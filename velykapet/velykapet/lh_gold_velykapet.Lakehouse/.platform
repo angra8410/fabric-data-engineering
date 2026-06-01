@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Lakehouse",
+    "displayName": "lh_gold_velykapet"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "21b64633-fb8c-907f-4412-709d5004f4fc"
+  }
+}

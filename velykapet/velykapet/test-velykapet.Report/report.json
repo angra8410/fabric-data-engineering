@@ -1,0 +1,277 @@
+{
+  "config": "{\"version\":\"5.68\",\"themeCollection\":{\"baseTheme\":{\"name\":\"CY18SU07\",\"type\":2,\"version\":{\"visual\":\"1.8.23\",\"report\":\"2.0.23\",\"page\":\"1.3.23\"}}},\"activeSectionIndex\":0,\"defaultDrillFilterOtherVisuals\":true,\"linguisticSchemaSyncVersion\":0,\"settings\":{\"useNewFilterPaneExperience\":true,\"allowChangeFilterTypes\":true,\"useStylableVisualContainerHeader\":true,\"queryLimitOption\":6,\"useEnhancedTooltips\":true,\"exportDataMode\":1,\"useDefaultAggregateDisplayName\":true},\"objects\":{\"section\":[{\"properties\":{\"verticalAlignment\":{\"expr\":{\"Literal\":{\"Value\":\"'Top'\"}}}}}],\"outspacePane\":[{\"properties\":{\"expanded\":{\"expr\":{\"Literal\":{\"Value\":\"false\"}}}}}]}}",
+  "layoutOptimization": 0,
+  "resourcePackages": [
+    {
+      "resourcePackage": {
+        "disabled": false,
+        "items": [
+          {
+            "name": "CY18SU07",
+            "path": "BaseThemes/CY18SU07.json",
+            "type": 202
+          }
+        ],
+        "name": "SharedResources",
+        "type": 2
+      }
+    },
+    {
+      "resourcePackage": {
+        "items": [
+          {
+            "name": "Logo_VelykaPet09239823027273764.png",
+            "path": "Logo_VelykaPet09239823027273764.png",
+            "type": 100
+          }
+        ],
+        "name": "RegisteredResources",
+        "type": 1
+      }
+    }
+  ],
+  "sections": [
+    {
+      "config": "{}",
+      "displayName": "RENTABILIDAD",
+      "displayOption": 1,
+      "filters": "[]",
+      "height": 720.00,
+      "name": "38c393ce949bcc32b311",
+      "ordinal": 2,
+      "visualContainers": [
+        {
+          "config": "{\"name\":\"50b658f948e27382094d\",\"layouts\":[{\"id\":0,\"position\":{\"x\":640.326091991292,\"y\":308.4237343091389,\"z\":4000,\"width\":604.040946778452,\"height\":205.97155959053222,\"tabOrder\":4000}}],\"singleVisual\":{\"visualType\":\"donutChart\",\"projections\":{\"Y\":[{\"queryRef\":\"gold_fct_gastos.Total Gastos\"},{\"queryRef\":\"gold_fct_gastos.# Gastos\"}],\"Category\":[{\"queryRef\":\"gold_fct_gastos.categoria_gasto\",\"active\":true}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"g\",\"Entity\":\"gold_fct_gastos\",\"Type\":0}],\"Select\":[{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Total Gastos\"},\"Name\":\"gold_fct_gastos.Total Gastos\",\"NativeReferenceName\":\"Total Gastos\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"# Gastos\"},\"Name\":\"gold_fct_gastos.# Gastos\",\"NativeReferenceName\":\"# Gastos\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"categoria_gasto\"},\"Name\":\"gold_fct_gastos.categoria_gasto\",\"NativeReferenceName\":\"categoria_gasto\"}],\"OrderBy\":[{\"Direction\":2,\"Expression\":{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Total Gastos\"}}}]},\"drillFilterOtherVisuals\":true,\"hasDefaultSort\":true,\"objects\":{\"labels\":[{\"properties\":{\"labelStyle\":{\"expr\":{\"Literal\":{\"Value\":\"'Data value, percent of total'\"}}}}}]},\"vcObjects\":{\"title\":[{\"properties\":{\"fontSize\":{\"expr\":{\"Literal\":{\"Value\":\"10D\"}}},\"bold\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"ThemeDataColor\":{\"ColorId\":1,\"Percent\":0}}}}},\"alignment\":{\"expr\":{\"Literal\":{\"Value\":\"'center'\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Gastos operativos por categoría'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 205.97,
+          "width": 604.04,
+          "x": 640.33,
+          "y": 308.42,
+          "z": 4000.00
+        },
+        {
+          "config": "{\"name\":\"57b6bfcd910744409a9c\",\"layouts\":[{\"id\":0,\"position\":{\"x\":34.150724906202235,\"y\":104.58659502524435,\"z\":1000,\"width\":1211.2835240168606,\"height\":186.76177683079348,\"tabOrder\":1000}}],\"singleVisual\":{\"visualType\":\"waterfallChart\",\"projections\":{\"Category\":[{\"queryRef\":\"_PL_Orden.PL_Paso\",\"active\":true}],\"Y\":[{\"queryRef\":\"_PL_Orden.Valor P&L\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"_\",\"Entity\":\"_PL_Orden\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"_\"}},\"Property\":\"PL_Paso\"},\"Name\":\"_PL_Orden.PL_Paso\",\"NativeReferenceName\":\"PL_Paso\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"_\"}},\"Property\":\"Valor P&L\"},\"Name\":\"_PL_Orden.Valor P&L\",\"NativeReferenceName\":\"Valor P&L\"}],\"OrderBy\":[{\"Direction\":2,\"Expression\":{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"_\"}},\"Property\":\"Valor P&L\"}}}]},\"drillFilterOtherVisuals\":true,\"hasDefaultSort\":true,\"objects\":{\"labels\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]},\"vcObjects\":{\"title\":[{\"properties\":{\"fontSize\":{\"expr\":{\"Literal\":{\"Value\":\"10D\"}}},\"bold\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"ThemeDataColor\":{\"ColorId\":1,\"Percent\":0}}}}},\"alignment\":{\"expr\":{\"Literal\":{\"Value\":\"'center'\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Cascada de P&L mensual'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 186.76,
+          "width": 1211.28,
+          "x": 34.15,
+          "y": 104.59,
+          "z": 1000.00
+        },
+        {
+          "config": "{\"name\":\"583f42eb8ec305407154\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":287.3654134487538,\"height\":136.73031768932643,\"tabOrder\":0}}],\"singleVisual\":{\"visualType\":\"image\",\"drillFilterOtherVisuals\":true,\"objects\":{\"image\":[{\"properties\":{\"sourceFile\":{\"image\":{\"name\":{\"expr\":{\"Literal\":{\"Value\":\"'Logo_VelykaPet.png'\"}}},\"url\":{\"expr\":{\"ResourcePackageItem\":{\"PackageName\":\"RegisteredResources\",\"PackageType\":1,\"ItemName\":\"Logo_VelykaPet09239823027273764.png\"}}},\"scaling\":{\"expr\":{\"Literal\":{\"Value\":\"'Normal'\"}}}}}}}]}}}",
+          "filters": "[]",
+          "height": 136.73,
+          "width": 287.37,
+          "x": 0.00,
+          "y": 0.00,
+          "z": 0.00
+        },
+        {
+          "config": "{\"name\":\"8aad271d926ad626015a\",\"layouts\":[{\"id\":0,\"position\":{\"x\":1180.7474044527426,\"y\":90.38105745565645,\"z\":5001,\"width\":89.2223259498147,\"height\":81.11120540892246,\"tabOrder\":5001}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"dim_calendario.anio\",\"active\":true}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"d\",\"Entity\":\"dim_calendario\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"d\"}},\"Property\":\"anio\"},\"Name\":\"dim_calendario.anio\",\"NativeReferenceName\":\"anio\"}]},\"syncGroup\":{\"groupName\":\"anio\",\"fieldChanges\":true,\"filterChanges\":true},\"drillFilterOtherVisuals\":true,\"objects\":{\"data\":[{\"properties\":{\"mode\":{\"expr\":{\"Literal\":{\"Value\":\"'Basic'\"}}}}}],\"general\":[{\"properties\":{\"filter\":{\"filter\":{\"Version\":2,\"From\":[{\"Name\":\"d\",\"Entity\":\"dim_calendario\",\"Type\":0}],\"Where\":[{\"Condition\":{\"In\":{\"Expressions\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"d\"}},\"Property\":\"anio\"}}],\"Values\":[[{\"Literal\":{\"Value\":\"'2026'\"}}]]}}}]}}}}],\"header\":[{\"properties\":{\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Año'\"}}}}}]}}}",
+          "filters": "[{\"name\":\"e412a5d82fec0fa52088\",\"expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Entity\":\"dim_calendario\"}},\"Property\":\"anio\"}},\"filter\":{\"Version\":2,\"From\":[{\"Name\":\"d\",\"Entity\":\"dim_calendario\",\"Type\":0}],\"Where\":[{\"Condition\":{\"Not\":{\"Expression\":{\"In\":{\"Expressions\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"d\"}},\"Property\":\"anio\"}}],\"Values\":[[{\"Literal\":{\"Value\":\"null\"}}]]}}}}}]},\"type\":\"Categorical\",\"howCreated\":0,\"objects\":{\"general\":[{\"properties\":{\"isInvertedSelectionMode\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]},\"isHiddenInViewMode\":false}]",
+          "height": 81.11,
+          "width": 89.22,
+          "x": 1180.75,
+          "y": 90.38,
+          "z": 5001.00
+        },
+        {
+          "config": "{\"name\":\"cc97d387144a6232aa7b\",\"layouts\":[{\"id\":0,\"position\":{\"x\":33.08351475288342,\"y\":514.3952938996712,\"z\":3000,\"width\":1211.2835240168606,\"height\":205.97155959053222,\"tabOrder\":3000}}],\"singleVisual\":{\"visualType\":\"pivotTable\",\"projections\":{\"Values\":[{\"queryRef\":\"gold_fct_ventas.Total Ventas\"},{\"queryRef\":\"gold_fct_ventas.Total Costo\"},{\"queryRef\":\"gold_fct_ventas.Utilidad Bruta\"},{\"queryRef\":\"gold_fct_ventas.Margen Bruto %\"},{\"queryRef\":\"gold_fct_ventas.Ganancia Neta\"},{\"queryRef\":\"gold_fct_ventas.Costo Unitario Prom\"},{\"queryRef\":\"gold_fct_ventas.# Transacciones\"},{\"queryRef\":\"gold_fct_ventas.Crecimiento MoM %\"},{\"queryRef\":\"gold_fct_ventas.Variacion Ventas MoM\"},{\"queryRef\":\"gold_fct_ventas.Ventas MTD\"},{\"queryRef\":\"gold_fct_ventas.Ventas YTD\"}],\"Rows\":[{\"queryRef\":\"gold_fct_ventas.categoria_producto\",\"active\":true},{\"queryRef\":\"gold_fct_ventas.producto\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"g\",\"Entity\":\"gold_fct_ventas\",\"Type\":0}],\"Select\":[{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Total Ventas\"},\"Name\":\"gold_fct_ventas.Total Ventas\",\"NativeReferenceName\":\"Total Ventas\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Total Costo\"},\"Name\":\"gold_fct_ventas.Total Costo\",\"NativeReferenceName\":\"Total Costo\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Utilidad Bruta\"},\"Name\":\"gold_fct_ventas.Utilidad Bruta\",\"NativeReferenceName\":\"Utilidad Bruta\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Margen Bruto %\"},\"Name\":\"gold_fct_ventas.Margen Bruto %\",\"NativeReferenceName\":\"Margen Bruto %\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Costo Unitario Prom\"},\"Name\":\"gold_fct_ventas.Costo Unitario Prom\",\"NativeReferenceName\":\"Costo Unitario Prom\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"# Transacciones\"},\"Name\":\"gold_fct_ventas.# Transacciones\",\"NativeReferenceName\":\"# Transacciones\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"categoria_producto\"},\"Name\":\"gold_fct_ventas.categoria_producto\",\"NativeReferenceName\":\"categoria_producto\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"producto\"},\"Name\":\"gold_fct_ventas.producto\",\"NativeReferenceName\":\"producto\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Ganancia Neta\"},\"Name\":\"gold_fct_ventas.Ganancia Neta\",\"NativeReferenceName\":\"Ganancia Neta\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Crecimiento MoM %\"},\"Name\":\"gold_fct_ventas.Crecimiento MoM %\",\"NativeReferenceName\":\"Crecimiento MoM %\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Variacion Ventas MoM\"},\"Name\":\"gold_fct_ventas.Variacion Ventas MoM\",\"NativeReferenceName\":\"Variacion Ventas MoM\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Ventas MTD\"},\"Name\":\"gold_fct_ventas.Ventas MTD\",\"NativeReferenceName\":\"Ventas MTD\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Ventas YTD\"},\"Name\":\"gold_fct_ventas.Ventas YTD\",\"NativeReferenceName\":\"Ventas YTD\"}],\"OrderBy\":[{\"Direction\":2,\"Expression\":{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"# Transacciones\"}}}]},\"drillFilterOtherVisuals\":true,\"objects\":{},\"vcObjects\":{\"title\":[{\"properties\":{\"fontSize\":{\"expr\":{\"Literal\":{\"Value\":\"10D\"}}},\"bold\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"ThemeDataColor\":{\"ColorId\":1,\"Percent\":0}}}}},\"alignment\":{\"expr\":{\"Literal\":{\"Value\":\"'center'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 205.97,
+          "width": 1211.28,
+          "x": 33.08,
+          "y": 514.40,
+          "z": 3000.00
+        },
+        {
+          "config": "{\"name\":\"d4e229eaa3a7dc98325f\",\"layouts\":[{\"id\":0,\"position\":{\"x\":34.150724906202235,\"y\":308.4237343091389,\"z\":2000,\"width\":605.1081569317708,\"height\":205.97155959053222,\"tabOrder\":2000}}],\"singleVisual\":{\"visualType\":\"lineStackedColumnComboChart\",\"projections\":{\"Y\":[{\"queryRef\":\"gold_fct_ventas.Utilidad Bruta\"}],\"Y2\":[{\"queryRef\":\"gold_fct_ventas.Margen Bruto %\"}],\"Category\":[{\"queryRef\":\"gold_fct_ventas.categoria_producto\",\"active\":true}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"g\",\"Entity\":\"gold_fct_ventas\",\"Type\":0}],\"Select\":[{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Utilidad Bruta\"},\"Name\":\"gold_fct_ventas.Utilidad Bruta\",\"NativeReferenceName\":\"Utilidad Bruta\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Margen Bruto %\"},\"Name\":\"gold_fct_ventas.Margen Bruto %\",\"NativeReferenceName\":\"Margen Bruto %\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"categoria_producto\"},\"Name\":\"gold_fct_ventas.categoria_producto\",\"NativeReferenceName\":\"categoria_producto\"}],\"OrderBy\":[{\"Direction\":2,\"Expression\":{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Utilidad Bruta\"}}}]},\"drillFilterOtherVisuals\":true,\"hasDefaultSort\":true,\"objects\":{\"labels\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"false\"}}}}}]},\"vcObjects\":{\"title\":[{\"properties\":{\"fontSize\":{\"expr\":{\"Literal\":{\"Value\":\"10D\"}}},\"bold\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"ThemeDataColor\":{\"ColorId\":1,\"Percent\":0}}}}},\"alignment\":{\"expr\":{\"Literal\":{\"Value\":\"'center'\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Margen bruto por categoría'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 205.97,
+          "width": 605.11,
+          "x": 34.15,
+          "y": 308.42,
+          "z": 2000.00
+        },
+        {
+          "config": "{\"name\":\"f594c99f88ade83b382b\",\"layouts\":[{\"id\":0,\"position\":{\"x\":518.6641345129465,\"y\":39.486775672796334,\"z\":5000,\"width\":272.13858909629903,\"height\":51.22608735930335,\"tabOrder\":5000}}],\"singleVisual\":{\"visualType\":\"textbox\",\"drillFilterOtherVisuals\":true,\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"RENTABILIDAD\",\"textStyle\":{\"fontWeight\":\"bold\",\"fontSize\":\"20pt\"}}],\"horizontalTextAlignment\":\"center\"}]}}]}}}",
+          "filters": "[]",
+          "height": 51.23,
+          "width": 272.14,
+          "x": 518.66,
+          "y": 39.49,
+          "z": 5000.00
+        }
+      ],
+      "width": 1280.00
+    },
+    {
+      "config": "{}",
+      "displayName": "EVALUACIÓN DE VENTAS MENSUAL",
+      "displayOption": 1,
+      "filters": "[]",
+      "height": 720.00,
+      "name": "ca1c515853381e06861f",
+      "ordinal": 1,
+      "visualContainers": [
+        {
+          "config": "{\"name\":\"06ed7b3e3f0a37ece680\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":287.3654134487538,\"height\":136.73031768932643,\"tabOrder\":0}}],\"singleVisual\":{\"visualType\":\"image\",\"drillFilterOtherVisuals\":true,\"objects\":{\"image\":[{\"properties\":{\"sourceFile\":{\"image\":{\"name\":{\"expr\":{\"Literal\":{\"Value\":\"'Logo_VelykaPet.png'\"}}},\"url\":{\"expr\":{\"ResourcePackageItem\":{\"PackageName\":\"RegisteredResources\",\"PackageType\":1,\"ItemName\":\"Logo_VelykaPet09239823027273764.png\"}}},\"scaling\":{\"expr\":{\"Literal\":{\"Value\":\"'Normal'\"}}}}}}}]}}}",
+          "filters": "[]",
+          "height": 136.73,
+          "width": 287.37,
+          "x": 0.00,
+          "y": 0.00,
+          "z": 0.00
+        },
+        {
+          "config": "{\"name\":\"10c1b3b15f949d86ba81\",\"layouts\":[{\"id\":0,\"position\":{\"x\":33.08351475288342,\"y\":313.759785075733,\"z\":2000,\"width\":1211.2835240168606,\"height\":205.97155959053222,\"tabOrder\":2000}}],\"singleVisual\":{\"visualType\":\"lineChart\",\"projections\":{\"Y\":[{\"queryRef\":\"gold_fct_ventas.Ventas YTD\"}],\"Category\":[{\"queryRef\":\"dim_calendario.fecha_key\",\"active\":true}],\"Y2\":[{\"queryRef\":\"gold_fct_ventas.Ventas MTD\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"g\",\"Entity\":\"gold_fct_ventas\",\"Type\":0},{\"Name\":\"d\",\"Entity\":\"dim_calendario\",\"Type\":0}],\"Select\":[{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Ventas YTD\"},\"Name\":\"gold_fct_ventas.Ventas YTD\",\"NativeReferenceName\":\"Ventas YTD\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"d\"}},\"Property\":\"fecha_key\"},\"Name\":\"dim_calendario.fecha_key\",\"NativeReferenceName\":\"fecha_key\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Ventas MTD\"},\"Name\":\"gold_fct_ventas.Ventas MTD\",\"NativeReferenceName\":\"Ventas MTD\"}],\"OrderBy\":[{\"Direction\":1,\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"d\"}},\"Property\":\"fecha_key\"}}}]},\"drillFilterOtherVisuals\":true,\"hasDefaultSort\":true,\"objects\":{\"labels\":[{\"properties\":{}}]},\"vcObjects\":{\"title\":[{\"properties\":{\"fontSize\":{\"expr\":{\"Literal\":{\"Value\":\"10D\"}}},\"bold\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"ThemeDataColor\":{\"ColorId\":1,\"Percent\":0}}}}},\"alignment\":{\"expr\":{\"Literal\":{\"Value\":\"'center'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 205.97,
+          "width": 1211.28,
+          "x": 33.08,
+          "y": 313.76,
+          "z": 2000.00
+        },
+        {
+          "config": "{\"name\":\"8ecb1b7f1f7291c1c99c\",\"layouts\":[{\"id\":0,\"position\":{\"x\":33.08351475288342,\"y\":107.7882254852008,\"z\":1000,\"width\":1211.2835240168606,\"height\":205.97155959053222,\"tabOrder\":1000}}],\"singleVisual\":{\"visualType\":\"lineClusteredColumnComboChart\",\"projections\":{\"Category\":[{\"queryRef\":\"dim_calendario.anio\",\"active\":true},{\"queryRef\":\"dim_calendario.mes_nombre\",\"active\":true}],\"Y\":[{\"queryRef\":\"gold_fct_ventas.Total Ventas\"},{\"queryRef\":\"gold_fct_ventas.Ventas Mes Anterior\"}],\"Y2\":[{\"queryRef\":\"gold_fct_ventas.Crecimiento MoM %\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"g\",\"Entity\":\"gold_fct_ventas\",\"Type\":0},{\"Name\":\"d\",\"Entity\":\"dim_calendario\",\"Type\":0}],\"Select\":[{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Total Ventas\"},\"Name\":\"gold_fct_ventas.Total Ventas\",\"NativeReferenceName\":\"Total Ventas\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Ventas Mes Anterior\"},\"Name\":\"gold_fct_ventas.Ventas Mes Anterior\",\"NativeReferenceName\":\"Ventas Mes Anterior\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Crecimiento MoM %\"},\"Name\":\"gold_fct_ventas.Crecimiento MoM %\",\"NativeReferenceName\":\"Crecimiento MoM %\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"d\"}},\"Property\":\"mes_nombre\"},\"Name\":\"dim_calendario.mes_nombre\",\"NativeReferenceName\":\"mes_nombre\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"d\"}},\"Property\":\"anio\"},\"Name\":\"dim_calendario.anio\",\"NativeReferenceName\":\"anio\"}]},\"drillFilterOtherVisuals\":true,\"objects\":{\"labels\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}},{\"properties\":{\"fontSize\":{\"expr\":{\"Literal\":{\"Value\":\"8D\"}}}},\"selector\":{\"metadata\":\"gold_fct_ventas.Total Ventas\"}}]},\"vcObjects\":{\"title\":[{\"properties\":{\"fontSize\":{\"expr\":{\"Literal\":{\"Value\":\"10D\"}}},\"bold\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"ThemeDataColor\":{\"ColorId\":1,\"Percent\":0}}}}},\"alignment\":{\"expr\":{\"Literal\":{\"Value\":\"'center'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 205.97,
+          "width": 1211.28,
+          "x": 33.08,
+          "y": 107.79,
+          "z": 1000.00
+        },
+        {
+          "config": "{\"name\":\"aab3d8aad4b9d09ed84e\",\"layouts\":[{\"id\":0,\"position\":{\"x\":1180.7474044527426,\"y\":90.38105745565645,\"z\":4001,\"width\":89.2223259498147,\"height\":81.11120540892246,\"tabOrder\":4001}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"dim_calendario.anio\",\"active\":true}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"d\",\"Entity\":\"dim_calendario\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"d\"}},\"Property\":\"anio\"},\"Name\":\"dim_calendario.anio\",\"NativeReferenceName\":\"anio\"}]},\"syncGroup\":{\"groupName\":\"anio\",\"fieldChanges\":true,\"filterChanges\":true},\"drillFilterOtherVisuals\":true,\"objects\":{\"data\":[{\"properties\":{\"mode\":{\"expr\":{\"Literal\":{\"Value\":\"'Basic'\"}}}}}],\"general\":[{\"properties\":{\"filter\":{\"filter\":{\"Version\":2,\"From\":[{\"Name\":\"d\",\"Entity\":\"dim_calendario\",\"Type\":0}],\"Where\":[{\"Condition\":{\"In\":{\"Expressions\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"d\"}},\"Property\":\"anio\"}}],\"Values\":[[{\"Literal\":{\"Value\":\"'2026'\"}}]]}}}]}}}}],\"header\":[{\"properties\":{\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Año'\"}}}}}]}}}",
+          "filters": "[{\"name\":\"e412a5d82fec0fa52088\",\"expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Entity\":\"dim_calendario\"}},\"Property\":\"anio\"}},\"filter\":{\"Version\":2,\"From\":[{\"Name\":\"d\",\"Entity\":\"dim_calendario\",\"Type\":0}],\"Where\":[{\"Condition\":{\"Not\":{\"Expression\":{\"In\":{\"Expressions\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"d\"}},\"Property\":\"anio\"}}],\"Values\":[[{\"Literal\":{\"Value\":\"null\"}}]]}}}}}]},\"type\":\"Categorical\",\"howCreated\":0,\"objects\":{\"general\":[{\"properties\":{\"isInvertedSelectionMode\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]},\"isHiddenInViewMode\":false}]",
+          "height": 81.11,
+          "width": 89.22,
+          "x": 1180.75,
+          "y": 90.38,
+          "z": 4001.00
+        },
+        {
+          "config": "{\"name\":\"d62181e31d69123e6873\",\"layouts\":[{\"id\":0,\"position\":{\"x\":33.08351475288342,\"y\":514.3952938996712,\"z\":3000,\"width\":1211.2835240168606,\"height\":205.97155959053222,\"tabOrder\":3000}}],\"singleVisual\":{\"visualType\":\"clusteredBarChart\",\"projections\":{\"Category\":[{\"queryRef\":\"gold_fct_ventas.categoria_producto\",\"active\":true}],\"Y\":[{\"queryRef\":\"gold_fct_ventas.Total Cantidad\"},{\"queryRef\":\"gold_fct_ventas.Total Ventas\"},{\"queryRef\":\"gold_fct_ventas.Ticket Promedio\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"g\",\"Entity\":\"gold_fct_ventas\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"categoria_producto\"},\"Name\":\"gold_fct_ventas.categoria_producto\",\"NativeReferenceName\":\"categoria_producto\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Total Cantidad\"},\"Name\":\"gold_fct_ventas.Total Cantidad\",\"NativeReferenceName\":\"Total Cantidad\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Total Ventas\"},\"Name\":\"gold_fct_ventas.Total Ventas\",\"NativeReferenceName\":\"Total Ventas\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Ticket Promedio\"},\"Name\":\"gold_fct_ventas.Ticket Promedio\",\"NativeReferenceName\":\"Ticket Promedio\"}],\"OrderBy\":[{\"Direction\":2,\"Expression\":{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Total Cantidad\"}}}]},\"drillFilterOtherVisuals\":true,\"hasDefaultSort\":true,\"objects\":{\"labels\":[{\"properties\":{}}]},\"vcObjects\":{\"title\":[{\"properties\":{\"fontSize\":{\"expr\":{\"Literal\":{\"Value\":\"10D\"}}},\"bold\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"ThemeDataColor\":{\"ColorId\":1,\"Percent\":0}}}}},\"alignment\":{\"expr\":{\"Literal\":{\"Value\":\"'center'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 205.97,
+          "width": 1211.28,
+          "x": 33.08,
+          "y": 514.40,
+          "z": 3000.00
+        },
+        {
+          "config": "{\"name\":\"ffd4efc5021bab83f573\",\"layouts\":[{\"id\":0,\"position\":{\"x\":518.6641345129465,\"y\":39.486775672796334,\"z\":4000,\"width\":451.4298948538608,\"height\":45.89003659270925,\"tabOrder\":4000}}],\"singleVisual\":{\"visualType\":\"textbox\",\"drillFilterOtherVisuals\":true,\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"EVALUACIÓN DE VENTAS MENSUALES\",\"textStyle\":{\"fontWeight\":\"bold\",\"fontSize\":\"20pt\"}}]}]}}]}}}",
+          "filters": "[]",
+          "height": 45.89,
+          "width": 451.43,
+          "x": 518.66,
+          "y": 39.49,
+          "z": 4000.00
+        }
+      ],
+      "width": 1280.00
+    },
+    {
+      "config": "{}",
+      "displayName": "RESUMEN EJECUTIVO",
+      "displayOption": 1,
+      "filters": "[]",
+      "height": 720.00,
+      "name": "d4fcf61ab6a8537da948",
+      "visualContainers": [
+        {
+          "config": "{\"name\":\"13cfb2e3e36ddb3eb984\",\"layouts\":[{\"id\":0,\"position\":{\"x\":639.6197912246456,\"y\":105.44456703159919,\"z\":3000,\"width\":180.7621149113129,\"height\":92.69852046733995,\"tabOrder\":3000}}],\"singleVisual\":{\"visualType\":\"cardVisual\",\"projections\":{\"Data\":[{\"queryRef\":\"gold_fct_ventas.Margen Neto %\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"g\",\"Entity\":\"gold_fct_ventas\",\"Type\":0}],\"Select\":[{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Margen Neto %\"},\"Name\":\"gold_fct_ventas.Margen Neto %\",\"NativeReferenceName\":\"Margen Neto %\"}],\"OrderBy\":[{\"Direction\":2,\"Expression\":{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Margen Neto %\"}}}]},\"drillFilterOtherVisuals\":true,\"hasDefaultSort\":true,\"objects\":{\"label\":[{\"properties\":{\"position\":{\"expr\":{\"Literal\":{\"Value\":\"'aboveValue'\"}}},\"bold\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"fontSize\":{\"expr\":{\"Literal\":{\"Value\":\"10D\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"ThemeDataColor\":{\"ColorId\":1,\"Percent\":0}}}}}},\"selector\":{\"id\":\"default\"}}],\"value\":[{\"properties\":{\"fontSize\":{\"expr\":{\"Literal\":{\"Value\":\"16D\"}}},\"horizontalAlignment\":{\"expr\":{\"Literal\":{\"Value\":\"'center'\"}}}},\"selector\":{\"id\":\"default\"}}]}}}",
+          "filters": "[]",
+          "height": 92.70,
+          "width": 180.76,
+          "x": 639.62,
+          "y": 105.44,
+          "z": 3000.00
+        },
+        {
+          "config": "{\"name\":\"1a371c91d20be9db0865\",\"layouts\":[{\"id\":0,\"position\":{\"x\":1180.7474044527426,\"y\":90.38105745565645,\"z\":8001,\"width\":89.2223259498147,\"height\":81.11120540892246,\"tabOrder\":8001}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"dim_calendario.anio\",\"active\":true}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"d\",\"Entity\":\"dim_calendario\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"d\"}},\"Property\":\"anio\"},\"Name\":\"dim_calendario.anio\",\"NativeReferenceName\":\"anio\"}]},\"syncGroup\":{\"groupName\":\"anio\",\"fieldChanges\":true,\"filterChanges\":true},\"drillFilterOtherVisuals\":true,\"objects\":{\"data\":[{\"properties\":{\"mode\":{\"expr\":{\"Literal\":{\"Value\":\"'Basic'\"}}}}}],\"general\":[{\"properties\":{\"filter\":{\"filter\":{\"Version\":2,\"From\":[{\"Name\":\"d\",\"Entity\":\"dim_calendario\",\"Type\":0}],\"Where\":[{\"Condition\":{\"In\":{\"Expressions\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"d\"}},\"Property\":\"anio\"}}],\"Values\":[[{\"Literal\":{\"Value\":\"'2026'\"}}]]}}}]}}}}],\"header\":[{\"properties\":{\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Año'\"}}}}}]}}}",
+          "filters": "[{\"name\":\"e412a5d82fec0fa52088\",\"expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Entity\":\"dim_calendario\"}},\"Property\":\"anio\"}},\"filter\":{\"Version\":2,\"From\":[{\"Name\":\"d\",\"Entity\":\"dim_calendario\",\"Type\":0}],\"Where\":[{\"Condition\":{\"Not\":{\"Expression\":{\"In\":{\"Expressions\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"d\"}},\"Property\":\"anio\"}}],\"Values\":[[{\"Literal\":{\"Value\":\"null\"}}]]}}}}}]},\"type\":\"Categorical\",\"howCreated\":0,\"objects\":{\"general\":[{\"properties\":{\"isInvertedSelectionMode\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]},\"isHiddenInViewMode\":false}]",
+          "height": 81.11,
+          "width": 89.22,
+          "x": 1180.75,
+          "y": 90.38,
+          "z": 8001.00
+        },
+        {
+          "config": "{\"name\":\"3abf7813d97ff85b4c5a\",\"layouts\":[{\"id\":0,\"position\":{\"x\":190.0319669580469,\"y\":105.44456703159919,\"z\":1000,\"width\":180.7621149113129,\"height\":92.69852046733995,\"tabOrder\":1000}}],\"singleVisual\":{\"visualType\":\"cardVisual\",\"projections\":{\"Data\":[{\"queryRef\":\"gold_fct_ventas.Total Ventas\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"g\",\"Entity\":\"gold_fct_ventas\",\"Type\":0}],\"Select\":[{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Total Ventas\"},\"Name\":\"gold_fct_ventas.Total Ventas\",\"NativeReferenceName\":\"Total Ventas\"}],\"OrderBy\":[{\"Direction\":2,\"Expression\":{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Total Ventas\"}}}]},\"drillFilterOtherVisuals\":true,\"hasDefaultSort\":true,\"objects\":{\"label\":[{\"properties\":{\"position\":{\"expr\":{\"Literal\":{\"Value\":\"'aboveValue'\"}}},\"bold\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"fontSize\":{\"expr\":{\"Literal\":{\"Value\":\"10D\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"ThemeDataColor\":{\"ColorId\":1,\"Percent\":0}}}}}},\"selector\":{\"id\":\"default\"}}],\"value\":[{\"properties\":{\"fontSize\":{\"expr\":{\"Literal\":{\"Value\":\"16D\"}}},\"horizontalAlignment\":{\"expr\":{\"Literal\":{\"Value\":\"'center'\"}}}},\"selector\":{\"id\":\"default\"}}]}}}",
+          "filters": "[]",
+          "height": 92.70,
+          "width": 180.76,
+          "x": 190.03,
+          "y": 105.44,
+          "z": 1000.00
+        },
+        {
+          "config": "{\"name\":\"4f41210820c31fed46ad\",\"layouts\":[{\"id\":0,\"position\":{\"x\":664.8719255176247,\"y\":491.9838806799759,\"z\":7000,\"width\":579.4951132521192,\"height\":228.38297281022744,\"tabOrder\":7000}}],\"singleVisual\":{\"visualType\":\"donutChart\",\"projections\":{\"Y\":[{\"queryRef\":\"gold_fct_ventas.Total Ventas\"}],\"Category\":[{\"queryRef\":\"dim_metodo_pago.metodo_pago\",\"active\":true}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"g\",\"Entity\":\"gold_fct_ventas\",\"Type\":0},{\"Name\":\"d\",\"Entity\":\"dim_metodo_pago\",\"Type\":0}],\"Select\":[{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Total Ventas\"},\"Name\":\"gold_fct_ventas.Total Ventas\",\"NativeReferenceName\":\"Total Ventas\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"d\"}},\"Property\":\"metodo_pago\"},\"Name\":\"dim_metodo_pago.metodo_pago\",\"NativeReferenceName\":\"metodo_pago\"}],\"OrderBy\":[{\"Direction\":2,\"Expression\":{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Total Ventas\"}}}]},\"drillFilterOtherVisuals\":true,\"hasDefaultSort\":true,\"objects\":{\"labels\":[{\"properties\":{\"labelStyle\":{\"expr\":{\"Literal\":{\"Value\":\"'Category, data value, percent of total'\"}}}}}]},\"vcObjects\":{\"title\":[{\"properties\":{\"fontSize\":{\"expr\":{\"Literal\":{\"Value\":\"10D\"}}},\"bold\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"ThemeDataColor\":{\"ColorId\":1,\"Percent\":0}}}}},\"alignment\":{\"expr\":{\"Literal\":{\"Value\":\"'center'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 228.38,
+          "width": 579.50,
+          "x": 664.87,
+          "y": 491.98,
+          "z": 7000.00
+        },
+        {
+          "config": "{\"name\":\"774d6f04dfe1b4371e97\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":287.3654134487538,\"height\":136.73031768932643,\"tabOrder\":0}}],\"singleVisual\":{\"visualType\":\"image\",\"drillFilterOtherVisuals\":true,\"objects\":{\"image\":[{\"properties\":{\"sourceFile\":{\"image\":{\"name\":{\"expr\":{\"Literal\":{\"Value\":\"'Logo_VelykaPet.png'\"}}},\"url\":{\"expr\":{\"ResourcePackageItem\":{\"PackageName\":\"RegisteredResources\",\"PackageType\":1,\"ItemName\":\"Logo_VelykaPet09239823027273764.png\"}}},\"scaling\":{\"expr\":{\"Literal\":{\"Value\":\"'Normal'\"}}}}}}}]}}}",
+          "filters": "[]",
+          "height": 136.73,
+          "width": 287.37,
+          "x": 0.00,
+          "y": 0.00,
+          "z": 0.00
+        },
+        {
+          "config": "{\"name\":\"8ace76a76b374e46001c\",\"layouts\":[{\"id\":0,\"position\":{\"x\":33.08351475288342,\"y\":491.9838806799759,\"z\":6000,\"width\":579.4951132521192,\"height\":228.38297281022744,\"tabOrder\":6000}}],\"singleVisual\":{\"visualType\":\"donutChart\",\"projections\":{\"Category\":[{\"queryRef\":\"gold_fct_ventas.canal_venta\",\"active\":true}],\"Y\":[{\"queryRef\":\"gold_fct_ventas.Total Ventas\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"g\",\"Entity\":\"gold_fct_ventas\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"canal_venta\"},\"Name\":\"gold_fct_ventas.canal_venta\",\"NativeReferenceName\":\"canal_venta\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Total Ventas\"},\"Name\":\"gold_fct_ventas.Total Ventas\",\"NativeReferenceName\":\"Total Ventas\"}],\"OrderBy\":[{\"Direction\":2,\"Expression\":{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Total Ventas\"}}}]},\"drillFilterOtherVisuals\":true,\"hasDefaultSort\":true,\"objects\":{\"labels\":[{\"properties\":{\"labelStyle\":{\"expr\":{\"Literal\":{\"Value\":\"'Category, data value, percent of total'\"}}}}}]},\"vcObjects\":{\"title\":[{\"properties\":{\"fontSize\":{\"expr\":{\"Literal\":{\"Value\":\"10D\"}}},\"bold\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"ThemeDataColor\":{\"ColorId\":1,\"Percent\":0}}}}},\"alignment\":{\"expr\":{\"Literal\":{\"Value\":\"'center'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 228.38,
+          "width": 579.50,
+          "x": 33.08,
+          "y": 491.98,
+          "z": 6000.00
+        },
+        {
+          "config": "{\"name\":\"948bae18566322f85032\",\"layouts\":[{\"id\":0,\"position\":{\"x\":33.08351475288342,\"y\":239.05507434341564,\"z\":5000,\"width\":1211.2835240168606,\"height\":235.8534438834592,\"tabOrder\":5000}}],\"singleVisual\":{\"visualType\":\"clusteredColumnChart\",\"projections\":{\"Y\":[{\"queryRef\":\"gold_fct_ventas.Total Ventas\"},{\"queryRef\":\"gold_fct_ventas.Total Costo\"},{\"queryRef\":\"gold_fct_gastos.Total Gastos\"}],\"Category\":[{\"queryRef\":\"dim_calendario.anio\",\"active\":true},{\"queryRef\":\"dim_calendario.mes_nombre\",\"active\":true}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"g\",\"Entity\":\"gold_fct_ventas\",\"Type\":0},{\"Name\":\"g1\",\"Entity\":\"gold_fct_gastos\",\"Type\":0},{\"Name\":\"d\",\"Entity\":\"dim_calendario\",\"Type\":0}],\"Select\":[{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Total Ventas\"},\"Name\":\"gold_fct_ventas.Total Ventas\",\"NativeReferenceName\":\"Total Ventas\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Total Costo\"},\"Name\":\"gold_fct_ventas.Total Costo\",\"NativeReferenceName\":\"Total Costo\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g1\"}},\"Property\":\"Total Gastos\"},\"Name\":\"gold_fct_gastos.Total Gastos\",\"NativeReferenceName\":\"Total Gastos\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"d\"}},\"Property\":\"mes_nombre\"},\"Name\":\"dim_calendario.mes_nombre\",\"NativeReferenceName\":\"mes_nombre\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"d\"}},\"Property\":\"anio\"},\"Name\":\"dim_calendario.anio\",\"NativeReferenceName\":\"anio\"}]},\"drillFilterOtherVisuals\":true,\"objects\":{\"labels\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}},{\"properties\":{\"fontSize\":{\"expr\":{\"Literal\":{\"Value\":\"8D\"}}},\"labelDisplayUnits\":{\"expr\":{\"Literal\":{\"Value\":\"0D\"}}}},\"selector\":{\"metadata\":\"gold_fct_gastos.Total Gastos\"}},{\"properties\":{\"fontSize\":{\"expr\":{\"Literal\":{\"Value\":\"8D\"}}}},\"selector\":{\"metadata\":\"gold_fct_ventas.Total Ventas\"}},{\"properties\":{\"fontSize\":{\"expr\":{\"Literal\":{\"Value\":\"8D\"}}}},\"selector\":{\"metadata\":\"gold_fct_ventas.Total Costo\"}}]},\"vcObjects\":{\"title\":[{\"properties\":{\"fontSize\":{\"expr\":{\"Literal\":{\"Value\":\"10D\"}}},\"bold\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"ThemeDataColor\":{\"ColorId\":1,\"Percent\":0}}}}},\"alignment\":{\"expr\":{\"Literal\":{\"Value\":\"'center'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 235.85,
+          "width": 1211.28,
+          "x": 33.08,
+          "y": 239.06,
+          "z": 5000.00
+        },
+        {
+          "config": "{\"name\":\"a9d7e13551a73332eeb7\",\"layouts\":[{\"id\":0,\"position\":{\"x\":518.6641345129465,\"y\":39.486775672796334,\"z\":8000,\"width\":272.13858909629903,\"height\":51.22608735930335,\"tabOrder\":8000}}],\"singleVisual\":{\"visualType\":\"textbox\",\"drillFilterOtherVisuals\":true,\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"RESUMEN EJECUTIVO\",\"textStyle\":{\"fontWeight\":\"bold\",\"fontSize\":\"20pt\"}}],\"horizontalTextAlignment\":\"center\"}]}}]}}}",
+          "filters": "[]",
+          "height": 51.23,
+          "width": 272.14,
+          "x": 518.66,
+          "y": 39.49,
+          "z": 8000.00
+        },
+        {
+          "config": "{\"name\":\"e39ebc3efa15c1b910fb\",\"layouts\":[{\"id\":0,\"position\":{\"x\":407.8734900562958,\"y\":105.44456703159919,\"z\":2000,\"width\":180.7621149113129,\"height\":92.69852046733995,\"tabOrder\":2000}}],\"singleVisual\":{\"visualType\":\"cardVisual\",\"projections\":{\"Data\":[{\"queryRef\":\"gold_fct_ventas.Margen Bruto %\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"g\",\"Entity\":\"gold_fct_ventas\",\"Type\":0}],\"Select\":[{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Margen Bruto %\"},\"Name\":\"gold_fct_ventas.Margen Bruto %\",\"NativeReferenceName\":\"Margen Bruto %\"}],\"OrderBy\":[{\"Direction\":2,\"Expression\":{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Margen Bruto %\"}}}]},\"drillFilterOtherVisuals\":true,\"hasDefaultSort\":true,\"objects\":{\"label\":[{\"properties\":{\"position\":{\"expr\":{\"Literal\":{\"Value\":\"'aboveValue'\"}}},\"bold\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"fontSize\":{\"expr\":{\"Literal\":{\"Value\":\"10D\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"ThemeDataColor\":{\"ColorId\":1,\"Percent\":0}}}}}},\"selector\":{\"id\":\"default\"}}],\"value\":[{\"properties\":{\"fontSize\":{\"expr\":{\"Literal\":{\"Value\":\"16D\"}}},\"horizontalAlignment\":{\"expr\":{\"Literal\":{\"Value\":\"'center'\"}}}},\"selector\":{\"id\":\"default\"}}]}}}",
+          "filters": "[]",
+          "height": 92.70,
+          "width": 180.76,
+          "x": 407.87,
+          "y": 105.44,
+          "z": 2000.00
+        },
+        {
+          "config": "{\"name\":\"f9b2eafe8514b973c50f\",\"layouts\":[{\"id\":0,\"position\":{\"x\":867.8898978754703,\"y\":105.44456703159919,\"z\":4000,\"width\":180.7621149113129,\"height\":92.69852046733995,\"tabOrder\":4000}}],\"singleVisual\":{\"visualType\":\"cardVisual\",\"projections\":{\"Data\":[{\"queryRef\":\"gold_fct_ventas.Ticket Promedio\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"g\",\"Entity\":\"gold_fct_ventas\",\"Type\":0}],\"Select\":[{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Ticket Promedio\"},\"Name\":\"gold_fct_ventas.Ticket Promedio\",\"NativeReferenceName\":\"Ticket Promedio\"}],\"OrderBy\":[{\"Direction\":2,\"Expression\":{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Ticket Promedio\"}}}]},\"drillFilterOtherVisuals\":true,\"hasDefaultSort\":true,\"objects\":{\"label\":[{\"properties\":{\"position\":{\"expr\":{\"Literal\":{\"Value\":\"'aboveValue'\"}}},\"bold\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"fontSize\":{\"expr\":{\"Literal\":{\"Value\":\"10D\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"ThemeDataColor\":{\"ColorId\":1,\"Percent\":0}}}}}},\"selector\":{\"id\":\"default\"}}],\"value\":[{\"properties\":{\"fontSize\":{\"expr\":{\"Literal\":{\"Value\":\"16D\"}}},\"horizontalAlignment\":{\"expr\":{\"Literal\":{\"Value\":\"'center'\"}}}},\"selector\":{\"id\":\"default\"}}]}}}",
+          "filters": "[]",
+          "height": 92.70,
+          "width": 180.76,
+          "x": 867.89,
+          "y": 105.44,
+          "z": 4000.00
+        }
+      ],
+      "width": 1280.00
+    }
+  ]
+}

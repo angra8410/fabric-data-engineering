@@ -1,0 +1,49 @@
+table 'Case View'
+	lineageTag: e034403e-0ce3-45e5-b2ad-df2968c10d0b
+
+	column 'Case View'
+		lineageTag: f9c3296a-cf3c-45fa-9146-ee912e8583f4
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Case View Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Case View Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Case View Fields'
+		isHidden
+		lineageTag: 56a16970-b8f4-4c33-aa94-df49bceb81d9
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Case View Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Case View Order'
+		isHidden
+		formatString: 0
+		lineageTag: 09264654-240c-4a27-8ca0-e3633c88909b
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Case View' = calculated
+		mode: import
+		source =
+				{
+				    ("Cases (Period)", NAMEOF('Fact_Covid_Daily'[Cases (Period)]), 0),
+				    ("Cases Per Million", NAMEOF('Fact_Covid_Daily'[Cases Per Million]), 1),
+				    ("New Cases (7-Day Avg)", NAMEOF('Fact_Covid_Daily'[New Cases (7-Day Avg)]), 2)
+				}
+
+	annotation PBI_Id = b08809fe539241c494be951eb8d267e0
+

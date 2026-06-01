@@ -1,20 +1,21 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+# Velykapet — Data Engineering Project
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+## Architecture
+Bronze → Silver → Gold medallion on Microsoft Fabric (OneLake)
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+## Pipeline
+`pl_labor_full_refresh` runs daily at 05:00 AM (Bogotá time)
+Ingests `Data_Cliente_Multidominio.xlsx` → transforms → 
+builds star schema → refreshes `test-velykapet` semantic model
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+## Layers
+- **Bronze** (`lh_bronze_velykapet`): raw Excel ingestion
+- **Silver** (`lh_silver_velykapet`): cleaned, typed, validated
+- **Gold** (`lh_gold_velykapet`): star schema (dim_calendario, 
+  dim_metodo_pago, gold_fct_ventas, gold_fct_gastos)
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+## Semantic Model
+`test-velykapet` — DirectLake, 18 measures across 4 folders
+
+## Owner
+Antonio Gutierrez — contacto@velykapet.com

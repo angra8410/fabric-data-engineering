@@ -1,0 +1,282 @@
+table gold_fct_ventas
+	lineageTag: 63cba065-2ba8-4b70-9525-aa4f436362ed
+	sourceLineageTag: [dbo].[gold_fct_ventas]
+
+	/// Suma total de ventas en COP
+	measure 'Total Ventas' = SUM(gold_fct_ventas[total_venta_cop])
+		formatString: #,##0" COP"
+		displayFolder: 💰 Ventas
+		lineageTag: c7bd4960-cafa-4e1b-b3c0-2447a99a36f3
+
+	/// Unidades vendidas
+	measure 'Total Cantidad' = SUM(gold_fct_ventas[cantidad])
+		formatString: #,##0
+		displayFolder: 💰 Ventas
+		lineageTag: 6bedc868-4d1c-4048-8313-d40d2bbd423e
+
+	/// Valor promedio por unidad vendida
+	measure 'Ticket Promedio' = DIVIDE([Total Ventas], [Total Cantidad])
+		formatString: #,##0" COP"
+		displayFolder: 💰 Ventas
+		lineageTag: 59638e90-4a0b-4d58-b985-739353c84be7
+
+	/// Número de transacciones de venta
+	measure '# Transacciones' = COUNTROWS(gold_fct_ventas)
+		formatString: #,##0
+		displayFolder: 💰 Ventas
+		lineageTag: 490f6321-a3d6-4e80-8bfe-e3daa6116dc0
+
+	/// Suma total de costos de los productos vendidos
+	measure 'Total Costo' = SUM(gold_fct_ventas[costo_total_cop])
+		formatString: #,##0" COP"
+		displayFolder: 📦 Costos & Gastos
+		lineageTag: 2b776546-b220-4596-974a-96eb7a801c91
+
+	/// Costo unitario promedio ponderado
+	measure 'Costo Unitario Prom' = DIVIDE([Total Costo], [Total Cantidad])
+		formatString: #,##0" COP"
+		displayFolder: 📦 Costos & Gastos
+		lineageTag: 70bbdfd0-a59d-4f7f-9d45-cc4f824e0db9
+
+	/// Utilidad bruta: ventas menos costo de ventas
+	measure 'Utilidad Bruta' = SUM(gold_fct_ventas[utilidad_cop])
+		formatString: #,##0" COP"
+		displayFolder: 📈 Rentabilidad
+		lineageTag: 405e0cf4-52a6-4b9d-bcbf-93633a9ff4bd
+
+	/// Margen bruto como porcentaje de ventas
+	measure 'Margen Bruto %' = DIVIDE([Utilidad Bruta], [Total Ventas])
+		formatString: 0.0%
+		displayFolder: 📈 Rentabilidad
+		lineageTag: fe68e568-1e3f-48fa-942d-4c3eb743ec13
+
+	/// Ganancia neta después de restar gastos operativos
+	measure 'Ganancia Neta' = [Utilidad Bruta] - [Total Gastos]
+		formatString: #,##0" COP"
+		displayFolder: 📈 Rentabilidad
+		lineageTag: 59e4aeff-2b4d-4a25-907f-c2a14c2e9ca2
+
+	/// Margen neto como porcentaje de ventas totales
+	measure 'Margen Neto %' = DIVIDE([Ganancia Neta], [Total Ventas])
+		formatString: 0.0%
+		displayFolder: 📈 Rentabilidad
+		lineageTag: c399c21e-119f-44ff-b280-ba32e95ca6cd
+
+	/// Relación entre gastos operativos y ventas totales
+	measure 'Gastos sobre Ventas %' = DIVIDE([Total Gastos], [Total Ventas])
+		formatString: 0.0%
+		displayFolder: 📈 Rentabilidad
+		lineageTag: 9e64a08d-b8a4-4260-8d51-8799b95c1612
+
+	/// Ventas del mes anterior en el mismo contexto
+	measure 'Ventas Mes Anterior' = CALCULATE([Total Ventas], DATEADD(dim_calendario[fecha_key], -1, MONTH))
+		formatString: #,##0" COP"
+		displayFolder: 🗓️ Tiempo
+		lineageTag: b65d02d3-143a-4622-9968-0841beccb284
+
+	/// Variación de ventas respecto al mes anterior en COP
+	measure 'Variacion Ventas MoM' = [Total Ventas] - [Ventas Mes Anterior]
+		formatString: #,##0" COP"
+		displayFolder: 🗓️ Tiempo
+		lineageTag: bac9109d-4066-4926-9552-a372df702b38
+
+	/// Crecimiento porcentual respecto al mes anterior
+	measure 'Crecimiento MoM %' = DIVIDE([Total Ventas] - [Ventas Mes Anterior], [Ventas Mes Anterior])
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 🗓️ Tiempo
+		lineageTag: 6ab47bfc-836f-44e5-9457-606f99909a4e
+
+	/// Ventas acumuladas desde inicio del año hasta la fecha
+	measure 'Ventas YTD' = CALCULATE([Total Ventas], DATESYTD(dim_calendario[fecha_key]))
+		formatString: #,##0" COP"
+		displayFolder: 🗓️ Tiempo
+		lineageTag: 1ca54222-4419-4aae-ab99-3bc590981e07
+
+	/// Ventas acumuladas del mes hasta la fecha
+	measure 'Ventas MTD' = CALCULATE([Total Ventas], DATESMTD(dim_calendario[fecha_key]))
+		formatString: #,##0" COP"
+		displayFolder: 🗓️ Tiempo
+		lineageTag: 12d1090e-106b-48c3-babe-0f4697338f84
+
+	column fecha_key
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: c09068c8-bd17-49bb-90a0-59e8045f0fe0
+		sourceLineageTag: fecha_key
+		summarizeBy: none
+		sourceColumn: fecha_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column metodo_pago_sk
+		dataType: int64
+		lineageTag: bde29608-f96e-4350-a2ea-ca84b27b5438
+		sourceLineageTag: metodo_pago_sk
+		summarizeBy: none
+		sourceColumn: metodo_pago_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column anio
+		dataType: string
+		lineageTag: 383414c4-bee6-42cd-94cb-c999e57ed844
+		sourceLineageTag: anio
+		summarizeBy: none
+		sourceColumn: anio
+
+		annotation SummarizationSetBy = Automatic
+
+	column codigo_producto
+		dataType: string
+		lineageTag: 72d2f54b-cd31-409e-9e0e-c184344f405b
+		sourceLineageTag: codigo_producto
+		summarizeBy: none
+		sourceColumn: codigo_producto
+
+		annotation SummarizationSetBy = Automatic
+
+	column producto
+		dataType: string
+		lineageTag: a2199e73-f606-4a04-af2b-235cc76df6f9
+		sourceLineageTag: producto
+		summarizeBy: none
+		sourceColumn: producto
+
+		annotation SummarizationSetBy = Automatic
+
+	column categoria_producto
+		dataType: string
+		lineageTag: 6c832c2b-1f5e-4b4d-a3a1-c1b836113032
+		sourceLineageTag: categoria_producto
+		summarizeBy: none
+		sourceColumn: categoria_producto
+
+		annotation SummarizationSetBy = Automatic
+
+	column cantidad
+		dataType: double
+		lineageTag: cbb948df-a77f-4504-802c-d95372e27a3a
+		sourceLineageTag: cantidad
+		summarizeBy: sum
+		sourceColumn: cantidad
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column precio_unitario_cop
+		dataType: double
+		lineageTag: 22e86c94-867a-4a44-89c5-0bc1a38896bc
+		sourceLineageTag: precio_unitario_cop
+		summarizeBy: sum
+		sourceColumn: precio_unitario_cop
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_venta_cop
+		dataType: double
+		lineageTag: 189c1234-1c03-4278-b5d1-3ee94ee77674
+		sourceLineageTag: total_venta_cop
+		summarizeBy: sum
+		sourceColumn: total_venta_cop
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column costo_unitario_cop
+		dataType: double
+		lineageTag: 6b07d492-d418-490e-9652-978e1622fa2e
+		sourceLineageTag: costo_unitario_cop
+		summarizeBy: sum
+		sourceColumn: costo_unitario_cop
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column costo_total_cop
+		dataType: double
+		lineageTag: b06b73bf-4458-42d7-88e9-df9c15115634
+		sourceLineageTag: costo_total_cop
+		summarizeBy: sum
+		sourceColumn: costo_total_cop
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column utilidad_cop
+		dataType: double
+		lineageTag: 6638bd17-c316-47c8-b393-911ba423acbb
+		sourceLineageTag: utilidad_cop
+		summarizeBy: sum
+		sourceColumn: utilidad_cop
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column canal_venta
+		dataType: string
+		lineageTag: d609f381-5c42-4a37-a252-63ce6c009ce5
+		sourceLineageTag: canal_venta
+		summarizeBy: none
+		sourceColumn: canal_venta
+
+		annotation SummarizationSetBy = Automatic
+
+	column codigo_transaccion
+		dataType: string
+		lineageTag: 3c51fca6-ba11-4528-8a81-4ccaf4510e6c
+		sourceLineageTag: codigo_transaccion
+		summarizeBy: none
+		sourceColumn: codigo_transaccion
+
+		annotation SummarizationSetBy = Automatic
+
+	column logistica_torre
+		dataType: string
+		lineageTag: 3f5b9ac6-070c-4581-8fb5-6105e52895c9
+		sourceLineageTag: logistica_torre
+		summarizeBy: none
+		sourceColumn: logistica_torre
+
+		annotation SummarizationSetBy = Automatic
+
+	column logistica_apto
+		dataType: string
+		lineageTag: 690410d2-e231-41bd-97ae-9e141e5aacef
+		sourceLineageTag: logistica_apto
+		summarizeBy: none
+		sourceColumn: logistica_apto
+
+		annotation SummarizationSetBy = Automatic
+
+	column logistica_unidad
+		dataType: string
+		lineageTag: 589ead03-442d-4d8e-9f3b-a3c9084706c0
+		sourceLineageTag: logistica_unidad
+		summarizeBy: none
+		sourceColumn: logistica_unidad
+
+		annotation SummarizationSetBy = Automatic
+
+	column origen_pestaña
+		dataType: string
+		lineageTag: 383e935f-3bb2-496f-baa4-72a750a0b71b
+		sourceLineageTag: origen_pestaña
+		summarizeBy: none
+		sourceColumn: origen_pestaña
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_fct_ventas = entity
+		mode: directLake
+		source
+			entityName: gold_fct_ventas
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_gold_velykapet'
+

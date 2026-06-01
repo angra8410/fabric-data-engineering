@@ -1,0 +1,16 @@
+relationship 55e6d50e-c9c5-1591-932a-6c50702a6110
+	fromColumn: gold_fct_gastos.metodo_pago_sk
+	toColumn: dim_metodo_pago.metodo_pago_sk
+
+relationship 847d03f0-7172-d17d-8228-62da13bf4186
+	fromColumn: gold_fct_gastos.fecha_key
+	toColumn: dim_calendario.fecha_key
+
+relationship 29353b59-404c-9825-2709-7051c1597084
+	fromColumn: gold_fct_ventas.fecha_key
+	toColumn: dim_calendario.fecha_key
+
+relationship gold_fct_ventas_metodo_pago_sk_dim_metodo_pago_metodo_pago_sk
+	fromColumn: gold_fct_ventas.metodo_pago_sk
+	toColumn: dim_metodo_pago.metodo_pago_sk
+

@@ -1,0 +1,29 @@
+/// Tabla de soporte para cascada P&L. Desconectada del modelo, usada solo como eje del Waterfall.
+table _PL_Orden
+
+	/// Medida switch para el Waterfall de P&L. Retorna el valor correcto según el paso seleccionado en _PL_Orden.
+	measure 'Valor P&L' =
+			VAR paso = SELECTEDVALUE(_PL_Orden[PL_Orden])
+			RETURN
+			    SWITCH(paso,
+			        1, [Total Ventas],
+			        2, -[Total Costo],
+			        3, [Utilidad Bruta],
+			        4, -[Total Gastos],
+			        5, [Ganancia Neta]
+			    )
+		formatString: #,##0" COP"
+		displayFolder: 📊 Rentabilidad
+
+	column PL_Paso
+		isNameInferred
+		sourceColumn: [PL_Paso]
+
+	column PL_Orden
+		isNameInferred
+		sourceColumn: [PL_Orden]
+
+	partition _PL_Orden = calculated
+		mode: import
+		source = DATATABLE("PL_Paso", STRING, "PL_Orden", INTEGER, {{"1. Ventas Totales", 1}, {"2. (-) Costo de Ventas", 2}, {"3. Utilidad Bruta", 3}, {"4. (-) Gastos Operativos", 4}, {"5. Ganancia Neta", 5}})
+

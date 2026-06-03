@@ -98,6 +98,109 @@ table gold_fct_ventas
 		displayFolder: 🗓️ Tiempo
 		lineageTag: 12d1090e-106b-48c3-babe-0f4697338f84
 
+	measure 'Ventas por Torre' =
+			
+			CALCULATE(
+			    [Total Ventas],
+			    ALLEXCEPT(gold_fct_ventas, gold_fct_ventas[logistica_torre])
+			)
+		displayFolder: 🏢 Logística
+		lineageTag: 16142f23-7caf-49e3-a5f0-e3c3749dbc40
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Torre Líder' =
+			
+			CALCULATE(
+			    FIRSTNONBLANK(gold_fct_ventas[logistica_torre], 1),
+			    TOPN(1, VALUES(gold_fct_ventas[logistica_torre]), [Total Ventas], DESC)
+			)
+		displayFolder: 🏢 Logística
+		lineageTag: 0b5c8b8b-734c-48d8-b897-5625bbf84b58
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+	measure 'Transacciones por Torre' =
+			
+			CALCULATE(
+			    [# Transacciones],
+			    ALLEXCEPT(gold_fct_ventas, gold_fct_ventas[logistica_torre])
+			)
+		formatString: 0
+		displayFolder: 🏢 Logística
+		lineageTag: e1aa32cb-0728-49f8-8da3-5ea86e8fdee6
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+	measure 'Ticket Promedio Torre' =
+			
+			DIVIDE([Total Ventas], [# Transacciones])
+		displayFolder: 🏢 Logística
+		lineageTag: c5799df9-5218-4990-937a-beb875598b4b
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Ventas por Apto' =
+			
+			CALCULATE(
+			    [Total Ventas],
+			    ALLEXCEPT(gold_fct_ventas, gold_fct_ventas[logistica_apto])
+			)
+		displayFolder: 🏢 Logística
+		lineageTag: a7858e90-f003-415c-b99f-ae4763d38b03
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Participacion Torre %' =
+			
+			DIVIDE([Total Ventas], CALCULATE([Total Ventas], ALL(gold_fct_ventas[logistica_torre])))
+		displayFolder: 🏢 Logística
+		lineageTag: 7224130d-4234-42c2-a049-77fd752d76df
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Aptos por Torre' =
+			
+			DISTINCTCOUNT(gold_fct_ventas[logistica_apto])
+		formatString: 0
+		displayFolder: 🏢 Logística
+		lineageTag: 505cfc25-d95d-46b1-8dc1-02d20bf3b860
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+	measure 'Unidades por Torre' =
+			
+			DISTINCTCOUNT(gold_fct_ventas[logistica_unidad])
+		formatString: 0
+		displayFolder: 🏢 Logística
+		lineageTag: 22b3e512-3764-49cd-b4f4-6eeaeabfc2c7
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
 	column fecha_key
 		dataType: dateTime
 		formatString: General Date

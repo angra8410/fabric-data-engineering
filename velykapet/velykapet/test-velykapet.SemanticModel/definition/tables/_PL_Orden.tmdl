@@ -1,5 +1,6 @@
 /// Tabla de soporte para cascada P&L. Desconectada del modelo, usada solo como eje del Waterfall.
 table _PL_Orden
+	lineageTag: b440cdf0-8557-414a-8336-d7b9e91b1db9
 
 	/// Medida switch para el Waterfall de P&L. Retorna el valor correcto según el paso seleccionado en _PL_Orden.
 	measure 'Valor P&L' =
@@ -14,12 +15,15 @@ table _PL_Orden
 			    )
 		formatString: #,##0" COP"
 		displayFolder: 📊 Rentabilidad
+		lineageTag: 81770431-5e45-4030-b956-3567d2a902b8
 
 	column PL_Paso
+		lineageTag: 10ac5bb7-68f9-48fe-9bed-ca6256a2b98f
 		isNameInferred
 		sourceColumn: [PL_Paso]
 
 	column PL_Orden
+		lineageTag: a345d110-15f1-4f70-9251-6c1ed9e0401e
 		isNameInferred
 		sourceColumn: [PL_Orden]
 

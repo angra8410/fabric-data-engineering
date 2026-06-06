@@ -1,0 +1,88 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "6c20d060b40b606830d0",
+  "position": {
+    "x": 38.4909206489594,
+    "y": 492.45736712639234,
+    "z": 8000,
+    "height": 227.54926618943645,
+    "width": 1156.9917912716619,
+    "tabOrder": 8000
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_marketing_performance"
+                    }
+                  },
+                  "Property": "GA_Web_Source"
+                }
+              },
+              "queryRef": "fact_marketing_performance.GA_Web_Source",
+              "nativeQueryRef": "GA_Web_Source",
+              "active": true
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_marketing_performance"
+                    }
+                  },
+                  "Property": "Top GA Source by Sessions"
+                }
+              },
+              "queryRef": "fact_marketing_performance.Top GA Source by Sessions",
+              "nativeQueryRef": "Top GA Source by Sessions"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_marketing_performance"
+                    }
+                  },
+                  "Property": "Engagement Rate"
+                }
+              },
+              "queryRef": "fact_marketing_performance.Engagement Rate",
+              "nativeQueryRef": "Engagement Rate"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_marketing_performance"
+                    }
+                  },
+                  "Property": "Avg Sessions per User"
+                }
+              },
+              "queryRef": "fact_marketing_performance.Avg Sessions per User",
+              "nativeQueryRef": "Avg Sessions per User"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

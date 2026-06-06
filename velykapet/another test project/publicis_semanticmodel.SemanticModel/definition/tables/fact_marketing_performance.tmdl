@@ -1,0 +1,388 @@
+table fact_marketing_performance
+	lineageTag: e28c222a-dc7b-4db7-8dab-0dee18aa33c2
+	sourceLineageTag: [dbo].[fact_marketing_performance]
+
+	/// Total ad impressions from DCM
+	measure 'Total Impressions' = SUM(fact_marketing_performance[Impressions])
+		formatString: #,0
+		displayFolder: DCM Metrics
+		lineageTag: 00fd6a44-1035-4079-8d03-f468ee6273ce
+
+	/// Total clicks from DCM
+	measure 'Total Clicks' = SUM(fact_marketing_performance[Clicks])
+		formatString: #,0
+		displayFolder: DCM Metrics
+		lineageTag: a3fa7071-e650-4271-a5e2-791cc1f6548c
+
+	/// Click-Through Rate: Clicks / Impressions
+	measure CTR = DIVIDE([Total Clicks], [Total Impressions], 0)
+		formatString: 0.00%
+		displayFolder: DCM Metrics
+		lineageTag: 61f1e4a2-ac86-4e6d-93c2-4e99d622065a
+
+	/// Total web sessions from Google Analytics
+	measure 'Total Sessions' = SUM(fact_marketing_performance[Sessions])
+		formatString: #,0
+		displayFolder: GA Metrics
+		lineageTag: 9257eaf4-51b9-4438-b851-544dc347990b
+
+	/// Total unique users from Google Analytics
+	measure 'Total Users' = SUM(fact_marketing_performance[Users])
+		formatString: #,0
+		displayFolder: GA Metrics
+		lineageTag: d39405b1-1a75-485d-97c6-b593434f59c4
+
+	/// Average sessions per user - engagement depth
+	measure 'Sessions per User' = DIVIDE([Total Sessions], [Total Users], 0)
+		formatString: 0.00
+		displayFolder: GA Metrics
+		lineageTag: 5d7a2231-2bdd-4eaa-b9f2-75eb7f7b47d8
+
+	/// How many clicks resulted in a session - post-click quality
+	measure 'Click-to-Session Rate' = DIVIDE([Total Sessions], [Total Clicks], 0)
+		formatString: 0.00%
+		displayFolder: Efficiency Metrics
+		lineageTag: 62da2328-35e7-4c74-9557-4ae4f3cb5aaf
+
+	/// Frequency: how many times each user was exposed to the ad
+	measure 'Impressions per User' = DIVIDE([Total Impressions], [Total Users], 0)
+		formatString: #,0.0
+		displayFolder: Efficiency Metrics
+		lineageTag: c165ea59-2b3f-4dde-bb76-99776a45f1de
+
+	/// Placeholder - requires spend data. Replace BLANK() with DIVIDE([Total Spend],[Total Clicks],0)
+	measure 'Cost per Click (Est)' = BLANK()
+		formatString: $ #,0.00
+		displayFolder: Efficiency Metrics
+		lineageTag: 8007a871-c3c4-416e-927a-85ad5c638551
+
+	/// Clicks from the single best-performing campaign
+	measure 'Top Campaign by Clicks' = CALCULATE([Total Clicks], TOPN(1, VALUES(fact_marketing_performance[Campaign]), [Total Clicks], DESC))
+		formatString: #,0
+		displayFolder: Rankings
+		lineageTag: b3cb22ef-d05f-4776-a041-f735d3f1d5c8
+
+	/// Highest CTR from any single media placement
+	measure 'Top Placement by CTR' = CALCULATE([CTR], TOPN(1, VALUES(fact_marketing_performance[Media_Placement_Site]), [CTR], DESC))
+		formatString: 0.00%
+		displayFolder: Rankings
+		lineageTag: b410b29e-2e70-4afb-bf41-3d5809002234
+
+	/// MoM Impressions Growth — latest month vs prior month, only when prior month has data
+	measure 'MoM Impressions Growth' = VAR AllKeys = VALUES(dim_date[YearMonthKey]) VAR CurrKey = MAXX(AllKeys, dim_date[YearMonthKey]) VAR PrevKey = IF(MOD(CurrKey, 100) = 1, CurrKey - 89, CurrKey - 1) VAR HasPrev = COUNTROWS(FILTER(AllKeys, dim_date[YearMonthKey] = PrevKey)) > 0 VAR CurrVal = CALCULATE([Total Impressions], dim_date[YearMonthKey] = CurrKey) VAR PrevVal = CALCULATE([Total Impressions], ALL(dim_date), dim_date[YearMonthKey] = PrevKey) RETURN IF(HasPrev && NOT ISBLANK(PrevVal), DIVIDE(CurrVal - PrevVal, PrevVal, BLANK()), BLANK())
+		formatString: 0.00%
+		displayFolder: Trends
+		lineageTag: 896184db-ac63-4b7d-b9bb-a6bad9e3957b
+
+	/// MoM Sessions Growth — latest month vs prior month, only when prior month has data
+	measure 'MoM Sessions Growth' = VAR AllKeys = VALUES(dim_date[YearMonthKey]) VAR CurrKey = MAXX(AllKeys, dim_date[YearMonthKey]) VAR PrevKey = IF(MOD(CurrKey, 100) = 1, CurrKey - 89, CurrKey - 1) VAR HasPrev = COUNTROWS(FILTER(AllKeys, dim_date[YearMonthKey] = PrevKey)) > 0 VAR CurrVal = CALCULATE([Total Sessions], dim_date[YearMonthKey] = CurrKey) VAR PrevVal = CALCULATE([Total Sessions], ALL(dim_date), dim_date[YearMonthKey] = PrevKey) RETURN IF(HasPrev && NOT ISBLANK(PrevVal), DIVIDE(CurrVal - PrevVal, PrevVal, BLANK()), BLANK())
+		formatString: 0.00%
+		displayFolder: Trends
+		lineageTag: b7451499-3407-430d-bb75-934e40f539bd
+
+	/// MoM CTR Change — latest month vs prior month absolute difference
+	measure 'MoM CTR Change' = VAR AllKeys = VALUES(dim_date[YearMonthKey]) VAR CurrKey = MAXX(AllKeys, dim_date[YearMonthKey]) VAR PrevKey = IF(MOD(CurrKey, 100) = 1, CurrKey - 89, CurrKey - 1) VAR HasPrev = COUNTROWS(FILTER(AllKeys, dim_date[YearMonthKey] = PrevKey)) > 0 VAR CurrVal = CALCULATE([CTR], dim_date[YearMonthKey] = CurrKey) VAR PrevVal = CALCULATE([CTR], ALL(dim_date), dim_date[YearMonthKey] = PrevKey) RETURN IF(HasPrev && NOT ISBLANK(PrevVal), CurrVal - PrevVal, BLANK())
+		formatString: 0.00%
+		displayFolder: Trends
+		lineageTag: 754d0da5-92a8-413a-b793-b59bfbf95a04
+
+	/// Sessions from desktop devices
+	measure 'Desktop Sessions' = CALCULATE([Total Sessions], fact_marketing_performance[Device_Category] = "desktop")
+		formatString: #,0
+		displayFolder: Device Breakdown
+		lineageTag: bf149a32-4391-4b12-92b2-4273964b5276
+
+	/// Sessions from mobile devices
+	measure 'Mobile Sessions' = CALCULATE([Total Sessions], fact_marketing_performance[Device_Category] = "mobile")
+		formatString: #,0
+		displayFolder: Device Breakdown
+		lineageTag: aba03558-2211-4ec0-b7a1-84a2c5c91022
+
+	/// Sessions from tablet devices
+	measure 'Tablet Sessions' = CALCULATE([Total Sessions], fact_marketing_performance[Device_Category] = "tablet")
+		formatString: #,0
+		displayFolder: Device Breakdown
+		lineageTag: dbf5c6b9-41c3-42f5-9cd6-e1328f2a1bb4
+
+	/// Percentage of sessions on mobile
+	measure 'Mobile Share of Sessions' = DIVIDE([Mobile Sessions], [Total Sessions], 0)
+		formatString: 0.0%
+		displayFolder: Device Breakdown
+		lineageTag: 1c46791e-ae3f-461c-b42f-429e14b61b5c
+
+	/// Active Campaigns: distinct campaign count
+	measure 'Active Campaigns' = DISTINCTCOUNT(fact_marketing_performance[Campaign])
+		formatString: #,##0
+		displayFolder: DCM Metrics
+		lineageTag: 9d9e7ea8-6876-4719-adf5-a26bcb386e32
+
+	/// Number of distinct media placement sites
+	measure 'Active Placements' = DISTINCTCOUNT(fact_marketing_performance[Media_Placement_Site])
+		formatString: #,0
+		displayFolder: DCM Metrics
+		lineageTag: 7a8f4989-5718-4d88-837d-d9ca2f6c6abf
+
+	/// Engagement Rate: (Clicks + Sessions) / Impressions
+	measure 'Engagement Rate' = VAR TotalClicks = [Total Clicks] VAR TotalSessions = [Total Sessions] VAR TotalImpressions = [Total Impressions] RETURN IF(TotalImpressions = 0 || ISBLANK(TotalImpressions), BLANK(), DIVIDE(TotalClicks + TotalSessions, TotalImpressions, 0))
+		formatString: 0.00%
+		displayFolder: DCM + GA Combined
+		lineageTag: c9dec99d-2b55-472b-9f92-cf2420068dfe
+
+	/// Proxy for bounce: users who didn't return for a second session
+	measure 'Bounce Rate Proxy' = DIVIDE([Total Users] - [Total Sessions] + [Total Users], [Total Users], 0)
+		formatString: 0.00%
+		displayFolder: GA Metrics
+		lineageTag: 75fb73ac-ce51-4a73-9ec0-5b3868ed7666
+
+	/// Average number of sessions generated per unique user
+	measure 'Avg Sessions per User' = DIVIDE([Total Sessions], [Total Users], 0)
+		formatString: 0.00
+		displayFolder: GA Metrics
+		lineageTag: 9f1202f4-fc6e-4a18-88e9-126cd8465a18
+
+	/// Each creative's CTR relative to the average CTR (index > 1 = above average)
+	measure 'Creative Efficiency Index' = DIVIDE([CTR], AVERAGEX(VALUES(fact_marketing_performance[Creative_Name]), [CTR]), 0)
+		formatString: 0.00
+		displayFolder: Creative Analysis
+		lineageTag: af5e3dd9-9f75-47c9-b29f-10396abbfb78
+
+	/// DCM Clicks to GA Sessions Gap — absolute number, NOT a percentage
+	measure 'DCM Clicks to GA Sessions Gap' = ABS([Total Clicks] - [Total Sessions])
+		formatString: #,##0
+		displayFolder: DCM + GA Combined
+		lineageTag: c2a28216-5877-4a06-bd1f-16a7e4587ee8
+
+	/// % gap between clicks (DCM) and sessions (GA) — typical benchmark is <10%
+	measure 'DCM vs GA Discrepancy Rate' = DIVIDE(ABS([Total Clicks] - [Total Sessions]), [Total Clicks], 0)
+		formatString: 0.00%
+		displayFolder: DCM + GA Combined
+		lineageTag: db34b796-d5ba-4b5d-9c92-8f7a4ef4f2d8
+
+	/// Impression share per campaign — ALLEXCEPT preserves campaign context correctly
+	measure 'Impression Share by Campaign' = DIVIDE([Total Impressions], CALCULATE([Total Impressions], ALLEXCEPT(fact_marketing_performance, fact_marketing_performance[Campaign])), 0)
+		formatString: 0.00%
+		displayFolder: Campaign Performance
+		lineageTag: 57025c89-5fbd-456c-b524-4c925640ec1f
+
+	/// Click share per campaign — ALLEXCEPT preserves campaign context correctly
+	measure 'Click Share by Campaign' = DIVIDE([Total Clicks], CALCULATE([Total Clicks], ALLEXCEPT(fact_marketing_performance, fact_marketing_performance[Campaign])), 0)
+		formatString: 0.00%
+		displayFolder: Campaign Performance
+		lineageTag: 589b3a74-4305-4122-b5a8-9e10056de8d2
+
+	/// Each device category's share of total sessions
+	measure 'Session Share by Device' = DIVIDE([Total Sessions], CALCULATE([Total Sessions], ALL(fact_marketing_performance[Device_Category])), 0)
+		formatString: 0.00%
+		displayFolder: Device Analysis
+		lineageTag: 83b329b8-a6a0-4a83-a9f1-5e222d49058f
+
+	/// Desktop sessions as % of total
+	measure 'Desktop Share of Sessions' = DIVIDE([Desktop Sessions], [Total Sessions], 0)
+		formatString: 0.00%
+		displayFolder: Device Analysis
+		lineageTag: a94aecce-a863-4d57-b9b5-eb68c77b59ca
+
+	/// Tablet sessions as % of total
+	measure 'Tablet Share of Sessions' = DIVIDE([Tablet Sessions], [Total Sessions], 0)
+		formatString: 0.00%
+		displayFolder: Device Analysis
+		lineageTag: e9a416b9-f03e-41de-8212-1e0555a9b30d
+
+	/// CTR in the context of a placement slicer — same formula, context-driven
+	measure 'CTR by Placement' = DIVIDE([Total Clicks], [Total Impressions], 0)
+		formatString: 0.00%
+		displayFolder: Placement Analysis
+		lineageTag: ffa68a3c-4626-4c6b-995f-2b9f2b65ea72
+
+	/// Total impressions for the single best-performing quarter
+	measure 'Best Performing Quarter' = CALCULATE([Total Impressions], TOPN(1, VALUES(dim_date[Quarter]), [Total Impressions], DESC))
+		formatString: #,##0
+		displayFolder: Time Intelligence
+		lineageTag: 359d64a8-c52f-4c07-b5c8-0e3d30361fe8
+
+	/// QoQ Impressions Growth — compares current quarter vs previous quarter within the same dataset (no prior-year lookup needed, data is 2021 only)
+	measure 'QoQ Impressions Growth' = VAR CurrQ = MAX(dim_date[Quarter]) VAR CurrYear = MAX(dim_date[Year]) VAR PrevQ = SWITCH(CurrQ, "Q1", "Q4", "Q2", "Q1", "Q3", "Q2", "Q4", "Q3") VAR PrevYear = IF(CurrQ = "Q1", CurrYear - 1, CurrYear) VAR CurrVal = CALCULATE([Total Impressions], dim_date[Quarter] = CurrQ, dim_date[Year] = CurrYear) VAR PrevVal = CALCULATE([Total Impressions], ALL(dim_date), dim_date[Quarter] = PrevQ, dim_date[Year] = PrevYear) RETURN IF(PrevVal = 0 || ISBLANK(PrevVal), BLANK(), DIVIDE(CurrVal - PrevVal, PrevVal, BLANK()))
+		formatString: 0.00%
+		displayFolder: Time Intelligence
+		lineageTag: e0536675-0c5c-4756-af0f-0dbb7b1bb36b
+
+	/// QoQ Sessions Growth — compares current quarter vs previous quarter within the same dataset
+	measure 'QoQ Sessions Growth' = VAR CurrQ = MAX(dim_date[Quarter]) VAR CurrYear = MAX(dim_date[Year]) VAR PrevQ = SWITCH(CurrQ, "Q1", "Q4", "Q2", "Q1", "Q3", "Q2", "Q4", "Q3") VAR PrevYear = IF(CurrQ = "Q1", CurrYear - 1, CurrYear) VAR CurrVal = CALCULATE([Total Sessions], dim_date[Quarter] = CurrQ, dim_date[Year] = CurrYear) VAR PrevVal = CALCULATE([Total Sessions], ALL(dim_date), dim_date[Quarter] = PrevQ, dim_date[Year] = PrevYear) RETURN IF(PrevVal = 0 || ISBLANK(PrevVal), BLANK(), DIVIDE(CurrVal - PrevVal, PrevVal, BLANK()))
+		formatString: 0.00%
+		displayFolder: Time Intelligence
+		lineageTag: 71e1d1b1-872a-4ea3-9218-514deb7648a3
+
+	/// Count of distinct creative names in scope
+	measure 'Unique Creatives' = DISTINCTCOUNT(fact_marketing_performance[Creative_Name])
+		formatString: #,##0
+		displayFolder: Creative Analysis
+		lineageTag: 1ed8a9c5-542c-49f1-b420-f6ebeefcf49d
+
+	/// Count of distinct creative dimension formats
+	measure 'Unique Creative Sizes' = DISTINCTCOUNT(fact_marketing_performance[Creative_Dimensions])
+		formatString: #,##0
+		displayFolder: Creative Analysis
+		lineageTag: dd77fa5e-add6-43d4-82d6-81776254ec95
+
+	/// CTR of the best-performing creative
+	measure 'Top Creative by CTR' = CALCULATE([CTR], TOPN(1, VALUES(fact_marketing_performance[Creative_Name]), [CTR], DESC))
+		formatString: 0.00%
+		displayFolder: Creative Analysis
+		lineageTag: 6b95194a-eeab-411e-be2f-f05a65c3e901
+
+	/// Sessions from the top GA web source in current context
+	measure 'Top GA Source by Sessions' = CALCULATE([Total Sessions], TOPN(1, VALUES(fact_marketing_performance[GA_Web_Source]), [Total Sessions], DESC))
+		formatString: #,##0
+		displayFolder: GA Metrics
+		lineageTag: 0f25d1e2-a619-4b30-9b85-a001122e0ad9
+
+	/// Numeric sort key for Quarter to force chronological order in visuals (Q1=1, Q2=2, Q3=3, Q4=4)
+	measure 'Quarter Sort Order' = SWITCH(MAX(dim_date[Quarter]), "Q1", 1, "Q2", 2, "Q3", 3, "Q4", 4, 0)
+		formatString: 0
+		displayFolder: Time Intelligence
+		lineageTag: 740d813a-9ebd-4b24-ab9e-b74093c06159
+
+	column Date
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: date
+		lineageTag: 97bf3ead-00cb-49a0-a525-431f5f9ee0c4
+		sourceLineageTag: Date
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column Campaign
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: c1a969ab-a88b-447f-bc9f-3bc3623b5a6c
+		sourceLineageTag: Campaign
+		summarizeBy: none
+		sourceColumn: Campaign
+
+		annotation SummarizationSetBy = Automatic
+
+	column Media_Placement_Site
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 7bb590e2-59a9-4643-83b8-53ca17b97bc0
+		sourceLineageTag: Media_Placement_Site
+		summarizeBy: none
+		sourceColumn: Media_Placement_Site
+
+		annotation SummarizationSetBy = Automatic
+
+	column Creative_Name
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 45e82e37-b48c-46b0-860f-0e5643a3ed9d
+		sourceLineageTag: Creative_Name
+		summarizeBy: none
+		sourceColumn: Creative_Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Creative_Dimensions
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 409ba678-59eb-466a-9feb-08e32a18ab70
+		sourceLineageTag: Creative_Dimensions
+		summarizeBy: none
+		sourceColumn: Creative_Dimensions
+
+		annotation SummarizationSetBy = Automatic
+
+	column GA_Web_Source
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: ab8e156d-fcfb-454c-8c97-2cc0d31da34f
+		sourceLineageTag: GA_Web_Source
+		summarizeBy: none
+		sourceColumn: GA_Web_Source
+
+		annotation SummarizationSetBy = Automatic
+
+	column Device_Category
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 19bacea6-1149-4d36-894a-f946e56d35cf
+		sourceLineageTag: Device_Category
+		summarizeBy: none
+		sourceColumn: Device_Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column Impressions
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: a45bc90e-bbb0-4003-80c3-8de11a620f0e
+		sourceLineageTag: Impressions
+		summarizeBy: sum
+		sourceColumn: Impressions
+
+		annotation SummarizationSetBy = Automatic
+
+	column Clicks
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 3f18f429-43eb-404f-9b46-5b5fa2208c3a
+		sourceLineageTag: Clicks
+		summarizeBy: sum
+		sourceColumn: Clicks
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sessions
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 80643747-960f-4831-862f-272399f4eddc
+		sourceLineageTag: Sessions
+		summarizeBy: sum
+		sourceColumn: Sessions
+
+		annotation SummarizationSetBy = Automatic
+
+	column Users
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: c5daa49c-dd59-4fcd-ac1e-08fe9161b9b6
+		sourceLineageTag: Users
+		summarizeBy: sum
+		sourceColumn: Users
+
+		annotation SummarizationSetBy = Automatic
+
+	column Campaign_Group
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 6633a9cc-c84e-48a5-a511-ffacc2019bd1
+		sourceLineageTag: Campaign_Group
+		summarizeBy: none
+		sourceColumn: Campaign_Group
+
+		annotation SummarizationSetBy = Automatic
+
+	column Device_Category_DCM
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: ef60d100-b6c2-4cb6-b3f9-6357970aa9d5
+		sourceLineageTag: Device_Category_DCM
+		summarizeBy: none
+		sourceColumn: Device_Category_DCM
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_marketing_performance = entity
+		mode: directLake
+		source
+			entityName: fact_marketing_performance
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+

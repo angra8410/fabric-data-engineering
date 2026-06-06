@@ -1,0 +1,58 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "92af4efc9746dc8aa6a3",
+  "position": {
+    "x": 180.00165832895721,
+    "y": 449.438102871673,
+    "z": 1002,
+    "height": 258.115585528316,
+    "width": 1092.4628948895829,
+    "tabOrder": 1002
+  },
+  "visual": {
+    "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6855",
+    "query": {
+      "queryState": {
+        "content": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Schema": "extension",
+                      "Entity": "fact_marketing_performance"
+                    }
+                  },
+                  "Property": "Marketer Action Items HTML"
+                }
+              },
+              "queryRef": "fact_marketing_performance.Marketer Action Items HTML",
+              "nativeQueryRef": "Marketer Action Items HTML"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Schema": "extension",
+                    "Entity": "fact_marketing_performance"
+                  }
+                },
+                "Property": "Marketer Action Items HTML"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

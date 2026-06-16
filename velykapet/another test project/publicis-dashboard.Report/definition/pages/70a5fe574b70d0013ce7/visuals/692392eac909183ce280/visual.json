@@ -10,7 +10,7 @@
     "tabOrder": 6000
   },
   "visual": {
-    "visualType": "clusteredBarChart",
+    "visualType": "columnChart",
     "query": {
       "queryState": {
         "Category": {
@@ -23,11 +23,11 @@
                       "Entity": "fact_marketing_performance"
                     }
                   },
-                  "Property": "Campaign"
+                  "Property": "Media_Placement_Site"
                 }
               },
-              "queryRef": "fact_marketing_performance.Campaign",
-              "nativeQueryRef": "Campaign",
+              "queryRef": "fact_marketing_performance.Media_Placement_Site",
+              "nativeQueryRef": "Media_Placement_Site",
               "active": true
             }
           ]
@@ -47,20 +47,6 @@
               },
               "queryRef": "fact_marketing_performance.Total Impressions",
               "nativeQueryRef": "Total Impressions"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_marketing_performance"
-                    }
-                  },
-                  "Property": "Total Clicks"
-                }
-              },
-              "queryRef": "fact_marketing_performance.Total Clicks",
-              "nativeQueryRef": "Total Clicks"
             }
           ]
         }
@@ -92,6 +78,26 @@
               "expr": {
                 "Literal": {
                   "Value": "'Categorical'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "labels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1000000D"
                 }
               }
             }
@@ -140,5 +146,62 @@
       ]
     },
     "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "e02dabd426dabe57c567",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_marketing_performance"
+              }
+            },
+            "Property": "Campaign"
+          }
+        },
+        "type": "Advanced",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "f",
+              "Entity": "fact_marketing_performance",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "Not": {
+                  "Expression": {
+                    "Comparison": {
+                      "ComparisonKind": 0,
+                      "Left": {
+                        "Column": {
+                          "Expression": {
+                            "SourceRef": {
+                              "Source": "f"
+                            }
+                          },
+                          "Property": "Campaign"
+                        }
+                      },
+                      "Right": {
+                        "Literal": {
+                          "Value": "null"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "howCreated": "User"
+      }
+    ]
   }
 }

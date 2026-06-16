@@ -38,8 +38,8 @@ table fact_marketing_performance
 		displayFolder: GA Metrics
 		lineageTag: 5d7a2231-2bdd-4eaa-b9f2-75eb7f7b47d8
 
-	/// How many clicks resulted in a session - post-click quality
-	measure 'Click-to-Session Rate' = DIVIDE([Total Sessions], [Total Clicks], 0)
+	/// Click-to-Session Rate: only calculated for months where both DCM clicks AND GA sessions exist (Apr-Oct). Excludes Jan-Mar where GA had no data.
+	measure 'Click-to-Session Rate' = VAR ClicksWhereGAExists = CALCULATE([Total Clicks], FILTER(VALUES(dim_date[YearMonthKey]), [Total Sessions] > 0)) VAR SessionsWhereGAExists = CALCULATE([Total Sessions], FILTER(VALUES(dim_date[YearMonthKey]), [Total Sessions] > 0)) RETURN DIVIDE(ClicksWhereGAExists, SessionsWhereGAExists, 0)
 		formatString: 0.00%
 		displayFolder: Efficiency Metrics
 		lineageTag: 62da2328-35e7-4c74-9557-4ae4f3cb5aaf
@@ -68,20 +68,20 @@ table fact_marketing_performance
 		displayFolder: Rankings
 		lineageTag: b410b29e-2e70-4afb-bf41-3d5809002234
 
-	/// MoM Impressions Growth — latest month vs prior month, only when prior month has data
-	measure 'MoM Impressions Growth' = VAR AllKeys = VALUES(dim_date[YearMonthKey]) VAR CurrKey = MAXX(AllKeys, dim_date[YearMonthKey]) VAR PrevKey = IF(MOD(CurrKey, 100) = 1, CurrKey - 89, CurrKey - 1) VAR HasPrev = COUNTROWS(FILTER(AllKeys, dim_date[YearMonthKey] = PrevKey)) > 0 VAR CurrVal = CALCULATE([Total Impressions], dim_date[YearMonthKey] = CurrKey) VAR PrevVal = CALCULATE([Total Impressions], ALL(dim_date), dim_date[YearMonthKey] = PrevKey) RETURN IF(HasPrev && NOT ISBLANK(PrevVal), DIVIDE(CurrVal - PrevVal, PrevVal, BLANK()), BLANK())
+	/// MoM Impressions Growth - requires Date field on filter context from dim_date, not a slicer on YearMonthKey from fact table
+	measure 'MoM Impressions Growth' = VAR AllKeys = CALCULATETABLE(VALUES(dim_date[YearMonthKey]), ALLSELECTED(dim_date)) VAR CurrKey = MAXX(AllKeys, dim_date[YearMonthKey]) VAR PrevKey = IF(MOD(CurrKey, 100) = 1, CurrKey - 89, CurrKey - 1) VAR HasPrev = COUNTROWS(FILTER(AllKeys, dim_date[YearMonthKey] = PrevKey)) > 0 VAR CurrVal = CALCULATE([Total Impressions], dim_date[YearMonthKey] = CurrKey) VAR PrevVal = CALCULATE([Total Impressions], ALL(dim_date), dim_date[YearMonthKey] = PrevKey) RETURN IF(HasPrev && NOT ISBLANK(PrevVal) && PrevVal > 0, DIVIDE(CurrVal - PrevVal, PrevVal, BLANK()), BLANK())
 		formatString: 0.00%
 		displayFolder: Trends
 		lineageTag: 896184db-ac63-4b7d-b9bb-a6bad9e3957b
 
-	/// MoM Sessions Growth — latest month vs prior month, only when prior month has data
-	measure 'MoM Sessions Growth' = VAR AllKeys = VALUES(dim_date[YearMonthKey]) VAR CurrKey = MAXX(AllKeys, dim_date[YearMonthKey]) VAR PrevKey = IF(MOD(CurrKey, 100) = 1, CurrKey - 89, CurrKey - 1) VAR HasPrev = COUNTROWS(FILTER(AllKeys, dim_date[YearMonthKey] = PrevKey)) > 0 VAR CurrVal = CALCULATE([Total Sessions], dim_date[YearMonthKey] = CurrKey) VAR PrevVal = CALCULATE([Total Sessions], ALL(dim_date), dim_date[YearMonthKey] = PrevKey) RETURN IF(HasPrev && NOT ISBLANK(PrevVal), DIVIDE(CurrVal - PrevVal, PrevVal, BLANK()), BLANK())
+	/// MoM Sessions Growth - uses ALLSELECTED to respect slicer context
+	measure 'MoM Sessions Growth' = VAR AllKeys = CALCULATETABLE(VALUES(dim_date[YearMonthKey]), ALLSELECTED(dim_date)) VAR CurrKey = MAXX(AllKeys, dim_date[YearMonthKey]) VAR PrevKey = IF(MOD(CurrKey, 100) = 1, CurrKey - 89, CurrKey - 1) VAR HasPrev = COUNTROWS(FILTER(AllKeys, dim_date[YearMonthKey] = PrevKey)) > 0 VAR CurrVal = CALCULATE([Total Sessions], dim_date[YearMonthKey] = CurrKey) VAR PrevVal = CALCULATE([Total Sessions], ALL(dim_date), dim_date[YearMonthKey] = PrevKey) RETURN IF(HasPrev && NOT ISBLANK(PrevVal) && PrevVal > 0, DIVIDE(CurrVal - PrevVal, PrevVal, BLANK()), BLANK())
 		formatString: 0.00%
 		displayFolder: Trends
 		lineageTag: b7451499-3407-430d-bb75-934e40f539bd
 
-	/// MoM CTR Change — latest month vs prior month absolute difference
-	measure 'MoM CTR Change' = VAR AllKeys = VALUES(dim_date[YearMonthKey]) VAR CurrKey = MAXX(AllKeys, dim_date[YearMonthKey]) VAR PrevKey = IF(MOD(CurrKey, 100) = 1, CurrKey - 89, CurrKey - 1) VAR HasPrev = COUNTROWS(FILTER(AllKeys, dim_date[YearMonthKey] = PrevKey)) > 0 VAR CurrVal = CALCULATE([CTR], dim_date[YearMonthKey] = CurrKey) VAR PrevVal = CALCULATE([CTR], ALL(dim_date), dim_date[YearMonthKey] = PrevKey) RETURN IF(HasPrev && NOT ISBLANK(PrevVal), CurrVal - PrevVal, BLANK())
+	/// MoM CTR Change - uses ALLSELECTED to respect slicer context
+	measure 'MoM CTR Change' = VAR AllKeys = CALCULATETABLE(VALUES(dim_date[YearMonthKey]), ALLSELECTED(dim_date)) VAR CurrKey = MAXX(AllKeys, dim_date[YearMonthKey]) VAR PrevKey = IF(MOD(CurrKey, 100) = 1, CurrKey - 89, CurrKey - 1) VAR HasPrev = COUNTROWS(FILTER(AllKeys, dim_date[YearMonthKey] = PrevKey)) > 0 VAR CurrVal = CALCULATE([CTR], dim_date[YearMonthKey] = CurrKey) VAR PrevVal = CALCULATE([CTR], ALL(dim_date), dim_date[YearMonthKey] = PrevKey) RETURN IF(HasPrev && NOT ISBLANK(PrevVal) && PrevVal > 0, CurrVal - PrevVal, BLANK())
 		formatString: 0.00%
 		displayFolder: Trends
 		lineageTag: 754d0da5-92a8-413a-b793-b59bfbf95a04
@@ -111,10 +111,12 @@ table fact_marketing_performance
 		lineageTag: 1c46791e-ae3f-461c-b42f-429e14b61b5c
 
 	/// Active Campaigns: distinct campaign count
-	measure 'Active Campaigns' = DISTINCTCOUNT(fact_marketing_performance[Campaign])
+	measure 'Active Sources' = DISTINCTCOUNT(fact_marketing_performance[Campaign])
 		formatString: #,##0
 		displayFolder: DCM Metrics
 		lineageTag: 9d9e7ea8-6876-4719-adf5-a26bcb386e32
+
+		changedProperty = Name
 
 	/// Number of distinct media placement sites
 	measure 'Active Placements' = DISTINCTCOUNT(fact_marketing_performance[Media_Placement_Site])
@@ -147,10 +149,12 @@ table fact_marketing_performance
 		lineageTag: af5e3dd9-9f75-47c9-b29f-10396abbfb78
 
 	/// DCM Clicks to GA Sessions Gap — absolute number, NOT a percentage
-	measure 'DCM Clicks to GA Sessions Gap' = ABS([Total Clicks] - [Total Sessions])
+	measure 'Untracked Sessions Est' = ABS([Total Clicks] - [Total Sessions])
 		formatString: #,##0
 		displayFolder: DCM + GA Combined
 		lineageTag: c2a28216-5877-4a06-bd1f-16a7e4587ee8
+
+		changedProperty = Name
 
 	/// % gap between clicks (DCM) and sessions (GA) — typical benchmark is <10%
 	measure 'DCM vs GA Discrepancy Rate' = DIVIDE(ABS([Total Clicks] - [Total Sessions]), [Total Clicks], 0)

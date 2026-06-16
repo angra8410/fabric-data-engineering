@@ -23,11 +23,11 @@
                       "Entity": "fact_marketing_performance"
                     }
                   },
-                  "Property": "Active Campaigns"
+                  "Property": "Active Sources"
                 }
               },
-              "queryRef": "fact_marketing_performance.Active Campaigns",
-              "nativeQueryRef": "Active Campaigns"
+              "queryRef": "fact_marketing_performance.Active Sources",
+              "nativeQueryRef": "Active Sources"
             }
           ]
         }
@@ -42,7 +42,7 @@
                     "Entity": "fact_marketing_performance"
                   }
                 },
-                "Property": "Active Campaigns"
+                "Property": "Active Sources"
               }
             },
             "direction": "Descending"

@@ -259,34 +259,6 @@
             }
           ]
         }
-      },
-      {
-        "name": "ff55eb97186d11ab0a3d",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "fact_marketing_performance"
-              }
-            },
-            "Property": "Total Impressions"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "a56248551e50839c3b23",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "fact_marketing_performance"
-              }
-            },
-            "Property": "CTR"
-          }
-        },
-        "type": "Advanced"
       }
     ]
   }

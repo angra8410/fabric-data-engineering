@@ -1,0 +1,218 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "575a46b8b17960050075",
+  "position": {
+    "x": 176.64386760060432,
+    "y": 384.7911001236094,
+    "z": 6000,
+    "height": 193.52067023760472,
+    "width": 432.04614750721055,
+    "tabOrder": 6000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "gold_fact_top_posts"
+                    }
+                  },
+                  "Property": "post_title"
+                }
+              },
+              "queryRef": "gold_fact_top_posts.post_title",
+              "nativeQueryRef": "post_title"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "gold_dim_date"
+                    }
+                  },
+                  "Property": "date"
+                }
+              },
+              "queryRef": "gold_dim_date.date",
+              "nativeQueryRef": "date"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "gold_fact_top_posts"
+                    }
+                  },
+                  "Property": "Top Post Impressions"
+                }
+              },
+              "queryRef": "gold_fact_top_posts.Top Post Impressions",
+              "nativeQueryRef": "Top Post Impressions"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "gold_fact_top_posts"
+                    }
+                  },
+                  "Property": "Top Post Engagements"
+                }
+              },
+              "queryRef": "gold_fact_top_posts.Top Post Engagements",
+              "nativeQueryRef": "Top Post Engagements"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "gold_fact_top_posts"
+                    }
+                  },
+                  "Property": "Avg Post Engagement Rate"
+                }
+              },
+              "queryRef": "gold_fact_top_posts.Avg Post Engagement Rate",
+              "nativeQueryRef": "Avg Post Engagement Rate"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "gold_fact_top_posts"
+                    }
+                  },
+                  "Property": "Post Count"
+                }
+              },
+              "queryRef": "gold_fact_top_posts.Post Count",
+              "nativeQueryRef": "Post Count"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "gold_fact_top_posts"
+                  }
+                },
+                "Property": "Top Post Impressions"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "154.57836182768057D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "gold_fact_top_posts.post_title"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "69.24447191319874D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "gold_dim_date.date"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "67.26128582899D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "gold_fact_top_posts.Top Post Impressions"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "77.49567367119901D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "gold_fact_top_posts.Top Post Engagements"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "76.1183903309985D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "gold_fact_top_posts.Avg Post Engagement Rate"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "43.998077187199556D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "gold_fact_top_posts.Post Count"
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {}
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

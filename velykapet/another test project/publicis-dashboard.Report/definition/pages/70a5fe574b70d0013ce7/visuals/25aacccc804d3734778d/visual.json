@@ -60,11 +60,11 @@
                       "Entity": "fact_marketing_performance"
                     }
                   },
-                  "Property": "DCM Clicks to GA Sessions Gap"
+                  "Property": "Untracked Sessions Est"
                 }
               },
-              "queryRef": "fact_marketing_performance.DCM Clicks to GA Sessions Gap",
-              "nativeQueryRef": "DCM Clicks to GA Sessions Gap"
+              "queryRef": "fact_marketing_performance.Untracked Sessions Est",
+              "nativeQueryRef": "Untracked Sessions Est"
             }
           ]
         }
@@ -130,5 +130,51 @@
       ]
     },
     "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "f6d8f6e4820a1aa03591",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_date"
+              }
+            },
+            "Property": "DateKey"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "6f5680ecbccd0aac30aa",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_marketing_performance"
+              }
+            },
+            "Property": "DCM vs GA Discrepancy Rate"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "34d1f7ccac0854494aa7",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_marketing_performance"
+              }
+            },
+            "Property": "Untracked Sessions Est"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
   }
 }

@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "6013e937726d6db27042",
   "position": {
-    "x": 189.51995373048004,
-    "y": 104.91283152937288,
+    "x": 189.96340729074993,
+    "y": 104.58659502524435,
     "z": 2000,
-    "height": 163.57376958880718,
-    "width": 175.9828141783029,
+    "height": 163.28315345777943,
+    "width": 175.02246514428646,
     "tabOrder": 2000
   },
   "visual": {
@@ -171,6 +171,28 @@
           },
           "selector": {
             "metadata": "fact_marketing_performance.Total Impressions"
+          }
+        },
+        {
+          "properties": {
+            "titleContentType": {
+              "expr": {
+                "Literal": {
+                  "Value": "'custom'"
+                }
+              }
+            },
+            "titleText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Select a month to see MoM Comparison ---Sessions per Click'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fact_marketing_performance.Total Impressions",
+            "id": "field-c6a586dd-549b-72d7-4882-f3c825ea8af9"
           }
         }
       ],

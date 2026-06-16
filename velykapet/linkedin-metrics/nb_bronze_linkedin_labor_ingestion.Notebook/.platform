@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_bronze_linkedin_labor_ingestion"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "c2a30357-71e4-b88a-4e4d-b6ce2f0f4561"
+  }
+}

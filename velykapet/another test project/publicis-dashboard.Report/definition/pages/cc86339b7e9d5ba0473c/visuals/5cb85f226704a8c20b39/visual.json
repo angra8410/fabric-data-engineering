@@ -23,11 +23,11 @@
                       "Entity": "dim_date"
                     }
                   },
-                  "Property": "YearMonthKey"
+                  "Property": "Month_Short"
                 }
               },
-              "queryRef": "dim_date.YearMonthKey",
-              "nativeQueryRef": "YearMonthKey",
+              "queryRef": "dim_date.Month_Short",
+              "nativeQueryRef": "Month_Short",
               "active": true
             }
           ]
@@ -79,7 +79,7 @@
                     "Entity": "dim_date"
                   }
                 },
-                "Property": "YearMonthKey"
+                "Property": "Month_Short"
               }
             },
             "direction": "Ascending"

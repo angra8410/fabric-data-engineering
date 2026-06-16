@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
   "name": "8260cabd0394d16a84d1",
   "position": {
     "x": 117.48493344935383,
@@ -20,14 +20,14 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "gold_fact_daily_performance"
+                      "Entity": "gold_fact_weekly_summary"
                     }
                   },
-                  "Property": "Impressions MTD"
+                  "Property": "Weekly Impressions WoW %"
                 }
               },
-              "queryRef": "gold_fact_daily_performance.Impressions MTD",
-              "nativeQueryRef": "Impressions MTD"
+              "queryRef": "gold_fact_weekly_summary.Weekly Impressions WoW %",
+              "nativeQueryRef": "Weekly Impressions WoW %"
             }
           ]
         }
@@ -39,10 +39,10 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "gold_fact_daily_performance"
+                    "Entity": "gold_fact_weekly_summary"
                   }
                 },
-                "Property": "Impressions MTD"
+                "Property": "Weekly Impressions WoW %"
               }
             },
             "direction": "Descending"
@@ -110,7 +110,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "14D"
+                  "Value": "12D"
                 }
               }
             },
@@ -165,14 +165,14 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Impressions MTD'"
+                  "Value": "'Weekly Impressions WoW %'"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "10D"
+                  "Value": "9D"
                 }
               }
             },
@@ -207,23 +207,5 @@
       ]
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "ea99c0e2535e31263d8b",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "gold_fact_daily_performance"
-              }
-            },
-            "Property": "Impressions MTD"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }

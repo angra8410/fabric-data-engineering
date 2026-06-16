@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
   "name": "a099240d243c5e26522b",
   "position": {
     "x": 343.214412323955,
     "y": 619.10599761513424,
-    "z": 9001,
+    "z": 10000,
     "height": 63.362660736730156,
     "width": 180.84759418608397,
-    "tabOrder": 9001
+    "tabOrder": 10000
   },
   "visual": {
     "visualType": "cardVisual",
@@ -20,14 +20,14 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "gold_fact_daily_performance"
+                      "Entity": "gold_fact_weekly_summary"
                     }
                   },
-                  "Property": "Engagements MTD"
+                  "Property": "Weekly New Followers WoW %"
                 }
               },
-              "queryRef": "gold_fact_daily_performance.Engagements MTD",
-              "nativeQueryRef": "Engagements MTD"
+              "queryRef": "gold_fact_weekly_summary.Weekly New Followers WoW %",
+              "nativeQueryRef": "Weekly New Followers WoW %"
             }
           ]
         }
@@ -39,10 +39,10 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "gold_fact_daily_performance"
+                    "Entity": "gold_fact_weekly_summary"
                   }
                 },
-                "Property": "Engagements MTD"
+                "Property": "Weekly New Followers WoW %"
               }
             },
             "direction": "Descending"
@@ -110,7 +110,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "14D"
+                  "Value": "12D"
                 }
               }
             },
@@ -165,14 +165,14 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Engagements MTD'"
+                  "Value": "'Weekly New Followers WoW %'"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "10D"
+                  "Value": "9D"
                 }
               }
             },
@@ -207,23 +207,5 @@
       ]
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "110050588ad5d445090b",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "gold_fact_daily_performance"
-              }
-            },
-            "Property": "Engagements MTD"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }

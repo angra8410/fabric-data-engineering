@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
   "name": "0441d6056459d0669030",
   "position": {
     "x": 685.19818706221668,
@@ -47,6 +47,24 @@
               },
               "queryRef": "gold_fact_daily_performance.Total New Followers",
               "nativeQueryRef": "Total New Followers"
+            }
+          ]
+        },
+        "Y2": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "gold_fact_daily_performance"
+                    }
+                  },
+                  "Property": "Total Impressions"
+                }
+              },
+              "queryRef": "gold_fact_daily_performance.Total Impressions",
+              "nativeQueryRef": "Total Impressions"
             }
           ]
         }

@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
   "name": "72df2eb304ccaec25d50",
   "position": {
     "x": 549.05864579041338,
     "y": 618.81609669001512,
-    "z": 9002,
+    "z": 11000,
     "height": 63.006729844801541,
     "width": 181.14434830380443,
-    "tabOrder": 9002
+    "tabOrder": 11000
   },
   "visual": {
     "visualType": "cardVisual",
@@ -20,14 +20,14 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "gold_fact_daily_performance"
+                      "Entity": "gold_fact_weekly_summary"
                     }
                   },
-                  "Property": "Impressions YTD"
+                  "Property": "Weekly Engagement Rate WoW pp"
                 }
               },
-              "queryRef": "gold_fact_daily_performance.Impressions YTD",
-              "nativeQueryRef": "Impressions YTD"
+              "queryRef": "gold_fact_weekly_summary.Weekly Engagement Rate WoW pp",
+              "nativeQueryRef": "Weekly Engagement Rate WoW pp"
             }
           ]
         }
@@ -39,10 +39,10 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "gold_fact_daily_performance"
+                    "Entity": "gold_fact_weekly_summary"
                   }
                 },
-                "Property": "Impressions YTD"
+                "Property": "Weekly Engagement Rate WoW pp"
               }
             },
             "direction": "Descending"
@@ -110,7 +110,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "14D"
+                  "Value": "12D"
                 }
               }
             },
@@ -165,14 +165,14 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Impressions YTD'"
+                  "Value": "'Weekly Engagement Rate WoW pp'"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "10D"
+                  "Value": "9D"
                 }
               }
             },

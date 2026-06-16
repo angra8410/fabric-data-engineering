@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
   "name": "ff8f9f4dc220d2085a09",
   "position": {
     "x": 685.19818706221668,
@@ -218,20 +218,6 @@
             }
           ]
         }
-      },
-      {
-        "name": "0fdf535e59266e69178e",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "gold_dim_demographics"
-              }
-            },
-            "Property": "Demographics % for Chart"
-          }
-        },
-        "type": "Advanced"
       }
     ]
   }

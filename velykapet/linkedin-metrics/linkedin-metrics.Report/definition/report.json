@@ -31,7 +31,7 @@
           "expanded": {
             "expr": {
               "Literal": {
-                "Value": "false"
+                "Value": "true"
               }
             }
           }
@@ -48,6 +48,17 @@
           "name": "CY18SU07",
           "path": "BaseThemes/CY18SU07.json",
           "type": "BaseTheme"
+        }
+      ]
+    },
+    {
+      "name": "RegisteredResources",
+      "type": "RegisteredResources",
+      "items": [
+        {
+          "name": "AntonioGutierrez_DataAnalyst9793303990312753.png",
+          "path": "AntonioGutierrez_DataAnalyst9793303990312753.png",
+          "type": "Image"
         }
       ]
     }

@@ -1,16 +1,16 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
-  "name": "0441d6056459d0669030",
+  "name": "7043bbf02120964320e2",
   "position": {
-    "x": 685.19818706221668,
-    "y": 117.01249828320286,
-    "z": 5000,
-    "height": 253.15203955500618,
-    "width": 347.66213432220849,
-    "tabOrder": 5000
+    "x": 176.74924085024773,
+    "y": 527.62921527888761,
+    "z": 8000,
+    "height": 192.46028448138085,
+    "width": 432.05369985616107,
+    "tabOrder": 8000
   },
   "visual": {
-    "visualType": "lineStackedColumnComboChart",
+    "visualType": "donutChart",
     "query": {
       "queryState": {
         "Category": {
@@ -20,14 +20,14 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "gold_dim_date"
+                      "Entity": "gold_fact_top_posts"
                     }
                   },
-                  "Property": "date"
+                  "Property": "engagement_tier"
                 }
               },
-              "queryRef": "gold_dim_date.date",
-              "nativeQueryRef": "date",
+              "queryRef": "gold_fact_top_posts.engagement_tier",
+              "nativeQueryRef": "engagement_tier",
               "active": true
             }
           ]
@@ -39,32 +39,14 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "gold_fact_daily_performance"
+                      "Entity": "gold_fact_top_posts"
                     }
                   },
-                  "Property": "Total New Followers"
+                  "Property": "Post Count"
                 }
               },
-              "queryRef": "gold_fact_daily_performance.Total New Followers",
-              "nativeQueryRef": "Total New Followers"
-            }
-          ]
-        },
-        "Y2": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "gold_fact_daily_performance"
-                    }
-                  },
-                  "Property": "Total Impressions"
-                }
-              },
-              "queryRef": "gold_fact_daily_performance.Total Impressions",
-              "nativeQueryRef": "Total Impressions"
+              "queryRef": "gold_fact_top_posts.Post Count",
+              "nativeQueryRef": "Post Count"
             }
           ]
         }
@@ -73,16 +55,16 @@
         "sort": [
           {
             "field": {
-              "Column": {
+              "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "gold_dim_date"
+                    "Entity": "gold_fact_top_posts"
                   }
                 },
-                "Property": "date"
+                "Property": "Post Count"
               }
             },
-            "direction": "Ascending"
+            "direction": "Descending"
           }
         ],
         "isDefaultSort": true
@@ -107,6 +89,13 @@
       "title": [
         {
           "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Engagements by Day of Week'"
+                }
+              }
+            },
             "fontColor": {
               "solid": {
                 "color": {

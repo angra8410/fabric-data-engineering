@@ -1,6 +1,6 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
-  "name": "575a46b8b17960050075",
+  "name": "7d97bdd9630e36193065",
   "position": {
     "x": 176.64386760060432,
     "y": 384.7911001236094,
@@ -234,93 +234,5 @@
       ]
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "aa9ecdb0384830eb7491",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "gold_fact_top_posts"
-              }
-            },
-            "Property": "post_title"
-          }
-        },
-        "type": "Categorical"
-      },
-      {
-        "name": "7943f4325940514c8004",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "gold_fact_top_posts"
-              }
-            },
-            "Property": "Top Post Impressions"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "86082bdf5bc64b7d1b0a",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "gold_fact_top_posts"
-              }
-            },
-            "Property": "Top Post Engagements"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "2b55fadf0b6d630333c5",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "gold_fact_top_posts"
-              }
-            },
-            "Property": "Avg Post Engagement Rate"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "ef58f0265670510b8332",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "gold_fact_top_posts"
-              }
-            },
-            "Property": "Post Count"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "dd9ba27ad6ba05d911cd",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "gold_dim_date"
-              }
-            },
-            "Property": "date"
-          }
-        },
-        "type": "Categorical"
-      }
-    ]
   }
 }

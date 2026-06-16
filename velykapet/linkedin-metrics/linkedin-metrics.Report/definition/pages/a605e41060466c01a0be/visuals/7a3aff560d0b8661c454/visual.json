@@ -1,16 +1,16 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
-  "name": "04026eafd884cc1c0d32",
+  "name": "7a3aff560d0b8661c454",
   "position": {
-    "x": 176.64386760060432,
-    "y": 117.01249828320286,
-    "z": 4000,
-    "height": 253.15203955500618,
-    "width": 432.04614750721055,
-    "tabOrder": 4000
+    "x": 176.74924085024773,
+    "y": 106.04954451014864,
+    "z": 2000,
+    "height": 210.7898353843695,
+    "width": 432.05369985616107,
+    "tabOrder": 2000
   },
   "visual": {
-    "visualType": "lineStackedColumnComboChart",
+    "visualType": "columnChart",
     "query": {
       "queryState": {
         "Category": {
@@ -23,11 +23,11 @@
                       "Entity": "gold_dim_date"
                     }
                   },
-                  "Property": "date"
+                  "Property": "day_name"
                 }
               },
-              "queryRef": "gold_dim_date.date",
-              "nativeQueryRef": "date",
+              "queryRef": "gold_dim_date.day_name",
+              "nativeQueryRef": "day_name",
               "active": true
             }
           ]
@@ -42,43 +42,11 @@
                       "Entity": "gold_fact_daily_performance"
                     }
                   },
-                  "Property": "Total Impressions"
+                  "Property": "Impressions by Day of Week"
                 }
               },
-              "queryRef": "gold_fact_daily_performance.Total Impressions",
-              "nativeQueryRef": "Total Impressions"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "gold_fact_daily_performance"
-                    }
-                  },
-                  "Property": "Total New Followers"
-                }
-              },
-              "queryRef": "gold_fact_daily_performance.Total New Followers",
-              "nativeQueryRef": "Total New Followers"
-            }
-          ]
-        },
-        "Y2": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "gold_fact_daily_performance"
-                    }
-                  },
-                  "Property": "Total Engagements"
-                }
-              },
-              "queryRef": "gold_fact_daily_performance.Total Engagements",
-              "nativeQueryRef": "Total Engagements"
+              "queryRef": "gold_fact_daily_performance.Impressions by Day of Week",
+              "nativeQueryRef": "Impressions by Day of Week"
             }
           ]
         }
@@ -93,29 +61,15 @@
                     "Entity": "gold_dim_date"
                   }
                 },
-                "Property": "date"
+                "Property": "day_name"
               }
             },
             "direction": "Ascending"
           }
-        ],
-        "isDefaultSort": true
+        ]
       }
     },
     "objects": {
-      "lineStyles": [
-        {
-          "properties": {
-            "showMarker": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            }
-          }
-        }
-      ],
       "labels": [
         {
           "properties": {
@@ -137,7 +91,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Daily impressions & engagements'"
+                  "Value": "'Impressions by Day of Week'"
                 }
               }
             },

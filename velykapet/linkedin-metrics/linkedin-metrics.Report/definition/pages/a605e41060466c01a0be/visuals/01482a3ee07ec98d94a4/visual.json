@@ -1,16 +1,16 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
-  "name": "04026eafd884cc1c0d32",
+  "name": "01482a3ee07ec98d94a4",
   "position": {
-    "x": 176.64386760060432,
-    "y": 117.01249828320286,
+    "x": 176.74924085024773,
+    "y": 316.83937989451812,
     "z": 4000,
-    "height": 253.15203955500618,
-    "width": 432.04614750721055,
+    "height": 193.76953811730863,
+    "width": 432.05369985616107,
     "tabOrder": 4000
   },
   "visual": {
-    "visualType": "lineStackedColumnComboChart",
+    "visualType": "columnChart",
     "query": {
       "queryState": {
         "Category": {
@@ -23,12 +23,58 @@
                       "Entity": "gold_dim_date"
                     }
                   },
-                  "Property": "date"
+                  "Property": "day_name"
                 }
               },
-              "queryRef": "gold_dim_date.date",
-              "nativeQueryRef": "date",
+              "queryRef": "gold_dim_date.day_name",
+              "nativeQueryRef": "day_name",
               "active": true
+            }
+          ]
+        },
+        "Tooltips": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "gold_fact_top_posts"
+                    }
+                  },
+                  "Property": "Top Post Engagements"
+                }
+              },
+              "queryRef": "gold_fact_top_posts.Top Post Engagements",
+              "nativeQueryRef": "Top Post Engagements"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "gold_fact_top_posts"
+                    }
+                  },
+                  "Property": "Avg Post Engagement Rate"
+                }
+              },
+              "queryRef": "gold_fact_top_posts.Avg Post Engagement Rate",
+              "nativeQueryRef": "Avg Post Engagement Rate"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "gold_fact_top_posts"
+                    }
+                  },
+                  "Property": "Post Count"
+                }
+              },
+              "queryRef": "gold_fact_top_posts.Post Count",
+              "nativeQueryRef": "Post Count"
             }
           ]
         },
@@ -42,80 +88,17 @@
                       "Entity": "gold_fact_daily_performance"
                     }
                   },
-                  "Property": "Total Impressions"
+                  "Property": "Engagements by Day of Week"
                 }
               },
-              "queryRef": "gold_fact_daily_performance.Total Impressions",
-              "nativeQueryRef": "Total Impressions"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "gold_fact_daily_performance"
-                    }
-                  },
-                  "Property": "Total New Followers"
-                }
-              },
-              "queryRef": "gold_fact_daily_performance.Total New Followers",
-              "nativeQueryRef": "Total New Followers"
-            }
-          ]
-        },
-        "Y2": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "gold_fact_daily_performance"
-                    }
-                  },
-                  "Property": "Total Engagements"
-                }
-              },
-              "queryRef": "gold_fact_daily_performance.Total Engagements",
-              "nativeQueryRef": "Total Engagements"
+              "queryRef": "gold_fact_daily_performance.Engagements by Day of Week",
+              "nativeQueryRef": "Engagements by Day of Week"
             }
           ]
         }
-      },
-      "sortDefinition": {
-        "sort": [
-          {
-            "field": {
-              "Column": {
-                "Expression": {
-                  "SourceRef": {
-                    "Entity": "gold_dim_date"
-                  }
-                },
-                "Property": "date"
-              }
-            },
-            "direction": "Ascending"
-          }
-        ],
-        "isDefaultSort": true
       }
     },
     "objects": {
-      "lineStyles": [
-        {
-          "properties": {
-            "showMarker": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            }
-          }
-        }
-      ],
       "labels": [
         {
           "properties": {
@@ -137,14 +120,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Daily impressions & engagements'"
-                }
-              }
-            },
-            "bold": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
+                  "Value": "'Engagements by Day of Week'"
                 }
               }
             },
@@ -164,6 +140,13 @@
               "expr": {
                 "Literal": {
                   "Value": "'center'"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
                 }
               }
             }

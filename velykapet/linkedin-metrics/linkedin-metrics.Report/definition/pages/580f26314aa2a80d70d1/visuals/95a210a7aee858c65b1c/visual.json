@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
-  "name": "a099240d243c5e26522b",
+  "name": "95a210a7aee858c65b1c",
   "position": {
-    "x": 343.214412323955,
-    "y": 619.10599761513424,
-    "z": 10000,
-    "height": 63.362660736730156,
-    "width": 180.84759418608397,
-    "tabOrder": 10000
+    "x": 768.45708007141877,
+    "y": 618.81609669001512,
+    "z": 12000,
+    "height": 63.006729844801541,
+    "width": 181.14434830380443,
+    "tabOrder": 12000
   },
   "visual": {
     "visualType": "cardVisual",
@@ -23,11 +23,11 @@
                       "Entity": "gold_fact_weekly_summary"
                     }
                   },
-                  "Property": "Weekly New Followers WoW %"
+                  "Property": "Weekly Engagements WoW %"
                 }
               },
-              "queryRef": "gold_fact_weekly_summary.Weekly New Followers WoW %",
-              "nativeQueryRef": "Weekly New Followers WoW %"
+              "queryRef": "gold_fact_weekly_summary.Weekly Engagements WoW %",
+              "nativeQueryRef": "Weekly Engagements WoW %"
             }
           ]
         }
@@ -42,7 +42,7 @@
                     "Entity": "gold_fact_weekly_summary"
                   }
                 },
-                "Property": "Weekly New Followers WoW %"
+                "Property": "Weekly Engagements WoW %"
               }
             },
             "direction": "Descending"
@@ -165,7 +165,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Weekly New Followers WoW %'"
+                  "Value": "'Weekly Engagements WoW %'"
                 }
               }
             },

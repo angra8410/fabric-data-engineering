@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
   "name": "7d5969d00377ca0d17b9",
   "position": {
     "x": 768.45708007141877,
     "y": 618.81609669001512,
-    "z": 9003,
+    "z": 12000,
     "height": 63.006729844801541,
     "width": 181.14434830380443,
-    "tabOrder": 9003
+    "tabOrder": 12000
   },
   "visual": {
     "visualType": "cardVisual",
@@ -20,14 +20,14 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "gold_fact_daily_performance"
+                      "Entity": "gold_fact_weekly_summary"
                     }
                   },
-                  "Property": "Engagements YTD"
+                  "Property": "Weekly Engagements WoW %"
                 }
               },
-              "queryRef": "gold_fact_daily_performance.Engagements YTD",
-              "nativeQueryRef": "Engagements YTD"
+              "queryRef": "gold_fact_weekly_summary.Weekly Engagements WoW %",
+              "nativeQueryRef": "Weekly Engagements WoW %"
             }
           ]
         }
@@ -39,10 +39,10 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "gold_fact_daily_performance"
+                    "Entity": "gold_fact_weekly_summary"
                   }
                 },
-                "Property": "Engagements YTD"
+                "Property": "Weekly Engagements WoW %"
               }
             },
             "direction": "Descending"
@@ -110,7 +110,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "14D"
+                  "Value": "12D"
                 }
               }
             },
@@ -165,14 +165,14 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Engagements YTD'"
+                  "Value": "'Weekly Engagements WoW %'"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "10D"
+                  "Value": "9D"
                 }
               }
             },

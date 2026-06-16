@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
-  "name": "a099240d243c5e26522b",
+  "name": "580cb9c170c3eca0a39b",
   "position": {
-    "x": 343.214412323955,
-    "y": 619.10599761513424,
-    "z": 10000,
-    "height": 63.362660736730156,
-    "width": 180.84759418608397,
-    "tabOrder": 10000
+    "x": 343.02445261307338,
+    "y": 28.803579990410739,
+    "z": 0,
+    "height": 62.844174524532527,
+    "width": 180.677001758031,
+    "tabOrder": 0
   },
   "visual": {
     "visualType": "cardVisual",
@@ -20,34 +20,19 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "gold_fact_weekly_summary"
+                      "Entity": "gold_fact_daily_performance"
                     }
                   },
-                  "Property": "Weekly New Followers WoW %"
+                  "Property": "Best Day to Post (Engagement Rate)"
                 }
               },
-              "queryRef": "gold_fact_weekly_summary.Weekly New Followers WoW %",
-              "nativeQueryRef": "Weekly New Followers WoW %"
+              "queryRef": "gold_fact_daily_performance.Best Day to Post (Engagement Rate)",
+              "nativeQueryRef": "Best Day to Post (Engagement Rate)"
             }
           ]
         }
       },
       "sortDefinition": {
-        "sort": [
-          {
-            "field": {
-              "Measure": {
-                "Expression": {
-                  "SourceRef": {
-                    "Entity": "gold_fact_weekly_summary"
-                  }
-                },
-                "Property": "Weekly New Followers WoW %"
-              }
-            },
-            "direction": "Descending"
-          }
-        ],
         "isDefaultSort": true
       }
     },
@@ -125,6 +110,20 @@
           "selector": {
             "id": "default"
           }
+        },
+        {
+          "properties": {
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "gold_fact_daily_performance.Total Impressions"
+          }
         }
       ],
       "label": [
@@ -134,6 +133,13 @@
               "expr": {
                 "Literal": {
                   "Value": "'aboveValue'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
                 }
               }
             },
@@ -148,6 +154,20 @@
           "selector": {
             "id": "default"
           }
+        },
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "gold_fact_daily_performance.Total Impressions"
+          }
         }
       ]
     },
@@ -155,6 +175,13 @@
       "title": [
         {
           "properties": {
+            "titleWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
             "show": {
               "expr": {
                 "Literal": {
@@ -165,14 +192,14 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Weekly New Followers WoW %'"
+                  "Value": "'Best Day to Post'"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "9D"
+                  "Value": "10D"
                 }
               }
             },
@@ -180,6 +207,13 @@
               "expr": {
                 "Literal": {
                   "Value": "'center'"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
                 }
               }
             },
@@ -194,11 +228,53 @@
                   }
                 }
               }
-            },
-            "bold": {
+            }
+          }
+        }
+      ],
+      "spacing": [
+        {
+          "properties": {
+            "verticalSpacing": {
+              "expr": {
+                "Literal": {
+                  "Value": "2D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
               "expr": {
                 "Literal": {
                   "Value": "true"
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "width": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
                 }
               }
             }

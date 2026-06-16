@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
   "name": "8071e75887ec00ee126a",
   "position": {
     "x": 1120.6196950968274,
@@ -116,23 +116,5 @@
       ]
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "61fe5df65e07d7a80830",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "gold_dim_demographics"
-              }
-            },
-            "Property": "demographic_category"
-          }
-        },
-        "type": "Categorical"
-      }
-    ]
   }
 }

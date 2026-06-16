@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
-  "name": "04026eafd884cc1c0d32",
+  "name": "0818975a71dd2e102333",
   "position": {
-    "x": 176.64386760060432,
-    "y": 117.01249828320286,
-    "z": 4000,
-    "height": 253.15203955500618,
-    "width": 432.04614750721055,
-    "tabOrder": 4000
+    "x": 684.739651590219,
+    "y": 116.52357359757072,
+    "z": 3000,
+    "height": 200.31580629694741,
+    "width": 348.26146715678442,
+    "tabOrder": 3000
   },
   "visual": {
     "visualType": "lineStackedColumnComboChart",
@@ -23,11 +23,11 @@
                       "Entity": "gold_dim_date"
                     }
                   },
-                  "Property": "date"
+                  "Property": "day_name"
                 }
               },
-              "queryRef": "gold_dim_date.date",
-              "nativeQueryRef": "date",
+              "queryRef": "gold_dim_date.day_name",
+              "nativeQueryRef": "day_name",
               "active": true
             }
           ]
@@ -42,43 +42,11 @@
                       "Entity": "gold_fact_daily_performance"
                     }
                   },
-                  "Property": "Total Impressions"
+                  "Property": "Engagement Rate by Day of Week"
                 }
               },
-              "queryRef": "gold_fact_daily_performance.Total Impressions",
-              "nativeQueryRef": "Total Impressions"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "gold_fact_daily_performance"
-                    }
-                  },
-                  "Property": "Total New Followers"
-                }
-              },
-              "queryRef": "gold_fact_daily_performance.Total New Followers",
-              "nativeQueryRef": "Total New Followers"
-            }
-          ]
-        },
-        "Y2": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "gold_fact_daily_performance"
-                    }
-                  },
-                  "Property": "Total Engagements"
-                }
-              },
-              "queryRef": "gold_fact_daily_performance.Total Engagements",
-              "nativeQueryRef": "Total Engagements"
+              "queryRef": "gold_fact_daily_performance.Engagement Rate by Day of Week",
+              "nativeQueryRef": "Engagement Rate by Day of Week"
             }
           ]
         }
@@ -93,29 +61,15 @@
                     "Entity": "gold_dim_date"
                   }
                 },
-                "Property": "date"
+                "Property": "day_name"
               }
             },
             "direction": "Ascending"
           }
-        ],
-        "isDefaultSort": true
+        ]
       }
     },
     "objects": {
-      "lineStyles": [
-        {
-          "properties": {
-            "showMarker": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            }
-          }
-        }
-      ],
       "labels": [
         {
           "properties": {
@@ -134,20 +88,6 @@
       "title": [
         {
           "properties": {
-            "text": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Daily impressions & engagements'"
-                }
-              }
-            },
-            "bold": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            },
             "fontColor": {
               "solid": {
                 "color": {
@@ -164,6 +104,20 @@
               "expr": {
                 "Literal": {
                   "Value": "'center'"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Engagement Rate by Day of Week'"
                 }
               }
             }

@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
-  "name": "a099240d243c5e26522b",
+  "name": "f80d800495c9dcb84673",
   "position": {
-    "x": 343.214412323955,
-    "y": 619.10599761513424,
-    "z": 10000,
-    "height": 63.362660736730156,
-    "width": 180.84759418608397,
-    "tabOrder": 10000
+    "x": 785.55218155665659,
+    "y": 28.803579990410739,
+    "z": 1000,
+    "height": 62.844174524532527,
+    "width": 179.36774812210325,
+    "tabOrder": 1000
   },
   "visual": {
     "visualType": "cardVisual",
@@ -20,34 +20,19 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "gold_fact_weekly_summary"
+                      "Entity": "gold_fact_daily_performance"
                     }
                   },
-                  "Property": "Weekly New Followers WoW %"
+                  "Property": "Best Day for Reach (Impressions)"
                 }
               },
-              "queryRef": "gold_fact_weekly_summary.Weekly New Followers WoW %",
-              "nativeQueryRef": "Weekly New Followers WoW %"
+              "queryRef": "gold_fact_daily_performance.Best Day for Reach (Impressions)",
+              "nativeQueryRef": "Best Day for Reach (Impressions)"
             }
           ]
         }
       },
       "sortDefinition": {
-        "sort": [
-          {
-            "field": {
-              "Measure": {
-                "Expression": {
-                  "SourceRef": {
-                    "Entity": "gold_fact_weekly_summary"
-                  }
-                },
-                "Property": "Weekly New Followers WoW %"
-              }
-            },
-            "direction": "Descending"
-          }
-        ],
         "isDefaultSort": true
       }
     },
@@ -137,6 +122,13 @@
                 }
               }
             },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
             "show": {
               "expr": {
                 "Literal": {
@@ -165,14 +157,14 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Weekly New Followers WoW %'"
+                  "Value": "'Best Day for Reach'"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "9D"
+                  "Value": "10D"
                 }
               }
             },
@@ -180,6 +172,13 @@
               "expr": {
                 "Literal": {
                   "Value": "'center'"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
                 }
               }
             },
@@ -192,13 +191,6 @@
                       "Percent": 0
                     }
                   }
-                }
-              }
-            },
-            "bold": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
                 }
               }
             }

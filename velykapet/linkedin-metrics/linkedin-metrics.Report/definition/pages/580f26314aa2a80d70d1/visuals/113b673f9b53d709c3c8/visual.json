@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
-  "name": "a099240d243c5e26522b",
+  "name": "113b673f9b53d709c3c8",
   "position": {
-    "x": 343.214412323955,
-    "y": 619.10599761513424,
-    "z": 10000,
-    "height": 63.362660736730156,
-    "width": 180.84759418608397,
-    "tabOrder": 10000
+    "x": 343.1616536190084,
+    "y": 42.754566680401041,
+    "z": 1000,
+    "height": 63.006729844801541,
+    "width": 181.14434830380443,
+    "tabOrder": 1000
   },
   "visual": {
     "visualType": "cardVisual",
@@ -20,34 +20,19 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "gold_fact_weekly_summary"
+                      "Entity": "gold_dim_demographics"
                     }
                   },
-                  "Property": "Weekly New Followers WoW %"
+                  "Property": "Top Active Demographic Value"
                 }
               },
-              "queryRef": "gold_fact_weekly_summary.Weekly New Followers WoW %",
-              "nativeQueryRef": "Weekly New Followers WoW %"
+              "queryRef": "gold_dim_demographics.Top Active Demographic Value",
+              "nativeQueryRef": "Top Active Demographic Value"
             }
           ]
         }
       },
       "sortDefinition": {
-        "sort": [
-          {
-            "field": {
-              "Measure": {
-                "Expression": {
-                  "SourceRef": {
-                    "Entity": "gold_fact_weekly_summary"
-                  }
-                },
-                "Property": "Weekly New Followers WoW %"
-              }
-            },
-            "direction": "Descending"
-          }
-        ],
         "isDefaultSort": true
       }
     },
@@ -125,6 +110,20 @@
           "selector": {
             "id": "default"
           }
+        },
+        {
+          "properties": {
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "gold_fact_daily_performance.Total Impressions"
+          }
         }
       ],
       "label": [
@@ -134,6 +133,13 @@
               "expr": {
                 "Literal": {
                   "Value": "'aboveValue'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
                 }
               }
             },
@@ -148,6 +154,20 @@
           "selector": {
             "id": "default"
           }
+        },
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "gold_fact_daily_performance.Total Impressions"
+          }
         }
       ]
     },
@@ -155,6 +175,13 @@
       "title": [
         {
           "properties": {
+            "titleWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
             "show": {
               "expr": {
                 "Literal": {
@@ -165,14 +192,14 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Weekly New Followers WoW %'"
+                  "Value": "'Top Active Demographic Value'"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "9D"
+                  "Value": "10D"
                 }
               }
             },
@@ -180,6 +207,13 @@
               "expr": {
                 "Literal": {
                   "Value": "'center'"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
                 }
               }
             },
@@ -194,11 +228,53 @@
                   }
                 }
               }
-            },
-            "bold": {
+            }
+          }
+        }
+      ],
+      "spacing": [
+        {
+          "properties": {
+            "verticalSpacing": {
+              "expr": {
+                "Literal": {
+                  "Value": "2D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
               "expr": {
                 "Literal": {
                   "Value": "true"
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "width": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
                 }
               }
             }
@@ -207,5 +283,23 @@
       ]
     },
     "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "755727389b0c0eac1dc2",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "gold_dim_demographics"
+              }
+            },
+            "Property": "Top Active Demographic Value"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
   }
 }

@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
-  "name": "04026eafd884cc1c0d32",
+  "name": "1c18e949b16a9847b1b8",
   "position": {
-    "x": 176.64386760060432,
+    "x": 685.19818706221668,
     "y": 117.01249828320286,
-    "z": 4000,
+    "z": 5000,
     "height": 253.15203955500618,
-    "width": 432.04614750721055,
-    "tabOrder": 4000
+    "width": 347.66213432220849,
+    "tabOrder": 5000
   },
   "visual": {
     "visualType": "lineStackedColumnComboChart",
@@ -42,20 +42,6 @@
                       "Entity": "gold_fact_daily_performance"
                     }
                   },
-                  "Property": "Total Impressions"
-                }
-              },
-              "queryRef": "gold_fact_daily_performance.Total Impressions",
-              "nativeQueryRef": "Total Impressions"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "gold_fact_daily_performance"
-                    }
-                  },
                   "Property": "Total New Followers"
                 }
               },
@@ -74,11 +60,11 @@
                       "Entity": "gold_fact_daily_performance"
                     }
                   },
-                  "Property": "Total Engagements"
+                  "Property": "Total Impressions"
                 }
               },
-              "queryRef": "gold_fact_daily_performance.Total Engagements",
-              "nativeQueryRef": "Total Engagements"
+              "queryRef": "gold_fact_daily_performance.Total Impressions",
+              "nativeQueryRef": "Total Impressions"
             }
           ]
         }
@@ -103,19 +89,6 @@
       }
     },
     "objects": {
-      "lineStyles": [
-        {
-          "properties": {
-            "showMarker": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            }
-          }
-        }
-      ],
       "labels": [
         {
           "properties": {
@@ -134,20 +107,6 @@
       "title": [
         {
           "properties": {
-            "text": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Daily impressions & engagements'"
-                }
-              }
-            },
-            "bold": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            },
             "fontColor": {
               "solid": {
                 "color": {
@@ -164,6 +123,13 @@
               "expr": {
                 "Literal": {
                   "Value": "'center'"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
                 }
               }
             }

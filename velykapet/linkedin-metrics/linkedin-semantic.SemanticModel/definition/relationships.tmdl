@@ -1,0 +1,16 @@
+relationship fact_daily_to_dim_date
+	fromColumn: gold_fact_daily_performance.date
+	toColumn: gold_dim_date.date
+
+relationship fact_weekly_to_dim_date
+	fromColumn: gold_fact_weekly_summary.week_start_date
+	toColumn: gold_dim_date.week_start_date
+
+relationship fact_top_posts_to_dim_date
+	fromColumn: gold_fact_top_posts.post_publish_date
+	toColumn: gold_dim_date.date
+
+relationship dim_demographics_to_dim_date
+	fromColumn: gold_dim_demographics.start_date
+	toColumn: gold_dim_date.date
+

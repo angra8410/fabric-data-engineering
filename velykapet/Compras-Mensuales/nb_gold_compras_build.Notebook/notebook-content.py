@@ -157,8 +157,15 @@ df_or = spark.read.table("compras_or_2026_silver").select(
 df_exito = spark.read.table("compras_exito_2026_silver").select("Item_Name_Clean", "Price_COP", "Quantity_Clean", "Transaction_Date", "Status_Clean", "Store")
 df_d1 = spark.read.table("compras_d1_2026_silver").select("Item_Name_Clean", "Price_COP", "Quantity_Clean", "Transaction_Date", "Status_Clean", "Store")
 
+# Ejemplo: agrega una columna 'Origen_Dato'
+df_or_silver = df_or_silver.withColumn("Origen_Dato", F.lit("Precio_Referencia"))
+df_exito_silver = df_exito_silver.withColumn("Origen_Dato", F.lit("Compra_Real"))
+df_d1_silver = df_d1_silver.withColumn("Origen_Dato", F.lit("Compra_Real"))
+
 # Realizar la unión final
 df_gold = df_or.unionAll(df_exito).unionAll(df_d1)
+
+
 
 # Escribir con overwriteSchema para asegurar que no queden rastros de estructuras viejas
 df_gold.write \
@@ -178,13 +185,54 @@ print(" [✓] ¡La tabla 'compras_master_gold' está finalmente consolidada y li
 
 # CELL ********************
 
-# MAGIC %%sql
-# MAGIC SELECT Transaction_Date, Store, SUM(Price_COP) FROM compras_master_gold GROUP BY Transaction_Date, Store
+from pyspark.sql import functions as F
+
+print(" [✓] Consolidating Gold table with Data Source origin...")
+
+# 1. Read and add origin flag to each DataFrame individually
+df_or = spark.read.table("compras_or_2026_silver").select(
+    "Item_Name_Clean", 
+    F.col("Price_Current_COP").alias("Price_COP"), 
+    F.lit(1).alias("Quantity_Clean"), 
+    "Transaction_Date", 
+    F.lit("ENTREGADO").alias("Status_Clean"), 
+    "Store"
+).withColumn("Origen_Dato", F.lit("Precio_Referencia"))
+
+df_exito = spark.read.table("compras_exito_2026_silver").select(
+    "Item_Name_Clean", 
+    "Price_COP", 
+    "Quantity_Clean", 
+    "Transaction_Date", 
+    "Status_Clean", 
+    "Store"
+).withColumn("Origen_Dato", F.lit("Compra_Real"))
+
+df_d1 = spark.read.table("compras_d1_2026_silver").select(
+    "Item_Name_Clean", 
+    "Price_COP", 
+    "Quantity_Clean", 
+    "Transaction_Date", 
+    "Status_Clean", 
+    "Store"
+).withColumn("Origen_Dato", F.lit("Compra_Real"))
+
+# 2. Perform the Union
+df_gold = df_or.unionAll(df_exito).unionAll(df_d1)
+
+# 3. Write to Gold with schema overwrite
+df_gold.write \
+    .format("delta") \
+    .mode("overwrite") \
+    .option("overwriteSchema", "true") \
+    .saveAsTable("compras_master_gold")
+
+print(" [✓] Gold Master table created with 'Origen_Dato' column!")
 
 # METADATA ********************
 
 # META {
-# META   "language": "sparksql",
+# META   "language": "python",
 # META   "language_group": "synapse_pyspark"
 # META }
 

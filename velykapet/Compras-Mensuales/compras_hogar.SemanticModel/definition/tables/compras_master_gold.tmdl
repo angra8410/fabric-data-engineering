@@ -16,7 +16,7 @@ table compras_master_gold
 		formatString: 0
 		lineageTag: 891c10fd-9b02-4a80-82b7-08669b3d5312
 		sourceLineageTag: Price_COP
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: Price_COP
 
 		annotation SummarizationSetBy = Automatic
@@ -26,7 +26,7 @@ table compras_master_gold
 		formatString: 0
 		lineageTag: ceaec394-7a47-41a2-819c-eb44396e5aaa
 		sourceLineageTag: Quantity_Clean
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: Quantity_Clean
 
 		annotation SummarizationSetBy = Automatic
@@ -62,6 +62,15 @@ table compras_master_gold
 		sourceLineageTag: Store
 		summarizeBy: none
 		sourceColumn: Store
+
+		annotation SummarizationSetBy = Automatic
+
+	column Origen_Dato
+		dataType: string
+		lineageTag: 2e5b2158-4c46-4a93-99b3-8237521a38e1
+		sourceLineageTag: Origen_Dato
+		summarizeBy: none
+		sourceColumn: Origen_Dato
 
 		annotation SummarizationSetBy = Automatic
 

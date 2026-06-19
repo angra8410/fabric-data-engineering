@@ -53,6 +53,20 @@ print(f" [✓] Se han agregado {new_products.count()} nuevos productos al catál
 
 # CELL ********************
 
+# Lista todas las tablas registradas en tu catálogo actual
+tables = spark.catalog.listTables()
+for t in tables:
+    print(t.name)
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
 
 # METADATA ********************
 

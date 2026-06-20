@@ -14,3 +14,23 @@ relationship gold_fct_ventas_metodo_pago_sk_dim_metodo_pago_metodo_pago_sk
 	fromColumn: gold_fct_ventas.metodo_pago_sk
 	toColumn: dim_metodo_pago.metodo_pago_sk
 
+relationship gold_fct_ventas_producto_sk_dim_producto_producto_sk
+	fromColumn: gold_fct_ventas.producto_sk
+	toColumn: dim_producto.producto_sk
+
+relationship gold_fct_compras_producto_sk_dim_producto_producto_sk
+	fromColumn: gold_fct_compras.producto_sk
+	toColumn: dim_producto.producto_sk
+
+relationship gold_fct_inventario_producto_sk_dim_producto_producto_sk
+	fromColumn: gold_fct_inventario.producto_sk
+	toColumn: dim_producto.producto_sk
+
+relationship gold_fct_compras_fecha_key_dim_calendario_fecha_key
+	fromColumn: gold_fct_compras.fecha_key
+	toColumn: dim_calendario.fecha_key
+
+relationship gold_fct_inventario_fecha_key_dim_calendario_fecha_key
+	fromColumn: gold_fct_inventario.fecha_key
+	toColumn: dim_calendario.fecha_key
+

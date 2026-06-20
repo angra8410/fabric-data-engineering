@@ -1,0 +1,109 @@
+table gold_fct_compras
+	lineageTag: b429bd84-2c2b-41b9-8223-8eaeffa674cf
+	sourceLineageTag: [dbo].[gold_fct_compras]
+
+	column fecha_key
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 9f02d638-48d3-40ee-818a-3597cf1eba8d
+		sourceLineageTag: fecha_key
+		summarizeBy: none
+		sourceColumn: fecha_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column producto_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: ba97a595-6037-46a1-8628-88ed754d7d84
+		sourceLineageTag: producto_sk
+		summarizeBy: sum
+		sourceColumn: producto_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column codigo_producto
+		dataType: string
+		lineageTag: 81c9f3f3-180a-4591-8f28-8f56af34bf98
+		sourceLineageTag: codigo_producto
+		summarizeBy: none
+		sourceColumn: codigo_producto
+
+		annotation SummarizationSetBy = Automatic
+
+	column proveedor
+		dataType: string
+		lineageTag: 97498204-cab8-4764-b7be-842b77f72196
+		sourceLineageTag: proveedor
+		summarizeBy: none
+		sourceColumn: proveedor
+
+		annotation SummarizationSetBy = Automatic
+
+	column cantidad
+		dataType: double
+		lineageTag: 813ad25c-0a39-4756-8c18-146f42b7ce96
+		sourceLineageTag: cantidad
+		summarizeBy: sum
+		sourceColumn: cantidad
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column costo_unitario_cop
+		dataType: double
+		lineageTag: 6b7d0ea6-e87c-4998-8883-aa8cc691df85
+		sourceLineageTag: costo_unitario_cop
+		summarizeBy: sum
+		sourceColumn: costo_unitario_cop
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_compra_cop
+		dataType: double
+		lineageTag: f1ecf541-0f8f-4dff-89b7-c7fa358ad4b9
+		sourceLineageTag: total_compra_cop
+		summarizeBy: sum
+		sourceColumn: total_compra_cop
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column estado_disponible_vendido
+		dataType: string
+		lineageTag: f6f7a3c1-e365-48d4-8661-8e4b4f181b4d
+		sourceLineageTag: estado_disponible_vendido
+		summarizeBy: none
+		sourceColumn: estado_disponible_vendido
+
+		annotation SummarizationSetBy = Automatic
+
+	column notas
+		dataType: string
+		lineageTag: bae09046-2774-407f-aed0-69aef07c50af
+		sourceLineageTag: notas
+		summarizeBy: none
+		sourceColumn: notas
+
+		annotation SummarizationSetBy = Automatic
+
+	column origen_pestaña
+		dataType: string
+		lineageTag: cf6d4656-8f91-42eb-baab-ff6b3b3081d0
+		sourceLineageTag: origen_pestaña
+		summarizeBy: none
+		sourceColumn: origen_pestaña
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_fct_compras = entity
+		mode: directLake
+		source
+			entityName: gold_fct_compras
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_gold_velykapet'
+

@@ -2,6 +2,46 @@ table gold_fct_compras
 	lineageTag: b429bd84-2c2b-41b9-8223-8eaeffa674cf
 	sourceLineageTag: [dbo].[gold_fct_compras]
 
+	/// Suma total de compras en COP
+	measure 'Total Compras' = SUM(gold_fct_compras[total_compra_cop])
+		formatString: #,##0" COP"
+		displayFolder: 🛒 Compras
+
+	/// Total de unidades compradas
+	measure 'Unidades Compradas' = SUM(gold_fct_compras[cantidad])
+		formatString: #,##0
+		displayFolder: 🛒 Compras
+
+	/// Costo unitario promedio de las compras
+	measure 'Costo Unitario Prom Compra' = AVERAGE(gold_fct_compras[costo_unitario_cop])
+		formatString: #,##0" COP"
+		displayFolder: 🛒 Compras
+
+	/// Número de transacciones de compra
+	measure '# Compras' = COUNTROWS(gold_fct_compras)
+		formatString: #,##0
+		displayFolder: 🛒 Compras
+
+	/// Número de proveedores distintos
+	measure '# Proveedores' = DISTINCTCOUNT(gold_fct_compras[proveedor])
+		formatString: #,##0
+		displayFolder: 🛒 Compras
+
+	/// Unidades compradas que aún están disponibles, sin vender
+	measure 'Unidades Disponibles (Compras)' = CALCULATE(SUM(gold_fct_compras[cantidad]), gold_fct_compras[estado_disponible_vendido] = "Disponible")
+		formatString: #,##0
+		displayFolder: 🛒 Compras
+
+	/// Unidades compradas marcadas como vencidas
+	measure 'Unidades Vencidas (Compras)' = CALCULATE(SUM(gold_fct_compras[cantidad]), gold_fct_compras[estado_disponible_vendido] = "Vencido")
+		formatString: #,##0
+		displayFolder: 🛒 Compras
+
+	/// Porcentaje de unidades compradas que vencieron
+	measure '% Mercancía Vencida' = DIVIDE([Unidades Vencidas (Compras)], [Unidades Compradas])
+		formatString: 0.0%
+		displayFolder: 🛒 Compras
+
 	column fecha_key
 		dataType: dateTime
 		formatString: General Date

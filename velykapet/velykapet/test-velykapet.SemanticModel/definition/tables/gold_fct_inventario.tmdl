@@ -2,6 +2,86 @@ table gold_fct_inventario
 	lineageTag: 4ac79ee6-93da-4478-a339-849dfe0a5da8
 	sourceLineageTag: [dbo].[gold_fct_inventario]
 
+	/// Inventario final en unidades, calculado en origen como stock_inicial + entradas - salidas
+	measure 'Inventario Final (Unidades)' = SUM(gold_fct_inventario[stock_actual])
+		formatString: #,##0
+		displayFolder: 📦 Inventario
+
+	/// Valor monetario del inventario final
+	measure 'Inventario Final (Valor)' = SUM(gold_fct_inventario[valor_total_final])
+		formatString: #,##0" COP"
+		displayFolder: 📦 Inventario
+
+	/// Stock inicial total antes de movimientos
+	measure 'Stock Inicial Total' = SUM(gold_fct_inventario[stock_inicial])
+		formatString: #,##0
+		displayFolder: 📦 Inventario
+
+	/// Total de unidades que entraron a inventario
+	measure 'Entradas Totales' = SUM(gold_fct_inventario[entradas])
+		formatString: #,##0
+		displayFolder: 📦 Inventario
+
+	/// Total de unidades que salieron de inventario
+	measure 'Salidas Totales' = SUM(gold_fct_inventario[salidas])
+		formatString: #,##0
+		displayFolder: 📦 Inventario
+
+	/// Costo total de las entradas de inventario
+	measure 'Costo Total Entradas' = SUM(gold_fct_inventario[costo_total_entradas])
+		formatString: #,##0" COP"
+		displayFolder: 📦 Inventario
+
+	/// Margen promedio de los productos en inventario
+	measure 'Margen Promedio Inventario' = AVERAGE(gold_fct_inventario[margen])
+		formatString: #,##0.00
+		displayFolder: 📦 Inventario
+
+	/// Número de productos con stock actual negativo (alerta de datos)
+	measure '# Productos con Stock Negativo' = CALCULATE(DISTINCTCOUNT(gold_fct_inventario[id_interno]), gold_fct_inventario[stock_actual] < 0)
+		formatString: #,##0
+		displayFolder: 📦 Inventario
+
+	/// Número de filas donde stock_actual no coincide con stock_inicial + entradas - salidas
+	measure '# Inconsistencias de Stock' = CALCULATE(COUNTROWS(gold_fct_inventario), gold_fct_inventario[stock_consistente] = FALSE())
+		formatString: #,##0
+		displayFolder: 📦 Inventario
+
+	/// Porcentaje de filas de inventario cuyo saldo es consistente con el cálculo esperado
+	measure '% Stock Consistente' = DIVIDE(CALCULATE(COUNTROWS(gold_fct_inventario), gold_fct_inventario[stock_consistente] = TRUE()), COUNTROWS(gold_fct_inventario))
+		formatString: 0.0%
+		displayFolder: 📦 Inventario
+
+	/// Diferencia entre unidades compradas y unidades registradas como entrada en el inventario. Debería ser cercana a 0 si todo se registra correctamente.
+	measure 'Compras vs Entradas (Diferencia)' = [Unidades Compradas] - [Entradas Totales]
+		formatString: #,##0
+		displayFolder: 🔄 Reconciliación
+
+	/// Porcentaje de unidades compradas que ya quedaron reflejadas como entrada en el inventario
+	measure '% Compras Reflejadas en Inventario' = DIVIDE([Entradas Totales], [Unidades Compradas])
+		formatString: 0.0%
+		displayFolder: 🔄 Reconciliación
+
+	/// Unidades compradas que aún no se han registrado como entrada en el inventario (nunca negativo)
+	measure 'Compras Pendientes de Registrar' = MAX(0, [Unidades Compradas] - [Entradas Totales])
+		formatString: #,##0
+		displayFolder: 🔄 Reconciliación
+
+	/// Diferencia entre el costo total de compras y el costo total de entradas registrado en inventario
+	measure 'Diferencia Costo Compras vs Entradas' = [Total Compras] - [Costo Total Entradas]
+		formatString: #,##0" COP"
+		displayFolder: 🔄 Reconciliación
+
+	/// Inventario final proyectado si se registraran todas las compras pendientes como entrada
+	measure 'Inventario Proyectado (con Compras Pendientes)' = [Inventario Final (Unidades)] + [Compras Pendientes de Registrar]
+		formatString: #,##0
+		displayFolder: 🔄 Reconciliación
+
+	/// Rotación aproximada de inventario: salidas respecto al inventario final disponible
+	measure 'Rotación de Inventario (aprox)' = DIVIDE([Salidas Totales], [Inventario Final (Unidades)])
+		formatString: 0.00
+		displayFolder: 🔄 Reconciliación
+
 	column fecha_key
 		dataType: dateTime
 		formatString: General Date

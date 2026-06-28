@@ -3,7 +3,7 @@
   "version": "4.0",
   "datasetReference": {
     "byPath": {
-      "path": "../Compras-Mensuales/compras_hogar.SemanticModel"
+      "path": "../compras_hogar.SemanticModel"
     }
   }
 }

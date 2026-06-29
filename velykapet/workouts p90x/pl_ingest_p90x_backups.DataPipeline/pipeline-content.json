@@ -94,7 +94,7 @@
             "type": "Expression"
           },
           "condition": {
-            "value": "@equals(contains(string(activity('Lookup').output.firstRow?.processed_list), item().name), false)",
+            "value": "@if(\n  equals(activity('Lookup').output.firstRow, null),\n  true,\n  equals(contains(activity('Lookup').output.firstRow.processed_list, item().name), false)\n)",
             "type": "Expression"
           }
         },

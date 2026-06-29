@@ -94,7 +94,7 @@
             "type": "Expression"
           },
           "condition": {
-            "value": "@equals(contains(activity('Lookup').output.firstRow.processed_list, item().name), false)",
+            "value": "@equals(contains(string(activity('Lookup').output.firstRow?.processed_list), item().name), false)",
             "type": "Expression"
           }
         },
@@ -124,7 +124,10 @@
                 "workspaceId": "00000000-0000-0000-0000-000000000000",
                 "parameters": {
                   "file_path": {
-                    "value": "@concat('abfss://b14581ac-9906-43e2-809c-c2fd4315ad5b@onelake.dfs.fabric.microsoft.com/5846138b-520e-429b-8e30-7d9a17223730/Files/raw/', item().name)",
+                    "value": {
+                      "value": "@concat('abfss://b14581ac-9906-43e2-809c-c2fd4315ad5b@onelake.dfs.fabric.microsoft.com/5846138b-520e-429b-8e30-7d9a17223730/Files/raw/', item().name)",
+                      "type": "Expression"
+                    },
                     "type": "string"
                   },
                   "lakehouse_name": {

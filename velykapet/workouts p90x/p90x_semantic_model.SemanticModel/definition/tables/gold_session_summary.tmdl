@@ -2,6 +2,21 @@ table gold_session_summary
 	lineageTag: af6b3d58-c058-4a1d-99b6-662daaa787eb
 	sourceLineageTag: [dbo].[gold_session_summary]
 
+	measure 'Total Sessions' = COUNTROWS(gold_session_summary)
+		formatString: 0
+
+	measure 'Avg Difficulty' = AVERAGE(gold_session_summary[difficulty])
+		formatString: 0.0
+
+	measure 'Total Volume (lbs)' = SUM(gold_session_summary[total_volume_lbs])
+		formatString: #,##0
+
+	measure 'Avg Recovery Days' = AVERAGE(gold_session_summary[recovery_days_since_previous])
+		formatString: 0.0
+
+	measure 'Avg Volume per Session' = DIVIDE([Total Volume (lbs)], [Total Sessions])
+		formatString: #,##0
+
 	column session_id
 		dataType: int64
 		formatString: 0

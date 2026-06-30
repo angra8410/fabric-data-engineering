@@ -2,6 +2,12 @@ table gold_exercise_prs
 	lineageTag: 352cd613-cc49-4304-b67e-30ab59d3cca5
 	sourceLineageTag: [dbo].[gold_exercise_prs]
 
+	measure 'Total PRs' = COUNTROWS(gold_exercise_prs)
+		formatString: 0
+
+	measure 'Most Recent PR Date' = MAX(gold_exercise_prs[pr_achieved_at])
+		formatString: General Date
+
 	column exercise_name
 		dataType: string
 		sourceProviderType: varchar(8000)

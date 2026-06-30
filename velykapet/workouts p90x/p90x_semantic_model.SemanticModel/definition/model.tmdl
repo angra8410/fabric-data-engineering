@@ -11,6 +11,8 @@ annotation __PBI_TimeIntelligenceEnabled = 0
 
 annotation PBI_QueryOrder = ["DatabaseQuery"]
 
+annotation PBI_ProTooling = ["WebModelingEdit","MCP-PBIModeling"]
+
 ref table gold_workout_streak
 ref table dim_date
 ref table gold_session_summary

@@ -2,6 +2,12 @@ table gold_workout_streak
 	lineageTag: 29522528-8e7c-4d7c-93fc-b2a5ce7ea66b
 	sourceLineageTag: [dbo].[gold_workout_streak]
 
+	measure 'Current Streak Count' = MAXX(gold_workout_streak, gold_workout_streak[cumulative_sessions])
+		formatString: 0
+
+	measure 'Rest Day %' = DIVIDE(COUNTROWS(FILTER(gold_workout_streak, gold_workout_streak[is_rest_day] = TRUE)), COUNTROWS(gold_workout_streak))
+		formatString: 0.0%
+
 	column session_id
 		dataType: int64
 		formatString: 0

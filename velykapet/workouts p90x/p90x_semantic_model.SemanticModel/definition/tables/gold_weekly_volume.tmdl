@@ -2,6 +2,17 @@ table gold_weekly_volume
 	lineageTag: ce6fcafb-9427-4ab8-850b-ede1ae50dcb2
 	sourceLineageTag: [dbo].[gold_weekly_volume]
 
+	measure 'Avg Weekly Volume' = AVERAGE(gold_weekly_volume[total_volume_lbs])
+		formatString: #,##0
+
+	measure 'WoW Volume Change %' =
+			VAR CurrentWeek = MAX(gold_weekly_volume[week_start])
+			VAR CurrentVolume = CALCULATE(SUM(gold_weekly_volume[total_volume_lbs]), gold_weekly_volume[week_start] = CurrentWeek)
+			VAR PreviousWeek = CALCULATE(MAX(gold_weekly_volume[week_start]), gold_weekly_volume[week_start] < CurrentWeek)
+			VAR PreviousVolume = CALCULATE(SUM(gold_weekly_volume[total_volume_lbs]), gold_weekly_volume[week_start] = PreviousWeek)
+			RETURN DIVIDE(CurrentVolume - PreviousVolume, PreviousVolume)
+		formatString: 0.0%;-0.0%
+
 	column week_start
 		dataType: dateTime
 		formatString: General Date

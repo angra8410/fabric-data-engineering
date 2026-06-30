@@ -25,7 +25,18 @@
       "filters": "[]",
       "height": 720.00,
       "name": "a8683ac391544a986a2d",
-      "visualContainers": [],
+      "visualContainers": [
+        {
+          "config": "{\"name\":\"bd398088e529d2a285cf\",\"layouts\":[{\"id\":0,\"position\":{\"x\":271.14317236696934,\"y\":101.96837251407395,\"z\":0,\"width\":564.302243344932,\"height\":404.39729553877055,\"tabOrder\":0}}],\"singleVisual\":{\"visualType\":\"tableEx\",\"projections\":{\"Values\":[{\"queryRef\":\"gold_exercise_prs.exercise_name\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"g1\",\"Entity\":\"gold_exercise_prs\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g1\"}},\"Property\":\"exercise_name\"},\"Name\":\"gold_exercise_prs.exercise_name\",\"NativeReferenceName\":\"exercise_name\"}]},\"drillFilterOtherVisuals\":true,\"objects\":{\"columnHeaders\":[{\"properties\":{}}]}}}",
+          "filters": "[]",
+          "height": 404.40,
+          "queryBinary": "H4sIAAAAAAAEAF1RTU/DMAz9Lz5XqAVx6ZFSOCDQ2NA4oGkKqRlBTVI5Cayq+t+x2zFgN388v/dsD1B5a5VrApQvA6yQ42j0Y0Lqr1VUq3fV4QEC5QBTQ4I1UjDeQXmewQ15O40/KItQwq6ADGrmib1kvm22uEfSJuC2o8DNp75jYD5uMpZsUcdpvPJtsk7Y631HGGYBduUTaVzi228yq4xjBgvyHdKkdBRx4oN7P35OHZz9Rwowmk9RQEKn8TB3wrdhxivjGuN2YmRBxqr5GLfkU8fl+Yjs6INXYvOS57Jjeo0+qhbKYmKRyy6xSRNICKSwlu1Z9iL7S/3Mgv5Losonx3e6zPNR9j4+oOCk3qNOQnaPkYwOd0beVYys9g1QTJJ34gEAAA==",
+          "width": 564.30,
+          "x": 271.14,
+          "y": 101.97,
+          "z": 0.00
+        }
+      ],
       "width": 1280.00
     }
   ]

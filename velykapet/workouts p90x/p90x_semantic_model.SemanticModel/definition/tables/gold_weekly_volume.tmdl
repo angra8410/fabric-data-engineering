@@ -1,0 +1,79 @@
+table gold_weekly_volume
+	lineageTag: ce6fcafb-9427-4ab8-850b-ede1ae50dcb2
+	sourceLineageTag: [dbo].[gold_weekly_volume]
+
+	column week_start
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 9c96d265-de3e-4bcb-9e2c-ffcd65640c59
+		sourceLineageTag: week_start
+		summarizeBy: none
+		sourceColumn: week_start
+
+		annotation SummarizationSetBy = Automatic
+
+	column year_week
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 7c236bda-6d29-42f4-ad53-1fbba0507264
+		sourceLineageTag: year_week
+		summarizeBy: none
+		sourceColumn: year_week
+
+		annotation SummarizationSetBy = Automatic
+
+	column sessions_count
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: e4d5aca8-4884-4630-b916-1e1a9b26a8dd
+		sourceLineageTag: sessions_count
+		summarizeBy: sum
+		sourceColumn: sessions_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_sets
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 2c6001e2-964c-4b29-9fe5-3fd913d78373
+		sourceLineageTag: total_sets
+		summarizeBy: sum
+		sourceColumn: total_sets
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_reps
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: f12ee52e-11ba-4118-87fc-751a7ac5021e
+		sourceLineageTag: total_reps
+		summarizeBy: sum
+		sourceColumn: total_reps
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_volume_lbs
+		dataType: double
+		sourceProviderType: float
+		lineageTag: 4b789a3a-28ab-4ea4-9d33-6c3642dee03c
+		sourceLineageTag: total_volume_lbs
+		summarizeBy: sum
+		sourceColumn: total_volume_lbs
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition gold_weekly_volume = entity
+		mode: directLake
+		source
+			entityName: gold_weekly_volume
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+

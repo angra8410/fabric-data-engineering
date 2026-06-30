@@ -142,3 +142,62 @@ print("\n🏆 All gold tables created successfully!")
 # META   "language": "python",
 # META   "language_group": "synapse_pyspark"
 # META }
+
+# CELL ********************
+
+# ── dim_date ────────────────────────────────────────────────────
+from pyspark.sql import functions as F
+from pyspark.sql.types import *
+import pandas as pd
+
+# Generate date range covering your data + future buffer
+date_range = pd.date_range(start="2026-01-01", end="2027-12-31", freq="D")
+
+df_dates = spark.createDataFrame(
+    [(d.date(),) for d in date_range], ["date"]
+)
+
+dim_date = df_dates \
+    .withColumn("date_key", F.date_format("date", "yyyyMMdd").cast("int")) \
+    .withColumn("year", F.year("date")) \
+    .withColumn("month_num", F.month("date")) \
+    .withColumn("month_name", F.date_format("date", "MMMM")) \
+    .withColumn("month_short", F.date_format("date", "MMM")) \
+    .withColumn("quarter", F.quarter("date")) \
+    .withColumn("quarter_label", F.concat(F.lit("Q"), F.quarter("date").cast("string"))) \
+    .withColumn("week_of_year", F.weekofyear("date")) \
+    .withColumn("year_week", F.concat(
+        F.year("date").cast("string"),
+        F.lit("-W"),
+        F.lpad(F.weekofyear("date").cast("string"), 2, "0")
+    )) \
+    .withColumn("week_start", F.date_trunc("week", F.col("date").cast("timestamp"))) \
+    .withColumn("day_of_week_num", F.dayofweek("date")) \
+    .withColumn("day_name", F.date_format("date", "EEEE")) \
+    .withColumn("day_short", F.date_format("date", "EEE")) \
+    .withColumn("is_weekend", F.dayofweek("date").isin([1, 7])) \
+    .withColumn("day_of_month", F.dayofmonth("date")) \
+    .withColumn("day_of_year", F.dayofyear("date"))
+
+dim_date.write.format("delta").mode("overwrite") \
+    .option("overwriteSchema", "true") \
+    .saveAsTable("dim_date")
+
+print("✅ dim_date done:", dim_date.count(), "rows")
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }

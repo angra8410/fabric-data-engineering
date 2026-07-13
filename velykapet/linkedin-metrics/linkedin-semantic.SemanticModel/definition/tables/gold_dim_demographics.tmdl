@@ -16,7 +16,7 @@ table gold_dim_demographics
 
 	/// Percentage for demographics active on the selected date (range-aware: start_date <= selected date <= end_date)
 	measure 'Active Demographics %' =
-			VAR _selectedDate = MAX(gold_dim_date[date])
+			VAR _selectedDate = IF ( ISFILTERED ( gold_dim_date[date] ), MAX ( gold_dim_date[date] ), TODAY () )
 			RETURN
 			CALCULATE(
 			    SUM(gold_dim_demographics[percentage]),
@@ -48,15 +48,15 @@ table gold_dim_demographics
 
 	/// The demographic value with the highest percentage active on the selected date
 	measure 'Top Active Demographic Value' =
-			VAR _selectedDate = MAX(gold_dim_date[date])
+			VAR _selectedDate = IF ( ISFILTERED ( gold_dim_date[date] ), MAX ( gold_dim_date[date] ), TODAY () )
 			VAR _activeRows =
-			    FILTER(
+			    FILTER (
 			        gold_dim_demographics,
 			        gold_dim_demographics[start_date] <= _selectedDate
 			            && gold_dim_demographics[end_date] >= _selectedDate
 			    )
 			VAR _topValue =
-			    TOPN(
+			    TOPN (
 			        1,
 			        SUMMARIZE(_activeRows, gold_dim_demographics[demographic_value], "_pct", SUM(gold_dim_demographics[percentage])),
 			        [_pct], DESC
@@ -68,16 +68,19 @@ table gold_dim_demographics
 
 	/// Percentage filtered by demographic category and active date range — use with demographic_category slicer
 	measure 'Active Demographics by Category %' =
-			VAR _selectedDate = MAX(gold_dim_date[date])
-			RETURN
-			CALCULATE(
-			    SUM(gold_dim_demographics[percentage]),
-			    FILTER(
-			        ALLEXCEPT(gold_dim_demographics, gold_dim_demographics[demographic_category], gold_dim_demographics[demographic_value]),
-			        gold_dim_demographics[start_date] <= _selectedDate
-			            && gold_dim_demographics[end_date] >= _selectedDate
+			VAR _selectedDate = IF ( ISFILTERED ( gold_dim_date[date] ), MAX ( gold_dim_date[date] ), TODAY () )
+			VAR _hasSingleCategory = HASONEVALUE ( gold_dim_demographics[demographic_category] )
+			VAR _pct =
+			    CALCULATE(
+			        SUM(gold_dim_demographics[percentage]),
+			        FILTER(
+			            ALLEXCEPT(gold_dim_demographics, gold_dim_demographics[demographic_category], gold_dim_demographics[demographic_value]),
+			            gold_dim_demographics[start_date] <= _selectedDate
+			                && gold_dim_demographics[end_date] >= _selectedDate
+			        )
 			    )
-			)
+			RETURN
+			    IF ( _hasSingleCategory, FORMAT ( _pct, "0.00%" ), "Select a category" )
 		formatString: 0.00%
 		displayFolder: Demographics
 		lineageTag: 16b8fa52-9834-481b-847e-78f0d82084ea
@@ -100,6 +103,41 @@ table gold_dim_demographics
 		formatString: 0%
 		displayFolder: Demographics
 		lineageTag: 4402cd6e-2353-45c4-906b-ecd1b915fead
+
+	/// Top demographic_value within the current demographic_category context (e.g. filtered by a category slicer), respecting the active date range.
+	measure 'Top Value by Category' =
+			VAR _selectedDate = IF ( ISFILTERED ( gold_dim_date[date] ), MAX ( gold_dim_date[date] ), TODAY () )
+			VAR _activeRows =
+			    FILTER (
+			        ALLEXCEPT ( gold_dim_demographics, gold_dim_demographics[demographic_category] ),
+			        gold_dim_demographics[start_date] <= _selectedDate
+			            && gold_dim_demographics[end_date] >= _selectedDate
+			    )
+			VAR _summary =
+			    SUMMARIZE ( _activeRows, gold_dim_demographics[demographic_value], "_pct", SUM ( gold_dim_demographics[percentage] ) )
+			VAR _top =
+			    TOPN ( 1, _summary, [_pct], DESC )
+			RETURN
+			    MAXX ( _top, gold_dim_demographics[demographic_value] )
+		displayFolder: Demographics
+
+	/// Percentage of the top demographic_value within the current demographic_category context, respecting the active date range.
+	measure 'Top Value % by Category' =
+			VAR _selectedDate = IF ( ISFILTERED ( gold_dim_date[date] ), MAX ( gold_dim_date[date] ), TODAY () )
+			VAR _activeRows =
+			    FILTER (
+			        ALLEXCEPT ( gold_dim_demographics, gold_dim_demographics[demographic_category] ),
+			        gold_dim_demographics[start_date] <= _selectedDate
+			            && gold_dim_demographics[end_date] >= _selectedDate
+			    )
+			VAR _summary =
+			    SUMMARIZE ( _activeRows, gold_dim_demographics[demographic_value], "_pct", SUM ( gold_dim_demographics[percentage] ) )
+			VAR _top =
+			    TOPN ( 1, _summary, [_pct], DESC )
+			RETURN
+			    MAXX ( _top, [_pct] )
+		formatString: 0.00%
+		displayFolder: Demographics
 
 	column start_date
 		dataType: dateTime

@@ -299,3 +299,35 @@ print("Successfully created Silver table: silver_post_hashtags")
 # META   "language": "python",
 # META   "language_group": "synapse_pyspark"
 # META }
+
+# CELL ********************
+
+spark.sql("DESCRIBE silver_post_content").filter("col_name = 'linkedin_post_id'").show()
+
+# check for potential precision collisions
+spark.read.table("silver_post_content") \
+    .groupBy(F.col("linkedin_post_id").cast("decimal(38,0)").cast("string")) \
+    .count() \
+    .filter("count > 1") \
+    .show()
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+spark.read.table("silver_post_content") \
+    .filter(F.col("linkedin_post_id").cast("decimal(38,0)").isNull()) \
+    .select("post_id", "linkedin_post_id", "notes") \
+    .show(20, truncate=False)
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }

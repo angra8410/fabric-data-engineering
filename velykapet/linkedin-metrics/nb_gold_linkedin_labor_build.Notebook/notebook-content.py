@@ -850,6 +850,23 @@ display(df_weekly_summary)
 
 # CELL ********************
 
+df_content_fixed = spark.read.table("silver_post_content").withColumn(
+    "linkedin_post_id",
+    F.coalesce(
+        F.col("linkedin_post_id"),
+        F.regexp_extract(F.col("notes"), r"urn:li:ugcPost:(\d+)", 1)
+    )
+)
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
 # =====================================================================
 # BLOQUE 6. ENRIQUECIMIENTO: gold_fact_top_posts + contenido real
 # =====================================================================

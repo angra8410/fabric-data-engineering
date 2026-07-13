@@ -915,11 +915,70 @@ print("  ➔ Éxito: 'gold_bridge_post_hashtags' lista para el modelo semántico
 
 # META {
 # META   "language": "python",
-# META   "language_group": "synapse_pyspark"
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
 # META }
 
 # CELL ********************
 
+# =====================================================================
+# BLOQUE 6. ENRIQUECIMIENTO: gold_fact_top_posts + contenido real
+# =====================================================================
+print("\n[6/7] Generando gold_fact_top_posts_enriched...")
+
+df_top_posts_keyed = spark.read.table("gold_fact_top_posts").withColumn(
+    "linkedin_urn",
+    F.regexp_extract(F.col("post_url"), r"(?:ugcPost|share|activity|document|posts)-([0-9]{15,})", 1)
+)
+
+# Deterministic dedup: when two rows share a linkedin_post_id, prefer the one
+# with real content populated, then the most recently loaded row as tiebreak.
+# NOTE: this is a best-effort heuristic — verify against the actual duplicate
+# rows if pillar/media_format still look wrong after this runs.
+df_content = (spark.read.table("silver_post_content")
+    .withColumn(
+        "_has_real_content",
+        F.when(
+            F.col("pillar").isNotNull() & (F.col("pillar") != "General") &
+            F.col("media_format").isNotNull() & (F.col("media_format") != "Unknown"),
+            1
+        ).otherwise(0)
+    )
+    .orderBy(F.col("_has_real_content").desc(), F.col("silver_load_timestamp").desc())
+    .dropDuplicates(["linkedin_post_id"])
+    .drop("_has_real_content"))
+
+df_enriched = df_top_posts_keyed.join(
+    df_content.select(
+        F.col("linkedin_post_id").alias("linkedin_urn"),
+        F.col("pillar"),
+        F.col("media_format"),
+        F.col("post_title").alias("real_post_title"),
+    ),
+    on="linkedin_urn",
+    how="left"
+).withColumn("gold_load_timestamp", F.current_timestamp())
+
+(df_enriched.write.format("delta").mode("overwrite")
+ .option("overwriteSchema", "true").saveAsTable("gold_fact_top_posts_enriched"))
+print("  ➔ Éxito: 'gold_fact_top_posts_enriched' — métricas reales de LinkedIn + pillar/formato/título reales de la app.")
+
+
+# =====================================================================
+# BLOQUE 7. PUENTE: gold_bridge_post_hashtags (muchos-a-muchos)
+# =====================================================================
+print("\n[7/7] Generando gold_bridge_post_hashtags...")
+
+df_bridge = (spark.read.table("silver_post_hashtags")
+    .join(spark.read.table("silver_post_content").select("post_id", "linkedin_post_id"), on="post_id", how="left")
+    .withColumn("linkedin_urn", F.col("linkedin_post_id").cast("decimal(38,0)").cast("string"))
+    .drop("linkedin_post_id")
+    .withColumn("gold_load_timestamp", F.current_timestamp()))
+
+(df_bridge.write.format("delta").mode("overwrite")
+ .option("overwriteSchema", "true").saveAsTable("gold_bridge_post_hashtags"))
+print("  ➔ Éxito: 'gold_bridge_post_hashtags' lista para el modelo semántico.")
 
 # METADATA ********************
 

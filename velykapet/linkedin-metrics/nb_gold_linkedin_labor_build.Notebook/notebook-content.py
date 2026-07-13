@@ -850,6 +850,47 @@ display(df_weekly_summary)
 
 # CELL ********************
 
+# =====================================================================
+# BLOQUE 6. ENRIQUECIMIENTO: gold_fact_top_posts + contenido real
+# =====================================================================
+print("\n[6/7] Generando gold_fact_top_posts_enriched...")
+
+df_top_posts_keyed = spark.read.table("gold_fact_top_posts").withColumn(
+    "linkedin_urn",
+    F.regexp_extract(F.col("post_url"), r"(?:ugcPost|share|activity|document|posts)-([0-9]{15,})", 1)
+)
+
+df_content = spark.read.table("silver_post_content")
+
+df_enriched = df_top_posts_keyed.join(
+    df_content.select(
+        F.col("linkedin_post_id").alias("linkedin_urn"),
+        F.col("pillar"),
+        F.col("media_format"),
+        F.col("post_title").alias("real_post_title"),
+    ),
+    on="linkedin_urn",
+    how="left"
+).withColumn("gold_load_timestamp", F.current_timestamp())
+
+(df_enriched.write.format("delta").mode("overwrite")
+ .option("overwriteSchema", "true").saveAsTable("gold_fact_top_posts_enriched"))
+print("  ➔ Éxito: 'gold_fact_top_posts_enriched' — métricas reales de LinkedIn + pillar/formato/título reales de la app.")
+
+
+# =====================================================================
+# BLOQUE 7. PUENTE: gold_bridge_post_hashtags (muchos-a-muchos)
+# =====================================================================
+print("\n[7/7] Generando gold_bridge_post_hashtags...")
+
+df_bridge = (spark.read.table("silver_post_hashtags")
+    .join(spark.read.table("silver_post_content").select("post_id", "linkedin_post_id"), on="post_id", how="left")
+    .withColumnRenamed("linkedin_post_id", "linkedin_urn")
+    .withColumn("gold_load_timestamp", F.current_timestamp()))
+
+(df_bridge.write.format("delta").mode("overwrite")
+ .option("overwriteSchema", "true").saveAsTable("gold_bridge_post_hashtags"))
+print("  ➔ Éxito: 'gold_bridge_post_hashtags' lista para el modelo semántico.")
 
 # METADATA ********************
 

@@ -120,6 +120,7 @@ table gold_dim_demographics
 			RETURN
 			    MAXX ( _top, gold_dim_demographics[demographic_value] )
 		displayFolder: Demographics
+		lineageTag: 20f6a4a9-e549-4dca-9d46-9a133f6aefb7
 
 	/// Percentage of the top demographic_value within the current demographic_category context, respecting the active date range.
 	measure 'Top Value % by Category' =
@@ -138,6 +139,7 @@ table gold_dim_demographics
 			    MAXX ( _top, [_pct] )
 		formatString: 0.00%
 		displayFolder: Demographics
+		lineageTag: bf4f9488-b9ea-4260-bf56-fa806931bd58
 
 	column start_date
 		dataType: dateTime

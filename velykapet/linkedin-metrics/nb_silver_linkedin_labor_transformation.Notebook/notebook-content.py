@@ -271,6 +271,27 @@ for table in ["silver_discovery", "silver_engagement", "silver_top_posts", "silv
 
 # CELL ********************
 
+content_bronze_tables = ["post_content", "post_hashtags"]
+for t in content_bronze_tables:
+    try:
+        spark.catalog.refreshTable(t)
+    except Exception as e:
+        print(f"Refresh warning for {t}: {e}")
+
+df_content_silver = (spark.read.table("post_content")
+    .withColumn("posted_at", F.to_timestamp("posted_at"))
+    .dropDuplicates(["post_id"])
+    .withColumn("silver_load_timestamp", F.current_timestamp()))
+(df_content_silver.write.format("delta").mode("overwrite")
+ .option("overwriteSchema", "true").saveAsTable("silver_post_content"))
+print("Successfully created Silver table: silver_post_content")
+
+df_hashtags_silver = (spark.read.table("post_hashtags")
+    .dropDuplicates(["post_id", "hashtag"])
+    .withColumn("silver_load_timestamp", F.current_timestamp()))
+(df_hashtags_silver.write.format("delta").mode("overwrite")
+ .option("overwriteSchema", "true").saveAsTable("silver_post_hashtags"))
+print("Successfully created Silver table: silver_post_hashtags")
 
 # METADATA ********************
 

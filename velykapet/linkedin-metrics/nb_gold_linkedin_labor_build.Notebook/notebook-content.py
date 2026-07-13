@@ -980,6 +980,132 @@ df_bridge = (spark.read.table("silver_post_hashtags")
  .option("overwriteSchema", "true").saveAsTable("gold_bridge_post_hashtags"))
 print("  ➔ Éxito: 'gold_bridge_post_hashtags' lista para el modelo semántico.")
 
+# =============================================================================
+# BLOQUE 8: gold_fact_performance_by_format
+# -----------------------------------------------------------------------------
+# Rolling-window performance comparison by media_format and by pillar.
+#
+# WHY A ROLLING WINDOW INSTEAD OF WEEKLY BUCKETS:
+#   At ~5-15 posts/week split across 3+ formats and 7 pillars, a hard weekly
+#   reset gives each format-bucket only 1-3 posts some weeks -> the "average"
+#   swings on a single post, not a real signal. Instead, this table recomputes
+#   a rolling WINDOW_DAYS-day window as of every Monday snapshot, which smooths
+#   noise while still showing a moving trend.
+#
+# SAMPLE-SIZE SAFEGUARD:
+#   Every row carries post_count and is_reliable (post_count >= MIN_SAMPLE_SIZE).
+#   Don't trust avg_engagement_rate for a row where is_reliable = False -- just
+#   eyeball the raw posts instead.
+#
+# KNOWN UPSTREAM DATA QUALITY ISSUES (fix these for this table to be useful):
+#   1. media_format is "Unknown" for ~73% of posts (80/109) -- classification
+#      gap, likely in nb_silver_linkedin_labor_transformation. Until fixed,
+#      "Unknown" will dominate the media_format rows here.
+#   2. pillar has a duplicate category: "Microsoft Fabric" vs "Microsoft Fabric,"
+#      (trailing comma). Trim/clean at the source rather than here, so the fix
+#      propagates to every other Gold table that uses pillar too.
+# =============================================================================
+
+from pyspark.sql import functions as F
+
+WINDOW_DAYS = 30          # rolling 30-day / ~4-week window
+SNAPSHOT_INTERVAL_DAYS = 7  # recompute a snapshot every 7 days
+MIN_SAMPLE_SIZE = 8       # below this post_count, treat the rate as directional only
+
+# ---- source ----------------------------------------------------------------
+df_posts = (
+    spark.read.table("gold_fact_top_posts_enriched")
+    .withColumn("post_publish_date", F.to_date("post_publish_date"))
+)
+
+date_bounds = df_posts.agg(
+    F.min("post_publish_date").alias("min_date"),
+    F.max("post_publish_date").alias("max_date"),
+).collect()[0]
+
+min_date = date_bounds["min_date"]
+max_date = date_bounds["max_date"]
+
+# weekly snapshot dates spanning the full post history
+snapshot_dates = spark.sql(
+    f"""
+    SELECT explode(sequence(
+        to_date('{min_date}'),
+        to_date('{max_date}'),
+        interval {SNAPSHOT_INTERVAL_DAYS} day
+    )) AS snapshot_date
+    """
+)
+
+
+def build_rolling_perf(dim_col: str, dim_label: str):
+    """Rolling WINDOW_DAYS-day performance aggregation for one dimension
+    (media_format or pillar), snapshotted every SNAPSHOT_INTERVAL_DAYS days."""
+
+    dims = df_posts.select(F.col(dim_col).alias("dimension_value")).distinct()
+    grid = snapshot_dates.crossJoin(dims)
+
+    joined = grid.join(
+        df_posts,
+        (df_posts[dim_col] == grid["dimension_value"])
+        & (df_posts["post_publish_date"] > F.date_sub(grid["snapshot_date"], WINDOW_DAYS))
+        & (df_posts["post_publish_date"] <= grid["snapshot_date"]),
+        "left",
+    )
+
+    agg = (
+        joined.groupBy("snapshot_date", "dimension_value")
+        .agg(
+            F.count("linkedin_urn").alias("post_count"),
+            F.sum("impressions").alias("total_impressions"),
+            F.sum("engagements").alias("total_engagements"),
+        )
+        .withColumn(
+            "avg_engagement_rate",
+            F.when(
+                F.col("total_impressions") > 0,
+                F.col("total_engagements") / F.col("total_impressions"),
+            ).otherwise(None),
+        )
+        .withColumn("is_reliable", F.col("post_count") >= MIN_SAMPLE_SIZE)
+        .withColumn("dimension_type", F.lit(dim_label))
+        .withColumn("window_days", F.lit(WINDOW_DAYS))
+    )
+    return agg
+
+
+perf_format = build_rolling_perf("media_format", "media_format")
+perf_pillar = build_rolling_perf("pillar", "pillar")
+
+gold_fact_performance_by_format = (
+    perf_format.unionByName(perf_pillar)
+    .select(
+        "snapshot_date",
+        "window_days",
+        "dimension_type",
+        "dimension_value",
+        "post_count",
+        "total_impressions",
+        "total_engagements",
+        "avg_engagement_rate",
+        "is_reliable",
+    )
+    .withColumn("gold_load_timestamp", F.current_timestamp())
+)
+
+(
+    gold_fact_performance_by_format.write.format("delta")
+    .mode("overwrite")
+    .saveAsTable("gold_fact_performance_by_format")
+)
+
+print(
+    f"gold_fact_performance_by_format written: "
+    f"{gold_fact_performance_by_format.count()} rows "
+    f"({min_date} to {max_date}, {WINDOW_DAYS}-day rolling window, "
+    f"snapshotted every {SNAPSHOT_INTERVAL_DAYS} days)"
+)
+
 # METADATA ********************
 
 # META {

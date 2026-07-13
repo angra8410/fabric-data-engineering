@@ -14,3 +14,7 @@ relationship dim_demographics_to_dim_date
 	fromColumn: gold_dim_demographics.start_date
 	toColumn: gold_dim_date.date
 
+relationship f8de6d30-dec7-9174-4732-3b7d296bde47
+	fromColumn: gold_fact_top_posts_enriched.linkedin_urn
+	toColumn: gold_bridge_post_hashtags.linkedin_urn
+

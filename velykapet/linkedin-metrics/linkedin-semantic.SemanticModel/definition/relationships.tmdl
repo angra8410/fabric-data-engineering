@@ -23,3 +23,7 @@ relationship 25968bc8-05d0-7b5b-9dc8-0a691c04f5f2
 	fromColumn: gold_fact_top_posts_enriched.post_publish_date
 	toColumn: gold_dim_date.date
 
+relationship fact_performance_by_format_to_dim_date
+	fromColumn: gold_fact_performance_by_format.snapshot_date
+	toColumn: gold_dim_date.date
+

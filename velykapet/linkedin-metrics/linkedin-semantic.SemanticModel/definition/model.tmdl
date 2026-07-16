@@ -20,4 +20,5 @@ ref table gold_dim_demographics
 ref table gold_fact_daily_performance
 ref table gold_bridge_post_hashtags
 ref table gold_fact_top_posts_enriched
+ref table gold_fact_performance_by_format
 

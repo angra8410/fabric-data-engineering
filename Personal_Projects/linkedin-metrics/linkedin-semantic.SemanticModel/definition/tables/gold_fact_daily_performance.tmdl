@@ -1,0 +1,230 @@
+table gold_fact_daily_performance
+	lineageTag: da80b05d-d96f-4dbc-8f59-2dad971ca309
+	sourceLineageTag: [dbo].[gold_fact_daily_performance]
+
+	/// Total impressions across all days
+	measure 'Total Impressions' = SUM(gold_fact_daily_performance[impressions])
+		formatString: #,0
+		displayFolder: Core Metrics
+		lineageTag: a7d7292b-6d01-4e3b-b788-87a8cbbac287
+
+	/// Total engagements across all days
+	measure 'Total Engagements' = SUM(gold_fact_daily_performance[engagements])
+		formatString: #,0
+		displayFolder: Core Metrics
+		lineageTag: d5a8210c-c00e-4daa-b07f-2957828fef87
+
+	/// Total new followers across all days
+	measure 'Total New Followers' = SUM(gold_fact_daily_performance[new_followers])
+		formatString: #,0
+		displayFolder: Core Metrics
+		lineageTag: 19f32ec7-2934-4cb3-a399-dcfff16e079c
+
+	/// Average daily engagement rate
+	measure 'Avg Daily Engagement Rate' = AVERAGE(gold_fact_daily_performance[engagement_rate])
+		formatString: 0.00%
+		displayFolder: Core Metrics
+		lineageTag: 9007929f-87ad-4b6f-9620-6de813e7e75c
+
+	/// Average impressions per day
+	measure 'Avg Daily Impressions' = AVERAGEX(VALUES(gold_fact_daily_performance[date]), [Total Impressions])
+		formatString: #,0
+		displayFolder: Core Metrics
+		lineageTag: 62414d8f-3f02-4cda-bce9-00c7aa8e4cef
+
+	/// Average engagements per day
+	measure 'Avg Daily Engagements' = AVERAGEX(VALUES(gold_fact_daily_performance[date]), [Total Engagements])
+		formatString: #,0
+		displayFolder: Core Metrics
+		lineageTag: aa8db723-6a2c-4950-8d37-c38e60c895b3
+
+	/// Week-over-week impressions growth
+	measure 'Impressions WoW %' =
+			VAR _current = [Total Impressions]
+			VAR _prev = CALCULATE([Total Impressions], DATEADD(gold_dim_date[date], -7, DAY))
+			RETURN IF(ISBLANK(_prev), BLANK(), DIVIDE(_current - _prev, _prev))
+		formatString: 0.00%
+		displayFolder: Period Comparisons
+		lineageTag: 3ad3cafa-f3d8-4db0-8204-0c8de7b94896
+
+	/// Week-over-week engagements growth
+	measure 'Engagements WoW %' =
+			VAR _current = [Total Engagements]
+			VAR _prev = CALCULATE([Total Engagements], DATEADD(gold_dim_date[date], -7, DAY))
+			RETURN IF(ISBLANK(_prev), BLANK(), DIVIDE(_current - _prev, _prev))
+		formatString: 0.00%
+		displayFolder: Period Comparisons
+		lineageTag: 73a6c28d-4ef5-4a0e-bc52-5df8b5be31e9
+
+	/// Week-over-week new followers growth
+	measure 'Followers WoW %' =
+			VAR _current = [Total New Followers]
+			VAR _prev = CALCULATE([Total New Followers], DATEADD(gold_dim_date[date], -7, DAY))
+			RETURN IF(ISBLANK(_prev), BLANK(), DIVIDE(_current - _prev, _prev))
+		formatString: 0.00%
+		displayFolder: Period Comparisons
+		lineageTag: 999c703a-4184-4dc1-a553-7c785931f1e0
+
+	/// Month-over-month impressions growth
+	measure 'Impressions MoM %' =
+			VAR _current = [Total Impressions]
+			VAR _prev = CALCULATE([Total Impressions], DATEADD(gold_dim_date[date], -1, MONTH))
+			RETURN IF(ISBLANK(_prev), BLANK(), DIVIDE(_current - _prev, _prev))
+		formatString: 0.00%
+		displayFolder: Period Comparisons
+		lineageTag: 5b7e4a08-db9c-4949-ac7e-b94541511341
+
+	/// Month-over-month engagements growth
+	measure 'Engagements MoM %' =
+			VAR _current = [Total Engagements]
+			VAR _prev = CALCULATE([Total Engagements], DATEADD(gold_dim_date[date], -1, MONTH))
+			RETURN IF(ISBLANK(_prev), BLANK(), DIVIDE(_current - _prev, _prev))
+		formatString: 0.00%
+		displayFolder: Period Comparisons
+		lineageTag: c2e58bc1-356f-451e-8156-2d2b194fdbb9
+
+	/// Month-to-date impressions
+	measure 'Impressions MTD' = CALCULATE([Total Impressions], DATESMTD(gold_dim_date[date]))
+		formatString: #,0
+		displayFolder: Time Intelligence
+		lineageTag: a56c647e-b792-44dc-84e9-3a563cfcd0f6
+
+	/// Month-to-date engagements
+	measure 'Engagements MTD' = CALCULATE([Total Engagements], DATESMTD(gold_dim_date[date]))
+		formatString: #,0
+		displayFolder: Time Intelligence
+		lineageTag: 0800e00a-ad5e-4630-821a-7a3726c18f36
+
+	/// Year-to-date impressions
+	measure 'Impressions YTD' = CALCULATE([Total Impressions], DATESYTD(gold_dim_date[date]))
+		formatString: #,0
+		displayFolder: Time Intelligence
+		lineageTag: 8c9f6010-3bdc-453c-ad15-626b433bf603
+
+	/// Year-to-date engagements
+	measure 'Engagements YTD' = CALCULATE([Total Engagements], DATESYTD(gold_dim_date[date]))
+		formatString: #,0
+		displayFolder: Time Intelligence
+		lineageTag: 71caaed7-a050-459a-967d-51e1def8eff7
+
+	/// Total impressions aggregated by day of week (use day_name on axis)
+	measure 'Impressions by Day of Week' = [Total Impressions]
+		formatString: #,0
+		displayFolder: Diagnostic\Day of Week
+		lineageTag: 2ca00835-179f-4daf-b4db-e13d46632ee8
+
+	/// Total engagements aggregated by day of week (use day_name on axis)
+	measure 'Engagements by Day of Week' = [Total Engagements]
+		formatString: #,0
+		displayFolder: Diagnostic\Day of Week
+		lineageTag: 8e4b8fbe-8fe2-4fd3-a51f-fac76f9b9f65
+
+	/// Average engagement rate aggregated by day of week (use day_name on axis)
+	measure 'Engagement Rate by Day of Week' = DIVIDE([Total Engagements], [Total Impressions])
+		formatString: 0.00%
+		displayFolder: Diagnostic\Day of Week
+		lineageTag: 0b73f37f-0d46-4f66-8b9f-131a81eae6c4
+
+	/// Identifies the day of week with the highest average engagement rate across all history. Use as a card.
+	measure 'Best Day to Post (Engagement Rate)' =
+			VAR _byDay = ADDCOLUMNS(VALUES(gold_dim_date[day_name]), "_rate", CALCULATE(DIVIDE([Total Engagements], [Total Impressions])))
+			VAR _top = TOPN(1, _byDay, [_rate], DESC)
+			RETURN MAXX(_top, gold_dim_date[day_name])
+		displayFolder: Diagnostic\Day of Week
+		lineageTag: a09e1d44-5642-41aa-b35d-0b321db10d95
+
+	/// Identifies the day of week with the highest total impressions across all history. Use as a card.
+	measure 'Best Day for Reach (Impressions)' =
+			VAR _byDay = ADDCOLUMNS(VALUES(gold_dim_date[day_name]), "_impr", CALCULATE([Total Impressions]))
+			VAR _top = TOPN(1, _byDay, [_impr], DESC)
+			RETURN MAXX(_top, gold_dim_date[day_name])
+		displayFolder: Diagnostic\Day of Week
+		lineageTag: ce0f251b-8b49-49f6-a224-37b24c6566dc
+
+	column date
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: date
+		lineageTag: e6004cbf-ffe3-4cf4-a910-226d7ff31caf
+		sourceLineageTag: date
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation SummarizationSetBy = Automatic
+
+	column impressions
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: ee847a81-59b8-40a8-a144-e78af0ae42e9
+		sourceLineageTag: impressions
+		summarizeBy: sum
+		sourceColumn: impressions
+
+		annotation SummarizationSetBy = Automatic
+
+	column engagements
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: e25d9dce-3d0c-433e-a764-f179618ec886
+		sourceLineageTag: engagements
+		summarizeBy: sum
+		sourceColumn: engagements
+
+		annotation SummarizationSetBy = Automatic
+
+	column new_followers
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 326fd98d-5b22-4775-9628-de989f3fc48b
+		sourceLineageTag: new_followers
+		summarizeBy: sum
+		sourceColumn: new_followers
+
+		annotation SummarizationSetBy = Automatic
+
+	column engagement_rate
+		dataType: double
+		sourceProviderType: float
+		lineageTag: bf3471d6-2f99-4ccb-8366-301649a06b05
+		sourceLineageTag: engagement_rate
+		summarizeBy: sum
+		sourceColumn: engagement_rate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column gold_load_timestamp
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: e41f30cd-376c-474d-9a33-7614e4291809
+		sourceLineageTag: gold_load_timestamp
+		summarizeBy: none
+		sourceColumn: gold_load_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column cumulative_followers
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 4c7d369e-ccbf-45c3-b097-72eec4a53197
+		sourceLineageTag: cumulative_followers
+		summarizeBy: sum
+		sourceColumn: cumulative_followers
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_fact_daily_performance = entity
+		mode: directLake
+		source
+			entityName: gold_fact_daily_performance
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+

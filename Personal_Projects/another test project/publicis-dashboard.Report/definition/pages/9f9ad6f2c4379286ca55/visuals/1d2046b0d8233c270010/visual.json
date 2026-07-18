@@ -1,0 +1,53 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "1d2046b0d8233c270010",
+  "position": {
+    "x": 872.97790541479458,
+    "y": 104.58659502524435,
+    "z": 4000,
+    "height": 58.696558432535092,
+    "width": 232.65181342350272,
+    "tabOrder": 4000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Marketer action items",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Anthropic Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif",
+                      "fontSize": "14pt",
+                      "color": "#000000"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

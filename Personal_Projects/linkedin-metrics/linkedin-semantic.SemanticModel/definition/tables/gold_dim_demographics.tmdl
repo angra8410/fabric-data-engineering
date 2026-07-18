@@ -1,0 +1,217 @@
+table gold_dim_demographics
+	lineageTag: 03b1508a-de69-42f9-9826-eb6e25b1bd4f
+	sourceLineageTag: [dbo].[gold_dim_demographics]
+
+	/// Highest percentage among demographic values
+	measure 'Top Demographic %' = MAXX(VALUES(gold_dim_demographics[demographic_value]), SUM(gold_dim_demographics[percentage]))
+		formatString: 0.00%
+		displayFolder: Demographics
+		lineageTag: 713973b5-743b-415a-aa9d-add99a000edd
+
+	/// Number of distinct demographic categories
+	measure 'Demographic Categories' = DISTINCTCOUNT(gold_dim_demographics[demographic_category])
+		formatString: #,0
+		displayFolder: Demographics
+		lineageTag: 12ec7a0f-c1df-409a-b89d-0f0cb4e05ab9
+
+	/// Percentage for demographics active on the selected date (range-aware: start_date <= selected date <= end_date)
+	measure 'Active Demographics %' =
+			VAR _selectedDate = IF ( ISFILTERED ( gold_dim_date[date] ), MAX ( gold_dim_date[date] ), TODAY () )
+			RETURN
+			CALCULATE(
+			    SUM(gold_dim_demographics[percentage]),
+			    FILTER(
+			        gold_dim_demographics,
+			        gold_dim_demographics[start_date] <= _selectedDate
+			            && gold_dim_demographics[end_date] >= _selectedDate
+			    )
+			)
+		formatString: 0.00%
+		displayFolder: Demographics
+		lineageTag: bb18c256-e97d-471c-ac14-d2cc75645e22
+
+	/// Number of distinct demographic values active on the selected date
+	measure 'Active Demographics Count' =
+			VAR _selectedDate = MAX(gold_dim_date[date])
+			RETURN
+			CALCULATE(
+			    DISTINCTCOUNT(gold_dim_demographics[demographic_value]),
+			    FILTER(
+			        gold_dim_demographics,
+			        gold_dim_demographics[start_date] <= _selectedDate
+			            && gold_dim_demographics[end_date] >= _selectedDate
+			    )
+			)
+		formatString: #,0
+		displayFolder: Demographics
+		lineageTag: 2cbd6a1e-0cd5-458e-abf6-83bdfcb872b6
+
+	/// The demographic value with the highest percentage active on the selected date
+	measure 'Top Active Demographic Value' =
+			VAR _selectedDate = IF ( ISFILTERED ( gold_dim_date[date] ), MAX ( gold_dim_date[date] ), TODAY () )
+			VAR _activeRows =
+			    FILTER (
+			        gold_dim_demographics,
+			        gold_dim_demographics[start_date] <= _selectedDate
+			            && gold_dim_demographics[end_date] >= _selectedDate
+			    )
+			VAR _topValue =
+			    TOPN (
+			        1,
+			        SUMMARIZE(_activeRows, gold_dim_demographics[demographic_value], "_pct", SUM(gold_dim_demographics[percentage])),
+			        [_pct], DESC
+			    )
+			RETURN
+			    MAXX(_topValue, gold_dim_demographics[demographic_value])
+		displayFolder: Demographics
+		lineageTag: c07c54d7-b455-4490-ad7a-8e40757d4cd3
+
+	/// Percentage filtered by demographic category and active date range — use with demographic_category slicer
+	measure 'Active Demographics by Category %' =
+			VAR _selectedDate = IF ( ISFILTERED ( gold_dim_date[date] ), MAX ( gold_dim_date[date] ), TODAY () )
+			VAR _hasSingleCategory = HASONEVALUE ( gold_dim_demographics[demographic_category] )
+			VAR _pct =
+			    CALCULATE(
+			        SUM(gold_dim_demographics[percentage]),
+			        FILTER(
+			            ALLEXCEPT(gold_dim_demographics, gold_dim_demographics[demographic_category], gold_dim_demographics[demographic_value]),
+			            gold_dim_demographics[start_date] <= _selectedDate
+			                && gold_dim_demographics[end_date] >= _selectedDate
+			        )
+			    )
+			RETURN
+			    IF ( _hasSingleCategory, FORMAT ( _pct, "0.00%" ), "Select a category" )
+		formatString: 0.00%
+		displayFolder: Demographics
+		lineageTag: 16b8fa52-9834-481b-847e-78f0d82084ea
+
+	/// Simple percentage for bar chart — no date context needed. Use with demographic_value on Y-axis and filter demographic_category via slicer.
+	measure 'Demographics % for Chart' = SUM(gold_dim_demographics[percentage])
+		formatString: 0%
+		displayFolder: Demographics
+		lineageTag: 14dce54a-2193-42f9-a9d1-47eb6266c61d
+
+	/// Percentage share within the selected category — shows relative weight of each value inside its category group.
+	measure 'Demographics % of Category' =
+			DIVIDE(
+			    SUM(gold_dim_demographics[percentage]),
+			    CALCULATE(
+			        SUM(gold_dim_demographics[percentage]),
+			        ALLEXCEPT(gold_dim_demographics, gold_dim_demographics[demographic_category])
+			    )
+			)
+		formatString: 0%
+		displayFolder: Demographics
+		lineageTag: 4402cd6e-2353-45c4-906b-ecd1b915fead
+
+	/// Top demographic_value within the current demographic_category context (e.g. filtered by a category slicer), respecting the active date range.
+	measure 'Top Value by Category' =
+			VAR _selectedDate = IF ( ISFILTERED ( gold_dim_date[date] ), MAX ( gold_dim_date[date] ), TODAY () )
+			VAR _activeRows =
+			    FILTER (
+			        ALLEXCEPT ( gold_dim_demographics, gold_dim_demographics[demographic_category] ),
+			        gold_dim_demographics[start_date] <= _selectedDate
+			            && gold_dim_demographics[end_date] >= _selectedDate
+			    )
+			VAR _summary =
+			    SUMMARIZE ( _activeRows, gold_dim_demographics[demographic_value], "_pct", SUM ( gold_dim_demographics[percentage] ) )
+			VAR _top =
+			    TOPN ( 1, _summary, [_pct], DESC )
+			RETURN
+			    MAXX ( _top, gold_dim_demographics[demographic_value] )
+		displayFolder: Demographics
+		lineageTag: 20f6a4a9-e549-4dca-9d46-9a133f6aefb7
+
+	/// Percentage of the top demographic_value within the current demographic_category context, respecting the active date range.
+	measure 'Top Value % by Category' =
+			VAR _selectedDate = IF ( ISFILTERED ( gold_dim_date[date] ), MAX ( gold_dim_date[date] ), TODAY () )
+			VAR _activeRows =
+			    FILTER (
+			        ALLEXCEPT ( gold_dim_demographics, gold_dim_demographics[demographic_category] ),
+			        gold_dim_demographics[start_date] <= _selectedDate
+			            && gold_dim_demographics[end_date] >= _selectedDate
+			    )
+			VAR _summary =
+			    SUMMARIZE ( _activeRows, gold_dim_demographics[demographic_value], "_pct", SUM ( gold_dim_demographics[percentage] ) )
+			VAR _top =
+			    TOPN ( 1, _summary, [_pct], DESC )
+			RETURN
+			    MAXX ( _top, [_pct] )
+		formatString: 0.00%
+		displayFolder: Demographics
+		lineageTag: bf4f9488-b9ea-4260-bf56-fa806931bd58
+
+	column start_date
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: date
+		lineageTag: c57a20b7-ae5e-4e79-8a1f-99acd0a799a8
+		sourceLineageTag: start_date
+		summarizeBy: none
+		sourceColumn: start_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column end_date
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: date
+		lineageTag: bfbca200-99a5-44e1-a805-c3b743c2328f
+		sourceLineageTag: end_date
+		summarizeBy: none
+		sourceColumn: end_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column demographic_category
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 9bc70bd2-75e7-44cf-b747-6bb9eb63ae16
+		sourceLineageTag: demographic_category
+		summarizeBy: none
+		sourceColumn: demographic_category
+
+		annotation SummarizationSetBy = Automatic
+
+	column demographic_value
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 5b4581a1-48f1-412e-a3b2-9955ccf8e0d0
+		sourceLineageTag: demographic_value
+		summarizeBy: none
+		sourceColumn: demographic_value
+
+		annotation SummarizationSetBy = Automatic
+
+	column percentage
+		dataType: double
+		sourceProviderType: float
+		lineageTag: bf81fd23-3d14-4173-b164-df2b90b27dec
+		sourceLineageTag: percentage
+		summarizeBy: sum
+		sourceColumn: percentage
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column gold_load_timestamp
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 831e627a-de83-438f-82ba-87205e4dadf6
+		sourceLineageTag: gold_load_timestamp
+		summarizeBy: none
+		sourceColumn: gold_load_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_dim_demographics = entity
+		mode: directLake
+		source
+			entityName: gold_dim_demographics
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+

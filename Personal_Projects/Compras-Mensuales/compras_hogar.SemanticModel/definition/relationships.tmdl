@@ -1,0 +1,8 @@
+relationship 6cf7ed6e-a7b7-0612-6f26-82bd97648116
+	fromColumn: dim_date.DateKey
+	toColumn: compras_master_gold.Transaction_Date
+
+relationship d5a6c7f1-5bee-7fa0-2e46-614b9ba60783
+	fromColumn: compras_master_gold.Item_Name_Clean
+	toColumn: dim_productos.Item_Name_Clean
+

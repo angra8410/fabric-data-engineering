@@ -1,0 +1,89 @@
+table dim_date
+	lineageTag: 2b99955d-ab46-4dde-b221-53eb9e58b526
+	sourceLineageTag: [dbo].[dim_date]
+
+	column DateKey
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 3914663b-8d4e-47ec-84e4-21ec156ec35b
+		sourceLineageTag: DateKey
+		summarizeBy: none
+		sourceColumn: DateKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 6741c3cf-629e-41d3-bf18-ddd1f6b0a702
+		sourceLineageTag: Year
+		summarizeBy: none
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month_Number
+		dataType: int64
+		formatString: 0
+		lineageTag: a3f81f72-41ed-438c-9bbb-8fb999287c6e
+		sourceLineageTag: Month_Number
+		summarizeBy: none
+		sourceColumn: Month_Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month_Short
+		dataType: string
+		lineageTag: 80e75688-fe1c-402e-85ca-c369d9a02b97
+		sourceLineageTag: Month_Short
+		summarizeBy: none
+		sourceColumn: Month_Short
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter
+		dataType: string
+		lineageTag: e4f23955-ee56-4e10-962e-e8cb1960723a
+		sourceLineageTag: Quarter
+		summarizeBy: none
+		sourceColumn: Quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearMonthKey
+		dataType: int64
+		formatString: 0
+		lineageTag: f079732b-8520-44fd-8eee-ede1d3a6ca84
+		sourceLineageTag: YearMonthKey
+		summarizeBy: none
+		sourceColumn: YearMonthKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Day_of_Month
+		dataType: int64
+		formatString: 0
+		lineageTag: d1d6aadd-d60a-4594-ad21-dc07e113c707
+		sourceLineageTag: Day_of_Month
+		summarizeBy: none
+		sourceColumn: Day_of_Month
+
+		annotation SummarizationSetBy = Automatic
+
+	column Day_of_Week
+		dataType: int64
+		formatString: 0
+		lineageTag: c5cf3b35-b728-4642-bd87-60b507a03911
+		sourceLineageTag: Day_of_Week
+		summarizeBy: none
+		sourceColumn: Day_of_Week
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_date = entity
+		mode: directLake
+		source
+			entityName: dim_date
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_digital_campaign_dev'
+

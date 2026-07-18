@@ -1,0 +1,11 @@
+expression 'DirectLake - lh_digital_campaign_dev' =
+		let
+		    Source = AzureStorage.DataLake("https://onelake.dfs.fabric.microsoft.com/b14581ac-9906-43e2-809c-c2fd4315ad5b/e4ab5a3e-7d4e-480f-84a0-cdbf419c7399", [HierarchicalNavigation=true])
+		in
+		    Source
+	lineageTag: 0a079f13-00bc-4021-8133-00bc47891639
+
+	annotation PBI_IncludeFutureArtifacts = False
+
+	annotation PBI_RemovedChildren = [{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[dbo].[marketing_ga_cleaned]"}},"objectType":"Table"},{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[dbo].[marketing_dcm_cleaned]"}},"objectType":"Table"},{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[dbo].[marketing_ga_raw]"}},"objectType":"Table"},{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[dbo].[marketing_dcm_raw]"}},"objectType":"Table"}]
+

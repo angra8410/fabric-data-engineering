@@ -1,0 +1,159 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "01482a3ee07ec98d94a4",
+  "position": {
+    "x": 176.74924085024773,
+    "y": 316.83937989451812,
+    "z": 4000,
+    "height": 193.76953811730863,
+    "width": 432.05369985616107,
+    "tabOrder": 4000
+  },
+  "visual": {
+    "visualType": "columnChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "gold_dim_date"
+                    }
+                  },
+                  "Property": "day_name"
+                }
+              },
+              "queryRef": "gold_dim_date.day_name",
+              "nativeQueryRef": "day_name",
+              "active": true
+            }
+          ]
+        },
+        "Tooltips": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "gold_fact_top_posts"
+                    }
+                  },
+                  "Property": "Top Post Engagements"
+                }
+              },
+              "queryRef": "gold_fact_top_posts.Top Post Engagements",
+              "nativeQueryRef": "Top Post Engagements"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "gold_fact_top_posts"
+                    }
+                  },
+                  "Property": "Avg Post Engagement Rate"
+                }
+              },
+              "queryRef": "gold_fact_top_posts.Avg Post Engagement Rate",
+              "nativeQueryRef": "Avg Post Engagement Rate"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "gold_fact_top_posts"
+                    }
+                  },
+                  "Property": "Post Count"
+                }
+              },
+              "queryRef": "gold_fact_top_posts.Post Count",
+              "nativeQueryRef": "Post Count"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "gold_fact_daily_performance"
+                    }
+                  },
+                  "Property": "Engagements by Day of Week"
+                }
+              },
+              "queryRef": "gold_fact_daily_performance.Engagements by Day of Week",
+              "nativeQueryRef": "Engagements by Day of Week"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "labels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Engagements by Day of Week'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            },
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'center'"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

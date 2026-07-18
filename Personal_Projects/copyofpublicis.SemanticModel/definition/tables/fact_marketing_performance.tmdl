@@ -1,0 +1,133 @@
+table fact_marketing_performance
+	lineageTag: 5c439e3c-cff0-47ae-b871-8dcb2e54e148
+	sourceLineageTag: [dbo].[fact_marketing_performance]
+
+	column Campaign
+		dataType: string
+		lineageTag: bbd35694-3138-409b-b2f8-6cfd72817930
+		sourceLineageTag: Campaign
+		summarizeBy: none
+		sourceColumn: Campaign
+
+		annotation SummarizationSetBy = Automatic
+
+	column Media_Placement_Site
+		dataType: string
+		lineageTag: 2c69c723-381c-40e8-901f-c02ee9a91bc3
+		sourceLineageTag: Media_Placement_Site
+		summarizeBy: none
+		sourceColumn: Media_Placement_Site
+
+		annotation SummarizationSetBy = Automatic
+
+	column Creative_Name
+		dataType: string
+		lineageTag: e3ea00d9-878a-4788-9ba0-ee7ffa1d6912
+		sourceLineageTag: Creative_Name
+		summarizeBy: none
+		sourceColumn: Creative_Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Creative_Dimensions
+		dataType: string
+		lineageTag: 50aace0d-1325-4fcd-b249-9205b54ee798
+		sourceLineageTag: Creative_Dimensions
+		summarizeBy: none
+		sourceColumn: Creative_Dimensions
+
+		annotation SummarizationSetBy = Automatic
+
+	column Device_Category
+		dataType: string
+		lineageTag: 0ed0526f-6fce-4fe9-9b23-7ba375809148
+		sourceLineageTag: Device_Category
+		summarizeBy: none
+		sourceColumn: Device_Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column Impressions
+		dataType: int64
+		formatString: 0
+		lineageTag: d7ba742e-1e09-449d-a97e-ddd594bcd95f
+		sourceLineageTag: Impressions
+		summarizeBy: sum
+		sourceColumn: Impressions
+
+		annotation SummarizationSetBy = Automatic
+
+	column Clicks
+		dataType: int64
+		formatString: 0
+		lineageTag: 79cb766a-db62-41fa-9fa5-d94fd783dce3
+		sourceLineageTag: Clicks
+		summarizeBy: sum
+		sourceColumn: Clicks
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sessions
+		dataType: int64
+		formatString: 0
+		lineageTag: fbc31ec2-2c52-4ad0-b732-0dd19f2bd1a0
+		sourceLineageTag: Sessions
+		summarizeBy: sum
+		sourceColumn: Sessions
+
+		annotation SummarizationSetBy = Automatic
+
+	column Users
+		dataType: int64
+		formatString: 0
+		lineageTag: 14a16a9f-7fda-418d-bf15-84a1783b5717
+		sourceLineageTag: Users
+		summarizeBy: sum
+		sourceColumn: Users
+
+		annotation SummarizationSetBy = Automatic
+
+	column Device_Category_DCM
+		dataType: string
+		lineageTag: 595634a1-718c-4c8b-a89d-fe5de6fce911
+		sourceLineageTag: Device_Category_DCM
+		summarizeBy: none
+		sourceColumn: Device_Category_DCM
+
+		annotation SummarizationSetBy = Automatic
+
+	column Campaign_Group
+		dataType: string
+		lineageTag: 47e9bb83-7d2a-4b8a-87e4-8adaaa57b063
+		sourceLineageTag: Campaign_Group
+		summarizeBy: none
+		sourceColumn: Campaign_Group
+
+		annotation SummarizationSetBy = Automatic
+
+	column GA_Web_Source
+		dataType: string
+		lineageTag: 9de2564a-75c3-4518-870d-f63378cb4711
+		sourceLineageTag: GA_Web_Source
+		summarizeBy: none
+		sourceColumn: GA_Web_Source
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 305b1ea1-1737-4b18-bab8-a2e39ded34cd
+		sourceLineageTag: Date
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_marketing_performance = entity
+		mode: directLake
+		source
+			entityName: fact_marketing_performance
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_digital_campaign_dev'
+

@@ -1,0 +1,210 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "name": "Copy data1",
+        "description": "Version modificada por Desarrollador A",
+        "type": "Copy",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "source": {
+            "type": "SqlServerSource",
+            "sqlReaderQuery": "SELECT \n    CAST(DocumentNode AS VARCHAR(MAX)) AS NodeText,\n    Title,\n    Owner,\n    FolderFlag,\n    FileName,\n    FileExtension,\n    Revision,\n    ChangeNumber,\n    Status,\n    CAST(DocumentSummary AS VARCHAR(MAX)) AS DocumentSummary,\n    rowguid,\n    ModifiedDate\nFROM Production.Document",
+            "queryTimeout": "02:00:00",
+            "partitionOption": "None",
+            "datasetSettings": {
+              "annotations": [],
+              "type": "SqlServerTable",
+              "schema": [],
+              "typeProperties": {
+                "database": "AdventureWorks2022"
+              },
+              "externalReferences": {
+                "connection": "fbbf5fa3-da0d-4d01-9e01-3bac960c08f4"
+              }
+            }
+          },
+          "sink": {
+            "type": "SqlServerSink",
+            "writeBehavior": "insert",
+            "sqlWriterUseTableLock": false,
+            "datasetSettings": {
+              "annotations": [],
+              "type": "SqlServerTable",
+              "schema": [],
+              "typeProperties": {
+                "schema": "Production",
+                "table": "Document",
+                "database": "AdventureWorks2022"
+              },
+              "externalReferences": {
+                "connection": "fbbf5fa3-da0d-4d01-9e01-3bac960c08f4"
+              }
+            }
+          },
+          "enableStaging": false,
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "name": "NodeText",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "MAX"
+                },
+                "sink": {
+                  "name": "NodeText",
+                  "physicalType": "smallint"
+                }
+              },
+              {
+                "source": {
+                  "name": "Title",
+                  "type": "String",
+                  "physicalType": "nvarchar",
+                  "length": "50"
+                },
+                "sink": {
+                  "name": "Title",
+                  "physicalType": "nvarchar",
+                  "length": "50"
+                }
+              },
+              {
+                "source": {
+                  "name": "Owner",
+                  "type": "Int32",
+                  "physicalType": "int"
+                },
+                "sink": {
+                  "name": "Owner",
+                  "physicalType": "int"
+                }
+              },
+              {
+                "source": {
+                  "name": "FolderFlag",
+                  "type": "Boolean",
+                  "physicalType": "bit"
+                },
+                "sink": {
+                  "name": "FolderFlag",
+                  "physicalType": "bit"
+                }
+              },
+              {
+                "source": {
+                  "name": "FileName",
+                  "type": "String",
+                  "physicalType": "nvarchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "FileName",
+                  "physicalType": "nvarchar",
+                  "length": "400"
+                }
+              },
+              {
+                "source": {
+                  "name": "FileExtension",
+                  "type": "String",
+                  "physicalType": "nvarchar",
+                  "length": "8"
+                },
+                "sink": {
+                  "name": "FileExtension",
+                  "physicalType": "nvarchar",
+                  "length": "8"
+                }
+              },
+              {
+                "source": {
+                  "name": "Revision",
+                  "type": "String",
+                  "physicalType": "nchar",
+                  "length": "5"
+                },
+                "sink": {
+                  "name": "Revision",
+                  "physicalType": "nchar",
+                  "length": "5"
+                }
+              },
+              {
+                "source": {
+                  "name": "ChangeNumber",
+                  "type": "Int32",
+                  "physicalType": "int"
+                },
+                "sink": {
+                  "name": "ChangeNumber",
+                  "physicalType": "int"
+                }
+              },
+              {
+                "source": {
+                  "name": "Status",
+                  "type": "Byte",
+                  "physicalType": "tinyint"
+                },
+                "sink": {
+                  "name": "Status",
+                  "physicalType": "tinyint"
+                }
+              },
+              {
+                "source": {
+                  "name": "DocumentSummary",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "MAX"
+                },
+                "sink": {
+                  "name": "DocumentSummary",
+                  "physicalType": "nvarchar",
+                  "length": "MAX"
+                }
+              },
+              {
+                "source": {
+                  "name": "rowguid",
+                  "type": "Guid",
+                  "physicalType": "uniqueidentifier"
+                },
+                "sink": {
+                  "name": "rowguid",
+                  "physicalType": "uniqueidentifier"
+                }
+              },
+              {
+                "source": {
+                  "name": "ModifiedDate",
+                  "type": "DateTime",
+                  "physicalType": "datetime"
+                },
+                "sink": {
+                  "name": "ModifiedDate",
+                  "physicalType": "datetime"
+                }
+              }
+            ],
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            }
+          }
+        }
+      }
+    ]
+  }
+}

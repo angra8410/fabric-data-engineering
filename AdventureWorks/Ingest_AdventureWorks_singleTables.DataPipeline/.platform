@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "Ingest_AdventureWorks_singleTables"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "28d25d66-d79b-a042-4ae7-4c251b64a737"
+  }
+}

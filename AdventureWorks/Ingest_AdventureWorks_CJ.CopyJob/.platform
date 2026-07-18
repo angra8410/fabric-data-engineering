@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "CopyJob",
+    "displayName": "Ingest_AdventureWorks_CJ"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "225a3afd-982f-9446-4f02-17f7f403eb83"
+  }
+}

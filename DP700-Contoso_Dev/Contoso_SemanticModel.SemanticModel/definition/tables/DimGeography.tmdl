@@ -1,0 +1,96 @@
+table DimGeography
+	lineageTag: 1b86bcf6-e8e2-4799-850f-c6674f0c0c0b
+	sourceLineageTag: [dbo].[DimGeography]
+
+	column GeographyKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 37d58b7c-ca44-4df6-ac15-3ed0007096a3
+		sourceLineageTag: GeographyKey
+		summarizeBy: count
+		sourceColumn: GeographyKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column GeographyType
+		dataType: string
+		lineageTag: faecf799-73ba-4a98-9ef0-121035dbfc93
+		sourceLineageTag: GeographyType
+		summarizeBy: none
+		sourceColumn: GeographyType
+
+		annotation SummarizationSetBy = Automatic
+
+	column ContinentName
+		dataType: string
+		lineageTag: e8f153d2-b0fe-4f40-9062-61454f5d995f
+		sourceLineageTag: ContinentName
+		summarizeBy: none
+		sourceColumn: ContinentName
+
+		annotation SummarizationSetBy = Automatic
+
+	column CityName
+		dataType: string
+		lineageTag: 20fcd600-ef2f-44f1-8d9b-72685d243544
+		sourceLineageTag: CityName
+		summarizeBy: none
+		sourceColumn: CityName
+
+		annotation SummarizationSetBy = Automatic
+
+	column StateProvinceName
+		dataType: string
+		lineageTag: ee54115f-82c4-4e7b-b5e8-4d3317ecab06
+		sourceLineageTag: StateProvinceName
+		summarizeBy: none
+		sourceColumn: StateProvinceName
+
+		annotation SummarizationSetBy = Automatic
+
+	column RegionCountryName
+		dataType: string
+		lineageTag: 0a485284-ae8e-46f0-afc7-49f97173e0d7
+		sourceLineageTag: RegionCountryName
+		summarizeBy: none
+		sourceColumn: RegionCountryName
+
+		annotation SummarizationSetBy = Automatic
+
+	column ETLLoadID
+		dataType: int64
+		formatString: 0
+		lineageTag: 4dd93097-8770-40b0-9aec-e193cb89a192
+		sourceLineageTag: ETLLoadID
+		summarizeBy: count
+		sourceColumn: ETLLoadID
+
+		annotation SummarizationSetBy = Automatic
+
+	column LoadDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 986053bd-258d-42a8-a575-7336eeed32f4
+		sourceLineageTag: LoadDate
+		summarizeBy: none
+		sourceColumn: LoadDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column UpdateDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 616398bf-5041-4a50-a9a6-bf07133422e6
+		sourceLineageTag: UpdateDate
+		summarizeBy: none
+		sourceColumn: UpdateDate
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimGeography = entity
+		mode: directLake
+		source
+			entityName: DimGeography
+			schemaName: dbo
+			expressionSource: 'DirectLake - Contoso_Fabric_LH'
+

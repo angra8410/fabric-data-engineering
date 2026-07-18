@@ -1,0 +1,181 @@
+table DimMachine
+	lineageTag: ef3f4ccd-b686-4b05-a41a-830a27b4d817
+	sourceLineageTag: [dbo].[DimMachine]
+
+	column MachineKey
+		dataType: int64
+		formatString: 0
+		lineageTag: a988fce4-2003-400c-a723-b81183728ff0
+		sourceLineageTag: MachineKey
+		summarizeBy: none
+		sourceColumn: MachineKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column MachineLabel
+		dataType: string
+		lineageTag: 9877c10a-29f7-44c1-a8ac-b5de5e1370a9
+		sourceLineageTag: MachineLabel
+		summarizeBy: none
+		sourceColumn: MachineLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column StoreKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 23c4b506-07b9-4457-a3ef-c821ce09f702
+		sourceLineageTag: StoreKey
+		summarizeBy: count
+		sourceColumn: StoreKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column MachineType
+		dataType: string
+		lineageTag: 624d9fa8-a01f-4497-a72b-f18c6d245721
+		sourceLineageTag: MachineType
+		summarizeBy: none
+		sourceColumn: MachineType
+
+		annotation SummarizationSetBy = Automatic
+
+	column MachineName
+		dataType: string
+		lineageTag: 01bbbdb6-629b-414c-94be-c3a99d6c3094
+		sourceLineageTag: MachineName
+		summarizeBy: none
+		sourceColumn: MachineName
+
+		annotation SummarizationSetBy = Automatic
+
+	column MachineDescription
+		dataType: string
+		lineageTag: 2bf67628-3cd8-40b9-b4eb-22ae90d92712
+		sourceLineageTag: MachineDescription
+		summarizeBy: none
+		sourceColumn: MachineDescription
+
+		annotation SummarizationSetBy = Automatic
+
+	column VendorName
+		dataType: string
+		lineageTag: 57448142-da09-4f24-9026-a80c0db0360e
+		sourceLineageTag: VendorName
+		summarizeBy: none
+		sourceColumn: VendorName
+
+		annotation SummarizationSetBy = Automatic
+
+	column MachineOS
+		dataType: string
+		lineageTag: ac6b3522-a6c7-4cd0-82a1-e94ade53d5e4
+		sourceLineageTag: MachineOS
+		summarizeBy: none
+		sourceColumn: MachineOS
+
+		annotation SummarizationSetBy = Automatic
+
+	column MachineSource
+		dataType: string
+		lineageTag: fae18acb-37c8-40bb-afac-79a3bb5e4a4e
+		sourceLineageTag: MachineSource
+		summarizeBy: none
+		sourceColumn: MachineSource
+
+		annotation SummarizationSetBy = Automatic
+
+	column MachineHardware
+		dataType: string
+		lineageTag: 266d7d4a-fb3b-4288-a676-66a5b6fa8f27
+		sourceLineageTag: MachineHardware
+		summarizeBy: none
+		sourceColumn: MachineHardware
+
+		annotation SummarizationSetBy = Automatic
+
+	column MachineSoftware
+		dataType: string
+		lineageTag: c2fa1336-146b-453a-8d89-913f0d27fb7b
+		sourceLineageTag: MachineSoftware
+		summarizeBy: none
+		sourceColumn: MachineSoftware
+
+		annotation SummarizationSetBy = Automatic
+
+	column Status
+		dataType: string
+		lineageTag: 09a4fd06-3b54-4fb7-848b-d17c28376f59
+		sourceLineageTag: Status
+		summarizeBy: none
+		sourceColumn: Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column ServiceStartDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 96cd6064-8fb8-41d5-8986-02cde4fb4bce
+		sourceLineageTag: ServiceStartDate
+		summarizeBy: none
+		sourceColumn: ServiceStartDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column DecommissionDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f1b645c4-afe5-49d4-b7e5-65560cf8c7fc
+		sourceLineageTag: DecommissionDate
+		summarizeBy: none
+		sourceColumn: DecommissionDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column LastModifiedDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: a572be59-82a9-4ddf-9562-09c0cbc6b8ad
+		sourceLineageTag: LastModifiedDate
+		summarizeBy: none
+		sourceColumn: LastModifiedDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column ETLLoadID
+		dataType: int64
+		formatString: 0
+		lineageTag: d7424c5d-66b4-495e-881e-821e3fd2e322
+		sourceLineageTag: ETLLoadID
+		summarizeBy: count
+		sourceColumn: ETLLoadID
+
+		annotation SummarizationSetBy = Automatic
+
+	column LoadDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 5f62fdec-7545-441c-bb51-ba78a7bbac3b
+		sourceLineageTag: LoadDate
+		summarizeBy: none
+		sourceColumn: LoadDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column UpdateDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 0c9b9ee1-e054-4233-b8e2-23d8e6481325
+		sourceLineageTag: UpdateDate
+		summarizeBy: none
+		sourceColumn: UpdateDate
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimMachine = entity
+		mode: directLake
+		source
+			entityName: DimMachine
+			schemaName: dbo
+			expressionSource: 'DirectLake - Contoso_Fabric_LH'
+

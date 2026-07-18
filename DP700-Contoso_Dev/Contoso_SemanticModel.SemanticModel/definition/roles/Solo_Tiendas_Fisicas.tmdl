@@ -1,0 +1,11 @@
+role Solo_Tiendas_Fisicas
+	modelPermission: read
+
+	tablePermission DimChannel = [ChannelName] == "Store"
+
+	tablePermission DimStore
+
+		columnPermission EmployeeCount = none
+
+	annotation PBI_Id = d16cadbbbe5f42338e99b25a2debef32
+

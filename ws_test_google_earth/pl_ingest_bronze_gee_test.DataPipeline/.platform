@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "pl_ingest_bronze_gee_test"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "9a03797f-7886-9d67-4dce-522228278151"
+  }
+}

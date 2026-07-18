@@ -1,0 +1,8 @@
+relationship AutoDetected_62468b08-df18-413d-a5b9-ba893e395f6c
+	fromColumn: Fact_Covid_Daily.iso_code
+	toColumn: Dim_Location.iso_code
+
+relationship 3333c647-1f2f-8756-a204-44d886d1fcac
+	fromColumn: Fact_Covid_Daily.date
+	toColumn: Dim_Date.Date
+

@@ -1,0 +1,148 @@
+table Dim_Date
+	lineageTag: 95f9c1b7-cb1b-4b34-a8b9-f9069564b627
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 576467d4-0241-4567-b897-ab466b0d7503
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 8f9b5c75-a0d4-4dd4-bc34-6964cd70900c
+		summarizeBy: none
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Number'
+		dataType: int64
+		formatString: 0
+		lineageTag: 5eb81330-d41f-42c9-861a-e86b69896711
+		summarizeBy: none
+		sourceColumn: Month Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Name'
+		dataType: string
+		lineageTag: d54795b9-f3b0-4487-a2c9-45c0633865e7
+		summarizeBy: none
+		sourceColumn: Month Name
+		sortByColumn: 'Month Number'
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter
+		dataType: string
+		lineageTag: 86a8934e-9e46-42d4-b5da-b7cbf6fab33c
+		summarizeBy: none
+		sourceColumn: Quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Week Number'
+		dataType: int64
+		formatString: 0
+		lineageTag: 7cf8f39c-c9f1-46a7-954c-0306f2f0f5d2
+		summarizeBy: none
+		sourceColumn: Week Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Day of Week'
+		dataType: int64
+		formatString: 0
+		lineageTag: b6458b1e-7cac-415d-ac19-51eb275050eb
+		summarizeBy: none
+		sourceColumn: Day of Week
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Day Name'
+		dataType: string
+		lineageTag: 12fc94cf-fb20-4968-9435-3a81e1ae809d
+		summarizeBy: none
+		sourceColumn: Day Name
+		sortByColumn: 'Day of Week'
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearMonthKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 23894f64-17e6-4ac3-ade8-43907460006c
+		summarizeBy: none
+		sourceColumn: YearMonthKey
+
+		annotation SummarizationSetBy = Automatic
+
+	hierarchy 'Date Hierarchy'
+		lineageTag: c6e1f4eb-765c-405d-b897-829acde6e0e5
+
+		level Date
+			lineageTag: be0c32bb-6334-4633-86d4-644514eb0f02
+			column: Date
+
+		level Year
+			lineageTag: 8599c9f4-46b5-4f2e-bdb1-aeb2896ac356
+			column: Year
+
+		level Quarter
+			lineageTag: fa73b5cb-38c9-4a58-b3fb-9f015f02290a
+			column: Quarter
+
+		level 'Month Name'
+			lineageTag: 0d7469e5-6ecf-436d-8fec-892645ab8e22
+			column: 'Month Name'
+
+		level 'Day Name'
+			lineageTag: 65e2c5c7-6d73-46e1-a20d-c1b48027d4c3
+			column: 'Day Name'
+
+	partition Dim_Date = m
+		mode: import
+		source = ```
+				let
+				    // 1. Define the start and end dates based on the COVID dataset range
+				    StartDate = #date(2020, 1, 1),
+				    EndDate = #date(2026, 12, 31), // Extends to cover the full range of your analysis
+				    
+				    // 2. Generate a continuous list of days between those dates
+				    Count = Duration.Days(Duration.From(EndDate - StartDate)) + 1,
+				    Source = List.Dates(StartDate, Count, #duration(1, 0, 0, 0)),
+				    
+				    // 3. Convert the list into a table
+				    #"Converted to Table" = Table.FromList(Source, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+				    #"Renamed Columns" = Table.RenameColumns(#"Converted to Table",{{"Column1", "Date"}}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns",{{"Date", type date}}),
+				    
+				    // 4. Add all the calendar attributes for filtering and slicing
+				    #"Added Year" = Table.AddColumn(#"Changed Type", "Year", each Date.Year([Date]), Int64.Type),
+				    #"Added Month Number" = Table.AddColumn(#"Added Year", "Month Number", each Date.Month([Date]), Int64.Type),
+				    #"Added Month Name" = Table.AddColumn(#"Added Month Number", "Month Name", each Text.Start(Date.MonthName([Date]), 3), type text),
+				    #"Added Quarter" = Table.AddColumn(#"Added Month Name", "Quarter", each "Q" & Text.From(Date.QuarterOfYear([Date])), type text),
+				    #"Added Week Number" = Table.AddColumn(#"Added Quarter", "Week Number", each Date.WeekOfYear([Date]), Int64.Type),
+				    #"Added Day of Week" = Table.AddColumn(#"Added Week Number", "Day of Week", each Date.DayOfWeek([Date]), Int64.Type),
+				    #"Added Day Name" = Table.AddColumn(#"Added Day of Week", "Day Name", each Text.Start(Date.DayOfWeekName([Date]), 3), type text),
+				    
+				    // 5. Add a Year-Month sorting key (Crucial so Jan, Feb, Mar sort correctly, not alphabetically)
+				    #"Added YearMonthKey" = Table.AddColumn(#"Added Day Name", "YearMonthKey", each [Year] * 100 + [Month Number], Int64.Type)
+				in
+				    #"Added YearMonthKey"
+				```
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

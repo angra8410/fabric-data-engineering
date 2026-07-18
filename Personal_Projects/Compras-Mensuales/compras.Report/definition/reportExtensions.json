@@ -1,0 +1,64 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/reportExtension/1.0.0/schema.json",
+  "name": "extension",
+  "entities": [
+    {
+      "name": "compras_master_gold",
+      "measures": [
+        {
+          "name": "Avg Price",
+          "dataType": "Double",
+          "expression": "AVERAGE(compras_master_gold[Price_COP])",
+          "formatString": "General Number"
+        },
+        {
+          "name": "Min Market Price",
+          "dataType": "Double",
+          "expression": "CALCULATE(MIN(compras_master_gold),ALL(compras_master_gold[Store]))",
+          "formatString": "General Number"
+        },
+        {
+          "name": "Ahorro",
+          "dataType": "Double",
+          "expression": "[Avg Price] - [Min Market Price]",
+          "formatString": "General Number",
+          "references": {
+            "measures": [
+              {
+                "schema": "extension",
+                "entity": "compras_master_gold",
+                "name": "Avg Price"
+              },
+              {
+                "schema": "extension",
+                "entity": "compras_master_gold",
+                "name": "Min Market Price"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Total Price",
+          "dataType": "Double",
+          "expression": "SUM(compras_master_gold[Price_COP])",
+          "formatString": "General Number"
+        },
+        {
+          "name": "Dif % Mercado",
+          "dataType": "Double",
+          "expression": "\nVAR PromedioTienda = [Avg Price]\nVAR MinMercado = CALCULATE([Avg Price], ALL(compras_master_gold[Store]))\nRETURN DIVIDE(PromedioTienda - MinMercado, MinMercado)",
+          "formatString": "General Number",
+          "references": {
+            "measures": [
+              {
+                "schema": "extension",
+                "entity": "compras_master_gold",
+                "name": "Avg Price"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

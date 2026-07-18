@@ -1,0 +1,268 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "8903699f74177853a788",
+  "position": {
+    "x": 43.768996960486326,
+    "y": 37.933130699088146,
+    "z": 1,
+    "height": 681.823708206687,
+    "width": 1236.2310030395138,
+    "tabOrder": 1
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Columns": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_fecha"
+                    }
+                  },
+                  "Property": "periodo_paz"
+                }
+              },
+              "queryRef": "dim_fecha.periodo_paz",
+              "nativeQueryRef": "periodo_paz",
+              "active": true
+            }
+          ]
+        },
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_divipola"
+                    }
+                  },
+                  "Property": "region"
+                }
+              },
+              "queryRef": "dim_divipola.region",
+              "nativeQueryRef": "region",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_divipola"
+                    }
+                  },
+                  "Property": "nombre_departamento"
+                }
+              },
+              "queryRef": "dim_divipola.nombre_departamento",
+              "nativeQueryRef": "nombre_departamento",
+              "active": true
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_deforestacion"
+                    }
+                  },
+                  "Property": "Total Hectáreas Deforestadas"
+                }
+              },
+              "queryRef": "fact_deforestacion.Total Hectáreas Deforestadas",
+              "nativeQueryRef": "Total Hectáreas Deforestadas"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_deforestacion"
+                    }
+                  },
+                  "Property": "% del Total Nacional"
+                }
+              },
+              "queryRef": "fact_deforestacion.% del Total Nacional",
+              "nativeQueryRef": "% del Total Nacional"
+            }
+          ]
+        }
+      }
+    },
+    "expansionStates": [
+      {
+        "roles": [
+          "Rows"
+        ],
+        "levels": [
+          {
+            "queryRefs": [
+              "dim_divipola.region"
+            ],
+            "isCollapsed": true,
+            "identityKeys": [
+              {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_divipola"
+                    }
+                  },
+                  "Property": "region"
+                }
+              }
+            ],
+            "isPinned": true
+          },
+          {
+            "queryRefs": [
+              "dim_divipola.nombre_departamento"
+            ],
+            "isCollapsed": true,
+            "isPinned": true
+          }
+        ],
+        "root": {
+          "children": [
+            {
+              "identityValues": [
+                {
+                  "Literal": {
+                    "Value": "'Amazonia'"
+                  }
+                }
+              ],
+              "isToggled": true
+            },
+            {
+              "identityValues": [
+                {
+                  "Literal": {
+                    "Value": "'Andina'"
+                  }
+                }
+              ],
+              "isToggled": true
+            },
+            {
+              "identityValues": [
+                {
+                  "Literal": {
+                    "Value": "'Caribe'"
+                  }
+                }
+              ],
+              "isToggled": true
+            },
+            {
+              "identityValues": [
+                {
+                  "Literal": {
+                    "Value": "'Orinoquia'"
+                  }
+                }
+              ],
+              "isToggled": true
+            },
+            {
+              "identityValues": [
+                {
+                  "Literal": {
+                    "Value": "'Pacifica'"
+                  }
+                }
+              ],
+              "isToggled": true
+            }
+          ]
+        }
+      }
+    ],
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "16ba18150853ea99117b",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_deforestacion"
+              }
+            },
+            "Property": "Total Hectáreas Deforestadas"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "6dd3ec3d87b5b199ed0b",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_fecha"
+              }
+            },
+            "Property": "periodo_paz"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "c3986e10de782a48d0d1",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_divipola"
+              }
+            },
+            "Property": "region"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "69b2a089d6cb619ed055",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_divipola"
+              }
+            },
+            "Property": "nombre_departamento"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "0be6a7a6ccd6095390b0",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_deforestacion"
+              }
+            },
+            "Property": "% del Total Nacional"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

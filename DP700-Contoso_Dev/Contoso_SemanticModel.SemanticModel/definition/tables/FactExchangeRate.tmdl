@@ -1,0 +1,93 @@
+table FactExchangeRate
+	lineageTag: 984e23c8-3110-4a12-8974-625dc2bfc39f
+	sourceLineageTag: [dbo].[FactExchangeRate]
+
+	column ExchangeRateKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 93df62ed-8c1e-487f-9dae-a377aed616d0
+		sourceLineageTag: ExchangeRateKey
+		summarizeBy: count
+		sourceColumn: ExchangeRateKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column CurrencyKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 4f5f700f-ac5e-4b5f-aa27-c2606288e826
+		sourceLineageTag: CurrencyKey
+		summarizeBy: none
+		sourceColumn: CurrencyKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column DateKey
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 20985ba3-3c51-4878-b860-062687c1568b
+		sourceLineageTag: DateKey
+		summarizeBy: none
+		sourceColumn: DateKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column AverageRate
+		dataType: double
+		lineageTag: bae85be0-af8f-4ff9-bc33-1cb818bb7015
+		sourceLineageTag: AverageRate
+		summarizeBy: sum
+		sourceColumn: AverageRate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column EndOfDayRate
+		dataType: double
+		lineageTag: 3fa2ab48-0808-4c34-a16e-0da4e2fa00d9
+		sourceLineageTag: EndOfDayRate
+		summarizeBy: sum
+		sourceColumn: EndOfDayRate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ETLLoadID
+		dataType: int64
+		formatString: 0
+		lineageTag: 3116e668-00fc-46c0-be6e-a78fbf38dffe
+		sourceLineageTag: ETLLoadID
+		summarizeBy: count
+		sourceColumn: ETLLoadID
+
+		annotation SummarizationSetBy = Automatic
+
+	column LoadDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 6e6b7744-4f82-4339-a5f2-aa4bd3f1bd3b
+		sourceLineageTag: LoadDate
+		summarizeBy: none
+		sourceColumn: LoadDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column UpdateDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 241692f6-0979-4ba7-b2f2-da065d38909f
+		sourceLineageTag: UpdateDate
+		summarizeBy: none
+		sourceColumn: UpdateDate
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FactExchangeRate = entity
+		mode: directLake
+		source
+			entityName: FactExchangeRate
+			schemaName: dbo
+			expressionSource: 'DirectLake - Contoso_Fabric_LH'
+

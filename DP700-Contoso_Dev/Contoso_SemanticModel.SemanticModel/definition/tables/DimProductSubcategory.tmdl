@@ -1,0 +1,88 @@
+table DimProductSubcategory
+	lineageTag: 63a46644-5349-4db0-993b-f635432d41ac
+	sourceLineageTag: [dbo].[DimProductSubcategory]
+
+	column ProductSubcategoryKey
+		dataType: int64
+		formatString: 0
+		lineageTag: b392be32-3d25-4014-bbb1-34ada0602730
+		sourceLineageTag: ProductSubcategoryKey
+		summarizeBy: count
+		sourceColumn: ProductSubcategoryKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductSubcategoryLabel
+		dataType: string
+		lineageTag: dbc29364-5013-4100-a0bc-d74fa4f002fc
+		sourceLineageTag: ProductSubcategoryLabel
+		summarizeBy: none
+		sourceColumn: ProductSubcategoryLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductSubcategoryName
+		dataType: string
+		lineageTag: b2d69e6f-1d07-404d-bb9d-3688e5ad2bb0
+		sourceLineageTag: ProductSubcategoryName
+		summarizeBy: none
+		sourceColumn: ProductSubcategoryName
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductSubcategoryDescription
+		dataType: string
+		lineageTag: 4ddf7399-e428-4198-b020-04b1f336aded
+		sourceLineageTag: ProductSubcategoryDescription
+		summarizeBy: none
+		sourceColumn: ProductSubcategoryDescription
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductCategoryKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 4e86ddf6-86e7-4e48-8c54-78f73026220b
+		sourceLineageTag: ProductCategoryKey
+		summarizeBy: count
+		sourceColumn: ProductCategoryKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ETLLoadID
+		dataType: int64
+		formatString: 0
+		lineageTag: 5d205834-eb51-422f-8f54-34147c79f5c9
+		sourceLineageTag: ETLLoadID
+		summarizeBy: count
+		sourceColumn: ETLLoadID
+
+		annotation SummarizationSetBy = Automatic
+
+	column LoadDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: a6177681-a8a1-42bd-aba7-8d472d9d28bf
+		sourceLineageTag: LoadDate
+		summarizeBy: none
+		sourceColumn: LoadDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column UpdateDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: fd21fba0-b902-4d72-9836-320dd1b1704e
+		sourceLineageTag: UpdateDate
+		summarizeBy: none
+		sourceColumn: UpdateDate
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimProductSubcategory = entity
+		mode: directLake
+		source
+			entityName: DimProductSubcategory
+			schemaName: dbo
+			expressionSource: 'DirectLake - Contoso_Fabric_LH'
+

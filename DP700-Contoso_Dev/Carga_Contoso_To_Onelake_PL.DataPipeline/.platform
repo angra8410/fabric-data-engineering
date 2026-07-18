@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "Carga_Contoso_To_Onelake_PL"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "2529390c-3b62-a06d-4b6a-6cd8480a4d98"
+  }
+}

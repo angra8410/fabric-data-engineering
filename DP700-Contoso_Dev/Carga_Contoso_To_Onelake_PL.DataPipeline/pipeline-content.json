@@ -1,0 +1,75 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "SqlServerSource",
+            "sqlReaderQuery": "SELECT \n    StoreKey,\n    GeographyKey,\n    StoreManager,\n    StoreType,\n    StoreName,\n    StoreDescription,\n    Status,\n    OpenDate,\n    CloseDate,\n    EntityKey,\n    ZipCode,\n    ZipCodeExtension,\n    StorePhone,\n    StoreFax,\n    AddressLine1,\n    AddressLine2,\n    CloseReason,\n    EmployeeCount,\n    SellingAreaSize,\n    LastRemodelDate,\n    ETLLoadID,\n    LoadDate,\n    UpdateDate\nFROM dbo.DimStore",
+            "partitionOption": "None",
+            "queryTimeout": "02:00:00",
+            "datasetSettings": {
+              "type": "SqlServerTable",
+              "typeProperties": {
+                "schema": "dbo",
+                "table": "DimStore",
+                "database": "ContosoRetailDW"
+              },
+              "schema": [],
+              "externalReferences": {
+                "connection": "743a3e6d-ad74-40d5-b757-cfd2ddbb1bad"
+              },
+              "annotations": []
+            }
+          },
+          "sink": {
+            "type": "LakehouseTableSink",
+            "tableActionOption": "OverwriteSchema",
+            "applyVOrder": true,
+            "partitionOption": "None",
+            "datasetSettings": {
+              "type": "LakehouseTable",
+              "typeProperties": {
+                "schema": "dbo",
+                "table": "DimStore"
+              },
+              "schema": [],
+              "linkedService": {
+                "name": "Contoso_Fabric_LH",
+                "properties": {
+                  "type": "Lakehouse",
+                  "typeProperties": {
+                    "artifactId": "8c59419b-972b-8409-4d46-3ea5be1fe58c",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000",
+                    "rootFolder": "Tables"
+                  },
+                  "annotations": []
+                }
+              },
+              "annotations": []
+            }
+          },
+          "translator": {
+            "type": "TabularTranslator",
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            }
+          },
+          "enableStaging": false
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Copy data1",
+        "dependsOn": []
+      }
+    ]
+  }
+}

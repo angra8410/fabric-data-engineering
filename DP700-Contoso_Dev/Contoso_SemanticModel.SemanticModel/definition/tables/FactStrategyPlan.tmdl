@@ -1,0 +1,122 @@
+table FactStrategyPlan
+	lineageTag: de4c8512-4e07-4ff2-b074-64020c65636e
+	sourceLineageTag: [dbo].[FactStrategyPlan]
+
+	column StrategyPlanKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 72be21a9-cd62-4378-86ef-93713a1d8c13
+		sourceLineageTag: StrategyPlanKey
+		summarizeBy: count
+		sourceColumn: StrategyPlanKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Datekey
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 131360af-41c7-438d-b264-a061c24203ce
+		sourceLineageTag: Datekey
+		summarizeBy: none
+		sourceColumn: Datekey
+
+		annotation SummarizationSetBy = Automatic
+
+	column EntityKey
+		dataType: int64
+		formatString: 0
+		lineageTag: ec386783-f371-4805-84d1-af8157636d2a
+		sourceLineageTag: EntityKey
+		summarizeBy: none
+		sourceColumn: EntityKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ScenarioKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 04d50b6e-823e-4f7c-a197-3c6965386f7a
+		sourceLineageTag: ScenarioKey
+		summarizeBy: none
+		sourceColumn: ScenarioKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column AccountKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 71980e34-4f1c-4746-9f41-13b1fd8ea541
+		sourceLineageTag: AccountKey
+		summarizeBy: none
+		sourceColumn: AccountKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column CurrencyKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 1f260fd1-4574-4424-8411-a52c638af367
+		sourceLineageTag: CurrencyKey
+		summarizeBy: none
+		sourceColumn: CurrencyKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductCategoryKey
+		dataType: int64
+		formatString: 0
+		lineageTag: ce717aac-e2b5-4f2a-8324-52f54e779558
+		sourceLineageTag: ProductCategoryKey
+		summarizeBy: none
+		sourceColumn: ProductCategoryKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Amount
+		dataType: double
+		lineageTag: a5df9bca-2674-4d2f-b1e7-07bb4b1a5a77
+		sourceLineageTag: Amount
+		summarizeBy: sum
+		sourceColumn: Amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ETLLoadID
+		dataType: int64
+		formatString: 0
+		lineageTag: 788c8b8d-21e3-42af-940d-840bbead47f7
+		sourceLineageTag: ETLLoadID
+		summarizeBy: count
+		sourceColumn: ETLLoadID
+
+		annotation SummarizationSetBy = Automatic
+
+	column LoadDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 5397e045-a47c-4619-87cb-7e3a2b06819b
+		sourceLineageTag: LoadDate
+		summarizeBy: none
+		sourceColumn: LoadDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column UpdateDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: fbf3b65b-a461-4f5c-a934-78c9eec1506d
+		sourceLineageTag: UpdateDate
+		summarizeBy: none
+		sourceColumn: UpdateDate
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FactStrategyPlan = entity
+		mode: directLake
+		source
+			entityName: FactStrategyPlan
+			schemaName: dbo
+			expressionSource: 'DirectLake - Contoso_Fabric_LH'
+

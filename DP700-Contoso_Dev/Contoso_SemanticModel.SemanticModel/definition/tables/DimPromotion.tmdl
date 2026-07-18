@@ -1,0 +1,147 @@
+table DimPromotion
+	lineageTag: 69e79b7c-77ce-4eb9-a5f5-fd47715906c8
+	sourceLineageTag: [dbo].[DimPromotion]
+
+	column PromotionKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 018bac78-d953-474f-bf45-e6ff94aa9005
+		sourceLineageTag: PromotionKey
+		summarizeBy: none
+		sourceColumn: PromotionKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column PromotionLabel
+		dataType: string
+		lineageTag: a70e4ca2-92e8-4320-88da-95f759e4ea12
+		sourceLineageTag: PromotionLabel
+		summarizeBy: none
+		sourceColumn: PromotionLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column PromotionName
+		dataType: string
+		lineageTag: 79de3e5c-85e5-4bb6-a180-8f825358f624
+		sourceLineageTag: PromotionName
+		summarizeBy: none
+		sourceColumn: PromotionName
+
+		annotation SummarizationSetBy = Automatic
+
+	column PromotionDescription
+		dataType: string
+		lineageTag: d0de94a4-dc65-4949-8706-c1c654431276
+		sourceLineageTag: PromotionDescription
+		summarizeBy: none
+		sourceColumn: PromotionDescription
+
+		annotation SummarizationSetBy = Automatic
+
+	column DiscountPercent
+		dataType: double
+		lineageTag: 1b89a9f4-3744-4c7c-9f95-b3d4c833d976
+		sourceLineageTag: DiscountPercent
+		summarizeBy: sum
+		sourceColumn: DiscountPercent
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PromotionType
+		dataType: string
+		lineageTag: 578d281c-e02a-4d72-b738-d45f46c79e0a
+		sourceLineageTag: PromotionType
+		summarizeBy: none
+		sourceColumn: PromotionType
+
+		annotation SummarizationSetBy = Automatic
+
+	column PromotionCategory
+		dataType: string
+		lineageTag: 2e7d371b-0eef-4374-b4e8-776f07494dda
+		sourceLineageTag: PromotionCategory
+		summarizeBy: none
+		sourceColumn: PromotionCategory
+
+		annotation SummarizationSetBy = Automatic
+
+	column StartDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 10e7eab1-7aa9-4986-a547-193776a8990b
+		sourceLineageTag: StartDate
+		summarizeBy: none
+		sourceColumn: StartDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column EndDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 179570bf-5458-4a92-9774-f97a8945005b
+		sourceLineageTag: EndDate
+		summarizeBy: none
+		sourceColumn: EndDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column MinQuantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 8266aad4-7159-42c2-8112-a44843a268f6
+		sourceLineageTag: MinQuantity
+		summarizeBy: sum
+		sourceColumn: MinQuantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column MaxQuantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 23593eeb-5694-4c2d-9858-a0c41b11e1cd
+		sourceLineageTag: MaxQuantity
+		summarizeBy: sum
+		sourceColumn: MaxQuantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column ETLLoadID
+		dataType: int64
+		formatString: 0
+		lineageTag: a5be0582-bc9a-45e3-9a35-7987bf617ab6
+		sourceLineageTag: ETLLoadID
+		summarizeBy: count
+		sourceColumn: ETLLoadID
+
+		annotation SummarizationSetBy = Automatic
+
+	column LoadDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 30271cbc-4bc9-43b9-afc0-c8eab71cd41f
+		sourceLineageTag: LoadDate
+		summarizeBy: none
+		sourceColumn: LoadDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column UpdateDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 756e2381-6c48-4400-ae0f-3bfacd4e701d
+		sourceLineageTag: UpdateDate
+		summarizeBy: none
+		sourceColumn: UpdateDate
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimPromotion = entity
+		mode: directLake
+		source
+			entityName: DimPromotion
+			schemaName: dbo
+			expressionSource: 'DirectLake - Contoso_Fabric_LH'
+

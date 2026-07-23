@@ -1,8 +1,0 @@
-{
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
-  "name": "70a5fe574b70d0013ce7",
-  "displayName": "CAMPAIGN",
-  "displayOption": "FitToPage",
-  "height": 720,
-  "width": 1280
-}

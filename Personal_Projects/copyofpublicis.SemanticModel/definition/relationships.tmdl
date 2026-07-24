@@ -1,4 +1,0 @@
-relationship dacae4ed-deff-d942-6d22-4caab51833aa
-	fromColumn: fact_marketing_performance.Date
-	toColumn: dim_date.DateKey
-

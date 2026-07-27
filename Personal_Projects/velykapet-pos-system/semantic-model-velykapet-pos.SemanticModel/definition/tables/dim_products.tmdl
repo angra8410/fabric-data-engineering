@@ -1,0 +1,146 @@
+table dim_products
+	lineageTag: 9f425652-81fa-4cad-9527-64b87cc25811
+	sourceLineageTag: [dbo].[dim_products]
+
+	column barcode
+		dataType: string
+		lineageTag: ed347c66-9ec7-45a3-820c-391d155820ab
+		sourceLineageTag: barcode
+		summarizeBy: none
+		sourceColumn: barcode
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_name
+		dataType: string
+		lineageTag: 10a5bfe8-bde6-4cbf-be78-a425e6ec50c2
+		sourceLineageTag: product_name
+		summarizeBy: none
+		sourceColumn: product_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column category
+		dataType: string
+		lineageTag: 2f2557c7-cbe5-4a7d-be58-717eb737d87c
+		sourceLineageTag: category
+		summarizeBy: none
+		sourceColumn: category
+
+		annotation SummarizationSetBy = Automatic
+
+	column supplier
+		dataType: string
+		lineageTag: e13c6041-1e5e-4dc2-afa5-cebd2fb9864f
+		sourceLineageTag: supplier
+		summarizeBy: none
+		sourceColumn: supplier
+
+		annotation SummarizationSetBy = Automatic
+
+	column cost_price
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: d4aab1dd-9541-4ee0-8993-579a11f1b1d5
+		sourceLineageTag: cost_price
+		summarizeBy: sum
+		sourceColumn: cost_price
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column standard_sale_price
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: fec5c9c2-f457-4ef2-975d-efe8bee5a28a
+		sourceLineageTag: standard_sale_price
+		summarizeBy: sum
+		sourceColumn: standard_sale_price
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column rappi_price
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 657cfa7b-8a71-4d7a-ba85-1b6b6a1dbd62
+		sourceLineageTag: rappi_price
+		summarizeBy: sum
+		sourceColumn: rappi_price
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column standard_unit_margin
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 430c67e4-c6e0-4696-a72e-f106282b8aa9
+		sourceLineageTag: standard_unit_margin
+		summarizeBy: sum
+		sourceColumn: standard_unit_margin
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column standard_margin_pct
+		dataType: double
+		lineageTag: 7fbcc868-7193-4cb5-ac2a-a208c05d258a
+		sourceLineageTag: standard_margin_pct
+		summarizeBy: sum
+		sourceColumn: standard_margin_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column current_stock_qty
+		dataType: int64
+		formatString: 0
+		lineageTag: feef537e-fcb7-4e45-a4b2-380592783246
+		sourceLineageTag: current_stock_qty
+		summarizeBy: sum
+		sourceColumn: current_stock_qty
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_purchased_qty
+		dataType: int64
+		formatString: 0
+		lineageTag: d66fa601-6144-42e3-8404-2ae576eea3f4
+		sourceLineageTag: total_purchased_qty
+		summarizeBy: sum
+		sourceColumn: total_purchased_qty
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_sold_qty
+		dataType: int64
+		formatString: 0
+		lineageTag: 81b94116-5886-4803-90b3-c298c2f976b1
+		sourceLineageTag: total_sold_qty
+		summarizeBy: sum
+		sourceColumn: total_sold_qty
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_returned_qty
+		dataType: int64
+		formatString: 0
+		lineageTag: 7ccb328f-4815-4ab3-be26-00a6d1666eb9
+		sourceLineageTag: total_returned_qty
+		summarizeBy: sum
+		sourceColumn: total_returned_qty
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_products = entity
+		mode: directLake
+		source
+			entityName: dim_products
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
+

@@ -5,42 +5,56 @@ table fact_sales
 	measure 'Total Revenue' = SUM(fact_sales[total_revenue])
 		formatString: \$#,0.00
 		displayFolder: Sales
+		lineageTag: acdbbdb1-b82c-48ab-bdd4-67d8c3d7ffcf
 
 	measure 'Total Transactions' = DISTINCTCOUNT(fact_sales[sale_id])
 		formatString: #,0
 		displayFolder: Sales
+		lineageTag: 9e3b0eae-3a8a-4a01-8cb6-ad45d9581449
 
 	measure 'Average Order Value' = DIVIDE([Total Revenue], [Total Transactions])
 		formatString: \$#,0.00
 		displayFolder: Sales
+		lineageTag: 4c52fd51-1188-4ab6-ae13-dfb74d813325
 
 	measure 'Revenue YTD' = TOTALYTD([Total Revenue], dim_dates[date_key])
 		formatString: \$#,0.00
 		displayFolder: Sales\Time Intelligence
+		lineageTag: 66744ee1-044f-46c1-afac-962f06c4ac4a
 
 	measure 'Revenue MTD' = TOTALMTD([Total Revenue], dim_dates[date_key])
 		formatString: \$#,0.00
 		displayFolder: Sales\Time Intelligence
+		lineageTag: 34b6ed2e-32ca-4847-863c-c57e89099ecc
 
 	measure 'Revenue PY' = CALCULATE([Total Revenue], SAMEPERIODLASTYEAR(dim_dates[date_key]))
 		formatString: \$#,0.00
 		displayFolder: Sales\Time Intelligence
+		lineageTag: 5d5f3763-e416-46ed-abb4-32ab7946f9c9
 
 	measure 'Revenue YoY %' = DIVIDE([Total Revenue] - [Revenue PY], [Revenue PY])
 		formatString: 0.0%
 		displayFolder: Sales\Time Intelligence
+		lineageTag: 681b858c-21eb-4d9a-b51e-7eb97bb30c55
 
 	measure 'Net Revenue' = [Total Revenue] - [Total Refund Amount]
-		formatString: \$#,0.00
+		formatString: \$#,0;(\$#,0);\$#,0
 		displayFolder: Profitability
+		lineageTag: 9e7b7fcb-7d84-4130-8e9b-7ef793cad00f
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
 
 	measure 'Net Profit' = [Gross Profit] - [Total Refund Amount] - [Total Expenses]
 		formatString: \$#,0.00
 		displayFolder: Profitability
+		lineageTag: 969b65ea-cc60-481b-bf93-cc1b034d88e7
 
 	measure 'Net Margin %' = DIVIDE([Net Profit], [Net Revenue])
 		formatString: 0.0%
 		displayFolder: Profitability
+		lineageTag: 501fe51a-577f-427c-bb84-6fab0ebd447f
 
 	column sale_id
 		dataType: int64

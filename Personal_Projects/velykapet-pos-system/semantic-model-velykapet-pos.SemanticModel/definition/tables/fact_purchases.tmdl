@@ -2,6 +2,18 @@ table fact_purchases
 	lineageTag: 27fe70b5-e4c8-4f1d-b922-1921557227d4
 	sourceLineageTag: [dbo].[fact_purchases]
 
+	measure 'Total Purchase Cost' = SUM(fact_purchases[total_cost])
+		formatString: \$#,0.00
+		displayFolder: Purchases
+
+	measure 'Total Purchased Quantity' = SUM(fact_purchases[quantity])
+		formatString: #,0
+		displayFolder: Purchases
+
+	measure 'Average Purchase Unit Cost' = DIVIDE([Total Purchase Cost], [Total Purchased Quantity])
+		formatString: \$#,0.00
+		displayFolder: Purchases
+
 	column purchase_id
 		dataType: int64
 		formatString: 0

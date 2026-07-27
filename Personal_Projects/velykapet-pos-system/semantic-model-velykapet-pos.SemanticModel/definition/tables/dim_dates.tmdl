@@ -1,6 +1,7 @@
 table dim_dates
 	lineageTag: 241a7b0c-ff5c-42e6-9015-7ba6f28dc844
 	sourceLineageTag: [dbo].[dim_dates]
+	dataCategory: Time
 
 	column date_key
 		dataType: dateTime

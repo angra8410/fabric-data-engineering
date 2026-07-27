@@ -1,0 +1,144 @@
+table fact_sales
+	lineageTag: 7ddeb250-79d7-458f-bff3-6960aab59d79
+	sourceLineageTag: [dbo].[fact_sales]
+
+	column sale_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 9362a7fe-a408-437a-9887-d6458038a32f
+		sourceLineageTag: sale_id
+		summarizeBy: sum
+		sourceColumn: sale_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column local_id
+		dataType: int64
+		formatString: 0
+		lineageTag: b72b796d-e83a-4dd4-8392-e1480758714b
+		sourceLineageTag: local_id
+		summarizeBy: sum
+		sourceColumn: local_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_key
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 4add9251-81d3-4aab-94e9-338fa4ff600a
+		sourceLineageTag: date_key
+		summarizeBy: none
+		sourceColumn: date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column sale_timestamp
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 969cd12a-84ea-4985-85b2-4e4f7307420b
+		sourceLineageTag: sale_timestamp
+		summarizeBy: none
+		sourceColumn: sale_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column sales_channel
+		dataType: string
+		lineageTag: 2018aeec-fc9a-47d8-9af1-726e635d8e8e
+		sourceLineageTag: sales_channel
+		summarizeBy: none
+		sourceColumn: sales_channel
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_method
+		dataType: string
+		lineageTag: 0043acf4-031d-4d43-9f29-ac910835cd9a
+		sourceLineageTag: payment_method
+		summarizeBy: none
+		sourceColumn: payment_method
+
+		annotation SummarizationSetBy = Automatic
+
+	column sale_type
+		dataType: string
+		lineageTag: de0184de-880f-41ee-adfb-8cc7f0d206db
+		sourceLineageTag: sale_type
+		summarizeBy: none
+		sourceColumn: sale_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column invoice_number
+		dataType: string
+		lineageTag: 4517ec99-f074-47cf-89ad-4d9305ea2a4d
+		sourceLineageTag: invoice_number
+		summarizeBy: none
+		sourceColumn: invoice_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column transaction_code
+		dataType: string
+		lineageTag: cc75381c-a524-4171-9a31-c38f08fb0b78
+		sourceLineageTag: transaction_code
+		summarizeBy: none
+		sourceColumn: transaction_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_revenue
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: b8be6d22-b93e-43ac-87f5-65b7fc77de40
+		sourceLineageTag: total_revenue
+		summarizeBy: sum
+		sourceColumn: total_revenue
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column delivery_tower
+		dataType: string
+		lineageTag: 80981282-52b4-4a09-94cf-2911072b1023
+		sourceLineageTag: delivery_tower
+		summarizeBy: none
+		sourceColumn: delivery_tower
+
+		annotation SummarizationSetBy = Automatic
+
+	column delivery_apartment
+		dataType: string
+		lineageTag: 930b0be2-780e-4c6c-b8e7-71c4463f6946
+		sourceLineageTag: delivery_apartment
+		summarizeBy: none
+		sourceColumn: delivery_apartment
+
+		annotation SummarizationSetBy = Automatic
+
+	column delivery_complex
+		dataType: string
+		lineageTag: 89f7dadf-bd23-4280-b9d8-a11528de8c5b
+		sourceLineageTag: delivery_complex
+		summarizeBy: none
+		sourceColumn: delivery_complex
+
+		annotation SummarizationSetBy = Automatic
+
+	column notes
+		dataType: string
+		lineageTag: 70f74199-ac7c-4966-9577-ad32bbf9c95b
+		sourceLineageTag: notes
+		summarizeBy: none
+		sourceColumn: notes
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_sales = entity
+		mode: directLake
+		source
+			entityName: fact_sales
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
+

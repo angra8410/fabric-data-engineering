@@ -5,26 +5,32 @@ table fact_sale_items
 	measure 'Total Quantity Sold' = SUM(fact_sale_items[quantity])
 		formatString: #,0
 		displayFolder: Sale Items
+		lineageTag: cf3b3676-2905-482b-a328-7fea2b34e768
 
 	measure 'Total Cost of Goods Sold' = SUM(fact_sale_items[total_cost])
 		formatString: \$#,0.00
 		displayFolder: Sale Items
+		lineageTag: 63abf586-f053-4160-914e-4729cd0174b3
 
 	measure 'Gross Profit' = SUM(fact_sale_items[gross_profit])
 		formatString: \$#,0.00
 		displayFolder: Sale Items
+		lineageTag: 7e3d95b0-6a3b-4cf4-a4f2-b133dac95943
 
 	measure 'Gross Margin %' = DIVIDE([Gross Profit], SUM(fact_sale_items[total_revenue]))
 		formatString: 0.0%
 		displayFolder: Sale Items
+		lineageTag: ce77d736-4fad-4f4d-b450-e555949bf38b
 
 	measure 'Average Basket Size' = DIVIDE([Total Quantity Sold], DISTINCTCOUNT(fact_sale_items[sale_id]))
 		formatString: 0.00
 		displayFolder: Sale Items
+		lineageTag: d4700f10-9fbe-4f2c-9ada-df6b100949eb
 
 	measure 'Average Selling Price' = DIVIDE(SUM(fact_sale_items[total_revenue]), [Total Quantity Sold])
 		formatString: \$#,0.00
 		displayFolder: Sale Items
+		lineageTag: a84e1fa2-4381-45fe-aaff-21578cf7cd07
 
 	column sale_item_id
 		dataType: int64

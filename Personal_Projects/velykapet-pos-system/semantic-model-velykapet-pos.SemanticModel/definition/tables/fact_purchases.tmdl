@@ -5,14 +5,17 @@ table fact_purchases
 	measure 'Total Purchase Cost' = SUM(fact_purchases[total_cost])
 		formatString: \$#,0.00
 		displayFolder: Purchases
+		lineageTag: d30b4cf8-0a0d-48ae-ae6e-01a7d4f62f4f
 
 	measure 'Total Purchased Quantity' = SUM(fact_purchases[quantity])
 		formatString: #,0
 		displayFolder: Purchases
+		lineageTag: 7ab605f7-4a81-4884-b923-561962888be9
 
 	measure 'Average Purchase Unit Cost' = DIVIDE([Total Purchase Cost], [Total Purchased Quantity])
 		formatString: \$#,0.00
 		displayFolder: Purchases
+		lineageTag: a38914ec-42c7-4bd0-b2b4-5d6c7f5199a4
 
 	column purchase_id
 		dataType: int64

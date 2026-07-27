@@ -5,18 +5,22 @@ table fact_devolution_items
 	measure 'Total Refund Amount' = SUM(fact_devolution_items[total_refund])
 		formatString: \$#,0.00
 		displayFolder: Returns
+		lineageTag: a0e4f2ee-c46b-402b-ae67-e57bf9d75f13
 
 	measure 'Total Returned Quantity' = SUM(fact_devolution_items[returned_quantity])
 		formatString: #,0
 		displayFolder: Returns
+		lineageTag: 579ca3c9-012d-4f38-986e-d8116d533d75
 
 	measure 'Return Count' = DISTINCTCOUNT(fact_devolution_items[devolution_id])
 		formatString: #,0
 		displayFolder: Returns
+		lineageTag: 72e2b056-cb18-4b65-99d0-872784fe398a
 
 	measure 'Return Rate % (Qty)' = DIVIDE([Total Returned Quantity], [Total Quantity Sold])
 		formatString: 0.0%
 		displayFolder: Returns
+		lineageTag: 8fff042f-9c21-456d-a7dc-f11ec67cabe9
 
 	column devolution_item_id
 		dataType: int64

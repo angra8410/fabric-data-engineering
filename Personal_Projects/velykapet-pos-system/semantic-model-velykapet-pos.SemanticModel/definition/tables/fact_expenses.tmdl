@@ -5,10 +5,12 @@ table fact_expenses
 	measure 'Total Expenses' = SUM(fact_expenses[amount])
 		formatString: \$#,0.00
 		displayFolder: Expenses
+		lineageTag: fc44472a-c4b7-4f21-9c9c-22034e5987f1
 
 	measure 'Expense Count' = COUNTROWS(fact_expenses)
 		formatString: #,0
 		displayFolder: Expenses
+		lineageTag: 2b501467-8126-4e8f-b3dc-9c0621030f8b
 
 	column expense_id
 		dataType: int64

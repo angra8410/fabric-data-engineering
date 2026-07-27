@@ -2,6 +2,46 @@ table fact_sales
 	lineageTag: 7ddeb250-79d7-458f-bff3-6960aab59d79
 	sourceLineageTag: [dbo].[fact_sales]
 
+	measure 'Total Revenue' = SUM(fact_sales[total_revenue])
+		formatString: \$#,0.00
+		displayFolder: Sales
+
+	measure 'Total Transactions' = DISTINCTCOUNT(fact_sales[sale_id])
+		formatString: #,0
+		displayFolder: Sales
+
+	measure 'Average Order Value' = DIVIDE([Total Revenue], [Total Transactions])
+		formatString: \$#,0.00
+		displayFolder: Sales
+
+	measure 'Revenue YTD' = TOTALYTD([Total Revenue], dim_dates[date_key])
+		formatString: \$#,0.00
+		displayFolder: Sales\Time Intelligence
+
+	measure 'Revenue MTD' = TOTALMTD([Total Revenue], dim_dates[date_key])
+		formatString: \$#,0.00
+		displayFolder: Sales\Time Intelligence
+
+	measure 'Revenue PY' = CALCULATE([Total Revenue], SAMEPERIODLASTYEAR(dim_dates[date_key]))
+		formatString: \$#,0.00
+		displayFolder: Sales\Time Intelligence
+
+	measure 'Revenue YoY %' = DIVIDE([Total Revenue] - [Revenue PY], [Revenue PY])
+		formatString: 0.0%
+		displayFolder: Sales\Time Intelligence
+
+	measure 'Net Revenue' = [Total Revenue] - [Total Refund Amount]
+		formatString: \$#,0.00
+		displayFolder: Profitability
+
+	measure 'Net Profit' = [Gross Profit] - [Total Refund Amount] - [Total Expenses]
+		formatString: \$#,0.00
+		displayFolder: Profitability
+
+	measure 'Net Margin %' = DIVIDE([Net Profit], [Net Revenue])
+		formatString: 0.0%
+		displayFolder: Profitability
+
 	column sale_id
 		dataType: int64
 		formatString: 0

@@ -2,6 +2,14 @@ table fact_expenses
 	lineageTag: 9355ea9b-f185-43a5-947a-4fbfd51ae735
 	sourceLineageTag: [dbo].[fact_expenses]
 
+	measure 'Total Expenses' = SUM(fact_expenses[amount])
+		formatString: \$#,0.00
+		displayFolder: Expenses
+
+	measure 'Expense Count' = COUNTROWS(fact_expenses)
+		formatString: #,0
+		displayFolder: Expenses
+
 	column expense_id
 		dataType: int64
 		formatString: 0

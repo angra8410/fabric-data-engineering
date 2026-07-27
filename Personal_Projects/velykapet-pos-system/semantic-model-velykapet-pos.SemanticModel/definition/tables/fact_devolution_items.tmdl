@@ -2,6 +2,22 @@ table fact_devolution_items
 	lineageTag: eab51980-5dab-4d56-9431-7b4b9dd044d4
 	sourceLineageTag: [dbo].[fact_devolution_items]
 
+	measure 'Total Refund Amount' = SUM(fact_devolution_items[total_refund])
+		formatString: \$#,0.00
+		displayFolder: Returns
+
+	measure 'Total Returned Quantity' = SUM(fact_devolution_items[returned_quantity])
+		formatString: #,0
+		displayFolder: Returns
+
+	measure 'Return Count' = DISTINCTCOUNT(fact_devolution_items[devolution_id])
+		formatString: #,0
+		displayFolder: Returns
+
+	measure 'Return Rate % (Qty)' = DIVIDE([Total Returned Quantity], [Total Quantity Sold])
+		formatString: 0.0%
+		displayFolder: Returns
+
 	column devolution_item_id
 		dataType: int64
 		formatString: 0

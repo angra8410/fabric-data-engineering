@@ -1,0 +1,142 @@
+table fact_devolution_items
+	lineageTag: eab51980-5dab-4d56-9431-7b4b9dd044d4
+	sourceLineageTag: [dbo].[fact_devolution_items]
+
+	column devolution_item_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 6b60e784-81cb-4e22-babf-6e4f58853d96
+		sourceLineageTag: devolution_item_id
+		summarizeBy: sum
+		sourceColumn: devolution_item_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column devolution_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 6c66f63c-f9db-4714-957d-ed56a3f0af6f
+		sourceLineageTag: devolution_id
+		summarizeBy: sum
+		sourceColumn: devolution_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column sale_item_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 5aef5472-0c32-4306-b343-44625d1f81cd
+		sourceLineageTag: sale_item_id
+		summarizeBy: sum
+		sourceColumn: sale_item_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column barcode
+		dataType: string
+		lineageTag: 74ef8535-d1b3-4ecc-9efc-ed1cda4c92c7
+		sourceLineageTag: barcode
+		summarizeBy: none
+		sourceColumn: barcode
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_name
+		dataType: string
+		lineageTag: 3e370286-351f-4104-b69a-d51b31a3b0bf
+		sourceLineageTag: product_name
+		summarizeBy: none
+		sourceColumn: product_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column returned_quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: bf3000ec-0828-4ebe-b3e3-0dabcc64c01e
+		sourceLineageTag: returned_quantity
+		summarizeBy: sum
+		sourceColumn: returned_quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column unit_cost
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 320b0b6a-c74f-4ccf-b8da-5f8f675f6770
+		sourceLineageTag: unit_cost
+		summarizeBy: sum
+		sourceColumn: unit_cost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column unit_price
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 5a474b9f-c4ae-4fe3-ad3f-bcbb6e924d19
+		sourceLineageTag: unit_price
+		summarizeBy: sum
+		sourceColumn: unit_price
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column total_refund
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 77b52521-ea25-4aff-a46d-05b3081eef22
+		sourceLineageTag: total_refund
+		summarizeBy: sum
+		sourceColumn: total_refund
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column devolution_number
+		dataType: string
+		lineageTag: 16015ce1-1ba1-4c6a-8f90-aabd01b8f72e
+		sourceLineageTag: devolution_number
+		summarizeBy: none
+		sourceColumn: devolution_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column refund_method
+		dataType: string
+		lineageTag: e5037840-1dfd-49ac-a4bd-5aa60e2558fd
+		sourceLineageTag: refund_method
+		summarizeBy: none
+		sourceColumn: refund_method
+
+		annotation SummarizationSetBy = Automatic
+
+	column return_reason
+		dataType: string
+		lineageTag: 9990355e-f491-444d-848b-b7be685ac201
+		sourceLineageTag: return_reason
+		summarizeBy: none
+		sourceColumn: return_reason
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_key
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 81625c61-72e0-4baa-bc1a-c7cf2dccde8f
+		sourceLineageTag: date_key
+		summarizeBy: none
+		sourceColumn: date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_devolution_items = entity
+		mode: directLake
+		source
+			entityName: fact_devolution_items
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
+

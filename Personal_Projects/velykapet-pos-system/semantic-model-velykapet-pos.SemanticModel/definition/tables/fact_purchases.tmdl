@@ -1,0 +1,130 @@
+table fact_purchases
+	lineageTag: 27fe70b5-e4c8-4f1d-b922-1921557227d4
+	sourceLineageTag: [dbo].[fact_purchases]
+
+	column purchase_id
+		dataType: int64
+		formatString: 0
+		lineageTag: ab149969-d4c9-42a0-bb03-0e902ba52b8a
+		sourceLineageTag: purchase_id
+		summarizeBy: sum
+		sourceColumn: purchase_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column local_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 43adc783-56c7-4fdb-a24e-cf8fd0de96a3
+		sourceLineageTag: local_id
+		summarizeBy: sum
+		sourceColumn: local_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column barcode
+		dataType: string
+		lineageTag: 282dd6b0-2eb1-4091-a682-87d082d58492
+		sourceLineageTag: barcode
+		summarizeBy: none
+		sourceColumn: barcode
+
+		annotation SummarizationSetBy = Automatic
+
+	column supplier
+		dataType: string
+		lineageTag: 1621df56-2528-4956-a63e-f0cd4e3f839d
+		sourceLineageTag: supplier
+		summarizeBy: none
+		sourceColumn: supplier
+
+		annotation SummarizationSetBy = Automatic
+
+	column quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 44fe2a2c-9eb9-4312-bdca-81ae24ef8d94
+		sourceLineageTag: quantity
+		summarizeBy: sum
+		sourceColumn: quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column unit_cost
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 3b91c9a4-3863-49cd-ac8c-514da748d638
+		sourceLineageTag: unit_cost
+		summarizeBy: sum
+		sourceColumn: unit_cost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column total_cost
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 7cc7b5a7-de36-4990-9bfa-738187ba92fc
+		sourceLineageTag: total_cost
+		summarizeBy: sum
+		sourceColumn: total_cost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column status
+		dataType: string
+		lineageTag: 2e0ea4e8-287e-4a73-a67a-0e037da0ab50
+		sourceLineageTag: status
+		summarizeBy: none
+		sourceColumn: status
+
+		annotation SummarizationSetBy = Automatic
+
+	column lot_reference
+		dataType: string
+		lineageTag: ef564f7e-48fc-496f-8efe-1706306da647
+		sourceLineageTag: lot_reference
+		summarizeBy: none
+		sourceColumn: lot_reference
+
+		annotation SummarizationSetBy = Automatic
+
+	column notes
+		dataType: string
+		lineageTag: 3d1b73b1-ad2a-455e-9016-b60242149b05
+		sourceLineageTag: notes
+		summarizeBy: none
+		sourceColumn: notes
+
+		annotation SummarizationSetBy = Automatic
+
+	column purchase_timestamp
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: aed68e0c-d89a-4737-9d0c-000b3010244a
+		sourceLineageTag: purchase_timestamp
+		summarizeBy: none
+		sourceColumn: purchase_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_key
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 1552537a-6021-45f2-a4b8-b104cf98251c
+		sourceLineageTag: date_key
+		summarizeBy: none
+		sourceColumn: date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_purchases = entity
+		mode: directLake
+		source
+			entityName: fact_purchases
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
+

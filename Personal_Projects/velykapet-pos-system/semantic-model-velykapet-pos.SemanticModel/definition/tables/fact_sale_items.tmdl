@@ -32,6 +32,21 @@ table fact_sale_items
 		displayFolder: Sale Items
 		lineageTag: a84e1fa2-4381-45fe-aaff-21578cf7cd07
 
+	/// Item-level revenue, correctly relates to dim_products/category unlike Total Revenue (which is order-level and has no product relationship)
+	measure 'Item Revenue' = SUM(fact_sale_items[total_revenue])
+		formatString: \$#,0.00
+		displayFolder: Sale Items
+
+	/// Item Revenue in the previous calendar month — safe to use when sliced by product or category
+	measure 'Item Revenue PM' = CALCULATE([Item Revenue], PREVIOUSMONTH(dim_dates[date_key]))
+		formatString: \$#,0.00
+		displayFolder: Diagnostic
+
+	/// Percent change in Item Revenue vs previous month — safe to use when sliced by product or category
+	measure 'Item Revenue MoM %' = DIVIDE([Item Revenue] - [Item Revenue PM], [Item Revenue PM])
+		formatString: 0.0%
+		displayFolder: Diagnostic
+
 	column sale_item_id
 		dataType: int64
 		formatString: 0

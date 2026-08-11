@@ -56,6 +56,47 @@ table fact_sales
 		displayFolder: Profitability
 		lineageTag: 501fe51a-577f-427c-bb84-6fab0ebd447f
 
+	/// Diagnostic: revenue in the previous calendar month
+	measure 'Revenue PM' = CALCULATE([Total Revenue], PREVIOUSMONTH(dim_dates[date_key]))
+		formatString: \$#,0.00
+		displayFolder: Diagnostic
+		lineageTag: 781920c1-70ab-44f8-816d-6fcae7d3f103
+
+	/// Diagnostic: absolute revenue change vs previous month
+	measure 'Revenue MoM Change' = [Total Revenue] - [Revenue PM]
+		formatString: \$#,0.00
+		displayFolder: Diagnostic
+		lineageTag: f5dd494b-f57b-4351-b2f5-d7f0d91ceecc
+
+	/// Diagnostic: percent revenue change vs previous month
+	measure 'Revenue MoM %' = DIVIDE([Total Revenue] - [Revenue PM], [Revenue PM])
+		formatString: 0.0%
+		displayFolder: Diagnostic
+		lineageTag: 15564219-6bf6-4540-a2dd-ddfdb9ccc638
+
+	/// Diagnostic: transaction count in the previous calendar month
+	measure 'Transactions PM' = CALCULATE([Total Transactions], PREVIOUSMONTH(dim_dates[date_key]))
+		formatString: #,0
+		displayFolder: Diagnostic
+		lineageTag: 984104f6-863e-4e9b-bca1-8bdd2987622f
+
+	/// Diagnostic: percent change in transaction count vs previous month — helps separate 'more customers' from 'bigger baskets' as a revenue driver
+	measure 'Transactions MoM %' = DIVIDE([Total Transactions] - [Transactions PM], [Transactions PM])
+		formatString: 0.0%
+		displayFolder: Diagnostic
+		lineageTag: 943640f9-b187-4138-9fed-5573d9bb4d1f
+
+	/// Predictive support: trailing 3-month average monthly revenue, for spotting trend direction (not a forecast — use the line chart Forecast analytics feature for that)
+	measure 'Revenue 3M Moving Avg' = CALCULATE([Total Revenue], DATESINPERIOD(dim_dates[date_key], LASTDATE(dim_dates[date_key]), -3, MONTH)) / 3
+		formatString: \$#,0.00
+		displayFolder: Predictive
+		lineageTag: f78e3b39-f207-4355-b9dc-b0cb45631656
+
+	/// Predictive support: whether current period revenue is running above or below its own trailing 3-month average
+	measure 'Revenue vs Trend' = IF(ISBLANK([Total Revenue]), BLANK(), IF([Total Revenue] > [Revenue 3M Moving Avg], "Above Trend", "Below Trend"))
+		displayFolder: Predictive
+		lineageTag: 36b93607-0869-4fab-9925-194ebf57c9f1
+
 	column sale_id
 		dataType: int64
 		formatString: 0

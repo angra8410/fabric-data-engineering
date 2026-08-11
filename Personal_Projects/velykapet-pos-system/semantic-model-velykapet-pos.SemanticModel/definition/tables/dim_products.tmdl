@@ -2,6 +2,42 @@ table dim_products
 	lineageTag: 9f425652-81fa-4cad-9527-64b87cc25811
 	sourceLineageTag: [dbo].[dim_products]
 
+	/// Prescriptive: share of units sold that were later returned, per product
+	measure 'Product Return Rate %' = DIVIDE(SUM(dim_products[total_returned_qty]), SUM(dim_products[total_sold_qty]))
+		formatString: 0.0%
+		displayFolder: Prescriptive
+		lineageTag: 14aece67-bb3a-461e-9c4b-f76a2abaff6c
+
+	/// Prescriptive: flags products with zero stock that have sold before (reorder now) or with stock below 10% of lifetime units sold (low stock)
+	measure 'Restock Alert' = VAR StockQty = SUM(dim_products[current_stock_qty]) VAR SoldQty = SUM(dim_products[total_sold_qty]) RETURN IF(StockQty = 0 && SoldQty > 0, "Reorder Now", IF(StockQty < SoldQty * 0.1, "Low Stock", "OK"))
+		displayFolder: Prescriptive
+		lineageTag: e07a5ce6-8b9f-401e-99e0-df62b242731e
+
+	/// Prescriptive: flags products selling below a 10% gross margin threshold — candidates for price review or supplier renegotiation
+	measure 'Margin Risk Flag' = IF(ISBLANK([Gross Margin %]), BLANK(), IF([Gross Margin %] < 0.1, "Low Margin", "OK"))
+		displayFolder: Prescriptive
+		lineageTag: 41198275-3e3b-4c12-9914-a016fe4b281a
+
+	/// Prescriptive: flags products with an above-15% return rate — candidates for quality review or listing/description review
+	measure 'Return Risk Flag' = IF(ISBLANK([Product Return Rate %]), BLANK(), IF([Product Return Rate %] > 0.15, "High Returns", "OK"))
+		displayFolder: Prescriptive
+		lineageTag: 053af976-2d7f-4dff-b4cf-c04bdd512ae4
+
+	/// Prescriptive: count of distinct products currently flagged Reorder Now
+	measure 'Products Needing Reorder' = CALCULATE(DISTINCTCOUNT(dim_products[barcode]), FILTER(dim_products, [Restock Alert] = "Reorder Now"))
+		formatString: #,0
+		displayFolder: Prescriptive
+
+	/// Prescriptive: count of distinct products currently flagged Low Margin
+	measure 'Products Low Margin Count' = CALCULATE(DISTINCTCOUNT(dim_products[barcode]), FILTER(dim_products, [Margin Risk Flag] = "Low Margin"))
+		formatString: #,0
+		displayFolder: Prescriptive
+
+	/// Prescriptive: count of distinct products currently flagged High Returns
+	measure 'Products High Return Count' = CALCULATE(DISTINCTCOUNT(dim_products[barcode]), FILTER(dim_products, [Return Risk Flag] = "High Returns"))
+		formatString: #,0
+		displayFolder: Prescriptive
+
 	column barcode
 		dataType: string
 		lineageTag: ed347c66-9ec7-45a3-820c-391d155820ab

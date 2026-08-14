@@ -44,8 +44,10 @@ table fact_expenses
 		formatString: yyyy-MM-dd
 		sourceColumn: expense_date
 
-	partition fact_expenses_directlake = entity
+	partition fact_expenses = entity
 		mode: directLake
-		entityName: fact_expenses
-		schemaName: dbo
+		source
+			entityName: fact_expenses
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
 

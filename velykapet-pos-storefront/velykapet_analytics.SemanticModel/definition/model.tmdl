@@ -8,7 +8,10 @@ model Model
 		returnErrorValuesAsNull
 
 annotation __PBI_TimeIntelligenceEnabled = 0
-annotation PBI_ProTooling = ["WebModelingEdit","FabricGitIntegration"]
+
+annotation PBI_QueryOrder = ["DirectLake - lh_velykapet_gold_dev"]
+
+annotation PBI_ProTooling = ["DirectLakeOnOneLakeInWeb","WebModelingEdit","FabricGitIntegration"]
 
 ref table fact_sales
 ref table fact_expenses

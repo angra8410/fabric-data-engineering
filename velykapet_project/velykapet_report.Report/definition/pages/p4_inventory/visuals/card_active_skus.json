@@ -1,0 +1,59 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.6.0/schema.json",
+  "name": "card_active_skus",
+  "position": {
+    "x": 20,
+    "y": 20,
+    "z": 1000,
+    "width": 280,
+    "height": 110,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Fields": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_products"
+                    }
+                  },
+                  "Property": "Total Active SKUs"
+                }
+              },
+              "queryRef": "dim_products.Total Active SKUs",
+              "nativeVisualMode": "Value"
+            }
+          ]
+        }
+      }
+    },
+    "visualCustomizations": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Total Active SKUs'"
+                }
+              }
+            },
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

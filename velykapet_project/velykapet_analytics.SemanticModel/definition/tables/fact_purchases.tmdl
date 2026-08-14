@@ -7,6 +7,11 @@ table fact_purchases
 		displayFolder: 📦 Procurement
 		lineageTag: pur-001
 
+	measure 'Procurement Purchase Count' = COUNTROWS(fact_purchases)
+		formatString: #,##0
+		displayFolder: 📦 Procurement
+		lineageTag: purcnt-001
+
 	column purchase_id
 		dataType: string
 		sourceColumn: purchase_id

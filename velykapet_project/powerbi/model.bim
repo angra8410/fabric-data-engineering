@@ -1,0 +1,269 @@
+{
+  "name": "sm_velykapet_gold_analytics",
+  "compatibilityLevel": 1600,
+  "model": {
+    "culture": "en-US",
+    "dataAccessOptions": {
+      "legacyRedirects": true,
+      "returnErrorValuesAsNull": true
+    },
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "sourceQueryCulture": "en-US",
+    "tables": [
+      {
+        "name": "fact_sales",
+        "columns": [
+          { "name": "item_id", "dataType": "string", "sourceColumn": "item_id", "isNullable": false },
+          { "name": "sale_id", "dataType": "string", "sourceColumn": "sale_id", "isNullable": false },
+          { "name": "sale_origin", "dataType": "string", "sourceColumn": "sale_origin" },
+          { "name": "payment_method", "dataType": "string", "sourceColumn": "payment_method" },
+          { "name": "sale_timestamp", "dataType": "dateTime", "sourceColumn": "sale_timestamp", "formatString": "yyyy-MM-dd HH:mm:ss" },
+          { "name": "sale_date", "dataType": "dateTime", "sourceColumn": "sale_date", "formatString": "yyyy-MM-dd" },
+          { "name": "product_name", "dataType": "string", "sourceColumn": "product_name" },
+          { "name": "quantity", "dataType": "int64", "sourceColumn": "quantity" },
+          { "name": "unit_cost", "dataType": "double", "sourceColumn": "unit_cost", "formatString": "$#,##0.00" },
+          { "name": "unit_price", "dataType": "double", "sourceColumn": "unit_price", "formatString": "$#,##0.00" },
+          { "name": "total_item_revenue", "dataType": "double", "sourceColumn": "total_item_revenue", "formatString": "$#,##0.00" },
+          { "name": "item_gross_profit", "dataType": "double", "sourceColumn": "item_gross_profit", "formatString": "$#,##0.00" }
+        ],
+        "partitions": [
+          {
+            "name": "fact_sales_directlake",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "schemaName": "dbo",
+              "entityName": "fact_sales",
+              "expressionSource": "DirectLakeDatabase"
+            }
+          }
+        ]
+      },
+      {
+        "name": "fact_expenses",
+        "columns": [
+          { "name": "expense_id", "dataType": "string", "sourceColumn": "expense_id", "isNullable": false },
+          { "name": "description", "dataType": "string", "sourceColumn": "description" },
+          { "name": "expense_amount", "dataType": "double", "sourceColumn": "expense_amount", "formatString": "$#,##0.00" },
+          { "name": "category", "dataType": "string", "sourceColumn": "category" },
+          { "name": "expense_date", "dataType": "dateTime", "sourceColumn": "expense_date", "formatString": "yyyy-MM-dd" }
+        ],
+        "partitions": [
+          {
+            "name": "fact_expenses_directlake",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "schemaName": "dbo",
+              "entityName": "fact_expenses",
+              "expressionSource": "DirectLakeDatabase"
+            }
+          }
+        ]
+      },
+      {
+        "name": "fact_purchases",
+        "columns": [
+          { "name": "purchase_id", "dataType": "string", "sourceColumn": "purchase_id", "isNullable": false },
+          { "name": "supplier", "dataType": "string", "sourceColumn": "supplier" },
+          { "name": "purchase_amount", "dataType": "double", "sourceColumn": "purchase_amount", "formatString": "$#,##0.00" },
+          { "name": "purchase_date", "dataType": "dateTime", "sourceColumn": "purchase_date", "formatString": "yyyy-MM-dd" }
+        ],
+        "partitions": [
+          {
+            "name": "fact_purchases_directlake",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "schemaName": "dbo",
+              "entityName": "fact_purchases",
+              "expressionSource": "DirectLakeDatabase"
+            }
+          }
+        ]
+      },
+      {
+        "name": "dim_products",
+        "columns": [
+          { "name": "product_id", "dataType": "string", "sourceColumn": "product_id", "isNullable": false },
+          { "name": "barcode", "dataType": "string", "sourceColumn": "barcode" },
+          { "name": "supplier", "dataType": "string", "sourceColumn": "supplier" },
+          { "name": "cost_price", "dataType": "double", "sourceColumn": "cost_price", "formatString": "$#,##0.00" },
+          { "name": "sale_price", "dataType": "double", "sourceColumn": "sale_price", "formatString": "$#,##0.00" },
+          { "name": "current_stock", "dataType": "int64", "sourceColumn": "current_stock" }
+        ],
+        "partitions": [
+          {
+            "name": "dim_products_directlake",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "schemaName": "dbo",
+              "entityName": "dim_products",
+              "expressionSource": "DirectLakeDatabase"
+            }
+          }
+        ]
+      },
+      {
+        "name": "dim_date",
+        "dataCategory": "Time",
+        "columns": [
+          { "name": "Date", "dataType": "dateTime", "isKey": true, "formatString": "yyyy-MM-dd" },
+          { "name": "Year", "dataType": "int64" },
+          { "name": "Quarter", "dataType": "string" },
+          { "name": "Month", "dataType": "int64" },
+          { "name": "MonthName", "dataType": "string", "sortByColumn": "Month" },
+          { "name": "YearMonth", "dataType": "string", "sortByColumn": "Date" },
+          { "name": "DayOfWeek", "dataType": "int64" },
+          { "name": "DayName", "dataType": "string", "sortByColumn": "DayOfWeek" },
+          { "name": "IsWeekend", "dataType": "boolean" }
+        ],
+        "partitions": [
+          {
+            "name": "dim_date_calculated",
+            "mode": "import",
+            "source": {
+              "type": "calculated",
+              "expression": "ADDCOLUMNS(CALENDAR(DATE(2025, 1, 1), DATE(2026, 12, 31)), \"Year\", YEAR([Date]), \"Quarter\", \"Q\" & FORMAT([Date], \"Q\"), \"Month\", MONTH([Date]), \"MonthName\", FORMAT([Date], \"MMMM\"), \"YearMonth\", FORMAT([Date], \"YYYY-MM\"), \"DayOfWeek\", WEEKDAY([Date], 2), \"DayName\", FORMAT([Date], \"dddd\"), \"IsWeekend\", IF(WEEKDAY([Date], 2) >= 6, TRUE(), FALSE()))"
+            }
+          }
+        ]
+      },
+      {
+        "name": "_Measures",
+        "columns": [
+          { "name": "MeasureHolder", "dataType": "string", "isHidden": true, "sourceColumn": "MeasureHolder" }
+        ],
+        "measures": [
+          {
+            "name": "Total Revenue",
+            "expression": "SUM(fact_sales[total_item_revenue])",
+            "formatString": "$#,##0.00",
+            "displayFolder": "1. Sales & Revenue"
+          },
+          {
+            "name": "Total Cost",
+            "expression": "SUMX(fact_sales, fact_sales[quantity] * fact_sales[unit_cost])",
+            "formatString": "$#,##0.00",
+            "displayFolder": "1. Sales & Revenue"
+          },
+          {
+            "name": "Gross Profit",
+            "expression": "[Total Revenue] - [Total Cost]",
+            "formatString": "$#,##0.00",
+            "displayFolder": "1. Sales & Revenue"
+          },
+          {
+            "name": "Gross Margin %",
+            "expression": "DIVIDE([Gross Profit], [Total Revenue], 0)",
+            "formatString": "0.00%",
+            "displayFolder": "1. Sales & Revenue"
+          },
+          {
+            "name": "Total Transactions",
+            "expression": "DISTINCTCOUNT(fact_sales[sale_id])",
+            "formatString": "#,##0",
+            "displayFolder": "1. Sales & Revenue"
+          },
+          {
+            "name": "Average Order Value (AOV)",
+            "expression": "DIVIDE([Total Revenue], [Total Transactions], 0)",
+            "formatString": "$#,##0.00",
+            "displayFolder": "1. Sales & Revenue"
+          },
+          {
+            "name": "Total Expenses",
+            "expression": "SUM(fact_expenses[expense_amount])",
+            "formatString": "$#,##0.00",
+            "displayFolder": "2. Expenses & Net Profit"
+          },
+          {
+            "name": "Total Purchases",
+            "expression": "SUM(fact_purchases[purchase_amount])",
+            "formatString": "$#,##0.00",
+            "displayFolder": "2. Expenses & Net Profit"
+          },
+          {
+            "name": "Net Operating Profit",
+            "expression": "[Gross Profit] - [Total Expenses]",
+            "formatString": "$#,##0.00",
+            "displayFolder": "2. Expenses & Net Profit"
+          },
+          {
+            "name": "Net Profit Margin %",
+            "expression": "DIVIDE([Net Operating Profit], [Total Revenue], 0)",
+            "formatString": "0.00%",
+            "displayFolder": "2. Expenses & Net Profit"
+          },
+          {
+            "name": "Current Stock Units",
+            "expression": "SUM(dim_products[current_stock])",
+            "formatString": "#,##0",
+            "displayFolder": "3. Inventory"
+          },
+          {
+            "name": "Inventory Retail Valuation",
+            "expression": "SUMX(dim_products, dim_products[current_stock] * dim_products[sale_price])",
+            "formatString": "$#,##0.00",
+            "displayFolder": "3. Inventory"
+          },
+          {
+            "name": "Revenue MTD",
+            "expression": "TOTALMTD([Total Revenue], dim_date[Date])",
+            "formatString": "$#,##0.00",
+            "displayFolder": "4. Time Intelligence"
+          },
+          {
+            "name": "Revenue YTD",
+            "expression": "TOTALYTD([Total Revenue], dim_date[Date])",
+            "formatString": "$#,##0.00",
+            "displayFolder": "4. Time Intelligence"
+          },
+          {
+            "name": "Revenue MoM Growth %",
+            "expression": "VAR PriorM = CALCULATE([Total Revenue], DATEADD(dim_date[Date], -1, MONTH)) RETURN DIVIDE([Total Revenue] - PriorM, PriorM, 0)",
+            "formatString": "+0.00%;-0.00%;0.00%",
+            "displayFolder": "4. Time Intelligence"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "_Measures_partition",
+            "mode": "import",
+            "source": {
+              "type": "calculated",
+              "expression": "ROW(\"MeasureHolder\", BLANK())"
+            }
+          }
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "name": "fact_sales_dim_date",
+        "fromTable": "fact_sales",
+        "fromColumn": "sale_date",
+        "toTable": "dim_date",
+        "toColumn": "Date",
+        "crossFilteringBehavior": "oneDirection"
+      },
+      {
+        "name": "fact_expenses_dim_date",
+        "fromTable": "fact_expenses",
+        "fromColumn": "expense_date",
+        "toTable": "dim_date",
+        "toColumn": "Date",
+        "crossFilteringBehavior": "oneDirection"
+      },
+      {
+        "name": "fact_purchases_dim_date",
+        "fromTable": "fact_purchases",
+        "fromColumn": "purchase_date",
+        "toTable": "dim_date",
+        "toColumn": "Date",
+        "crossFilteringBehavior": "oneDirection"
+      }
+    ]
+  }
+}

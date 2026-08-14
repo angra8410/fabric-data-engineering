@@ -126,5 +126,11 @@ velykapet_project/
 │   └── 04_master_medallion_pipeline.py  <-- Unified Single-Session Master Pipeline
 ├── pipelines/                     <-- Fabric DataPipeline JSON Definitions
 │   └── 02_master_medallion_pipeline.json
+├── powerbi/                       <-- Microsoft Fabric Direct Lake Semantic Model & Power BI Assets
+│   ├── model.bim                  <-- Direct Lake Tabular Semantic Model Definition
+│   ├── dax_measures.dax           <-- Production DAX Measures Catalog
+│   ├── powerbi_theme.json         <-- Executive Dark Mode Theme Definition
+│   └── report_blueprint.md        <-- 5-Page Visual Layout & Report Blueprint
 └── README.md                      <-- Technical Documentation Showcase
 ```
+

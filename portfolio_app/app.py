@@ -83,8 +83,6 @@ def load_dane_data():
     years = list(range(2004, 2027))
     np.random.seed(101)
     
-    # Realistic historical Colombia employment indicators
-    # High unemployment (~13-16% in 2004, peak during 2020 pandemic at ~16-18%, stabilizing to 9-10% in 2025-2026)
     unemp_trend = [14.2, 13.5, 12.8, 11.5, 11.2, 12.0, 11.8, 10.8, 10.4, 9.6, 9.1, 8.9, 9.2, 9.4, 9.7, 10.5, 16.1, 13.8, 11.2, 10.2, 9.8, 9.4, 9.1]
     tgp_trend = [59.5, 60.1, 60.8, 61.2, 62.0, 63.5, 64.0, 64.8, 65.2, 64.9, 64.2, 64.7, 64.5, 63.9, 64.0, 63.3, 59.2, 61.5, 63.6, 63.8, 64.1, 64.3, 64.5]
     occupied_millions = [17.5, 18.1, 18.7, 19.2, 19.8, 20.4, 21.0, 21.6, 22.1, 22.5, 22.8, 23.1, 23.2, 23.0, 22.8, 22.5, 19.8, 21.4, 22.6, 23.1, 23.5, 23.9, 24.2]
@@ -96,7 +94,6 @@ def load_dane_data():
         "Ocupados_Millones": occupied_millions
     })
 
-    # City breakdown for latest period
     df_cities = pd.DataFrame({
         "Ciudad_Metropolitana": ["Bogotá D.C.", "Medellín A.M.", "Cali A.M.", "Barranquilla A.M.", "Bucaramanga A.M.", "Manizales A.M.", "Pereira A.M."],
         "Tasa_Desempleo": [9.8, 8.9, 10.5, 8.4, 8.1, 9.2, 9.0],
@@ -104,7 +101,6 @@ def load_dane_data():
         "Ocupados_K": [4150, 1920, 1150, 890, 520, 220, 310]
     })
 
-    # Informality breakdown
     df_informality = pd.DataFrame({
         "Condición": ["Ocupados Formales", "Ocupados Informales"],
         "Porcentaje": [43.8, 56.2]
@@ -185,12 +181,12 @@ if "Velykapet" in selected_project:
                 fig_trend.add_trace(go.Scatter(x=df_filtered_sales["sale_date"], y=df_filtered_sales["gross_revenue"], mode='lines', name='Ingreso Bruto ($)', line=dict(color='#4F46E5', width=2.5)))
                 fig_trend.add_trace(go.Scatter(x=df_filtered_sales["sale_date"], y=df_filtered_sales["gross_profit"], mode='lines', name='Ganancia Bruta ($)', line=dict(color='#10B981', width=2.5)))
                 fig_trend.update_layout(template="plotly_dark", height=380, margin=dict(l=20, r=20, t=30, b=20), legend=dict(orientation="h", y=1.1))
-                st.plotly_chart(fig_trend, use_container_width=True)
+                st.plotly_chart(fig_trend)
             with vc2:
                 st.markdown("##### 🍕 Origen de Ventas por Canal")
                 fig_pie = px.pie(df_channels, names='Channel', values='Revenue', hole=0.4, color_discrete_sequence=px.colors.qualitative.Pastel)
                 fig_pie.update_layout(template="plotly_dark", height=380, margin=dict(l=20, r=20, t=30, b=20))
-                st.plotly_chart(fig_pie, use_container_width=True)
+                st.plotly_chart(fig_pie)
 
     with t2:
         st.subheader("📦 Estado de Inventario y Desempeño de Productos")
@@ -201,7 +197,7 @@ if "Velykapet" in selected_project:
         st.divider()
         fig_bar = px.bar(df_products, x='product_name', y='revenue', color='profit_margin', text_auto='.2s', color_continuous_scale='Viridis')
         fig_bar.update_layout(template="plotly_dark", height=400)
-        st.plotly_chart(fig_bar, use_container_width=True)
+        st.plotly_chart(fig_bar)
 
     with t3:
         st.subheader("📲 Monitor de Conversión del Bot de WhatsApp")
@@ -279,7 +275,7 @@ else:
             line=dict(color='#3B82F6', width=2.5, dash='dash')
         ))
         fig_dane_line.update_layout(template="plotly_dark", height=400, margin=dict(l=20, r=20, t=30, b=20), legend=dict(orientation="h", y=1.1))
-        st.plotly_chart(fig_dane_line, use_container_width=True)
+        st.plotly_chart(fig_dane_line)
 
     with dt2:
         st.subheader("🏙️ Indicadores por Áreas Metropolitanas y Brecha de Informalidad")
@@ -297,13 +293,13 @@ else:
                 color_continuous_scale='Reds'
             )
             fig_city_bar.update_layout(template="plotly_dark", height=380)
-            st.plotly_chart(fig_city_bar, use_container_width=True)
+            st.plotly_chart(fig_city_bar)
 
         with col_city2:
             st.markdown("##### 💼 Distribución Formal vs Informal")
             fig_inf_pie = px.pie(df_informality, names='Condición', values='Porcentaje', hole=0.4, color_discrete_sequence=['#10B981', '#F59E0B'])
             fig_inf_pie.update_layout(template="plotly_dark", height=380)
-            st.plotly_chart(fig_inf_pie, use_container_width=True)
+            st.plotly_chart(fig_inf_pie)
 
     with dt3:
         st.subheader("🏛️ Arquitectura Medallion para Procesamiento de Datos Masivos DANE")
@@ -330,7 +326,7 @@ else:
         st.dataframe(pd.DataFrame({
             "Tabla Gold": ["fact_ocupacion_mensual", "fact_desempleo_ciudad", "dim_geografia_metropolitana", "dim_ramas_actividad", "kpi_series_historicas_2004_2026"],
             "Descripción": ["Fact table con ocupados, desocupados e inactivos nivel mensual", "Desglose por ciudades principales e informalidad laboral", "Dimensión de divisiones político-administrativas", "Clasificación CIIU de ramas de actividad económica", "Series temporales consolidadas (2004-2026)"]
-        }), use_container_width=True)
+        }))
 
 st.sidebar.markdown("---")
 st.sidebar.caption("Multi-Project Data Engineering Portfolio Hub | Microsoft Fabric & Streamlit")

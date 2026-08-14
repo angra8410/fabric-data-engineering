@@ -153,8 +153,10 @@ table fact_sales
 		sourceColumn: item_gross_profit
 		lineageTag: col-igp
 
-	partition fact_sales_directlake = entity
+	partition fact_sales = entity
 		mode: directLake
-		entityName: fact_sales
-		schemaName: dbo
+		source
+			entityName: fact_sales
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
 

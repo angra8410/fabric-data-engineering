@@ -1,0 +1,50 @@
+table dim_date
+	lineageTag: e5f6a7b8-c9d0-1234-efab-567890123456
+	dataCategory: Time
+
+	measure 'Revenue MTD' = TOTALMTD([Total Revenue], dim_date[Date])
+		formatString: $#,##0.00
+		displayFolder: 📈 Time Intelligence
+		lineageTag: mtd-001
+
+	measure 'Revenue YTD' = TOTALYTD([Total Revenue], dim_date[Date])
+		formatString: $#,##0.00
+		displayFolder: 📈 Time Intelligence
+		lineageTag: ytd-001
+
+	column Date
+		dataType: dateTime
+		isKey
+		formatString: yyyy-MM-dd
+
+	column Year
+		dataType: int64
+
+	column Quarter
+		dataType: string
+
+	column Month
+		dataType: int64
+
+	column MonthName
+		dataType: string
+		sortByColumn: Month
+
+	column YearMonth
+		dataType: string
+		sortByColumn: Date
+
+	column DayOfWeek
+		dataType: int64
+
+	column DayName
+		dataType: string
+		sortByColumn: DayOfWeek
+
+	column IsWeekend
+		dataType: boolean
+
+	partition dim_date_calculated = calculated
+		mode: import
+		source = ADDCOLUMNS(CALENDAR(DATE(2025, 1, 1), DATE(2026, 12, 31)), "Year", YEAR([Date]), "Quarter", "Q" & FORMAT([Date], "Q"), "Month", MONTH([Date]), "MonthName", FORMAT([Date], "MMMM"), "YearMonth", FORMAT([Date], "YYYY-MM"), "DayOfWeek", WEEKDAY([Date], 2), "DayName", FORMAT([Date], "dddd"), "IsWeekend", IF(WEEKDAY([Date], 2) >= 6, TRUE(), FALSE()))
+

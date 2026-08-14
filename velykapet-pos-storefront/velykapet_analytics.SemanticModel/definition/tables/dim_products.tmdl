@@ -37,6 +37,13 @@ table dim_products
 		summarizeBy: none
 		sourceColumn: product_id
 
+	column product_name
+		dataType: string
+		lineageTag: 71eb1145-d1d1-4388-a492-04fce83a2343a
+		sourceLineageTag: product_name
+		summarizeBy: none
+		sourceColumn: product_name
+
 	column barcode
 		dataType: string
 		lineageTag: 71eb1145-d1d1-4388-a492-04fce83a2344

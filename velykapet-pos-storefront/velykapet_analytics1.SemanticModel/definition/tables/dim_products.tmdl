@@ -1,0 +1,63 @@
+table dim_products
+	lineageTag: 74e31bd0-1832-47ea-9394-5e75a90f6a42
+	sourceLineageTag: [dbo].[dim_products]
+
+	column product_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 3a5ef7d3-fc49-45fb-96ee-5835ea95232e
+		sourceLineageTag: product_id
+		summarizeBy: sum
+		sourceColumn: product_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column cost_price
+		dataType: double
+		lineageTag: 9eba6af7-ac00-43e6-aff5-06f274a5e4ef
+		sourceLineageTag: cost_price
+		summarizeBy: sum
+		sourceColumn: cost_price
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column sale_price
+		dataType: double
+		lineageTag: 3e6290a9-07ba-4965-b741-deb14c3bc29d
+		sourceLineageTag: sale_price
+		summarizeBy: sum
+		sourceColumn: sale_price
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column current_stock
+		dataType: int64
+		formatString: 0
+		lineageTag: a0a1c08d-24e0-48a6-993d-f2e12dadd4bf
+		sourceLineageTag: current_stock
+		summarizeBy: sum
+		sourceColumn: current_stock
+
+		annotation SummarizationSetBy = Automatic
+
+	column _updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 2a6e0214-ec37-4b61-8608-aa3ca26af161
+		sourceLineageTag: _updated_at
+		summarizeBy: none
+		sourceColumn: _updated_at
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_products = entity
+		mode: directLake
+		source
+			entityName: dim_products
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
+

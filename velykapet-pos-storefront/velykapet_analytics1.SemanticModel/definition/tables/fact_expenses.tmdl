@@ -1,0 +1,51 @@
+table fact_expenses
+	lineageTag: 886ef98e-14ee-4c87-8151-d0788caf5de3
+	sourceLineageTag: [dbo].[fact_expenses]
+
+	column expense_id
+		dataType: int64
+		formatString: 0
+		lineageTag: be77ec30-e318-4c2e-8f25-af32b374dbd1
+		sourceLineageTag: expense_id
+		summarizeBy: sum
+		sourceColumn: expense_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column expense_amount
+		dataType: double
+		lineageTag: a60431e2-107e-4f6f-9376-295a41a2785d
+		sourceLineageTag: expense_amount
+		summarizeBy: sum
+		sourceColumn: expense_amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column category
+		dataType: string
+		lineageTag: 9275e34d-6c96-4571-a965-fa4cc486d04b
+		sourceLineageTag: category
+		summarizeBy: none
+		sourceColumn: category
+
+		annotation SummarizationSetBy = Automatic
+
+	column _updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 54413023-822b-4836-9fd4-482ef72bc677
+		sourceLineageTag: _updated_at
+		summarizeBy: none
+		sourceColumn: _updated_at
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_expenses = entity
+		mode: directLake
+		source
+			entityName: fact_expenses
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
+

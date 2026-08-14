@@ -12,9 +12,8 @@ annotation PBI_QueryOrder = ["DirectLake - lh_velykapet_gold_dev"]
 
 annotation PBI_ProTooling = ["DirectLakeOnOneLakeInWeb"]
 
-ref table fact_expenses
-ref table dim_products
 ref table fact_sales
+ref table fact_expenses
 ref table fact_purchases
+ref table dim_products
 ref table dim_dates
-

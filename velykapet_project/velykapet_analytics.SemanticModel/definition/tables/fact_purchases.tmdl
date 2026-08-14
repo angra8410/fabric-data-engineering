@@ -1,34 +1,53 @@
 table fact_purchases
-	lineageTag: c3d4e5f6-a7b8-9012-cdef-345678901234
+	lineageTag: 06fa9fb0-9bc8-43d9-9fb8-ef951e70e28d
 	sourceLineageTag: [dbo].[fact_purchases]
 
 	measure 'Total Purchases' = SUM(fact_purchases[purchase_amount])
-		formatString: $#,##0.00
-		displayFolder: 📦 Procurement
-		lineageTag: pur-001
+		formatString: \$#,0.00
+		lineageTag: m_tot_purchases
 
-	measure 'Procurement Purchase Count' = COUNTROWS(fact_purchases)
-		formatString: #,##0
-		displayFolder: 📦 Procurement
-		lineageTag: purcnt-001
+	measure 'Procurement Purchase Count' = DISTINCTCOUNT(fact_purchases[purchase_id])
+		formatString: #,0
+		lineageTag: m_purch_count
 
 	column purchase_id
-		dataType: string
+		dataType: int64
+		formatString: 0
+		lineageTag: 91eb1145-d1d1-4388-a492-04fce83a2343
+		sourceLineageTag: purchase_id
+		summarizeBy: sum
 		sourceColumn: purchase_id
 
 	column supplier
 		dataType: string
+		lineageTag: 91eb1145-d1d1-4388-a492-04fce83a2344
+		sourceLineageTag: supplier
+		summarizeBy: none
 		sourceColumn: supplier
 
 	column purchase_amount
-		dataType: double
-		formatString: $#,##0.00
+		dataType: decimal
+		formatString: \$#,0.00
+		lineageTag: 91eb1145-d1d1-4388-a492-04fce83a2345
+		sourceLineageTag: purchase_amount
+		summarizeBy: sum
 		sourceColumn: purchase_amount
 
 	column purchase_date
 		dataType: dateTime
-		formatString: yyyy-MM-dd
+		formatString: General Date
+		lineageTag: 91eb1145-d1d1-4388-a492-04fce83a2346
+		sourceLineageTag: purchase_date
+		summarizeBy: none
 		sourceColumn: purchase_date
+
+	column _updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 91eb1145-d1d1-4388-a492-04fce83a2347
+		sourceLineageTag: _updated_at
+		summarizeBy: none
+		sourceColumn: _updated_at
 
 	partition fact_purchases = entity
 		mode: directLake
@@ -36,4 +55,3 @@ table fact_purchases
 			entityName: fact_purchases
 			schemaName: dbo
 			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
-

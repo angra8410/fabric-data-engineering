@@ -2,6 +2,90 @@ table fact_sales
 	lineageTag: 5f6cac2c-0d45-4092-96ba-ccab8cf1988e
 	sourceLineageTag: [dbo].[fact_sales]
 
+	measure 'Total Revenue' = SUM(fact_sales[total_item_revenue])
+		formatString: \$#,0.00
+		lineageTag: m_tot_rev
+
+	measure 'Gross Profit' = SUM(fact_sales[item_gross_profit])
+		formatString: \$#,0.00
+		lineageTag: m_gross_profit
+
+	measure 'Gross Margin %' = DIVIDE([Gross Profit], [Total Revenue], 0)
+		formatString: 0.0%
+		lineageTag: m_gross_margin
+
+	measure 'Total Units Sold' = SUM(fact_sales[quantity])
+		formatString: #,0
+		lineageTag: m_tot_units
+
+	measure 'Total Transactions' = DISTINCTCOUNT(fact_sales[sale_id])
+		formatString: #,0
+		lineageTag: m_tot_trans
+
+	measure 'Average Order Value (AOV)' = DIVIDE([Total Revenue], [Total Transactions], 0)
+		formatString: \$#,0.00
+		lineageTag: m_aov
+
+	measure 'Average Units Per Order' = DIVIDE([Total Units Sold], [Total Transactions], 0)
+		formatString: 0.0
+		lineageTag: m_aunits_order
+
+	measure 'Average Item Price' = DIVIDE([Total Revenue], [Total Units Sold], 0)
+		formatString: \$#,0.00
+		lineageTag: m_aitem_price
+
+	measure 'POS Store Revenue' = CALCULATE([Total Revenue], fact_sales[sale_origin] = "POS")
+		formatString: \$#,0.00
+		lineageTag: m_pos_rev
+
+	measure 'POS Revenue Share %' = DIVIDE([POS Store Revenue], [Total Revenue], 0)
+		formatString: 0.0%
+		lineageTag: m_pos_share
+
+	measure 'Rappi Revenue' = CALCULATE([Total Revenue], fact_sales[sale_origin] = "Rappi")
+		formatString: \$#,0.00
+		lineageTag: m_rappi_rev
+
+	measure 'Rappi Revenue Share %' = DIVIDE([Rappi Revenue], [Total Revenue], 0)
+		formatString: 0.0%
+		lineageTag: m_rappi_share
+
+	measure 'Web Direct Revenue' = CALCULATE([Total Revenue], fact_sales[sale_origin] = "Web")
+		formatString: \$#,0.00
+		lineageTag: m_web_rev
+
+	measure 'Web Revenue Share %' = DIVIDE([Web Direct Revenue], [Total Revenue], 0)
+		formatString: 0.0%
+		lineageTag: m_web_share
+
+	measure 'WhatsApp Bot Revenue' = CALCULATE([Total Revenue], fact_sales[sale_origin] = "WhatsApp")
+		formatString: \$#,0.00
+		lineageTag: m_wa_rev
+
+	measure 'WhatsApp Revenue Share %' = DIVIDE([WhatsApp Bot Revenue], [Total Revenue], 0)
+		formatString: 0.0%
+		lineageTag: m_wa_share
+
+	measure 'Revenue MTD' = TOTALMTD([Total Revenue], dim_dates[date_key])
+		formatString: \$#,0.00
+		lineageTag: m_rev_mtd
+
+	measure 'Revenue QTD' = TOTALQTD([Total Revenue], dim_dates[date_key])
+		formatString: \$#,0.00
+		lineageTag: m_rev_qtd
+
+	measure 'Revenue YTD' = TOTALYTD([Total Revenue], dim_dates[date_key])
+		formatString: \$#,0.00
+		lineageTag: m_rev_ytd
+
+	measure 'Gross Profit MTD' = TOTALMTD([Gross Profit], dim_dates[date_key])
+		formatString: \$#,0.00
+		lineageTag: m_gp_mtd
+
+	measure 'Gross Profit YTD' = TOTALYTD([Gross Profit], dim_dates[date_key])
+		formatString: \$#,0.00
+		lineageTag: m_gp_ytd
+
 	column item_id
 		dataType: int64
 		formatString: 0
@@ -71,7 +155,7 @@ table fact_sales
 
 	column total_item_revenue
 		dataType: decimal
-		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		formatString: \$#,0.00
 		lineageTag: 166478f7-2096-4a94-b272-6b4684315bee
 		sourceLineageTag: total_item_revenue
 		summarizeBy: sum
@@ -83,7 +167,7 @@ table fact_sales
 
 	column item_gross_profit
 		dataType: decimal
-		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		formatString: \$#,0.00
 		lineageTag: c0140a9a-9bcd-43d1-8cd1-8ef93ce6d802
 		sourceLineageTag: item_gross_profit
 		summarizeBy: sum
@@ -109,4 +193,3 @@ table fact_sales
 			entityName: fact_sales
 			schemaName: dbo
 			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
-

@@ -1,58 +1,87 @@
 table dim_products
-	lineageTag: 74e31bd0-1832-47ea-9394-5e75a90f6a42
+	lineageTag: 07fa9fb0-9bc8-43d9-9fb8-ef951e70e28c
 	sourceLineageTag: [dbo].[dim_products]
 
+	measure 'Total Active SKUs' = DISTINCTCOUNT(dim_products[product_id])
+		formatString: #,0
+		lineageTag: m_active_skus
+
+	measure 'Current Stock Units' = SUM(dim_products[current_stock])
+		formatString: #,0
+		lineageTag: m_stock_units
+
+	measure 'Inventory Cost Valuation' = SUMX(dim_products, dim_products[current_stock] * dim_products[cost_price])
+		formatString: \$#,0.00
+		lineageTag: m_inv_cost_val
+
+	measure 'Inventory Retail Valuation' = SUMX(dim_products, dim_products[current_stock] * dim_products[sale_price])
+		formatString: \$#,0.00
+		lineageTag: m_inv_retail_val
+
+	measure 'Potential Inventory Margin' = [Inventory Retail Valuation] - [Inventory Cost Valuation]
+		formatString: \$#,0.00
+		lineageTag: m_pot_inv_margin
+
+	measure 'Potential Inventory Margin %' = DIVIDE([Potential Inventory Margin], [Inventory Retail Valuation], 0)
+		formatString: 0.0%
+		lineageTag: m_pot_margin_pct
+
+	measure 'Stock-Out Alert SKUs' = CALCULATE(DISTINCTCOUNT(dim_products[product_id]), dim_products[current_stock] <= 5)
+		formatString: #,0
+		lineageTag: m_stockout_alerts
+
 	column product_id
-		dataType: int64
-		formatString: 0
-		lineageTag: 3a5ef7d3-fc49-45fb-96ee-5835ea95232e
+		dataType: string
+		lineageTag: 71eb1145-d1d1-4388-a492-04fce83a2343
 		sourceLineageTag: product_id
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: product_id
 
-		annotation SummarizationSetBy = Automatic
+	column barcode
+		dataType: string
+		lineageTag: 71eb1145-d1d1-4388-a492-04fce83a2344
+		sourceLineageTag: barcode
+		summarizeBy: none
+		sourceColumn: barcode
+
+	column supplier
+		dataType: string
+		lineageTag: 71eb1145-d1d1-4388-a492-04fce83a2345
+		sourceLineageTag: supplier
+		summarizeBy: none
+		sourceColumn: supplier
 
 	column cost_price
-		dataType: double
-		lineageTag: 9eba6af7-ac00-43e6-aff5-06f274a5e4ef
+		dataType: decimal
+		formatString: \$#,0.00
+		lineageTag: 71eb1145-d1d1-4388-a492-04fce83a2346
 		sourceLineageTag: cost_price
 		summarizeBy: sum
 		sourceColumn: cost_price
 
-		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
 	column sale_price
-		dataType: double
-		lineageTag: 3e6290a9-07ba-4965-b741-deb14c3bc29d
+		dataType: decimal
+		formatString: \$#,0.00
+		lineageTag: 71eb1145-d1d1-4388-a492-04fce83a2347
 		sourceLineageTag: sale_price
 		summarizeBy: sum
 		sourceColumn: sale_price
 
-		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
 	column current_stock
 		dataType: int64
 		formatString: 0
-		lineageTag: a0a1c08d-24e0-48a6-993d-f2e12dadd4bf
+		lineageTag: 71eb1145-d1d1-4388-a492-04fce83a2348
 		sourceLineageTag: current_stock
 		summarizeBy: sum
 		sourceColumn: current_stock
 
-		annotation SummarizationSetBy = Automatic
-
 	column _updated_at
 		dataType: dateTime
 		formatString: General Date
-		lineageTag: 2a6e0214-ec37-4b61-8608-aa3ca26af161
+		lineageTag: 71eb1145-d1d1-4388-a492-04fce83a2349
 		sourceLineageTag: _updated_at
 		summarizeBy: none
 		sourceColumn: _updated_at
-
-		annotation SummarizationSetBy = Automatic
 
 	partition dim_products = entity
 		mode: directLake
@@ -60,4 +89,3 @@ table dim_products
 			entityName: dim_products
 			schemaName: dbo
 			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
-

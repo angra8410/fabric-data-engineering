@@ -1,0 +1,51 @@
+table fact_expenses
+	lineageTag: b2c3d4e5-f6a7-8901-bcde-f23456789012
+	sourceLineageTag: [dbo].[fact_expenses]
+
+	measure 'Total Expenses' = SUM(fact_expenses[expense_amount])
+		formatString: $#,##0.00
+		displayFolder: 💸 Expenses & Net Profit
+		lineageTag: exp-001
+
+	measure 'Net Operating Profit' = [Total Revenue] - [Total Expenses]
+		formatString: $#,##0.00
+		displayFolder: 💸 Expenses & Net Profit
+		lineageTag: net-001
+
+	measure 'Net Profit Margin %' = DIVIDE([Net Operating Profit], [Total Revenue], 0)
+		formatString: 0.00%
+		displayFolder: 💸 Expenses & Net Profit
+		lineageTag: netm-001
+
+	measure 'Expense to Revenue Ratio %' = DIVIDE([Total Expenses], [Total Revenue], 0)
+		formatString: 0.00%
+		displayFolder: 💸 Expenses & Net Profit
+		lineageTag: exprat-001
+
+	column expense_id
+		dataType: string
+		sourceColumn: expense_id
+
+	column description
+		dataType: string
+		sourceColumn: description
+
+	column expense_amount
+		dataType: double
+		formatString: $#,##0.00
+		sourceColumn: expense_amount
+
+	column category
+		dataType: string
+		sourceColumn: category
+
+	column expense_date
+		dataType: dateTime
+		formatString: yyyy-MM-dd
+		sourceColumn: expense_date
+
+	partition fact_expenses_directlake = entity
+		mode: directLake
+		entityName: fact_expenses
+		schemaName: dbo
+

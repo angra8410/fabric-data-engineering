@@ -1,0 +1,17 @@
+model Model
+	culture: en-US
+	collation: Latin1_General_100_BIN2_UTF8
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+annotation PBI_ProTooling = ["WebModelingEdit","FabricGitIntegration"]
+
+ref table fact_sales
+ref table fact_expenses
+ref table fact_purchases
+ref table dim_products
+ref table dim_date

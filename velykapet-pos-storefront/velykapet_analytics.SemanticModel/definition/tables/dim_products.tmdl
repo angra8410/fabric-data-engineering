@@ -1,0 +1,75 @@
+table dim_products
+	lineageTag: d4e5f6a7-b8c9-0123-defa-456789012345
+	sourceLineageTag: [dbo].[dim_products]
+
+	measure 'Total Active SKUs' = DISTINCTCOUNT(dim_products[product_id])
+		formatString: #,##0
+		displayFolder: 📦 Inventory
+		lineageTag: sku-001
+
+	measure 'Current Stock Units' = SUM(dim_products[current_stock])
+		formatString: #,##0
+		displayFolder: 📦 Inventory
+		lineageTag: stk-001
+
+	measure 'Inventory Cost Valuation' = SUMX(dim_products, dim_products[current_stock] * dim_products[cost_price])
+		formatString: $#,##0.00
+		displayFolder: 📦 Inventory
+		lineageTag: costval-001
+
+	measure 'Inventory Retail Valuation' = SUMX(dim_products, dim_products[current_stock] * dim_products[sale_price])
+		formatString: $#,##0.00
+		displayFolder: 📦 Inventory
+		lineageTag: val-001
+
+	measure 'Potential Inventory Margin' = [Inventory Retail Valuation] - [Inventory Cost Valuation]
+		formatString: $#,##0.00
+		displayFolder: 📦 Inventory
+		lineageTag: potmargin-001
+
+	measure 'Potential Inventory Margin %' = DIVIDE([Potential Inventory Margin], [Inventory Retail Valuation], 0)
+		formatString: 0.00%
+		displayFolder: 📦 Inventory
+		lineageTag: potmarginpct-001
+
+	measure 'Stock-Out Alert SKUs' = CALCULATE(DISTINCTCOUNT(dim_products[product_id]), dim_products[current_stock] <= 5)
+		formatString: #,##0
+		displayFolder: 📦 Inventory
+		lineageTag: alert-001
+
+	measure 'Overstocked SKUs' = CALCULATE(DISTINCTCOUNT(dim_products[product_id]), dim_products[current_stock] > 100)
+		formatString: #,##0
+		displayFolder: 📦 Inventory
+		lineageTag: overstk-001
+
+	column product_id
+		dataType: string
+		sourceColumn: product_id
+
+	column barcode
+		dataType: string
+		sourceColumn: barcode
+
+	column supplier
+		dataType: string
+		sourceColumn: supplier
+
+	column cost_price
+		dataType: double
+		formatString: $#,##0.00
+		sourceColumn: cost_price
+
+	column sale_price
+		dataType: double
+		formatString: $#,##0.00
+		sourceColumn: sale_price
+
+	column current_stock
+		dataType: int64
+		sourceColumn: current_stock
+
+	partition dim_products_directlake = entity
+		mode: directLake
+		entityName: dim_products
+		schemaName: dbo
+

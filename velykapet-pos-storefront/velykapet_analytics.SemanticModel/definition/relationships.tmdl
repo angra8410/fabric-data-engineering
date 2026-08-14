@@ -1,0 +1,15 @@
+relationship fact_sales_dim_date
+	fromColumn: fact_sales.sale_date
+	toColumn: dim_date.Date
+
+relationship fact_expenses_dim_date
+	fromColumn: fact_expenses.expense_date
+	toColumn: dim_date.Date
+
+relationship fact_purchases_dim_date
+	fromColumn: fact_purchases.purchase_date
+	toColumn: dim_date.Date
+
+relationship fact_sales_dim_products
+	fromColumn: fact_sales.product_name
+	toColumn: dim_products.product_id

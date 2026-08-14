@@ -1,0 +1,59 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.6.0/schema.json",
+  "name": "card_wa_share",
+  "position": {
+    "x": 450,
+    "y": 20,
+    "z": 2000,
+    "width": 380,
+    "height": 110,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Fields": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_sales"
+                    }
+                  },
+                  "Property": "WhatsApp Revenue Share %"
+                }
+              },
+              "queryRef": "fact_sales.WhatsApp Revenue Share %",
+              "nativeVisualMode": "Value"
+            }
+          ]
+        }
+      }
+    },
+    "visualCustomizations": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'WhatsApp Share of Total Revenue %'"
+                }
+              }
+            },
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

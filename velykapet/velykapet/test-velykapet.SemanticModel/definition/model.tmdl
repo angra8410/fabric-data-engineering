@@ -17,4 +17,7 @@ ref table gold_fct_gastos
 ref table gold_fct_ventas
 ref table dim_metodo_pago
 ref table _PL_Orden
+ref table dim_producto
+ref table gold_fct_compras
+ref table gold_fct_inventario
 

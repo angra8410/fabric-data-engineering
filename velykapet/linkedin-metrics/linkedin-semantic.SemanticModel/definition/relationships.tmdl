@@ -14,3 +14,16 @@ relationship dim_demographics_to_dim_date
 	fromColumn: gold_dim_demographics.start_date
 	toColumn: gold_dim_date.date
 
+relationship 87d7961f-593b-70dc-7bc5-644bc999e1ee
+	crossFilteringBehavior: bothDirections
+	fromColumn: gold_bridge_post_hashtags.linkedin_urn
+	toColumn: gold_fact_top_posts_enriched.linkedin_urn
+
+relationship 25968bc8-05d0-7b5b-9dc8-0a691c04f5f2
+	fromColumn: gold_fact_top_posts_enriched.post_publish_date
+	toColumn: gold_dim_date.date
+
+relationship fact_performance_by_format_to_dim_date
+	fromColumn: gold_fact_performance_by_format.snapshot_date
+	toColumn: gold_dim_date.date
+

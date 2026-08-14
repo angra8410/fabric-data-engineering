@@ -4,102 +4,88 @@
   "position": {
     "x": 685.19818706221668,
     "y": 117.01249828320286,
-    "z": 5000,
+    "z": 3000,
     "height": 253.15203955500618,
     "width": 347.66213432220849,
-    "tabOrder": 5000
+    "tabOrder": 3000
   },
   "visual": {
-    "visualType": "lineStackedColumnComboChart",
+    "visualType": "tableEx",
     "query": {
       "queryState": {
-        "Category": {
+        "Values": {
           "projections": [
             {
               "field": {
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "gold_dim_date"
+                      "Entity": "gold_dim_demographics"
                     }
                   },
-                  "Property": "date"
+                  "Property": "demographic_category"
                 }
               },
-              "queryRef": "gold_dim_date.date",
-              "nativeQueryRef": "date",
-              "active": true
-            }
-          ]
-        },
-        "Y": {
-          "projections": [
+              "queryRef": "gold_dim_demographics.demographic_category",
+              "nativeQueryRef": "demog_category",
+              "displayName": "demog_category"
+            },
             {
               "field": {
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "gold_fact_daily_performance"
+                      "Entity": "gold_dim_demographics"
                     }
                   },
-                  "Property": "Total New Followers"
+                  "Property": "Top Value by Category"
                 }
               },
-              "queryRef": "gold_fact_daily_performance.Total New Followers",
-              "nativeQueryRef": "Total New Followers"
-            }
-          ]
-        },
-        "Y2": {
-          "projections": [
+              "queryRef": "gold_dim_demographics.Top Value by Category",
+              "nativeQueryRef": "Top Value by Category"
+            },
             {
               "field": {
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "gold_fact_daily_performance"
+                      "Entity": "gold_dim_demographics"
                     }
                   },
-                  "Property": "Total Impressions"
+                  "Property": "Top Value % by Category"
                 }
               },
-              "queryRef": "gold_fact_daily_performance.Total Impressions",
-              "nativeQueryRef": "Total Impressions"
+              "queryRef": "gold_dim_demographics.Top Value % by Category",
+              "nativeQueryRef": "Top Value % by Cat",
+              "displayName": "Top Value % by Cat"
             }
           ]
         }
       },
       "sortDefinition": {
-        "sort": [
-          {
-            "field": {
-              "Column": {
-                "Expression": {
-                  "SourceRef": {
-                    "Entity": "gold_dim_date"
-                  }
-                },
-                "Property": "date"
-              }
-            },
-            "direction": "Ascending"
-          }
-        ],
         "isDefaultSort": true
       }
     },
     "objects": {
-      "labels": [
+      "columnWidth": [
         {
           "properties": {
-            "show": {
+            "value": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "119.19856153024345D"
                 }
               }
             }
+          },
+          "selector": {
+            "metadata": "gold_dim_demographics.Top Value by Category"
           }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {}
         }
       ]
     },

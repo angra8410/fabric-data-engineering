@@ -1,0 +1,73 @@
+table gold_exercise_prs
+	lineageTag: 352cd613-cc49-4304-b67e-30ab59d3cca5
+	sourceLineageTag: [dbo].[gold_exercise_prs]
+
+	measure 'Total PRs' = COUNTROWS(gold_exercise_prs)
+		formatString: 0
+
+	measure 'Most Recent PR Date' = MAX(gold_exercise_prs[pr_achieved_at])
+		formatString: General Date
+
+	column exercise_name
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 13b5e000-531f-493d-859b-ae8ee6f963bc
+		sourceLineageTag: exercise_name
+		summarizeBy: none
+		sourceColumn: exercise_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column weight
+		dataType: double
+		sourceProviderType: float
+		lineageTag: ec815262-77a7-4219-8e7e-4ac1c1dfd79c
+		sourceLineageTag: weight
+		summarizeBy: sum
+		sourceColumn: weight
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column reps
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: b52b8fd1-9914-4eea-bd9c-4dacebd68f6c
+		sourceLineageTag: reps
+		summarizeBy: sum
+		sourceColumn: reps
+
+		annotation SummarizationSetBy = Automatic
+
+	column pr_achieved_at
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: e6a7039f-9370-4f38-9d40-3ea4dde5b3f4
+		sourceLineageTag: pr_achieved_at
+		summarizeBy: none
+		sourceColumn: pr_achieved_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column workout_part
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: f3032f8c-cb30-4847-a382-1404d7b87081
+		sourceLineageTag: workout_part
+		summarizeBy: none
+		sourceColumn: workout_part
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_exercise_prs = entity
+		mode: directLake
+		source
+			entityName: gold_exercise_prs
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+

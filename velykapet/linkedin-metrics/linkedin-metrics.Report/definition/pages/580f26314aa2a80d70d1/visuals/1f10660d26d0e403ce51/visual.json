@@ -4,13 +4,13 @@
   "position": {
     "x": 176.64386760060432,
     "y": 117.01249828320286,
-    "z": 4000,
+    "z": 2000,
     "height": 253.15203955500618,
     "width": 432.04614750721055,
-    "tabOrder": 4000
+    "tabOrder": 2000
   },
   "visual": {
-    "visualType": "lineStackedColumnComboChart",
+    "visualType": "barChart",
     "query": {
       "queryState": {
         "Category": {
@@ -20,14 +20,14 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "gold_dim_date"
+                      "Entity": "gold_dim_demographics"
                     }
                   },
-                  "Property": "date"
+                  "Property": "demographic_value"
                 }
               },
-              "queryRef": "gold_dim_date.date",
-              "nativeQueryRef": "date",
+              "queryRef": "gold_dim_demographics.demographic_value",
+              "nativeQueryRef": "demographic_value",
               "active": true
             }
           ]
@@ -39,46 +39,14 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "gold_fact_daily_performance"
+                      "Entity": "gold_dim_demographics"
                     }
                   },
-                  "Property": "Total Impressions"
+                  "Property": "Demographics % for Chart"
                 }
               },
-              "queryRef": "gold_fact_daily_performance.Total Impressions",
-              "nativeQueryRef": "Total Impressions"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "gold_fact_daily_performance"
-                    }
-                  },
-                  "Property": "Total New Followers"
-                }
-              },
-              "queryRef": "gold_fact_daily_performance.Total New Followers",
-              "nativeQueryRef": "Total New Followers"
-            }
-          ]
-        },
-        "Y2": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "gold_fact_daily_performance"
-                    }
-                  },
-                  "Property": "Total Engagements"
-                }
-              },
-              "queryRef": "gold_fact_daily_performance.Total Engagements",
-              "nativeQueryRef": "Total Engagements"
+              "queryRef": "gold_dim_demographics.Demographics % for Chart",
+              "nativeQueryRef": "Demographics % for Chart"
             }
           ]
         }
@@ -87,35 +55,22 @@
         "sort": [
           {
             "field": {
-              "Column": {
+              "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "gold_dim_date"
+                    "Entity": "gold_dim_demographics"
                   }
                 },
-                "Property": "date"
+                "Property": "Demographics % for Chart"
               }
             },
-            "direction": "Ascending"
+            "direction": "Descending"
           }
         ],
         "isDefaultSort": true
       }
     },
     "objects": {
-      "lineStyles": [
-        {
-          "properties": {
-            "showMarker": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            }
-          }
-        }
-      ],
       "labels": [
         {
           "properties": {
@@ -137,7 +92,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Daily impressions & engagements'"
+                  "Value": "'Top Values'"
                 }
               }
             },

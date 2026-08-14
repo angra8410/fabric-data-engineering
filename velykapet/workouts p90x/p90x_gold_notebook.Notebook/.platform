@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "p90x_gold_notebook"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "31ba5781-271d-b438-4dac-6dcdbb673088"
+  }
+}

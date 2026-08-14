@@ -850,6 +850,261 @@ display(df_weekly_summary)
 
 # CELL ********************
 
+df_content_fixed = spark.read.table("silver_post_content").withColumn(
+    "linkedin_post_id",
+    F.coalesce(
+        F.col("linkedin_post_id"),
+        F.regexp_extract(F.col("notes"), r"urn:li:ugcPost:(\d+)", 1)
+    )
+)
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# =====================================================================
+# BLOQUE 6. ENRIQUECIMIENTO: gold_fact_top_posts + contenido real
+# =====================================================================
+print("\n[6/7] Generando gold_fact_top_posts_enriched...")
+
+df_top_posts_keyed = spark.read.table("gold_fact_top_posts").withColumn(
+    "linkedin_urn",
+    F.regexp_extract(F.col("post_url"), r"(?:ugcPost|share|activity|document|posts)-([0-9]{15,})", 1)
+)
+
+df_content = (spark.read.table("silver_post_content")
+    .dropDuplicates(["linkedin_post_id"]))
+
+df_enriched = df_top_posts_keyed.join(
+    df_content.select(
+        F.col("linkedin_post_id").alias("linkedin_urn"),
+        F.col("pillar"),
+        F.col("media_format"),
+        F.col("post_title").alias("real_post_title"),
+    ),
+    on="linkedin_urn",
+    how="left"
+).withColumn("gold_load_timestamp", F.current_timestamp())
+
+(df_enriched.write.format("delta").mode("overwrite")
+ .option("overwriteSchema", "true").saveAsTable("gold_fact_top_posts_enriched"))
+print("  ➔ Éxito: 'gold_fact_top_posts_enriched' — métricas reales de LinkedIn + pillar/formato/título reales de la app.")
+
+
+# =====================================================================
+# BLOQUE 7. PUENTE: gold_bridge_post_hashtags (muchos-a-muchos)
+# =====================================================================
+print("\n[7/7] Generando gold_bridge_post_hashtags...")
+
+df_bridge = (spark.read.table("silver_post_hashtags")
+    .join(spark.read.table("silver_post_content").select("post_id", "linkedin_post_id"), on="post_id", how="left")
+    .withColumn("linkedin_urn", F.col("linkedin_post_id").cast("decimal(38,0)").cast("string"))
+    .drop("linkedin_post_id")
+    .withColumn("gold_load_timestamp", F.current_timestamp()))
+
+(df_bridge.write.format("delta").mode("overwrite")
+ .option("overwriteSchema", "true").saveAsTable("gold_bridge_post_hashtags"))
+print("  ➔ Éxito: 'gold_bridge_post_hashtags' lista para el modelo semántico.")
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
+# META }
+
+# CELL ********************
+
+# =====================================================================
+# BLOQUE 6. ENRIQUECIMIENTO: gold_fact_top_posts + contenido real
+# =====================================================================
+print("\n[6/7] Generando gold_fact_top_posts_enriched...")
+
+df_top_posts_keyed = spark.read.table("gold_fact_top_posts").withColumn(
+    "linkedin_urn",
+    F.regexp_extract(F.col("post_url"), r"(?:ugcPost|share|activity|document|posts)-([0-9]{15,})", 1)
+)
+
+# Deterministic dedup: when two rows share a linkedin_post_id, prefer the one
+# with real content populated, then the most recently loaded row as tiebreak.
+# NOTE: this is a best-effort heuristic — verify against the actual duplicate
+# rows if pillar/media_format still look wrong after this runs.
+df_content = (spark.read.table("silver_post_content")
+    .withColumn(
+        "_has_real_content",
+        F.when(
+            F.col("pillar").isNotNull() & (F.col("pillar") != "General") &
+            F.col("media_format").isNotNull() & (F.col("media_format") != "Unknown"),
+            1
+        ).otherwise(0)
+    )
+    .orderBy(F.col("_has_real_content").desc(), F.col("silver_load_timestamp").desc())
+    .dropDuplicates(["linkedin_post_id"])
+    .drop("_has_real_content"))
+
+df_enriched = df_top_posts_keyed.join(
+    df_content.select(
+        F.col("linkedin_post_id").alias("linkedin_urn"),
+        F.col("pillar"),
+        F.col("media_format"),
+        F.col("post_title").alias("real_post_title"),
+    ),
+    on="linkedin_urn",
+    how="left"
+).withColumn("gold_load_timestamp", F.current_timestamp())
+
+(df_enriched.write.format("delta").mode("overwrite")
+ .option("overwriteSchema", "true").saveAsTable("gold_fact_top_posts_enriched"))
+print("  ➔ Éxito: 'gold_fact_top_posts_enriched' — métricas reales de LinkedIn + pillar/formato/título reales de la app.")
+
+
+# =====================================================================
+# BLOQUE 7. PUENTE: gold_bridge_post_hashtags (muchos-a-muchos)
+# =====================================================================
+print("\n[7/7] Generando gold_bridge_post_hashtags...")
+
+df_bridge = (spark.read.table("silver_post_hashtags")
+    .join(spark.read.table("silver_post_content").select("post_id", "linkedin_post_id"), on="post_id", how="left")
+    .withColumn("linkedin_urn", F.col("linkedin_post_id").cast("decimal(38,0)").cast("string"))
+    .drop("linkedin_post_id")
+    .withColumn("gold_load_timestamp", F.current_timestamp()))
+
+(df_bridge.write.format("delta").mode("overwrite")
+ .option("overwriteSchema", "true").saveAsTable("gold_bridge_post_hashtags"))
+print("  ➔ Éxito: 'gold_bridge_post_hashtags' lista para el modelo semántico.")
+
+# =============================================================================
+# BLOQUE 8: gold_fact_performance_by_format
+# -----------------------------------------------------------------------------
+# Rolling-window performance comparison by media_format and by pillar.
+#
+# WHY A ROLLING WINDOW INSTEAD OF WEEKLY BUCKETS:
+#   At ~5-15 posts/week split across 3+ formats and 7 pillars, a hard weekly
+#   reset gives each format-bucket only 1-3 posts some weeks -> the "average"
+#   swings on a single post, not a real signal. Instead, this table recomputes
+#   a rolling WINDOW_DAYS-day window as of every Monday snapshot, which smooths
+#   noise while still showing a moving trend.
+#
+# SAMPLE-SIZE SAFEGUARD:
+#   Every row carries post_count and is_reliable (post_count >= MIN_SAMPLE_SIZE).
+#   Don't trust avg_engagement_rate for a row where is_reliable = False -- just
+#   eyeball the raw posts instead.
+#
+# KNOWN UPSTREAM DATA QUALITY ISSUES (fix these for this table to be useful):
+#   1. media_format is "Unknown" for ~73% of posts (80/109) -- classification
+#      gap, likely in nb_silver_linkedin_labor_transformation. Until fixed,
+#      "Unknown" will dominate the media_format rows here.
+#   2. pillar has a duplicate category: "Microsoft Fabric" vs "Microsoft Fabric,"
+#      (trailing comma). Trim/clean at the source rather than here, so the fix
+#      propagates to every other Gold table that uses pillar too.
+# =============================================================================
+
+from pyspark.sql import functions as F
+
+WINDOW_DAYS = 30          # rolling 30-day / ~4-week window
+SNAPSHOT_INTERVAL_DAYS = 7  # recompute a snapshot every 7 days
+MIN_SAMPLE_SIZE = 8       # below this post_count, treat the rate as directional only
+
+# ---- source ----------------------------------------------------------------
+df_posts = (
+    spark.read.table("gold_fact_top_posts_enriched")
+    .withColumn("post_publish_date", F.to_date("post_publish_date"))
+)
+
+date_bounds = df_posts.agg(
+    F.min("post_publish_date").alias("min_date"),
+    F.max("post_publish_date").alias("max_date"),
+).collect()[0]
+
+min_date = date_bounds["min_date"]
+max_date = date_bounds["max_date"]
+
+# weekly snapshot dates spanning the full post history
+snapshot_dates = spark.sql(
+    f"""
+    SELECT explode(sequence(
+        to_date('{min_date}'),
+        to_date('{max_date}'),
+        interval {SNAPSHOT_INTERVAL_DAYS} day
+    )) AS snapshot_date
+    """
+)
+
+
+def build_rolling_perf(dim_col: str, dim_label: str):
+    """Rolling WINDOW_DAYS-day performance aggregation for one dimension
+    (media_format or pillar), snapshotted every SNAPSHOT_INTERVAL_DAYS days."""
+
+    dims = df_posts.select(F.col(dim_col).alias("dimension_value")).distinct()
+    grid = snapshot_dates.crossJoin(dims)
+
+    joined = grid.join(
+        df_posts,
+        (df_posts[dim_col] == grid["dimension_value"])
+        & (df_posts["post_publish_date"] > F.date_sub(grid["snapshot_date"], WINDOW_DAYS))
+        & (df_posts["post_publish_date"] <= grid["snapshot_date"]),
+        "left",
+    )
+
+    agg = (
+        joined.groupBy("snapshot_date", "dimension_value")
+        .agg(
+            F.count("linkedin_urn").alias("post_count"),
+            F.sum("impressions").alias("total_impressions"),
+            F.sum("engagements").alias("total_engagements"),
+        )
+        .withColumn(
+            "avg_engagement_rate",
+            F.when(
+                F.col("total_impressions") > 0,
+                F.col("total_engagements") / F.col("total_impressions"),
+            ).otherwise(None),
+        )
+        .withColumn("is_reliable", F.col("post_count") >= MIN_SAMPLE_SIZE)
+        .withColumn("dimension_type", F.lit(dim_label))
+        .withColumn("window_days", F.lit(WINDOW_DAYS))
+    )
+    return agg
+
+
+perf_format = build_rolling_perf("media_format", "media_format")
+perf_pillar = build_rolling_perf("pillar", "pillar")
+
+gold_fact_performance_by_format = (
+    perf_format.unionByName(perf_pillar)
+    .select(
+        "snapshot_date",
+        "window_days",
+        "dimension_type",
+        "dimension_value",
+        "post_count",
+        "total_impressions",
+        "total_engagements",
+        "avg_engagement_rate",
+        "is_reliable",
+    )
+    .withColumn("gold_load_timestamp", F.current_timestamp())
+)
+
+(
+    gold_fact_performance_by_format.write.format("delta")
+    .mode("overwrite")
+    .saveAsTable("gold_fact_performance_by_format")
+)
+
+print(
+    f"gold_fact_performance_by_format written: "
+    f"{gold_fact_performance_by_format.count()} rows "
+    f"({min_date} to {max_date}, {WINDOW_DAYS}-day rolling window, "
+    f"snapshotted every {SNAPSHOT_INTERVAL_DAYS} days)"
+)
 
 # METADATA ********************
 

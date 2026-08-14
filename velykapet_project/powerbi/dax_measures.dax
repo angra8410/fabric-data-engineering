@@ -1,0 +1,190 @@
+// ===============================================================================
+// DAX Measures Catalog - Velykapet Omnichannel Semantic Model
+// Lakehouse / SQL Endpoint: lh_velykapet_gold_dev.dbo
+// ===============================================================================
+
+// -------------------------------------------------------------------------------
+// 1. CORE REVENUE & SALES MEASURES
+// -------------------------------------------------------------------------------
+
+[Total Revenue] = 
+SUM(fact_sales[total_item_revenue])
+
+[Total Cost] = 
+SUMX(
+    fact_sales, 
+    fact_sales[quantity] * fact_sales[unit_cost]
+)
+
+[Gross Profit] = 
+[Total Revenue] - [Total Cost]
+
+[Gross Margin %] = 
+DIVIDE([Gross Profit], [Total Revenue], 0)
+
+[Total Units Sold] = 
+SUM(fact_sales[quantity])
+
+[Total Transactions] = 
+DISTINCTCOUNT(fact_sales[sale_id])
+
+[Average Order Value (AOV)] = 
+DIVIDE([Total Revenue], [Total Transactions], 0)
+
+[Average Units Per Order] = 
+DIVIDE([Total Units Sold], [Total Transactions], 0)
+
+[Average Item Price] = 
+DIVIDE([Total Revenue], [Total Units Sold], 0)
+
+
+// -------------------------------------------------------------------------------
+// 2. EXPENSES, PURCHASES & NET PROFITABILITY MEASURES
+// -------------------------------------------------------------------------------
+
+[Total Expenses] = 
+SUM(fact_expenses[expense_amount])
+
+[Total Purchases] = 
+SUM(fact_purchases[purchase_amount])
+
+[Net Operating Profit] = 
+[Gross Profit] - [Total Expenses]
+
+[Net Profit Margin %] = 
+DIVIDE([Net Operating Profit], [Total Revenue], 0)
+
+[Expense to Revenue Ratio %] = 
+DIVIDE([Total Expenses], [Total Revenue], 0)
+
+
+// -------------------------------------------------------------------------------
+// 3. INVENTORY & STOCK VALUATION MEASURES
+// -------------------------------------------------------------------------------
+
+[Total Active SKUs] = 
+DISTINCTCOUNT(dim_products[product_id])
+
+[Current Stock Units] = 
+SUM(dim_products[current_stock])
+
+[Inventory Cost Valuation] = 
+SUMX(
+    dim_products, 
+    dim_products[current_stock] * dim_products[cost_price]
+)
+
+[Inventory Retail Valuation] = 
+SUMX(
+    dim_products, 
+    dim_products[current_stock] * dim_products[sale_price]
+)
+
+[Potential Inventory Margin] = 
+[Inventory Retail Valuation] - [Inventory Cost Valuation]
+
+[Potential Inventory Margin %] = 
+DIVIDE([Potential Inventory Margin], [Inventory Retail Valuation], 0)
+
+[Stock-Out Alert SKUs] = 
+CALCULATE(
+    DISTINCTCOUNT(dim_products[product_id]),
+    dim_products[current_stock] <= 5
+)
+
+[Overstocked SKUs] = 
+CALCULATE(
+    DISTINCTCOUNT(dim_products[product_id]),
+    dim_products[current_stock] > 100
+)
+
+
+// -------------------------------------------------------------------------------
+// 4. OMNICHANNEL & DIGITAL SALES BREAKDOWN
+// -------------------------------------------------------------------------------
+
+[POS Store Revenue] = 
+CALCULATE(
+    [Total Revenue],
+    fact_sales[sale_origin] = "POS"
+)
+
+[POS Revenue Share %] = 
+DIVIDE([POS Store Revenue], [Total Revenue], 0)
+
+[Rappi Revenue] = 
+CALCULATE(
+    [Total Revenue],
+    fact_sales[sale_origin] = "Rappi"
+)
+
+[Rappi Revenue Share %] = 
+DIVIDE([Rappi Revenue], [Total Revenue], 0)
+
+[Web Direct Revenue] = 
+CALCULATE(
+    [Total Revenue],
+    fact_sales[sale_origin] = "Web"
+)
+
+[Web Revenue Share %] = 
+DIVIDE([Web Direct Revenue], [Total Revenue], 0)
+
+[WhatsApp Bot Revenue] = 
+CALCULATE(
+    [Total Revenue],
+    fact_sales[sale_origin] = "WhatsApp"
+)
+
+[WhatsApp Revenue Share %] = 
+DIVIDE([WhatsApp Bot Revenue], [Total Revenue], 0)
+
+
+// -------------------------------------------------------------------------------
+// 5. TIME INTELLIGENCE MEASURES (Requires dim_date)
+// -------------------------------------------------------------------------------
+
+[Revenue MTD] = 
+TOTALMTD([Total Revenue], dim_date[Date])
+
+[Revenue QTD] = 
+TOTALQTD([Total Revenue], dim_date[Date])
+
+[Revenue YTD] = 
+TOTALYTD([Total Revenue], dim_date[Date])
+
+[Gross Profit MTD] = 
+TOTALMTD([Gross Profit], dim_date[Date])
+
+[Gross Profit YTD] = 
+TOTALYTD([Gross Profit], dim_date[Date])
+
+[Revenue Prior Month (PM)] = 
+CALCULATE(
+    [Total Revenue],
+    DATEADD(dim_date[Date], -1, MONTH)
+)
+
+[Revenue MoM Growth $] = 
+[Total Revenue] - [Revenue Prior Month (PM)]
+
+[Revenue MoM Growth %] = 
+DIVIDE([Revenue MoM Growth $], [Revenue Prior Month (PM)], 0)
+
+[Revenue Prior Year (PY)] = 
+CALCULATE(
+    [Total Revenue],
+    SAMEPERIODLASTYEAR(dim_date[Date])
+)
+
+[Revenue YoY Growth %] = 
+DIVIDE([Total Revenue] - [Revenue Prior Year (PY)], [Revenue Prior Year (PY)], 0)
+
+[30-Day Rolling Revenue] = 
+CALCULATE(
+    [Total Revenue],
+    DATESINPERIOD(dim_date[Date], MAX(dim_date[Date]), -30, DAY)
+)
+
+[Daily Average Revenue (30D)] = 
+DIVIDE([30-Day Rolling Revenue], 30, 0)

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/3.3.0/schema.json",
+  "themeCollection": {
+    "baseTheme": {
+      "name": "CY26SU05",
+      "version": "5.67",
+      "type": 2
+    }
+  },
+  "activeSectionName": "228d92912ca07c030c0a"
+}

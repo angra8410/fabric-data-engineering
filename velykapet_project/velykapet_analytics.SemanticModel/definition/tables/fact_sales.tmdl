@@ -1,0 +1,125 @@
+table fact_sales
+	lineageTag: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+	sourceLineageTag: [dbo].[fact_sales]
+
+	measure 'Total Revenue' = SUM(fact_sales[total_item_revenue])
+		formatString: $#,##0.00
+		displayFolder: 📊 Core Revenue & Sales
+		lineageTag: rev-001
+
+	measure 'Total Cost' = SUMX(fact_sales, fact_sales[quantity] * fact_sales[unit_cost])
+		formatString: $#,##0.00
+		displayFolder: 📊 Core Revenue & Sales
+		lineageTag: cost-001
+
+	measure 'Gross Profit' = [Total Revenue] - [Total Cost]
+		formatString: $#,##0.00
+		displayFolder: 📊 Core Revenue & Sales
+		lineageTag: profit-001
+
+	measure 'Gross Margin %' = DIVIDE([Gross Profit], [Total Revenue], 0)
+		formatString: 0.00%
+		displayFolder: 📊 Core Revenue & Sales
+		lineageTag: margin-001
+
+	measure 'Total Units Sold' = SUM(fact_sales[quantity])
+		formatString: #,##0
+		displayFolder: 📊 Core Revenue & Sales
+		lineageTag: units-001
+
+	measure 'Total Transactions' = DISTINCTCOUNT(fact_sales[sale_id])
+		formatString: #,##0
+		displayFolder: 📊 Core Revenue & Sales
+		lineageTag: tx-001
+
+	measure 'Average Order Value (AOV)' = DIVIDE([Total Revenue], [Total Transactions], 0)
+		formatString: $#,##0.00
+		displayFolder: 📊 Core Revenue & Sales
+		lineageTag: aov-001
+
+	measure 'POS Store Revenue' = CALCULATE([Total Revenue], fact_sales[sale_origin] = "POS")
+		formatString: $#,##0.00
+		displayFolder: 🛍️ Omnichannel
+		lineageTag: pos-001
+
+	measure 'Rappi Revenue' = CALCULATE([Total Revenue], fact_sales[sale_origin] = "Rappi")
+		formatString: $#,##0.00
+		displayFolder: 🛍️ Omnichannel
+		lineageTag: rappi-001
+
+	measure 'WhatsApp Bot Revenue' = CALCULATE([Total Revenue], fact_sales[sale_origin] = "WhatsApp")
+		formatString: $#,##0.00
+		displayFolder: 🛍️ Omnichannel
+		lineageTag: wa-001
+
+	column item_id
+		dataType: string
+		sourceColumn: item_id
+		lineageTag: col-item-id
+
+	column sale_id
+		dataType: string
+		sourceColumn: sale_id
+		lineageTag: col-sale-id
+
+	column sale_origin
+		dataType: string
+		sourceColumn: sale_origin
+		lineageTag: col-sale-origin
+
+	column payment_method
+		dataType: string
+		sourceColumn: payment_method
+		lineageTag: col-pm
+
+	column sale_timestamp
+		dataType: dateTime
+		formatString: yyyy-MM-dd HH:mm:ss
+		sourceColumn: sale_timestamp
+		lineageTag: col-st
+
+	column sale_date
+		dataType: dateTime
+		formatString: yyyy-MM-dd
+		sourceColumn: sale_date
+		lineageTag: col-sd
+
+	column product_name
+		dataType: string
+		sourceColumn: product_name
+		lineageTag: col-pn
+
+	column quantity
+		dataType: int64
+		sourceColumn: quantity
+		lineageTag: col-qty
+
+	column unit_cost
+		dataType: double
+		formatString: $#,##0.00
+		sourceColumn: unit_cost
+		lineageTag: col-uc
+
+	column unit_price
+		dataType: double
+		formatString: $#,##0.00
+		sourceColumn: unit_price
+		lineageTag: col-up
+
+	column total_item_revenue
+		dataType: double
+		formatString: $#,##0.00
+		sourceColumn: total_item_revenue
+		lineageTag: col-tir
+
+	column item_gross_profit
+		dataType: double
+		formatString: $#,##0.00
+		sourceColumn: item_gross_profit
+		lineageTag: col-igp
+
+	partition fact_sales_directlake = entity
+		mode: directLake
+		entityName: fact_sales
+		schemaName: dbo
+

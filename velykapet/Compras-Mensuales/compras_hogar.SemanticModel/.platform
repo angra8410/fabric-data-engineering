@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "compras_hogar"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "64cd9198-7d9d-9ec0-4bce-bbba76b9621d"
+  }
+}

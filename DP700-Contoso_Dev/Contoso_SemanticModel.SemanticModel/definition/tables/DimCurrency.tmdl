@@ -1,0 +1,78 @@
+table DimCurrency
+	lineageTag: 0e15577e-6050-467f-a151-470fe2028c01
+	sourceLineageTag: [dbo].[DimCurrency]
+
+	column CurrencyKey
+		dataType: int64
+		formatString: 0
+		lineageTag: b20470ad-68d4-4a3d-8708-e2b123664f98
+		sourceLineageTag: CurrencyKey
+		summarizeBy: none
+		sourceColumn: CurrencyKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column CurrencyLabel
+		dataType: string
+		lineageTag: 608d7320-cd61-475b-a2d4-31e928fb2918
+		sourceLineageTag: CurrencyLabel
+		summarizeBy: none
+		sourceColumn: CurrencyLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column CurrencyName
+		dataType: string
+		lineageTag: 337c8cd5-9aca-4d86-9b14-b0314b341ffc
+		sourceLineageTag: CurrencyName
+		summarizeBy: none
+		sourceColumn: CurrencyName
+
+		annotation SummarizationSetBy = Automatic
+
+	column CurrencyDescription
+		dataType: string
+		lineageTag: 45edcd68-4556-4b96-9441-328d488f3c18
+		sourceLineageTag: CurrencyDescription
+		summarizeBy: none
+		sourceColumn: CurrencyDescription
+
+		annotation SummarizationSetBy = Automatic
+
+	column ETLLoadID
+		dataType: int64
+		formatString: 0
+		lineageTag: e67d5533-3c79-438e-8fad-3a681e9cba88
+		sourceLineageTag: ETLLoadID
+		summarizeBy: count
+		sourceColumn: ETLLoadID
+
+		annotation SummarizationSetBy = Automatic
+
+	column LoadDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 75e31c4c-2991-40b5-ad53-72fdec1c94f2
+		sourceLineageTag: LoadDate
+		summarizeBy: none
+		sourceColumn: LoadDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column UpdateDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 117e7daf-fa70-4596-9eb3-2c880c0a17f4
+		sourceLineageTag: UpdateDate
+		summarizeBy: none
+		sourceColumn: UpdateDate
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimCurrency = entity
+		mode: directLake
+		source
+			entityName: DimCurrency
+			schemaName: dbo
+			expressionSource: 'DirectLake - Contoso_Fabric_LH'
+

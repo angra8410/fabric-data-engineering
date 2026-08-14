@@ -1,0 +1,67 @@
+{
+  "properties": {
+    "jobMode": "Batch",
+    "source": {
+      "type": "SqlServerTable",
+      "connectionSettings": {
+        "type": "SqlServer",
+        "typeProperties": {
+          "database": "AdventureWorks2022"
+        },
+        "externalReferences": {
+          "connection": "fbbf5fa3-da0d-4d01-9e01-3bac960c08f4"
+        }
+      }
+    },
+    "destination": {
+      "type": "LakehouseTable",
+      "connectionSettings": {
+        "type": "Lakehouse",
+        "typeProperties": {
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "artifactId": "dc5993d8-530b-822e-42d0-fd21cd23cf30",
+          "rootFolder": "Tables"
+        }
+      }
+    },
+    "policy": {
+      "timeout": "0.12:00:00",
+      "retry": 0
+    }
+  },
+  "activities": [
+    {
+      "id": "d4fca534-1c10-4052-9807-c8e22872a1cf",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "Production",
+            "table": "Document"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "Production",
+            "table": "Document"
+          },
+          "applyVOrder": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,172 @@
+table FactInventory
+	lineageTag: 295bce05-cbe5-458f-9c19-6ef3195e1bfa
+	sourceLineageTag: [dbo].[FactInventory]
+
+	column InventoryKey
+		dataType: int64
+		formatString: 0
+		lineageTag: b23325c0-41b2-4cdc-a69e-2ca90c956be0
+		sourceLineageTag: InventoryKey
+		summarizeBy: none
+		sourceColumn: InventoryKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column DateKey
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 450d23c7-d233-4d52-9105-79cde3780eed
+		sourceLineageTag: DateKey
+		summarizeBy: none
+		sourceColumn: DateKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column StoreKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 031c8b76-503d-4d22-9692-92a1a07d96af
+		sourceLineageTag: StoreKey
+		summarizeBy: none
+		sourceColumn: StoreKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductKey
+		dataType: int64
+		formatString: 0
+		lineageTag: b7739014-ff02-42b2-9596-ed7d00131cca
+		sourceLineageTag: ProductKey
+		summarizeBy: count
+		sourceColumn: ProductKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column CurrencyKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 47cceac0-b835-4471-b0c6-768bf0f03d00
+		sourceLineageTag: CurrencyKey
+		summarizeBy: none
+		sourceColumn: CurrencyKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column OnHandQuantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 6a919537-b0fc-43d2-8ddc-196f600a20fc
+		sourceLineageTag: OnHandQuantity
+		summarizeBy: sum
+		sourceColumn: OnHandQuantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column OnOrderQuantity
+		dataType: int64
+		formatString: 0
+		lineageTag: a2712a3d-5b78-4523-a0c8-b75cd2040424
+		sourceLineageTag: OnOrderQuantity
+		summarizeBy: sum
+		sourceColumn: OnOrderQuantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column SafetyStockQuantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 3e34fc22-732f-41d1-a1c7-55f93e21a074
+		sourceLineageTag: SafetyStockQuantity
+		summarizeBy: sum
+		sourceColumn: SafetyStockQuantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column UnitCost
+		dataType: double
+		lineageTag: ff8fe4d9-38c2-47c3-8d65-e3f6171cbc80
+		sourceLineageTag: UnitCost
+		summarizeBy: sum
+		sourceColumn: UnitCost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DaysInStock
+		dataType: int64
+		formatString: 0
+		lineageTag: a03d1ff5-51dd-4aaa-becf-28bdec1cdbe8
+		sourceLineageTag: DaysInStock
+		summarizeBy: sum
+		sourceColumn: DaysInStock
+
+		annotation SummarizationSetBy = Automatic
+
+	column MinDayInStock
+		dataType: int64
+		formatString: 0
+		lineageTag: 2ed86a5a-cd3b-44ba-af7e-933ff7e3ec0b
+		sourceLineageTag: MinDayInStock
+		summarizeBy: sum
+		sourceColumn: MinDayInStock
+
+		annotation SummarizationSetBy = Automatic
+
+	column MaxDayInStock
+		dataType: int64
+		formatString: 0
+		lineageTag: f46deaa8-8bc8-4c66-8d8b-9410b545ccc3
+		sourceLineageTag: MaxDayInStock
+		summarizeBy: sum
+		sourceColumn: MaxDayInStock
+
+		annotation SummarizationSetBy = Automatic
+
+	column Aging
+		dataType: int64
+		formatString: 0
+		lineageTag: 84851f49-f033-4a8a-9f97-4c931ea66464
+		sourceLineageTag: Aging
+		summarizeBy: sum
+		sourceColumn: Aging
+
+		annotation SummarizationSetBy = Automatic
+
+	column ETLLoadID
+		dataType: int64
+		formatString: 0
+		lineageTag: 3a664883-4e88-4722-8c87-0d6d4aa98931
+		sourceLineageTag: ETLLoadID
+		summarizeBy: count
+		sourceColumn: ETLLoadID
+
+		annotation SummarizationSetBy = Automatic
+
+	column LoadDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 5f081d7b-da10-42f8-8e3e-e26c98e56510
+		sourceLineageTag: LoadDate
+		summarizeBy: none
+		sourceColumn: LoadDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column UpdateDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 79eb95a4-7c1d-49cc-9185-65f2c17e123b
+		sourceLineageTag: UpdateDate
+		summarizeBy: none
+		sourceColumn: UpdateDate
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FactInventory = entity
+		mode: directLake
+		source
+			entityName: FactInventory
+			schemaName: dbo
+			expressionSource: 'DirectLake - Contoso_Fabric_LH'
+

@@ -1,0 +1,133 @@
+table DimAccount
+	lineageTag: 73f4d137-20c4-47dd-8fa5-dc6b25a9ced9
+	sourceLineageTag: [dbo].[DimAccount]
+
+	column AccountKey
+		dataType: int64
+		formatString: 0
+		lineageTag: ad61f763-cec1-4c3a-9956-7213f6250095
+		sourceLineageTag: AccountKey
+		summarizeBy: none
+		sourceColumn: AccountKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ParentAccountKey
+		dataType: int64
+		formatString: 0
+		lineageTag: e9eed8d3-fa62-4eab-84d7-b0a041b9a753
+		sourceLineageTag: ParentAccountKey
+		summarizeBy: none
+		sourceColumn: ParentAccountKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column AccountLabel
+		dataType: string
+		lineageTag: 7ffcccb2-19eb-429c-94af-655b7e1fa99c
+		sourceLineageTag: AccountLabel
+		summarizeBy: none
+		sourceColumn: AccountLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column AccountName
+		dataType: string
+		lineageTag: 0dcf32fd-6fd5-4a4f-8597-eaa46ee43ed9
+		sourceLineageTag: AccountName
+		summarizeBy: none
+		sourceColumn: AccountName
+
+		annotation SummarizationSetBy = Automatic
+
+	column AccountDescription
+		dataType: string
+		lineageTag: b3313218-74e3-4edc-af37-6601ae6ea796
+		sourceLineageTag: AccountDescription
+		summarizeBy: none
+		sourceColumn: AccountDescription
+
+		annotation SummarizationSetBy = Automatic
+
+	column AccountType
+		dataType: string
+		lineageTag: 867406e9-0fd3-499c-927c-894d6e977ecd
+		sourceLineageTag: AccountType
+		summarizeBy: none
+		sourceColumn: AccountType
+
+		annotation SummarizationSetBy = Automatic
+
+	column Operator
+		dataType: string
+		lineageTag: 839b518c-9c1c-48e8-9df1-a914aaa64542
+		sourceLineageTag: Operator
+		summarizeBy: none
+		sourceColumn: Operator
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomMembers
+		dataType: string
+		lineageTag: 7db5f127-b5ae-4730-b42d-55f813fd52e6
+		sourceLineageTag: CustomMembers
+		summarizeBy: none
+		sourceColumn: CustomMembers
+
+		annotation SummarizationSetBy = Automatic
+
+	column ValueType
+		dataType: string
+		lineageTag: d90c11cc-7b83-4388-8521-6932c346634f
+		sourceLineageTag: ValueType
+		summarizeBy: none
+		sourceColumn: ValueType
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomMemberOptions
+		dataType: string
+		lineageTag: d273fa07-ec12-485f-bfd8-7c8b3ef7ab8f
+		sourceLineageTag: CustomMemberOptions
+		summarizeBy: none
+		sourceColumn: CustomMemberOptions
+
+		annotation SummarizationSetBy = Automatic
+
+	column ETLLoadID
+		dataType: int64
+		formatString: 0
+		lineageTag: 4b7de452-dc7f-4603-8d5c-c99b0817f94f
+		sourceLineageTag: ETLLoadID
+		summarizeBy: none
+		sourceColumn: ETLLoadID
+
+		annotation SummarizationSetBy = Automatic
+
+	column LoadDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: a4897ece-c314-4f43-bd7a-59298ff58b60
+		sourceLineageTag: LoadDate
+		summarizeBy: none
+		sourceColumn: LoadDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column UpdateDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 0d7968d4-8537-4522-a83f-c71e7786e70d
+		sourceLineageTag: UpdateDate
+		summarizeBy: none
+		sourceColumn: UpdateDate
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimAccount = entity
+		mode: directLake
+		source
+			entityName: DimAccount
+			schemaName: dbo
+			expressionSource: 'DirectLake - Contoso_Fabric_LH'
+

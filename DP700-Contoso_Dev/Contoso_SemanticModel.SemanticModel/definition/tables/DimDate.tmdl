@@ -1,0 +1,284 @@
+table DimDate
+	lineageTag: 184079f9-1550-4ede-9369-e6649ca64612
+	sourceLineageTag: [dbo].[DimDate]
+
+	column Datekey
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 2145d1ca-7d23-405f-bbfd-964b33c070c5
+		sourceLineageTag: Datekey
+		summarizeBy: none
+		sourceColumn: Datekey
+
+		annotation SummarizationSetBy = Automatic
+
+	column FullDateLabel
+		dataType: string
+		lineageTag: 9de7bc6b-c823-4c24-bf81-cc38db70937f
+		sourceLineageTag: FullDateLabel
+		summarizeBy: none
+		sourceColumn: FullDateLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column DateDescription
+		dataType: string
+		lineageTag: 355a8811-6684-4d03-bab8-a30217607adb
+		sourceLineageTag: DateDescription
+		summarizeBy: none
+		sourceColumn: DateDescription
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarYear
+		dataType: int64
+		formatString: 0
+		lineageTag: a93233dd-bfc8-434e-9e21-6a8901d91a4b
+		sourceLineageTag: CalendarYear
+		summarizeBy: sum
+		sourceColumn: CalendarYear
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarYearLabel
+		dataType: string
+		lineageTag: 6df15f47-5526-4921-a4e6-6a3168305146
+		sourceLineageTag: CalendarYearLabel
+		summarizeBy: none
+		sourceColumn: CalendarYearLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarHalfYear
+		dataType: int64
+		formatString: 0
+		lineageTag: cd8a9fb7-c2e1-49c4-a0d1-34c1747f18f1
+		sourceLineageTag: CalendarHalfYear
+		summarizeBy: sum
+		sourceColumn: CalendarHalfYear
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarHalfYearLabel
+		dataType: string
+		lineageTag: db2692e0-3b63-41de-8eeb-89a77e1d18e7
+		sourceLineageTag: CalendarHalfYearLabel
+		summarizeBy: none
+		sourceColumn: CalendarHalfYearLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarQuarter
+		dataType: int64
+		formatString: 0
+		lineageTag: 914d08f0-3b5e-49d1-a404-b841226f7b10
+		sourceLineageTag: CalendarQuarter
+		summarizeBy: sum
+		sourceColumn: CalendarQuarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarQuarterLabel
+		dataType: string
+		lineageTag: f7fd8cd2-a942-4ad2-91ad-cebab1b4ee78
+		sourceLineageTag: CalendarQuarterLabel
+		summarizeBy: none
+		sourceColumn: CalendarQuarterLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarMonth
+		dataType: int64
+		formatString: 0
+		lineageTag: 183ae508-9326-4513-9feb-0ef04c8c5bd7
+		sourceLineageTag: CalendarMonth
+		summarizeBy: sum
+		sourceColumn: CalendarMonth
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarMonthLabel
+		dataType: string
+		lineageTag: d152a2b8-e1c8-4e42-a017-49ce07874625
+		sourceLineageTag: CalendarMonthLabel
+		summarizeBy: none
+		sourceColumn: CalendarMonthLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarWeek
+		dataType: int64
+		formatString: 0
+		lineageTag: af066d6e-ff86-4d07-b202-d475e6b1fb5e
+		sourceLineageTag: CalendarWeek
+		summarizeBy: sum
+		sourceColumn: CalendarWeek
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarWeekLabel
+		dataType: string
+		lineageTag: 54bb2114-530d-428c-b75c-68e0f86d18c6
+		sourceLineageTag: CalendarWeekLabel
+		summarizeBy: none
+		sourceColumn: CalendarWeekLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarDayOfWeek
+		dataType: int64
+		formatString: 0
+		lineageTag: cbef1a4e-6751-4757-a5c9-268f08ff7843
+		sourceLineageTag: CalendarDayOfWeek
+		summarizeBy: sum
+		sourceColumn: CalendarDayOfWeek
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarDayOfWeekLabel
+		dataType: string
+		lineageTag: 2bc75a16-96e7-4a10-8b47-d19713c61bea
+		sourceLineageTag: CalendarDayOfWeekLabel
+		summarizeBy: none
+		sourceColumn: CalendarDayOfWeekLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column FiscalYear
+		dataType: int64
+		formatString: 0
+		lineageTag: 4478b33f-2ca4-4513-ab3f-6e3662043c25
+		sourceLineageTag: FiscalYear
+		summarizeBy: sum
+		sourceColumn: FiscalYear
+
+		annotation SummarizationSetBy = Automatic
+
+	column FiscalYearLabel
+		dataType: string
+		lineageTag: c5e5a727-14aa-473a-9b17-b7ae5fdcee55
+		sourceLineageTag: FiscalYearLabel
+		summarizeBy: none
+		sourceColumn: FiscalYearLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column FiscalHalfYear
+		dataType: int64
+		formatString: 0
+		lineageTag: cad165bf-d3e5-4e54-9426-276c1b9d027b
+		sourceLineageTag: FiscalHalfYear
+		summarizeBy: sum
+		sourceColumn: FiscalHalfYear
+
+		annotation SummarizationSetBy = Automatic
+
+	column FiscalHalfYearLabel
+		dataType: string
+		lineageTag: b7fe6657-7832-4ed5-b7e5-881c84a2d848
+		sourceLineageTag: FiscalHalfYearLabel
+		summarizeBy: none
+		sourceColumn: FiscalHalfYearLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column FiscalQuarter
+		dataType: int64
+		formatString: 0
+		lineageTag: 4b171586-498d-436a-b85c-f3930b8abec5
+		sourceLineageTag: FiscalQuarter
+		summarizeBy: sum
+		sourceColumn: FiscalQuarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column FiscalQuarterLabel
+		dataType: string
+		lineageTag: 28da3ce6-fcc5-41ab-9cc9-d0b6ed9e5eb6
+		sourceLineageTag: FiscalQuarterLabel
+		summarizeBy: none
+		sourceColumn: FiscalQuarterLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column FiscalMonth
+		dataType: int64
+		formatString: 0
+		lineageTag: 4e4f1e1c-efdc-4014-a584-cf13bc98415d
+		sourceLineageTag: FiscalMonth
+		summarizeBy: sum
+		sourceColumn: FiscalMonth
+
+		annotation SummarizationSetBy = Automatic
+
+	column FiscalMonthLabel
+		dataType: string
+		lineageTag: 76ed20fc-27d4-479b-9ce0-d0785e5a8356
+		sourceLineageTag: FiscalMonthLabel
+		summarizeBy: none
+		sourceColumn: FiscalMonthLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsWorkDay
+		dataType: string
+		lineageTag: ab5893d2-1c4a-4261-9f56-174c4a129b3c
+		sourceLineageTag: IsWorkDay
+		summarizeBy: none
+		sourceColumn: IsWorkDay
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsHoliday
+		dataType: int64
+		formatString: 0
+		lineageTag: bfc051f0-fc36-43e5-a6e5-fa88ae5a5274
+		sourceLineageTag: IsHoliday
+		summarizeBy: sum
+		sourceColumn: IsHoliday
+
+		annotation SummarizationSetBy = Automatic
+
+	column HolidayName
+		dataType: string
+		lineageTag: a10482e3-6515-4a18-b552-64be19fc086a
+		sourceLineageTag: HolidayName
+		summarizeBy: none
+		sourceColumn: HolidayName
+
+		annotation SummarizationSetBy = Automatic
+
+	column EuropeSeason
+		dataType: string
+		lineageTag: a0b585a9-39aa-4e9f-b89e-6990cde28b4d
+		sourceLineageTag: EuropeSeason
+		summarizeBy: none
+		sourceColumn: EuropeSeason
+
+		annotation SummarizationSetBy = Automatic
+
+	column NorthAmericaSeason
+		dataType: string
+		lineageTag: b951c140-f871-4085-88b3-7a1204310b12
+		sourceLineageTag: NorthAmericaSeason
+		summarizeBy: none
+		sourceColumn: NorthAmericaSeason
+
+		annotation SummarizationSetBy = Automatic
+
+	column AsiaSeason
+		dataType: string
+		lineageTag: 6fa7dc54-a943-4c47-860d-cefb9ebbb480
+		sourceLineageTag: AsiaSeason
+		summarizeBy: none
+		sourceColumn: AsiaSeason
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimDate = entity
+		mode: directLake
+		source
+			entityName: DimDate
+			schemaName: dbo
+			expressionSource: 'DirectLake - Contoso_Fabric_LH'
+

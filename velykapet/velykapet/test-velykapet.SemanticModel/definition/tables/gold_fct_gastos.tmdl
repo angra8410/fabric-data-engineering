@@ -1,0 +1,90 @@
+table gold_fct_gastos
+	lineageTag: ded5493a-b741-48e9-90d3-b02fcb1bbf36
+	sourceLineageTag: [dbo].[gold_fct_gastos]
+
+	/// Total de gastos operativos registrados
+	measure 'Total Gastos' = SUM(gold_fct_gastos[monto_cop])
+		formatString: #,##0" COP"
+		displayFolder: 📦 Costos & Gastos
+		lineageTag: c1affece-98f3-4d29-b5dd-9afb0f760375
+
+	/// Número de registros de gastos
+	measure '# Gastos' = COUNTROWS(gold_fct_gastos)
+		formatString: #,##0
+		displayFolder: 📦 Costos & Gastos
+		lineageTag: 611c84a3-5365-41e2-9f3f-eed2d616b20d
+
+	column fecha_key
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 02f78825-f1d0-42f3-984e-8500e81f31e9
+		sourceLineageTag: fecha_key
+		summarizeBy: none
+		sourceColumn: fecha_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column metodo_pago_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 8ef1699e-15cd-42be-9c23-c0606da20e3f
+		sourceLineageTag: metodo_pago_sk
+		summarizeBy: none
+		sourceColumn: metodo_pago_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column descripcion
+		dataType: string
+		lineageTag: 417768f6-45f3-4267-b7ae-0ae43f2fb825
+		sourceLineageTag: descripcion
+		summarizeBy: none
+		sourceColumn: descripcion
+
+		annotation SummarizationSetBy = Automatic
+
+	column categoria_gasto
+		dataType: string
+		lineageTag: cbb416f7-3fbd-4b6e-83bb-87a4f7a47cbe
+		sourceLineageTag: categoria_gasto
+		summarizeBy: none
+		sourceColumn: categoria_gasto
+
+		annotation SummarizationSetBy = Automatic
+
+	column monto_cop
+		dataType: double
+		lineageTag: 8c3db3f6-e4a9-4c29-ad6a-17b37aa9dc76
+		sourceLineageTag: monto_cop
+		summarizeBy: sum
+		sourceColumn: monto_cop
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column notas
+		dataType: string
+		lineageTag: 1c79ba3c-385b-444c-a3ab-c95dd57564b4
+		sourceLineageTag: notas
+		summarizeBy: none
+		sourceColumn: notas
+
+		annotation SummarizationSetBy = Automatic
+
+	column origen_pestaña
+		dataType: string
+		lineageTag: c9e46263-54c1-4c44-b22a-3bc81cb59cc9
+		sourceLineageTag: origen_pestaña
+		summarizeBy: none
+		sourceColumn: origen_pestaña
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_fct_gastos = entity
+		mode: directLake
+		source
+			entityName: gold_fct_gastos
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_gold_velykapet'
+

@@ -22,6 +22,9 @@ proyectos-data-engineering/
 ├── portfolio_app/                 <-- Multi-Project Streamlit Hub (Navegador de Proyectos)
 │   ├── app.py                     <-- Código fuente del Hub con selector de proyectos
 │   └── requirements.txt
+├── velykapet-pos-storefront/      <-- Entrypoint para Streamlit Community Cloud
+│   ├── app.py
+│   └── requirements.txt
 ├── velykapet_project/             <-- Proyecto 1: Velykapet Retail Data Engineering Platform
 │   ├── config/
 │   ├── notebooks/                 <-- PySpark (Bronze, Silver, Gold y Master)
@@ -29,6 +32,12 @@ proyectos-data-engineering/
 │   └── README.md
 ├── dane_employment_project/       <-- Proyecto 2: DANE Colombia Labor Market Analytics (2004-2026)
 │   └── README.md
+├── AdventureWorks/                <-- Ítems e infraestructura de Fabric previas
+├── DP700-Contoso_Dev/             <-- Workspace items de Microsoft Fabric
+├── Personal_Projects/             <-- Proyectos personales y laboratorios
+├── PluralSightTrainingDevops/      <-- Entornos DevOps y laboratorios
+├── velykapet/                     <-- Workspace items adicionales (Linkedin metrics, P90x)
+├── ws_data_eng_dev/               <-- Workspaces adicionales de ingeniería
 ├── create_project.py             <-- CLI Scaffolding Tool para nuevos proyectos
 └── README.md                     <-- Documentación Principal
 ```

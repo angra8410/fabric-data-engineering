@@ -1,0 +1,135 @@
+table gold_fact_top_posts
+	lineageTag: 3e73f0ff-802e-4d87-bf93-3963dcadaf59
+	sourceLineageTag: [dbo].[gold_fact_top_posts]
+
+	/// Total impressions from top posts
+	measure 'Top Post Impressions' = SUM(gold_fact_top_posts[impressions])
+		formatString: #,0
+		displayFolder: Top Posts
+		lineageTag: b9794c85-327f-407b-bcd3-af74dd9918ae
+
+	/// Total engagements from top posts
+	measure 'Top Post Engagements' = SUM(gold_fact_top_posts[engagements])
+		formatString: #,0
+		displayFolder: Top Posts
+		lineageTag: e0543f22-128e-4bcb-91df-17f294433ba5
+
+	/// Average engagement rate across top posts
+	measure 'Avg Post Engagement Rate' = AVERAGE(gold_fact_top_posts[post_engagement_rate])
+		formatString: 0.00%
+		displayFolder: Top Posts
+		lineageTag: 0403bc46-dbdd-4dcb-ad04-624b52cd7425
+
+	/// Highest engagement rate among all posts
+	measure 'Best Post Engagement Rate' = MAXX(VALUES(gold_fact_top_posts[post_title]), AVERAGE(gold_fact_top_posts[post_engagement_rate]))
+		formatString: 0.00%
+		displayFolder: Top Posts
+		lineageTag: 41ddc1c4-1eeb-4f7d-8550-162a70338d74
+
+	/// Number of distinct posts
+	measure 'Post Count' = DISTINCTCOUNT(gold_fact_top_posts[post_url])
+		formatString: #,0
+		displayFolder: Top Posts
+		lineageTag: 4ca170bc-490c-45d4-a09c-583a4058954f
+
+	column post_publish_date
+		dataType: dateTime
+		formatString: Short Date
+		sourceProviderType: date
+		lineageTag: 6fde8f20-03ad-4573-8a0e-d1c8fdf7f0d3
+		sourceLineageTag: post_publish_date
+		summarizeBy: none
+		sourceColumn: post_publish_date
+
+		changedProperty = DataType
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column post_title
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 187fe575-f684-4668-8675-e4dbab7db21e
+		sourceLineageTag: post_title
+		summarizeBy: none
+		sourceColumn: post_title
+
+		annotation SummarizationSetBy = Automatic
+
+	column post_url
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: ba64d24b-90fc-4a04-8cd1-007dec48bc5a
+		sourceLineageTag: post_url
+		summarizeBy: none
+		sourceColumn: post_url
+
+		annotation SummarizationSetBy = Automatic
+
+	column impressions
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 9fcce419-e162-463a-9efd-3e4c3e95f028
+		sourceLineageTag: impressions
+		summarizeBy: sum
+		sourceColumn: impressions
+
+		annotation SummarizationSetBy = Automatic
+
+	column engagements
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 6b589c1c-ad6d-4346-a715-37b2213991d3
+		sourceLineageTag: engagements
+		summarizeBy: sum
+		sourceColumn: engagements
+
+		annotation SummarizationSetBy = Automatic
+
+	column post_engagement_rate
+		dataType: double
+		sourceProviderType: float
+		lineageTag: d6b11791-37c1-4d10-9187-91008bb3fa91
+		sourceLineageTag: post_engagement_rate
+		summarizeBy: sum
+		sourceColumn: post_engagement_rate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column gold_load_timestamp
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: ffc1c4d3-924f-49b6-86e2-040f2d9874b9
+		sourceLineageTag: gold_load_timestamp
+		summarizeBy: none
+		sourceColumn: gold_load_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column engagement_tier
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: e5474858-071a-4764-8d47-d98c9ed6b427
+		sourceLineageTag: engagement_tier
+		summarizeBy: none
+		sourceColumn: engagement_tier
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_fact_top_posts = entity
+		mode: directLake
+		source
+			entityName: gold_fact_top_posts
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+

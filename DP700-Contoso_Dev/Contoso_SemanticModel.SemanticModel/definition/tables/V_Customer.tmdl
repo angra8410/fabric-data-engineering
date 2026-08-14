@@ -1,0 +1,119 @@
+table V_Customer
+	lineageTag: 78ebdf38-18c2-46a0-b2da-6e8c29e75592
+	sourceLineageTag: [dbo].[V_Customer]
+
+	column CustomerKey
+		dataType: int64
+		formatString: 0
+		lineageTag: eaa33eca-fd91-40a3-8cfd-ed5f565ced74
+		sourceLineageTag: CustomerKey
+		summarizeBy: count
+		sourceColumn: CustomerKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Age
+		dataType: int64
+		formatString: 0
+		lineageTag: 84b0a422-1dc5-491a-a3b8-759b1d353bfe
+		sourceLineageTag: Age
+		summarizeBy: sum
+		sourceColumn: Age
+
+		annotation SummarizationSetBy = Automatic
+
+	column MaritalStatus
+		dataType: string
+		lineageTag: e2fcc99a-369f-459c-81b7-5f27a52b6cca
+		sourceLineageTag: MaritalStatus
+		summarizeBy: none
+		sourceColumn: MaritalStatus
+
+		annotation SummarizationSetBy = Automatic
+
+	column Gender
+		dataType: string
+		lineageTag: 34a7277e-0e7a-41f7-a789-9791217dd5a0
+		sourceLineageTag: Gender
+		summarizeBy: none
+		sourceColumn: Gender
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearlyIncome
+		dataType: double
+		lineageTag: 87d555d1-ed8f-4981-9df4-ff7f64c171d4
+		sourceLineageTag: YearlyIncome
+		summarizeBy: sum
+		sourceColumn: YearlyIncome
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TotalChildren
+		dataType: int64
+		formatString: 0
+		lineageTag: a5721345-6f72-4c93-af6a-6a7ed3de5139
+		sourceLineageTag: TotalChildren
+		summarizeBy: sum
+		sourceColumn: TotalChildren
+
+		annotation SummarizationSetBy = Automatic
+
+	column NumberChildrenAtHome
+		dataType: int64
+		formatString: 0
+		lineageTag: 1c29bc90-67ba-4383-97a3-cd7bdb8d246a
+		sourceLineageTag: NumberChildrenAtHome
+		summarizeBy: sum
+		sourceColumn: NumberChildrenAtHome
+
+		annotation SummarizationSetBy = Automatic
+
+	column Education
+		dataType: string
+		lineageTag: 69fe4379-e60e-41a3-8e17-b5247435c2d8
+		sourceLineageTag: Education
+		summarizeBy: none
+		sourceColumn: Education
+
+		annotation SummarizationSetBy = Automatic
+
+	column HouseOwnerFlag
+		dataType: string
+		lineageTag: c8442981-e49e-4531-95c5-11fb2cf1eb4e
+		sourceLineageTag: HouseOwnerFlag
+		summarizeBy: none
+		sourceColumn: HouseOwnerFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column NumberCarsOwned
+		dataType: int64
+		formatString: 0
+		lineageTag: 32800a2e-7801-4c93-b170-0e79df0ff973
+		sourceLineageTag: NumberCarsOwned
+		summarizeBy: sum
+		sourceColumn: NumberCarsOwned
+
+		annotation SummarizationSetBy = Automatic
+
+	column Consumption
+		dataType: double
+		lineageTag: 9d7e6456-0f62-4e67-81c2-5ce676be4d30
+		sourceLineageTag: Consumption
+		summarizeBy: sum
+		sourceColumn: Consumption
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition V_Customer = entity
+		mode: directLake
+		source
+			entityName: V_Customer
+			schemaName: dbo
+			expressionSource: 'DirectLake - Contoso_Fabric_LH'
+

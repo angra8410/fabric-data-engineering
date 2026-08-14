@@ -1,0 +1,176 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "04026eafd884cc1c0d32",
+  "position": {
+    "x": 176.64386760060432,
+    "y": 117.01249828320286,
+    "z": 4000,
+    "height": 253.15203955500618,
+    "width": 432.04614750721055,
+    "tabOrder": 4000
+  },
+  "visual": {
+    "visualType": "lineStackedColumnComboChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "gold_dim_date"
+                    }
+                  },
+                  "Property": "date"
+                }
+              },
+              "queryRef": "gold_dim_date.date",
+              "nativeQueryRef": "date",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "gold_fact_daily_performance"
+                    }
+                  },
+                  "Property": "Total Impressions"
+                }
+              },
+              "queryRef": "gold_fact_daily_performance.Total Impressions",
+              "nativeQueryRef": "Total Impressions"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "gold_fact_daily_performance"
+                    }
+                  },
+                  "Property": "Total New Followers"
+                }
+              },
+              "queryRef": "gold_fact_daily_performance.Total New Followers",
+              "nativeQueryRef": "Total New Followers"
+            }
+          ]
+        },
+        "Y2": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "gold_fact_daily_performance"
+                    }
+                  },
+                  "Property": "Total Engagements"
+                }
+              },
+              "queryRef": "gold_fact_daily_performance.Total Engagements",
+              "nativeQueryRef": "Total Engagements"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "gold_dim_date"
+                  }
+                },
+                "Property": "date"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "lineStyles": [
+        {
+          "properties": {
+            "showMarker": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "labels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Daily impressions & engagements'"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            },
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'center'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

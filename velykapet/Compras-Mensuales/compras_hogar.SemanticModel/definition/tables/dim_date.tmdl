@@ -1,0 +1,88 @@
+table dim_date
+	lineageTag: 3c94eb2b-0151-4db5-b754-d4e841ecef0b
+	sourceLineageTag: [dbo].[dim_date]
+
+	column DateKey
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 99ca89aa-9c52-47e1-bae9-cac1f0c70e76
+		sourceLineageTag: DateKey
+		summarizeBy: none
+		sourceColumn: DateKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 41296b4d-2064-42f0-af96-798203d0652b
+		sourceLineageTag: Year
+		summarizeBy: sum
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month
+		dataType: int64
+		formatString: 0
+		lineageTag: 2fc780f2-5214-4e26-8c40-dd41500a22fe
+		sourceLineageTag: Month
+		summarizeBy: sum
+		sourceColumn: Month
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month_Name
+		dataType: string
+		lineageTag: 1370e558-d90a-47ac-9561-abbb9e5dd63c
+		sourceLineageTag: Month_Name
+		summarizeBy: none
+		sourceColumn: Month_Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter
+		dataType: int64
+		formatString: 0
+		lineageTag: c37de2f5-0411-4284-9ab1-17b0b6e1a671
+		sourceLineageTag: Quarter
+		summarizeBy: sum
+		sourceColumn: Quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column Day_of_Week
+		dataType: int64
+		formatString: 0
+		lineageTag: 982a8f17-9f31-46fe-9057-e39ff551e524
+		sourceLineageTag: Day_of_Week
+		summarizeBy: sum
+		sourceColumn: Day_of_Week
+
+		annotation SummarizationSetBy = Automatic
+
+	column Day_Name
+		dataType: string
+		lineageTag: ecaad4f6-1aae-4afa-8a9a-3a623ce92b5f
+		sourceLineageTag: Day_Name
+		summarizeBy: none
+		sourceColumn: Day_Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Day_Type
+		dataType: string
+		lineageTag: bc726ece-ce7f-484a-9f43-621880c34eec
+		sourceLineageTag: Day_Type
+		summarizeBy: none
+		sourceColumn: Day_Type
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_date = entity
+		mode: directLake
+		source
+			entityName: dim_date
+			schemaName: dbo
+			expressionSource: 'DirectLake - compras_bronze_lh'
+

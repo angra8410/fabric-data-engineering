@@ -200,7 +200,7 @@ def build_dim_dates():
     spark.sql(f"""
         CREATE OR REPLACE TABLE {GOLD_SCHEMA}.dim_dates AS
         SELECT 
-            CAST(datum AS TIMESTAMP) AS date_key,
+            to_date(datum) AS date_key,
             YEAR(datum) AS year,
             QUARTER(datum) AS quarter,
             MONTH(datum) AS month_number,

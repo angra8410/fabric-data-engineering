@@ -103,6 +103,40 @@ table fact_sales
 
 		annotation SummarizationSetBy = Automatic
 
+	column sale_timestamp
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: b1fad6d7-f1ba-4848-a60e-b16937eeaea6
+		sourceLineageTag: sale_timestamp
+		summarizeBy: none
+		sourceColumn: sale_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column unit_cost
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: d428749a-ae3e-47c7-8084-4c2a0308c13b
+		sourceLineageTag: unit_cost
+		summarizeBy: sum
+		sourceColumn: unit_cost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column unit_price
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: c552a325-2b81-4c05-86df-f27e256ab8b1
+		sourceLineageTag: unit_price
+		summarizeBy: sum
+		sourceColumn: unit_price
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
 	partition fact_sales = entity
 		mode: directLake
 		source

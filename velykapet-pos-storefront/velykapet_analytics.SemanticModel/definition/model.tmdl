@@ -16,4 +16,5 @@ ref table fact_expenses
 ref table dim_products
 ref table fact_sales
 ref table fact_purchases
+ref table dim_dates
 

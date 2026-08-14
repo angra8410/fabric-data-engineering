@@ -54,6 +54,24 @@ table dim_products
 
 		annotation SummarizationSetBy = Automatic
 
+	column barcode
+		dataType: string
+		lineageTag: 9504def9-4090-46bc-9efe-abc4fb963eb4
+		sourceLineageTag: barcode
+		summarizeBy: none
+		sourceColumn: barcode
+
+		annotation SummarizationSetBy = Automatic
+
+	column supplier
+		dataType: string
+		lineageTag: 048863a9-07b2-47fb-b299-29096f061c22
+		sourceLineageTag: supplier
+		summarizeBy: none
+		sourceColumn: supplier
+
+		annotation SummarizationSetBy = Automatic
+
 	partition dim_products = entity
 		mode: directLake
 		source

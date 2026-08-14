@@ -128,7 +128,8 @@ def build_dim_products():
     cols = df_prod.columns
 
     df_dim = df_prod.select(
-        col("id").alias("product_id"),
+        col("id").cast("string").alias("product_id"),
+        col("name").alias("product_name") if "name" in cols else col("id").cast("string").alias("product_name"),
         col("barcode") if "barcode" in cols else lit("N/A").alias("barcode"),
         col("supplier") if "supplier" in cols else lit("N/A").alias("supplier"),
         col("cost_price").cast("double").alias("cost_price") if "cost_price" in cols else lit(0.0).alias("cost_price"),

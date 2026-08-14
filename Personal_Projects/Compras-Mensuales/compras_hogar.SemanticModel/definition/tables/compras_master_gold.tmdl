@@ -1,0 +1,83 @@
+table compras_master_gold
+	lineageTag: 4fa25e96-72ed-4b3f-a4bf-8bc60ebafe0c
+	sourceLineageTag: [dbo].[compras_master_gold]
+
+	column Item_Name_Clean
+		dataType: string
+		lineageTag: 75fd082d-83a7-41d3-b336-48ff3bfe7d52
+		sourceLineageTag: Item_Name_Clean
+		summarizeBy: none
+		sourceColumn: Item_Name_Clean
+
+		annotation SummarizationSetBy = Automatic
+
+	column Price_COP
+		dataType: int64
+		formatString: 0
+		lineageTag: 891c10fd-9b02-4a80-82b7-08669b3d5312
+		sourceLineageTag: Price_COP
+		summarizeBy: sum
+		sourceColumn: Price_COP
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quantity_Clean
+		dataType: int64
+		formatString: 0
+		lineageTag: ceaec394-7a47-41a2-819c-eb44396e5aaa
+		sourceLineageTag: Quantity_Clean
+		summarizeBy: sum
+		sourceColumn: Quantity_Clean
+
+		annotation SummarizationSetBy = Automatic
+
+	column Transaction_Date
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 92220d12-2bc2-46a3-bd13-c833af6cdf90
+		sourceLineageTag: Transaction_Date
+		summarizeBy: none
+		sourceColumn: Transaction_Date
+
+		changedProperty = DataType
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Status_Clean
+		dataType: string
+		lineageTag: 30d1e5cb-0be2-41f9-84ae-793aaad6cc22
+		sourceLineageTag: Status_Clean
+		summarizeBy: none
+		sourceColumn: Status_Clean
+
+		annotation SummarizationSetBy = Automatic
+
+	column Store
+		dataType: string
+		lineageTag: 68f13cac-cbae-4a92-9a3a-8b378f8a245f
+		sourceLineageTag: Store
+		summarizeBy: none
+		sourceColumn: Store
+
+		annotation SummarizationSetBy = Automatic
+
+	column Origen_Dato
+		dataType: string
+		lineageTag: 2e5b2158-4c46-4a93-99b3-8237521a38e1
+		sourceLineageTag: Origen_Dato
+		summarizeBy: none
+		sourceColumn: Origen_Dato
+
+		annotation SummarizationSetBy = Automatic
+
+	partition compras_master_gold = entity
+		mode: directLake
+		source
+			entityName: compras_master_gold
+			schemaName: dbo
+			expressionSource: 'DirectLake - compras_bronze_lh'
+

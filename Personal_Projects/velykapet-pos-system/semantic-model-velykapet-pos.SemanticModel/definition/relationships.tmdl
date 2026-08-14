@@ -1,0 +1,42 @@
+relationship fact_sales_to_dim_dates
+	fromColumn: fact_sales.date_key
+	toColumn: dim_dates.date_key
+
+relationship fact_sale_items_to_dim_dates
+	fromColumn: fact_sale_items.date_key
+	toColumn: dim_dates.date_key
+
+relationship fact_purchases_to_dim_dates
+	fromColumn: fact_purchases.date_key
+	toColumn: dim_dates.date_key
+
+relationship fact_expenses_to_dim_dates
+	fromColumn: fact_expenses.date_key
+	toColumn: dim_dates.date_key
+
+relationship fact_devolution_items_to_dim_dates
+	fromColumn: fact_devolution_items.date_key
+	toColumn: dim_dates.date_key
+
+relationship fact_sale_items_to_dim_products
+	fromColumn: fact_sale_items.barcode
+	toColumn: dim_products.barcode
+
+relationship fact_purchases_to_dim_products
+	fromColumn: fact_purchases.barcode
+	toColumn: dim_products.barcode
+
+relationship fact_devolution_items_to_dim_products
+	fromColumn: fact_devolution_items.barcode
+	toColumn: dim_products.barcode
+
+relationship fact_sale_items_to_fact_sales
+	isActive: false
+	fromColumn: fact_sale_items.sale_id
+	toColumn: fact_sales.sale_id
+
+relationship fact_devolution_items_to_fact_sale_items
+	isActive: false
+	fromColumn: fact_devolution_items.sale_item_id
+	toColumn: fact_sale_items.sale_item_id
+

@@ -1,0 +1,47 @@
+table dim_productos
+	lineageTag: 2b86af55-aafc-4317-b9c1-c52e845ad7b3
+	sourceLineageTag: [dbo].[dim_productos]
+
+	column Item_Name_Clean
+		dataType: string
+		lineageTag: 761f2263-d832-40e4-b805-ec8fe2a37688
+		sourceLineageTag: Item_Name_Clean
+		summarizeBy: none
+		sourceColumn: Item_Name_Clean
+
+		annotation SummarizationSetBy = Automatic
+
+	column Item_Name_Standard
+		dataType: string
+		lineageTag: b749196c-ffed-4e16-875e-233a0bf7c0b1
+		sourceLineageTag: Item_Name_Standard
+		summarizeBy: none
+		sourceColumn: Item_Name_Standard
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		dataType: string
+		lineageTag: a46400cc-c028-4d49-ad44-f70f10efa504
+		sourceLineageTag: Category
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column EAN_Reference
+		dataType: string
+		lineageTag: fe113973-1ce8-4e9d-b165-b1f1cd3a93b6
+		sourceLineageTag: EAN_Reference
+		summarizeBy: none
+		sourceColumn: EAN_Reference
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_productos = entity
+		mode: directLake
+		source
+			entityName: dim_productos
+			schemaName: dbo
+			expressionSource: 'DirectLake - compras_bronze_lh'
+

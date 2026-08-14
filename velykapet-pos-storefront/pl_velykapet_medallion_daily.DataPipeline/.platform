@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "pl_velykapet_medallion_daily"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "87a8df51-cfd3-b60f-416c-b84a0e11558a"
+  }
+}

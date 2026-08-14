@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "p90x_semantic_model"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "dedef0da-e41f-a265-4900-b32bf081df7a"
+  }
+}

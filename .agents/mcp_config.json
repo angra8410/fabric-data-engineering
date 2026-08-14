@@ -4,9 +4,11 @@
             "command": "npx",
             "args": [
                 "-y",
-                "@microsoft/fabric-mcp"
+                "@microsoft/fabric-mcp",
+                "server",
+                "start"
             ],
             "disabled": false
         }
     }
-}
+}

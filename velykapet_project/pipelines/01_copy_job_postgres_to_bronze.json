@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/copyJob/1.0.0/schema.json",
+  "displayName": "CopyJob_Postgres_To_Bronze",
+  "properties": {
+    "jobMode": "Batch",
+    "source": {
+      "type": "PostgreSqlTable",
+      "connectionSettings": {
+        "type": "PostgreSql"
+      }
+    },
+    "destination": {
+      "type": "LakehouseTable",
+      "connectionSettings": {
+        "type": "Lakehouse",
+        "targetLakehouse": "lh_velykapet_bronze_dev",
+        "targetSchema": "public",
+        "rootFolder": "Tables"
+      }
+    }
+  },
+  "tables": [
+    "whatsapp_order_items",
+    "v_product_stock",
+    "sale_items",
+    "purchases",
+    "devolutions",
+    "products",
+    "whatsapp_orders",
+    "sales",
+    "customer_last_search",
+    "devolution_items",
+    "processed_whatsapp_messages",
+    "expenses",
+    "demand_backlog",
+    "master_catalog",
+    "whatsapp_contacts",
+    "customer_cart"
+  ]
+}

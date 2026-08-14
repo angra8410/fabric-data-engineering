@@ -1,0 +1,26 @@
+{
+  "name": "pl_velykapet_medallion_daily",
+  "displayName": "pl_velykapet_medallion_daily",
+  "workspaceId": "b5af9286-d297-491a-a1bf-5ea0b186665d",
+  "description": "Master Orchestration Pipeline: Ingest Bronze -> Silver Transformation (with 0-initialized WhatsApp tables) -> Gold Data Warehouse Reporting",
+  "properties": {
+    "activities": [
+      {
+        "name": "Master_Medallion_ETL",
+        "type": "TridentNotebook",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 2,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "notebookId": "df08761b-e981-44c3-81e5-93e6b3df71ec",
+          "workspaceId": "b5af9286-d297-491a-a1bf-5ea0b186665d"
+        }
+      }
+    ]
+  }
+}

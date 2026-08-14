@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_bronze_p90x_ingestion"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "6b7bc0f4-499a-975f-4a0b-caa94585a2fe"
+  }
+}

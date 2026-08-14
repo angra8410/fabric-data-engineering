@@ -1,0 +1,360 @@
+table gold_fct_inventario
+	lineageTag: 4ac79ee6-93da-4478-a339-849dfe0a5da8
+	sourceLineageTag: [dbo].[gold_fct_inventario]
+
+	/// Inventario final en unidades, calculado en origen como stock_inicial + entradas - salidas
+	measure 'Inventario Final (Unidades)' = SUM(gold_fct_inventario[stock_actual])
+		formatString: #,##0
+		displayFolder: 📦 Inventario
+
+	/// Valor monetario del inventario final
+	measure 'Inventario Final (Valor)' = SUM(gold_fct_inventario[valor_total_final])
+		formatString: #,##0" COP"
+		displayFolder: 📦 Inventario
+
+	/// Stock inicial total antes de movimientos
+	measure 'Stock Inicial Total' = SUM(gold_fct_inventario[stock_inicial])
+		formatString: #,##0
+		displayFolder: 📦 Inventario
+
+	/// Total de unidades que entraron a inventario
+	measure 'Entradas Totales' = SUM(gold_fct_inventario[entradas])
+		formatString: #,##0
+		displayFolder: 📦 Inventario
+
+	/// Total de unidades que salieron de inventario
+	measure 'Salidas Totales' = SUM(gold_fct_inventario[salidas])
+		formatString: #,##0
+		displayFolder: 📦 Inventario
+
+	/// Costo total de las entradas de inventario
+	measure 'Costo Total Entradas' = SUM(gold_fct_inventario[costo_total_entradas])
+		formatString: #,##0" COP"
+		displayFolder: 📦 Inventario
+
+	/// Margen promedio de los productos en inventario
+	measure 'Margen Promedio Inventario' = AVERAGE(gold_fct_inventario[margen])
+		formatString: #,##0.00
+		displayFolder: 📦 Inventario
+
+	/// Número de productos con stock actual negativo (alerta de datos)
+	measure '# Productos con Stock Negativo' = CALCULATE(DISTINCTCOUNT(gold_fct_inventario[id_interno]), gold_fct_inventario[stock_actual] < 0)
+		formatString: #,##0
+		displayFolder: 📦 Inventario
+
+	/// Número de filas donde stock_actual no coincide con stock_inicial + entradas - salidas
+	measure '# Inconsistencias de Stock' = CALCULATE(COUNTROWS(gold_fct_inventario), gold_fct_inventario[stock_consistente] = FALSE())
+		formatString: #,##0
+		displayFolder: 📦 Inventario
+
+	/// Porcentaje de filas de inventario cuyo saldo es consistente con el cálculo esperado
+	measure '% Stock Consistente' = DIVIDE(CALCULATE(COUNTROWS(gold_fct_inventario), gold_fct_inventario[stock_consistente] = TRUE()), COUNTROWS(gold_fct_inventario))
+		formatString: 0.0%
+		displayFolder: 📦 Inventario
+
+	/// Diferencia entre unidades compradas y unidades registradas como entrada en el inventario. Debería ser cercana a 0 si todo se registra correctamente.
+	measure 'Compras vs Entradas (Diferencia)' = [Unidades Compradas] - [Entradas Totales]
+		formatString: #,##0
+		displayFolder: 🔄 Reconciliación
+
+	/// Porcentaje de unidades compradas que ya quedaron reflejadas como entrada en el inventario
+	measure '% Compras Reflejadas en Inventario' = DIVIDE([Entradas Totales], [Unidades Compradas])
+		formatString: 0.0%
+		displayFolder: 🔄 Reconciliación
+
+	/// Unidades compradas que aún no se han registrado como entrada en el inventario (nunca negativo)
+	measure 'Compras Pendientes de Registrar' = MAX(0, [Unidades Compradas] - [Entradas Totales])
+		formatString: #,##0
+		displayFolder: 🔄 Reconciliación
+
+	/// Diferencia entre el costo total de compras y el costo total de entradas registrado en inventario
+	measure 'Diferencia Costo Compras vs Entradas' = [Total Compras] - [Costo Total Entradas]
+		formatString: #,##0" COP"
+		displayFolder: 🔄 Reconciliación
+
+	/// Inventario final proyectado si se registraran todas las compras pendientes como entrada
+	measure 'Inventario Proyectado (con Compras Pendientes)' = [Inventario Final (Unidades)] + [Compras Pendientes de Registrar]
+		formatString: #,##0
+		displayFolder: 🔄 Reconciliación
+
+	/// Rotación aproximada de inventario: salidas respecto al inventario final disponible
+	measure 'Rotación de Inventario (aprox)' = DIVIDE([Salidas Totales], [Inventario Final (Unidades)])
+		formatString: 0.00
+		displayFolder: 🔄 Reconciliación
+
+	column fecha_key
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 1bf06caa-ce28-4fde-9904-d329d9bb2d89
+		sourceLineageTag: fecha_key
+		summarizeBy: none
+		sourceColumn: fecha_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column producto_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: e92d58fe-6715-4ed3-bd3b-d559229527bc
+		sourceLineageTag: producto_sk
+		summarizeBy: sum
+		sourceColumn: producto_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_interno
+		dataType: string
+		lineageTag: 771ae21d-0ae6-4025-b3cf-dbcc47044150
+		sourceLineageTag: id_interno
+		summarizeBy: none
+		sourceColumn: id_interno
+
+		annotation SummarizationSetBy = Automatic
+
+	column proveedor
+		dataType: string
+		lineageTag: 97b70232-48f0-4a18-b173-d94da606f671
+		sourceLineageTag: proveedor
+		summarizeBy: none
+		sourceColumn: proveedor
+
+		annotation SummarizationSetBy = Automatic
+
+	column concepto
+		dataType: string
+		lineageTag: 3fd541b8-b382-4272-b3b0-239de99f266a
+		sourceLineageTag: concepto
+		summarizeBy: none
+		sourceColumn: concepto
+
+		annotation SummarizationSetBy = Automatic
+
+	column stock_inicial
+		dataType: double
+		lineageTag: c50fe3bf-50a0-42c6-b19a-80d845919b96
+		sourceLineageTag: stock_inicial
+		summarizeBy: sum
+		sourceColumn: stock_inicial
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column entradas
+		dataType: double
+		lineageTag: 51395f25-e87f-4eb5-a2e3-e0b9aa854945
+		sourceLineageTag: entradas
+		summarizeBy: sum
+		sourceColumn: entradas
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column salidas
+		dataType: double
+		lineageTag: ad74931d-ca55-44ec-b02f-4f3b7ba2bc4d
+		sourceLineageTag: salidas
+		summarizeBy: sum
+		sourceColumn: salidas
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column stock_actual
+		dataType: double
+		lineageTag: 4e787bf0-2f33-45d2-a9d5-51e59b92cfe9
+		sourceLineageTag: stock_actual
+		summarizeBy: sum
+		sourceColumn: stock_actual
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column stock_consistente
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 8a7b2e5e-94ef-4e76-a67c-130b5a3a11f5
+		sourceLineageTag: stock_consistente
+		summarizeBy: none
+		sourceColumn: stock_consistente
+
+		annotation SummarizationSetBy = Automatic
+
+	column costo_unitario
+		dataType: double
+		lineageTag: 09efd07e-e5a5-4131-9e85-fba84a579030
+		sourceLineageTag: costo_unitario
+		summarizeBy: sum
+		sourceColumn: costo_unitario
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column costo_total_entradas
+		dataType: double
+		lineageTag: 1ce51af4-b8a5-4d6e-bd1f-83b6953ed5e5
+		sourceLineageTag: costo_total_entradas
+		summarizeBy: sum
+		sourceColumn: costo_total_entradas
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column valor_total_final
+		dataType: double
+		lineageTag: c6a198b9-54c5-4bb8-966b-2deea5574a48
+		sourceLineageTag: valor_total_final
+		summarizeBy: sum
+		sourceColumn: valor_total_final
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column margen
+		dataType: double
+		lineageTag: 7add15e2-c048-46c3-a357-7a7ffddf5169
+		sourceLineageTag: margen
+		summarizeBy: sum
+		sourceColumn: margen
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column precio_venta
+		dataType: double
+		lineageTag: 9f72ade9-9602-4eba-bfc5-d13d3d4a64fb
+		sourceLineageTag: precio_venta
+		summarizeBy: sum
+		sourceColumn: precio_venta
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column precio_final_venta
+		dataType: double
+		lineageTag: 9ce9642b-baae-4016-962a-63ba5356c591
+		sourceLineageTag: precio_final_venta
+		summarizeBy: sum
+		sourceColumn: precio_final_venta
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column precio_venta_navidad
+		dataType: double
+		lineageTag: 17863e0b-0212-4089-a7c2-b26b2e0daaaf
+		sourceLineageTag: precio_venta_navidad
+		summarizeBy: sum
+		sourceColumn: precio_venta_navidad
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column venta_total_salida
+		dataType: double
+		lineageTag: 957e795a-394f-41cc-9ec7-c8f12d1e2380
+		sourceLineageTag: venta_total_salida
+		summarizeBy: sum
+		sourceColumn: venta_total_salida
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column venta_proyectada
+		dataType: double
+		lineageTag: cc664863-8f8a-4aac-bbd6-07d828987f45
+		sourceLineageTag: venta_proyectada
+		summarizeBy: sum
+		sourceColumn: venta_proyectada
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ganancia_unitaria_real
+		dataType: double
+		lineageTag: bec05f2c-dd50-4485-97ae-81da46b8796d
+		sourceLineageTag: ganancia_unitaria_real
+		summarizeBy: sum
+		sourceColumn: ganancia_unitaria_real
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column lote
+		dataType: string
+		lineageTag: d6675230-4162-429b-a5b5-7ebdac43919c
+		sourceLineageTag: lote
+		summarizeBy: none
+		sourceColumn: lote
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_fabricacion
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: a185cf4b-d801-4250-b800-f91e6fec8d18
+		sourceLineageTag: fecha_fabricacion
+		summarizeBy: none
+		sourceColumn: fecha_fabricacion
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_expiracion
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f7e1acbc-01d7-46c7-8823-c742d11a7e1d
+		sourceLineageTag: fecha_expiracion
+		summarizeBy: none
+		sourceColumn: fecha_expiracion
+
+		annotation SummarizationSetBy = Automatic
+
+	column vendido_rappi
+		dataType: string
+		lineageTag: 22da331b-e8b0-4868-88d2-a4bdc06a13a9
+		sourceLineageTag: vendido_rappi
+		summarizeBy: none
+		sourceColumn: vendido_rappi
+
+		annotation SummarizationSetBy = Automatic
+
+	column precio_rappi
+		dataType: double
+		lineageTag: de52881d-e60c-44a9-9982-06cf67f95bf4
+		sourceLineageTag: precio_rappi
+		summarizeBy: sum
+		sourceColumn: precio_rappi
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column origen_pestaña
+		dataType: string
+		lineageTag: 2df4c809-674a-4a4d-a1ca-364896554367
+		sourceLineageTag: origen_pestaña
+		summarizeBy: none
+		sourceColumn: origen_pestaña
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_fct_inventario = entity
+		mode: directLake
+		source
+			entityName: gold_fct_inventario
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_gold_velykapet'
+

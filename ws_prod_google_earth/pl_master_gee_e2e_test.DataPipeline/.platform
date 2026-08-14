@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "pl_master_gee_e2e_test"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "e132e7f5-2348-bebe-49b0-3686e8bf6226"
+  }
+}

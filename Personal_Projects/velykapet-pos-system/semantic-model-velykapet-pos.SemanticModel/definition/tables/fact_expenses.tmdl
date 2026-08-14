@@ -1,0 +1,99 @@
+table fact_expenses
+	lineageTag: 9355ea9b-f185-43a5-947a-4fbfd51ae735
+	sourceLineageTag: [dbo].[fact_expenses]
+
+	measure 'Total Expenses' = SUM(fact_expenses[amount])
+		formatString: \$#,0.00
+		displayFolder: Expenses
+		lineageTag: fc44472a-c4b7-4f21-9c9c-22034e5987f1
+
+	measure 'Expense Count' = COUNTROWS(fact_expenses)
+		formatString: #,0
+		displayFolder: Expenses
+		lineageTag: 2b501467-8126-4e8f-b3dc-9c0621030f8b
+
+	column expense_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 9ef4b2b4-ab3c-499d-a972-84c0a210c54d
+		sourceLineageTag: expense_id
+		summarizeBy: sum
+		sourceColumn: expense_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_key
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 419cb331-96ff-4587-b326-34993ed66186
+		sourceLineageTag: date_key
+		summarizeBy: none
+		sourceColumn: date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column expense_timestamp
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f3b520a0-1682-4f28-94e3-2b54d157cbe3
+		sourceLineageTag: expense_timestamp
+		summarizeBy: none
+		sourceColumn: expense_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column description
+		dataType: string
+		lineageTag: f575e1bb-cc11-414b-bca4-f0378da24ef2
+		sourceLineageTag: description
+		summarizeBy: none
+		sourceColumn: description
+
+		annotation SummarizationSetBy = Automatic
+
+	column amount
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: ce4eec4e-cdc4-4ae4-842f-98cd13816959
+		sourceLineageTag: amount
+		summarizeBy: sum
+		sourceColumn: amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column payment_method
+		dataType: string
+		lineageTag: 1b5eaa81-0fe1-44c9-bc19-9e94d3b4757c
+		sourceLineageTag: payment_method
+		summarizeBy: none
+		sourceColumn: payment_method
+
+		annotation SummarizationSetBy = Automatic
+
+	column notes
+		dataType: string
+		lineageTag: b7eea64b-beee-43ae-9636-c9a7c350b932
+		sourceLineageTag: notes
+		summarizeBy: none
+		sourceColumn: notes
+
+		annotation SummarizationSetBy = Automatic
+
+	column expense_category
+		dataType: string
+		lineageTag: ad232364-6698-42e6-988a-3d0ca46f4b91
+		sourceLineageTag: expense_category
+		summarizeBy: none
+		sourceColumn: expense_category
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_expenses = entity
+		mode: directLake
+		source
+			entityName: fact_expenses
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
+

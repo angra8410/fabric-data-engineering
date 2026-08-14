@@ -1,0 +1,123 @@
+table fact_deforestacion
+	lineageTag: 7c9b7f53-b948-45ce-9cf1-3b754d41372e
+	sourceLineageTag: [dbo].[fact_deforestacion]
+
+	/// Total deforested hectares in the selected context
+	measure 'Total Hectáreas Deforestadas' = SUM(fact_deforestacion[hectareas_deforestadas])
+		formatString: #,##0.00
+		displayFolder: 📊 Core Metrics
+		lineageTag: c318eddb-7719-4adf-98dd-da348c7bb689
+
+	/// Number of distinct departments with deforestation
+	measure '# Departamentos Afectados' = DISTINCTCOUNT(fact_deforestacion[id_divipola])
+		formatString: #,##0
+		displayFolder: 📊 Core Metrics
+		lineageTag: bcaf6693-3b39-44f0-b593-1516d60cbba5
+
+	/// Number of distinct years with data
+	measure 'Años con Datos' = DISTINCTCOUNT(fact_deforestacion[id_anio])
+		formatString: #,##0
+		displayFolder: 📊 Core Metrics
+		lineageTag: 6dfb721e-6408-4739-92ce-3e48a9e71fa7
+
+	/// Average annual deforestation in hectares
+	measure 'Promedio Anual Hectáreas' = DIVIDE([Total Hectáreas Deforestadas], [Años con Datos])
+		formatString: #,##0.00
+		displayFolder: 📊 Core Metrics
+		lineageTag: b9e8abda-d7fd-47ed-a557-7f7c8901d092
+
+	/// Absolute change in deforested hectares vs prior year
+	measure 'Variación Año Anterior (Ha)' =
+			VAR CurrentYear = MAX(fact_deforestacion[id_anio])
+			VAR CurrentValue = [Total Hectáreas Deforestadas]
+			VAR PriorValue = CALCULATE([Total Hectáreas Deforestadas], fact_deforestacion[id_anio] = CurrentYear - 1)
+			RETURN CurrentValue - PriorValue
+		formatString: +#,##0.00;-#,##0.00;0.00
+		displayFolder: 📈 Time Intelligence
+		lineageTag: d4e2e99b-4b46-4fa0-8f73-088f1c0a6aaa
+
+	/// Percentage change in deforestation vs prior year
+	measure 'Variación Año Anterior (%)' =
+			VAR CurrentYear = MAX(fact_deforestacion[id_anio])
+			VAR CurrentValue = [Total Hectáreas Deforestadas]
+			VAR PriorValue = CALCULATE([Total Hectáreas Deforestadas], fact_deforestacion[id_anio] = CurrentYear - 1)
+			RETURN DIVIDE(CurrentValue - PriorValue, PriorValue)
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 📈 Time Intelligence
+		lineageTag: ae82b0fc-6b81-4d8b-bbfb-63821b05699d
+
+	/// Cumulative deforested hectares from the first year to the current year
+	measure 'Hectáreas Acumuladas' = CALCULATE([Total Hectáreas Deforestadas], FILTER(ALL(fact_deforestacion[id_anio]), fact_deforestacion[id_anio] <= MAX(fact_deforestacion[id_anio])))
+		formatString: #,##0.00
+		displayFolder: 📈 Time Intelligence
+		lineageTag: f5c631f3-7871-4383-8204-38597267bddc
+
+	/// Share of deforestation relative to national total
+	measure '% del Total Nacional' = DIVIDE([Total Hectáreas Deforestadas], CALCULATE([Total Hectáreas Deforestadas], ALL(dim_divipola)))
+		formatString: 0.00%
+		displayFolder: 🗺️ Geographic
+		lineageTag: d6d49104-5258-4c3a-a70c-cc0cac608fb5
+
+	/// Ranking of department by total deforested hectares (1 = most affected)
+	measure 'Rank Departamento' = IF(HASONEVALUE(dim_divipola[nombre_departamento]), RANKX(ALL(dim_divipola[nombre_departamento]), [Total Hectáreas Deforestadas],,DESC,Dense))
+		formatString: #,##0
+		displayFolder: 🗺️ Geographic
+		lineageTag: a318da05-0619-40a2-bb60-93515f7da74b
+
+	/// Year of the deforestation measurement (2004–2025)
+	column id_anio
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: e55f9404-8073-4366-ac0b-fe8d25d946d4
+		sourceLineageTag: id_anio
+		summarizeBy: none
+		sourceColumn: id_anio
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Foreign key to dim_divipola (hidden - use dimension columns directly)
+	column id_divipola
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 18771b18-152d-4634-8775-cd8422e484cc
+		sourceLineageTag: id_divipola
+		summarizeBy: none
+		sourceColumn: id_divipola
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Deforested area in hectares for this record
+	column hectareas_deforestadas
+		dataType: double
+		sourceProviderType: float
+		lineageTag: 8868872b-cd12-4a52-8180-9cef291f4ea7
+		sourceLineageTag: hectareas_deforestadas
+		summarizeBy: sum
+		sourceColumn: hectareas_deforestadas
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Algorithm version used to detect deforestation (UMD/Hansen)
+	column version_algoritmo
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: b6704f67-1654-4c81-bb4a-901853845a3f
+		sourceLineageTag: version_algoritmo
+		summarizeBy: none
+		sourceColumn: version_algoritmo
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_deforestacion = entity
+		mode: directLake
+		source
+			entityName: fact_deforestacion
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+

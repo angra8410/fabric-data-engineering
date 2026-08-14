@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "deforestation_colombia"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "abf7bd08-17fc-92c9-4737-82236608c54c"
+  }
+}

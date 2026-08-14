@@ -1,0 +1,16 @@
+relationship 93c18f7f-9262-9300-2d1f-02d9bb22a44c
+	fromColumn: gold_session_summary.completed_at
+	toColumn: dim_date.date
+
+relationship 9d47e53c-06be-98a7-a3ac-14a622cba6ca
+	fromColumn: gold_weekly_volume.week_start
+	toColumn: dim_date.date
+
+relationship 59846c4d-4a2a-f72e-e3af-05cbd871f9b1
+	fromColumn: gold_workout_streak.workout_date
+	toColumn: dim_date.date
+
+relationship 731b4726-a0c9-ac0e-63ad-c7a315e71c8c
+	fromColumn: gold_exercise_prs.pr_achieved_at
+	toColumn: dim_date.date
+

@@ -1,0 +1,67 @@
+table gold_bridge_post_hashtags
+	lineageTag: 573a5863-533b-4438-bd20-803ad159ab94
+	sourceLineageTag: [dbo].[gold_bridge_post_hashtags]
+
+	column post_id
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: b41c21e9-6644-405e-8443-7d4d7d4a0ef5
+		sourceLineageTag: post_id
+		summarizeBy: none
+		sourceColumn: post_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column hashtag
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: ab18823b-4d43-40c8-9fa8-3cdf6581c075
+		sourceLineageTag: hashtag
+		summarizeBy: none
+		sourceColumn: hashtag
+
+		annotation SummarizationSetBy = Automatic
+
+	column silver_load_timestamp
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 9d47d2d8-48aa-4104-8c65-7f31acd2eada
+		sourceLineageTag: silver_load_timestamp
+		summarizeBy: none
+		sourceColumn: silver_load_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column linkedin_urn
+		dataType: string
+		sourceProviderType: float
+		lineageTag: ae0c66ab-56d6-46f7-b8a8-1f3de15fefe0
+		sourceLineageTag: linkedin_urn
+		summarizeBy: none
+		sourceColumn: linkedin_urn
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+	column gold_load_timestamp
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: f96d6050-4128-464a-8193-7d79432bf21f
+		sourceLineageTag: gold_load_timestamp
+		summarizeBy: none
+		sourceColumn: gold_load_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_bridge_post_hashtags = entity
+		mode: directLake
+		source
+			entityName: gold_bridge_post_hashtags
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+

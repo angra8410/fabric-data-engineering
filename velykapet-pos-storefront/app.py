@@ -154,7 +154,13 @@ if "Velykapet" in selected_project:
 
     df_filtered_sales = df_sales_trend[(df_sales_trend["sale_datetime"] >= start_d) & (df_sales_trend["sale_datetime"] <= end_d)]
 
-    t1, t2, t3, t4 = st.tabs(["📊 Resumen Ejecutivo & KPIs", "📦 Inventarios & Catálogo", "📲 WhatsApp Bot Conversion", "🏛️ Arquitectura & Data Engineering"])
+    t1, t2, t3, t4, t5 = st.tabs([
+        "📊 Resumen Ejecutivo & KPIs", 
+        "📦 Inventarios & Catálogo", 
+        "📲 WhatsApp Bot Conversion", 
+        "📈 Power BI & Modelo Semántico",
+        "🏛️ Arquitectura & Data Engineering"
+    ])
     
     with t1:
         st.subheader(f"📈 Rendimiento Financiero y de Ventas ({start_d.strftime('%d/%m/%Y')} a {end_d.strftime('%d/%m/%Y')})")
@@ -209,6 +215,98 @@ if "Velykapet" in selected_project:
         wc4.metric("📈 Tasa de Conversión", "0.0%")
 
     with t4:
+        st.subheader("📈 Power BI Direct Lake Semantic Model & Interactive Visual Report")
+        st.caption("Conexión Direct Lake sobre Delta Tables en `lh_velykapet_gold_dev.dbo` con 25+ Medidas DAX.")
+        
+        pbi_page = st.selectbox(
+            "📄 Seleccionar Página de Reporte Power BI:",
+            [
+                "Page 1: 🌟 Executive Financial Overview",
+                "Page 2: 🛍️ Omnichannel Sales Performance",
+                "Page 3: 💸 Financial Control & Expenses Waterfall",
+                "Page 4: 📦 Inventory Health & Stock Alerts",
+                "Page 5: 🤖 WhatsApp Bot Conversion Funnel"
+            ]
+        )
+
+        if "Page 1" in pbi_page:
+            st.markdown("#### 🌟 Page 1: Resumen Ejecutivo Financiero")
+            k1, k2, k3, k4 = st.columns(4)
+            k1.metric("Ingreso Total [DAX: Total Revenue]", f"${tot_rev:,.2f}")
+            k2.metric("Ganancia Bruta [DAX: Gross Profit]", f"${tot_prof:,.2f}")
+            k3.metric("Margen Bruto [DAX: Gross Margin %]", f"{m_pct:.1f}%")
+            k4.metric("Ticket Promedio [DAX: AOV]", f"${avg_t:,.2f}")
+            
+            fig_pbi1 = px.area(df_filtered_sales, x="sale_date", y="gross_revenue", title="Ingreso Bruto Mensual / Diarios (Direct Lake Stream)", color_discrete_sequence=["#4F46E5"])
+            fig_pbi1.update_layout(template="plotly_dark", height=320)
+            st.plotly_chart(fig_pbi1, use_container_width=True)
+
+        elif "Page 2" in pbi_page:
+            st.markdown("#### 🛍️ Page 2: Desempeño Multicanal (POS, Rappi, Web, WhatsApp)")
+            fig_pbi2 = px.bar(df_channels, x="Channel", y="Revenue", color="Channel", title="Ventas por Canal de Distribución", text_auto=True, color_discrete_sequence=["#4F46E5", "#7C3AED", "#EC4899", "#10B981"])
+            fig_pbi2.update_layout(template="plotly_dark", height=350)
+            st.plotly_chart(fig_pbi2, use_container_width=True)
+
+        elif "Page 3" in pbi_page:
+            st.markdown("#### 💸 Page 3: Control Financiero & Waterfall de Margen Neto")
+            cogs = tot_rev - tot_prof
+            opex = tot_rev * 0.12
+            net_profit = tot_prof - opex
+            
+            fig_wf = go.Figure(go.Waterfall(
+                name = "Finanzas Velykapet", orientation = "v",
+                measure = ["relative", "relative", "total", "relative", "total"],
+                x = ["Ingreso Bruto", "Costo de Ventas (COGS)", "Ganancia Bruta", "Gastos OpEx", "Utilidad Neta Operativa"],
+                textposition = "outside",
+                text = [f"${tot_rev:,.0f}", f"-${cogs:,.0f}", f"${tot_prof:,.0f}", f"-${opex:,.0f}", f"${net_profit:,.0f}"],
+                y = [tot_rev, -cogs, 0, -opex, 0],
+                connector = {"line":{"color":"#9CA3AF"}},
+                decreasing = {"marker":{"color":"#EF4444"}},
+                increasing = {"marker":{"color":"#10B981"}},
+                totals = {"marker":{"color":"#4F46E5"}}
+            ))
+            fig_wf.update_layout(title="Waterfall de Margen Neto [DAX: Net Operating Profit]", template="plotly_dark", height=380)
+            st.plotly_chart(fig_wf, use_container_width=True)
+
+        elif "Page 4" in pbi_page:
+            st.markdown("#### 📦 Page 4: Estado de Inventario & Alertas de Reabastecimiento")
+            st.markdown("**Tabla de Alertas de Stock Crítico (`dim_products[current_stock] <= 5`)**")
+            df_alert = pd.DataFrame({
+                "SKU Code": ["VK-DOG-15K", "VK-CAT-LIT10", "VK-TOY-RUB01", "VK-SNK-PORK200"],
+                "Producto": ["Alimento Perro Premium 15kg", "Arena Gato 10kg", "Juguete Morder Caucho", "Snack Premios Cerdo 200g"],
+                "Costo ($)": [136.00, 50.40, 11.00, 5.00],
+                "Precio ($)": [200.00, 70.00, 20.00, 10.00],
+                "Stock Actual": [4, 2, 5, 1],
+                "Estado": ["⚠️ Reabastecer", "🚨 Crítico", "⚠️ Reabastecer", "🚨 Crítico"]
+            })
+            st.dataframe(df_alert, use_container_width=True)
+
+        elif "Page 5" in pbi_page:
+            st.markdown("#### 🤖 Page 5: Embudo de Conversión Bot de WhatsApp")
+            fig_funnel = go.Figure(go.Funnel(
+                y = ["Consultas Mensajes", "Búsqueda Catálogo", "Carrito Creado", "Pedidos Completados"],
+                x = [1250, 840, 310, 185],
+                textinfo = "value+percent initial",
+                marker = {"color": ["#4F46E5", "#7C3AED", "#EC4899", "#10B981"]}
+            ))
+            fig_funnel.update_layout(title="Embudo de Conversión WhatsApp Bot", template="plotly_dark", height=350)
+            st.plotly_chart(fig_funnel, use_container_width=True)
+
+        with st.expander("📚 Ver Catálogo de Medidas DAX del Modelo Semántico (`sm_velykapet_gold_analytics`)"):
+            st.code("""
+// CORE DAX MEASURES
+[Total Revenue] = SUM(fact_sales[total_item_revenue])
+[Total Cost] = SUMX(fact_sales, fact_sales[quantity] * fact_sales[unit_cost])
+[Gross Profit] = [Total Revenue] - [Total Cost]
+[Gross Margin %] = DIVIDE([Gross Profit], [Total Revenue], 0)
+[Average Order Value (AOV)] = DIVIDE([Total Revenue], DISTINCTCOUNT(fact_sales[sale_id]), 0)
+[Net Operating Profit] = [Gross Profit] - SUM(fact_expenses[expense_amount])
+[Inventory Retail Valuation] = SUMX(dim_products, dim_products[current_stock] * dim_products[sale_price])
+[Revenue MTD] = TOTALMTD([Total Revenue], dim_date[Date])
+[Revenue YTD] = TOTALYTD([Total Revenue], dim_date[Date])
+            """, language="dax")
+
+    with t5:
         st.subheader("🏛️ Arquitectura Medallion en Microsoft Fabric")
         st.markdown("""
         ```mermaid
@@ -216,6 +314,7 @@ if "Velykapet" in selected_project:
             DB[(PostgreSQL)] --> CJ["CopyJob_1"] --> B["Bronze (16 Raw Tables)"] --> S["Silver (Clean & 0-Baseline)"] --> G["Gold Data Warehouse"] --> BI["Streamlit / Power BI"]
         ```
         """)
+
 
 # ==============================================================================
 # PROJECT 2: DANE COLOMBIA LABOR MARKET & EMPLOYMENT PLATFORM

@@ -1,0 +1,51 @@
+table fact_purchases
+	lineageTag: 09b6ccdd-ce10-403c-99a8-c82ed1e7007a
+	sourceLineageTag: [dbo].[fact_purchases]
+
+	column purchase_id
+		dataType: int64
+		formatString: 0
+		lineageTag: d8aa54cc-6010-4cb3-a84c-459dbe63ad1f
+		sourceLineageTag: purchase_id
+		summarizeBy: sum
+		sourceColumn: purchase_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column supplier
+		dataType: string
+		lineageTag: f26c4465-35f5-4bcb-98e2-6d90d104a8c2
+		sourceLineageTag: supplier
+		summarizeBy: none
+		sourceColumn: supplier
+
+		annotation SummarizationSetBy = Automatic
+
+	column purchase_amount
+		dataType: double
+		lineageTag: a7abfaa3-186c-41de-8ce0-af34993fe1a2
+		sourceLineageTag: purchase_amount
+		summarizeBy: sum
+		sourceColumn: purchase_amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column _updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: a52d5914-586e-4c26-acb7-1d2b91cd086c
+		sourceLineageTag: _updated_at
+		summarizeBy: none
+		sourceColumn: _updated_at
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_purchases = entity
+		mode: directLake
+		source
+			entityName: fact_purchases
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
+

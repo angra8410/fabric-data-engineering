@@ -42,25 +42,6 @@ table fact_expenses
 
 		annotation SummarizationSetBy = Automatic
 
-	column description
-		dataType: string
-		lineageTag: 382fa5ac-0e90-4ba4-9f20-2361018c5c03
-		sourceLineageTag: description
-		summarizeBy: none
-		sourceColumn: description
-
-		annotation SummarizationSetBy = Automatic
-
-	column expense_date
-		dataType: dateTime
-		formatString: General Date
-		lineageTag: 2d70ae9b-38fb-44ac-8c33-e42c6a98d6de
-		sourceLineageTag: expense_date
-		summarizeBy: none
-		sourceColumn: expense_date
-
-		annotation SummarizationSetBy = Automatic
-
 	partition fact_expenses = entity
 		mode: directLake
 		source

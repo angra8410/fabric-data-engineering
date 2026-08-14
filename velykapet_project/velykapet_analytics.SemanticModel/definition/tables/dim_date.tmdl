@@ -7,10 +7,60 @@ table dim_date
 		displayFolder: 📈 Time Intelligence
 		lineageTag: mtd-001
 
+	measure 'Revenue QTD' = TOTALQTD([Total Revenue], dim_date[Date])
+		formatString: $#,##0.00
+		displayFolder: 📈 Time Intelligence
+		lineageTag: qtd-001
+
 	measure 'Revenue YTD' = TOTALYTD([Total Revenue], dim_date[Date])
 		formatString: $#,##0.00
 		displayFolder: 📈 Time Intelligence
 		lineageTag: ytd-001
+
+	measure 'Gross Profit MTD' = TOTALMTD([Gross Profit], dim_date[Date])
+		formatString: $#,##0.00
+		displayFolder: 📈 Time Intelligence
+		lineageTag: gpmtd-001
+
+	measure 'Gross Profit YTD' = TOTALYTD([Gross Profit], dim_date[Date])
+		formatString: $#,##0.00
+		displayFolder: 📈 Time Intelligence
+		lineageTag: gpytd-001
+
+	measure 'Revenue Prior Month (PM)' = CALCULATE([Total Revenue], DATEADD(dim_date[Date], -1, MONTH))
+		formatString: $#,##0.00
+		displayFolder: 📈 Time Intelligence
+		lineageTag: pm-001
+
+	measure 'Revenue MoM Growth $' = [Total Revenue] - [Revenue Prior Month (PM)]
+		formatString: $#,##0.00
+		displayFolder: 📈 Time Intelligence
+		lineageTag: momg-001
+
+	measure 'Revenue MoM Growth %' = DIVIDE([Revenue MoM Growth $], [Revenue Prior Month (PM)], 0)
+		formatString: 0.00%
+		displayFolder: 📈 Time Intelligence
+		lineageTag: mompct-001
+
+	measure 'Revenue Prior Year (PY)' = CALCULATE([Total Revenue], SAMEPERIODLASTYEAR(dim_date[Date]))
+		formatString: $#,##0.00
+		displayFolder: 📈 Time Intelligence
+		lineageTag: py-001
+
+	measure 'Revenue YoY Growth %' = DIVIDE([Total Revenue] - [Revenue Prior Year (PY)], [Revenue Prior Year (PY)], 0)
+		formatString: 0.00%
+		displayFolder: 📈 Time Intelligence
+		lineageTag: yoypct-001
+
+	measure '30-Day Rolling Revenue' = CALCULATE([Total Revenue], DATESINPERIOD(dim_date[Date], MAX(dim_date[Date]), -30, DAY))
+		formatString: $#,##0.00
+		displayFolder: 📈 Time Intelligence
+		lineageTag: roll30-001
+
+	measure 'Daily Average Revenue (30D)' = DIVIDE([30-Day Rolling Revenue], 30, 0)
+		formatString: $#,##0.00
+		displayFolder: 📈 Time Intelligence
+		lineageTag: avg30-001
 
 	column Date
 		dataType: dateTime

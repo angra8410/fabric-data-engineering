@@ -17,6 +17,11 @@ table fact_expenses
 		displayFolder: 💸 Expenses & Net Profit
 		lineageTag: netm-001
 
+	measure 'Expense to Revenue Ratio %' = DIVIDE([Total Expenses], [Total Revenue], 0)
+		formatString: 0.00%
+		displayFolder: 💸 Expenses & Net Profit
+		lineageTag: exprat-001
+
 	column expense_id
 		dataType: string
 		sourceColumn: expense_id

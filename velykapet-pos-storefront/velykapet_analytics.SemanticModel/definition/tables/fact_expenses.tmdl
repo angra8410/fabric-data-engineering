@@ -1,46 +1,68 @@
 table fact_expenses
-	lineageTag: 886ef98e-14ee-4c87-8151-d0788caf5de3
+	lineageTag: 05fa9fb0-9bc8-43d9-9fb8-ef951e70e28e
 	sourceLineageTag: [dbo].[fact_expenses]
+
+	measure 'Total Expenses' = SUM(fact_expenses[expense_amount])
+		formatString: \$#,0.00
+		lineageTag: m_tot_exp
+
+	measure 'Net Operating Profit' = [Gross Profit] - [Total Expenses]
+		formatString: \$#,0.00
+		lineageTag: m_net_op_profit
+
+	measure 'Net Profit Margin %' = DIVIDE([Net Operating Profit], [Total Revenue], 0)
+		formatString: 0.0%
+		lineageTag: m_net_profit_margin
+
+	measure 'Expense to Revenue Ratio %' = DIVIDE([Total Expenses], [Total Revenue], 0)
+		formatString: 0.0%
+		lineageTag: m_exp_ratio
 
 	column expense_id
 		dataType: int64
 		formatString: 0
-		lineageTag: be77ec30-e318-4c2e-8f25-af32b374dbd1
+		lineageTag: 81eb1145-d1d1-4388-a492-04fce83a2343
 		sourceLineageTag: expense_id
 		summarizeBy: sum
 		sourceColumn: expense_id
 
-		annotation SummarizationSetBy = Automatic
-
-	column expense_amount
-		dataType: double
-		lineageTag: a60431e2-107e-4f6f-9376-295a41a2785d
-		sourceLineageTag: expense_amount
-		summarizeBy: sum
-		sourceColumn: expense_amount
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
+	column expense_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 81eb1145-d1d1-4388-a492-04fce83a2344
+		sourceLineageTag: expense_date
+		summarizeBy: none
+		sourceColumn: expense_date
 
 	column category
 		dataType: string
-		lineageTag: 9275e34d-6c96-4571-a965-fa4cc486d04b
+		lineageTag: 81eb1145-d1d1-4388-a492-04fce83a2345
 		sourceLineageTag: category
 		summarizeBy: none
 		sourceColumn: category
 
-		annotation SummarizationSetBy = Automatic
+	column description
+		dataType: string
+		lineageTag: 81eb1145-d1d1-4388-a492-04fce83a2346
+		sourceLineageTag: description
+		summarizeBy: none
+		sourceColumn: description
+
+	column expense_amount
+		dataType: decimal
+		formatString: \$#,0.00
+		lineageTag: 81eb1145-d1d1-4388-a492-04fce83a2347
+		sourceLineageTag: expense_amount
+		summarizeBy: sum
+		sourceColumn: expense_amount
 
 	column _updated_at
 		dataType: dateTime
 		formatString: General Date
-		lineageTag: 54413023-822b-4836-9fd4-482ef72bc677
+		lineageTag: 81eb1145-d1d1-4388-a492-04fce83a2348
 		sourceLineageTag: _updated_at
 		summarizeBy: none
 		sourceColumn: _updated_at
-
-		annotation SummarizationSetBy = Automatic
 
 	partition fact_expenses = entity
 		mode: directLake
@@ -48,4 +70,3 @@ table fact_expenses
 			entityName: fact_expenses
 			schemaName: dbo
 			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
-

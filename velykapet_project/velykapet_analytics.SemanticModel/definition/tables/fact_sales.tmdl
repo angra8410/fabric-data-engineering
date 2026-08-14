@@ -1,157 +1,191 @@
 table fact_sales
-	lineageTag: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+	lineageTag: 5f6cac2c-0d45-4092-96ba-ccab8cf1988e
 	sourceLineageTag: [dbo].[fact_sales]
 
 	measure 'Total Revenue' = SUM(fact_sales[total_item_revenue])
-		formatString: $#,##0.00
-		displayFolder: 📊 Core Revenue & Sales
-		lineageTag: rev-001
+		formatString: \$#,0.00
+		lineageTag: m_tot_rev
 
-	measure 'Total Cost' = SUMX(fact_sales, fact_sales[quantity] * fact_sales[unit_cost])
-		formatString: $#,##0.00
-		displayFolder: 📊 Core Revenue & Sales
-		lineageTag: cost-001
-
-	measure 'Gross Profit' = [Total Revenue] - [Total Cost]
-		formatString: $#,##0.00
-		displayFolder: 📊 Core Revenue & Sales
-		lineageTag: profit-001
+	measure 'Gross Profit' = SUM(fact_sales[item_gross_profit])
+		formatString: \$#,0.00
+		lineageTag: m_gross_profit
 
 	measure 'Gross Margin %' = DIVIDE([Gross Profit], [Total Revenue], 0)
-		formatString: 0.00%
-		displayFolder: 📊 Core Revenue & Sales
-		lineageTag: margin-001
+		formatString: 0.0%
+		lineageTag: m_gross_margin
 
 	measure 'Total Units Sold' = SUM(fact_sales[quantity])
-		formatString: #,##0
-		displayFolder: 📊 Core Revenue & Sales
-		lineageTag: units-001
+		formatString: #,0
+		lineageTag: m_tot_units
 
 	measure 'Total Transactions' = DISTINCTCOUNT(fact_sales[sale_id])
-		formatString: #,##0
-		displayFolder: 📊 Core Revenue & Sales
-		lineageTag: tx-001
+		formatString: #,0
+		lineageTag: m_tot_trans
 
 	measure 'Average Order Value (AOV)' = DIVIDE([Total Revenue], [Total Transactions], 0)
-		formatString: $#,##0.00
-		displayFolder: 📊 Core Revenue & Sales
-		lineageTag: aov-001
+		formatString: \$#,0.00
+		lineageTag: m_aov
 
 	measure 'Average Units Per Order' = DIVIDE([Total Units Sold], [Total Transactions], 0)
-		formatString: #,##0.00
-		displayFolder: 📊 Core Revenue & Sales
-		lineageTag: aupo-001
+		formatString: 0.0
+		lineageTag: m_aunits_order
 
 	measure 'Average Item Price' = DIVIDE([Total Revenue], [Total Units Sold], 0)
-		formatString: $#,##0.00
-		displayFolder: 📊 Core Revenue & Sales
-		lineageTag: aip-001
+		formatString: \$#,0.00
+		lineageTag: m_aitem_price
 
 	measure 'POS Store Revenue' = CALCULATE([Total Revenue], fact_sales[sale_origin] = "POS")
-		formatString: $#,##0.00
-		displayFolder: 🛍️ Omnichannel
-		lineageTag: pos-001
+		formatString: \$#,0.00
+		lineageTag: m_pos_rev
 
 	measure 'POS Revenue Share %' = DIVIDE([POS Store Revenue], [Total Revenue], 0)
-		formatString: 0.00%
-		displayFolder: 🛍️ Omnichannel
-		lineageTag: pos-sh-001
+		formatString: 0.0%
+		lineageTag: m_pos_share
 
 	measure 'Rappi Revenue' = CALCULATE([Total Revenue], fact_sales[sale_origin] = "Rappi")
-		formatString: $#,##0.00
-		displayFolder: 🛍️ Omnichannel
-		lineageTag: rappi-001
+		formatString: \$#,0.00
+		lineageTag: m_rappi_rev
 
 	measure 'Rappi Revenue Share %' = DIVIDE([Rappi Revenue], [Total Revenue], 0)
-		formatString: 0.00%
-		displayFolder: 🛍️ Omnichannel
-		lineageTag: rappi-sh-001
+		formatString: 0.0%
+		lineageTag: m_rappi_share
 
 	measure 'Web Direct Revenue' = CALCULATE([Total Revenue], fact_sales[sale_origin] = "Web")
-		formatString: $#,##0.00
-		displayFolder: 🛍️ Omnichannel
-		lineageTag: web-001
+		formatString: \$#,0.00
+		lineageTag: m_web_rev
 
 	measure 'Web Revenue Share %' = DIVIDE([Web Direct Revenue], [Total Revenue], 0)
-		formatString: 0.00%
-		displayFolder: 🛍️ Omnichannel
-		lineageTag: web-sh-001
+		formatString: 0.0%
+		lineageTag: m_web_share
 
 	measure 'WhatsApp Bot Revenue' = CALCULATE([Total Revenue], fact_sales[sale_origin] = "WhatsApp")
-		formatString: $#,##0.00
-		displayFolder: 🛍️ Omnichannel
-		lineageTag: wa-001
+		formatString: \$#,0.00
+		lineageTag: m_wa_rev
 
 	measure 'WhatsApp Revenue Share %' = DIVIDE([WhatsApp Bot Revenue], [Total Revenue], 0)
-		formatString: 0.00%
-		displayFolder: 🛍️ Omnichannel
-		lineageTag: wa-sh-001
+		formatString: 0.0%
+		lineageTag: m_wa_share
+
+	measure 'Revenue MTD' = TOTALMTD([Total Revenue], dim_dates[date_key])
+		formatString: \$#,0.00
+		lineageTag: m_rev_mtd
+
+	measure 'Revenue QTD' = TOTALQTD([Total Revenue], dim_dates[date_key])
+		formatString: \$#,0.00
+		lineageTag: m_rev_qtd
+
+	measure 'Revenue YTD' = TOTALYTD([Total Revenue], dim_dates[date_key])
+		formatString: \$#,0.00
+		lineageTag: m_rev_ytd
+
+	measure 'Gross Profit MTD' = TOTALMTD([Gross Profit], dim_dates[date_key])
+		formatString: \$#,0.00
+		lineageTag: m_gp_mtd
+
+	measure 'Gross Profit YTD' = TOTALYTD([Gross Profit], dim_dates[date_key])
+		formatString: \$#,0.00
+		lineageTag: m_gp_ytd
 
 	column item_id
-		dataType: string
+		dataType: int64
+		formatString: 0
+		lineageTag: 0b8d81fb-1073-4f40-b0b8-e773756a1168
+		sourceLineageTag: item_id
+		summarizeBy: sum
 		sourceColumn: item_id
-		lineageTag: col-item-id
+
+		annotation SummarizationSetBy = Automatic
 
 	column sale_id
-		dataType: string
+		dataType: int64
+		formatString: 0
+		lineageTag: cdd2a41b-2c96-4821-adce-5a0d8cd1db0d
+		sourceLineageTag: sale_id
+		summarizeBy: sum
 		sourceColumn: sale_id
-		lineageTag: col-sale-id
+
+		annotation SummarizationSetBy = Automatic
 
 	column sale_origin
 		dataType: string
+		lineageTag: 73270275-7914-4f68-93e5-3719015f85f1
+		sourceLineageTag: sale_origin
+		summarizeBy: none
 		sourceColumn: sale_origin
-		lineageTag: col-sale-origin
+
+		annotation SummarizationSetBy = Automatic
 
 	column payment_method
 		dataType: string
+		lineageTag: b1ec2e33-47ea-4e28-a161-e6fd68490ad4
+		sourceLineageTag: payment_method
+		summarizeBy: none
 		sourceColumn: payment_method
-		lineageTag: col-pm
 
-	column sale_timestamp
-		dataType: dateTime
-		formatString: yyyy-MM-dd HH:mm:ss
-		sourceColumn: sale_timestamp
-		lineageTag: col-st
+		annotation SummarizationSetBy = Automatic
 
 	column sale_date
 		dataType: dateTime
-		formatString: yyyy-MM-dd
+		formatString: General Date
+		lineageTag: 0f26260f-420f-49d3-88a4-fc23d3e1d2e7
+		sourceLineageTag: sale_date
+		summarizeBy: none
 		sourceColumn: sale_date
-		lineageTag: col-sd
+
+		annotation SummarizationSetBy = Automatic
 
 	column product_name
 		dataType: string
+		lineageTag: 6410b62d-4674-4fa7-9cf1-7fe7f858a6fa
+		sourceLineageTag: product_name
+		summarizeBy: none
 		sourceColumn: product_name
-		lineageTag: col-pn
+
+		annotation SummarizationSetBy = Automatic
 
 	column quantity
 		dataType: int64
+		formatString: 0
+		lineageTag: 67c05aa7-ecd0-410d-93fb-965c91b23b4f
+		sourceLineageTag: quantity
+		summarizeBy: sum
 		sourceColumn: quantity
-		lineageTag: col-qty
 
-	column unit_cost
-		dataType: double
-		formatString: $#,##0.00
-		sourceColumn: unit_cost
-		lineageTag: col-uc
-
-	column unit_price
-		dataType: double
-		formatString: $#,##0.00
-		sourceColumn: unit_price
-		lineageTag: col-up
+		annotation SummarizationSetBy = Automatic
 
 	column total_item_revenue
-		dataType: double
-		formatString: $#,##0.00
+		dataType: decimal
+		formatString: \$#,0.00
+		lineageTag: 166478f7-2096-4a94-b272-6b4684315bee
+		sourceLineageTag: total_item_revenue
+		summarizeBy: sum
 		sourceColumn: total_item_revenue
-		lineageTag: col-tir
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
 
 	column item_gross_profit
-		dataType: double
-		formatString: $#,##0.00
+		dataType: decimal
+		formatString: \$#,0.00
+		lineageTag: c0140a9a-9bcd-43d1-8cd1-8ef93ce6d802
+		sourceLineageTag: item_gross_profit
+		summarizeBy: sum
 		sourceColumn: item_gross_profit
-		lineageTag: col-igp
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column _updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 61eb1145-d1d1-4388-a492-04fce83a2342
+		sourceLineageTag: _updated_at
+		summarizeBy: none
+		sourceColumn: _updated_at
+
+		annotation SummarizationSetBy = Automatic
 
 	partition fact_sales = entity
 		mode: directLake
@@ -159,4 +193,3 @@ table fact_sales
 			entityName: fact_sales
 			schemaName: dbo
 			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
-

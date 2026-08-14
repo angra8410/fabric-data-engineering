@@ -1,5 +1,6 @@
 table dim_date
 	lineageTag: e5f6a7b8-c9d0-1234-efab-567890123456
+	sourceLineageTag: [dbo].[dim_dates]
 	dataCategory: Time
 
 	measure 'Revenue MTD' = TOTALMTD([Total Revenue], dim_date[Date])
@@ -66,53 +67,46 @@ table dim_date
 		dataType: dateTime
 		isKey
 		formatString: yyyy-MM-dd
-		type: calculated
-		sourceColumn: [Date]
+		sourceColumn: date_key
 
 	column Year
 		dataType: int64
-		type: calculated
-		sourceColumn: [Year]
+		sourceColumn: year
 
 	column Quarter
-		dataType: string
-		type: calculated
-		sourceColumn: [Quarter]
+		dataType: int64
+		sourceColumn: quarter
 
 	column Month
 		dataType: int64
-		type: calculated
-		sourceColumn: [Month]
+		sourceColumn: month_number
 
 	column MonthName
 		dataType: string
 		sortByColumn: Month
-		type: calculated
-		sourceColumn: [MonthName]
+		sourceColumn: month_name
 
 	column YearMonth
 		dataType: string
 		sortByColumn: Date
-		type: calculated
-		sourceColumn: [YearMonth]
+		sourceColumn: year_month
 
 	column DayOfWeek
 		dataType: int64
-		type: calculated
-		sourceColumn: [DayOfWeek]
+		sourceColumn: day_of_week
 
 	column DayName
 		dataType: string
 		sortByColumn: DayOfWeek
-		type: calculated
-		sourceColumn: [DayName]
+		sourceColumn: day_name
 
 	column IsWeekend
 		dataType: boolean
-		type: calculated
-		sourceColumn: [IsWeekend]
+		sourceColumn: is_weekend
 
-	partition dim_date_calculated = calculated
-		mode: import
-		source = ADDCOLUMNS(CALENDAR(DATE(2025, 1, 1), DATE(2026, 12, 31)), "Year", YEAR([Date]), "Quarter", "Q" & FORMAT([Date], "Q"), "Month", MONTH([Date]), "MonthName", FORMAT([Date], "MMMM"), "YearMonth", FORMAT([Date], "YYYY-MM"), "DayOfWeek", WEEKDAY([Date], 2), "DayName", FORMAT([Date], "dddd"), "IsWeekend", IF(WEEKDAY([Date], 2) >= 6, TRUE(), FALSE()))
-
+	partition dim_date = entity
+		mode: directLake
+		source
+			entityName: dim_dates
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_velykapet_gold_dev'

@@ -1,0 +1,59 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.6.0/schema.json",
+  "name": "card_stockout_alert",
+  "position": {
+    "x": 940,
+    "y": 20,
+    "z": 4000,
+    "width": 320,
+    "height": 110,
+    "tabOrder": 4000
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Fields": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_products"
+                    }
+                  },
+                  "Property": "Stock-Out Alert SKUs"
+                }
+              },
+              "queryRef": "dim_products.Stock-Out Alert SKUs",
+              "nativeVisualMode": "Value"
+            }
+          ]
+        }
+      }
+    },
+    "visualCustomizations": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Stock-Out Alert SKUs (Stock <= 5)'"
+                }
+              }
+            },
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -37,20 +37,55 @@ table fact_sales
 		displayFolder: 📊 Core Revenue & Sales
 		lineageTag: aov-001
 
+	measure 'Average Units Per Order' = DIVIDE([Total Units Sold], [Total Transactions], 0)
+		formatString: #,##0.00
+		displayFolder: 📊 Core Revenue & Sales
+		lineageTag: aupo-001
+
+	measure 'Average Item Price' = DIVIDE([Total Revenue], [Total Units Sold], 0)
+		formatString: $#,##0.00
+		displayFolder: 📊 Core Revenue & Sales
+		lineageTag: aip-001
+
 	measure 'POS Store Revenue' = CALCULATE([Total Revenue], fact_sales[sale_origin] = "POS")
 		formatString: $#,##0.00
 		displayFolder: 🛍️ Omnichannel
 		lineageTag: pos-001
+
+	measure 'POS Revenue Share %' = DIVIDE([POS Store Revenue], [Total Revenue], 0)
+		formatString: 0.00%
+		displayFolder: 🛍️ Omnichannel
+		lineageTag: pos-sh-001
 
 	measure 'Rappi Revenue' = CALCULATE([Total Revenue], fact_sales[sale_origin] = "Rappi")
 		formatString: $#,##0.00
 		displayFolder: 🛍️ Omnichannel
 		lineageTag: rappi-001
 
+	measure 'Rappi Revenue Share %' = DIVIDE([Rappi Revenue], [Total Revenue], 0)
+		formatString: 0.00%
+		displayFolder: 🛍️ Omnichannel
+		lineageTag: rappi-sh-001
+
+	measure 'Web Direct Revenue' = CALCULATE([Total Revenue], fact_sales[sale_origin] = "Web")
+		formatString: $#,##0.00
+		displayFolder: 🛍️ Omnichannel
+		lineageTag: web-001
+
+	measure 'Web Revenue Share %' = DIVIDE([Web Direct Revenue], [Total Revenue], 0)
+		formatString: 0.00%
+		displayFolder: 🛍️ Omnichannel
+		lineageTag: web-sh-001
+
 	measure 'WhatsApp Bot Revenue' = CALCULATE([Total Revenue], fact_sales[sale_origin] = "WhatsApp")
 		formatString: $#,##0.00
 		displayFolder: 🛍️ Omnichannel
 		lineageTag: wa-001
+
+	measure 'WhatsApp Revenue Share %' = DIVIDE([WhatsApp Bot Revenue], [Total Revenue], 0)
+		formatString: 0.00%
+		displayFolder: 🛍️ Omnichannel
+		lineageTag: wa-sh-001
 
 	column item_id
 		dataType: string

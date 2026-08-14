@@ -1,0 +1,59 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.6.0/schema.json",
+  "name": "card_opex_ratio",
+  "position": {
+    "x": 880,
+    "y": 20,
+    "z": 3000,
+    "width": 380,
+    "height": 110,
+    "tabOrder": 3000
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Fields": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_expenses"
+                    }
+                  },
+                  "Property": "Expense to Revenue Ratio %"
+                }
+              },
+              "queryRef": "fact_expenses.Expense to Revenue Ratio %",
+              "nativeVisualMode": "Value"
+            }
+          ]
+        }
+      }
+    },
+    "visualCustomizations": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'OpEx to Revenue Ratio %'"
+                }
+              }
+            },
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

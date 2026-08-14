@@ -68,8 +68,10 @@ table dim_products
 		dataType: int64
 		sourceColumn: current_stock
 
-	partition dim_products_directlake = entity
+	partition dim_products = entity
 		mode: directLake
-		entityName: dim_products
-		schemaName: dbo
+		source
+			entityName: dim_products
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
 

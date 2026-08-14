@@ -30,8 +30,10 @@ table fact_purchases
 		formatString: yyyy-MM-dd
 		sourceColumn: purchase_date
 
-	partition fact_purchases_directlake = entity
+	partition fact_purchases = entity
 		mode: directLake
-		entityName: fact_purchases
-		schemaName: dbo
+		source
+			entityName: fact_purchases
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
 

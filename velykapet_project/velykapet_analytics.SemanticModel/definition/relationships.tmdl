@@ -12,4 +12,4 @@ relationship fact_purchases_dim_dates
 
 relationship fact_sales_dim_products
 	fromColumn: fact_sales.product_name
-	toColumn: dim_products.product_id
+	toColumn: dim_products.product_name

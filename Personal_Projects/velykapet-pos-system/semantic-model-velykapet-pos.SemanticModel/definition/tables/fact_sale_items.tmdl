@@ -1,0 +1,193 @@
+table fact_sale_items
+	lineageTag: 2c7bbdfd-7931-48c7-ae81-c8485a61ffbe
+	sourceLineageTag: [dbo].[fact_sale_items]
+
+	measure 'Total Quantity Sold' = SUM(fact_sale_items[quantity])
+		formatString: #,0
+		displayFolder: Sale Items
+		lineageTag: cf3b3676-2905-482b-a328-7fea2b34e768
+
+	measure 'Total Cost of Goods Sold' = SUM(fact_sale_items[total_cost])
+		formatString: \$#,0.00
+		displayFolder: Sale Items
+		lineageTag: 63abf586-f053-4160-914e-4729cd0174b3
+
+	measure 'Gross Profit' = SUM(fact_sale_items[gross_profit])
+		formatString: \$#,0.00
+		displayFolder: Sale Items
+		lineageTag: 7e3d95b0-6a3b-4cf4-a4f2-b133dac95943
+
+	measure 'Gross Margin %' = DIVIDE([Gross Profit], SUM(fact_sale_items[total_revenue]))
+		formatString: 0.0%
+		displayFolder: Sale Items
+		lineageTag: ce77d736-4fad-4f4d-b450-e555949bf38b
+
+	measure 'Average Basket Size' = DIVIDE([Total Quantity Sold], DISTINCTCOUNT(fact_sale_items[sale_id]))
+		formatString: 0.00
+		displayFolder: Sale Items
+		lineageTag: d4700f10-9fbe-4f2c-9ada-df6b100949eb
+
+	measure 'Average Selling Price' = DIVIDE(SUM(fact_sale_items[total_revenue]), [Total Quantity Sold])
+		formatString: \$#,0.00
+		displayFolder: Sale Items
+		lineageTag: a84e1fa2-4381-45fe-aaff-21578cf7cd07
+
+	/// Item-level revenue, correctly relates to dim_products/category unlike Total Revenue (which is order-level and has no product relationship)
+	measure 'Item Revenue' = SUM(fact_sale_items[total_revenue])
+		formatString: \$#,0.00
+		displayFolder: Sale Items
+
+	/// Item Revenue in the previous calendar month — safe to use when sliced by product or category
+	measure 'Item Revenue PM' = CALCULATE([Item Revenue], PREVIOUSMONTH(dim_dates[date_key]))
+		formatString: \$#,0.00
+		displayFolder: Diagnostic
+
+	/// Percent change in Item Revenue vs previous month — safe to use when sliced by product or category
+	measure 'Item Revenue MoM %' = DIVIDE([Item Revenue] - [Item Revenue PM], [Item Revenue PM])
+		formatString: 0.0%
+		displayFolder: Diagnostic
+
+	column sale_item_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 14bb4bfa-402a-4583-a677-1bc693b25ca7
+		sourceLineageTag: sale_item_id
+		summarizeBy: sum
+		sourceColumn: sale_item_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column sale_id
+		dataType: int64
+		formatString: 0
+		lineageTag: e1d1ca9a-38bb-471c-9a70-a40d4e6ad276
+		sourceLineageTag: sale_id
+		summarizeBy: sum
+		sourceColumn: sale_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column barcode
+		dataType: string
+		lineageTag: 3c7a8b35-3135-4a5c-8a77-f56eaff89283
+		sourceLineageTag: barcode
+		summarizeBy: none
+		sourceColumn: barcode
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_name
+		dataType: string
+		lineageTag: d54e0bad-397b-49da-ac70-370d55eaf7b0
+		sourceLineageTag: product_name
+		summarizeBy: none
+		sourceColumn: product_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: fa627bb0-78e3-45d4-8d1b-6c873fdb4d5a
+		sourceLineageTag: quantity
+		summarizeBy: sum
+		sourceColumn: quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column unit_cost
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 4a1ef8b9-2b10-4bfb-a5ed-33b9473f2884
+		sourceLineageTag: unit_cost
+		summarizeBy: sum
+		sourceColumn: unit_cost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column unit_price
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: a0968bd5-e816-4588-ad31-31e5012cb30e
+		sourceLineageTag: unit_price
+		summarizeBy: sum
+		sourceColumn: unit_price
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column total_cost
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: b48774a1-8a11-45d3-984a-0b503d5378b5
+		sourceLineageTag: total_cost
+		summarizeBy: sum
+		sourceColumn: total_cost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column total_revenue
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: db079394-5041-4d86-a895-80e15d312548
+		sourceLineageTag: total_revenue
+		summarizeBy: sum
+		sourceColumn: total_revenue
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column gross_profit
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: da72ae9a-6bf4-46dc-a3a7-405e07226900
+		sourceLineageTag: gross_profit
+		summarizeBy: sum
+		sourceColumn: gross_profit
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column returned_quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 27053925-b414-4c90-90de-11d789907d78
+		sourceLineageTag: returned_quantity
+		summarizeBy: sum
+		sourceColumn: returned_quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column sales_channel
+		dataType: string
+		lineageTag: 99e06782-ab5f-4275-8e5f-bbc0ebd667a5
+		sourceLineageTag: sales_channel
+		summarizeBy: none
+		sourceColumn: sales_channel
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_key
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 6e1bf888-8d64-4c58-a309-1b91f3c0bf7d
+		sourceLineageTag: date_key
+		summarizeBy: none
+		sourceColumn: date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_sale_items = entity
+		mode: directLake
+		source
+			entityName: fact_sale_items
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
+

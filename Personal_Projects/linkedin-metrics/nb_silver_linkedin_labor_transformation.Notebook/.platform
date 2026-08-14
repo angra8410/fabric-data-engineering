@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_silver_linkedin_labor_transformation"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "600788f3-4b31-8ae7-451f-deda3ff2828a"
+  }
+}

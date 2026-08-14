@@ -1,6 +1,6 @@
 {
   "name": "{{Dataset_Name}}",
-  "compatibilityLevel": 1604,
+  "compatibilityLevel": 1606,
   "model": {
     "name": "{{Dataset_Name}}",
     "culture": "en-US",
@@ -11,13 +11,6 @@
     },
     "defaultPowerBIDataSourceVersion": "powerBI_V3",
     "sourceQueryCulture": "en-US",
-    "expressions": [
-      {
-        "name": "DatabaseQuery",
-        "kind": "m",
-        "expression": "let\n    database = {{TDS_Endpoint}}\nin\n    database\n"
-      }
-    ],
     "annotations": [
       {
         "name": "__PBI_TimeIntelligenceEnabled",

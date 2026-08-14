@@ -1,0 +1,80 @@
+[
+  {
+    "name": "gold_fct_ventas",
+    "path": "/Tables/dbo",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/gold_fct_ventas",
+        "itemId": "add93f25-ebbf-baa0-48f4-50d3abe92425",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "artifactType": "Lakehouse"
+      }
+    }
+  },
+  {
+    "name": "gold_fct_gastos",
+    "path": "/Tables/dbo",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/gold_fct_gastos",
+        "itemId": "add93f25-ebbf-baa0-48f4-50d3abe92425",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "artifactType": "Lakehouse"
+      }
+    }
+  },
+  {
+    "name": "fct_ventas",
+    "path": "/Tables/dbo",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/fct_ventas",
+        "itemId": "add93f25-ebbf-baa0-48f4-50d3abe92425",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "artifactType": "Lakehouse"
+      }
+    }
+  },
+  {
+    "name": "fct_gastos",
+    "path": "/Tables/dbo",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/fct_gastos",
+        "itemId": "add93f25-ebbf-baa0-48f4-50d3abe92425",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "artifactType": "Lakehouse"
+      }
+    }
+  },
+  {
+    "name": "dim_metodo_pago",
+    "path": "/Tables/dbo",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/dim_metodo_pago",
+        "itemId": "add93f25-ebbf-baa0-48f4-50d3abe92425",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "artifactType": "Lakehouse"
+      }
+    }
+  },
+  {
+    "name": "dim_calendario",
+    "path": "/Tables/dbo",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/dim_calendario",
+        "itemId": "add93f25-ebbf-baa0-48f4-50d3abe92425",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "artifactType": "Lakehouse"
+      }
+    }
+  }
+]

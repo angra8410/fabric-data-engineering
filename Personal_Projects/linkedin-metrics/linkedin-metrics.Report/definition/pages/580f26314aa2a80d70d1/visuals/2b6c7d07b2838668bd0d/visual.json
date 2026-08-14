@@ -1,0 +1,77 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "2b6c7d07b2838668bd0d",
+  "position": {
+    "x": 1092.6219908913467,
+    "y": 29.18734702729498,
+    "z": 10000,
+    "height": 149.74378040090468,
+    "width": 151.01279548904793,
+    "tabOrder": 10000
+  },
+  "visual": {
+    "visualType": "slicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "gold_dim_demographics"
+                    }
+                  },
+                  "Property": "demographic_category"
+                }
+              },
+              "queryRef": "gold_dim_demographics.demographic_category",
+              "nativeQueryRef": "demographic_category",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "data": [
+        {
+          "properties": {
+            "mode": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Basic'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {}
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "bc8f409b067b19b9336a",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "gold_dim_demographics"
+              }
+            },
+            "Property": "demographic_category"
+          }
+        },
+        "type": "Categorical"
+      }
+    ]
+  }
+}

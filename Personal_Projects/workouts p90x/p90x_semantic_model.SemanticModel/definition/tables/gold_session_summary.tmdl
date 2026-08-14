@@ -1,0 +1,106 @@
+table gold_session_summary
+	lineageTag: af6b3d58-c058-4a1d-99b6-662daaa787eb
+	sourceLineageTag: [dbo].[gold_session_summary]
+
+	measure 'Total Sessions' = COUNTROWS(gold_session_summary)
+		formatString: 0
+
+	measure 'Avg Difficulty' = AVERAGE(gold_session_summary[difficulty])
+		formatString: 0.0
+
+	measure 'Total Volume (lbs)' = SUM(gold_session_summary[total_volume_lbs])
+		formatString: #,##0
+
+	measure 'Avg Recovery Days' = AVERAGE(gold_session_summary[recovery_days_since_previous])
+		formatString: 0.0
+
+	measure 'Avg Volume per Session' = DIVIDE([Total Volume (lbs)], [Total Sessions])
+		formatString: #,##0
+
+	column session_id
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 22463d19-47cd-4c2b-94fb-d1cf4435d235
+		sourceLineageTag: session_id
+		summarizeBy: sum
+		sourceColumn: session_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column completed_at
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: e94ff835-cc90-4590-86be-2664d43ac1a8
+		sourceLineageTag: completed_at
+		summarizeBy: none
+		sourceColumn: completed_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column difficulty
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 71c023a2-4dd4-4e0b-88e0-ffdf205caeb2
+		sourceLineageTag: difficulty
+		summarizeBy: sum
+		sourceColumn: difficulty
+
+		annotation SummarizationSetBy = Automatic
+
+	column recovery_days_since_previous
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 298ebfca-22fe-466a-87f2-979a417d8e20
+		sourceLineageTag: recovery_days_since_previous
+		summarizeBy: sum
+		sourceColumn: recovery_days_since_previous
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_sets
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 18ba6086-dcf7-4d66-946e-3cca5179856a
+		sourceLineageTag: total_sets
+		summarizeBy: sum
+		sourceColumn: total_sets
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_reps
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: a0f925e7-185f-4219-8565-77b898bc0034
+		sourceLineageTag: total_reps
+		summarizeBy: sum
+		sourceColumn: total_reps
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_volume_lbs
+		dataType: double
+		sourceProviderType: float
+		lineageTag: b45b43f7-b47c-488e-93ad-1cd5fc323a8e
+		sourceLineageTag: total_volume_lbs
+		summarizeBy: sum
+		sourceColumn: total_volume_lbs
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition gold_session_summary = entity
+		mode: directLake
+		source
+			entityName: gold_session_summary
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+

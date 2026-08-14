@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_catalogo_maestro"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "7c3c7ca7-5319-828a-4075-24cac1e57f04"
+  }
+}

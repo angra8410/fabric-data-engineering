@@ -1,0 +1,50 @@
+table 'Scale View'
+	lineageTag: e4f467ad-f3dd-4f3a-9637-3d6ae870a648
+
+	column 'Scale View'
+		lineageTag: de2e31ba-017a-4208-ab45-17bd95b0f704
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Scale View Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Scale View Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Scale View Fields'
+		isHidden
+		lineageTag: 8001f258-c74d-4f6c-80d9-8014345b955e
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Scale View Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Scale View Order'
+		isHidden
+		formatString: 0
+		lineageTag: c3032297-0d0a-42a9-8229-c327deb4832a
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Scale View' = calculated
+		mode: import
+		source =
+				{
+				    ("New Cases (7-Day Avg)", NAMEOF('Fact_Covid_Daily'[New Cases (7-Day Avg)]), 0),
+				    ("Cases Per Million", NAMEOF('Fact_Covid_Daily'[Cases Per Million]), 1),
+				    ("New Deaths (7-Day Avg)", NAMEOF('Fact_Covid_Daily'[New Deaths (7-Day Avg)]), 2),
+				    ("Deaths Per Million", NAMEOF('Fact_Covid_Daily'[Deaths Per Million]), 3)
+				}
+
+	annotation PBI_Id = 0e582b83bbf74d1393209ad0a60935de
+

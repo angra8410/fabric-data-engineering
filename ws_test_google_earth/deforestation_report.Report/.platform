@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "deforestation_report"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "f44627f9-901c-b13e-414f-a8dc8286d46f"
+  }
+}

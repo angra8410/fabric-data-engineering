@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Lakehouse",
+    "displayName": "lh_bronze_linkedin_ingestion_labor"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "7cdeef2a-e81b-a8c4-4a6d-a51ae7bac705"
+  }
+}

@@ -1,0 +1,977 @@
+table Fact_Covid_Daily
+	lineageTag: f0b16757-22b7-4423-afb9-122672f75a1c
+
+	/// Latest cumulative confirmed COVID-19 cases (MAX of running total, not SUM)
+	measure 'Total Cases' =
+			SUMX(
+			    VALUES(Fact_Covid_Daily[location]),
+			    CALCULATE(MAX(Fact_Covid_Daily[total_cases]))
+			)
+		formatString: #,##0
+		displayFolder: Cases
+		lineageTag: 8c95652f-cb7a-47df-a67a-388abf55d664
+
+	/// Latest cumulative COVID-19 deaths (MAX of running total, not SUM)
+	measure 'Total Deaths' =
+			SUMX(
+			    VALUES(Fact_Covid_Daily[location]),
+			    CALCULATE(MAX(Fact_Covid_Daily[total_deaths]))
+			)
+		formatString: #,##0
+		displayFolder: Deaths
+		lineageTag: cc631740-245d-4c9a-bfc0-0c77c59e533b
+
+	/// Latest cumulative vaccination doses (MAX of running total, not SUM)
+	measure 'Total Vaccinations' =
+			SUMX(
+			    VALUES(Fact_Covid_Daily[location]),
+			    CALCULATE(MAX(Fact_Covid_Daily[total_vaccinations]))
+			)
+		formatString: #,##0
+		displayFolder: Vaccinations
+		lineageTag: 3e1644e5-2689-4ebc-afb8-45db93ba23c9
+
+	/// Latest cumulative people fully vaccinated (MAX of running total, not SUM)
+	measure 'People Fully Vaccinated' =
+			SUMX(
+			    VALUES(Fact_Covid_Daily[location]),
+			    CALCULATE(MAX(Fact_Covid_Daily[people_fully_vaccinated]))
+			)
+		formatString: #,##0
+		displayFolder: Vaccinations
+		lineageTag: dce0bacc-777e-436b-89c8-c847e7766158
+
+	/// New daily confirmed cases
+	measure 'New Cases' = SUM(Fact_Covid_Daily[new_cases])
+		formatString: #,##0
+		displayFolder: Cases
+		lineageTag: 1ecfc9b1-9a61-4f25-9055-c55145158eff
+
+	/// New daily deaths
+	measure 'New Deaths' = SUM(Fact_Covid_Daily[new_deaths])
+		formatString: #,##0
+		displayFolder: Deaths
+		lineageTag: 8a823825-f26e-4f09-8e45-daaf67d3aa2c
+
+	/// New daily vaccination doses administered
+	measure 'New Vaccinations' = SUM(Fact_Covid_Daily[new_vaccinations])
+		formatString: #,##0
+		displayFolder: Vaccinations
+		lineageTag: ec34e2b5-2e72-4d5b-b2df-99f27bd609cc
+
+	/// Deaths as % of confirmed cases
+	measure 'Case Fatality Rate %' = DIVIDE([Total Deaths], [Total Cases], 0) * 100
+		formatString: 0.00"%"
+		displayFolder: KPIs
+		lineageTag: e6ec11ff-496e-4877-a83d-133710776641
+
+	/// Average R-value (viral reproduction number)
+	measure 'Avg Reproduction Rate' = AVERAGE(Fact_Covid_Daily[reproduction_rate])
+		formatString: 0.00
+		displayFolder: KPIs
+		lineageTag: 903531ae-dc10-47ee-8041-b912dfec18b0
+
+	/// COVID-19 patients in ICU
+	measure 'ICU Patients' = SUM(Fact_Covid_Daily[icu_patients])
+		formatString: #,##0
+		displayFolder: Healthcare
+		lineageTag: 59644433-f733-4bac-81c4-b905651fef0c
+
+	/// COVID-19 patients hospitalised
+	measure 'Hospital Patients' = SUM(Fact_Covid_Daily[hosp_patients])
+		formatString: #,##0
+		displayFolder: Healthcare
+		lineageTag: bbfe5ca9-ee11-4d30-b181-49a1de93d471
+
+	/// Latest cumulative COVID-19 tests (MAX of running total, not SUM)
+	measure 'Total Tests' =
+			SUMX(
+			    VALUES(Fact_Covid_Daily[location]),
+			    CALCULATE(MAX(Fact_Covid_Daily[total_tests]))
+			)
+		formatString: #,##0
+		displayFolder: Testing
+		lineageTag: d93eac6a-4bdf-4297-954c-d558246f0128
+
+	/// Average test positivity rate
+	measure 'Positive Rate %' = AVERAGE(Fact_Covid_Daily[positive_rate]) * 100
+		formatString: 0.00"%"
+		displayFolder: Testing
+		lineageTag: 59dc2a5c-9aa2-4362-a33a-d412b5745f9d
+
+	/// % of population with at least one dose
+	measure 'Vaccination Rate %' = AVERAGE(Fact_Covid_Daily[people_vaccinated_per_hundred])
+		formatString: 0.0"%"
+		displayFolder: Vaccinations
+		lineageTag: 002cfa99-2ac6-4905-a005-69e5b0be1030
+
+	/// % of population fully vaccinated
+	measure 'Full Vaccination Rate %' = AVERAGE(Fact_Covid_Daily[people_fully_vaccinated_per_hundred])
+		formatString: 0.0"%"
+		displayFolder: Vaccinations
+		lineageTag: 934e641e-ac86-4c29-9d8c-adfad3119a6b
+
+	/// % of population with booster dose
+	measure 'Booster Rate %' = AVERAGE(Fact_Covid_Daily[total_boosters_per_hundred])
+		formatString: 0.0"%"
+		displayFolder: Vaccinations
+		lineageTag: 4b92a7f1-2075-4aa0-af90-e2344c2ff1c4
+
+	/// Cases per million population (avg)
+	measure 'Cases Per Million' = AVERAGE(Fact_Covid_Daily[total_cases_per_million])
+		formatString: #,##0.0
+		displayFolder: Cases
+		lineageTag: 0df7ccb1-a7d8-442a-bbef-cdbe4e52f28e
+
+	/// Deaths per million population (avg)
+	measure 'Deaths Per Million' = AVERAGE(Fact_Covid_Daily[total_deaths_per_million])
+		formatString: #,##0.0
+		displayFolder: Deaths
+		lineageTag: 1222496e-452c-4c8e-ae44-11a41e2a3ffb
+
+	/// 7-day rolling average of new cases
+	measure 'New Cases (7-Day Avg)' = AVERAGE(Fact_Covid_Daily[new_cases_smoothed])
+		formatString: #,##0.0
+		displayFolder: Cases
+		lineageTag: 1dd6f840-6460-4a3d-8c67-9f77347f8f1f
+
+	/// 7-day rolling average of new deaths
+	measure 'New Deaths (7-Day Avg)' = AVERAGE(Fact_Covid_Daily[new_deaths_smoothed])
+		formatString: #,##0.0
+		displayFolder: Deaths
+		lineageTag: ec923e17-df3d-4934-9a91-d00928c78339
+
+	/// Average government response stringency (0-100)
+	measure 'Stringency Index Peak' =
+			
+			MAXX(
+			    VALUES(Fact_Covid_Daily[location]),
+			    CALCULATE(MAX(Fact_Covid_Daily[stringency_index]))
+			)
+		formatString: 0.0
+		displayFolder: Policy
+		lineageTag: c9ccea13-13a4-4748-ad8b-07997a1d2224
+
+	/// Average excess mortality vs expected deaths
+	measure 'Excess Mortality %' = AVERAGE(Fact_Covid_Daily[excess_mortality])
+		formatString: 0.00"%"
+		displayFolder: Deaths
+		lineageTag: 9dc7d4ec-769a-48fc-a39e-8abe6c3ec716
+
+	/// Number of distinct countries/locations in selection
+	measure 'Total Countries' = DISTINCTCOUNT(Fact_Covid_Daily[location])
+		formatString: #,##0
+		displayFolder: KPIs
+		lineageTag: db8ce904-0596-4f01-9581-e5bba2a48662
+
+	/// Maximum single-day new cases in selection
+	measure 'Peak New Cases' = MAXX(VALUES(Dim_Date[Date]), CALCULATE(SUM(Fact_Covid_Daily[new_cases])))
+		formatString: #,##0
+		displayFolder: Cases
+		lineageTag: ce9497b9-0233-417e-9f07-e0b3e6014020
+
+	/// 7-day smoothed average of new vaccinations
+	measure 'New Vaccinations (7-Day Avg)' = AVERAGE(Fact_Covid_Daily[new_vaccinations_smoothed])
+		formatString: #,##0.0
+		displayFolder: Vaccinations
+		lineageTag: 19eb6cfb-4dc1-4473-9ffe-f17ad7a15471
+
+	/// Reference label for Total Cases KPI card
+	measure 'Label - Total Cases' =
+			VAR LatestDate = MAX(Dim_Date[Date])
+			VAR LatestMonth = FORMAT(LatestDate, "MMM YYYY")
+			VAR PrevMonthCases = CALCULATE([New Cases], DATEADD(Dim_Date[Date], -1, MONTH))
+			VAR PrevMonthLabel = FORMAT(PrevMonthCases / 1000000, "0.0") & "M new cases"
+			RETURN
+			"New last month: " & PrevMonthLabel & UNICHAR(10) & "As of " & LatestMonth
+		displayFolder: KPI Labels
+		lineageTag: 64ea59ec-a279-46c6-890f-d3810483001a
+
+	/// Reference label for Total Deaths KPI card
+	measure 'Label - Total Deaths' =
+			VAR CFR = [Case Fatality Rate %]
+			VAR CFRText = FORMAT(CFR, "0.00") & "% fatality rate"
+			VAR DeathsPerM = FORMAT([Deaths Per Million], "#,##0") & " per million"
+			RETURN
+			CFRText & UNICHAR(10) & DeathsPerM
+		displayFolder: KPI Labels
+		lineageTag: 84b5aed0-2d83-49de-baec-365f18bff5eb
+
+	/// Reference label for New Cases KPI card
+	measure 'Label - New Cases (Daily)' =
+			VAR Avg7 = [New Cases (7-Day Avg)]
+			VAR LatestDate = MAX(Dim_Date[Date])
+			VAR LatestMonth = FORMAT(LatestDate, "MMM YYYY")
+			RETURN
+			"7-day avg: " & FORMAT(Avg7, "#,##0") & UNICHAR(10) & "Latest period " & LatestMonth
+		displayFolder: KPI Labels
+		lineageTag: 5056b9e6-a2c7-4287-a403-329ba3808d92
+
+	/// Reference label for CFR KPI card
+	measure 'Label - Case Fatality Rate' =
+			VAR GlobalAvgCFR = CALCULATE([Case Fatality Rate %], ALL(Dim_Location))
+			VAR CurrentCFR = [Case Fatality Rate %]
+			VAR Diff = CurrentCFR - GlobalAvgCFR
+			VAR DiffText = IF(Diff > 0, "+" & FORMAT(Diff, "0.00") & "% vs global avg", FORMAT(Diff, "0.00") & "% vs global avg")
+			RETURN
+			DiffText & UNICHAR(10) & "Global avg: " & FORMAT(GlobalAvgCFR, "0.00") & "%"
+		displayFolder: KPI Labels
+		lineageTag: e16f23b0-0491-4555-b07f-a66f5829cda1
+
+	/// Reference label for Total Vaccinations KPI card
+	measure 'Label - Vaccinations' =
+			VAR FullyVaxPct = [Full Vaccination Rate %]
+			VAR BoosterPct = [Booster Rate %]
+			RETURN
+			FORMAT(FullyVaxPct, "0.0") & "% fully vaccinated" & UNICHAR(10) & FORMAT(BoosterPct, "0.0") & "% received booster"
+		displayFolder: KPI Labels
+		lineageTag: 3a08708f-55c7-4310-b91e-0732f794e6f0
+
+	/// Reference label for R-Rate KPI card
+	measure 'Label - Reproduction Rate' =
+			VAR RRate = [Avg Reproduction Rate]
+			VAR RateLabel = IF(RRate > 1, "Above threshold (R>1)", "Below threshold (R<1)")
+			VAR LatestDate = MAX(Dim_Date[Date])
+			RETURN
+			RateLabel & UNICHAR(10) & "Latest period " & FORMAT(LatestDate, "MMM YYYY")
+		displayFolder: KPI Labels
+		lineageTag: b2fcb82e-8e89-4599-96ae-b6340bcb603e
+
+	/// Reference label for Test Positivity Rate KPI card
+	measure 'Label - Positive Rate' =
+			VAR PosRate = [Positive Rate %]
+			VAR PosLabel = IF(PosRate > 5, "Above WHO 5% threshold", "Within WHO 5% threshold")
+			VAR TotalTestsM = FORMAT([Total Tests] / 1000000, "0.0") & "M total tests"
+			RETURN
+			PosLabel & UNICHAR(10) & TotalTestsM
+		displayFolder: KPI Labels
+		lineageTag: b8a26030-1d94-468e-8a46-22e2060de6c7
+
+	/// Reference label for ICU Patients KPI card
+	measure 'Label - ICU Patients' =
+			VAR HospTotal = [Hospital Patients]
+			VAR ICUTotal = [ICU Patients]
+			VAR ICUPct = DIVIDE(ICUTotal, HospTotal, 0) * 100
+			VAR LatestDate = MAX(Dim_Date[Date])
+			RETURN
+			FORMAT(ICUPct, "0.0") & "% of hospitalised in ICU" & UNICHAR(10) & "Latest period " & FORMAT(LatestDate, "MMM YYYY")
+		displayFolder: KPI Labels
+		lineageTag: 31308da1-12b3-42c2-8ce4-6b7e12cde89d
+
+	/// Reference label for Government Stringency KPI card
+	measure 'Label - Stringency Index' =
+			VAR SI = [Stringency Index Peak]
+			VAR SILabel = SWITCH(TRUE(), SI >= 75, "High restriction level", SI >= 50, "Moderate restriction level", SI >= 25, "Low restriction level", "Minimal restrictions")
+			VAR LatestDate = MAX(Dim_Date[Date])
+			RETURN
+			SILabel & UNICHAR(10) & "Score 0-100, Latest: " & FORMAT(LatestDate, "MMM YYYY")
+		displayFolder: KPI Labels
+		lineageTag: 96f1d213-e8a1-424c-8335-368ac4fb870c
+
+	/// Reference label for Excess Mortality KPI card
+	measure 'Label - Excess Mortality' =
+			VAR EM = [Excess Mortality %]
+			VAR Context = IF(EM > 0, "Above expected deaths baseline", "Below expected deaths baseline")
+			VAR DeathsPerM = FORMAT([Deaths Per Million], "#,##0") & " official deaths/M"
+			RETURN
+			Context & UNICHAR(10) & DeathsPerM
+		displayFolder: KPI Labels
+		lineageTag: f3a7d7de-2f1f-47b3-9ab0-2c49dc1817d7
+
+	/// Cases that actually occurred in the selected period — use this on time-axis charts, NOT Total Cases
+	measure 'Cases (Period)' = SUM(Fact_Covid_Daily[new_cases])
+		formatString: #,##0
+		displayFolder: Cases
+		lineageTag: ca9c606e-a944-4ca2-b5e6-4ad6f4848747
+
+	/// Deaths that actually occurred in the selected period — use this on time-axis charts, NOT Total Deaths
+	measure 'Deaths (Period)' = SUM(Fact_Covid_Daily[new_deaths])
+		formatString: #,##0
+		displayFolder: Deaths
+		lineageTag: eae93dfc-3e5e-4fa8-b6f0-84b69940d9a9
+
+	/// Vaccinations administered in the selected period — use this on time-axis charts, NOT Total Vaccinations
+	measure 'Vaccinations (Period)' = SUM(Fact_Covid_Daily[new_vaccinations])
+		formatString: #,##0
+		displayFolder: Vaccinations
+		lineageTag: c59f9db0-3afd-48d7-b096-f2deae644497
+
+	measure 'Tests Per Case' = AVERAGE(Fact_Covid_Daily[tests_per_case])
+		displayFolder: Cases
+		lineageTag: 163b0cbf-767c-41f1-909c-d710c8b33627
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Tests Per Thousand' = ```
+			
+			MAXX(
+			    VALUES(Dim_Location[location]), 
+			    CALCULATE(MAX(Fact_Covid_Daily[total_tests_per_thousand]))
+			)
+			```
+		displayFolder: Testing
+		lineageTag: 28a67b4d-efde-4a71-b036-3c8b68011060
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column iso_code
+		dataType: string
+		lineageTag: 5de02a71-4b3b-4a8e-9a2d-829d8af8209e
+		summarizeBy: none
+		sourceColumn: iso_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column continent
+		dataType: string
+		lineageTag: 9062061f-6a8b-486d-aa5b-f03e88800daa
+		summarizeBy: none
+		sourceColumn: continent
+
+		annotation SummarizationSetBy = Automatic
+
+	column location
+		dataType: string
+		lineageTag: e2026081-5398-434a-b76a-153c17146245
+		summarizeBy: none
+		sourceColumn: location
+
+		annotation SummarizationSetBy = Automatic
+
+	column date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 1e88c2a6-3496-4dc9-8683-79c431dc568e
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column total_cases
+		dataType: int64
+		formatString: 0
+		lineageTag: ce18e4ee-8ca0-49f5-b3c9-5937d8c616d5
+		summarizeBy: sum
+		sourceColumn: total_cases
+
+		annotation SummarizationSetBy = Automatic
+
+	column new_cases
+		dataType: int64
+		formatString: 0
+		lineageTag: 10bbf2c8-d44b-4249-be8a-16b1caa6e608
+		summarizeBy: sum
+		sourceColumn: new_cases
+
+		annotation SummarizationSetBy = Automatic
+
+	column new_cases_smoothed
+		dataType: double
+		lineageTag: c4378f5c-2df4-42e9-9a39-13914c5da4b5
+		summarizeBy: sum
+		sourceColumn: new_cases_smoothed
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_deaths
+		dataType: int64
+		formatString: 0
+		lineageTag: 2220c7de-8d7d-4343-ad8e-d542480b5bc6
+		summarizeBy: sum
+		sourceColumn: total_deaths
+
+		annotation SummarizationSetBy = Automatic
+
+	column new_deaths
+		dataType: int64
+		formatString: 0
+		lineageTag: 166c8039-1449-4cca-9b87-114390452007
+		summarizeBy: sum
+		sourceColumn: new_deaths
+
+		annotation SummarizationSetBy = Automatic
+
+	column new_deaths_smoothed
+		dataType: double
+		lineageTag: 819c30f1-36d0-4c5c-936c-63eb6f8bc5a9
+		summarizeBy: sum
+		sourceColumn: new_deaths_smoothed
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_cases_per_million
+		dataType: double
+		lineageTag: c153f270-6d05-42fe-8a2b-d4570ad2b844
+		summarizeBy: sum
+		sourceColumn: total_cases_per_million
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column new_cases_per_million
+		dataType: double
+		lineageTag: 2a9d6fb3-28a3-4989-aebd-170313497fcf
+		summarizeBy: sum
+		sourceColumn: new_cases_per_million
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column new_cases_smoothed_per_million
+		dataType: double
+		lineageTag: f98c24bb-5464-44ef-b7c5-600babd16d3d
+		summarizeBy: sum
+		sourceColumn: new_cases_smoothed_per_million
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_deaths_per_million
+		dataType: double
+		lineageTag: 7e58ced1-20f0-4ef3-ad7d-f3f6d9c9aae4
+		summarizeBy: sum
+		sourceColumn: total_deaths_per_million
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column new_deaths_per_million
+		dataType: double
+		lineageTag: b8adb5d4-acc4-441a-96d7-532dbee73f94
+		summarizeBy: sum
+		sourceColumn: new_deaths_per_million
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column new_deaths_smoothed_per_million
+		dataType: double
+		lineageTag: d9a87a94-fa39-436d-b08c-3504c2f6f778
+		summarizeBy: sum
+		sourceColumn: new_deaths_smoothed_per_million
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column reproduction_rate
+		dataType: double
+		lineageTag: 9cdf3b0f-436d-4e34-8f91-a41cf6c0382c
+		summarizeBy: sum
+		sourceColumn: reproduction_rate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column icu_patients
+		dataType: int64
+		formatString: 0
+		lineageTag: 00841267-a6a6-419a-ac52-f18ec50fa648
+		summarizeBy: sum
+		sourceColumn: icu_patients
+
+		annotation SummarizationSetBy = Automatic
+
+	column icu_patients_per_million
+		dataType: double
+		lineageTag: eb8b6b55-bd93-4f6f-be6e-8908c14f1e74
+		summarizeBy: sum
+		sourceColumn: icu_patients_per_million
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column hosp_patients
+		dataType: int64
+		formatString: 0
+		lineageTag: 8eb06e66-cb05-40f6-9582-5a33ef134029
+		summarizeBy: sum
+		sourceColumn: hosp_patients
+
+		annotation SummarizationSetBy = Automatic
+
+	column hosp_patients_per_million
+		dataType: double
+		lineageTag: 322e8465-1c36-4c68-bf50-a527aa39a88f
+		summarizeBy: sum
+		sourceColumn: hosp_patients_per_million
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column weekly_icu_admissions
+		dataType: int64
+		formatString: 0
+		lineageTag: a41fcf8e-e002-4866-937a-04157f395035
+		summarizeBy: sum
+		sourceColumn: weekly_icu_admissions
+
+		annotation SummarizationSetBy = Automatic
+
+	column weekly_icu_admissions_per_million
+		dataType: int64
+		formatString: 0
+		lineageTag: ea37c1ea-da10-4224-a960-41042f0abea6
+		summarizeBy: sum
+		sourceColumn: weekly_icu_admissions_per_million
+
+		annotation SummarizationSetBy = Automatic
+
+	column weekly_hosp_admissions
+		dataType: int64
+		formatString: 0
+		lineageTag: 378ed0b8-2bb3-4920-a6b1-7d8ff9bcc5f2
+		summarizeBy: sum
+		sourceColumn: weekly_hosp_admissions
+
+		annotation SummarizationSetBy = Automatic
+
+	column weekly_hosp_admissions_per_million
+		dataType: double
+		lineageTag: bbf6849f-7cca-4be9-99e3-8b6c0639f5fc
+		summarizeBy: sum
+		sourceColumn: weekly_hosp_admissions_per_million
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_tests
+		dataType: int64
+		formatString: 0
+		lineageTag: ad311ac3-9e90-490f-a63d-0f650c52612d
+		summarizeBy: sum
+		sourceColumn: total_tests
+
+		annotation SummarizationSetBy = Automatic
+
+	column new_tests
+		dataType: int64
+		formatString: 0
+		lineageTag: b750e68e-a21c-48b3-a534-7fb0e591bbb1
+		summarizeBy: sum
+		sourceColumn: new_tests
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_tests_per_thousand
+		dataType: double
+		lineageTag: 722f9c91-1419-47c2-bffd-dc078f894557
+		summarizeBy: sum
+		sourceColumn: total_tests_per_thousand
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column new_tests_per_thousand
+		dataType: double
+		lineageTag: 8205efbb-3845-4253-9a71-3b23eb4da69c
+		summarizeBy: sum
+		sourceColumn: new_tests_per_thousand
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column new_tests_smoothed
+		dataType: double
+		lineageTag: 4d1a1ed0-d8cc-469e-a4e1-b07e5d3fd16f
+		summarizeBy: sum
+		sourceColumn: new_tests_smoothed
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column new_tests_smoothed_per_thousand
+		dataType: double
+		lineageTag: 739b9b9e-fe86-42f3-982c-89dda27eb02b
+		summarizeBy: sum
+		sourceColumn: new_tests_smoothed_per_thousand
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column positive_rate
+		dataType: double
+		lineageTag: 430af6f0-1370-4a80-930b-41bb518e3bad
+		summarizeBy: sum
+		sourceColumn: positive_rate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column tests_per_case
+		dataType: double
+		lineageTag: 7786629c-5953-4f0b-a420-841407359efa
+		summarizeBy: sum
+		sourceColumn: tests_per_case
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column tests_units
+		dataType: string
+		lineageTag: d59abe38-aa51-4aed-8f44-aa7bc206d3e9
+		summarizeBy: none
+		sourceColumn: tests_units
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_vaccinations
+		dataType: int64
+		formatString: 0
+		lineageTag: e93b1c18-0dc1-46bf-a32b-35da37a86e77
+		summarizeBy: sum
+		sourceColumn: total_vaccinations
+
+		annotation SummarizationSetBy = Automatic
+
+	column people_vaccinated
+		dataType: int64
+		formatString: 0
+		lineageTag: 5bad879b-cdb4-4b98-93dd-a606f89cd4b6
+		summarizeBy: sum
+		sourceColumn: people_vaccinated
+
+		annotation SummarizationSetBy = Automatic
+
+	column people_fully_vaccinated
+		dataType: int64
+		formatString: 0
+		lineageTag: 3ca15268-7360-43d7-bf21-72ef73421fc5
+		summarizeBy: sum
+		sourceColumn: people_fully_vaccinated
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_boosters
+		dataType: int64
+		formatString: 0
+		lineageTag: 376b528f-e736-4a78-b84c-5eaca206446c
+		summarizeBy: sum
+		sourceColumn: total_boosters
+
+		annotation SummarizationSetBy = Automatic
+
+	column new_vaccinations
+		dataType: int64
+		formatString: 0
+		lineageTag: 5a58ae06-7260-48f6-b898-26ba34847983
+		summarizeBy: sum
+		sourceColumn: new_vaccinations
+
+		annotation SummarizationSetBy = Automatic
+
+	column new_vaccinations_smoothed
+		dataType: double
+		lineageTag: 80c563b7-f4f4-4046-b8dc-eafbc822e653
+		summarizeBy: sum
+		sourceColumn: new_vaccinations_smoothed
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_vaccinations_per_hundred
+		dataType: double
+		lineageTag: 3a3f6de2-263d-4dd8-972a-3852ce95912a
+		summarizeBy: sum
+		sourceColumn: total_vaccinations_per_hundred
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column people_vaccinated_per_hundred
+		dataType: double
+		lineageTag: 0cdd27cc-123b-4772-971f-ee84dd0d6d53
+		summarizeBy: sum
+		sourceColumn: people_vaccinated_per_hundred
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column people_fully_vaccinated_per_hundred
+		dataType: double
+		lineageTag: c4695d33-d80a-47be-83cc-774bdd570d52
+		summarizeBy: sum
+		sourceColumn: people_fully_vaccinated_per_hundred
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_boosters_per_hundred
+		dataType: double
+		lineageTag: 087382c2-a84f-4c55-9fc5-19a3fe5e5ee2
+		summarizeBy: sum
+		sourceColumn: total_boosters_per_hundred
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column new_vaccinations_smoothed_per_million
+		dataType: double
+		lineageTag: 6218dcfb-d0fe-4659-b015-00b93b67ee09
+		summarizeBy: sum
+		sourceColumn: new_vaccinations_smoothed_per_million
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column new_people_vaccinated_smoothed
+		dataType: int64
+		formatString: 0
+		lineageTag: 27f4f864-1102-405f-872b-3e420fa4c0bc
+		summarizeBy: sum
+		sourceColumn: new_people_vaccinated_smoothed
+
+		annotation SummarizationSetBy = Automatic
+
+	column new_people_vaccinated_smoothed_per_hundred
+		dataType: double
+		lineageTag: b3646fd4-ca75-4ba6-8a5d-be941aee205d
+		summarizeBy: sum
+		sourceColumn: new_people_vaccinated_smoothed_per_hundred
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column stringency_index
+		dataType: double
+		lineageTag: 352fd305-d7fb-4ab8-b336-86f1a6d9dabb
+		summarizeBy: sum
+		sourceColumn: stringency_index
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column population_density
+		dataType: double
+		lineageTag: e206f211-058d-4bfd-84f9-69f48a6e2821
+		summarizeBy: sum
+		sourceColumn: population_density
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column median_age
+		dataType: double
+		lineageTag: dcdfca94-8b60-4938-b10a-44ff074e41c1
+		summarizeBy: sum
+		sourceColumn: median_age
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column aged_65_older
+		dataType: double
+		lineageTag: d44813f5-08cb-4088-b210-21051b6156fa
+		summarizeBy: sum
+		sourceColumn: aged_65_older
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column aged_70_older
+		dataType: double
+		lineageTag: 36cf3e19-d2fa-4753-82c4-9d7797591131
+		summarizeBy: sum
+		sourceColumn: aged_70_older
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column gdp_per_capita
+		dataType: double
+		lineageTag: c61491de-d555-494b-a5b4-a939ef1d7f2b
+		summarizeBy: sum
+		sourceColumn: gdp_per_capita
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column extreme_poverty
+		dataType: double
+		lineageTag: bdbf6aff-fc52-4811-9cae-f6e87114bacd
+		summarizeBy: sum
+		sourceColumn: extreme_poverty
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column cardiovasc_death_rate
+		dataType: double
+		lineageTag: e6ce19ef-5377-4236-912e-b7c0817ca90c
+		summarizeBy: sum
+		sourceColumn: cardiovasc_death_rate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column diabetes_prevalence
+		dataType: double
+		lineageTag: 10348659-4e78-4059-bd87-2bdcab3c1803
+		summarizeBy: sum
+		sourceColumn: diabetes_prevalence
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column female_smokers
+		dataType: double
+		lineageTag: 07124276-ce91-42d3-ba2d-3eafdbc0a6dd
+		summarizeBy: sum
+		sourceColumn: female_smokers
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column male_smokers
+		dataType: double
+		lineageTag: c3be5a6a-e2a7-42f7-b67f-8f6d38a382ba
+		summarizeBy: sum
+		sourceColumn: male_smokers
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column handwashing_facilities
+		dataType: double
+		lineageTag: 0b6decf3-d400-4409-925e-658d52002858
+		summarizeBy: sum
+		sourceColumn: handwashing_facilities
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column hospital_beds_per_thousand
+		dataType: double
+		lineageTag: bca4fde1-0f13-4691-831b-7eaa58434712
+		summarizeBy: sum
+		sourceColumn: hospital_beds_per_thousand
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column life_expectancy
+		dataType: double
+		lineageTag: cee16039-402d-46ce-955f-96a7b409bbd3
+		summarizeBy: sum
+		sourceColumn: life_expectancy
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column human_development_index
+		dataType: double
+		lineageTag: 4dc8fc5c-ba3a-4497-b630-ebafad00a98d
+		summarizeBy: sum
+		sourceColumn: human_development_index
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column population
+		dataType: int64
+		formatString: 0
+		lineageTag: f34badc7-e397-4e80-8d74-a470db710606
+		summarizeBy: sum
+		sourceColumn: population
+
+		annotation SummarizationSetBy = Automatic
+
+	column excess_mortality_cumulative_absolute
+		dataType: double
+		lineageTag: 2d4fded2-6d4b-4737-b682-a09a20387c51
+		summarizeBy: sum
+		sourceColumn: excess_mortality_cumulative_absolute
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column excess_mortality_cumulative
+		dataType: double
+		lineageTag: 951f4733-60f0-4e39-bea5-20a186f2bbab
+		summarizeBy: sum
+		sourceColumn: excess_mortality_cumulative
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column excess_mortality
+		dataType: double
+		lineageTag: 711fa1e5-5d7f-4798-bc51-c785eeb05040
+		summarizeBy: sum
+		sourceColumn: excess_mortality
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column excess_mortality_cumulative_per_million
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: f3fb87ea-71d6-434a-b551-16440ef8e2a4
+		summarizeBy: sum
+		sourceColumn: excess_mortality_cumulative_per_million
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"es-US"}
+
+	partition Fact_Covid_Daily = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\antoi\Downloads\All_Files\projects\covid19-statistics\owid-covid-data.csv"),[Delimiter=",", Columns=67, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"iso_code", type text}, {"continent", type text}, {"location", type text}, {"date", type date}, {"total_cases", Int64.Type}, {"new_cases", Int64.Type}, {"new_cases_smoothed", type number}, {"total_deaths", Int64.Type}, {"new_deaths", Int64.Type}, {"new_deaths_smoothed", type number}, {"total_cases_per_million", type number}, {"new_cases_per_million", type number}, {"new_cases_smoothed_per_million", type number}, {"total_deaths_per_million", type number}, {"new_deaths_per_million", type number}, {"new_deaths_smoothed_per_million", type number}, {"reproduction_rate", type number}, {"icu_patients", Int64.Type}, {"icu_patients_per_million", type number}, {"hosp_patients", Int64.Type}, {"hosp_patients_per_million", type number}, {"weekly_icu_admissions", Int64.Type}, {"weekly_icu_admissions_per_million", Int64.Type}, {"weekly_hosp_admissions", Int64.Type}, {"weekly_hosp_admissions_per_million", type number}, {"total_tests", Int64.Type}, {"new_tests", Int64.Type}, {"total_tests_per_thousand", type number}, {"new_tests_per_thousand", type number}, {"new_tests_smoothed", type number}, {"new_tests_smoothed_per_thousand", type number}, {"positive_rate", type number}, {"tests_per_case", type number}, {"tests_units", type text}, {"total_vaccinations", Int64.Type}, {"people_vaccinated", Int64.Type}, {"people_fully_vaccinated", Int64.Type}, {"total_boosters", Int64.Type}, {"new_vaccinations", Int64.Type}, {"new_vaccinations_smoothed", type number}, {"total_vaccinations_per_hundred", type number}, {"people_vaccinated_per_hundred", type number}, {"people_fully_vaccinated_per_hundred", type number}, {"total_boosters_per_hundred", type number}, {"new_vaccinations_smoothed_per_million", type number}, {"new_people_vaccinated_smoothed", Int64.Type}, {"new_people_vaccinated_smoothed_per_hundred", type number}, {"stringency_index", type number}, {"population_density", type number}, {"median_age", type number}, {"aged_65_older", type number}, {"aged_70_older", type number}, {"gdp_per_capita", type number}, {"extreme_poverty", type number}, {"cardiovasc_death_rate", type number}, {"diabetes_prevalence", type number}, {"female_smokers", type number}, {"male_smokers", type number}, {"handwashing_facilities", type number}, {"hospital_beds_per_thousand", type number}, {"life_expectancy", type number}, {"human_development_index", type number}, {"population", Int64.Type}, {"excess_mortality_cumulative_absolute", type number}, {"excess_mortality_cumulative", type number}, {"excess_mortality", type number}, {"excess_mortality_cumulative_per_million", Currency.Type}}),
+				    #"Deletion of Continents and Null values" = Table.SelectRows(#"Changed Type", each not Text.StartsWith([iso_code], "OWID_") or [iso_code] = null)
+				in
+				    #"Deletion of Continents and Null values"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

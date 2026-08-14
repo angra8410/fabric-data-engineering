@@ -1,0 +1,12 @@
+relationship bb0e4031-dbad-0481-791f-2f8d289ec8f1
+	fromColumn: fact_deforestacion.id_divipola
+	toColumn: dim_divipola.cod_dane
+
+relationship 2b594a3e-66f8-21a0-8e9f-d31b304cedd6
+	fromColumn: fact_deforestacion.id_anio
+	toColumn: dim_fecha.id_anio
+
+relationship 958d7aa3-5741-bf29-bd52-a4f8757caf7c
+	fromColumn: fact_deforestacion.version_algoritmo
+	toColumn: dim_algoritmo.id_algoritmo
+

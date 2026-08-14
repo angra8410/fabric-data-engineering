@@ -1,0 +1,43 @@
+table Dim_Location
+	lineageTag: ddaa37a3-3fcf-4b27-a365-f6f913ad79db
+
+	column iso_code
+		dataType: string
+		lineageTag: a29736e2-520c-4557-99eb-407974b0e495
+		summarizeBy: none
+		sourceColumn: iso_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column continent
+		dataType: string
+		lineageTag: ce3d8cd2-aea8-4438-8f72-6327e6511457
+		dataCategory: Continent
+		summarizeBy: none
+		sourceColumn: continent
+
+		annotation SummarizationSetBy = Automatic
+
+	column location
+		dataType: string
+		lineageTag: 2735f66b-56e0-4c09-9c33-bd98aecc4490
+		dataCategory: Country
+		summarizeBy: none
+		sourceColumn: location
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Location = m
+		mode: import
+		source =
+				let
+				    Source = Fact_Covid_Daily,
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"iso_code", "continent", "location"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Removed Other Columns", {"iso_code"})
+				in
+				    #"Removed Duplicates"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

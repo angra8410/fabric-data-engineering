@@ -1,0 +1,53 @@
+table dim_divipola
+	lineageTag: a5136c22-6fc6-4643-b8a9-66662116ce09
+	sourceLineageTag: [dbo].[dim_divipola]
+
+	/// DANE geographic code — hidden FK, use nombre_departamento for display
+	column cod_dane
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 32589faf-a873-4d05-b394-2908d55dc770
+		sourceLineageTag: cod_dane
+		summarizeBy: none
+		sourceColumn: cod_dane
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Name of the Colombian department
+	column nombre_departamento
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 5ddea036-a10c-4d3d-95ec-6f11faba6e23
+		sourceLineageTag: nombre_departamento
+		dataCategory: Country
+		summarizeBy: none
+		sourceColumn: nombre_departamento
+
+		changedProperty = DataCategory
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Geographic region grouping (e.g. Amazonía, Andina, Pacífica)
+	column region
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: aed685d3-5fa7-4822-a728-ba9726b2a846
+		sourceLineageTag: region
+		dataCategory: Country
+		summarizeBy: none
+		sourceColumn: region
+
+		changedProperty = DataCategory
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_divipola = entity
+		mode: directLake
+		source
+			entityName: dim_divipola
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+

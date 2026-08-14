@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Lakehouse",
+    "displayName": "p90x_workout_lh"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "17223730-7d9a-8e30-429b-520e5846138b"
+  }
+}

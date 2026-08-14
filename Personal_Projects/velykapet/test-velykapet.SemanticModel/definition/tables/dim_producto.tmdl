@@ -1,0 +1,57 @@
+table dim_producto
+	lineageTag: 8fd9fa77-cbee-4d15-862b-388b77382fe3
+	sourceLineageTag: [dbo].[dim_producto]
+
+	column producto_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 5f2a2be6-2ea2-4484-9f11-d1b892f9dd93
+		sourceLineageTag: producto_sk
+		summarizeBy: sum
+		sourceColumn: producto_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column codigo_producto
+		dataType: string
+		lineageTag: f5fbdc1c-a132-43af-9b85-c77e492ddc38
+		sourceLineageTag: codigo_producto
+		summarizeBy: none
+		sourceColumn: codigo_producto
+
+		annotation SummarizationSetBy = Automatic
+
+	column nombre_producto
+		dataType: string
+		lineageTag: 87fc4a50-58ea-4d49-9d49-9b546e7ad346
+		sourceLineageTag: nombre_producto
+		summarizeBy: none
+		sourceColumn: nombre_producto
+
+		annotation SummarizationSetBy = Automatic
+
+	column categoria_producto
+		dataType: string
+		lineageTag: 2a9187e4-478b-4c82-838f-a3c63ea02ac6
+		sourceLineageTag: categoria_producto
+		summarizeBy: none
+		sourceColumn: categoria_producto
+
+		annotation SummarizationSetBy = Automatic
+
+	column barcode
+		dataType: string
+		lineageTag: 68bbaafb-ab0f-4c06-b39e-dbe72da3868e
+		sourceLineageTag: barcode
+		summarizeBy: none
+		sourceColumn: barcode
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_producto = entity
+		mode: directLake
+		source
+			entityName: dim_producto
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_gold_velykapet'
+

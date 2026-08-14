@@ -1,0 +1,11 @@
+expression 'DirectLake - lh_gold_velykapet' =
+		let
+		    Source = AzureStorage.DataLake("https://onelake.dfs.fabric.microsoft.com/b14581ac-9906-43e2-809c-c2fd4315ad5b/5004f4fc-709d-4412-907f-fb8c21b64633", [HierarchicalNavigation=true])
+		in
+		    Source
+	lineageTag: 89ed44a5-5157-4069-877b-5bb934fc08b0
+
+	annotation PBI_IncludeFutureArtifacts = False
+
+	annotation PBI_RemovedChildren = [{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[dbo].[fct_gastos]"}},"objectType":"Table"},{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[dbo].[fct_ventas]"}},"objectType":"Table"},{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[dbo].[fct_compras]"}},"objectType":"Table"},{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[dbo].[fct_inventario]"}},"objectType":"Table"}]
+

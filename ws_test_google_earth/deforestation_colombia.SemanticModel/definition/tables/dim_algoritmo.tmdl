@@ -1,0 +1,33 @@
+table dim_algoritmo
+	lineageTag: 3e1eb5fa-0570-4901-a02a-aaa085233476
+	sourceLineageTag: [dbo].[dim_algoritmo]
+
+	column id_algoritmo
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: d5392af7-b4ac-404e-8b81-bbf142d22658
+		sourceLineageTag: id_algoritmo
+		summarizeBy: none
+		sourceColumn: id_algoritmo
+
+		annotation SummarizationSetBy = Automatic
+
+	column nombre_version
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: e0ad313e-e985-4778-a7d0-30bf9bd684e9
+		sourceLineageTag: nombre_version
+		summarizeBy: none
+		sourceColumn: nombre_version
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_algoritmo = entity
+		mode: directLake
+		source
+			entityName: dim_algoritmo
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+

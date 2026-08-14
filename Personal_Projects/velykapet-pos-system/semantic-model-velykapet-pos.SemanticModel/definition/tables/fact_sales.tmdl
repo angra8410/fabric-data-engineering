@@ -1,0 +1,239 @@
+table fact_sales
+	lineageTag: 7ddeb250-79d7-458f-bff3-6960aab59d79
+	sourceLineageTag: [dbo].[fact_sales]
+
+	measure 'Total Revenue' = SUM(fact_sales[total_revenue])
+		formatString: \$#,0.00
+		displayFolder: Sales
+		lineageTag: acdbbdb1-b82c-48ab-bdd4-67d8c3d7ffcf
+
+	measure 'Total Transactions' = DISTINCTCOUNT(fact_sales[sale_id])
+		formatString: #,0
+		displayFolder: Sales
+		lineageTag: 9e3b0eae-3a8a-4a01-8cb6-ad45d9581449
+
+	measure 'Average Order Value' = DIVIDE([Total Revenue], [Total Transactions])
+		formatString: \$#,0.00
+		displayFolder: Sales
+		lineageTag: 4c52fd51-1188-4ab6-ae13-dfb74d813325
+
+	measure 'Revenue YTD' = TOTALYTD([Total Revenue], dim_dates[date_key])
+		formatString: \$#,0.00
+		displayFolder: Sales\Time Intelligence
+		lineageTag: 66744ee1-044f-46c1-afac-962f06c4ac4a
+
+	measure 'Revenue MTD' = TOTALMTD([Total Revenue], dim_dates[date_key])
+		formatString: \$#,0.00
+		displayFolder: Sales\Time Intelligence
+		lineageTag: 34b6ed2e-32ca-4847-863c-c57e89099ecc
+
+	measure 'Revenue PY' = CALCULATE([Total Revenue], SAMEPERIODLASTYEAR(dim_dates[date_key]))
+		formatString: \$#,0.00
+		displayFolder: Sales\Time Intelligence
+		lineageTag: 5d5f3763-e416-46ed-abb4-32ab7946f9c9
+
+	measure 'Revenue YoY %' = DIVIDE([Total Revenue] - [Revenue PY], [Revenue PY])
+		formatString: 0.0%
+		displayFolder: Sales\Time Intelligence
+		lineageTag: 681b858c-21eb-4d9a-b51e-7eb97bb30c55
+
+	measure 'Net Revenue' = [Total Revenue] - [Total Refund Amount]
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Profitability
+		lineageTag: 9e7b7fcb-7d84-4130-8e9b-7ef793cad00f
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Net Profit' = [Gross Profit] - [Total Refund Amount] - [Total Expenses]
+		formatString: \$#,0.00
+		displayFolder: Profitability
+		lineageTag: 969b65ea-cc60-481b-bf93-cc1b034d88e7
+
+	measure 'Net Margin %' = DIVIDE([Net Profit], [Net Revenue])
+		formatString: 0.0%
+		displayFolder: Profitability
+		lineageTag: 501fe51a-577f-427c-bb84-6fab0ebd447f
+
+	/// Diagnostic: revenue in the previous calendar month
+	measure 'Revenue PM' = CALCULATE([Total Revenue], PREVIOUSMONTH(dim_dates[date_key]))
+		formatString: \$#,0.00
+		displayFolder: Diagnostic
+		lineageTag: 781920c1-70ab-44f8-816d-6fcae7d3f103
+
+	/// Diagnostic: absolute revenue change vs previous month
+	measure 'Revenue MoM Change' = [Total Revenue] - [Revenue PM]
+		formatString: \$#,0.00
+		displayFolder: Diagnostic
+		lineageTag: f5dd494b-f57b-4351-b2f5-d7f0d91ceecc
+
+	/// Diagnostic: percent revenue change vs previous month
+	measure 'Revenue MoM %' = DIVIDE([Total Revenue] - [Revenue PM], [Revenue PM])
+		formatString: 0.0%
+		displayFolder: Diagnostic
+		lineageTag: 15564219-6bf6-4540-a2dd-ddfdb9ccc638
+
+	/// Diagnostic: transaction count in the previous calendar month
+	measure 'Transactions PM' = CALCULATE([Total Transactions], PREVIOUSMONTH(dim_dates[date_key]))
+		formatString: #,0
+		displayFolder: Diagnostic
+		lineageTag: 984104f6-863e-4e9b-bca1-8bdd2987622f
+
+	/// Diagnostic: percent change in transaction count vs previous month — helps separate 'more customers' from 'bigger baskets' as a revenue driver
+	measure 'Transactions MoM %' = DIVIDE([Total Transactions] - [Transactions PM], [Transactions PM])
+		formatString: 0.0%
+		displayFolder: Diagnostic
+		lineageTag: 943640f9-b187-4138-9fed-5573d9bb4d1f
+
+	/// Predictive support: trailing 3-month average monthly revenue, for spotting trend direction (not a forecast — use the line chart Forecast analytics feature for that)
+	measure 'Revenue 3M Moving Avg' = CALCULATE([Total Revenue], DATESINPERIOD(dim_dates[date_key], LASTDATE(dim_dates[date_key]), -3, MONTH)) / 3
+		formatString: \$#,0.00
+		displayFolder: Predictive
+		lineageTag: f78e3b39-f207-4355-b9dc-b0cb45631656
+
+	/// Predictive support: whether current period revenue is running above or below its own trailing 3-month average
+	measure 'Revenue vs Trend' = IF(ISBLANK([Total Revenue]), BLANK(), IF([Total Revenue] > [Revenue 3M Moving Avg], "Above Trend", "Below Trend"))
+		displayFolder: Predictive
+		lineageTag: 36b93607-0869-4fab-9925-194ebf57c9f1
+
+	column sale_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 9362a7fe-a408-437a-9887-d6458038a32f
+		sourceLineageTag: sale_id
+		summarizeBy: sum
+		sourceColumn: sale_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column local_id
+		dataType: int64
+		formatString: 0
+		lineageTag: b72b796d-e83a-4dd4-8392-e1480758714b
+		sourceLineageTag: local_id
+		summarizeBy: sum
+		sourceColumn: local_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_key
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 4add9251-81d3-4aab-94e9-338fa4ff600a
+		sourceLineageTag: date_key
+		summarizeBy: none
+		sourceColumn: date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column sale_timestamp
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 969cd12a-84ea-4985-85b2-4e4f7307420b
+		sourceLineageTag: sale_timestamp
+		summarizeBy: none
+		sourceColumn: sale_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column sales_channel
+		dataType: string
+		lineageTag: 2018aeec-fc9a-47d8-9af1-726e635d8e8e
+		sourceLineageTag: sales_channel
+		summarizeBy: none
+		sourceColumn: sales_channel
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_method
+		dataType: string
+		lineageTag: 0043acf4-031d-4d43-9f29-ac910835cd9a
+		sourceLineageTag: payment_method
+		summarizeBy: none
+		sourceColumn: payment_method
+
+		annotation SummarizationSetBy = Automatic
+
+	column sale_type
+		dataType: string
+		lineageTag: de0184de-880f-41ee-adfb-8cc7f0d206db
+		sourceLineageTag: sale_type
+		summarizeBy: none
+		sourceColumn: sale_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column invoice_number
+		dataType: string
+		lineageTag: 4517ec99-f074-47cf-89ad-4d9305ea2a4d
+		sourceLineageTag: invoice_number
+		summarizeBy: none
+		sourceColumn: invoice_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column transaction_code
+		dataType: string
+		lineageTag: cc75381c-a524-4171-9a31-c38f08fb0b78
+		sourceLineageTag: transaction_code
+		summarizeBy: none
+		sourceColumn: transaction_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_revenue
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: b8be6d22-b93e-43ac-87f5-65b7fc77de40
+		sourceLineageTag: total_revenue
+		summarizeBy: sum
+		sourceColumn: total_revenue
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column delivery_tower
+		dataType: string
+		lineageTag: 80981282-52b4-4a09-94cf-2911072b1023
+		sourceLineageTag: delivery_tower
+		summarizeBy: none
+		sourceColumn: delivery_tower
+
+		annotation SummarizationSetBy = Automatic
+
+	column delivery_apartment
+		dataType: string
+		lineageTag: 930b0be2-780e-4c6c-b8e7-71c4463f6946
+		sourceLineageTag: delivery_apartment
+		summarizeBy: none
+		sourceColumn: delivery_apartment
+
+		annotation SummarizationSetBy = Automatic
+
+	column delivery_complex
+		dataType: string
+		lineageTag: 89f7dadf-bd23-4280-b9d8-a11528de8c5b
+		sourceLineageTag: delivery_complex
+		summarizeBy: none
+		sourceColumn: delivery_complex
+
+		annotation SummarizationSetBy = Automatic
+
+	column notes
+		dataType: string
+		lineageTag: 70f74199-ac7c-4966-9577-ad32bbf9c95b
+		sourceLineageTag: notes
+		summarizeBy: none
+		sourceColumn: notes
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_sales = entity
+		mode: directLake
+		source
+			entityName: fact_sales
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
+

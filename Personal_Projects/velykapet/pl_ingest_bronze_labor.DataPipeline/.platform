@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "pl_ingest_bronze_labor"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "68fbea9d-4b6c-ab1f-473d-b03a29210cf2"
+  }
+}

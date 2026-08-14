@@ -1,0 +1,30 @@
+table dim_metodo_pago
+	lineageTag: bb9f312b-2610-4b6b-a2b0-988925c71c2f
+	sourceLineageTag: [dbo].[dim_metodo_pago]
+
+	column metodo_pago_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 272ae77b-b75f-4caa-83bb-72fb8063f7a3
+		sourceLineageTag: metodo_pago_sk
+		summarizeBy: none
+		sourceColumn: metodo_pago_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column metodo_pago
+		dataType: string
+		lineageTag: c31a1e56-2aa8-43cd-bcad-9d3b09e98159
+		sourceLineageTag: metodo_pago
+		summarizeBy: none
+		sourceColumn: metodo_pago
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_metodo_pago = entity
+		mode: directLake
+		source
+			entityName: dim_metodo_pago
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_gold_velykapet'
+

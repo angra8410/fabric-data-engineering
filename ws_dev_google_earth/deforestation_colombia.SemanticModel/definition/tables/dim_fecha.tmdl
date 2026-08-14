@@ -1,0 +1,76 @@
+table dim_fecha
+	lineageTag: f6427faa-7f9a-4ea3-a51c-40c77c418e3f
+	sourceLineageTag: [dbo].[dim_fecha]
+
+	column id_anio
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 5eb4b70c-c935-45a6-9d0a-8e19d66d93c1
+		sourceLineageTag: id_anio
+		summarizeBy: none
+		sourceColumn: id_anio
+
+		annotation SummarizationSetBy = Automatic
+
+	column decada
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: a9f56033-0c0c-4aac-b63f-d601e803c467
+		sourceLineageTag: decada
+		summarizeBy: none
+		sourceColumn: decada
+
+		annotation SummarizationSetBy = Automatic
+
+	column etiqueta_anio
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 77134e05-c824-4f1e-b778-acc7890439f6
+		sourceLineageTag: etiqueta_anio
+		summarizeBy: none
+		sourceColumn: etiqueta_anio
+
+		annotation SummarizationSetBy = Automatic
+
+	column es_anio_reciente
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: 68ad7314-c9d3-4531-97c3-a3f8ecf551aa
+		sourceLineageTag: es_anio_reciente
+		summarizeBy: none
+		sourceColumn: es_anio_reciente
+
+		annotation SummarizationSetBy = Automatic
+
+	column periodo_paz
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: cc09f32c-587b-4be3-a22c-0ea715678225
+		sourceLineageTag: periodo_paz
+		summarizeBy: none
+		sourceColumn: periodo_paz
+
+		annotation SummarizationSetBy = Automatic
+
+	column value
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: be9ee4b8-a55e-4b95-8f82-eb0b971cf23a
+		sourceLineageTag: value
+		summarizeBy: none
+		sourceColumn: value
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_fecha = entity
+		mode: directLake
+		source
+			entityName: dim_fecha
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+

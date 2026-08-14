@@ -1,0 +1,85 @@
+table gold_workout_streak
+	lineageTag: 29522528-8e7c-4d7c-93fc-b2a5ce7ea66b
+	sourceLineageTag: [dbo].[gold_workout_streak]
+
+	measure 'Current Streak Count' = MAXX(gold_workout_streak, gold_workout_streak[cumulative_sessions])
+		formatString: 0
+
+	measure 'Rest Day %' = DIVIDE(COUNTROWS(FILTER(gold_workout_streak, gold_workout_streak[is_rest_day] = TRUE)), COUNTROWS(gold_workout_streak))
+		formatString: 0.0%
+
+	column session_id
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: ac2af628-f98e-4f18-94f3-7b2e6ad0607c
+		sourceLineageTag: session_id
+		summarizeBy: sum
+		sourceColumn: session_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column workout_date
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: date
+		lineageTag: bd85256e-b655-4bbe-8c5d-c7a8d05ed76f
+		sourceLineageTag: workout_date
+		summarizeBy: none
+		sourceColumn: workout_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column recovery_days_since_previous
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: bb4a3ca0-c65a-4958-a461-14edd44c82c9
+		sourceLineageTag: recovery_days_since_previous
+		summarizeBy: sum
+		sourceColumn: recovery_days_since_previous
+
+		annotation SummarizationSetBy = Automatic
+
+	column difficulty
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 8de8b723-a0de-46e3-ba2e-7c24cee664aa
+		sourceLineageTag: difficulty
+		summarizeBy: sum
+		sourceColumn: difficulty
+
+		annotation SummarizationSetBy = Automatic
+
+	column cumulative_sessions
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 619d8b03-1064-4db6-9850-abe797e5f73d
+		sourceLineageTag: cumulative_sessions
+		summarizeBy: sum
+		sourceColumn: cumulative_sessions
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_rest_day
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: 9190f786-80c0-446d-8d85-2d764351db72
+		sourceLineageTag: is_rest_day
+		summarizeBy: none
+		sourceColumn: is_rest_day
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_workout_streak = entity
+		mode: directLake
+		source
+			entityName: gold_workout_streak
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+

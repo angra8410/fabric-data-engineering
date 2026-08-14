@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "pl_linkedin_metrics_etl"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "b26ce169-d251-b8bb-4c8c-7a24116a8bf2"
+  }
+}

@@ -190,8 +190,31 @@ def run_gold_pipeline():
     build_fact_expenses()
     build_fact_purchases()
     build_dim_products()
+    build_dim_dates()
     build_kpi_whatsapp_funnel()
     build_kpis()
+
+def build_dim_dates():
+    """Build DimDates table in Gold Lakehouse."""
+    print("📅 Generating Gold 'dim_dates'...")
+    spark.sql(f"""
+        CREATE OR REPLACE TABLE {GOLD_SCHEMA}.dim_dates AS
+        SELECT 
+            CAST(datum AS TIMESTAMP) AS date_key,
+            YEAR(datum) AS year,
+            QUARTER(datum) AS quarter,
+            MONTH(datum) AS month_number,
+            DATE_FORMAT(datum, 'MMMM') AS month_name,
+            DATE_FORMAT(datum, 'yyyy-MM') AS year_month,
+            DAYOFMONTH(datum) AS day_of_month,
+            DAYOFWEEK(datum) AS day_of_week,
+            DATE_FORMAT(datum, 'EEEE') AS day_name,
+            CASE WHEN DAYOFWEEK(datum) IN (1, 7) THEN true ELSE false END AS is_weekend
+        FROM (
+            SELECT EXPLODE(SEQUENCE(DATE'2025-01-01', DATE'2026-12-31', INTERVAL 1 DAY)) AS datum
+        )
+    """)
+    print("✅ 'dim_dates' generated.")
     
     print("🏁 Capa Gold completada exitosamente.")
 

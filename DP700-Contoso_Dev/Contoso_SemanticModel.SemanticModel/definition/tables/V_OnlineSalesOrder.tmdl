@@ -1,0 +1,48 @@
+table V_OnlineSalesOrder
+	lineageTag: e09f71c1-7218-4372-8210-fca982021193
+	sourceLineageTag: [dbo].[V_OnlineSalesOrder]
+
+	column OrderNumber
+		dataType: string
+		lineageTag: 099f2c86-b1f7-4e22-b713-13ade3d76c64
+		sourceLineageTag: OrderNumber
+		summarizeBy: none
+		sourceColumn: OrderNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 896e38d7-3f66-4cf1-b603-ee5d8354d17d
+		sourceLineageTag: CustomerKey
+		summarizeBy: count
+		sourceColumn: CustomerKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: 424e9587-5724-4f53-bf31-ea04c3ba374d
+		sourceLineageTag: Region
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column IncomeGroup
+		dataType: string
+		lineageTag: 98ad2b11-8210-4c93-acb6-fb897b4e9f16
+		sourceLineageTag: IncomeGroup
+		summarizeBy: none
+		sourceColumn: IncomeGroup
+
+		annotation SummarizationSetBy = Automatic
+
+	partition V_OnlineSalesOrder = entity
+		mode: directLake
+		source
+			entityName: V_OnlineSalesOrder
+			schemaName: dbo
+			expressionSource: 'DirectLake - Contoso_Fabric_LH'
+

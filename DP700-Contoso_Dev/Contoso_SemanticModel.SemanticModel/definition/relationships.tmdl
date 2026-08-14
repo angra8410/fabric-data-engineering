@@ -1,0 +1,174 @@
+relationship 84391fd1-c86a-7aaa-9c3d-9c267c278460
+	fromColumn: FactSales.channelKey
+	toColumn: DimChannel.ChannelKey
+
+relationship 55ffdb46-e5e6-9244-90dd-32e8d547e7be
+	fromColumn: FactSales.StoreKey
+	toColumn: DimStore.StoreKey
+
+relationship a5bb22db-510e-6396-24de-4d16012f5794
+	fromColumn: FactSales.ProductKey
+	toColumn: DimProduct.ProductKey
+
+relationship 442fb1d0-1e96-4438-defa-369d6ec25106
+	fromColumn: FactSales.PromotionKey
+	toColumn: DimPromotion.PromotionKey
+
+relationship 6cfef87e-77b1-8ab4-0d79-1a58f48a998f
+	fromColumn: FactSales.CurrencyKey
+	toColumn: DimCurrency.CurrencyKey
+
+relationship 74a0ab16-238d-6189-d85d-2ffd711b6190
+	fromColumn: FactSales.DateKey
+	toColumn: DimDate.Datekey
+
+relationship 73f13703-8d1a-fbaa-c8ec-e85efce6c1bd
+	fromColumn: FactOnlineSales.DateKey
+	toColumn: DimDate.Datekey
+
+relationship c8d33608-cd76-0d06-6fbb-2708363c93d0
+	fromColumn: FactOnlineSales.StoreKey
+	toColumn: DimStore.StoreKey
+
+relationship e60a05ef-cf3a-ae1d-9a5d-119aa916883a
+	fromColumn: FactOnlineSales.ProductKey
+	toColumn: DimProduct.ProductKey
+
+relationship 254d6a99-1bc0-ef07-e807-379932ebb8b7
+	fromColumn: FactOnlineSales.PromotionKey
+	toColumn: DimPromotion.PromotionKey
+
+relationship 403941e8-3afd-aa66-3852-d0d9539b3039
+	fromColumn: FactOnlineSales.CurrencyKey
+	toColumn: DimCurrency.CurrencyKey
+
+relationship 7e3a112f-4f86-a834-81ca-0212a22df79c
+	fromColumn: FactOnlineSales.CustomerKey
+	toColumn: DimCustomer.CustomerKey
+
+relationship 4ff7253b-92c9-b7eb-1518-654f7bcd9723
+	fromColumn: FactInventory.DateKey
+	toColumn: DimDate.Datekey
+
+relationship 2e8f2892-25e1-e87c-12cb-64f168afd2ca
+	fromColumn: FactInventory.StoreKey
+	toColumn: DimStore.StoreKey
+
+relationship 57d7d622-79d0-0473-fedc-34ac03d98e0f
+	fromColumn: FactInventory.CurrencyKey
+	toColumn: DimCurrency.CurrencyKey
+
+relationship cb59568d-3fb9-366d-3c84-e37be361911d
+	fromColumn: FactSalesQuota.ChannelKey
+	toColumn: DimChannel.ChannelKey
+
+relationship 13d7decc-fe1e-fdbc-6e33-4d2fa7ace89a
+	fromColumn: FactSalesQuota.StoreKey
+	toColumn: DimStore.StoreKey
+
+relationship 89e12f6e-962f-83e6-d130-56ac564d2e97
+	fromColumn: FactSalesQuota.ProductKey
+	toColumn: DimProduct.ProductKey
+
+relationship 3caeb0b8-c5c1-191b-b461-efa1e4c47c18
+	fromColumn: FactSalesQuota.DateKey
+	toColumn: DimDate.Datekey
+
+relationship 496e681b-aaeb-d9ec-d647-b24f91dd8948
+	fromColumn: FactSalesQuota.CurrencyKey
+	toColumn: DimCurrency.CurrencyKey
+
+relationship 1589a493-fde3-34fd-90e1-f94d99aab1ac
+	fromColumn: FactSalesQuota.ScenarioKey
+	toColumn: DimScenario.ScenarioKey
+
+relationship 6d8b46e2-868a-df56-cc56-e06f5f3b90d3
+	fromColumn: FactExchangeRate.CurrencyKey
+	toColumn: DimCurrency.CurrencyKey
+
+relationship e7b66b18-a2ec-c1e6-1e4d-942e72437c40
+	fromColumn: FactITSLA.DateKey
+	toColumn: DimDate.Datekey
+
+relationship b3ab6728-112c-e81a-fd55-3c4a06c72608
+	fromColumn: FactITSLA.StoreKey
+	toColumn: DimStore.StoreKey
+
+relationship 7180d907-27ce-85da-c3ac-4f6ea9ccbe8c
+	fromColumn: FactITSLA.OutageKey
+	toColumn: DimOutage.OutageKey
+
+relationship 8a725907-197f-bb29-9e7b-65c193cd5988
+	fromColumn: FactITMachine.Datekey
+	toColumn: DimDate.Datekey
+
+relationship f69df6da-0418-ed9f-f9cd-d123e9bf036d
+	fromColumn: FactStrategyPlan.Datekey
+	toColumn: DimDate.Datekey
+
+relationship 64021b10-b56e-ab0e-3244-9dc22de8e591
+	fromColumn: FactStrategyPlan.EntityKey
+	toColumn: DimEntity.EntityKey
+
+relationship 66e600c4-a6e8-8b24-90d1-4418fd45b95e
+	fromColumn: FactStrategyPlan.ScenarioKey
+	toColumn: DimScenario.ScenarioKey
+
+relationship 22cf23a1-cd5a-81fb-6265-a28a03428250
+	fromColumn: FactStrategyPlan.AccountKey
+	toColumn: DimAccount.AccountKey
+
+relationship a6a9dbab-c053-cb8f-a12e-f151f98d8617
+	fromColumn: FactStrategyPlan.CurrencyKey
+	toColumn: DimCurrency.CurrencyKey
+
+relationship FactInventory_ProductKey_DimProduct_ProductKey
+	fromColumn: FactInventory.ProductKey
+	toColumn: DimProduct.ProductKey
+
+relationship FactITMachine_MachineKey_DimMachine_MachineKey
+	fromColumn: FactITMachine.MachineKey
+	toColumn: DimMachine.MachineKey
+
+relationship FactStrategyPlan_ProductCategoryKey_DimProductCategory_ProductCategoryKey
+	fromColumn: FactStrategyPlan.ProductCategoryKey
+	toColumn: DimProductCategory.ProductCategoryKey
+
+relationship FactITSLA_MachineKey_DimMachine_MachineKey
+	fromColumn: FactITSLA.MachineKey
+	toColumn: DimMachine.MachineKey
+
+relationship FactExchangeRate_DateKey_DimDate_Datekey
+	fromColumn: FactExchangeRate.DateKey
+	toColumn: DimDate.Datekey
+
+relationship DimStore_GeographyKey_DimGeography_GeographyKey
+	fromColumn: DimStore.GeographyKey
+	toColumn: DimGeography.GeographyKey
+
+relationship DimStore_EntityKey_DimEntity_EntityKey
+	fromColumn: DimStore.EntityKey
+	toColumn: DimEntity.EntityKey
+
+relationship DimProduct_ProductSubcategoryKey_DimProductSubcategory_ProductSubcategoryKey
+	fromColumn: DimProduct.ProductSubcategoryKey
+	toColumn: DimProductSubcategory.ProductSubcategoryKey
+
+relationship DimProductSubcategory_ProductCategoryKey_DimProductCategory_ProductCategoryKey
+	fromColumn: DimProductSubcategory.ProductCategoryKey
+	toColumn: DimProductCategory.ProductCategoryKey
+
+relationship DimCustomer_GeographyKey_DimGeography_GeographyKey
+	isActive: false
+	fromColumn: DimCustomer.GeographyKey
+	toColumn: DimGeography.GeographyKey
+
+relationship DimMachine_StoreKey_DimStore_StoreKey
+	isActive: false
+	fromColumn: DimMachine.StoreKey
+	toColumn: DimStore.StoreKey
+
+relationship DimSalesTerritory_GeographyKey_DimGeography_GeographyKey
+	fromColumn: DimSalesTerritory.GeographyKey
+	toColumn: DimGeography.GeographyKey
+

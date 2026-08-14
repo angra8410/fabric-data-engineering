@@ -1,0 +1,51 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["DirectLake - Contoso_Fabric_LH"]
+
+annotation PBI_ProTooling = ["DirectLakeOnOneLakeInWeb","WebModelingEdit","MCP-PBIModeling"]
+
+annotation __TEdtr = 1
+
+ref table DimMachine
+ref table V_OnlineSalesOrderDetail
+ref table DimEmployee
+ref table V_OnlineSalesOrder
+ref table FactInventory
+ref table FactSales
+ref table DimProductCategory
+ref table DimAccount
+ref table DimEntity
+ref table FactStrategyPlan
+ref table DimStore
+ref table DimPromotion
+ref table V_Customer
+ref table FactSalesQuota
+ref table DimProduct
+ref table FactExchangeRate
+ref table DimOutage
+ref table sysdiagrams
+ref table DimGeography
+ref table V_ProductForecast
+ref table FactOnlineSales
+ref table DimSalesTerritory
+ref table DimProductSubcategory
+ref table DimDate
+ref table DimScenario
+ref table FactITSLA
+ref table FactITMachine
+ref table DimChannel
+ref table DimCustomer
+ref table DimCurrency
+ref table V_CustomerPromotion
+ref table V_CustomerOrders
+
+ref role Solo_Tiendas_Fisicas
+

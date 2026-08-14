@@ -1,0 +1,180 @@
+table gold_fact_weekly_summary
+	lineageTag: f350e7d4-c411-44b3-b6ce-45eea45216ff
+	sourceLineageTag: [dbo].[gold_fact_weekly_summary]
+
+	/// Total impressions from weekly summary
+	measure 'Weekly Total Impressions' = SUM(gold_fact_weekly_summary[total_impressions])
+		formatString: #,0
+		displayFolder: Weekly Summary
+		lineageTag: a04c7160-95db-4707-8009-88ab00e1ddd4
+
+	/// Total engagements from weekly summary
+	measure 'Weekly Total Engagements' = SUM(gold_fact_weekly_summary[total_engagements])
+		formatString: #,0
+		displayFolder: Weekly Summary
+		lineageTag: 3c09866c-4b91-427b-b05a-79d4d27a7275
+
+	/// Total new followers from weekly summary
+	measure 'Weekly Total New Followers' = SUM(gold_fact_weekly_summary[total_new_followers])
+		formatString: #,0
+		displayFolder: Weekly Summary
+		lineageTag: 1748717d-fed4-4df5-81be-3f1375fba584
+
+	/// Average weekly engagement rate
+	measure 'Avg Weekly Engagement Rate' = AVERAGE(gold_fact_weekly_summary[weekly_engagement_rate])
+		formatString: 0.00%
+		displayFolder: Weekly Summary
+		lineageTag: e1c27539-7c9e-4634-bf28-fe709716d1de
+
+	/// Highest impressions in a single week
+	measure 'Best Week Impressions' = MAXX(VALUES(gold_fact_weekly_summary[week_start_date]), [Weekly Total Impressions])
+		formatString: #,0
+		displayFolder: Weekly Summary
+		lineageTag: 053f1158-06c5-40e3-ac45-a1067b05ef37
+
+	/// Week-over-week change in total impressions vs the prior week
+	measure 'Weekly Impressions WoW %' =
+			VAR _curWeek = MAX(gold_fact_weekly_summary[week_start_date])
+			VAR _current = CALCULATE([Weekly Total Impressions], FILTER(ALL(gold_fact_weekly_summary[week_start_date]), gold_fact_weekly_summary[week_start_date] = _curWeek))
+			VAR _prev = CALCULATE([Weekly Total Impressions], FILTER(ALL(gold_fact_weekly_summary[week_start_date]), gold_fact_weekly_summary[week_start_date] = _curWeek - 7))
+			RETURN IF(ISBLANK(_prev), BLANK(), DIVIDE(_current - _prev, _prev))
+		formatString: 0.00%
+		displayFolder: Weekly Summary\Period Comparisons
+		lineageTag: a336f84f-37c0-475f-a4d0-a1eddae8ebbb
+
+	/// Week-over-week change in total engagements vs the prior week
+	measure 'Weekly Engagements WoW %' =
+			VAR _curWeek = MAX(gold_fact_weekly_summary[week_start_date])
+			VAR _current = CALCULATE([Weekly Total Engagements], FILTER(ALL(gold_fact_weekly_summary[week_start_date]), gold_fact_weekly_summary[week_start_date] = _curWeek))
+			VAR _prev = CALCULATE([Weekly Total Engagements], FILTER(ALL(gold_fact_weekly_summary[week_start_date]), gold_fact_weekly_summary[week_start_date] = _curWeek - 7))
+			RETURN IF(ISBLANK(_prev), BLANK(), DIVIDE(_current - _prev, _prev))
+		formatString: 0.00%
+		displayFolder: Weekly Summary\Period Comparisons
+		lineageTag: 453d5cd7-6ed8-464f-8124-d64aec767bb9
+
+	/// Week-over-week change in new followers vs the prior week
+	measure 'Weekly New Followers WoW %' =
+			VAR _curWeek = MAX(gold_fact_weekly_summary[week_start_date])
+			VAR _current = CALCULATE([Weekly Total New Followers], FILTER(ALL(gold_fact_weekly_summary[week_start_date]), gold_fact_weekly_summary[week_start_date] = _curWeek))
+			VAR _prev = CALCULATE([Weekly Total New Followers], FILTER(ALL(gold_fact_weekly_summary[week_start_date]), gold_fact_weekly_summary[week_start_date] = _curWeek - 7))
+			RETURN IF(ISBLANK(_prev), BLANK(), DIVIDE(_current - _prev, _prev))
+		formatString: 0.00%
+		displayFolder: Weekly Summary\Period Comparisons
+		lineageTag: efe51d42-2de1-4824-a09a-86b07807ac0e
+
+	/// Week-over-week change in average engagement rate, in percentage points, vs the prior week
+	measure 'Weekly Engagement Rate WoW pp' =
+			VAR _curWeek = MAX(gold_fact_weekly_summary[week_start_date])
+			VAR _current = CALCULATE([Avg Weekly Engagement Rate], FILTER(ALL(gold_fact_weekly_summary[week_start_date]), gold_fact_weekly_summary[week_start_date] = _curWeek))
+			VAR _prev = CALCULATE([Avg Weekly Engagement Rate], FILTER(ALL(gold_fact_weekly_summary[week_start_date]), gold_fact_weekly_summary[week_start_date] = _curWeek - 7))
+			RETURN IF(ISBLANK(_prev), BLANK(), _current - _prev)
+		formatString: 0.00%
+		displayFolder: Weekly Summary\Period Comparisons
+		lineageTag: e8d73b9c-54a4-490a-af56-6f883764d236
+
+	/// Total impressions for the prior week
+	measure 'Weekly Impressions Prior Week' =
+			VAR _curWeek = MAX(gold_fact_weekly_summary[week_start_date])
+			RETURN CALCULATE([Weekly Total Impressions], FILTER(ALL(gold_fact_weekly_summary[week_start_date]), gold_fact_weekly_summary[week_start_date] = _curWeek - 7))
+		formatString: #,0
+		displayFolder: Weekly Summary\Period Comparisons
+		lineageTag: fddcb62d-7479-4c59-87a0-a3c906b68578
+
+	/// Total engagements for the prior week
+	measure 'Weekly Engagements Prior Week' =
+			VAR _curWeek = MAX(gold_fact_weekly_summary[week_start_date])
+			RETURN CALCULATE([Weekly Total Engagements], FILTER(ALL(gold_fact_weekly_summary[week_start_date]), gold_fact_weekly_summary[week_start_date] = _curWeek - 7))
+		formatString: #,0
+		displayFolder: Weekly Summary\Period Comparisons
+		lineageTag: 4c51f9fd-88a1-4cd4-b3ea-3d15b1570323
+
+	/// Total new followers for the prior week
+	measure 'Weekly New Followers Prior Week' =
+			VAR _curWeek = MAX(gold_fact_weekly_summary[week_start_date])
+			RETURN CALCULATE([Weekly Total New Followers], FILTER(ALL(gold_fact_weekly_summary[week_start_date]), gold_fact_weekly_summary[week_start_date] = _curWeek - 7))
+		formatString: #,0
+		displayFolder: Weekly Summary\Period Comparisons
+		lineageTag: eccf76bc-a346-4d30-9fae-048937ffbe79
+
+	/// Count of distinct weeks available in the model — use to gauge reliability of trend/forecast visuals
+	measure 'Weeks of Data Available' = DISTINCTCOUNT(gold_fact_weekly_summary[week_start_date])
+		formatString: #,0
+		displayFolder: Weekly Summary
+		lineageTag: 3aec1be7-1071-4b82-a4cf-4d0b1b7129f0
+
+	column week_start_date
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: date
+		lineageTag: 5dbaca5c-7a73-492a-afcc-e8a5a06184b8
+		sourceLineageTag: week_start_date
+		summarizeBy: none
+		sourceColumn: week_start_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_impressions
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 1978fd4f-c5a6-4a8e-b18e-78cb7faa2ed1
+		sourceLineageTag: total_impressions
+		summarizeBy: sum
+		sourceColumn: total_impressions
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_engagements
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 63898e7e-b8de-4a05-8810-ae1df9938a95
+		sourceLineageTag: total_engagements
+		summarizeBy: sum
+		sourceColumn: total_engagements
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_new_followers
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 617713a7-0a96-4bbc-ba4f-8ddbf5c677d3
+		sourceLineageTag: total_new_followers
+		summarizeBy: sum
+		sourceColumn: total_new_followers
+
+		annotation SummarizationSetBy = Automatic
+
+	column weekly_engagement_rate
+		dataType: double
+		sourceProviderType: float
+		lineageTag: 101a78d5-19c4-4c1c-88c5-f3f07a00a354
+		sourceLineageTag: weekly_engagement_rate
+		summarizeBy: sum
+		sourceColumn: weekly_engagement_rate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column gold_load_timestamp
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: cba2533f-03eb-46c1-bba3-b43a618dbdad
+		sourceLineageTag: gold_load_timestamp
+		summarizeBy: none
+		sourceColumn: gold_load_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_fact_weekly_summary = entity
+		mode: directLake
+		source
+			entityName: gold_fact_weekly_summary
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+

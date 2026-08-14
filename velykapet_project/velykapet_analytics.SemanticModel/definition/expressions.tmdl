@@ -3,6 +3,9 @@ expression 'DirectLake - lh_velykapet_gold_dev' =
 		    Source = AzureStorage.DataLake("https://onelake.dfs.fabric.microsoft.com/b5af9286-d297-491a-a1bf-5ea0b186665d/0861f9d6-6a11-44cb-8a6d-bf98110b977b", [HierarchicalNavigation=true])
 		in
 		    Source
-	lineageTag: f69879d0-3f15-4295-89dd-bda1d2eb18a9
+	lineageTag: 543b3b74-99f4-4004-8e5d-b5ae737771ca
 
 	annotation PBI_IncludeFutureArtifacts = False
+
+	annotation PBI_RemovedChildren = [{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[dbo].[kpi_whatsapp_conversion]"}},"objectType":"Table"},{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[dbo].[kpi_product_performance]"}},"objectType":"Table"},{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[dbo].[kpi_inventory_health]"}},"objectType":"Table"},{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[dbo].[kpi_daily_sales_trend]"}},"objectType":"Table"}]
+

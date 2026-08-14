@@ -1,48 +1,68 @@
 table fact_expenses
-	lineageTag: b2c3d4e5-f6a7-8901-bcde-f23456789012
+	lineageTag: 05fa9fb0-9bc8-43d9-9fb8-ef951e70e28e
 	sourceLineageTag: [dbo].[fact_expenses]
 
 	measure 'Total Expenses' = SUM(fact_expenses[expense_amount])
-		formatString: $#,##0.00
-		displayFolder: 💸 Expenses & Net Profit
-		lineageTag: exp-001
+		formatString: \$#,0.00
+		lineageTag: m_tot_exp
 
-	measure 'Net Operating Profit' = [Total Revenue] - [Total Expenses]
-		formatString: $#,##0.00
-		displayFolder: 💸 Expenses & Net Profit
-		lineageTag: net-001
+	measure 'Net Operating Profit' = [Gross Profit] - [Total Expenses]
+		formatString: \$#,0.00
+		lineageTag: m_net_op_profit
 
 	measure 'Net Profit Margin %' = DIVIDE([Net Operating Profit], [Total Revenue], 0)
-		formatString: 0.00%
-		displayFolder: 💸 Expenses & Net Profit
-		lineageTag: netm-001
+		formatString: 0.0%
+		lineageTag: m_net_profit_margin
 
 	measure 'Expense to Revenue Ratio %' = DIVIDE([Total Expenses], [Total Revenue], 0)
-		formatString: 0.00%
-		displayFolder: 💸 Expenses & Net Profit
-		lineageTag: exprat-001
+		formatString: 0.0%
+		lineageTag: m_exp_ratio
 
 	column expense_id
-		dataType: string
+		dataType: int64
+		formatString: 0
+		lineageTag: 81eb1145-d1d1-4388-a492-04fce83a2343
+		sourceLineageTag: expense_id
+		summarizeBy: sum
 		sourceColumn: expense_id
-
-	column description
-		dataType: string
-		sourceColumn: description
-
-	column expense_amount
-		dataType: double
-		formatString: $#,##0.00
-		sourceColumn: expense_amount
-
-	column category
-		dataType: string
-		sourceColumn: category
 
 	column expense_date
 		dataType: dateTime
-		formatString: yyyy-MM-dd
+		formatString: General Date
+		lineageTag: 81eb1145-d1d1-4388-a492-04fce83a2344
+		sourceLineageTag: expense_date
+		summarizeBy: none
 		sourceColumn: expense_date
+
+	column category
+		dataType: string
+		lineageTag: 81eb1145-d1d1-4388-a492-04fce83a2345
+		sourceLineageTag: category
+		summarizeBy: none
+		sourceColumn: category
+
+	column description
+		dataType: string
+		lineageTag: 81eb1145-d1d1-4388-a492-04fce83a2346
+		sourceLineageTag: description
+		summarizeBy: none
+		sourceColumn: description
+
+	column expense_amount
+		dataType: decimal
+		formatString: \$#,0.00
+		lineageTag: 81eb1145-d1d1-4388-a492-04fce83a2347
+		sourceLineageTag: expense_amount
+		summarizeBy: sum
+		sourceColumn: expense_amount
+
+	column _updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 81eb1145-d1d1-4388-a492-04fce83a2348
+		sourceLineageTag: _updated_at
+		summarizeBy: none
+		sourceColumn: _updated_at
 
 	partition fact_expenses = entity
 		mode: directLake
@@ -50,4 +70,3 @@ table fact_expenses
 			entityName: fact_expenses
 			schemaName: dbo
 			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
-

@@ -1,0 +1,100 @@
+table dim_date
+	lineageTag: e5f6a7b8-c9d0-1234-efab-567890123456
+	dataCategory: Time
+
+	measure 'Revenue MTD' = TOTALMTD([Total Revenue], dim_date[Date])
+		formatString: $#,##0.00
+		displayFolder: 📈 Time Intelligence
+		lineageTag: mtd-001
+
+	measure 'Revenue QTD' = TOTALQTD([Total Revenue], dim_date[Date])
+		formatString: $#,##0.00
+		displayFolder: 📈 Time Intelligence
+		lineageTag: qtd-001
+
+	measure 'Revenue YTD' = TOTALYTD([Total Revenue], dim_date[Date])
+		formatString: $#,##0.00
+		displayFolder: 📈 Time Intelligence
+		lineageTag: ytd-001
+
+	measure 'Gross Profit MTD' = TOTALMTD([Gross Profit], dim_date[Date])
+		formatString: $#,##0.00
+		displayFolder: 📈 Time Intelligence
+		lineageTag: gpmtd-001
+
+	measure 'Gross Profit YTD' = TOTALYTD([Gross Profit], dim_date[Date])
+		formatString: $#,##0.00
+		displayFolder: 📈 Time Intelligence
+		lineageTag: gpytd-001
+
+	measure 'Revenue Prior Month (PM)' = CALCULATE([Total Revenue], DATEADD(dim_date[Date], -1, MONTH))
+		formatString: $#,##0.00
+		displayFolder: 📈 Time Intelligence
+		lineageTag: pm-001
+
+	measure 'Revenue MoM Growth $' = [Total Revenue] - [Revenue Prior Month (PM)]
+		formatString: $#,##0.00
+		displayFolder: 📈 Time Intelligence
+		lineageTag: momg-001
+
+	measure 'Revenue MoM Growth %' = DIVIDE([Revenue MoM Growth $], [Revenue Prior Month (PM)], 0)
+		formatString: 0.00%
+		displayFolder: 📈 Time Intelligence
+		lineageTag: mompct-001
+
+	measure 'Revenue Prior Year (PY)' = CALCULATE([Total Revenue], SAMEPERIODLASTYEAR(dim_date[Date]))
+		formatString: $#,##0.00
+		displayFolder: 📈 Time Intelligence
+		lineageTag: py-001
+
+	measure 'Revenue YoY Growth %' = DIVIDE([Total Revenue] - [Revenue Prior Year (PY)], [Revenue Prior Year (PY)], 0)
+		formatString: 0.00%
+		displayFolder: 📈 Time Intelligence
+		lineageTag: yoypct-001
+
+	measure '30-Day Rolling Revenue' = CALCULATE([Total Revenue], DATESINPERIOD(dim_date[Date], MAX(dim_date[Date]), -30, DAY))
+		formatString: $#,##0.00
+		displayFolder: 📈 Time Intelligence
+		lineageTag: roll30-001
+
+	measure 'Daily Average Revenue (30D)' = DIVIDE([30-Day Rolling Revenue], 30, 0)
+		formatString: $#,##0.00
+		displayFolder: 📈 Time Intelligence
+		lineageTag: avg30-001
+
+	column Date
+		dataType: dateTime
+		isKey
+		formatString: yyyy-MM-dd
+
+	column Year
+		dataType: int64
+
+	column Quarter
+		dataType: string
+
+	column Month
+		dataType: int64
+
+	column MonthName
+		dataType: string
+		sortByColumn: Month
+
+	column YearMonth
+		dataType: string
+		sortByColumn: Date
+
+	column DayOfWeek
+		dataType: int64
+
+	column DayName
+		dataType: string
+		sortByColumn: DayOfWeek
+
+	column IsWeekend
+		dataType: boolean
+
+	partition dim_date_calculated = calculated
+		mode: import
+		source = ADDCOLUMNS(CALENDAR(DATE(2025, 1, 1), DATE(2026, 12, 31)), "Year", YEAR([Date]), "Quarter", "Q" & FORMAT([Date], "Q"), "Month", MONTH([Date]), "MonthName", FORMAT([Date], "MMMM"), "YearMonth", FORMAT([Date], "YYYY-MM"), "DayOfWeek", WEEKDAY([Date], 2), "DayName", FORMAT([Date], "dddd"), "IsWeekend", IF(WEEKDAY([Date], 2) >= 6, TRUE(), FALSE()))
+

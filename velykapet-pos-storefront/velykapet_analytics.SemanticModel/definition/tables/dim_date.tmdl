@@ -66,33 +66,51 @@ table dim_date
 		dataType: dateTime
 		isKey
 		formatString: yyyy-MM-dd
+		type: calculated
+		sourceColumn: [Date]
 
 	column Year
 		dataType: int64
+		type: calculated
+		sourceColumn: [Year]
 
 	column Quarter
 		dataType: string
+		type: calculated
+		sourceColumn: [Quarter]
 
 	column Month
 		dataType: int64
+		type: calculated
+		sourceColumn: [Month]
 
 	column MonthName
 		dataType: string
 		sortByColumn: Month
+		type: calculated
+		sourceColumn: [MonthName]
 
 	column YearMonth
 		dataType: string
 		sortByColumn: Date
+		type: calculated
+		sourceColumn: [YearMonth]
 
 	column DayOfWeek
 		dataType: int64
+		type: calculated
+		sourceColumn: [DayOfWeek]
 
 	column DayName
 		dataType: string
 		sortByColumn: DayOfWeek
+		type: calculated
+		sourceColumn: [DayName]
 
 	column IsWeekend
 		dataType: boolean
+		type: calculated
+		sourceColumn: [IsWeekend]
 
 	partition dim_date_calculated = calculated
 		mode: import

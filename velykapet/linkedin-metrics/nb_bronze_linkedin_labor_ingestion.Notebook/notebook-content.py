@@ -22,6 +22,19 @@
 
 # CELL ********************
 
+spark.sql("DROP TABLE IF EXISTS post_content")
+spark.sql("DROP TABLE IF EXISTS post_hashtags")
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
 import warnings
 import pandas as pd
 import re
@@ -529,6 +542,167 @@ for sheet in sheet_names:
 # META   "language_group": "synapse_pyspark",
 # META   "frozen": true,
 # META   "editable": false
+# META }
+
+# CELL ********************
+
+# =====================================================================
+# BLOQUE ADICIONAL: Ingesta de contenido reconciliado (Posts + Hashtags)
+# Generado por la app linkedin-auto-poster — trae pillar, hashtags,
+# media_format y el título real del post (LinkedIn no lo incluye)
+# =====================================================================
+content_folder_path = "abfss://b14581ac-9906-43e2-809c-c2fd4315ad5b@onelake.dfs.fabric.microsoft.com/e7bac705-a51a-4a6d-a8c4-e81b7cdeef2a/Files/raw_data_content"
+
+content_merge_keys = {
+    "post_content": ["post_id"],
+    "post_hashtags": ["post_id", "hashtag"],
+}
+
+print("\n--- ESCANEANDO CARPETA raw_data_content (exportes de la app) ---")
+content_files = mssparkutils.fs.ls(content_folder_path)
+content_excel_files = sorted([f.path for f in content_files if f.path.endswith('.xlsx')])
+
+if not content_excel_files:
+    print("⚠️ No se encontraron archivos de exportación de contenido (linkedin_fabric_export_*.xlsx).")
+else:
+    content_frames = {t: [] for t in content_merge_keys}
+
+    for file_path in content_excel_files:
+        file_name = file_path.split('/')[-1]
+        print(f"\n=== Procesando archivo de contenido: {file_name} ===")
+
+        pdf_posts = pd.read_excel(file_path, sheet_name="Posts", dtype={"linkedin_post_id": str, "post_id": str, "source_draft_id": str})
+        pdf_posts["posted_at"] = pd.to_datetime(pdf_posts["posted_at"], errors='coerce')
+        content_frames["post_content"].append(pdf_posts)
+
+        pdf_tags = pd.read_excel(file_path, sheet_name="PostHashtags", dtype={"post_id": str})
+        content_frames["post_hashtags"].append(pdf_tags)
+
+    for table_name, frames in content_frames.items():
+        pdf_all = pd.concat(frames, ignore_index=True)
+        keys = content_merge_keys[table_name]
+
+        before = len(pdf_all)
+        pdf_all = pdf_all.drop_duplicates(subset=keys, keep="last").reset_index(drop=True)
+        after = len(pdf_all)
+        if before != after:
+            print(f"  -> '{table_name}': eliminadas {before - after} fila(s) duplicadas por clave {keys}.")
+
+        spark_df = spark.createDataFrame(pdf_all)
+        table_exists = spark.catalog.tableExists(table_name)
+
+        if table_exists:
+            existing_cols = set(spark.read.table(table_name).columns)
+            if not set(keys).issubset(existing_cols):
+                print(f"  -> Esquema antiguo incompatible en '{table_name}'. Recreando tabla.")
+                table_exists = False
+
+        if not table_exists:
+            (spark_df.write.format("delta").mode("overwrite")
+             .option("overwriteSchema", "true").saveAsTable(table_name))
+            print(f"  -> Tabla Bronze '{table_name}' creada con {spark_df.count()} fila(s).")
+        else:
+            delta_table = DeltaTable.forName(spark, table_name)
+            merge_condition = " AND ".join([f"target.{k} = source.{k}" for k in keys])
+            (delta_table.alias("target")
+             .merge(spark_df.alias("source"), merge_condition)
+             .whenMatchedUpdateAll()
+             .whenNotMatchedInsertAll()
+             .execute())
+            total = spark.read.table(table_name).count()
+            print(f"  -> Tabla Bronze '{table_name}' fusionada (MERGE). Total filas: {total}")
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# =====================================================================
+# BLOQUE ADICIONAL: Ingesta de contenido reconciliado (Posts + Hashtags)
+# Generado por la app linkedin-auto-poster — trae pillar, hashtags,
+# media_format y el título real del post (LinkedIn no lo incluye)
+# =====================================================================
+content_folder_path = "abfss://b14581ac-9906-43e2-809c-c2fd4315ad5b@onelake.dfs.fabric.microsoft.com/e7bac705-a51a-4a6d-a8c4-e81b7cdeef2a/Files/raw_data_content"
+
+content_merge_keys = {
+    "post_content": ["post_id"],
+    "post_hashtags": ["post_id", "hashtag"],
+}
+
+print("\n--- ESCANEANDO CARPETA raw_data_content (exportes de la app) ---")
+content_files = mssparkutils.fs.ls(content_folder_path)
+content_excel_files = sorted([f.path for f in content_files if f.path.endswith('.xlsx')])
+
+if not content_excel_files:
+    print("⚠️ No se encontraron archivos de exportación de contenido (linkedin_fabric_export_*.xlsx).")
+else:
+    content_frames = {t: [] for t in content_merge_keys}
+
+    for file_path in content_excel_files:
+        file_name = file_path.split('/')[-1]
+        print(f"\n=== Procesando archivo de contenido: {file_name} ===")
+
+        # dtype=str forces pandas to read these ID columns as text, preventing
+        # numeric inference from truncating precision on 19-digit LinkedIn URNs
+        # (a double can only hold ~15-17 significant digits safely).
+        pdf_posts = pd.read_excel(
+            file_path,
+            sheet_name="Posts",
+            dtype={"post_id": str, "linkedin_post_id": str, "source_draft_id": str}
+        )
+        pdf_posts["posted_at"] = pd.to_datetime(pdf_posts["posted_at"], errors='coerce')
+        content_frames["post_content"].append(pdf_posts)
+
+        pdf_tags = pd.read_excel(
+            file_path,
+            sheet_name="PostHashtags",
+            dtype={"post_id": str, "hashtag": str}
+        )
+        content_frames["post_hashtags"].append(pdf_tags)
+
+    for table_name, frames in content_frames.items():
+        pdf_all = pd.concat(frames, ignore_index=True)
+        keys = content_merge_keys[table_name]
+
+        before = len(pdf_all)
+        pdf_all = pdf_all.drop_duplicates(subset=keys, keep="last").reset_index(drop=True)
+        after = len(pdf_all)
+        if before != after:
+            print(f"  -> '{table_name}': eliminadas {before - after} fila(s) duplicadas por clave {keys}.")
+
+        spark_df = spark.createDataFrame(pdf_all)
+        table_exists = spark.catalog.tableExists(table_name)
+
+        if table_exists:
+            existing_cols = set(spark.read.table(table_name).columns)
+            if not set(keys).issubset(existing_cols):
+                print(f"  -> Esquema antiguo incompatible en '{table_name}'. Recreando tabla.")
+                table_exists = False
+
+        if not table_exists:
+            (spark_df.write.format("delta").mode("overwrite")
+             .option("overwriteSchema", "true").saveAsTable(table_name))
+            print(f"  -> Tabla Bronze '{table_name}' creada con {spark_df.count()} fila(s).")
+        else:
+            delta_table = DeltaTable.forName(spark, table_name)
+            merge_condition = " AND ".join([f"target.{k} = source.{k}" for k in keys])
+            (delta_table.alias("target")
+             .merge(spark_df.alias("source"), merge_condition)
+             .whenMatchedUpdateAll()
+             .whenNotMatchedInsertAll()
+             .execute())
+            total = spark.read.table(table_name).count()
+            print(f"  -> Tabla Bronze '{table_name}' fusionada (MERGE). Total filas: {total}")
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
 # META }
 
 # CELL ********************

@@ -1,0 +1,122 @@
+table gold_fact_performance_by_format
+	lineageTag: d8f9f827-ef6c-46aa-8a41-2aa8f293a58b
+	sourceLineageTag: [dbo].[gold_fact_performance_by_format]
+
+	column snapshot_date
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: date
+		lineageTag: 147959be-bef0-4793-bda2-3cce548ca191
+		sourceLineageTag: snapshot_date
+		summarizeBy: none
+		sourceColumn: snapshot_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column window_days
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 794a0970-402c-4ba3-b249-a07b48b6f8f1
+		sourceLineageTag: window_days
+		summarizeBy: sum
+		sourceColumn: window_days
+
+		annotation SummarizationSetBy = Automatic
+
+	column dimension_type
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: e0b12b20-9ed4-495f-83b0-f48b10f1501e
+		sourceLineageTag: dimension_type
+		summarizeBy: none
+		sourceColumn: dimension_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column dimension_value
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: ee182371-ec1c-4005-862e-fef4f303217d
+		sourceLineageTag: dimension_value
+		summarizeBy: none
+		sourceColumn: dimension_value
+
+		annotation SummarizationSetBy = Automatic
+
+	column post_count
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 2d4d8db7-42b1-40cc-b6b6-5e3a62975c63
+		sourceLineageTag: post_count
+		summarizeBy: sum
+		sourceColumn: post_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_impressions
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 0836ab19-f18e-40fa-a517-478cb1e77bc4
+		sourceLineageTag: total_impressions
+		summarizeBy: sum
+		sourceColumn: total_impressions
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_engagements
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: f58eac0b-fc92-4d4f-8408-73545c85f63f
+		sourceLineageTag: total_engagements
+		summarizeBy: sum
+		sourceColumn: total_engagements
+
+		annotation SummarizationSetBy = Automatic
+
+	column avg_engagement_rate
+		dataType: double
+		sourceProviderType: float
+		lineageTag: 866b83ff-7003-4026-a744-e47db9e9c8a0
+		sourceLineageTag: avg_engagement_rate
+		summarizeBy: sum
+		sourceColumn: avg_engagement_rate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column is_reliable
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: c5ad2240-fc07-4a21-8971-bbbcb4216d41
+		sourceLineageTag: is_reliable
+		summarizeBy: none
+		sourceColumn: is_reliable
+
+		annotation SummarizationSetBy = Automatic
+
+	column gold_load_timestamp
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: e37ab53b-29e8-42d2-bbcc-518a67bfe13f
+		sourceLineageTag: gold_load_timestamp
+		summarizeBy: none
+		sourceColumn: gold_load_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_fact_performance_by_format = entity
+		mode: directLake
+		source
+			entityName: gold_fact_performance_by_format
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+

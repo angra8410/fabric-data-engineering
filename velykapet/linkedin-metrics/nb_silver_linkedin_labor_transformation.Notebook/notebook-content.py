@@ -22,6 +22,18 @@
 
 # CELL ********************
 
+spark.sql("CREATE TABLE IF NOT EXISTS silver_post_content_backup_20260713 AS SELECT * FROM silver_post_content")
+print("Backup created: silver_post_content_backup_20260713")
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
 import re
 import pandas as pd
 from datetime import datetime
@@ -107,6 +119,50 @@ for table in bronze_tables:
 
     print(f"Successfully created Silver table: {silver_table_name}")
     display(final_silver_df.limit(5))
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+content_bronze_tables = ["post_content", "post_hashtags"]
+for t in content_bronze_tables:
+    try:
+        spark.catalog.refreshTable(t)
+    except Exception as e:
+        print(f"Refresh warning for {t}: {e}")
+
+df_content_silver = (spark.read.table("post_content")
+    .withColumn("posted_at", F.to_timestamp("posted_at"))
+    .withColumn(
+        "linkedin_post_id",
+        F.coalesce(
+            F.col("linkedin_post_id"),
+            F.regexp_extract(F.col("notes"), r"urn:li:ugcPost:(\d+)", 1)
+        )
+    )
+    .dropDuplicates(["post_id"])
+    .withColumn("silver_load_timestamp", F.current_timestamp()))
+(df_content_silver.write.format("delta").mode("overwrite")
+ .option("overwriteSchema", "true").saveAsTable("silver_post_content"))
+print("Successfully created Silver table: silver_post_content")
+
+# Verification: confirm only the truly-unrecoverable rows remain NULL
+null_check = spark.read.table("silver_post_content") \
+    .filter(F.col("linkedin_post_id").cast("decimal(38,0)").isNull())
+print(f"Remaining NULL linkedin_post_id rows: {null_check.count()} (expect 5, not 9)")
+null_check.select("post_id", "linkedin_post_id", "notes").show(20, truncate=False)
+
+df_hashtags_silver = (spark.read.table("post_hashtags")
+    .dropDuplicates(["post_id", "hashtag"])
+    .withColumn("silver_load_timestamp", F.current_timestamp()))
+(df_hashtags_silver.write.format("delta").mode("overwrite")
+ .option("overwriteSchema", "true").saveAsTable("silver_post_hashtags"))
+print("Successfully created Silver table: silver_post_hashtags")
 
 # METADATA ********************
 
@@ -271,6 +327,61 @@ for table in ["silver_discovery", "silver_engagement", "silver_top_posts", "silv
 
 # CELL ********************
 
+content_bronze_tables = ["post_content", "post_hashtags"]
+for t in content_bronze_tables:
+    try:
+        spark.catalog.refreshTable(t)
+    except Exception as e:
+        print(f"Refresh warning for {t}: {e}")
+
+df_content_silver = (spark.read.table("post_content")
+    .withColumn("posted_at", F.to_timestamp("posted_at"))
+    .dropDuplicates(["post_id"])
+    .withColumn("silver_load_timestamp", F.current_timestamp()))
+(df_content_silver.write.format("delta").mode("overwrite")
+ .option("overwriteSchema", "true").saveAsTable("silver_post_content"))
+print("Successfully created Silver table: silver_post_content")
+
+df_hashtags_silver = (spark.read.table("post_hashtags")
+    .dropDuplicates(["post_id", "hashtag"])
+    .withColumn("silver_load_timestamp", F.current_timestamp()))
+(df_hashtags_silver.write.format("delta").mode("overwrite")
+ .option("overwriteSchema", "true").saveAsTable("silver_post_hashtags"))
+print("Successfully created Silver table: silver_post_hashtags")
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
+# META }
+
+# CELL ********************
+
+spark.sql("DESCRIBE silver_post_content").filter("col_name = 'linkedin_post_id'").show()
+
+# check for potential precision collisions
+spark.read.table("silver_post_content") \
+    .groupBy(F.col("linkedin_post_id").cast("decimal(38,0)").cast("string")) \
+    .count() \
+    .filter("count > 1") \
+    .show()
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+spark.read.table("silver_post_content") \
+    .filter(F.col("linkedin_post_id").cast("decimal(38,0)").isNull()) \
+    .select("post_id", "linkedin_post_id", "notes") \
+    .show(20, truncate=False)
 
 # METADATA ********************
 

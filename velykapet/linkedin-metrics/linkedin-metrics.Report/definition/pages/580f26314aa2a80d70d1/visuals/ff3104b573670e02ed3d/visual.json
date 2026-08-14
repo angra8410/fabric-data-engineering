@@ -2,12 +2,12 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
   "name": "ff3104b573670e02ed3d",
   "position": {
-    "x": 784.20876253261918,
-    "y": 42.754566680401041,
-    "z": 3000,
-    "height": 63.006729844801541,
-    "width": 178.89410795220437,
-    "tabOrder": 3000
+    "x": 783.30249794902261,
+    "y": 28.968287646043734,
+    "z": 1000,
+    "height": 76.476279385555458,
+    "width": 178.44465189962941,
+    "tabOrder": 1000
   },
   "visual": {
     "visualType": "cardVisual",
@@ -23,11 +23,11 @@
                       "Entity": "gold_dim_demographics"
                     }
                   },
-                  "Property": "Active Demographics %"
+                  "Property": "Active Demographics by Category %"
                 }
               },
-              "queryRef": "gold_dim_demographics.Active Demographics %",
-              "nativeQueryRef": "Active Demographics %"
+              "queryRef": "gold_dim_demographics.Active Demographics by Category %",
+              "nativeQueryRef": "Active Demographics by Category %"
             }
           ]
         }
@@ -42,7 +42,7 @@
                     "Entity": "gold_dim_demographics"
                   }
                 },
-                "Property": "Active Demographics %"
+                "Property": "Active Demographics by Category %"
               }
             },
             "direction": "Descending"
@@ -218,7 +218,7 @@
   "filterConfig": {
     "filters": [
       {
-        "name": "096c5b65dae9632012c1",
+        "name": "25cec00cd0b81e285854",
         "field": {
           "Measure": {
             "Expression": {
@@ -226,7 +226,7 @@
                 "Entity": "gold_dim_demographics"
               }
             },
-            "Property": "Active Demographics %"
+            "Property": "Active Demographics by Category %"
           }
         },
         "type": "Advanced"

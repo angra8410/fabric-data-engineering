@@ -376,6 +376,16 @@ table gold_fct_ventas
 
 		annotation SummarizationSetBy = Automatic
 
+	column producto_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 112502d9-4e48-4ed6-94db-369b87f6b751
+		sourceLineageTag: producto_sk
+		summarizeBy: sum
+		sourceColumn: producto_sk
+
+		annotation SummarizationSetBy = Automatic
+
 	partition gold_fct_ventas = entity
 		mode: directLake
 		source

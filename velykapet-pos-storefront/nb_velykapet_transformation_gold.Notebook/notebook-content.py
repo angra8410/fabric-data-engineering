@@ -99,7 +99,7 @@ def build_fact_expenses():
         col("description") if "description" in cols else lit("N/A").alias("description"),
         col("amount").cast("double").alias("expense_amount"),
         col("category") if "category" in cols else lit("General").alias("category"),
-        col("expense_date") if "expense_date" in cols else to_date(col("created_at")).alias("expense_date")
+        to_date(col("expense_date")) if "expense_date" in cols else to_date(col("created_at")).alias("expense_date")
     ).withColumn("_updated_at", current_timestamp())
 
     df_fact.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.fact_expenses")
@@ -115,7 +115,7 @@ def build_fact_purchases():
         col("id").alias("purchase_id"),
         col("supplier_id") if "supplier_id" in cols else col("supplier").alias("supplier") if "supplier" in cols else lit("Unknown").alias("supplier"),
         col("amount").cast("double").alias("purchase_amount") if "amount" in cols else lit(0.0).alias("purchase_amount"),
-        to_date(col("created_at")).alias("purchase_date") if "created_at" in cols else current_timestamp().alias("purchase_date")
+        to_date(col("purchase_date")) if "purchase_date" in cols else to_date(col("created_at")) if "created_at" in cols else to_date(current_timestamp()).alias("purchase_date")
     ).withColumn("_updated_at", current_timestamp())
 
     df_fact.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.fact_purchases")

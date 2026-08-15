@@ -94,12 +94,16 @@ def build_fact_expenses():
     df_exp = spark.read.table(f"{SILVER_SCHEMA}.silver_expenses")
     cols = df_exp.columns
     
+    date_col = col("expense_date") if "expense_date" in cols else (col("created_at") if "created_at" in cols else current_timestamp())
+    desc_col = col("description") if "description" in cols else lit("N/A")
+    cat_col = col("category") if "category" in cols else lit("General")
+
     df_fact = df_exp.select(
         col("id").alias("expense_id"),
-        col("description") if "description" in cols else lit("N/A").alias("description"),
+        desc_col.alias("description"),
         col("amount").cast("double").alias("expense_amount"),
-        col("category") if "category" in cols else lit("General").alias("category"),
-        (to_date(col("expense_date")) if "expense_date" in cols else to_date(col("created_at"))).alias("expense_date")
+        cat_col.alias("category"),
+        to_date(date_col).alias("expense_date")
     ).withColumn("_updated_at", current_timestamp())
 
     df_fact.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.fact_expenses")
@@ -111,11 +115,15 @@ def build_fact_purchases():
     df_pur = spark.read.table(f"{SILVER_SCHEMA}.silver_purchases")
     cols = df_pur.columns
 
+    date_col = col("purchase_date") if "purchase_date" in cols else (col("created_at") if "created_at" in cols else current_timestamp())
+    supplier_col = col("supplier_id") if "supplier_id" in cols else (col("supplier") if "supplier" in cols else lit("Unknown"))
+    amount_col = col("amount").cast("double") if "amount" in cols else lit(0.0)
+
     df_fact = df_pur.select(
         col("id").alias("purchase_id"),
-        (col("supplier_id") if "supplier_id" in cols else (col("supplier") if "supplier" in cols else lit("Unknown"))).alias("supplier"),
-        (col("amount").cast("double") if "amount" in cols else lit(0.0)).alias("purchase_amount"),
-        (to_date(col("purchase_date")) if "purchase_date" in cols else (to_date(col("created_at")) if "created_at" in cols else to_date(current_timestamp()))).alias("purchase_date")
+        supplier_col.alias("supplier"),
+        amount_col.alias("purchase_amount"),
+        to_date(date_col).alias("purchase_date")
     ).withColumn("_updated_at", current_timestamp())
 
     df_fact.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.fact_purchases")

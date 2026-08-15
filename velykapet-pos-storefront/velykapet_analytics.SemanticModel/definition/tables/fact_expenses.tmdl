@@ -26,13 +26,13 @@ table fact_expenses
 		summarizeBy: sum
 		sourceColumn: expense_id
 
-	column expense_date
-		dataType: dateTime
-		formatString: General Date
-		lineageTag: 81eb1145-d1d1-4388-a492-04fce83a2344
-		sourceLineageTag: expense_date
-		summarizeBy: none
-		sourceColumn: expense_date
+	column expense_amount
+		dataType: double
+		formatString: \$#,0.00
+		lineageTag: 81eb1145-d1d1-4388-a492-04fce83a2347
+		sourceLineageTag: expense_amount
+		summarizeBy: sum
+		sourceColumn: expense_amount
 
 	column category
 		dataType: string
@@ -40,21 +40,6 @@ table fact_expenses
 		sourceLineageTag: category
 		summarizeBy: none
 		sourceColumn: category
-
-	column description
-		dataType: string
-		lineageTag: 81eb1145-d1d1-4388-a492-04fce83a2346
-		sourceLineageTag: description
-		summarizeBy: none
-		sourceColumn: description
-
-	column expense_amount
-		dataType: decimal
-		formatString: \$#,0.00
-		lineageTag: 81eb1145-d1d1-4388-a492-04fce83a2347
-		sourceLineageTag: expense_amount
-		summarizeBy: sum
-		sourceColumn: expense_amount
 
 	column _updated_at
 		dataType: dateTime
@@ -70,3 +55,4 @@ table fact_expenses
 			entityName: fact_expenses
 			schemaName: dbo
 			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
+

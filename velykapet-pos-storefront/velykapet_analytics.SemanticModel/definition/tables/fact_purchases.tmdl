@@ -41,6 +41,16 @@ table fact_purchases
 		summarizeBy: none
 		sourceColumn: _updated_at
 
+	column purchase_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 62a1f754-c2ec-4a44-9c6d-4f37703c67e9
+		sourceLineageTag: purchase_date
+		summarizeBy: none
+		sourceColumn: purchase_date
+
+		annotation SummarizationSetBy = Automatic
+
 	partition fact_purchases = entity
 		mode: directLake
 		source

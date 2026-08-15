@@ -31,11 +31,10 @@ table dim_products
 		lineageTag: m_stockout_alerts
 
 	column product_id
-		dataType: int64
-		formatString: 0
+		dataType: string
 		lineageTag: 71eb1145-d1d1-4388-a492-04fce83a2343
 		sourceLineageTag: product_id
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: product_id
 
 		annotation SummarizationSetBy = Automatic
@@ -45,24 +44,30 @@ table dim_products
 		formatString: \$#,0.00
 		lineageTag: 71eb1145-d1d1-4388-a492-04fce83a2346
 		sourceLineageTag: cost_price
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: cost_price
+
+		annotation SummarizationSetBy = Automatic
 
 	column sale_price
 		dataType: double
 		formatString: \$#,0.00
 		lineageTag: 71eb1145-d1d1-4388-a492-04fce83a2347
 		sourceLineageTag: sale_price
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: sale_price
+
+		annotation SummarizationSetBy = Automatic
 
 	column current_stock
 		dataType: int64
 		formatString: 0
 		lineageTag: 71eb1145-d1d1-4388-a492-04fce83a2348
 		sourceLineageTag: current_stock
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: current_stock
+
+		annotation SummarizationSetBy = Automatic
 
 	column _updated_at
 		dataType: dateTime
@@ -71,6 +76,33 @@ table dim_products
 		sourceLineageTag: _updated_at
 		summarizeBy: none
 		sourceColumn: _updated_at
+
+	column product_name
+		dataType: string
+		lineageTag: 93e06989-145f-4607-8493-060f981a593b
+		sourceLineageTag: product_name
+		summarizeBy: none
+		sourceColumn: product_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column barcode
+		dataType: string
+		lineageTag: f2d1a88f-7ab4-4eea-9bd5-23ede939be3b
+		sourceLineageTag: barcode
+		summarizeBy: none
+		sourceColumn: barcode
+
+		annotation SummarizationSetBy = Automatic
+
+	column supplier
+		dataType: string
+		lineageTag: 9d1819f0-d457-4733-8ab5-09236134217f
+		sourceLineageTag: supplier
+		summarizeBy: none
+		sourceColumn: supplier
+
+		annotation SummarizationSetBy = Automatic
 
 	partition dim_products = entity
 		mode: directLake

@@ -2,3 +2,15 @@ relationship fact_sales_dim_dates
 	fromColumn: fact_sales.sale_date
 	toColumn: dim_dates.date_key
 
+relationship 2a51d8bd-bf88-0e89-59f0-93e0061b7d72
+	fromColumn: fact_expenses.expense_date
+	toColumn: dim_dates.date_key
+
+relationship 7bf7d409-a04a-06c7-a769-9719133fa518
+	fromColumn: fact_purchases.purchase_date
+	toColumn: dim_dates.date_key
+
+relationship 2f325ac7-0c68-2806-5d4b-89a570e7e6f2
+	fromColumn: fact_sales.product_name
+	toColumn: dim_products.product_name
+

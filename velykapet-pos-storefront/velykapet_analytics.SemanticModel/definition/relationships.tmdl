@@ -2,14 +2,3 @@ relationship fact_sales_dim_dates
 	fromColumn: fact_sales.sale_date
 	toColumn: dim_dates.date_key
 
-relationship fact_expenses_dim_dates
-	fromColumn: fact_expenses.expense_date
-	toColumn: dim_dates.date_key
-
-relationship fact_purchases_dim_dates
-	fromColumn: fact_purchases.purchase_date
-	toColumn: dim_dates.date_key
-
-relationship fact_sales_dim_products
-	fromColumn: fact_sales.product_name
-	toColumn: dim_products.product_name

@@ -18,6 +18,8 @@ table dim_dates
 		summarizeBy: none
 		sourceColumn: year
 
+		annotation SummarizationSetBy = Automatic
+
 	column quarter
 		dataType: int64
 		formatString: 0
@@ -26,6 +28,8 @@ table dim_dates
 		summarizeBy: none
 		sourceColumn: quarter
 
+		annotation SummarizationSetBy = Automatic
+
 	column month_number
 		dataType: int64
 		formatString: 0
@@ -33,6 +37,8 @@ table dim_dates
 		sourceLineageTag: month_number
 		summarizeBy: none
 		sourceColumn: month_number
+
+		annotation SummarizationSetBy = Automatic
 
 	column month_name
 		dataType: string
@@ -56,6 +62,8 @@ table dim_dates
 		summarizeBy: none
 		sourceColumn: day_of_month
 
+		annotation SummarizationSetBy = Automatic
+
 	column day_of_week
 		dataType: int64
 		formatString: 0
@@ -63,6 +71,8 @@ table dim_dates
 		sourceLineageTag: day_of_week
 		summarizeBy: none
 		sourceColumn: day_of_week
+
+		annotation SummarizationSetBy = Automatic
 
 	column day_name
 		dataType: string
@@ -85,3 +95,4 @@ table dim_dates
 			entityName: dim_dates
 			schemaName: dbo
 			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
+

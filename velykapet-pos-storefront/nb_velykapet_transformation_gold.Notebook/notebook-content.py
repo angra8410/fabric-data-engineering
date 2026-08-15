@@ -69,29 +69,22 @@ def build_fact_sales():
         .join(df_sales.alias("s"), col(f"i.{sales_join_i}") == col(f"s.{sales_join_s}"), "inner") \
         .join(df_products.alias("p"), col(f"i.{item_prod_col}") == col(f"p.{prod_pk_col}"), "left")
 
-    origin_col = col("s.origin") if "origin" in sales_cols else lit("POS")
-    pm_col = col("s.payment_method") if "payment_method" in sales_cols else lit("Cash")
-    ts_col = col("s.created_at") if "created_at" in sales_cols else col("s.timestamp")
-    unit_cost_col = col("i.unit_cost").cast("double") if "unit_cost" in items_cols else lit(0.0)
-    unit_price_col = col("i.unit_price").cast("double") if "unit_price" in items_cols else lit(0.0)
-    revenue_col = col("i.total_price").cast("double") if "total_price" in items_cols else (col("i.subtotal").cast("double") if "subtotal" in items_cols else lit(0.0))
-    profit_col = col("i.profit").cast("double") if "profit" in items_cols else lit(0.0)
-
-    df_fact = df_joined.select(
+    select_exprs = [
         col("i.id").alias("item_id"),
         col(f"i.{sales_join_i}").alias("sale_id"),
-        origin_col.alias("sale_origin"),
-        pm_col.alias("payment_method"),
-        ts_col.alias("sale_timestamp"),
-        to_date(ts_col).alias("sale_date"),
+        col("s.origin").alias("sale_origin") if "origin" in sales_cols else lit("POS").alias("sale_origin"),
+        col("s.payment_method") if "payment_method" in sales_cols else lit("Cash").alias("payment_method"),
+        col("s.created_at").alias("sale_timestamp") if "created_at" in sales_cols else col("s.timestamp").alias("sale_timestamp"),
+        to_date(col("s.created_at") if "created_at" in sales_cols else col("s.timestamp")).alias("sale_date"),
         col(f"i.{item_prod_col}").alias("product_name"),
-        col("i.quantity").cast("int").alias("quantity"),
-        unit_cost_col.alias("unit_cost"),
-        unit_price_col.alias("unit_price"),
-        revenue_col.alias("total_item_revenue"),
-        profit_col.alias("item_gross_profit")
-    ).withColumn("_updated_at", current_timestamp())
+        col("i.quantity"),
+        col("i.unit_cost") if "unit_cost" in items_cols else lit(0.0).alias("unit_cost"),
+        col("i.unit_price") if "unit_price" in items_cols else lit(0.0).alias("unit_price"),
+        col("i.total_price").alias("total_item_revenue") if "total_price" in items_cols else col("i.subtotal").alias("total_item_revenue"),
+        col("i.profit").alias("item_gross_profit") if "profit" in items_cols else lit(0.0).alias("item_gross_profit")
+    ]
 
+    df_fact = df_joined.select(*select_exprs).withColumn("_updated_at", current_timestamp())
     df_fact.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.fact_sales")
     print(f"✅ 'fact_sales' generated ({df_fact.count()} records).")
 
@@ -109,8 +102,8 @@ def build_fact_expenses():
         col("id").alias("expense_id"),
         desc_col.alias("description"),
         col("amount").cast("double").alias("expense_amount"),
-        col("category") if "category" in cols else lit("General").alias("category"),
-        (to_date(col("expense_date")) if "expense_date" in cols else to_date(col("created_at"))).alias("expense_date")
+        cat_col.alias("category"),
+        to_date(date_col).alias("expense_date")
     ).withColumn("_updated_at", current_timestamp())
 
     df_fact.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.fact_expenses")
@@ -128,9 +121,9 @@ def build_fact_purchases():
 
     df_fact = df_pur.select(
         col("id").alias("purchase_id"),
-        (col("supplier_id") if "supplier_id" in cols else (col("supplier") if "supplier" in cols else lit("Unknown"))).alias("supplier"),
-        (col("amount").cast("double") if "amount" in cols else lit(0.0)).alias("purchase_amount"),
-        (to_date(col("purchase_date")) if "purchase_date" in cols else (to_date(col("created_at")) if "created_at" in cols else to_date(current_timestamp()))).alias("purchase_date")
+        supplier_col.alias("supplier"),
+        amount_col.alias("purchase_amount"),
+        to_date(date_col).alias("purchase_date")
     ).withColumn("_updated_at", current_timestamp())
 
     df_fact.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.fact_purchases")
@@ -155,8 +148,30 @@ def build_dim_products():
     df_dim.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.dim_products")
     print(f"✅ 'dim_products' generated ({df_dim.count()} records).")
 
+def build_dim_dates():
+    """5. Dimensión: DimDates."""
+    print("📅 Generating Gold 'dim_dates'...")
+    spark.sql(f"""
+        CREATE OR REPLACE TABLE {GOLD_SCHEMA}.dim_dates AS
+        SELECT 
+            to_date(datum) AS date_key,
+            YEAR(datum) AS year,
+            QUARTER(datum) AS quarter,
+            MONTH(datum) AS month_number,
+            DATE_FORMAT(datum, 'MMMM') AS month_name,
+            DATE_FORMAT(datum, 'yyyy-MM') AS year_month,
+            DAYOFMONTH(datum) AS day_of_month,
+            DAYOFWEEK(datum) AS day_of_week,
+            DATE_FORMAT(datum, 'EEEE') AS day_name,
+            CASE WHEN DAYOFWEEK(datum) IN (1, 7) THEN true ELSE false END AS is_weekend
+        FROM (
+            SELECT EXPLODE(SEQUENCE(DATE'2025-01-01', DATE'2026-12-31', INTERVAL 1 DAY)) AS datum
+        )
+    """)
+    print("✅ 'dim_dates' generated.")
+
 def build_kpi_whatsapp_funnel():
-    """5. Analítica de Conversión del Bot de WhatsApp."""
+    """6. Analítica de Conversión del Bot de WhatsApp."""
     print("📲 Generating Gold 'kpi_whatsapp_conversion' for WhatsApp Bot launch...")
     
     df_wa_orders = spark.read.table(f"{SILVER_SCHEMA}.silver_whatsapp_orders")
@@ -171,7 +186,7 @@ def build_kpi_whatsapp_funnel():
     print("✅ KPI 'kpi_whatsapp_conversion' ready for live WhatsApp Bot traffic.")
 
 def build_kpis():
-    """6. Tablas de KPIs Analíticos."""
+    """7. Tablas de KPIs Analíticos."""
     print("📈 Generating Gold KPIs (Daily Sales Trend, Inventory Health)...")
     
     df_sales_fact = spark.read.table(f"{GOLD_SCHEMA}.fact_sales")
@@ -209,32 +224,20 @@ def run_gold_pipeline():
     build_dim_dates()
     build_kpi_whatsapp_funnel()
     build_kpis()
-
-def build_dim_dates():
-    """Build DimDates table in Gold Lakehouse."""
-    print("📅 Generating Gold 'dim_dates'...")
-    spark.sql(f"""
-        CREATE OR REPLACE TABLE {GOLD_SCHEMA}.dim_dates AS
-        SELECT 
-            to_date(datum) AS date_key,
-            YEAR(datum) AS year,
-            QUARTER(datum) AS quarter,
-            MONTH(datum) AS month_number,
-            DATE_FORMAT(datum, 'MMMM') AS month_name,
-            DATE_FORMAT(datum, 'yyyy-MM') AS year_month,
-            DAYOFMONTH(datum) AS day_of_month,
-            DAYOFWEEK(datum) AS day_of_week,
-            DATE_FORMAT(datum, 'EEEE') AS day_name,
-            CASE WHEN DAYOFWEEK(datum) IN (1, 7) THEN true ELSE false END AS is_weekend
-        FROM (
-            SELECT EXPLODE(SEQUENCE(DATE'2025-01-01', DATE'2026-12-31', INTERVAL 1 DAY)) AS datum
-        )
-    """)
-    print("✅ 'dim_dates' generated.")
     
     print("🏁 Capa Gold completada exitosamente.")
 
-run_gold_pipeline()
+if __name__ == "__main__":
+    run_gold_pipeline()
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
 
 
 # METADATA ********************

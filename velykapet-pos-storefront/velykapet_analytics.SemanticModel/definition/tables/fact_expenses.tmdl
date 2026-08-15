@@ -49,6 +49,25 @@ table fact_expenses
 		summarizeBy: none
 		sourceColumn: _updated_at
 
+	column description
+		dataType: string
+		lineageTag: fd360a20-0484-45d5-8850-d8fb8e2c5d8c
+		sourceLineageTag: description
+		summarizeBy: none
+		sourceColumn: description
+
+		annotation SummarizationSetBy = Automatic
+
+	column expense_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: e892b631-f0b9-4c16-aa29-9837d9a14d8e
+		sourceLineageTag: expense_date
+		summarizeBy: none
+		sourceColumn: expense_date
+
+		annotation SummarizationSetBy = Automatic
+
 	partition fact_expenses = entity
 		mode: directLake
 		source

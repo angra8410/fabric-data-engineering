@@ -107,7 +107,7 @@ def build_fact_expenses():
     ).withColumn("_updated_at", current_timestamp())
 
     df_fact.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.fact_expenses")
-    print(f"✅ 'fact_expenses' generated ({df_fact.count()} records).")
+    print(f"✅ 'fact_expenses' generated ({df_fact.count()} records). Columns: {df_fact.columns}")
 
 def build_fact_purchases():
     """3. Tabla de Hechos: FactPurchases."""
@@ -127,7 +127,7 @@ def build_fact_purchases():
     ).withColumn("_updated_at", current_timestamp())
 
     df_fact.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.fact_purchases")
-    print(f"✅ 'fact_purchases' generated ({df_fact.count()} records).")
+    print(f"✅ 'fact_purchases' generated ({df_fact.count()} records). Columns: {df_fact.columns}")
 
 def build_dim_products():
     """4. Dimensión: DimProducts."""
@@ -135,18 +135,20 @@ def build_dim_products():
     df_prod = spark.read.table(f"{SILVER_SCHEMA}.silver_products")
     cols = df_prod.columns
 
+    name_col = col("name") if "name" in cols else (col("product_name") if "product_name" in cols else col("id").cast("string"))
+
     df_dim = df_prod.select(
         col("id").cast("string").alias("product_id"),
-        col("name").alias("product_name") if "name" in cols else col("id").cast("string").alias("product_name"),
-        col("barcode") if "barcode" in cols else lit("N/A").alias("barcode"),
-        col("supplier") if "supplier" in cols else lit("N/A").alias("supplier"),
-        col("cost_price").cast("double").alias("cost_price") if "cost_price" in cols else lit(0.0).alias("cost_price"),
-        col("sale_price").cast("double").alias("sale_price") if "sale_price" in cols else lit(0.0).alias("sale_price"),
-        col("stock").cast("int").alias("current_stock") if "stock" in cols else lit(0).alias("current_stock")
+        name_col.alias("product_name"),
+        (col("barcode") if "barcode" in cols else lit("N/A")).alias("barcode"),
+        (col("supplier") if "supplier" in cols else lit("N/A")).alias("supplier"),
+        (col("cost_price").cast("double") if "cost_price" in cols else lit(0.0)).alias("cost_price"),
+        (col("sale_price").cast("double") if "sale_price" in cols else lit(0.0)).alias("sale_price"),
+        (col("stock").cast("int") if "stock" in cols else lit(0)).alias("current_stock")
     ).withColumn("_updated_at", current_timestamp())
 
     df_dim.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.dim_products")
-    print(f"✅ 'dim_products' generated ({df_dim.count()} records).")
+    print(f"✅ 'dim_products' generated ({df_dim.count()} records). Columns: {df_dim.columns}")
 
 def build_dim_dates():
     """5. Dimensión: DimDates."""

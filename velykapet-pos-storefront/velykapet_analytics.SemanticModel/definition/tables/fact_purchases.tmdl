@@ -26,20 +26,12 @@ table fact_purchases
 		sourceColumn: supplier
 
 	column purchase_amount
-		dataType: decimal
+		dataType: double
 		formatString: \$#,0.00
 		lineageTag: 91eb1145-d1d1-4388-a492-04fce83a2345
 		sourceLineageTag: purchase_amount
 		summarizeBy: sum
 		sourceColumn: purchase_amount
-
-	column purchase_date
-		dataType: dateTime
-		formatString: General Date
-		lineageTag: 91eb1145-d1d1-4388-a492-04fce83a2346
-		sourceLineageTag: purchase_date
-		summarizeBy: none
-		sourceColumn: purchase_date
 
 	column _updated_at
 		dataType: dateTime
@@ -55,3 +47,4 @@ table fact_purchases
 			entityName: fact_purchases
 			schemaName: dbo
 			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
+

@@ -193,3 +193,4 @@ table fact_sales
 			entityName: fact_sales
 			schemaName: dbo
 			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
+

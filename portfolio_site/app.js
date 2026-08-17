@@ -88,23 +88,25 @@ document.addEventListener("DOMContentLoaded", () => {
     renderProject(activeProjectId);
   }
 
-  // Render Project Tabs & Global Dropdown
+  // Render Project Dropdown Switcher
   function renderProjectNav() {
-    projectTabsContainer.innerHTML = "";
+    if (projectTabsContainer) projectTabsContainer.innerHTML = "";
     if (globalProjectSelect) globalProjectSelect.innerHTML = "";
 
     data.projects.forEach(proj => {
-      // 1. Tab Button
-      const btn = document.createElement("button");
-      btn.className = `tab-btn ${proj.id === activeProjectId ? "active" : ""}`;
-      btn.innerHTML = `<span class="tab-icon">${proj.icon}</span> ${proj.title}`;
-      btn.addEventListener("click", () => {
-        activeProjectId = proj.id;
-        if (globalProjectSelect) globalProjectSelect.value = proj.id;
-        renderProjectNav();
-        renderProject(proj.id);
-      });
-      projectTabsContainer.appendChild(btn);
+      // 1. Tab Button (if container exists)
+      if (projectTabsContainer) {
+        const btn = document.createElement("button");
+        btn.className = `tab-btn ${proj.id === activeProjectId ? "active" : ""}`;
+        btn.innerHTML = `<span class="tab-icon">${proj.icon}</span> ${proj.title}`;
+        btn.addEventListener("click", () => {
+          activeProjectId = proj.id;
+          if (globalProjectSelect) globalProjectSelect.value = proj.id;
+          renderProjectNav();
+          renderProject(proj.id);
+        });
+        projectTabsContainer.appendChild(btn);
+      }
 
       // 2. Global Dropdown Option
       if (globalProjectSelect) {

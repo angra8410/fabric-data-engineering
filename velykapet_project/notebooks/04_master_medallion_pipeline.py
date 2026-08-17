@@ -127,10 +127,16 @@ def run_gold_stage():
 
     # FactExpenses
     df_exp = spark.read.table(f"{SILVER_SCHEMA}.silver_expenses")
+    exp_cols = df_exp.columns
+    desc_col = col("description") if "description" in exp_cols else lit("N/A").alias("description")
+    date_col = to_date(col("expense_date") if "expense_date" in exp_cols else (col("created_at") if "created_at" in exp_cols else current_timestamp()))
+    
     df_fact_exp = df_exp.select(
         col("id").alias("expense_id"),
+        desc_col.alias("description"),
         col("amount").cast("double").alias("expense_amount"),
-        col("category") if "category" in df_exp.columns else lit("General").alias("category")
+        col("category") if "category" in exp_cols else lit("General").alias("category"),
+        date_col.alias("expense_date")
     ).withColumn("_updated_at", current_timestamp())
     df_fact_exp.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.fact_expenses")
     print(f"  └── 💸 'fact_expenses': {df_fact_exp.count()} registros.")

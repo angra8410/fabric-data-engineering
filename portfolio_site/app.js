@@ -18,18 +18,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Elements
   const projectTabsContainer = document.getElementById("project-tabs");
+  const globalProjectSelect = document.getElementById("global-project-select");
   const envBadgeProd = document.getElementById("env-badge-prod");
   const envBadgeDev = document.getElementById("env-badge-dev");
   const envDescription = document.getElementById("env-description");
   const devModeToggleBtn = document.getElementById("dev-mode-toggle-btn");
 
+  const heroBadge = document.getElementById("hero-badge");
+  const heroTitle = document.getElementById("hero-title");
+  const heroSummary = document.getElementById("hero-summary");
+  const techPillsContainer = document.getElementById("tech-pills");
+
+  const reportDropdown = document.getElementById("report-dropdown");
+  const reportDescription = document.getElementById("report-description");
+  const reportMetricsContainer = document.getElementById("report-metrics");
+  const pbiIframe = document.getElementById("pbi-iframe");
+  const iframeFallback = document.getElementById("iframe-fallback");
+  const customUrlInput = document.getElementById("custom-url-input");
+  const btnApplyUrl = document.getElementById("btn-apply-url");
+  const btnFullscreen = document.getElementById("btn-fullscreen");
+
+  const medallionContainer = document.getElementById("medallion-container");
+  const codeTabsContainer = document.getElementById("code-tabs");
+  const codeContent = document.getElementById("code-content");
+  const btnCopyCode = document.getElementById("btn-copy-code");
+
+  const almContainer = document.getElementById("alm-container");
+  const almOptimization = document.getElementById("alm-optimization");
+
   // Show/Hide DEV toggle based on mode
   function updateDevModeUI() {
     if (isDevModeAllowed) {
-      envBadgeDev.style.display = "inline-flex";
+      if (envBadgeDev) envBadgeDev.style.display = "inline-flex";
       if (devModeToggleBtn) devModeToggleBtn.textContent = "⚙️ Dev Controls: ON";
     } else {
-      envBadgeDev.style.display = "none";
+      if (envBadgeDev) envBadgeDev.style.display = "none";
       if (devModeToggleBtn) devModeToggleBtn.textContent = "⚙️ Developer Mode";
     }
   }
@@ -64,8 +87,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     renderProject(activeProjectId);
   }
-
-  const globalProjectSelect = document.getElementById("global-project-select");
 
   // Render Project Tabs & Global Dropdown
   function renderProjectNav() {
@@ -205,24 +226,30 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Apply Custom Embed URL
-  btnApplyUrl.addEventListener("click", () => {
-    const url = customUrlInput.value.trim();
-    if (url) {
-      pbiIframe.style.display = "block";
-      iframeFallback.style.display = "none";
-      pbiIframe.src = url;
-    }
-  });
+  if (btnApplyUrl) {
+    btnApplyUrl.addEventListener("click", () => {
+      const url = customUrlInput ? customUrlInput.value.trim() : "";
+      if (url) {
+        if (pbiIframe) pbiIframe.style.display = "block";
+        if (iframeFallback) iframeFallback.style.display = "none";
+        if (pbiIframe) pbiIframe.src = url;
+      }
+    });
+  }
 
   // Fullscreen Button
-  btnFullscreen.addEventListener("click", () => {
-    const container = document.getElementById("iframe-container");
-    if (container.requestFullscreen) {
-      container.requestFullscreen();
-    } else if (container.webkitRequestFullscreen) {
-      container.webkitRequestFullscreen();
-    }
-  });
+  if (btnFullscreen) {
+    btnFullscreen.addEventListener("click", () => {
+      const container = document.getElementById("iframe-container");
+      if (container) {
+        if (container.requestFullscreen) {
+          container.requestFullscreen();
+        } else if (container.webkitRequestFullscreen) {
+          container.webkitRequestFullscreen();
+        }
+      }
+    });
+  }
 
   // Render Medallion Architecture Grid
   function renderMedallionGrid(medallion) {
@@ -301,12 +328,16 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Copy Code Button
-  btnCopyCode.addEventListener("click", () => {
-    navigator.clipboard.writeText(codeContent.textContent).then(() => {
-      btnCopyCode.textContent = "✅ Copied!";
-      setTimeout(() => { btnCopyCode.textContent = "📋 Copy Code"; }, 2000);
+  if (btnCopyCode) {
+    btnCopyCode.addEventListener("click", () => {
+      if (codeContent) {
+        navigator.clipboard.writeText(codeContent.textContent).then(() => {
+          btnCopyCode.textContent = "✅ Copied!";
+          setTimeout(() => { btnCopyCode.textContent = "📋 Copy Code"; }, 2000);
+        });
+      }
     });
-  });
+  }
 
   // Render ALM & Capacity Optimization
   function renderALM(alm) {

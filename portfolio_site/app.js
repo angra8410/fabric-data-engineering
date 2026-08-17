@@ -65,20 +65,43 @@ document.addEventListener("DOMContentLoaded", () => {
     renderProject(activeProjectId);
   }
 
-  // Render Project Tabs
+  const globalProjectSelect = document.getElementById("global-project-select");
+
+  // Render Project Tabs & Global Dropdown
   function renderProjectNav() {
     projectTabsContainer.innerHTML = "";
+    if (globalProjectSelect) globalProjectSelect.innerHTML = "";
+
     data.projects.forEach(proj => {
+      // 1. Tab Button
       const btn = document.createElement("button");
       btn.className = `tab-btn ${proj.id === activeProjectId ? "active" : ""}`;
       btn.innerHTML = `<span class="tab-icon">${proj.icon}</span> ${proj.title}`;
       btn.addEventListener("click", () => {
         activeProjectId = proj.id;
+        if (globalProjectSelect) globalProjectSelect.value = proj.id;
         renderProjectNav();
         renderProject(proj.id);
       });
       projectTabsContainer.appendChild(btn);
+
+      // 2. Global Dropdown Option
+      if (globalProjectSelect) {
+        const opt = document.createElement("option");
+        opt.value = proj.id;
+        opt.textContent = `${proj.icon} ${proj.title}`;
+        if (proj.id === activeProjectId) opt.selected = true;
+        globalProjectSelect.appendChild(opt);
+      }
     });
+
+    if (globalProjectSelect) {
+      globalProjectSelect.onchange = (e) => {
+        activeProjectId = e.target.value;
+        renderProjectNav();
+        renderProject(activeProjectId);
+      };
+    }
   }
 
   // Render Full Active Project Page

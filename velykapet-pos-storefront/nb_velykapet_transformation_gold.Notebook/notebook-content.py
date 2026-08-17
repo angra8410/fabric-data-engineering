@@ -236,7 +236,9 @@ if __name__ == "__main__":
 
 # META {
 # META   "language": "python",
-# META   "language_group": "synapse_pyspark"
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": false,
+# META   "editable": true
 # META }
 
 # CELL ********************

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Microsoft Fabric Data Engineering & BI Portfolio</title>
+  <meta name="description" content="Recruiter-facing Microsoft Fabric Data Engineering Portfolio showcasing Medallion Lakehouses, PySpark pipelines, Delta Lake, and embedded Power BI reports.">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="reports_config.js"></script>
+  <script src="app.js" defer></script>
+  <script src="three_hero.js" defer></script>
+</head>
+<body>
+
+  <!-- Header & Navigation -->
+  <header class="header">
+    <div class="container header-inner">
+      <div class="brand">
+        <div class="brand-icon">⚡</div>
+        <div>
+          <div class="brand-title">Microsoft Fabric Data Engineering</div>
+          <div class="brand-subtitle">Medallion Pipelines • PySpark • Direct Lake BI</div>
+        </div>
+      </div>
+
+      <div class="env-switcher-group">
+        <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">Environment:</span>
+        <div id="env-badge-prod" class="env-badge badge-prod active">🟢 PROD</div>
+        <div id="env-badge-dev" class="env-badge badge-dev">🟡 DEV</div>
+      </div>
+
+      <div class="header-links">
+        <a href="https://github.com/angra8410/fabric-data-engineering" target="_blank" class="btn-icon-link">
+          <span>📦</span> GitHub Monorepo
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Environment Status Banner -->
+    <div style="padding: 10px 0; margin-top: 10px;">
+      <span id="env-description" style="font-size: 0.85rem; color: var(--text-muted);">
+        Recruiter-facing production environment connected to Microsoft Fabric Production Workspace.
+      </span>
+    </div>
+
+    <!-- Project Tabs Navigation -->
+    <nav class="nav-projects">
+      <div id="project-tabs" class="project-tabs">
+        <!-- Injected via app.js -->
+      </div>
+    </nav>
+
+    <!-- Project Hero Section with 3D Canvas -->
+    <section class="hero-card">
+      <div id="hero-3d-container" class="hero-3d-container"></div>
+      
+      <div class="hero-content-relative">
+        <div class="hero-top">
+          <span id="hero-badge" class="project-badge-pill">Microsoft Fabric Medallion</span>
+        </div>
+        <h1 id="hero-title" class="hero-title">Velykapet Retail & WhatsApp Medallion Platform</h1>
+        <p id="hero-summary" class="hero-summary">
+          End-to-end Data Engineering Platform on Microsoft Fabric orchestrating a 3-tier Medallion Architecture across 16 operational tables.
+        </p>
+        <div id="tech-pills" class="tech-pills">
+          <!-- Injected via app.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Multi-Report Power BI Embedded Hub -->
+    <section class="section-card">
+      <div class="report-header-bar">
+        <h2 class="section-title" style="margin-bottom: 0;">📊 Power BI Embedded Reports</h2>
+        
+        <div class="report-select-wrapper">
+          <label for="report-dropdown" style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted); white-space: nowrap;">
+            Select Report:
+          </label>
+          <select id="report-dropdown" class="report-dropdown">
+            <!-- Options injected via app.js -->
+          </select>
+        </div>
+      </div>
+
+      <p id="report-description" style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.95rem;">
+        Omnichannel revenue, transaction trends, and margin analysis across POS & Web.
+      </p>
+
+      <!-- Key Performance Metrics Grid -->
+      <div id="report-metrics" class="report-meta-grid">
+        <!-- Metric cards injected via app.js -->
+      </div>
+
+      <!-- iFrame Embed Container -->
+      <div id="iframe-container" class="iframe-container">
+        <iframe id="pbi-iframe" src="" title="Power BI Embedded Report" allowfullscreen="true"></iframe>
+        
+        <div id="iframe-fallback" class="iframe-fallback">
+          <!-- Fallback view when iframe URL is empty or placeholder -->
+        </div>
+      </div>
+
+      <!-- Quick Embed Swapper Bar -->
+      <div class="url-swapper-bar">
+        <input type="text" id="custom-url-input" class="url-input" placeholder="Paste Power BI Embed URL to preview live report...">
+        <button id="btn-apply-url" class="btn-action">Load URL</button>
+        <button id="btn-fullscreen" class="btn-icon-link" style="cursor: pointer;">⛶ Fullscreen</button>
+      </div>
+    </section>
+
+    <!-- Medallion Architecture Inspector -->
+    <section class="section-card">
+      <h2 class="section-title">🏛️ Medallion Lakehouse Architecture (Bronze ➔ Silver ➔ Gold)</h2>
+      <p style="color: var(--text-muted); margin-bottom: 20px;">
+        100% operational fidelity raw tables ingested from PostgreSQL, transformed via PySpark Delta Lake tables, and served as a Star Schema Data Warehouse.
+      </p>
+      
+      <div id="medallion-container" class="medallion-grid">
+        <!-- Medallion cards injected via app.js -->
+      </div>
+    </section>
+
+    <!-- Fabric PySpark Code Inspector -->
+    <section class="section-card">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+        <h2 class="section-title" style="margin-bottom: 0;">💻 Fabric PySpark Code Inspector</h2>
+        <button id="btn-copy-code" class="btn-icon-link" style="cursor: pointer;">📋 Copy Code</button>
+      </div>
+      
+      <div class="code-viewer-container">
+        <div class="code-header-tabs">
+          <div id="code-tabs" class="code-tabs-list">
+            <!-- Code tab buttons injected via app.js -->
+          </div>
+          <span style="font-family: var(--font-code); font-size: 0.75rem; color: var(--text-dim);">PySpark / Fabric Notebook</span>
+        </div>
+        
+        <div class="code-body">
+          <pre><code id="code-content"># Loading notebook source code...</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ALM & Fabric Capacity Optimization -->
+    <section class="section-card">
+      <h2 class="section-title">⚡ ALM Deployment Pipelines & Capacity Optimization</h2>
+      
+      <div id="alm-container" class="alm-pipeline-flex">
+        <!-- Pipeline stages injected via app.js -->
+      </div>
+
+      <div style="margin-top: 24px; padding: 18px; border-radius: 12px; background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.2);">
+        <strong style="color: var(--accent-blue);">💡 Capacity Optimization Note:</strong>
+        <p id="alm-optimization" style="font-size: 0.9rem; color: var(--text-muted); margin-top: 6px;">
+          Single Spark Session Master ETL executes Bronze Validation ➔ Silver Transformation ➔ Gold DW in under 30 seconds, eliminating Fabric F-SKU concurrency limits (HTTP 430).
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p style="font-weight: 600; color: var(--text-main);">Microsoft Fabric Data Engineering & BI Monorepo</p>
+      <p style="margin-top: 6px;">
+        Hosted on <a href="https://github.com/angra8410/fabric-data-engineering" target="_blank">GitHub Pages CDN</a> • Fast Sub-Second Page Loads • Zero Cold Starts
+      </p>
+      <div style="margin-top: 14px;">
+        <a href="#" id="dev-mode-toggle-btn" style="font-size: 0.78rem; color: var(--text-dim); border-bottom: 1px dashed var(--text-dim);">⚙️ Developer Mode</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -4,7 +4,7 @@
  */
 const PORTFOLIO_DATA = {
   currentEnv: "prod", // 'prod' | 'dev'
-  
+
   environments: {
     prod: {
       name: "Production (ws-prod)",
@@ -32,7 +32,7 @@ const PORTFOLIO_DATA = {
           {
             id: "v_sales_pos_prod",
             title: "📊 Velykapet Executive Revenue & Sales POS",
-            embedUrl: "https://app.powerbi.com/view?r=YOUR_PUBLIC_POWERBI_EMBED_ID",
+            embedUrl: "https://app.fabric.microsoft.com/reportEmbed?reportId=565d03ab-33b9-4493-a0b0-6b586185e5f4&autoAuth=true&ctid=9da4a1e2-db93-42a7-a588-957fd6292e87",
             description: "Omnichannel sales analytics, transaction volume, gross profit margins, and top product ranking across physical POS and Web.",
             metrics: [
               { label: "Total Revenue", value: "$442.0K" },

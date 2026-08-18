@@ -65,7 +65,7 @@ def build_fact_sales():
         .join(df_sales.alias("s"), col(f"i.{sales_join_i}") == col(f"s.{sales_join_s}"), "inner")
 
     origin_col = col("s.origin") if "origin" in s_cols else lit("POS")
-    ts_col = col("s.created_at") if "created_at" in s_cols else col("s.timestamp")
+    ts_col = coalesce(col("s.timestamp"), col("s.created_at")) if "timestamp" in s_cols else (col("s.created_at") if "created_at" in s_cols else current_timestamp())
 
     from pyspark.sql.functions import when, upper, trim, coalesce
 

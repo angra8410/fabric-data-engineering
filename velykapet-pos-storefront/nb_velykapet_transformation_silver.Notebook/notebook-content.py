@@ -115,3 +115,28 @@ print("✅ Tablas Silver escritas exitosamente (WhatsApp y Backlog inicializadas
 # META   "frozen": false,
 # META   "editable": true
 # META }
+
+# CELL ********************
+
+df_sales = spark.read.table("lh_velykapet_silver_dev.dbo.silver_sales")
+print("📋 Todas las columnas de silver_sales:")
+print(df_sales.columns)
+# Ver todas las columnas que tengan fechas o tiempos
+date_cols = [c for c in df_sales.columns if any(k in c.lower() for k in ["date", "time", "created", "fecha"])]
+print("\n📅 Columnas de fecha detectadas:", date_cols)
+# Ver los primeros registros de esas columnas
+df_sales.select(date_cols).show(10, truncate=False)
+# Ver el rango mínimo y máximo de cada fecha
+from pyspark.sql.functions import min as _min, max as _max
+for col_name in date_cols:
+    df_sales.select(
+        _min(col_name).alias(f"Min_{col_name}"), 
+        _max(col_name).alias(f"Max_{col_name}")
+    ).show(truncate=False)
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }

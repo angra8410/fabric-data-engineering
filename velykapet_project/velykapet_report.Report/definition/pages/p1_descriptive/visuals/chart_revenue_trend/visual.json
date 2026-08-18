@@ -3,10 +3,10 @@
   "name": "chart_revenue_trend",
   "position": {
     "x": 20,
-    "y": 150,
+    "y": 200,
     "z": 4,
-    "width": 710,
-    "height": 540
+    "width": 610,
+    "height": 250
   },
   "visual": {
     "visualType": "lineStackedColumnComboChart",

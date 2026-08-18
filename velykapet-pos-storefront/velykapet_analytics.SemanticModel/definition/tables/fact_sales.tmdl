@@ -134,6 +134,15 @@ table fact_sales
 
 		annotation SummarizationSetBy = Automatic
 
+	column product_id
+		dataType: string
+		lineageTag: a2b8d81f-1073-4f40-b0b8-e773756a1199
+		sourceLineageTag: product_id
+		summarizeBy: none
+		sourceColumn: product_id
+
+		annotation SummarizationSetBy = Automatic
+
 	column product_name
 		dataType: string
 		lineageTag: 6410b62d-4674-4fa7-9cf1-7fe7f858a6fa

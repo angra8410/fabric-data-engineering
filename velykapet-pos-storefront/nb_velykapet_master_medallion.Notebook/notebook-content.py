@@ -127,31 +127,44 @@ def run_gold_stage():
     # FactSales
     df_sales = spark.read.table(f"{SILVER_SCHEMA}.silver_sales")
     df_items = spark.read.table(f"{SILVER_SCHEMA}.silver_sale_items")
-    df_products = spark.read.table(f"{SILVER_SCHEMA}.silver_products")
 
-    items_cols, sales_cols, prod_cols = df_items.columns, df_sales.columns, df_products.columns
-    sales_join_i = "sale_id" if "sale_id" in items_cols else ("id" if "id" in items_cols else items_cols[0])
-    sales_join_s = "id" if "id" in sales_cols else ("sale_id" if "sale_id" in sales_cols else sales_cols[0])
-    item_prod_col = "product_name" if "product_name" in items_cols else ("product_id" if "product_id" in items_cols else items_cols[0])
-    prod_pk_col = "id" if "id" in prod_cols else ("product_id" if "product_id" in prod_cols else prod_cols[0])
+    s_cols, i_cols = df_sales.columns, df_items.columns
+    sales_join_i = "sale_id" if "sale_id" in i_cols else ("id" if "id" in i_cols else i_cols[0])
+    sales_join_s = "id" if "id" in s_cols else ("sale_id" if "sale_id" in s_cols else s_cols[0])
+    item_prod_name = "product_name" if "product_name" in i_cols else ("product_id" if "product_id" in i_cols else i_cols[0])
 
     df_joined = df_items.alias("i") \
-        .join(df_sales.alias("s"), col(f"i.{sales_join_i}") == col(f"s.{sales_join_s}"), "inner") \
-        .join(df_products.alias("p"), col(f"i.{item_prod_col}") == col(f"p.{prod_pk_col}"), "left")
+        .join(df_sales.alias("s"), col(f"i.{sales_join_i}") == col(f"s.{sales_join_s}"), "inner")
+
+    from pyspark.sql.functions import when, upper, trim, coalesce
+
+    # Limpieza de métodos de pago
+    pm_raw = upper(trim(coalesce(col("s.payment_method"), lit("NO ESPECIFICADO"))))
+    clean_pm = when(pm_raw.contains("EFECTIVO") & pm_raw.contains("BANCOLOMBIA"), "Mixto (Bancolombia + Efectivo)") \
+        .when(pm_raw.contains("EFECTIVO") & (pm_raw.contains("BRE") | pm_raw.contains("NEQUI")), "Mixto (Digital + Efectivo)") \
+        .when(pm_raw.isin("B-BRE", "BRE-B", "BRE B", "B_BRE"), "Transferencia (Bre-B / Bancolombia)") \
+        .when(pm_raw.contains("BANCOLOMBIA"), "Bancolombia") \
+        .when(pm_raw.contains("NEQUI"), "Nequi") \
+        .when(pm_raw.contains("DAVIPLATA"), "Daviplata") \
+        .when(pm_raw.contains("BRE"), "Bre-B") \
+        .when(pm_raw.contains("TARJETA") | pm_raw.contains("DATAFONO"), "Tarjeta / Datáfono") \
+        .when(pm_raw.contains("EFECTIVO"), "Efectivo") \
+        .otherwise("Otros")
 
     df_fact_sales = df_joined.select(
         col("i.id").alias("item_id"),
         col(f"i.{sales_join_i}").alias("sale_id"),
-        col("s.origin").alias("sale_origin") if "origin" in sales_cols else lit("POS").alias("sale_origin"),
-        col("s.payment_method") if "payment_method" in sales_cols else lit("Cash").alias("payment_method"),
-        col("s.created_at").alias("sale_timestamp") if "created_at" in sales_cols else col("s.timestamp").alias("sale_timestamp"),
-        to_date(col("s.created_at") if "created_at" in sales_cols else col("s.timestamp")).alias("sale_date"),
-        col(f"i.{item_prod_col}").alias("product_name"),
-        col("i.quantity"),
-        col("i.unit_cost") if "unit_cost" in items_cols else lit(0.0).alias("unit_cost"),
-        col("i.unit_price") if "unit_price" in items_cols else lit(0.0).alias("unit_price"),
-        col("i.total_price").alias("total_item_revenue") if "total_price" in items_cols else col("i.subtotal").alias("total_item_revenue"),
-        col("i.profit").alias("item_gross_profit") if "profit" in items_cols else lit(0.0).alias("item_gross_profit")
+        col(f"i.{item_prod_name}").alias("product_id"),
+        col(f"i.{item_prod_name}").alias("product_name"),
+        (col("s.origin") if "origin" in s_cols else lit("POS")).alias("sale_origin"),
+        clean_pm.alias("payment_method"),
+        (col("s.created_at") if "created_at" in s_cols else col("s.timestamp")).alias("sale_timestamp"),
+        to_date(col("s.created_at") if "created_at" in s_cols else col("s.timestamp")).alias("sale_date"),
+        col("i.quantity").cast("int").alias("quantity"),
+        (col("i.unit_cost").cast("double") if "unit_cost" in i_cols else lit(0.0)).alias("unit_cost"),
+        (col("i.unit_price").cast("double") if "unit_price" in i_cols else lit(0.0)).alias("unit_price"),
+        (col("i.total_price").cast("double") if "total_price" in i_cols else col("i.subtotal").cast("double")).alias("total_item_revenue"),
+        (col("i.profit").cast("double") if "profit" in i_cols else lit(0.0)).alias("item_gross_profit")
     ).withColumn("_updated_at", current_timestamp())
 
     df_fact_sales.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.fact_sales")
@@ -160,14 +173,14 @@ def run_gold_stage():
     # FactExpenses
     df_exp = spark.read.table(f"{SILVER_SCHEMA}.silver_expenses")
     exp_cols = df_exp.columns
-    desc_col = col("description") if "description" in exp_cols else lit("N/A").alias("description")
+    desc_col = col("description") if "description" in exp_cols else lit("N/A")
     date_col = to_date(col("expense_date") if "expense_date" in exp_cols else (col("created_at") if "created_at" in exp_cols else current_timestamp()))
     
     df_fact_exp = df_exp.select(
         col("id").alias("expense_id"),
         desc_col.alias("description"),
         col("amount").cast("double").alias("expense_amount"),
-        col("category") if "category" in exp_cols else lit("General").alias("category"),
+        (col("category") if "category" in exp_cols else lit("General")).alias("category"),
         date_col.alias("expense_date")
     ).withColumn("_updated_at", current_timestamp())
     df_fact_exp.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.fact_expenses")
@@ -190,21 +203,37 @@ def run_gold_stage():
     print(f"  └── 📦 'fact_purchases': {df_fact_pur.count()} registros.")
 
     # DimProducts
+    df_cat = spark.read.table(f"{SILVER_SCHEMA}.silver_master_catalog")
     df_prod = spark.read.table(f"{SILVER_SCHEMA}.silver_products")
-    prod_cols = df_prod.columns
-    name_col = col("name") if "name" in prod_cols else (col("product_name") if "product_name" in prod_cols else col("id").cast("string"))
 
-    df_dim_p = df_prod.select(
-        col("id").alias("product_id"),
-        name_col.alias("product_name"),
-        (col("barcode") if "barcode" in prod_cols else lit("N/A")).alias("barcode"),
-        (col("supplier") if "supplier" in prod_cols else lit("N/A")).alias("supplier"),
-        col("cost_price").cast("double").alias("cost_price") if "cost_price" in prod_cols else lit(0.0).alias("cost_price"),
-        col("sale_price").cast("double").alias("sale_price") if "sale_price" in prod_cols else lit(0.0).alias("sale_price"),
-        col("stock").cast("int").alias("current_stock") if "stock" in prod_cols else lit(0).alias("current_stock")
-    ).withColumn("_updated_at", current_timestamp())
-    df_dim_p.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.dim_products")
-    print(f"  └── 🏷️ 'dim_products': {df_dim_p.count()} registros.")
+    df_dim_cat = df_cat.alias("c") \
+        .join(df_prod.alias("p"), col("c.barcode") == col("p.barcode"), "left") \
+        .select(
+            col("c.product_name").alias("product_id"),
+            col("c.product_name").alias("product_name"),
+            col("c.barcode").alias("barcode"),
+            coalesce(col("p.supplier"), lit("N/A")).alias("supplier"),
+            coalesce(col("p.cost_price").cast("double"), lit(0.0)).alias("cost_price"),
+            coalesce(col("p.sale_price").cast("double"), lit(0.0)).alias("sale_price"),
+            coalesce(col("p.stock").cast("int"), lit(0)).alias("current_stock")
+        ).dropDuplicates(["product_name"])
+
+    df_items_prod = df_items.select(
+        col("product_name").alias("product_id"),
+        col("product_name").alias("product_name"),
+        col("barcode").alias("barcode"),
+        lit("Velykapet").alias("supplier"),
+        coalesce(col("unit_cost").cast("double"), lit(0.0)).alias("cost_price"),
+        coalesce(col("unit_price").cast("double"), lit(0.0)).alias("sale_price"),
+        lit(10).cast("int").alias("current_stock")
+    ).distinct()
+
+    df_dim_prod = df_dim_cat.unionByName(df_items_prod, allowMissingColumns=True) \
+        .dropDuplicates(["product_name"]) \
+        .withColumn("_updated_at", current_timestamp())
+
+    df_dim_prod.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.dim_products")
+    print(f"  └── 🏷️ 'dim_products': {df_dim_prod.count()} registros.")
 
     # WhatsApp KPIs
     df_wa_orders = spark.read.table(f"{SILVER_SCHEMA}.silver_whatsapp_orders")

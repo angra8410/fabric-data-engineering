@@ -38,7 +38,7 @@ Descripción:
 
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import (
-    col, sum as _sum, count as _count, avg as _avg, current_timestamp, round as _round, to_date, lit, coalesce
+    col, sum as _sum, count as _count, avg as _avg, current_timestamp, round as _round, to_date, lit
 )
 
 spark = SparkSession.builder \
@@ -65,16 +65,30 @@ def build_fact_sales():
         .join(df_sales.alias("s"), col(f"i.{sales_join_i}") == col(f"s.{sales_join_s}"), "inner")
 
     origin_col = col("s.origin") if "origin" in s_cols else lit("POS")
-    pm_col = col("s.payment_method") if "payment_method" in s_cols else lit("Cash")
     ts_col = col("s.created_at") if "created_at" in s_cols else col("s.timestamp")
 
-    select_exprs = [
+    from pyspark.sql.functions import when, upper, trim, coalesce
+
+    # Limpieza y estandarización de método de pago
+    pm_raw = upper(trim(coalesce(col("s.payment_method"), lit("NO ESPECIFICADO"))))
+    clean_pm = when(pm_raw.contains("EFECTIVO") & pm_raw.contains("BANCOLOMBIA"), "Mixto (Bancolombia + Efectivo)") \
+        .when(pm_raw.contains("EFECTIVO") & (pm_raw.contains("BRE") | pm_raw.contains("NEQUI")), "Mixto (Digital + Efectivo)") \
+        .when(pm_raw.isin("B-BRE", "BRE-B", "BRE B", "B_BRE"), "Transferencia (Bre-B / Bancolombia)") \
+        .when(pm_raw.contains("BANCOLOMBIA"), "Bancolombia") \
+        .when(pm_raw.contains("NEQUI"), "Nequi") \
+        .when(pm_raw.contains("DAVIPLATA"), "Daviplata") \
+        .when(pm_raw.contains("BRE"), "Bre-B") \
+        .when(pm_raw.contains("TARJETA") | pm_raw.contains("DATAFONO"), "Tarjeta / Datáfono") \
+        .when(pm_raw.contains("EFECTIVO"), "Efectivo") \
+        .otherwise("Otros")
+
+    df_fact = df_joined.select(
         col("i.id").alias("item_id"),
         col(f"i.{sales_join_i}").alias("sale_id"),
         col(f"i.{item_prod_name}").alias("product_id"),
         col(f"i.{item_prod_name}").alias("product_name"),
         origin_col.alias("sale_origin"),
-        pm_col.alias("payment_method"),
+        clean_pm.alias("payment_method"),
         ts_col.alias("sale_timestamp"),
         to_date(ts_col).alias("sale_date"),
         col("i.quantity").cast("int").alias("quantity"),
@@ -82,9 +96,8 @@ def build_fact_sales():
         (col("i.unit_price").cast("double") if "unit_price" in i_cols else lit(0.0)).alias("unit_price"),
         (col("i.total_price").cast("double") if "total_price" in i_cols else col("i.subtotal").cast("double")).alias("total_item_revenue"),
         (col("i.profit").cast("double") if "profit" in i_cols else lit(0.0)).alias("item_gross_profit")
-    ]
+    ).withColumn("_updated_at", current_timestamp())
 
-    df_fact = df_joined.select(*select_exprs).withColumn("_updated_at", current_timestamp())
     df_fact.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.fact_sales")
     print(f"✅ 'fact_sales' generated ({df_fact.count()} records).")
 
@@ -130,13 +143,14 @@ def build_fact_purchases():
     print(f"✅ 'fact_purchases' generated ({df_fact.count()} records). Columns: {df_fact.columns}")
 
 def build_dim_products():
-    """4. Dimensión: DimProducts (Integración de Catálogo Maestro y Precios)."""
+    """4. Dimensión: DimProducts."""
     print("🏷️ Generating Gold 'dim_products'...")
     df_cat = spark.read.table(f"{SILVER_SCHEMA}.silver_master_catalog")
     df_prod = spark.read.table(f"{SILVER_SCHEMA}.silver_products")
     df_items = spark.read.table(f"{SILVER_SCHEMA}.silver_sale_items")
 
-    # Unir catálogo maestro con precios y stock por barcode
+    from pyspark.sql.functions import coalesce
+
     df_dim_cat = df_cat.alias("c") \
         .join(df_prod.alias("p"), col("c.barcode") == col("p.barcode"), "left") \
         .select(
@@ -149,7 +163,6 @@ def build_dim_products():
             coalesce(col("p.stock").cast("int"), lit(0)).alias("current_stock")
         ).dropDuplicates(["product_name"])
 
-    # Asegurar que cualquier producto vendido también esté presente
     df_items_prod = df_items.select(
         col("product_name").alias("product_id"),
         col("product_name").alias("product_name"),
@@ -233,7 +246,7 @@ def build_kpis():
 def run_gold_pipeline():
     """Ejecución del pipeline Gold completo."""
     print("==================================================")
-    print("EJECUTANDO CAPA GOLD COMPLETA - VELYKAPET")
+    print("EJECUTANDO CAPA GOLD COMPLETA (INCLUYENDO BOT WHATSAPP) - VELYKAPET")
     print("==================================================")
     
     build_fact_sales()
@@ -249,7 +262,6 @@ def run_gold_pipeline():
 if __name__ == "__main__":
     run_gold_pipeline()
 
-
 # METADATA ********************
 
 # META {
@@ -257,51 +269,6 @@ if __name__ == "__main__":
 # META   "language_group": "synapse_pyspark",
 # META   "frozen": false,
 # META   "editable": true
-# META }
-
-# CELL ********************
-
-df_fs = spark.read.table("lh_velykapet_gold_dev.dbo.fact_sales")
-df_dp = spark.read.table("lh_velykapet_gold_dev.dbo.dim_products")
-
-print(f"📊 Total ventas en fact_sales: {df_fs.count()}")
-print(f"🏷️ Total productos en dim_products: {df_dp.count()}")
-
-print("\n--- Muestra de fact_sales (product_id y product_name) ---")
-df_fs.select("sale_id", "product_id", "product_name", "total_item_revenue").show(5, truncate=False)
-
-print("\n--- Muestra de dim_products (product_id y product_name) ---")
-df_dp.select("product_id", "product_name").show(5, truncate=False)
-
-# Validación de match entre tablas
-df_match = df_fs.join(df_dp, df_fs.product_id == df_dp.product_id, "inner")
-print(f"\n🔍 Coincidencias entre fact_sales y dim_products por product_id: {df_match.count()} filas")
-
-
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
-
-# CELL ********************
-
-print("--- silver_master_catalog ---")
-spark.read.table("lh_velykapet_silver_dev.dbo.silver_master_catalog").show(5, truncate=False)
-
-print("--- silver_products (todas las columnas) ---")
-spark.read.table("lh_velykapet_silver_dev.dbo.silver_products").show(5, truncate=False)
-
-print("--- silver_sale_items ---")
-spark.read.table("lh_velykapet_silver_dev.dbo.silver_sale_items").show(5, truncate=False)
-
-
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
 # META }
 
 # CELL ********************

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.3.0/schema.json",
+  "name": "card_net_operating_profit",
+  "position": {
+    "x": 770,
+    "y": 15,
+    "z": 4,
+    "width": 235,
+    "height": 95
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_expenses"
+                    }
+                  },
+                  "Property": "Net Operating Profit"
+                }
+              },
+              "queryRef": "fact_expenses.Net Operating Profit"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

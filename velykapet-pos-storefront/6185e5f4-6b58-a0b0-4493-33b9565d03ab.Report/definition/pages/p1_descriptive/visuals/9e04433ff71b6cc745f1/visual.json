@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
   "name": "9e04433ff71b6cc745f1",
   "position": {
-    "x": 763.60406234971288,
-    "y": 140.20651220685167,
+    "x": 760.12786783218758,
+    "y": 449.58782426659877,
     "z": 7,
-    "height": 539.96888172225522,
-    "width": 516.79425160542019,
+    "height": 220.15898610993239,
+    "width": 500.57201052363575,
     "tabOrder": 1
   },
   "visual": {
@@ -89,24 +89,33 @@
         }
       }
     },
+    "objects": {
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "97.12435755315799D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dim_products.product_name"
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {}
+        }
+      ]
+    },
     "drillFilterOtherVisuals": true
   },
   "filterConfig": {
     "filters": [
-      {
-        "name": "94dde8ab7c45286988be",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "dim_products"
-              }
-            },
-            "Property": "product_name"
-          }
-        },
-        "type": "Categorical"
-      },
       {
         "name": "50bfa3fa296eab518055",
         "field": {
@@ -162,6 +171,20 @@
           }
         },
         "type": "Advanced"
+      },
+      {
+        "name": "8e9a910d8dd9e32400a7",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_products"
+              }
+            },
+            "Property": "product_name"
+          }
+        },
+        "type": "Categorical"
       }
     ]
   }

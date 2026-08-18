@@ -15,6 +15,29 @@
           "secureOutput": false
         },
         "name": "Master_Medallion_ETL",
+        "dependsOn": [
+          {
+            "activity": "Ingest_Bronze",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "7cc93cf8-04c2-8f4d-4c87-240f82abade9",
+          "workspaceId": "00000000-0000-0000-0000-000000000000"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Ingest_Bronze",
         "dependsOn": []
       }
     ]

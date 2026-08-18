@@ -151,6 +151,8 @@ def run_gold_stage():
         .when(pm_raw.contains("EFECTIVO"), "Efectivo") \
         .otherwise("Otros")
 
+    ts_expr = coalesce(col("s.timestamp"), col("s.created_at")) if "timestamp" in s_cols else (col("s.created_at") if "created_at" in s_cols else current_timestamp())
+
     df_fact_sales = df_joined.select(
         col("i.id").alias("item_id"),
         col(f"i.{sales_join_i}").alias("sale_id"),
@@ -158,8 +160,8 @@ def run_gold_stage():
         col(f"i.{item_prod_name}").alias("product_name"),
         (col("s.origin") if "origin" in s_cols else lit("POS")).alias("sale_origin"),
         clean_pm.alias("payment_method"),
-        (col("s.created_at") if "created_at" in s_cols else col("s.timestamp")).alias("sale_timestamp"),
-        to_date(col("s.created_at") if "created_at" in s_cols else col("s.timestamp")).alias("sale_date"),
+        ts_expr.alias("sale_timestamp"),
+        to_date(ts_expr).alias("sale_date"),
         col("i.quantity").cast("int").alias("quantity"),
         (col("i.unit_cost").cast("double") if "unit_cost" in i_cols else lit(0.0)).alias("unit_cost"),
         (col("i.unit_price").cast("double") if "unit_price" in i_cols else lit(0.0)).alias("unit_price"),

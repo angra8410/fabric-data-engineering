@@ -15,6 +15,7 @@
         "columns": [
           { "name": "item_id", "dataType": "string", "sourceColumn": "item_id", "isNullable": false },
           { "name": "sale_id", "dataType": "string", "sourceColumn": "sale_id", "isNullable": false },
+          { "name": "product_id", "dataType": "string", "sourceColumn": "product_id", "isNullable": false },
           { "name": "sale_origin", "dataType": "string", "sourceColumn": "sale_origin" },
           { "name": "payment_method", "dataType": "string", "sourceColumn": "payment_method" },
           { "name": "sale_timestamp", "dataType": "dateTime", "sourceColumn": "sale_timestamp", "formatString": "yyyy-MM-dd HH:mm:ss" },
@@ -86,6 +87,7 @@
         "name": "dim_products",
         "columns": [
           { "name": "product_id", "dataType": "string", "sourceColumn": "product_id", "isNullable": false },
+          { "name": "product_name", "dataType": "string", "sourceColumn": "product_name" },
           { "name": "barcode", "dataType": "string", "sourceColumn": "barcode" },
           { "name": "supplier", "dataType": "string", "sourceColumn": "supplier" },
           { "name": "cost_price", "dataType": "double", "sourceColumn": "cost_price", "formatString": "$#,##0.00" },
@@ -246,6 +248,14 @@
         "fromColumn": "sale_date",
         "toTable": "dim_date",
         "toColumn": "Date",
+        "crossFilteringBehavior": "oneDirection"
+      },
+      {
+        "name": "fact_sales_dim_products",
+        "fromTable": "fact_sales",
+        "fromColumn": "product_id",
+        "toTable": "dim_products",
+        "toColumn": "product_id",
         "crossFilteringBehavior": "oneDirection"
       },
       {

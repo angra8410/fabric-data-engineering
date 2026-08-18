@@ -11,6 +11,6 @@ relationship 7bf7d409-a04a-06c7-a769-9719133fa518
 	toColumn: dim_dates.date_key
 
 relationship 2f325ac7-0c68-2806-5d4b-89a570e7e6f2
-	fromColumn: fact_sales.product_name
-	toColumn: dim_products.product_name
+	fromColumn: fact_sales.product_id
+	toColumn: dim_products.product_id
 

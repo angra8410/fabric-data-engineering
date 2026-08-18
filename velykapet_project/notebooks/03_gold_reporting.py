@@ -26,35 +26,35 @@ def build_fact_sales():
     print("📊 Generating Gold 'fact_sales'...")
     df_sales = spark.read.table(f"{SILVER_SCHEMA}.silver_sales")
     df_items = spark.read.table(f"{SILVER_SCHEMA}.silver_sale_items")
-    df_products = spark.read.table(f"{SILVER_SCHEMA}.silver_products")
 
-    items_cols = df_items.columns
-    sales_cols = df_sales.columns
-    prod_cols = df_products.columns
+    s_cols = df_sales.columns
+    i_cols = df_items.columns
 
-    sales_join_i = "sale_id" if "sale_id" in items_cols else ("id" if "id" in items_cols else items_cols[0])
-    sales_join_s = "id" if "id" in sales_cols else ("sale_id" if "sale_id" in sales_cols else sales_cols[0])
-
-    item_prod_col = "product_name" if "product_name" in items_cols else ("product_id" if "product_id" in items_cols else items_cols[0])
-    prod_pk_col = "id" if "id" in prod_cols else ("product_id" if "product_id" in prod_cols else prod_cols[0])
+    sales_join_i = "sale_id" if "sale_id" in i_cols else ("id" if "id" in i_cols else i_cols[0])
+    sales_join_s = "id" if "id" in s_cols else ("sale_id" if "sale_id" in s_cols else s_cols[0])
+    item_prod_name = "product_name" if "product_name" in i_cols else ("product_id" if "product_id" in i_cols else i_cols[0])
 
     df_joined = df_items.alias("i") \
-        .join(df_sales.alias("s"), col(f"i.{sales_join_i}") == col(f"s.{sales_join_s}"), "inner") \
-        .join(df_products.alias("p"), col(f"i.{item_prod_col}") == col(f"p.{prod_pk_col}"), "left")
+        .join(df_sales.alias("s"), col(f"i.{sales_join_i}") == col(f"s.{sales_join_s}"), "inner")
+
+    origin_col = col("s.origin") if "origin" in s_cols else lit("POS")
+    pm_col = col("s.payment_method") if "payment_method" in s_cols else lit("Cash")
+    ts_col = col("s.created_at") if "created_at" in s_cols else col("s.timestamp")
 
     select_exprs = [
         col("i.id").alias("item_id"),
         col(f"i.{sales_join_i}").alias("sale_id"),
-        col("s.origin").alias("sale_origin") if "origin" in sales_cols else lit("POS").alias("sale_origin"),
-        col("s.payment_method") if "payment_method" in sales_cols else lit("Cash").alias("payment_method"),
-        col("s.created_at").alias("sale_timestamp") if "created_at" in sales_cols else col("s.timestamp").alias("sale_timestamp"),
-        to_date(col("s.created_at") if "created_at" in sales_cols else col("s.timestamp")).alias("sale_date"),
-        col(f"i.{item_prod_col}").alias("product_name"),
-        col("i.quantity"),
-        col("i.unit_cost") if "unit_cost" in items_cols else lit(0.0).alias("unit_cost"),
-        col("i.unit_price") if "unit_price" in items_cols else lit(0.0).alias("unit_price"),
-        col("i.total_price").alias("total_item_revenue") if "total_price" in items_cols else col("i.subtotal").alias("total_item_revenue"),
-        col("i.profit").alias("item_gross_profit") if "profit" in items_cols else lit(0.0).alias("item_gross_profit")
+        col(f"i.{item_prod_name}").alias("product_id"),
+        col(f"i.{item_prod_name}").alias("product_name"),
+        origin_col.alias("sale_origin"),
+        pm_col.alias("payment_method"),
+        ts_col.alias("sale_timestamp"),
+        to_date(ts_col).alias("sale_date"),
+        col("i.quantity").cast("int").alias("quantity"),
+        (col("i.unit_cost").cast("double") if "unit_cost" in i_cols else lit(0.0)).alias("unit_cost"),
+        (col("i.unit_price").cast("double") if "unit_price" in i_cols else lit(0.0)).alias("unit_price"),
+        (col("i.total_price").cast("double") if "total_price" in i_cols else col("i.subtotal").cast("double")).alias("total_item_revenue"),
+        (col("i.profit").cast("double") if "profit" in i_cols else lit(0.0)).alias("item_gross_profit")
     ]
 
     df_fact = df_joined.select(*select_exprs).withColumn("_updated_at", current_timestamp())
@@ -97,17 +97,37 @@ def build_fact_purchases():
 def build_dim_products():
     """4. Dimensión: DimProducts."""
     print("🏷️ Generating Gold 'dim_products'...")
+    df_cat = spark.read.table(f"{SILVER_SCHEMA}.silver_master_catalog")
     df_prod = spark.read.table(f"{SILVER_SCHEMA}.silver_products")
-    cols = df_prod.columns
+    df_items = spark.read.table(f"{SILVER_SCHEMA}.silver_sale_items")
 
-    df_dim = df_prod.select(
-        col("id").alias("product_id"),
-        col("barcode") if "barcode" in cols else lit("N/A").alias("barcode"),
-        col("supplier") if "supplier" in cols else lit("N/A").alias("supplier"),
-        col("cost_price").cast("double").alias("cost_price") if "cost_price" in cols else lit(0.0).alias("cost_price"),
-        col("sale_price").cast("double").alias("sale_price") if "sale_price" in cols else lit(0.0).alias("sale_price"),
-        col("stock").cast("int").alias("current_stock") if "stock" in cols else lit(0).alias("current_stock")
-    ).withColumn("_updated_at", current_timestamp())
+    from pyspark.sql.functions import coalesce
+
+    df_dim_cat = df_cat.alias("c") \
+        .join(df_prod.alias("p"), col("c.barcode") == col("p.barcode"), "left") \
+        .select(
+            col("c.product_name").alias("product_id"),
+            col("c.product_name").alias("product_name"),
+            col("c.barcode").alias("barcode"),
+            coalesce(col("p.supplier"), lit("N/A")).alias("supplier"),
+            coalesce(col("p.cost_price").cast("double"), lit(0.0)).alias("cost_price"),
+            coalesce(col("p.sale_price").cast("double"), lit(0.0)).alias("sale_price"),
+            coalesce(col("p.stock").cast("int"), lit(0)).alias("current_stock")
+        ).dropDuplicates(["product_name"])
+
+    df_items_prod = df_items.select(
+        col("product_name").alias("product_id"),
+        col("product_name").alias("product_name"),
+        col("barcode").alias("barcode"),
+        lit("Velykapet").alias("supplier"),
+        coalesce(col("unit_cost").cast("double"), lit(0.0)).alias("cost_price"),
+        coalesce(col("unit_price").cast("double"), lit(0.0)).alias("sale_price"),
+        lit(10).cast("int").alias("current_stock")
+    ).distinct()
+
+    df_dim = df_dim_cat.unionByName(df_items_prod, allowMissingColumns=True) \
+        .dropDuplicates(["product_name"]) \
+        .withColumn("_updated_at", current_timestamp())
 
     df_dim.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.dim_products")
     print(f"✅ 'dim_products' generated ({df_dim.count()} records).")

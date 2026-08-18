@@ -108,21 +108,25 @@ def run_gold_stage():
     items_cols, sales_cols, prod_cols = df_items.columns, df_sales.columns, df_products.columns
     sales_join_i = "sale_id" if "sale_id" in items_cols else ("id" if "id" in items_cols else items_cols[0])
     sales_join_s = "id" if "id" in sales_cols else ("sale_id" if "sale_id" in sales_cols else sales_cols[0])
-    item_prod_col = "product_name" if "product_name" in items_cols else ("product_id" if "product_id" in items_cols else items_cols[0])
+    item_prod_col = "product_id" if "product_id" in items_cols else ("product_name" if "product_name" in items_cols else items_cols[0])
     prod_pk_col = "id" if "id" in prod_cols else ("product_id" if "product_id" in prod_cols else prod_cols[0])
+    prod_name_col = "name" if "name" in prod_cols else ("product_name" if "product_name" in prod_cols else prod_pk_col)
 
     df_joined = df_items.alias("i") \
         .join(df_sales.alias("s"), col(f"i.{sales_join_i}") == col(f"s.{sales_join_s}"), "inner") \
-        .join(df_products.alias("p"), col(f"i.{item_prod_col}") == col(f"p.{prod_pk_col}"), "left")
+        .join(df_products.alias("p"), col(f"i.{item_prod_col}").cast("string") == col(f"p.{prod_pk_col}").cast("string"), "left")
+
+    product_name_expr = col(f"p.{prod_name_col}") if prod_name_col in prod_cols else (col("i.product_name") if "product_name" in items_cols else col(f"i.{item_prod_col}").cast("string"))
 
     df_fact_sales = df_joined.select(
         col("i.id").alias("item_id"),
         col(f"i.{sales_join_i}").alias("sale_id"),
+        col(f"i.{item_prod_col}").cast("string").alias("product_id"),
         col("s.origin").alias("sale_origin") if "origin" in sales_cols else lit("POS").alias("sale_origin"),
         col("s.payment_method") if "payment_method" in sales_cols else lit("Cash").alias("payment_method"),
         col("s.created_at").alias("sale_timestamp") if "created_at" in sales_cols else col("s.timestamp").alias("sale_timestamp"),
         to_date(col("s.created_at") if "created_at" in sales_cols else col("s.timestamp")).alias("sale_date"),
-        col(f"i.{item_prod_col}").alias("product_name"),
+        product_name_expr.alias("product_name"),
         col("i.quantity"),
         col("i.unit_cost") if "unit_cost" in items_cols else lit(0.0).alias("unit_cost"),
         col("i.unit_price") if "unit_price" in items_cols else lit(0.0).alias("unit_price"),
@@ -171,7 +175,7 @@ def run_gold_stage():
     name_col = col("name") if "name" in prod_cols else (col("product_name") if "product_name" in prod_cols else col("id").cast("string"))
 
     df_dim_p = df_prod.select(
-        col("id").alias("product_id"),
+        col("id").cast("string").alias("product_id"),
         name_col.alias("product_name"),
         (col("barcode") if "barcode" in prod_cols else lit("N/A")).alias("barcode"),
         (col("supplier") if "supplier" in prod_cols else lit("N/A")).alias("supplier"),

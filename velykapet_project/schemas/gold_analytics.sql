@@ -7,6 +7,7 @@
 CREATE TABLE IF NOT EXISTS lh_velykapet_gold_dev.dbo.fact_sales (
     item_id STRING NOT NULL,
     sale_id STRING NOT NULL,
+    product_id STRING NOT NULL,
     sale_origin STRING,
     payment_method STRING,
     sale_timestamp TIMESTAMP,
@@ -40,6 +41,7 @@ CREATE TABLE IF NOT EXISTS lh_velykapet_gold_dev.dbo.fact_purchases (
 -- 2. Tablas de Dimensiones (Dimension Tables)
 CREATE TABLE IF NOT EXISTS lh_velykapet_gold_dev.dbo.dim_products (
     product_id STRING NOT NULL,
+    product_name STRING,
     barcode STRING,
     supplier STRING,
     cost_price DOUBLE,

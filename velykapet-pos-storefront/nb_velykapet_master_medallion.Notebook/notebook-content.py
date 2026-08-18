@@ -170,21 +170,33 @@ def run_gold_stage():
 
     # FactPurchases
     df_pur = spark.read.table(f"{SILVER_SCHEMA}.silver_purchases")
+    pur_cols = df_pur.columns
+    pur_date_col = to_date(col("purchase_date") if "purchase_date" in pur_cols else (col("created_at") if "created_at" in pur_cols else current_timestamp()))
+    supplier_col = col("supplier_id") if "supplier_id" in pur_cols else (col("supplier") if "supplier" in pur_cols else lit("Unknown"))
+    amount_col = col("amount").cast("double") if "amount" in pur_cols else lit(0.0)
+
     df_fact_pur = df_pur.select(
         col("id").alias("purchase_id"),
-        col("supplier") if "supplier" in df_pur.columns else lit("Unknown").alias("supplier"),
-        col("amount").cast("double").alias("purchase_amount") if "amount" in df_pur.columns else lit(0.0).alias("purchase_amount")
+        supplier_col.alias("supplier"),
+        amount_col.alias("purchase_amount"),
+        pur_date_col.alias("purchase_date")
     ).withColumn("_updated_at", current_timestamp())
     df_fact_pur.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.fact_purchases")
     print(f"  └── 📦 'fact_purchases': {df_fact_pur.count()} registros.")
 
     # DimProducts
     df_prod = spark.read.table(f"{SILVER_SCHEMA}.silver_products")
+    prod_cols = df_prod.columns
+    name_col = col("name") if "name" in prod_cols else (col("product_name") if "product_name" in prod_cols else col("id").cast("string"))
+
     df_dim_p = df_prod.select(
         col("id").alias("product_id"),
-        col("cost_price").cast("double").alias("cost_price") if "cost_price" in df_prod.columns else lit(0.0).alias("cost_price"),
-        col("sale_price").cast("double").alias("sale_price") if "sale_price" in df_prod.columns else lit(0.0).alias("sale_price"),
-        col("stock").cast("int").alias("current_stock") if "stock" in df_prod.columns else lit(0).alias("current_stock")
+        name_col.alias("product_name"),
+        (col("barcode") if "barcode" in prod_cols else lit("N/A")).alias("barcode"),
+        (col("supplier") if "supplier" in prod_cols else lit("N/A")).alias("supplier"),
+        col("cost_price").cast("double").alias("cost_price") if "cost_price" in prod_cols else lit(0.0).alias("cost_price"),
+        col("sale_price").cast("double").alias("sale_price") if "sale_price" in prod_cols else lit(0.0).alias("sale_price"),
+        col("stock").cast("int").alias("current_stock") if "stock" in prod_cols else lit(0).alias("current_stock")
     ).withColumn("_updated_at", current_timestamp())
     df_dim_p.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.dim_products")
     print(f"  └── 🏷️ 'dim_products': {df_dim_p.count()} registros.")

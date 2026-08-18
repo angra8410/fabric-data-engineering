@@ -9,7 +9,7 @@
     "height": 540
   },
   "visual": {
-    "visualType": "lineAndClusteredColumnChart",
+    "visualType": "lineStackedColumnComboChart",
     "query": {
       "queryState": {
         "Category": {

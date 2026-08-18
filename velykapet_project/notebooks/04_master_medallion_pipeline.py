@@ -28,10 +28,14 @@ def run_bronze_stage():
         "whatsapp_order_items", "processed_whatsapp_messages", "whatsapp_contacts",
         "demand_backlog", "customer_last_search", "customer_cart"
     ]
+    batch_id = datetime.now().strftime("%Y%m%d_%H%M%S")
     for t in tables:
         try:
-            cnt = spark.read.table(f"lh_velykapet_bronze_dev.public.{t}").count()
-            print(f"  ├── 📋 Tablas Bronze '{t}': {cnt} registros.")
+            full_table_name = f"lh_velykapet_bronze_dev.public.{t}"
+            df_raw = spark.read.table(full_table_name)
+            df_bronze = df_raw.withColumn("_ingested_at", current_timestamp()).withColumn("_batch_id", lit(batch_id))
+            df_bronze.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(full_table_name)
+            print(f"  ├── 📋 Tabla Bronze '{t}': {df_bronze.count()} registros verificados.")
         except Exception as e:
             print(f"  ├── ⚠️ Tabla '{t}' no disponible en Bronze: {e}")
     print("✅ Capa Bronze validada.")

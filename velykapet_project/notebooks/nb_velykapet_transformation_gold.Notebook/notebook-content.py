@@ -65,8 +65,7 @@ def build_fact_sales():
         .join(df_sales.alias("s"), col(f"i.{sales_join_i}") == col(f"s.{sales_join_s}"), "inner")
 
     origin_col = col("s.origin") if "origin" in s_cols else lit("POS")
-    pm_col = col("s.payment_method") if "payment_method" in s_cols else lit("Cash")
-    ts_col = col("s.created_at") if "created_at" in s_cols else col("s.timestamp")
+    ts_col = coalesce(col("s.timestamp"), col("s.created_at")) if "timestamp" in s_cols else (col("s.created_at") if "created_at" in s_cols else current_timestamp())
     unit_cost_col = col("i.unit_cost").cast("double") if "unit_cost" in i_cols else lit(0.0)
     unit_price_col = col("i.unit_price").cast("double") if "unit_price" in i_cols else lit(0.0)
     revenue_col = col("i.total_price").cast("double") if "total_price" in i_cols else (col("i.subtotal").cast("double") if "subtotal" in i_cols else lit(0.0))

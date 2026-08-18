@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.3.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "card_total_transactions",
   "position": {
     "x": 480,
     "y": 20,
     "z": 3,
-    "width": 220,
-    "height": 100
+    "height": 100,
+    "width": 220
   },
   "visual": {
     "visualType": "card",
@@ -31,5 +31,23 @@
         }
       }
     }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "f2a6c0f864c599ac430c",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_sales"
+              }
+            },
+            "Property": "Total Transactions"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
   }
 }

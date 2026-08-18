@@ -139,9 +139,12 @@ def run_gold_stage():
         col(f"i.{sales_join_i}").alias("sale_id"),
         col("s.origin").alias("sale_origin") if "origin" in sales_cols else lit("POS").alias("sale_origin"),
         col("s.payment_method") if "payment_method" in sales_cols else lit("Cash").alias("payment_method"),
+        col("s.created_at").alias("sale_timestamp") if "created_at" in sales_cols else col("s.timestamp").alias("sale_timestamp"),
         to_date(col("s.created_at") if "created_at" in sales_cols else col("s.timestamp")).alias("sale_date"),
         col(f"i.{item_prod_col}").alias("product_name"),
         col("i.quantity"),
+        col("i.unit_cost") if "unit_cost" in items_cols else lit(0.0).alias("unit_cost"),
+        col("i.unit_price") if "unit_price" in items_cols else lit(0.0).alias("unit_price"),
         col("i.total_price").alias("total_item_revenue") if "total_price" in items_cols else col("i.subtotal").alias("total_item_revenue"),
         col("i.profit").alias("item_gross_profit") if "profit" in items_cols else lit(0.0).alias("item_gross_profit")
     ).withColumn("_updated_at", current_timestamp())

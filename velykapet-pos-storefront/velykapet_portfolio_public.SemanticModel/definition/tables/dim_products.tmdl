@@ -1,0 +1,147 @@
+table dim_products
+	lineageTag: e0d5a138-cbf6-4b53-810f-3ef264cfb752
+	sourceLineageTag: 07fa9fb0-9bc8-43d9-9fb8-ef951e70e28c
+
+	measure 'Total Active SKUs' = EXTERNALMEASURE("Total Active SKUs", INTEGER, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: #,0
+		lineageTag: 3510fd86-7388-48bb-8ff0-bea5d8cd4810
+		sourceLineageTag: m_active_skus
+		dataCategory: Uncategorized
+
+	measure 'Current Stock Units' = EXTERNALMEASURE("Current Stock Units", INTEGER, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: #,0
+		lineageTag: 268293d2-e0fc-42e2-99bf-7cb9e68b5b75
+		sourceLineageTag: m_stock_units
+		dataCategory: Uncategorized
+
+	measure 'Inventory Cost Valuation' = EXTERNALMEASURE("Inventory Cost Valuation", DOUBLE, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: \$#,0.00
+		lineageTag: ad11c5ae-544b-4438-a9f9-d42550da36b6
+		sourceLineageTag: m_inv_cost_val
+		dataCategory: Uncategorized
+
+	measure 'Inventory Retail Valuation' = EXTERNALMEASURE("Inventory Retail Valuation", DOUBLE, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: \$#,0.00
+		lineageTag: a4fca2bb-c139-4b2a-b57d-b9727d52198f
+		sourceLineageTag: m_inv_retail_val
+		dataCategory: Uncategorized
+
+	measure 'Potential Inventory Margin' = EXTERNALMEASURE("Potential Inventory Margin", DOUBLE, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: \$#,0.00
+		lineageTag: 105efd40-4da0-4b0c-b5e8-fd89156d7bb4
+		sourceLineageTag: m_pot_inv_margin
+		dataCategory: Uncategorized
+
+	measure 'Potential Inventory Margin %' = EXTERNALMEASURE("Potential Inventory Margin %", DOUBLE, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: 0.0%
+		lineageTag: 77f97e15-90c5-4bb3-ab3f-67ffa6c24c2b
+		sourceLineageTag: m_pot_margin_pct
+		dataCategory: Uncategorized
+
+	measure 'Stock-Out Alert SKUs' = EXTERNALMEASURE("Stock-Out Alert SKUs", INTEGER, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: #,0
+		lineageTag: e1293d39-23ea-425b-a4a8-cd4db170c888
+		sourceLineageTag: m_stockout_alerts
+		dataCategory: Uncategorized
+
+	column product_id
+		dataType: string
+		isNullable: false
+		lineageTag: 849feb42-b2cc-409d-9eaf-99ae59555486
+		sourceLineageTag: 71eb1145-d1d1-4388-a492-04fce83a2343
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: product_id
+
+		annotation SummarizationSetBy = User
+
+	column cost_price
+		dataType: double
+		formatString: \$#,0.00
+		lineageTag: c283642e-0438-4dd9-bf56-3120af81973d
+		sourceLineageTag: 71eb1145-d1d1-4388-a492-04fce83a2346
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: cost_price
+
+		annotation SummarizationSetBy = User
+
+	column sale_price
+		dataType: double
+		formatString: \$#,0.00
+		lineageTag: 2ad48db2-e054-439f-a828-bc6c262d782f
+		sourceLineageTag: 71eb1145-d1d1-4388-a492-04fce83a2347
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: sale_price
+
+		annotation SummarizationSetBy = User
+
+	column current_stock
+		dataType: int64
+		formatString: 0
+		lineageTag: 22937647-1394-44e1-9e62-99fcbc4b5ac7
+		sourceLineageTag: 71eb1145-d1d1-4388-a492-04fce83a2348
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: current_stock
+
+		annotation SummarizationSetBy = User
+
+	column _updated_at
+		dataType: dateTime
+		formatString: General Number
+		lineageTag: c5510c65-5bec-454e-8f29-417b11eeb2c3
+		sourceLineageTag: 71eb1145-d1d1-4388-a492-04fce83a2349
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: _updated_at
+
+		annotation SummarizationSetBy = User
+
+	column product_name
+		dataType: string
+		lineageTag: 0848c46d-9a15-46c1-9d70-c08648ad42d0
+		sourceLineageTag: 93e06989-145f-4607-8493-060f981a593b
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: product_name
+
+		annotation SummarizationSetBy = User
+
+	column barcode
+		dataType: string
+		lineageTag: d7ed512e-45dd-480a-90a6-31eaa94044ea
+		sourceLineageTag: f2d1a88f-7ab4-4eea-9bd5-23ede939be3b
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: barcode
+
+		annotation SummarizationSetBy = User
+
+	column supplier
+		dataType: string
+		lineageTag: 3f259848-18c5-4281-8cbc-e337b04e7688
+		sourceLineageTag: 9d1819f0-d457-4733-8ab5-09236134217f
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: supplier
+
+		annotation SummarizationSetBy = User
+
+	column category
+		dataType: string
+		lineageTag: cee37d7b-49ac-4894-81fe-c522b8fa555f
+		sourceLineageTag: 71eb1145-d1d1-4388-a492-04fce83a2345
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: category
+
+		annotation SummarizationSetBy = User
+
+	partition dim_products = entity
+		mode: directQuery
+		source
+			entityName: dim_products
+			expressionSource: 'DirectQuery to AS - velykapet_analytics_portfolio'
+

@@ -1,0 +1,11 @@
+expression 'DirectQuery to AS - velykapet_analytics_portfolio' =
+		let
+		    Source = AnalysisServices.Database("powerbi://api.powerbi.com/v1.0/9da4a1e2-db93-42a7-a588-957fd6292e87/ws-velykapet-dev", "velykapet_analytics_portfolio"),
+		    Cubes = Table.Combine(Source[Data]),
+		    Cube = Cubes{[Id="Model", Kind="Cube"]}[Data]
+		in
+		    Cube
+	lineageTag: 9108cbe0-ad49-4175-bc8a-5f95c183be85
+
+	annotation PBI_IncludeFutureArtifacts = True
+

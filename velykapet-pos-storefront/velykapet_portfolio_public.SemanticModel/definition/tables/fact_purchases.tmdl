@@ -1,0 +1,76 @@
+table fact_purchases
+	lineageTag: 0b0766c0-b94c-4e41-b5e4-2f32fe351310
+	sourceLineageTag: 06fa9fb0-9bc8-43d9-9fb8-ef951e70e28d
+
+	measure 'Total Purchases' = EXTERNALMEASURE("Total Purchases", DOUBLE, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: \$#,0.00
+		lineageTag: 394e04e3-2159-4355-9e88-adec2932f074
+		sourceLineageTag: m_tot_purchases
+		dataCategory: Uncategorized
+
+	measure 'Procurement Purchase Count' = EXTERNALMEASURE("Procurement Purchase Count", INTEGER, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: #,0
+		lineageTag: b1dbcfc1-4291-42d2-9edc-f406d964cc9d
+		sourceLineageTag: m_purch_count
+		dataCategory: Uncategorized
+
+	column purchase_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 23d4c5e0-2276-4a16-a2bb-a457262a8910
+		sourceLineageTag: 91eb1145-d1d1-4388-a492-04fce83a2343
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: purchase_id
+
+		annotation SummarizationSetBy = User
+
+	column supplier
+		dataType: string
+		lineageTag: 3a290b91-b57b-4b81-8642-f5176368b06a
+		sourceLineageTag: 91eb1145-d1d1-4388-a492-04fce83a2344
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: supplier
+
+		annotation SummarizationSetBy = User
+
+	column purchase_amount
+		dataType: double
+		formatString: \$#,0.00
+		lineageTag: 4cb56acc-842e-4919-a8c7-fa883db6d6b2
+		sourceLineageTag: 91eb1145-d1d1-4388-a492-04fce83a2345
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: purchase_amount
+
+		annotation SummarizationSetBy = User
+
+	column _updated_at
+		dataType: dateTime
+		formatString: General Number
+		lineageTag: 81a91485-8f72-4115-9cfd-93a90002b60f
+		sourceLineageTag: 91eb1145-d1d1-4388-a492-04fce83a2347
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: _updated_at
+
+		annotation SummarizationSetBy = User
+
+	column purchase_date
+		dataType: dateTime
+		formatString: General Number
+		lineageTag: 340fa0cf-71d4-4cad-b1bc-603cfbccefa2
+		sourceLineageTag: 62a1f754-c2ec-4a44-9c6d-4f37703c67e9
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: purchase_date
+
+		annotation SummarizationSetBy = User
+
+	partition fact_purchases = entity
+		mode: directQuery
+		source
+			entityName: fact_purchases
+			expressionSource: 'DirectQuery to AS - velykapet_analytics_portfolio'
+

@@ -1,0 +1,98 @@
+table fact_expenses
+	lineageTag: 8ec3b331-323a-44a6-9ca2-c2847e1a897a
+	sourceLineageTag: 05fa9fb0-9bc8-43d9-9fb8-ef951e70e28e
+
+	measure 'Total Expenses' = EXTERNALMEASURE("Total Expenses", DOUBLE, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: \$#,0.00
+		lineageTag: 3f4315b4-14f9-459a-bc71-490e3dbf91c6
+		sourceLineageTag: m_tot_exp
+		dataCategory: Uncategorized
+
+	measure 'Net Operating Profit' = EXTERNALMEASURE("Net Operating Profit", DOUBLE, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: \$#,0.00
+		lineageTag: f48a98ed-e914-436c-922d-fc46bb120b11
+		sourceLineageTag: m_net_op_profit
+		dataCategory: Uncategorized
+
+	measure 'Net Profit Margin %' = EXTERNALMEASURE("Net Profit Margin %", DOUBLE, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: 0.0%
+		lineageTag: 57fd3a29-545d-4d60-87ae-090480805f95
+		sourceLineageTag: m_net_profit_margin
+		dataCategory: Uncategorized
+
+	measure 'Expense to Revenue Ratio %' = EXTERNALMEASURE("Expense to Revenue Ratio %", DOUBLE, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: 0.0%
+		lineageTag: e993d8dc-396c-41df-8228-7a913d16ec4b
+		sourceLineageTag: m_exp_ratio
+		dataCategory: Uncategorized
+
+	column expense_id
+		dataType: int64
+		formatString: 0
+		lineageTag: ef884afb-7be1-4a5c-a651-6bffa3244410
+		sourceLineageTag: 81eb1145-d1d1-4388-a492-04fce83a2343
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: expense_id
+
+		annotation SummarizationSetBy = User
+
+	column expense_amount
+		dataType: double
+		formatString: \$#,0.00
+		lineageTag: a258b62c-2ab1-4cdf-8ca2-aa5bf07b3ccd
+		sourceLineageTag: 81eb1145-d1d1-4388-a492-04fce83a2347
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: expense_amount
+
+		annotation SummarizationSetBy = User
+
+	column category
+		dataType: string
+		lineageTag: b47451ee-b0e4-4c6a-9bc2-0d1d44cd45f1
+		sourceLineageTag: 81eb1145-d1d1-4388-a492-04fce83a2345
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: category
+
+		annotation SummarizationSetBy = User
+
+	column _updated_at
+		dataType: dateTime
+		formatString: General Number
+		lineageTag: 8f7f0fff-1947-4dda-a5ba-c9cd8c8f178c
+		sourceLineageTag: 81eb1145-d1d1-4388-a492-04fce83a2348
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: _updated_at
+
+		annotation SummarizationSetBy = User
+
+	column description
+		dataType: string
+		lineageTag: f8ddd447-9119-4875-9f6f-ae1d72e110c4
+		sourceLineageTag: fd360a20-0484-45d5-8850-d8fb8e2c5d8c
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: description
+
+		annotation SummarizationSetBy = User
+
+	column expense_date
+		dataType: dateTime
+		formatString: General Number
+		lineageTag: 4921f73a-2629-498a-912c-d545a9195e1f
+		sourceLineageTag: e892b631-f0b9-4c16-aa29-9837d9a14d8e
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: expense_date
+
+		annotation SummarizationSetBy = User
+
+	partition fact_expenses = entity
+		mode: directQuery
+		source
+			entityName: fact_expenses
+			expressionSource: 'DirectQuery to AS - velykapet_analytics_portfolio'
+

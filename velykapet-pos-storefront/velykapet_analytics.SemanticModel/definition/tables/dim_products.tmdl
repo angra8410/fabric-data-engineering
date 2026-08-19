@@ -104,6 +104,15 @@ table dim_products
 
 		annotation SummarizationSetBy = Automatic
 
+	column category
+		dataType: string
+		lineageTag: 71eb1145-d1d1-4388-a492-04fce83a2345
+		sourceLineageTag: category
+		summarizeBy: none
+		sourceColumn: category
+
+		annotation SummarizationSetBy = Automatic
+
 	partition dim_products = entity
 		mode: directLake
 		source

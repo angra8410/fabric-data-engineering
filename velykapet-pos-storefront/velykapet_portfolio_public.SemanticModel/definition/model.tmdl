@@ -1,0 +1,21 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: es-US
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["DirectQuery to AS - velykapet_analytics_portfolio"]
+
+ref table fact_expenses
+ref table dim_products
+ref table fact_sales
+ref table fact_purchases
+ref table dim_dates
+
+ref cultureInfo en-US
+

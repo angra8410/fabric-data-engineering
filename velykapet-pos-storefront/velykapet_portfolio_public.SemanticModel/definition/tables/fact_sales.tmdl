@@ -1,0 +1,286 @@
+table fact_sales
+	lineageTag: 70717bd1-1853-48f4-ae36-9a62ad64c887
+	sourceLineageTag: 5f6cac2c-0d45-4092-96ba-ccab8cf1988e
+
+	measure 'Total Revenue' = EXTERNALMEASURE("Total Revenue", CURRENCY, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: \$#,0.00
+		lineageTag: de55bb48-fe66-43cb-b22d-87f22418b6cc
+		sourceLineageTag: m_tot_rev
+		dataCategory: Uncategorized
+
+	measure 'Gross Profit' = EXTERNALMEASURE("Gross Profit", CURRENCY, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: \$#,0.00
+		lineageTag: 89668b21-7591-4a43-a438-785a8e0f1503
+		sourceLineageTag: m_gross_profit
+		dataCategory: Uncategorized
+
+	measure 'Gross Margin %' = EXTERNALMEASURE("Gross Margin %", DOUBLE, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: 0.0%
+		lineageTag: c2284be5-5630-4f08-b2ca-4f22fce0af39
+		sourceLineageTag: m_gross_margin
+		dataCategory: Uncategorized
+
+	measure 'Total Units Sold' = EXTERNALMEASURE("Total Units Sold", INTEGER, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: #,0
+		lineageTag: ce35a35a-0798-48a0-8d2e-69067740830e
+		sourceLineageTag: m_tot_units
+		dataCategory: Uncategorized
+
+	measure 'Total Transactions' = EXTERNALMEASURE("Total Transactions", INTEGER, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: #,0
+		lineageTag: e0a8ef14-0cd9-43d0-898c-9c3157f7e574
+		sourceLineageTag: m_tot_trans
+		dataCategory: Uncategorized
+
+	measure 'Average Order Value (AOV)' = EXTERNALMEASURE("Average Order Value (AOV)", CURRENCY, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: \$#,0.00
+		lineageTag: eee1cdca-2b5e-4d6c-a817-da19380b4024
+		sourceLineageTag: m_aov
+		dataCategory: Uncategorized
+
+	measure 'Average Units Per Order' = EXTERNALMEASURE("Average Units Per Order", DOUBLE, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: 0.0
+		lineageTag: bc5f0d5b-30a6-420f-b484-92d8c60ba41c
+		sourceLineageTag: m_aunits_order
+		dataCategory: Uncategorized
+
+	measure 'Average Item Price' = EXTERNALMEASURE("Average Item Price", CURRENCY, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: \$#,0.00
+		lineageTag: 8558ed79-2383-43c7-bfe4-d8363003e542
+		sourceLineageTag: m_aitem_price
+		dataCategory: Uncategorized
+
+	measure 'POS Store Revenue' = EXTERNALMEASURE("POS Store Revenue", CURRENCY, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: \$#,0.00
+		lineageTag: 5c9cd74e-27bf-4bf3-ba7d-23c02714e2cf
+		sourceLineageTag: m_pos_rev
+		dataCategory: Uncategorized
+
+	measure 'POS Revenue Share %' = EXTERNALMEASURE("POS Revenue Share %", DOUBLE, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: 0.0%
+		lineageTag: 7fb93710-dfce-44fa-be97-016da94b6725
+		sourceLineageTag: m_pos_share
+		dataCategory: Uncategorized
+
+	measure 'Rappi Revenue' = EXTERNALMEASURE("Rappi Revenue", CURRENCY, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: \$#,0.00
+		lineageTag: 98ae6a1e-d61a-40aa-b246-65e9e151265e
+		sourceLineageTag: m_rappi_rev
+		dataCategory: Uncategorized
+
+	measure 'Rappi Revenue Share %' = EXTERNALMEASURE("Rappi Revenue Share %", DOUBLE, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: 0.0%
+		lineageTag: 6867c543-f7b4-4afd-a12e-31d5ba5c88f7
+		sourceLineageTag: m_rappi_share
+		dataCategory: Uncategorized
+
+	measure 'Web Direct Revenue' = EXTERNALMEASURE("Web Direct Revenue", CURRENCY, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: \$#,0.00
+		lineageTag: 8b1e5641-11d1-48f5-96fd-b3b9140635ae
+		sourceLineageTag: m_web_rev
+		dataCategory: Uncategorized
+
+	measure 'Web Revenue Share %' = EXTERNALMEASURE("Web Revenue Share %", DOUBLE, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: 0.0%
+		lineageTag: 96dc02b5-0b67-4989-abe9-1911cf78cd73
+		sourceLineageTag: m_web_share
+		dataCategory: Uncategorized
+
+	measure 'WhatsApp Bot Revenue' = EXTERNALMEASURE("WhatsApp Bot Revenue", CURRENCY, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: \$#,0.00
+		lineageTag: 340e23ad-b839-402c-aa39-410bed640f34
+		sourceLineageTag: m_wa_rev
+		dataCategory: Uncategorized
+
+	measure 'WhatsApp Revenue Share %' = EXTERNALMEASURE("WhatsApp Revenue Share %", DOUBLE, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: 0.0%
+		lineageTag: 77b08d66-4197-429f-97af-e92c45b204d6
+		sourceLineageTag: m_wa_share
+		dataCategory: Uncategorized
+
+	measure 'Revenue MTD' = EXTERNALMEASURE("Revenue MTD", CURRENCY, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: \$#,0.00
+		lineageTag: 3a1a873a-1583-4843-a187-b539944decf3
+		sourceLineageTag: m_rev_mtd
+		dataCategory: Uncategorized
+
+	measure 'Revenue QTD' = EXTERNALMEASURE("Revenue QTD", CURRENCY, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: \$#,0.00
+		lineageTag: eab423a7-6bf2-4e20-a0e1-d2891c14c285
+		sourceLineageTag: m_rev_qtd
+		dataCategory: Uncategorized
+
+	measure 'Revenue YTD' = EXTERNALMEASURE("Revenue YTD", CURRENCY, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: \$#,0.00
+		lineageTag: d65ae571-34dc-4f39-b6af-2ca07f55ab93
+		sourceLineageTag: m_rev_ytd
+		dataCategory: Uncategorized
+
+	measure 'Gross Profit MTD' = EXTERNALMEASURE("Gross Profit MTD", CURRENCY, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: \$#,0.00
+		lineageTag: ad312c8e-062b-44c9-85aa-aea532540957
+		sourceLineageTag: m_gp_mtd
+		dataCategory: Uncategorized
+
+	measure 'Gross Profit YTD' = EXTERNALMEASURE("Gross Profit YTD", CURRENCY, "DirectQuery to AS - velykapet_analytics_portfolio")
+		formatString: \$#,0.00
+		lineageTag: 12b24c3d-73cf-467f-98fb-302ebef005bb
+		sourceLineageTag: m_gp_ytd
+		dataCategory: Uncategorized
+
+	column item_id
+		dataType: int64
+		formatString: 0
+		lineageTag: b53c5afd-e4b5-4f22-a03b-6121c9841853
+		sourceLineageTag: 0b8d81fb-1073-4f40-b0b8-e773756a1168
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: item_id
+
+		annotation SummarizationSetBy = User
+
+	column sale_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 10d4e690-877c-49d4-901a-87957374523f
+		sourceLineageTag: cdd2a41b-2c96-4821-adce-5a0d8cd1db0d
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: sale_id
+
+		annotation SummarizationSetBy = User
+
+	column sale_origin
+		dataType: string
+		lineageTag: 35969ced-b72c-44b2-ae72-96035199d8e1
+		sourceLineageTag: 73270275-7914-4f68-93e5-3719015f85f1
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: sale_origin
+
+		annotation SummarizationSetBy = User
+
+	column payment_method
+		dataType: string
+		lineageTag: e85ae27d-c16f-4b11-901e-0064505c23b8
+		sourceLineageTag: b1ec2e33-47ea-4e28-a161-e6fd68490ad4
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: payment_method
+
+		annotation SummarizationSetBy = User
+
+	column sale_date
+		dataType: dateTime
+		formatString: General Number
+		lineageTag: 5d48316e-c691-4c14-bc33-c717af4551e5
+		sourceLineageTag: 0f26260f-420f-49d3-88a4-fc23d3e1d2e7
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: sale_date
+
+		annotation SummarizationSetBy = User
+
+	column product_id
+		dataType: string
+		lineageTag: 7cff4821-0118-4a9b-8fe1-f24ae0becdda
+		sourceLineageTag: a2b8d81f-1073-4f40-b0b8-e773756a1199
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: product_id
+
+		annotation SummarizationSetBy = User
+
+	column product_name
+		dataType: string
+		lineageTag: cd37ebd2-3e8a-4c4c-990c-8dba0b870870
+		sourceLineageTag: 6410b62d-4674-4fa7-9cf1-7fe7f858a6fa
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: product_name
+
+		annotation SummarizationSetBy = User
+
+	column quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 08383ff3-620a-411f-a190-621c715b2f0f
+		sourceLineageTag: 67c05aa7-ecd0-410d-93fb-965c91b23b4f
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: quantity
+
+		annotation SummarizationSetBy = User
+
+	column total_item_revenue
+		dataType: decimal
+		formatString: \$#,0.00
+		lineageTag: 2f9e2e00-9dfd-40e2-9742-760bcead9f4b
+		sourceLineageTag: 166478f7-2096-4a94-b272-6b4684315bee
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: total_item_revenue
+
+		annotation SummarizationSetBy = User
+
+	column item_gross_profit
+		dataType: decimal
+		formatString: \$#,0.00
+		lineageTag: 4ecf567d-31b9-4c6c-9e45-ba2cf7ea552e
+		sourceLineageTag: c0140a9a-9bcd-43d1-8cd1-8ef93ce6d802
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: item_gross_profit
+
+		annotation SummarizationSetBy = User
+
+	column _updated_at
+		dataType: dateTime
+		formatString: General Number
+		lineageTag: 7fa9d471-aab6-49bf-bf98-dc8ae350b495
+		sourceLineageTag: 61eb1145-d1d1-4388-a492-04fce83a2342
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: _updated_at
+
+		annotation SummarizationSetBy = User
+
+	column sale_timestamp
+		dataType: dateTime
+		formatString: General Number
+		lineageTag: e5f80804-f3d7-40a1-a390-ac8ecfc55005
+		sourceLineageTag: bb093e56-f5e7-464c-90c8-4ee9dabb2627
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: sale_timestamp
+
+		annotation SummarizationSetBy = User
+
+	column unit_cost
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: ff045fd0-bb6c-4f17-9473-8271fa761bf9
+		sourceLineageTag: 3eaeca38-41d2-456a-8402-bef851be9c88
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: unit_cost
+
+		annotation SummarizationSetBy = User
+
+	column unit_price
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 4fe40d0b-ae06-4225-aee0-115ef701873c
+		sourceLineageTag: 2513292d-67bc-46e3-b1a1-d847e8da7849
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: unit_price
+
+		annotation SummarizationSetBy = User
+
+	partition fact_sales = entity
+		mode: directQuery
+		source
+			entityName: fact_sales
+			expressionSource: 'DirectQuery to AS - velykapet_analytics_portfolio'
+

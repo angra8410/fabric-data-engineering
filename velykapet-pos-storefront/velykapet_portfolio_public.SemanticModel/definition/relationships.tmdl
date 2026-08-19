@@ -1,0 +1,16 @@
+relationship ebf6669b-b899-412c-855d-f1850e715636
+	fromColumn: fact_expenses.expense_date
+	toColumn: dim_dates.date_key
+
+relationship 22a3cd47-4bf9-4dcf-ad88-096e53820cb8
+	fromColumn: fact_sales.sale_date
+	toColumn: dim_dates.date_key
+
+relationship 112bd42e-97a5-4c12-b5e6-12e1df679605
+	fromColumn: fact_sales.product_id
+	toColumn: dim_products.product_id
+
+relationship 3f2027f2-608c-4a55-9d60-b70ba13869fd
+	fromColumn: fact_purchases.purchase_date
+	toColumn: dim_dates.date_key
+

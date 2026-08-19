@@ -1,0 +1,72 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "6fd3474707f79e4cb3ab",
+  "position": {
+    "x": 359.06857821203539,
+    "y": 38.649742793656593,
+    "z": 1000,
+    "height": 100,
+    "width": 280
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_products"
+                    }
+                  },
+                  "Property": "Total Active SKUs"
+                }
+              },
+              "queryRef": "dim_products.Total Active SKUs",
+              "nativeQueryRef": "Total Active SKUs"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "dim_products"
+                  }
+                },
+                "Property": "Total Active SKUs"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "b939c556b8f327933ba5",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_products"
+              }
+            },
+            "Property": "Total Active SKUs"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

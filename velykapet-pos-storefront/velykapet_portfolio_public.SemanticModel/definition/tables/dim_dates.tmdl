@@ -1,0 +1,118 @@
+table dim_dates
+	lineageTag: 4aeec64f-28c9-45e0-80d0-c8ebd837b5dd
+	sourceLineageTag: 03fa9fb0-9bc8-43d9-9fb8-ef951e70e28f
+
+	column date_key
+		dataType: dateTime
+		isNullable: false
+		formatString: yyyy\-mm\-dd
+		lineageTag: c692d914-1a21-4ca4-9479-21f4d8a56393
+		sourceLineageTag: 88123456-7890-abcd-ef12-345678901234
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: date_key
+
+		annotation SummarizationSetBy = User
+
+	column year
+		dataType: int64
+		formatString: 0
+		lineageTag: 68f1cb04-82e2-4574-9262-2cce33ce1526
+		sourceLineageTag: 88123456-7890-abcd-ef12-345678901235
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: year
+
+		annotation SummarizationSetBy = User
+
+	column quarter
+		dataType: int64
+		formatString: 0
+		lineageTag: 2f1a612d-ffc9-4456-b97a-2fe53c051198
+		sourceLineageTag: 88123456-7890-abcd-ef12-345678901236
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: quarter
+
+		annotation SummarizationSetBy = User
+
+	column month_number
+		dataType: int64
+		formatString: 0
+		lineageTag: 71b2c19a-5e35-4f75-872f-712191bc5bef
+		sourceLineageTag: 88123456-7890-abcd-ef12-345678901237
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: month_number
+
+		annotation SummarizationSetBy = User
+
+	column month_name
+		dataType: string
+		lineageTag: eccd12ec-c65b-4f3b-acab-e66a324a21aa
+		sourceLineageTag: 88123456-7890-abcd-ef12-345678901238
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: month_name
+
+		annotation SummarizationSetBy = User
+
+	column year_month
+		dataType: string
+		lineageTag: 7c2ab2f1-05fe-40b3-b774-4126d77d4862
+		sourceLineageTag: 88123456-7890-abcd-ef12-345678901239
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: year_month
+
+		annotation SummarizationSetBy = User
+
+	column day_of_month
+		dataType: int64
+		formatString: 0
+		lineageTag: d4c15955-9a6a-4030-83b7-f10c3135d037
+		sourceLineageTag: 88123456-7890-abcd-ef12-345678901240
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: day_of_month
+
+		annotation SummarizationSetBy = User
+
+	column day_of_week
+		dataType: int64
+		formatString: 0
+		lineageTag: ae2b213b-e414-40cf-a0a0-ca1157195136
+		sourceLineageTag: 88123456-7890-abcd-ef12-345678901241
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: day_of_week
+
+		annotation SummarizationSetBy = User
+
+	column day_name
+		dataType: string
+		lineageTag: f3d39f04-f3a3-4bc8-96d5-b657f69aaf06
+		sourceLineageTag: 88123456-7890-abcd-ef12-345678901242
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: day_name
+
+		annotation SummarizationSetBy = User
+
+	column is_weekend
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 1233e44d-b8a8-4d90-b161-4e8c3dd83811
+		sourceLineageTag: 88123456-7890-abcd-ef12-345678901243
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: is_weekend
+
+		annotation SummarizationSetBy = User
+
+	partition dim_dates = entity
+		mode: directQuery
+		source
+			entityName: dim_dates
+			expressionSource: 'DirectQuery to AS - velykapet_analytics_portfolio'
+

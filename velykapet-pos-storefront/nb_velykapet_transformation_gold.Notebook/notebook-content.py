@@ -252,10 +252,71 @@ def build_kpis():
     df_inv.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.kpi_inventory_health")
     print("✅ KPIs 'kpi_daily_sales_trend' and 'kpi_inventory_health' generated.")
 
+def build_gold_portfolio_masked(scale_factor=1.45):
+    """
+    8. Capa de Enmascaramiento y Anonimización para Portafolio Público (Recruiters & Public Web).
+    - Anonimiza proveedores a nombres corporativos genéricos.
+    - Aplica factor de escala para proteger los números financieros exactos preservando márgenes y tendencias.
+    - Genera las tablas: 'fact_sales_masked', 'dim_products_masked', 'fact_expenses_masked', 'fact_purchases_masked'.
+    """
+    print(f"🎭 Generating Masked & Anonymized Gold Tables for Public Portfolio (Scale: {scale_factor}x)...")
+    
+    # 1. Supplier Mapping
+    supplier_raw = upper(trim(col("supplier")))
+    clean_supplier = when(supplier_raw.contains("FINCA URBANA"), "NutriPet Wholesale") \
+        .when(supplier_raw.contains("CDM"), "Global Pet Logistics") \
+        .when(supplier_raw.contains("MANAGRO"), "AgroPet Supply Co.") \
+        .when(supplier_raw.contains("AGRO MIS MASCOTAS"), "AgroVets Distribution") \
+        .when(supplier_raw.contains("LAIKA"), "OmniPet Direct") \
+        .when(supplier_raw.contains("ANIMAL KAN"), "Kanine Care Supply") \
+        .when(supplier_raw.contains("TIENDA MAYORISTA"), "Prime Pet Wholesaler") \
+        .when(supplier_raw.contains("CALABAZAPET"), "Pet Essentials Hub") \
+        .when(supplier_raw.contains("FARMASCOTA"), "PharmaVet Logistics") \
+        .when(supplier_raw.contains("TIERRAGRO"), "BioPet Nutrition") \
+        .when(supplier_raw.contains("AMAZON"), "E-Commerce Partner") \
+        .when(supplier_raw.contains("EXITO") | supplier_raw.contains("OLIMPICA") | supplier_raw.contains("DOLLARCITY"), "Retail Vendor Network") \
+        .otherwise("Regional Pet Partner")
+
+    # 2. DimProducts Masked
+    df_prod = spark.read.table(f"{GOLD_SCHEMA}.dim_products")
+    df_prod_masked = df_prod \
+        .withColumn("supplier", clean_supplier) \
+        .withColumn("cost_price", _round(col("cost_price") * lit(scale_factor), 2)) \
+        .withColumn("sale_price", _round(col("sale_price") * lit(scale_factor), 2)) \
+        .withColumn("_masked_for_portfolio", lit(True))
+    df_prod_masked.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.dim_products_masked")
+
+    # 3. FactSales Masked
+    df_sales = spark.read.table(f"{GOLD_SCHEMA}.fact_sales")
+    df_sales_masked = df_sales \
+        .withColumn("unit_cost", _round(col("unit_cost") * lit(scale_factor), 2)) \
+        .withColumn("unit_price", _round(col("unit_price") * lit(scale_factor), 2)) \
+        .withColumn("total_item_revenue", _round(col("total_item_revenue") * lit(scale_factor), 2)) \
+        .withColumn("item_gross_profit", _round(col("item_gross_profit") * lit(scale_factor), 2)) \
+        .withColumn("_masked_for_portfolio", lit(True))
+    df_sales_masked.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.fact_sales_masked")
+
+    # 4. FactExpenses Masked
+    df_exp = spark.read.table(f"{GOLD_SCHEMA}.fact_expenses")
+    df_exp_masked = df_exp \
+        .withColumn("expense_amount", _round(col("expense_amount") * lit(scale_factor), 2)) \
+        .withColumn("_masked_for_portfolio", lit(True))
+    df_exp_masked.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.fact_expenses_masked")
+
+    # 5. FactPurchases Masked
+    df_pur = spark.read.table(f"{GOLD_SCHEMA}.fact_purchases")
+    df_pur_masked = df_pur \
+        .withColumn("supplier", clean_supplier) \
+        .withColumn("purchase_amount", _round(col("purchase_amount") * lit(scale_factor), 2)) \
+        .withColumn("_masked_for_portfolio", lit(True))
+    df_pur_masked.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.fact_purchases_masked")
+
+    print("✅ Tablas Gold Masked creadas exitosamente para el Portafolio Público.")
+
 def run_gold_pipeline():
     """Ejecución del pipeline Gold completo."""
     print("==================================================")
-    print("EJECUTANDO CAPA GOLD COMPLETA (INCLUYENDO BOT WHATSAPP) - VELYKAPET")
+    print("EJECUTANDO CAPA GOLD COMPLETA - VELYKAPET")
     print("==================================================")
     
     build_fact_sales()
@@ -265,8 +326,9 @@ def run_gold_pipeline():
     build_dim_dates()
     build_kpi_whatsapp_funnel()
     build_kpis()
+    build_gold_portfolio_masked()
     
-    print("🏁 Capa Gold completada exitosamente.")
+    print("🏁 Capa Gold completada exitosamente (Tablas Reales y Tablas Masked).")
 
 if __name__ == "__main__":
     run_gold_pipeline()

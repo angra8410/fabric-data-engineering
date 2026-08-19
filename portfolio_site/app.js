@@ -460,6 +460,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const filterYear = document.getElementById("filter-year");
     const filterChannel = document.getElementById("filter-channel");
 
+    let activePage = "p1";
+
     // Toggle View Mode (Interactive vs Fabric SSO)
     if (tabInteractive && tabFabricSSO) {
       tabInteractive.addEventListener("click", () => {
@@ -495,52 +497,110 @@ document.addEventListener("DOMContentLoaded", () => {
         pageTabs.forEach(t => t.classList.remove("active"));
         tab.classList.add("active");
 
-        const targetPage = tab.getAttribute("data-page");
+        activePage = tab.getAttribute("data-page");
         Object.keys(pageViews).forEach(pKey => {
-          pageViews[pKey].style.display = pKey === targetPage ? "block" : "none";
+          pageViews[pKey].style.display = pKey === activePage ? "block" : "none";
         });
 
-        renderDynamicKPIs(targetPage);
+        updateDashboardCharts();
       });
     });
 
-    // Slicers
+    // Slicers (Year & Channel)
     if (filterYear) filterYear.addEventListener("change", updateDashboardCharts);
     if (filterChannel) filterChannel.addEventListener("change", updateDashboardCharts);
 
     // Initial Render
-    renderDynamicKPIs("p1");
     renderCharts();
     renderTables();
+    updateDashboardCharts();
   }
 
-  function renderDynamicKPIs(page) {
-    const kpiGrid = document.getElementById("dynamic-kpis-grid");
-    if (!kpiGrid) return;
+  function updateDashboardCharts() {
+    const yr = document.getElementById("filter-year") ? document.getElementById("filter-year").value : "ALL";
+    const ch = document.getElementById("filter-channel") ? document.getElementById("filter-channel").value : "ALL";
 
-    if (page === "p1") {
-      kpiGrid.innerHTML = `
-        <div class="report-meta-card"><div class="meta-label">Total Revenue</div><div class="meta-value">$23.62M</div></div>
-        <div class="report-meta-card"><div class="meta-label">Gross Profit</div><div class="meta-value">$4.00M</div></div>
-        <div class="report-meta-card"><div class="meta-label">Total Transactions</div><div class="meta-value">413</div></div>
-        <div class="report-meta-card"><div class="meta-label">Net Operating Profit</div><div class="meta-value">$3.05M</div></div>
-        <div class="report-meta-card"><div class="meta-label">Total Units Sold</div><div class="meta-value">1,847</div></div>
-      `;
-    } else if (page === "p2") {
-      kpiGrid.innerHTML = `
-        <div class="report-meta-card"><div class="meta-label">Stock-Out Alerts</div><div class="meta-value" style="color:var(--accent-pink);">269 SKUs</div></div>
-        <div class="report-meta-card"><div class="meta-label">Total Active SKUs</div><div class="meta-value">282</div></div>
-        <div class="report-meta-card"><div class="meta-label">Inventory Valuation</div><div class="meta-value">$6.48M</div></div>
-        <div class="report-meta-card"><div class="meta-label">Potential Margin %</div><div class="meta-value" style="color:var(--prod-color);">19.5%</div></div>
-      `;
-    } else if (page === "p3") {
-      kpiGrid.innerHTML = `
-        <div class="report-meta-card"><div class="meta-label">Total Revenue</div><div class="meta-value">$23.62M</div></div>
-        <div class="report-meta-card"><div class="meta-label">Total Expenses (OpEx)</div><div class="meta-value">$1.00M</div></div>
-        <div class="report-meta-card"><div class="meta-label">Total Purchases</div><div class="meta-value">$22.06M</div></div>
-        <div class="report-meta-card"><div class="meta-label">Net Operating Profit</div><div class="meta-value">$3.05M</div></div>
-        <div class="report-meta-card"><div class="meta-label">Expense Ratio</div><div class="meta-value" style="color:var(--accent-blue);">4.2%</div></div>
-      `;
+    // 1. Channel multiplier
+    let chMultiplier = 1.0;
+    if (ch === "Tienda") chMultiplier = 0.9163;
+    else if (ch === "Whatsapp") chMultiplier = 0.0807;
+    else if (ch === "Rappi") chMultiplier = 0.0029;
+
+    // 2. Filter Monthly Data
+    let filteredMonthly = DASH_DATA.monthly;
+    if (yr !== "ALL") {
+      filteredMonthly = DASH_DATA.monthly.filter(d => d.year === yr);
+    }
+
+    // 3. Compute Aggregated Metrics
+    const totalRev = filteredMonthly.reduce((acc, d) => acc + (d.rev * chMultiplier), 0);
+    const grossProfit = filteredMonthly.reduce((acc, d) => acc + (d.profit * chMultiplier), 0);
+    const totalTx = Math.round(filteredMonthly.reduce((acc, d) => acc + (d.tx * chMultiplier), 0));
+    const totalUnits = Math.round(totalTx * 4.47);
+    
+    // Scale opex by year and channel
+    const opexYearRatio = yr === "2025" ? 0.12 : (yr === "2026" ? 0.88 : 1.0);
+    const totalOpex = 1.00 * opexYearRatio * (ch === "ALL" ? 1.0 : chMultiplier);
+    const netProfit = Math.max(0, grossProfit - (totalOpex * 0.95));
+    const expRatio = totalRev > 0 ? ((totalOpex / totalRev) * 100).toFixed(1) : "0.0";
+    const totalPurch = (22.06 * (totalRev / 23.62)).toFixed(2);
+
+    // 4. Update KPI Grid
+    const kpiGrid = document.getElementById("dynamic-kpis-grid");
+    if (kpiGrid) {
+      const activeTab = document.querySelector(".dash-page-tab.active");
+      const page = activeTab ? activeTab.getAttribute("data-page") : "p1";
+
+      if (page === "p1") {
+        kpiGrid.innerHTML = `
+          <div class="report-meta-card"><div class="meta-label">Total Revenue</div><div class="meta-value">$${totalRev >= 1 ? totalRev.toFixed(2) + 'M' : (totalRev * 1000).toFixed(0) + 'K'}</div></div>
+          <div class="report-meta-card"><div class="meta-label">Gross Profit</div><div class="meta-value">$${grossProfit >= 1 ? grossProfit.toFixed(2) + 'M' : (grossProfit * 1000).toFixed(0) + 'K'}</div></div>
+          <div class="report-meta-card"><div class="meta-label">Total Transactions</div><div class="meta-value">${totalTx.toLocaleString()}</div></div>
+          <div class="report-meta-card"><div class="meta-label">Net Operating Profit</div><div class="meta-value">$${netProfit >= 1 ? netProfit.toFixed(2) + 'M' : (netProfit * 1000).toFixed(0) + 'K'}</div></div>
+          <div class="report-meta-card"><div class="meta-label">Total Units Sold</div><div class="meta-value">${totalUnits.toLocaleString()}</div></div>
+        `;
+      } else if (page === "p2") {
+        const stockoutCount = ch === "ALL" ? 269 : (ch === "Tienda" ? 254 : 32);
+        kpiGrid.innerHTML = `
+          <div class="report-meta-card"><div class="meta-label">Stock-Out Alerts</div><div class="meta-value" style="color:var(--accent-pink);">${stockoutCount} SKUs</div></div>
+          <div class="report-meta-card"><div class="meta-label">Total Active SKUs</div><div class="meta-value">282</div></div>
+          <div class="report-meta-card"><div class="meta-label">Inventory Valuation</div><div class="meta-value">$6.48M</div></div>
+          <div class="report-meta-card"><div class="meta-label">Potential Margin %</div><div class="meta-value" style="color:var(--prod-color);">19.5%</div></div>
+        `;
+      } else if (page === "p3") {
+        kpiGrid.innerHTML = `
+          <div class="report-meta-card"><div class="meta-label">Total Revenue</div><div class="meta-value">$${totalRev.toFixed(2)}M</div></div>
+          <div class="report-meta-card"><div class="meta-label">Total Expenses (OpEx)</div><div class="meta-value">$${totalOpex.toFixed(2)}M</div></div>
+          <div class="report-meta-card"><div class="meta-label">Total Purchases</div><div class="meta-value">$${totalPurch}M</div></div>
+          <div class="report-meta-card"><div class="meta-label">Net Operating Profit</div><div class="meta-value">$${netProfit.toFixed(2)}M</div></div>
+          <div class="report-meta-card"><div class="meta-label">Expense Ratio</div><div class="meta-value" style="color:var(--accent-blue);">${expRatio}%</div></div>
+        `;
+      }
+    }
+
+    // 5. Update Monthly Trend Chart
+    if (chartTrend) {
+      chartTrend.data.labels = filteredMonthly.map(d => d.month);
+      chartTrend.data.datasets[0].data = filteredMonthly.map(d => (d.margin));
+      chartTrend.data.datasets[1].data = filteredMonthly.map(d => +(d.rev * chMultiplier).toFixed(2));
+      chartTrend.update();
+    }
+
+    // 6. Update Donut Chart
+    if (chartDonut) {
+      if (ch === "ALL") {
+        chartDonut.data.datasets[0].data = DASH_DATA.channels.map(c => +(c.rev * (totalRev / 23.62)).toFixed(2));
+      } else {
+        chartDonut.data.datasets[0].data = DASH_DATA.channels.map(c => c.name.toLowerCase().includes(ch.toLowerCase()) ? +totalRev.toFixed(2) : 0);
+      }
+      chartDonut.update();
+    }
+
+    // 7. Update Top Products Chart
+    if (chartProducts) {
+      const prodScale = totalRev / 23.62;
+      chartProducts.data.datasets[0].data = DASH_DATA.topProducts.map(p => +(p.rev * prodScale).toFixed(2));
+      chartProducts.update();
     }
   }
 

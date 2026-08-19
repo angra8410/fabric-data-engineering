@@ -15,7 +15,63 @@
           "secureOutput": false
         },
         "name": "Master_Medallion_ETL",
+        "dependsOn": [
+          {
+            "activity": "Extract_Railway_Postgres",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "InvokeCopyJob",
+        "typeProperties": {
+          "copyJobId": "9d9460f5-c43e-9cee-439e-cce7d2c34ebd",
+          "workspaceId": "00000000-0000-0000-0000-000000000000"
+        },
+        "externalReferences": {
+          "connection": "1eb0be59-59b3-4ca1-b8bb-27da558ef68b"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Extract_Railway_Postgres",
         "dependsOn": []
+      },
+      {
+        "type": "PBISemanticModelRefresh",
+        "typeProperties": {
+          "method": "POST",
+          "groupId": "b5af9286-d297-491a-a1bf-5ea0b186665d",
+          "datasetId": "f2b4386e-92af-4a3e-be9d-625f7a8b6e47",
+          "commitMode": "Transactional",
+          "waitOnCompletion": true,
+          "operationType": "SemanticModelRefresh"
+        },
+        "externalReferences": {
+          "connection": "fb33fe49-3c7b-42c8-9997-1480d4136eff"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Refresh_PowerBI_DirectLake",
+        "dependsOn": [
+          {
+            "activity": "Master_Medallion_ETL",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
       }
     ]
   }

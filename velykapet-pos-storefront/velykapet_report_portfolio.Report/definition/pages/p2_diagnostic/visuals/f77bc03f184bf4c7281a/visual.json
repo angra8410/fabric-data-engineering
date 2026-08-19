@@ -1,0 +1,72 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "f77bc03f184bf4c7281a",
+  "position": {
+    "x": 652.05856390588372,
+    "y": 38.649742793656593,
+    "z": 2000,
+    "height": 100,
+    "width": 280
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_products"
+                    }
+                  },
+                  "Property": "Inventory Retail Valuation"
+                }
+              },
+              "queryRef": "dim_products.Inventory Retail Valuation",
+              "nativeQueryRef": "Inventory Retail Valuation"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "dim_products"
+                  }
+                },
+                "Property": "Inventory Retail Valuation"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "f1a435f8e7843458274a",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_products"
+              }
+            },
+            "Property": "Inventory Retail Valuation"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "velykapet_report"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "6185e5f4-6b58-a0b0-4493-33b9565d03ab"
+  }
+}

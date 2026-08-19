@@ -4,10 +4,10 @@
   "position": {
     "x": 19.69843559930974,
     "y": 119.34934510170018,
-    "z": 10,
+    "z": 7000,
     "height": 44.03179722198648,
     "width": 178.44465189962941,
-    "tabOrder": 4
+    "tabOrder": 1000
   },
   "visual": {
     "visualType": "slicer",
@@ -42,6 +42,13 @@
               "expr": {
                 "Literal": {
                   "Value": "'Basic'"
+                }
+              }
+            },
+            "isInvertedSelectionMode": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
                 }
               }
             }

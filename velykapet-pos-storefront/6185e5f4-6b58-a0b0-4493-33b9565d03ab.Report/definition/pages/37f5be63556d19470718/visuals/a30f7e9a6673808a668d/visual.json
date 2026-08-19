@@ -1,0 +1,73 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "a30f7e9a6673808a668d",
+  "position": {
+    "x": 260,
+    "y": 20,
+    "z": 1000,
+    "height": 110,
+    "width": 230,
+    "tabOrder": 4000
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_expenses"
+                    }
+                  },
+                  "Property": "Total Expenses"
+                }
+              },
+              "queryRef": "fact_expenses.Total Expenses",
+              "nativeQueryRef": "Total Expenses"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fact_expenses"
+                  }
+                },
+                "Property": "Total Expenses"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "c314b7fcc0e6e466faa6",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_expenses"
+              }
+            },
+            "Property": "Total Expenses"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

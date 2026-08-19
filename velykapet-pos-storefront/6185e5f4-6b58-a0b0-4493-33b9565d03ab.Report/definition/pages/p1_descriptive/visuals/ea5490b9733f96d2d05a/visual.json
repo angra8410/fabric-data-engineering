@@ -4,10 +4,10 @@
   "position": {
     "x": 758.03366511429692,
     "y": 173.30045962316987,
-    "z": 11,
+    "z": 8000,
     "height": 259.32730648647004,
     "width": 494.96606093811823,
-    "tabOrder": 5
+    "tabOrder": 2000
   },
   "visual": {
     "visualType": "donutChart",
@@ -111,12 +111,53 @@
         }
       ]
     },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "13D"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            },
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'center'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
     "drillFilterOtherVisuals": true
   },
   "filterConfig": {
     "filters": [
       {
-        "name": "ab5c0cd0d55c4a51eb25",
+        "name": "6b291b372823ffbcce6a",
         "field": {
           "Column": {
             "Expression": {
@@ -130,7 +171,7 @@
         "type": "Categorical"
       },
       {
-        "name": "595d53e3c5391503e30a",
+        "name": "7f8abaf7183907dbac9e",
         "field": {
           "Measure": {
             "Expression": {

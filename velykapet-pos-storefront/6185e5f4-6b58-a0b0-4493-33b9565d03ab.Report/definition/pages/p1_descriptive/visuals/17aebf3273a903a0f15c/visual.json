@@ -4,10 +4,10 @@
   "position": {
     "x": 192.34942996973041,
     "y": 119.34934510170018,
-    "z": 9,
+    "z": 6000,
     "height": 44.03179722198648,
     "width": 296.63526549548783,
-    "tabOrder": 3
+    "tabOrder": 0
   },
   "visual": {
     "visualType": "slicer",
@@ -76,23 +76,5 @@
       ]
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "b99f642659741c2f8be9",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "fact_sales"
-              }
-            },
-            "Property": "payment_method"
-          }
-        },
-        "type": "Categorical"
-      }
-    ]
   }
 }

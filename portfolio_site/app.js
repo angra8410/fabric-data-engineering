@@ -516,6 +516,9 @@ document.addEventListener("DOMContentLoaded", () => {
       filterChannel.addEventListener("input", updateDashboardCharts);
     }
 
+    // Expose to window for inline onchange events
+    window.updateDashboardCharts = updateDashboardCharts;
+
     // Initial Render
     renderCharts();
     renderTables();

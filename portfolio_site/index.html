@@ -7,6 +7,7 @@
   <meta name="description" content="Recruiter-facing Microsoft Fabric Data Engineering Portfolio showcasing Medallion Lakehouses, PySpark pipelines, Delta Lake, and embedded Power BI reports.">
   <link rel="stylesheet" href="styles.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="reports_config.js"></script>
   <script src="app.js" defer></script>
   <script src="three_hero.js" defer></script>
@@ -76,44 +77,205 @@
       </div>
     </section>
 
-    <!-- Multi-Report Power BI Embedded Hub -->
+    <!-- Executive BI Analytics Suite (Zero-Login Interactive Hub) -->
     <section class="section-card">
-      <div class="report-header-bar">
-        <h2 class="section-title" style="margin-bottom: 0;">📊 Power BI Embedded Reports</h2>
-        
-        <div class="report-select-wrapper">
-          <label for="report-dropdown" style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted); white-space: nowrap;">
-            Select Report:
-          </label>
-          <select id="report-dropdown" class="report-dropdown">
-            <!-- Options injected via app.js -->
-          </select>
+      <div class="report-header-bar" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 20px;">
+        <div>
+          <h2 class="section-title" style="margin-bottom: 4px;">📊 Executive Analytics Dashboard</h2>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">
+            Direct Lake Gold Data Warehouse • Zero-Login Interactive BI Explorer • Live Direct Lake Endpoint
+          </p>
+        </div>
+
+        <!-- Dashboard View Mode Switcher -->
+        <div class="view-mode-tabs" style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button id="tab-btn-interactive" class="btn-action active-tab-btn" style="padding: 8px 16px; font-size: 0.85rem;">
+            ✨ Interactive Dashboard (0-Login)
+          </button>
+          <button id="tab-btn-fabric-sso" class="btn-action" style="padding: 8px 16px; font-size: 0.85rem; background: rgba(255,255,255,0.06); border: 1px solid var(--border-color); color: var(--text-muted);">
+            ⚡ Live Fabric Cloud SSO
+          </button>
         </div>
       </div>
 
-      <p id="report-description" style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.95rem;">
-        Omnichannel revenue, transaction trends, and margin analysis across POS & Web.
-      </p>
+      <!-- INTERACTIVE DASHBOARD CONTAINER (Visible by default) -->
+      <div id="interactive-dashboard-wrapper">
+        <!-- Sub-page Navigation Tabs -->
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; background: rgba(15, 23, 42, 0.6); padding: 10px 16px; border-radius: 12px; border: 1px solid var(--border-color);">
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="dash-page-tab active" data-page="p1">📈 Descriptive Analytics</button>
+            <button class="dash-page-tab" data-page="p2">🚨 Diagnostic Analytics</button>
+            <button class="dash-page-tab" data-page="p3">💸 Financial & Procurement</button>
+          </div>
 
-      <!-- Key Performance Metrics Grid -->
-      <div id="report-metrics" class="report-meta-grid">
-        <!-- Metric cards injected via app.js -->
-      </div>
+          <!-- Slicers / Interactive Filters -->
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600;">Year:</span>
+              <select id="filter-year" class="report-dropdown" style="padding: 6px 12px; font-size: 0.8rem; min-width: 90px;">
+                <option value="ALL">All Years</option>
+                <option value="2026">2026</option>
+                <option value="2025">2025</option>
+              </select>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600;">Origin:</span>
+              <select id="filter-channel" class="report-dropdown" style="padding: 6px 12px; font-size: 0.8rem; min-width: 110px;">
+                <option value="ALL">All Channels</option>
+                <option value="Tienda">Tienda POS</option>
+                <option value="Whatsapp">WhatsApp Bot</option>
+                <option value="Rappi">Rappi</option>
+              </select>
+            </div>
+          </div>
+        </div>
 
-      <!-- iFrame Embed Container -->
-      <div id="iframe-container" class="iframe-container">
-        <iframe id="pbi-iframe" src="" title="Power BI Embedded Report" allowfullscreen="true"></iframe>
-        
-        <div id="iframe-fallback" class="iframe-fallback">
-          <!-- Fallback view when iframe URL is empty or placeholder -->
+        <!-- Dynamic Executive Cards -->
+        <div id="dynamic-kpis-grid" class="report-meta-grid" style="margin-bottom: 24px;">
+          <!-- Dynamically populated via app.js -->
+        </div>
+
+        <!-- PAGE 1: DESCRIPTIVE ANALYTICS -->
+        <div id="dash-page-p1" class="dash-page-view">
+          <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 24px;">
+            <!-- Monthly Revenue & Margin Combo Chart -->
+            <div class="card-inner-box" style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 14px; padding: 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-main);">📈 Evolución Mensual de Ingresos y Margen Bruto</h3>
+                <span style="font-size: 0.75rem; color: var(--prod-color); font-weight: 600;">● Revenue  — Gross Margin %</span>
+              </div>
+              <div style="position: relative; height: 300px; width: 100%;">
+                <canvas id="chart-monthly-trend"></canvas>
+              </div>
+            </div>
+
+            <!-- Revenue by Channel Donut -->
+            <div class="card-inner-box" style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 14px; padding: 20px;">
+              <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin-bottom: 14px;">🍩 Total Revenue por sale_origin</h3>
+              <div style="position: relative; height: 260px; width: 100%; display: flex; align-items: center; justify-content: center;">
+                <canvas id="chart-channel-donut"></canvas>
+              </div>
+              <div id="channel-legend" style="display: flex; justify-content: space-around; font-size: 0.75rem; margin-top: 10px; color: var(--text-muted);">
+                <!-- Dynamic legend -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Top Products Bar Chart -->
+          <div class="card-inner-box" style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 14px; padding: 20px;">
+            <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin-bottom: 14px;">🏆 Top 10 Ranking de Productos por Ventas</h3>
+            <div style="position: relative; height: 260px; width: 100%;">
+              <canvas id="chart-top-products"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAGE 2: DIAGNOSTIC ANALYTICS -->
+        <div id="dash-page-p2" class="dash-page-view" style="display: none;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <!-- Stock-Out Alert Table -->
+            <div class="card-inner-box" style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 14px; padding: 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                <h3 style="font-size: 1rem; font-weight: 700; color: var(--accent-pink);">🚨 Alerta de Quiebre de Stock (Stock &le; 5 Unidades)</h3>
+                <span class="status-pill status-alert">269 SKUs Críticos</span>
+              </div>
+              <div style="overflow-x: auto; max-height: 380px;">
+                <table class="portfolio-table" id="table-stockout">
+                  <thead>
+                    <tr>
+                      <th>Product Name</th>
+                      <th>Supplier</th>
+                      <th>Stock Units</th>
+                      <th>Sale Price</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Injected via app.js -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Profitability Matrix -->
+            <div class="card-inner-box" style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 14px; padding: 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-main);">🔍 Detección de Productos de Bajo Margen / Pérdida</h3>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Semáforo de Rentabilidad</span>
+              </div>
+              <div style="overflow-x: auto; max-height: 380px;">
+                <table class="portfolio-table" id="table-margins">
+                  <thead>
+                    <tr>
+                      <th>Product Name</th>
+                      <th>Supplier</th>
+                      <th>Total Revenue</th>
+                      <th>Gross Margin %</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Injected via app.js -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAGE 3: FINANCIAL & PROCUREMENT -->
+        <div id="dash-page-p3" class="dash-page-view" style="display: none;">
+          <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 20px;">
+            <!-- OpEx Breakdown -->
+            <div class="card-inner-box" style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 14px; padding: 20px;">
+              <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin-bottom: 14px;">💸 Desglose de Gastos Operativos (OpEx) por Categoría</h3>
+              <div style="position: relative; height: 320px; width: 100%;">
+                <canvas id="chart-opex-breakdown"></canvas>
+              </div>
+            </div>
+
+            <!-- Procurement Spend Summary Table -->
+            <div class="card-inner-box" style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 14px; padding: 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-main);">📦 Abastecimiento y Compras por Proveedor</h3>
+                <span class="status-pill status-synced">724 Órdenes</span>
+              </div>
+              <div style="overflow-x: auto; max-height: 340px;">
+                <table class="portfolio-table" id="table-procurement">
+                  <thead>
+                    <tr>
+                      <th>Sanitized Supplier</th>
+                      <th>Total Purchases</th>
+                      <th>Orders Count</th>
+                      <th>Share %</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Injected via app.js -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Quick Embed Swapper Bar -->
-      <div class="url-swapper-bar">
-        <input type="text" id="custom-url-input" class="url-input" placeholder="Paste Power BI Embed URL to preview live report...">
-        <button id="btn-apply-url" class="btn-action">Load URL</button>
-        <button id="btn-fullscreen" class="btn-icon-link" style="cursor: pointer;">⛶ Fullscreen</button>
+      <!-- FABRIC CLOUD SSO EMBED (Hidden by default, togglable) -->
+      <div id="fabric-sso-wrapper" style="display: none;">
+        <p id="report-description" style="color: var(--text-muted); margin-bottom: 14px; font-size: 0.9rem;">
+          Live Direct Lake endpoint embedded directly from Microsoft Fabric Cloud tenant. Requires Azure Entra ID / Microsoft Fabric SSO authentication.
+        </p>
+
+        <!-- iFrame Embed Container -->
+        <div id="iframe-container" class="iframe-container">
+          <iframe id="pbi-iframe" src="" title="Power BI Embedded Report" allowfullscreen="true"></iframe>
+          <div id="iframe-fallback" class="iframe-fallback"></div>
+        </div>
+
+        <!-- Quick Embed Swapper Bar -->
+        <div class="url-swapper-bar" style="margin-top: 14px;">
+          <input type="text" id="custom-url-input" class="url-input" placeholder="Paste Power BI Embed URL to preview live report...">
+          <button id="btn-apply-url" class="btn-action">Load URL</button>
+          <button id="btn-fullscreen" class="btn-icon-link" style="cursor: pointer;">⛶ Fullscreen</button>
+        </div>
       </div>
     </section>
 

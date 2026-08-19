@@ -357,7 +357,428 @@ document.addEventListener("DOMContentLoaded", () => {
     almOptimization.textContent = alm.optimization;
   }
 
+  // ==========================================
+  // ZERO-LOGIN INTERACTIVE BI DASHBOARD ENGINE
+  // ==========================================
+  let chartTrend = null;
+  let chartDonut = null;
+  let chartProducts = null;
+  let chartOpex = null;
+
+  const DASH_DATA = {
+    monthly: [
+      { month: "2025-09", year: "2025", rev: 0.09, profit: 0.02, margin: 25.0, tx: 3 },
+      { month: "2025-10", year: "2025", rev: 0.50, profit: 0.07, margin: 13.7, tx: 12 },
+      { month: "2025-11", year: "2025", rev: 0.73, profit: 0.15, margin: 20.1, tx: 18 },
+      { month: "2025-12", year: "2025", rev: 1.49, profit: 0.44, margin: 29.3, tx: 32 },
+      { month: "2026-01", year: "2026", rev: 1.44, profit: 0.18, margin: 12.8, tx: 28 },
+      { month: "2026-02", year: "2026", rev: 2.16, profit: 0.29, margin: 13.5, tx: 41 },
+      { month: "2026-03", year: "2026", rev: 1.38, profit: 0.19, margin: 13.7, tx: 25 },
+      { month: "2026-04", year: "2026", rev: 2.42, profit: 0.43, margin: 17.7, tx: 46 },
+      { month: "2026-05", year: "2026", rev: 3.03, profit: 0.55, margin: 18.0, tx: 58 },
+      { month: "2026-06", year: "2026", rev: 3.69, profit: 0.63, margin: 17.2, tx: 69 },
+      { month: "2026-07", year: "2026", rev: 4.53, profit: 0.78, margin: 17.2, tx: 84 },
+      { month: "2026-08", year: "2026", rev: 2.45, profit: 0.44, margin: 17.8, tx: 47 }
+    ],
+    channels: [
+      { name: "Tienda POS", rev: 21.64, pct: 91.63, color: "#0d9488" },
+      { name: "WhatsApp Bot", rev: 1.91, pct: 8.07, color: "#38bdf8" },
+      { name: "Rappi Delivery", rev: 0.07, pct: 0.29, color: "#f43f5e" }
+    ],
+    topProducts: [
+      { name: "ARENA MAIZ CAT 10 KG", rev: 1.74 },
+      { name: "PRO PLAN VETE DIETS", rev: 1.60 },
+      { name: "AGILITY ADULTO GATO 3KG", rev: 1.23 },
+      { name: "AGILITY GOLD GATITOS 1.5KG", rev: 1.11 },
+      { name: "C MAX PERRO JARABE", rev: 0.54 },
+      { name: "FORTIFLORA PERRO SOBRE", rev: 0.45 },
+      { name: "NEXGARD SPECTRA 15-30KG", rev: 0.43 },
+      { name: "PRO PLAN EXIGENT", rev: 0.41 },
+      { name: "NUSKÉ CABALLO", rev: 0.40 },
+      { name: "INABA GATO CHURU", rev: 0.39 }
+    ],
+    stockouts: [
+      { name: "ROYAL CANIN GASTROINTESTINAL FIBRE", supplier: "PharmaVet Logistics", stock: 0, price: "$253,750" },
+      { name: "ROYAL CANIN KITTEN STERILISED 400 GR", supplier: "PharmaVet Logistics", stock: 0, price: "$44,950" },
+      { name: "ROYAL CANIN KITTEN STERILISED 2 KG", supplier: "NutriPet Wholesale", stock: 0, price: "$200,100" },
+      { name: "ROYAL CANIN PUPPY MINI INDOOR 1.5KG", supplier: "NutriPet Wholesale", stock: 0, price: "$128,150" },
+      { name: "PRO PLAN VETE DIETS EN PERRO 379GR", supplier: "NutriPet Wholesale", stock: 0, price: "$36,250" },
+      { name: "DR CLAUDERS GATO BANDEJA CAMARONES", supplier: "Global Pet Logistics", stock: 0, price: "$15,370" },
+      { name: "NEXGARD COMBO GATO 2.5 - 7.5 KG", supplier: "NutriPet Wholesale", stock: 0, price: "$82,650" },
+      { name: "CALMING COLLAR FOR DOGS", supplier: "E-Commerce Partner", stock: 0, price: "$29,055" },
+      { name: "HILLS SD SMALL MINI ADULTO 1.5KG", supplier: "OmniPet Direct", stock: 0, price: "$138,050" }
+    ],
+    profitability: [
+      { name: "BAÑO SECO IKIPETS PERROS 200 ML", supplier: "Retail Vendor Network", rev: "$17,400", margin: "-33.3%", status: "loss" },
+      { name: "ARENA ULTRA CAT TOFU CAFÉ X2.5KG", supplier: "Regional Pet Partner", rev: "$68,700", margin: "-13.7%", status: "loss" },
+      { name: "ALIMENTO HÚMEDO GATITOS ATÚN WHISKAS", supplier: "AgroPet Supply Co.", rev: "$4,205", margin: "0.0%", status: "warn" },
+      { name: "ALIMENTO HÚMEDO GATOS POUCH ATÚN", supplier: "Regional Pet Partner", rev: "$3,680", margin: "0.0%", status: "warn" },
+      { name: "ARENA PARA GATO CALABAZA ROSA X4.5KG", supplier: "Pet Essentials Hub", rev: "$15,857", margin: "0.0%", status: "warn" },
+      { name: "ARNES D2 MORADO", supplier: "Prime Pet Wholesaler", rev: "$23,345", margin: "0.0%", status: "warn" },
+      { name: "ARNES NYLON D1", supplier: "Prime Pet Wholesaler", rev: "$36,260", margin: "0.0%", status: "warn" },
+      { name: "BEEFS DRY BATH 200 ML", supplier: "NutriPet Wholesale", rev: "$39,875", margin: "0.0%", status: "warn" },
+      { name: "CHUNKY ADULTO CORDERO ARROZ X 1.5KG", supplier: "NutriPet Wholesale", rev: "$34,220", margin: "16.0%", status: "healthy" }
+    ],
+    opex: [
+      { category: "Transporte & Logística", amount: 340740, pct: 34.1, color: "#0d9488" },
+      { category: "Documentación Legal & Notarial", amount: 178210, pct: 17.8, color: "#334155" },
+      { category: "Trade & Marketing POS", amount: 165450, pct: 16.5, color: "#f43f5e" },
+      { category: "Eventos & Ferias Pet", amount: 101500, pct: 10.2, color: "#eab308" },
+      { category: "Operativo & Mantenimiento", amount: 67640, pct: 6.8, color: "#64748b" },
+      { category: "Donaciones & Rescate Animal", amount: 58000, pct: 5.8, color: "#38bdf8" },
+      { category: "Equipos & Tecnología", amount: 48720, pct: 4.9, color: "#f97316" },
+      { category: "Papelería & Suministros", amount: 36760, pct: 3.7, color: "#a855f7" }
+    ],
+    procurement: [
+      { supplier: "NutriPet Wholesale", spend: "$7,315,135.97", orders: 187, share: "33.2%" },
+      { supplier: "Global Pet Logistics", spend: "$4,642,058.22", orders: 230, share: "21.0%" },
+      { supplier: "Regional Pet Partner", spend: "$3,025,439.81", orders: 119, share: "13.7%" },
+      { supplier: "AgroVets Distribution", spend: "$1,954,165.00", orders: 27, share: "8.9%" },
+      { supplier: "AgroPet Supply Co.", spend: "$1,564,695.00", orders: 29, share: "7.1%" },
+      { supplier: "OmniPet Direct", spend: "$833,683.30", orders: 17, share: "3.8%" },
+      { supplier: "Kanine Care Supply", spend: "$771,650.00", orders: 16, share: "3.5%" },
+      { supplier: "Prime Pet Wholesaler", spend: "$649,745.00", orders: 67, share: "2.9%" },
+      { supplier: "Pet Essentials Hub", spend: "$523,328.94", orders: 12, share: "2.4%" },
+      { supplier: "PharmaVet Logistics", spend: "$332,630.00", orders: 3, share: "1.5%" },
+      { supplier: "BioPet Nutrition", spend: "$265,654.50", orders: 7, share: "1.2%" },
+      { supplier: "E-Commerce Partner", spend: "$120,832.85", orders: 2, share: "0.5%" },
+      { supplier: "Retail Vendor Network", spend: "$62,219.50", orders: 8, share: "0.3%" }
+    ]
+  };
+
+  function initInteractiveDashboard() {
+    const tabInteractive = document.getElementById("tab-btn-interactive");
+    const tabFabricSSO = document.getElementById("tab-btn-fabric-sso");
+    const interactiveWrapper = document.getElementById("interactive-dashboard-wrapper");
+    const fabricSSOWrapper = document.getElementById("fabric-sso-wrapper");
+
+    const pageTabs = document.querySelectorAll(".dash-page-tab");
+    const pageViews = {
+      p1: document.getElementById("dash-page-p1"),
+      p2: document.getElementById("dash-page-p2"),
+      p3: document.getElementById("dash-page-p3")
+    };
+
+    const filterYear = document.getElementById("filter-year");
+    const filterChannel = document.getElementById("filter-channel");
+
+    // Toggle View Mode (Interactive vs Fabric SSO)
+    if (tabInteractive && tabFabricSSO) {
+      tabInteractive.addEventListener("click", () => {
+        tabInteractive.classList.add("active-tab-btn");
+        tabInteractive.style.background = "var(--prod-color)";
+        tabInteractive.style.color = "#000";
+
+        tabFabricSSO.classList.remove("active-tab-btn");
+        tabFabricSSO.style.background = "rgba(255,255,255,0.06)";
+        tabFabricSSO.style.color = "var(--text-muted)";
+
+        interactiveWrapper.style.display = "block";
+        fabricSSOWrapper.style.display = "none";
+      });
+
+      tabFabricSSO.addEventListener("click", () => {
+        tabFabricSSO.classList.add("active-tab-btn");
+        tabFabricSSO.style.background = "var(--primary)";
+        tabFabricSSO.style.color = "#fff";
+
+        tabInteractive.classList.remove("active-tab-btn");
+        tabInteractive.style.background = "rgba(255,255,255,0.06)";
+        tabInteractive.style.color = "var(--text-muted)";
+
+        interactiveWrapper.style.display = "none";
+        fabricSSOWrapper.style.display = "block";
+      });
+    }
+
+    // Sub-page switcher (P1, P2, P3)
+    pageTabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        pageTabs.forEach(t => t.classList.remove("active"));
+        tab.classList.add("active");
+
+        const targetPage = tab.getAttribute("data-page");
+        Object.keys(pageViews).forEach(pKey => {
+          pageViews[pKey].style.display = pKey === targetPage ? "block" : "none";
+        });
+
+        renderDynamicKPIs(targetPage);
+      });
+    });
+
+    // Slicers
+    if (filterYear) filterYear.addEventListener("change", updateDashboardCharts);
+    if (filterChannel) filterChannel.addEventListener("change", updateDashboardCharts);
+
+    // Initial Render
+    renderDynamicKPIs("p1");
+    renderCharts();
+    renderTables();
+  }
+
+  function renderDynamicKPIs(page) {
+    const kpiGrid = document.getElementById("dynamic-kpis-grid");
+    if (!kpiGrid) return;
+
+    if (page === "p1") {
+      kpiGrid.innerHTML = `
+        <div class="report-meta-card"><div class="meta-label">Total Revenue</div><div class="meta-value">$23.62M</div></div>
+        <div class="report-meta-card"><div class="meta-label">Gross Profit</div><div class="meta-value">$4.00M</div></div>
+        <div class="report-meta-card"><div class="meta-label">Total Transactions</div><div class="meta-value">413</div></div>
+        <div class="report-meta-card"><div class="meta-label">Net Operating Profit</div><div class="meta-value">$3.05M</div></div>
+        <div class="report-meta-card"><div class="meta-label">Total Units Sold</div><div class="meta-value">1,847</div></div>
+      `;
+    } else if (page === "p2") {
+      kpiGrid.innerHTML = `
+        <div class="report-meta-card"><div class="meta-label">Stock-Out Alerts</div><div class="meta-value" style="color:var(--accent-pink);">269 SKUs</div></div>
+        <div class="report-meta-card"><div class="meta-label">Total Active SKUs</div><div class="meta-value">282</div></div>
+        <div class="report-meta-card"><div class="meta-label">Inventory Valuation</div><div class="meta-value">$6.48M</div></div>
+        <div class="report-meta-card"><div class="meta-label">Potential Margin %</div><div class="meta-value" style="color:var(--prod-color);">19.5%</div></div>
+      `;
+    } else if (page === "p3") {
+      kpiGrid.innerHTML = `
+        <div class="report-meta-card"><div class="meta-label">Total Revenue</div><div class="meta-value">$23.62M</div></div>
+        <div class="report-meta-card"><div class="meta-label">Total Expenses (OpEx)</div><div class="meta-value">$1.00M</div></div>
+        <div class="report-meta-card"><div class="meta-label">Total Purchases</div><div class="meta-value">$22.06M</div></div>
+        <div class="report-meta-card"><div class="meta-label">Net Operating Profit</div><div class="meta-value">$3.05M</div></div>
+        <div class="report-meta-card"><div class="meta-label">Expense Ratio</div><div class="meta-value" style="color:var(--accent-blue);">4.2%</div></div>
+      `;
+    }
+  }
+
+  function renderCharts() {
+    if (typeof Chart === "undefined") return;
+
+    // 1. Monthly Trend Combo Chart
+    const ctxTrend = document.getElementById("chart-monthly-trend");
+    if (ctxTrend) {
+      chartTrend = new Chart(ctxTrend, {
+        type: "bar",
+        data: {
+          labels: DASH_DATA.monthly.map(d => d.month),
+          datasets: [
+            {
+              type: "line",
+              label: "Gross Margin %",
+              data: DASH_DATA.monthly.map(d => d.margin),
+              borderColor: "#334155",
+              borderWidth: 2.5,
+              pointBackgroundColor: "#334155",
+              pointRadius: 4,
+              yAxisID: "y1"
+            },
+            {
+              type: "bar",
+              label: "Total Revenue ($M)",
+              data: DASH_DATA.monthly.map(d => d.rev),
+              backgroundColor: "#0d9488",
+              borderRadius: 6,
+              yAxisID: "y"
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: "index", intersect: false },
+          scales: {
+            x: { grid: { color: "rgba(255,255,255,0.05)" }, ticks: { color: "#9ca3af", font: { size: 10 } } },
+            y: {
+              type: "linear",
+              position: "left",
+              grid: { color: "rgba(255,255,255,0.05)" },
+              ticks: { color: "#9ca3af", callback: v => `$${v}M` }
+            },
+            y1: {
+              type: "linear",
+              position: "right",
+              grid: { drawOnChartArea: false },
+              ticks: { color: "#9ca3af", callback: v => `${v}%` },
+              min: 0,
+              max: 35
+            }
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: "#1e293b",
+              titleColor: "#f8fafc",
+              bodyColor: "#94a3b8",
+              borderColor: "rgba(255,255,255,0.1)",
+              borderWidth: 1
+            }
+          }
+        }
+      });
+    }
+
+    // 2. Channel Donut Chart
+    const ctxDonut = document.getElementById("chart-channel-donut");
+    if (ctxDonut) {
+      chartDonut = new Chart(ctxDonut, {
+        type: "doughnut",
+        data: {
+          labels: DASH_DATA.channels.map(c => c.name),
+          datasets: [{
+            data: DASH_DATA.channels.map(c => c.rev),
+            backgroundColor: DASH_DATA.channels.map(c => c.color),
+            borderColor: "#0f172a",
+            borderWidth: 3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: "68%",
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: ctx => ` ${ctx.label}: $${ctx.raw}M (${DASH_DATA.channels[ctx.dataIndex].pct}%)`
+              }
+            }
+          }
+        }
+      });
+
+      const legendContainer = document.getElementById("channel-legend");
+      if (legendContainer) {
+        legendContainer.innerHTML = DASH_DATA.channels.map(c => `
+          <div><span style="color:${c.color};">●</span> ${c.name} (<strong>${c.pct}%</strong>)</div>
+        `).join("");
+      }
+    }
+
+    // 3. Top Products Ranking Chart
+    const ctxProd = document.getElementById("chart-top-products");
+    if (ctxProd) {
+      chartProducts = new Chart(ctxProd, {
+        type: "bar",
+        data: {
+          labels: DASH_DATA.topProducts.map(p => p.name),
+          datasets: [{
+            label: "Sales Revenue ($M)",
+            data: DASH_DATA.topProducts.map(p => p.rev),
+            backgroundColor: "#0d9488",
+            borderRadius: 6
+          }]
+        },
+        options: {
+          indexAxis: "y",
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { grid: { color: "rgba(255,255,255,0.05)" }, ticks: { color: "#9ca3af", callback: v => `$${v}M` } },
+            y: { grid: { display: false }, ticks: { color: "#e2e8f0", font: { size: 10 } } }
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: ctx => ` Revenue: $${ctx.raw}M`
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // 4. OpEx Breakdown Chart
+    const ctxOpex = document.getElementById("chart-opex-breakdown");
+    if (ctxOpex) {
+      chartOpex = new Chart(ctxOpex, {
+        type: "polarArea",
+        data: {
+          labels: DASH_DATA.opex.map(o => o.category),
+          datasets: [{
+            data: DASH_DATA.opex.map(o => o.amount),
+            backgroundColor: DASH_DATA.opex.map(o => o.color)
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              grid: { color: "rgba(255,255,255,0.05)" },
+              ticks: { display: false }
+            }
+          },
+          plugins: {
+            legend: { position: "right", labels: { color: "#94a3b8", font: { size: 10 } } },
+            tooltip: {
+              callbacks: {
+                label: ctx => ` $${ctx.raw.toLocaleString()} (${DASH_DATA.opex[ctx.dataIndex].pct}%)`
+              }
+            }
+          }
+        }
+      });
+    }
+  }
+
+  function updateDashboardCharts() {
+    const yr = document.getElementById("filter-year").value;
+    let filteredMonthly = DASH_DATA.monthly;
+    if (yr !== "ALL") {
+      filteredMonthly = DASH_DATA.monthly.filter(d => d.year === yr);
+    }
+
+    if (chartTrend) {
+      chartTrend.data.labels = filteredMonthly.map(d => d.month);
+      chartTrend.data.datasets[0].data = filteredMonthly.map(d => d.margin);
+      chartTrend.data.datasets[1].data = filteredMonthly.map(d => d.rev);
+      chartTrend.update();
+    }
+  }
+
+  function renderTables() {
+    // 1. Stockout Table
+    const tbStockout = document.querySelector("#table-stockout tbody");
+    if (tbStockout) {
+      tbStockout.innerHTML = DASH_DATA.stockouts.map(s => `
+        <tr>
+          <td style="font-weight:600;">${s.name}</td>
+          <td style="color:var(--accent-blue);">${s.supplier}</td>
+          <td><span class="badge-loss">${s.stock} Units</span></td>
+          <td style="font-family:var(--font-code);">${s.price}</td>
+        </tr>
+      `).join("");
+    }
+
+    // 2. Margins Table
+    const tbMargins = document.querySelector("#table-margins tbody");
+    if (tbMargins) {
+      tbMargins.innerHTML = DASH_DATA.profitability.map(m => {
+        const badgeClass = m.status === "loss" ? "badge-loss" : (m.status === "warn" ? "badge-warn" : "badge-healthy");
+        return `
+          <tr>
+            <td style="font-weight:600;">${m.name}</td>
+            <td style="color:var(--text-muted);">${m.supplier}</td>
+            <td style="font-family:var(--font-code);">${m.rev}</td>
+            <td><span class="${badgeClass}">${m.margin}</span></td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    // 3. Procurement Table
+    const tbProc = document.querySelector("#table-procurement tbody");
+    if (tbProc) {
+      tbProc.innerHTML = DASH_DATA.procurement.map(p => `
+        <tr>
+          <td style="font-weight:600; color:var(--text-main);">${p.supplier}</td>
+          <td style="font-family:var(--font-code); color:var(--prod-color);">${p.spend}</td>
+          <td>${p.orders}</td>
+          <td><strong style="color:var(--accent-blue);">${p.share}</strong></td>
+        </tr>
+      `).join("");
+    }
+  }
+
   // Initialize
   renderProjectNav();
   setEnvironment(currentEnv);
+  initInteractiveDashboard();
 });
+

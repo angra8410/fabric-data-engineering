@@ -233,7 +233,7 @@ table fact_sales
 	partition fact_sales = entity
 		mode: directLake
 		source
-			entityName: fact_sales
+			entityName: fact_sales_masked
 			schemaName: dbo
 			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
 

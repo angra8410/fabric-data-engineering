@@ -116,7 +116,7 @@ table dim_products
 	partition dim_products = entity
 		mode: directLake
 		source
-			entityName: dim_products_masked
+			entityName: dim_products
 			schemaName: dbo
 			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
 

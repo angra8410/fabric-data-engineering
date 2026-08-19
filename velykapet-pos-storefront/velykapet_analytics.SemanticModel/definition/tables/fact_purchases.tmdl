@@ -54,7 +54,7 @@ table fact_purchases
 	partition fact_purchases = entity
 		mode: directLake
 		source
-			entityName: fact_purchases_masked
+			entityName: fact_purchases
 			schemaName: dbo
 			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
 

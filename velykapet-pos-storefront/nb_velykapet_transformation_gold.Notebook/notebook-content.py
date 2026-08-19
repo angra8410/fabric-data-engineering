@@ -127,15 +127,25 @@ def build_fact_purchases():
     df_pur = spark.read.table(f"{SILVER_SCHEMA}.silver_purchases")
     cols = df_pur.columns
 
-    date_col = col("purchase_date") if "purchase_date" in cols else (col("created_at") if "created_at" in cols else current_timestamp())
-    supplier_col = col("supplier_id") if "supplier_id" in cols else (col("supplier") if "supplier" in cols else lit("Unknown"))
-    amount_col = col("amount").cast("double") if "amount" in cols else lit(0.0)
+    ts_col = coalesce(col("timestamp"), col("created_at")) if ("timestamp" in cols and "created_at" in cols) else (col("timestamp") if "timestamp" in cols else (col("created_at") if "created_at" in cols else current_timestamp()))
+    supplier_col = col("supplier") if "supplier" in cols else (col("supplier_id") if "supplier_id" in cols else lit("Unknown"))
+
+    if "total_price" in cols:
+        amount_col = col("total_price").cast("double")
+    elif "total_cost" in cols:
+        amount_col = col("total_cost").cast("double")
+    elif "amount" in cols:
+        amount_col = col("amount").cast("double")
+    elif "cost_price" in cols and "quantity" in cols:
+        amount_col = (col("cost_price") * col("quantity")).cast("double")
+    else:
+        amount_col = lit(0.0)
 
     df_fact = df_pur.select(
         col("id").alias("purchase_id"),
         supplier_col.alias("supplier"),
         amount_col.alias("purchase_amount"),
-        to_date(date_col).alias("purchase_date")
+        to_date(ts_col).alias("purchase_date")
     ).withColumn("_updated_at", current_timestamp())
 
     df_fact.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.fact_purchases")

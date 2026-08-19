@@ -71,7 +71,7 @@ table fact_expenses
 	partition fact_expenses = entity
 		mode: directLake
 		source
-			entityName: fact_expenses_masked
+			entityName: fact_expenses
 			schemaName: dbo
 			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
 

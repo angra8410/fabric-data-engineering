@@ -191,15 +191,25 @@ def run_gold_stage():
     # FactPurchases
     df_pur = spark.read.table(f"{SILVER_SCHEMA}.silver_purchases")
     pur_cols = df_pur.columns
-    pur_date_col = to_date(col("purchase_date") if "purchase_date" in pur_cols else (col("created_at") if "created_at" in pur_cols else current_timestamp()))
-    supplier_col = col("supplier_id") if "supplier_id" in pur_cols else (col("supplier") if "supplier" in pur_cols else lit("Unknown"))
-    amount_col = col("amount").cast("double") if "amount" in pur_cols else lit(0.0)
+    pur_ts_col = coalesce(col("timestamp"), col("created_at")) if ("timestamp" in pur_cols and "created_at" in pur_cols) else (col("timestamp") if "timestamp" in pur_cols else (col("created_at") if "created_at" in pur_cols else current_timestamp()))
+    supplier_col = col("supplier") if "supplier" in pur_cols else (col("supplier_id") if "supplier_id" in pur_cols else lit("Unknown"))
+
+    if "total_price" in pur_cols:
+        amount_col = col("total_price").cast("double")
+    elif "total_cost" in pur_cols:
+        amount_col = col("total_cost").cast("double")
+    elif "amount" in pur_cols:
+        amount_col = col("amount").cast("double")
+    elif "cost_price" in pur_cols and "quantity" in pur_cols:
+        amount_col = (col("cost_price") * col("quantity")).cast("double")
+    else:
+        amount_col = lit(0.0)
 
     df_fact_pur = df_pur.select(
         col("id").alias("purchase_id"),
         supplier_col.alias("supplier"),
         amount_col.alias("purchase_amount"),
-        pur_date_col.alias("purchase_date")
+        to_date(pur_ts_col).alias("purchase_date")
     ).withColumn("_updated_at", current_timestamp())
     df_fact_pur.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.fact_purchases")
     print(f"  └── 📦 'fact_purchases': {df_fact_pur.count()} registros.")

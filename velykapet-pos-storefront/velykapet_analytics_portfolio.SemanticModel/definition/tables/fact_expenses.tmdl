@@ -1,0 +1,77 @@
+table fact_expenses
+	lineageTag: 05fa9fb0-9bc8-43d9-9fb8-ef951e70e28e
+	sourceLineageTag: [dbo].[fact_expenses]
+
+	measure 'Total Expenses' = SUM(fact_expenses[expense_amount])
+		formatString: \$#,0.00
+		lineageTag: m_tot_exp
+
+	measure 'Net Operating Profit' = [Gross Profit] - [Total Expenses]
+		formatString: \$#,0.00
+		lineageTag: m_net_op_profit
+
+	measure 'Net Profit Margin %' = DIVIDE([Net Operating Profit], [Total Revenue], 0)
+		formatString: 0.0%
+		lineageTag: m_net_profit_margin
+
+	measure 'Expense to Revenue Ratio %' = DIVIDE([Total Expenses], [Total Revenue], 0)
+		formatString: 0.0%
+		lineageTag: m_exp_ratio
+
+	column expense_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 81eb1145-d1d1-4388-a492-04fce83a2343
+		sourceLineageTag: expense_id
+		summarizeBy: sum
+		sourceColumn: expense_id
+
+	column expense_amount
+		dataType: double
+		formatString: \$#,0.00
+		lineageTag: 81eb1145-d1d1-4388-a492-04fce83a2347
+		sourceLineageTag: expense_amount
+		summarizeBy: sum
+		sourceColumn: expense_amount
+
+	column category
+		dataType: string
+		lineageTag: 81eb1145-d1d1-4388-a492-04fce83a2345
+		sourceLineageTag: category
+		summarizeBy: none
+		sourceColumn: category
+
+	column _updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 81eb1145-d1d1-4388-a492-04fce83a2348
+		sourceLineageTag: _updated_at
+		summarizeBy: none
+		sourceColumn: _updated_at
+
+	column description
+		dataType: string
+		lineageTag: fd360a20-0484-45d5-8850-d8fb8e2c5d8c
+		sourceLineageTag: description
+		summarizeBy: none
+		sourceColumn: description
+
+		annotation SummarizationSetBy = Automatic
+
+	column expense_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: e892b631-f0b9-4c16-aa29-9837d9a14d8e
+		sourceLineageTag: expense_date
+		summarizeBy: none
+		sourceColumn: expense_date
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_expenses = entity
+		mode: directLake
+		source
+			entityName: fact_expenses_masked
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
+

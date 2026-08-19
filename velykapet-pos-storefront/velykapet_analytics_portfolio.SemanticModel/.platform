@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "velykapet_analytics"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "7a8b6e47-625f-be9d-4a3e-92aff2b4386e"
+  }
+}

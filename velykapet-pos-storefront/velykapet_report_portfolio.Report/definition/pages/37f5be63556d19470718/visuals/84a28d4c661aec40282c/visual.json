@@ -1,0 +1,54 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "84a28d4c661aec40282c",
+  "position": {
+    "x": 710,
+    "y": 20,
+    "z": 3000,
+    "height": 100,
+    "width": 220,
+    "tabOrder": 5000
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_expenses"
+                    }
+                  },
+                  "Property": "Net Operating Profit"
+                }
+              },
+              "queryRef": "fact_expenses.Net Operating Profit"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "312c9366974ede20e61f",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_expenses"
+              }
+            },
+            "Property": "Net Operating Profit"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

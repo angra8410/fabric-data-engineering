@@ -1,0 +1,60 @@
+table fact_purchases
+	lineageTag: 06fa9fb0-9bc8-43d9-9fb8-ef951e70e28d
+	sourceLineageTag: [dbo].[fact_purchases]
+
+	measure 'Total Purchases' = SUM(fact_purchases[purchase_amount])
+		formatString: \$#,0.00
+		lineageTag: m_tot_purchases
+
+	measure 'Procurement Purchase Count' = DISTINCTCOUNT(fact_purchases[purchase_id])
+		formatString: #,0
+		lineageTag: m_purch_count
+
+	column purchase_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 91eb1145-d1d1-4388-a492-04fce83a2343
+		sourceLineageTag: purchase_id
+		summarizeBy: sum
+		sourceColumn: purchase_id
+
+	column supplier
+		dataType: string
+		lineageTag: 91eb1145-d1d1-4388-a492-04fce83a2344
+		sourceLineageTag: supplier
+		summarizeBy: none
+		sourceColumn: supplier
+
+	column purchase_amount
+		dataType: double
+		formatString: \$#,0.00
+		lineageTag: 91eb1145-d1d1-4388-a492-04fce83a2345
+		sourceLineageTag: purchase_amount
+		summarizeBy: sum
+		sourceColumn: purchase_amount
+
+	column _updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 91eb1145-d1d1-4388-a492-04fce83a2347
+		sourceLineageTag: _updated_at
+		summarizeBy: none
+		sourceColumn: _updated_at
+
+	column purchase_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 62a1f754-c2ec-4a44-9c6d-4f37703c67e9
+		sourceLineageTag: purchase_date
+		summarizeBy: none
+		sourceColumn: purchase_date
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_purchases = entity
+		mode: directLake
+		source
+			entityName: fact_purchases_masked
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
+

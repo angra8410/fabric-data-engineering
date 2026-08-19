@@ -38,7 +38,8 @@ Descripción:
 
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import (
-    col, sum as _sum, count as _count, avg as _avg, current_timestamp, round as _round, to_date, lit
+    col, sum as _sum, count as _count, avg as _avg, current_timestamp, round as _round, to_date, lit,
+    coalesce, when, upper, trim
 )
 
 spark = SparkSession.builder \
@@ -66,8 +67,6 @@ def build_fact_sales():
 
     origin_col = col("s.origin") if "origin" in s_cols else lit("POS")
     ts_col = coalesce(col("s.timestamp"), col("s.created_at")) if "timestamp" in s_cols else (col("s.created_at") if "created_at" in s_cols else current_timestamp())
-
-    from pyspark.sql.functions import when, upper, trim, coalesce
 
     # Limpieza y estandarización de método de pago
     pm_raw = upper(trim(coalesce(col("s.payment_method"), lit("NO ESPECIFICADO"))))
@@ -148,8 +147,6 @@ def build_dim_products():
     df_cat = spark.read.table(f"{SILVER_SCHEMA}.silver_master_catalog")
     df_prod = spark.read.table(f"{SILVER_SCHEMA}.silver_products")
     df_items = spark.read.table(f"{SILVER_SCHEMA}.silver_sale_items")
-
-    from pyspark.sql.functions import coalesce
 
     df_dim_cat = df_cat.alias("c") \
         .join(df_prod.alias("p"), col("c.barcode") == col("p.barcode"), "left") \

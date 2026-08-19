@@ -4,9 +4,10 @@
   "position": {
     "x": 19.948254345113078,
     "y": 173.30045962316987,
-    "z": 6,
+    "z": 5000,
     "height": 546.08346269747051,
-    "width": 713.1500928377925
+    "width": 713.1500928377925,
+    "tabOrder": 9000
   },
   "visual": {
     "visualType": "lineStackedColumnComboChart",
@@ -187,6 +188,18 @@
                   "Value": "13D"
                 }
               }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -268,7 +281,7 @@
         }
       },
       {
-        "name": "cf1f4bb0e116b072cc34",
+        "name": "e75085c831cf8c82bde8",
         "field": {
           "Measure": {
             "Expression": {
@@ -282,7 +295,7 @@
         "type": "Advanced"
       },
       {
-        "name": "fc23c079f8cc61e6a013",
+        "name": "dc54d7c3e1499999168c",
         "field": {
           "Measure": {
             "Expression": {

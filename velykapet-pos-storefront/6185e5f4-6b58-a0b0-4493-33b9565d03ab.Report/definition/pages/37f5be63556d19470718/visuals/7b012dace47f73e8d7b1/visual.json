@@ -1,106 +1,65 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
-  "name": "479831300d2b57b252a7",
+  "name": "7b012dace47f73e8d7b1",
   "position": {
-    "x": 19.69843559930974,
-    "y": 119.34934510170018,
-    "z": 7000,
-    "height": 44.03179722198648,
-    "width": 178.44465189962941,
-    "tabOrder": 1000
+    "x": 19.948254345113078,
+    "y": 173.30045962316987,
+    "z": 5000,
+    "height": 546.08346269747051,
+    "width": 713.1500928377925,
+    "tabOrder": 9000
   },
   "visual": {
-    "visualType": "slicer",
+    "visualType": "treemap",
     "query": {
       "queryState": {
-        "Values": {
+        "Group": {
           "projections": [
             {
               "field": {
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "dim_dates"
+                      "Entity": "fact_expenses"
                     }
                   },
-                  "Property": "year"
+                  "Property": "category"
                 }
               },
-              "queryRef": "dim_dates.year",
-              "nativeQueryRef": "year",
+              "queryRef": "fact_expenses.category",
+              "nativeQueryRef": "category",
               "active": true
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_expenses"
+                    }
+                  },
+                  "Property": "Total Expenses"
+                }
+              },
+              "queryRef": "fact_expenses.Total Expenses",
+              "nativeQueryRef": "Total Expenses"
             }
           ]
         }
       }
     },
     "objects": {
-      "data": [
-        {
-          "properties": {
-            "mode": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Basic'"
-                }
-              }
-            },
-            "isInvertedSelectionMode": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            }
-          }
-        }
-      ],
-      "general": [
-        {
-          "properties": {
-            "orientation": {
-              "expr": {
-                "Literal": {
-                  "Value": "1D"
-                }
-              }
-            }
-          }
-        }
-      ],
-      "selection": [
-        {
-          "properties": {
-            "selectAllCheckboxEnabled": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            }
-          }
-        }
-      ],
-      "header": [
+      "labels": [
         {
           "properties": {
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
-                }
-              }
-            }
-          }
-        }
-      ],
-      "slider": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
+                  "Value": "true"
                 }
               }
             }
@@ -108,12 +67,59 @@
         }
       ]
     },
-    "drillFilterOtherVisuals": true
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Desglose de Gastos Operativos (OpEx) por Categoría'"
+                }
+              }
+            },
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'center'"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "13D"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
   },
   "filterConfig": {
     "filters": [
       {
-        "name": "133a72555969b86f45ff",
+        "name": "27f001b8657872faa132",
         "field": {
           "Column": {
             "Expression": {
@@ -121,7 +127,7 @@
                 "Entity": "dim_dates"
               }
             },
-            "Property": "year"
+            "Property": "year_month"
           }
         },
         "type": "Categorical",
@@ -148,7 +154,7 @@
                                 "Source": "d"
                               }
                             },
-                            "Property": "year"
+                            "Property": "year_month"
                           }
                         }
                       ],
@@ -168,6 +174,7 @@
             }
           ]
         },
+        "howCreated": "User",
         "objects": {
           "general": [
             {
@@ -183,6 +190,34 @@
             }
           ]
         }
+      },
+      {
+        "name": "e2210b2e89b159cc15dd",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_expenses"
+              }
+            },
+            "Property": "category"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "eeff486a495e333db83d",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_expenses"
+              }
+            },
+            "Property": "Total Expenses"
+          }
+        },
+        "type": "Advanced"
       }
     ]
   }

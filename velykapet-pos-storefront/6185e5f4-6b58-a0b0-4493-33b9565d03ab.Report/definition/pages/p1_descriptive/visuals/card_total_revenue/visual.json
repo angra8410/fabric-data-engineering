@@ -4,9 +4,10 @@
   "position": {
     "x": 20,
     "y": 20,
-    "z": 1,
+    "z": 0,
     "height": 110,
-    "width": 230
+    "width": 230,
+    "tabOrder": 6000
   },
   "visual": {
     "visualType": "card",
@@ -31,23 +32,5 @@
         }
       }
     }
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "f678a63f6260c3556d66",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "fact_sales"
-              }
-            },
-            "Property": "Total Revenue"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }

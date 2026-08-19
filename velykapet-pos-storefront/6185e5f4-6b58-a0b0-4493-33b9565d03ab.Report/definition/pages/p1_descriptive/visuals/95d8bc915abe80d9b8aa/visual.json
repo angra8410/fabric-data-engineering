@@ -4,10 +4,10 @@
   "position": {
     "x": 758.03366511429692,
     "y": 432.62776610963988,
-    "z": 12,
+    "z": 9000,
     "height": 286.75615621100053,
     "width": 507.43371990381394,
-    "tabOrder": 6
+    "tabOrder": 3000
   },
   "visual": {
     "visualType": "clusteredColumnChart",
@@ -78,6 +78,47 @@
               "expr": {
                 "Literal": {
                   "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "13D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            },
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'center'"
                 }
               }
             }
@@ -191,7 +232,7 @@
         }
       },
       {
-        "name": "54c74e356c822c3238a6",
+        "name": "afe3a95eca014f2982bf",
         "field": {
           "Measure": {
             "Expression": {

@@ -1,10 +1,10 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
-  "name": "card_stockout_alert",
+  "name": "86402e74f6116ca8199e",
   "position": {
-    "x": 19.948254345113078,
+    "x": 932.58089063403645,
     "y": 38.649742793656593,
-    "z": 0,
+    "z": 3000,
     "height": 100,
     "width": 280
   },
@@ -22,20 +22,39 @@
                       "Entity": "dim_products"
                     }
                   },
-                  "Property": "Stock-Out Alert SKUs"
+                  "Property": "Potential Inventory Margin %"
                 }
               },
-              "queryRef": "dim_products.Stock-Out Alert SKUs"
+              "queryRef": "dim_products.Potential Inventory Margin %",
+              "nativeQueryRef": "Potential Inventory Margin %"
             }
           ]
         }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "dim_products"
+                  }
+                },
+                "Property": "Potential Inventory Margin %"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
       }
     }
   },
   "filterConfig": {
     "filters": [
       {
-        "name": "79943bdee822ed10e77c",
+        "name": "db43542a3ef7058d573f",
         "field": {
           "Measure": {
             "Expression": {
@@ -43,7 +62,7 @@
                 "Entity": "dim_products"
               }
             },
-            "Property": "Stock-Out Alert SKUs"
+            "Property": "Potential Inventory Margin %"
           }
         },
         "type": "Advanced"

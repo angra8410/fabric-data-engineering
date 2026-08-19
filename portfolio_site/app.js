@@ -507,8 +507,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Slicers (Year & Channel)
-    if (filterYear) filterYear.addEventListener("change", updateDashboardCharts);
-    if (filterChannel) filterChannel.addEventListener("change", updateDashboardCharts);
+    if (filterYear) {
+      filterYear.addEventListener("change", updateDashboardCharts);
+      filterYear.addEventListener("input", updateDashboardCharts);
+    }
+    if (filterChannel) {
+      filterChannel.addEventListener("change", updateDashboardCharts);
+      filterChannel.addEventListener("input", updateDashboardCharts);
+    }
 
     // Initial Render
     renderCharts();
@@ -517,8 +523,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function updateDashboardCharts() {
-    const yr = document.getElementById("filter-year") ? document.getElementById("filter-year").value : "ALL";
-    const ch = document.getElementById("filter-channel") ? document.getElementById("filter-channel").value : "ALL";
+    const filterYrEl = document.getElementById("filter-year");
+    const filterChEl = document.getElementById("filter-channel");
+
+    const yr = filterYrEl ? filterYrEl.value : "ALL";
+    const ch = filterChEl ? filterChEl.value : "ALL";
 
     // 1. Channel multiplier
     let chMultiplier = 1.0;
@@ -586,12 +595,30 @@ document.addEventListener("DOMContentLoaded", () => {
       chartTrend.update();
     }
 
-    // 6. Update Donut Chart
+    // 6. Update Donut Chart & Legend
     if (chartDonut) {
+      const legendContainer = document.getElementById("channel-legend");
       if (ch === "ALL") {
+        chartDonut.data.labels = DASH_DATA.channels.map(c => c.name);
         chartDonut.data.datasets[0].data = DASH_DATA.channels.map(c => +(c.rev * (totalRev / 23.62)).toFixed(2));
+        chartDonut.data.datasets[0].backgroundColor = DASH_DATA.channels.map(c => c.color);
+        
+        if (legendContainer) {
+          legendContainer.innerHTML = DASH_DATA.channels.map(c => `
+            <div><span style="color:${c.color};">●</span> ${c.name} (<strong>${c.pct}%</strong>)</div>
+          `).join("");
+        }
       } else {
-        chartDonut.data.datasets[0].data = DASH_DATA.channels.map(c => c.name.toLowerCase().includes(ch.toLowerCase()) ? +totalRev.toFixed(2) : 0);
+        const selectedChannel = DASH_DATA.channels.find(c => c.name.toLowerCase().includes(ch.toLowerCase())) || DASH_DATA.channels[0];
+        chartDonut.data.labels = [selectedChannel.name];
+        chartDonut.data.datasets[0].data = [+totalRev.toFixed(2)];
+        chartDonut.data.datasets[0].backgroundColor = [selectedChannel.color];
+
+        if (legendContainer) {
+          legendContainer.innerHTML = `
+            <div><span style="color:${selectedChannel.color};">●</span> ${selectedChannel.name} (<strong>100% Filtered</strong>: $${totalRev >= 1 ? totalRev.toFixed(2) + 'M' : (totalRev * 1000).toFixed(0) + 'K'})</div>
+          `;
+        }
       }
       chartDonut.update();
     }

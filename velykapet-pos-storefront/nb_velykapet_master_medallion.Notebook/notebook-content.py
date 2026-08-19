@@ -207,6 +207,7 @@ def run_gold_stage():
     # DimProducts
     df_cat = spark.read.table(f"{SILVER_SCHEMA}.silver_master_catalog")
     df_prod = spark.read.table(f"{SILVER_SCHEMA}.silver_products")
+    df_items = spark.read.table(f"{SILVER_SCHEMA}.silver_sale_items")
 
     df_dim_cat = df_cat.alias("c") \
         .join(df_prod.alias("p"), col("c.barcode") == col("p.barcode"), "left") \
@@ -214,6 +215,7 @@ def run_gold_stage():
             col("c.product_name").alias("product_id"),
             col("c.product_name").alias("product_name"),
             col("c.barcode").alias("barcode"),
+            coalesce(col("c.category"), lit("General")).alias("category"),
             coalesce(col("p.supplier"), lit("N/A")).alias("supplier"),
             coalesce(col("p.cost_price").cast("double"), lit(0.0)).alias("cost_price"),
             coalesce(col("p.sale_price").cast("double"), lit(0.0)).alias("sale_price"),
@@ -224,6 +226,7 @@ def run_gold_stage():
         col("product_name").alias("product_id"),
         col("product_name").alias("product_name"),
         col("barcode").alias("barcode"),
+        lit("General").alias("category"),
         lit("Velykapet").alias("supplier"),
         coalesce(col("unit_cost").cast("double"), lit(0.0)).alias("cost_price"),
         coalesce(col("unit_price").cast("double"), lit(0.0)).alias("sale_price"),
@@ -235,7 +238,7 @@ def run_gold_stage():
         .withColumn("_updated_at", current_timestamp())
 
     df_dim_prod.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.dim_products")
-    print(f"  └── 🏷️ 'dim_products': {df_dim_prod.count()} registros.")
+    print(f"  └── 🏷️ 'dim_products': {df_dim_prod.count()} registros con categoría.")
 
     # WhatsApp KPIs
     df_wa_orders = spark.read.table(f"{SILVER_SCHEMA}.silver_whatsapp_orders")

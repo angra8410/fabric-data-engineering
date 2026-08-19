@@ -58,6 +58,13 @@ table dim_products
 		summarizeBy: none
 		sourceColumn: supplier
 
+	column category
+		dataType: string
+		lineageTag: 71eb1145-d1d1-4388-a492-04fce83a2345
+		sourceLineageTag: category
+		summarizeBy: none
+		sourceColumn: category
+
 	column cost_price
 		dataType: decimal
 		formatString: \$#,0.00

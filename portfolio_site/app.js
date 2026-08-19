@@ -655,38 +655,40 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
 
-    // 6. Channel Donut Chart & Legend
+    // 6. Channel Donut Chart & Legend (Power BI Cross-Highlighting Pattern)
     const ctxDonut = document.getElementById("chart-channel-donut");
     if (ctxDonut) {
       if (chartDonut) chartDonut.destroy();
 
-      let donutLabels = [];
-      let donutData = [];
-      let donutColors = [];
+      const yearScale = yr === "2025" ? 0.107 : (yr === "2026" ? 0.893 : 1.0);
+      const donutLabels = DASH_DATA.channels.map(c => c.name);
+      const donutData = DASH_DATA.channels.map(c => +(c.rev * yearScale).toFixed(2));
+      
+      // Determine colors based on active filter (Cross-highlighting)
+      const donutColors = DASH_DATA.channels.map(c => {
+        if (ch === "ALL") return c.color;
+        const isSelected = c.name.toLowerCase().includes(ch.toLowerCase());
+        return isSelected ? c.color : "rgba(255, 255, 255, 0.08)";
+      });
+
+      const donutBorders = DASH_DATA.channels.map(c => {
+        if (ch === "ALL") return "#0f172a";
+        const isSelected = c.name.toLowerCase().includes(ch.toLowerCase());
+        return isSelected ? "#ffffff" : "transparent";
+      });
 
       const legendContainer = document.getElementById("channel-legend");
-
-      if (ch === "ALL") {
-        donutLabels = DASH_DATA.channels.map(c => c.name);
-        donutData = DASH_DATA.channels.map(c => +(c.rev * (totalRev / 23.62)).toFixed(2));
-        donutColors = DASH_DATA.channels.map(c => c.color);
-
-        if (legendContainer) {
-          legendContainer.innerHTML = DASH_DATA.channels.map(c => `
-            <div><span style="color:${c.color};">●</span> ${c.name} (<strong>${c.pct}%</strong>)</div>
-          `).join("");
-        }
-      } else {
-        const selectedChannel = DASH_DATA.channels.find(c => c.name.toLowerCase().includes(ch.toLowerCase())) || DASH_DATA.channels[0];
-        donutLabels = [selectedChannel.name];
-        donutData = [+totalRev.toFixed(2)];
-        donutColors = [selectedChannel.color];
-
-        if (legendContainer) {
-          legendContainer.innerHTML = `
-            <div><span style="color:${selectedChannel.color};">●</span> ${selectedChannel.name} (<strong>100% Filtered</strong>: $${totalRev >= 1 ? totalRev.toFixed(2) + 'M' : (totalRev * 1000).toFixed(0) + 'K'})</div>
+      if (legendContainer) {
+        legendContainer.innerHTML = DASH_DATA.channels.map(c => {
+          const isSelected = ch === "ALL" || c.name.toLowerCase().includes(ch.toLowerCase());
+          const opacity = isSelected ? "1" : "0.35";
+          const highlightBadge = ch !== "ALL" && isSelected ? ` <span style="background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px; font-size:0.7rem; color:var(--text-main);">Active</span>` : "";
+          return `
+            <div style="opacity: ${opacity}; transition: opacity 0.2s;">
+              <span style="color:${c.color};">●</span> ${c.name} (<strong>${c.pct}%</strong>)${highlightBadge}
+            </div>
           `;
-        }
+        }).join("");
       }
 
       chartDonut = new Chart(ctxDonut, {
@@ -696,8 +698,8 @@ document.addEventListener("DOMContentLoaded", () => {
           datasets: [{
             data: donutData,
             backgroundColor: donutColors,
-            borderColor: "#0f172a",
-            borderWidth: 3
+            borderColor: donutBorders,
+            borderWidth: 2
           }]
         },
         options: {
@@ -708,7 +710,7 @@ document.addEventListener("DOMContentLoaded", () => {
             legend: { display: false },
             tooltip: {
               callbacks: {
-                label: ctx => ` ${ctx.label}: $${ctx.raw}M`
+                label: ctx => ` ${ctx.label}: $${ctx.raw}M (${DASH_DATA.channels[ctx.dataIndex].pct}% share)`
               }
             }
           }

@@ -595,6 +595,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const ctxTrend = document.getElementById("chart-monthly-trend");
     if (ctxTrend) {
       if (chartTrend) chartTrend.destroy();
+
+      const monthlyRevValues = filteredMonthly.map(d => +(d.rev * chMultiplier).toFixed(4));
+      const maxMonthlyRev = Math.max(...monthlyRevValues, 0.001);
+      const isSmallScale = maxMonthlyRev < 0.15; // less than $150K -> format in $K
+
       chartTrend = new Chart(ctxTrend, {
         type: "bar",
         data: {
@@ -604,17 +609,18 @@ document.addEventListener("DOMContentLoaded", () => {
               type: "line",
               label: "Gross Margin %",
               data: filteredMonthly.map(d => d.margin),
-              borderColor: "#334155",
+              borderColor: "#64748b",
               borderWidth: 2.5,
-              pointBackgroundColor: "#334155",
+              pointBackgroundColor: "#94a3b8",
               pointRadius: 4,
               yAxisID: "y1"
             },
             {
               type: "bar",
-              label: "Total Revenue ($M)",
-              data: filteredMonthly.map(d => +(d.rev * chMultiplier).toFixed(2)),
+              label: isSmallScale ? "Total Revenue ($K)" : "Total Revenue ($M)",
+              data: monthlyRevValues,
               backgroundColor: "#0d9488",
+              hoverBackgroundColor: "#14b8a6",
               borderRadius: 6,
               yAxisID: "y"
             }
@@ -630,7 +636,10 @@ document.addEventListener("DOMContentLoaded", () => {
               type: "linear",
               position: "left",
               grid: { color: "rgba(255,255,255,0.05)" },
-              ticks: { color: "#9ca3af", callback: v => `$${v}M` }
+              ticks: {
+                color: "#9ca3af",
+                callback: v => isSmallScale ? `$${(v * 1000).toFixed(0)}K` : `$${v.toFixed(1)}M`
+              }
             },
             y1: {
               type: "linear",
@@ -648,7 +657,13 @@ document.addEventListener("DOMContentLoaded", () => {
               titleColor: "#f8fafc",
               bodyColor: "#94a3b8",
               borderColor: "rgba(255,255,255,0.1)",
-              borderWidth: 1
+              borderWidth: 1,
+              callbacks: {
+                label: ctx => {
+                  if (ctx.datasetIndex === 0) return ` Gross Margin: ${ctx.raw}%`;
+                  return isSmallScale ? ` Total Revenue: $${(ctx.raw * 1000).toFixed(1)}K` : ` Total Revenue: $${ctx.raw.toFixed(2)}M`;
+                }
+              }
             }
           }
         }
@@ -662,7 +677,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const yearScale = yr === "2025" ? 0.107 : (yr === "2026" ? 0.893 : 1.0);
       const donutLabels = DASH_DATA.channels.map(c => c.name);
-      const donutData = DASH_DATA.channels.map(c => +(c.rev * yearScale).toFixed(2));
+      
+      // If a tiny slice is selected (like Rappi), give it a visual min-wedge so it's clearly distinct
+      const donutData = DASH_DATA.channels.map(c => {
+        if (ch === "Rappi" && c.name.includes("Rappi")) {
+          return +(Math.max(c.rev * yearScale, 0.45)).toFixed(2);
+        }
+        return +(c.rev * yearScale).toFixed(2);
+      });
       
       // Determine colors based on active filter (Cross-highlighting)
       const donutColors = DASH_DATA.channels.map(c => {
@@ -675,6 +697,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (ch === "ALL") return "#0f172a";
         const isSelected = c.name.toLowerCase().includes(ch.toLowerCase());
         return isSelected ? "#ffffff" : "transparent";
+      });
+
+      const donutOffsets = DASH_DATA.channels.map(c => {
+        if (ch === "ALL") return 0;
+        const isSelected = c.name.toLowerCase().includes(ch.toLowerCase());
+        return isSelected ? 10 : 0;
       });
 
       const legendContainer = document.getElementById("channel-legend");
@@ -699,7 +727,8 @@ document.addEventListener("DOMContentLoaded", () => {
             data: donutData,
             backgroundColor: donutColors,
             borderColor: donutBorders,
-            borderWidth: 2
+            borderWidth: 2,
+            offset: donutOffsets
           }]
         },
         options: {
@@ -710,7 +739,7 @@ document.addEventListener("DOMContentLoaded", () => {
             legend: { display: false },
             tooltip: {
               callbacks: {
-                label: ctx => ` ${ctx.label}: $${ctx.raw}M (${DASH_DATA.channels[ctx.dataIndex].pct}% share)`
+                label: ctx => ` ${ctx.label}: $${DASH_DATA.channels[ctx.dataIndex].rev}M (${DASH_DATA.channels[ctx.dataIndex].pct}% share)`
               }
             }
           }

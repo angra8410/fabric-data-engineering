@@ -269,7 +269,7 @@ def run_gold_stage():
         ).withColumn("_calculated_at", current_timestamp())
     df_trend.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.kpi_daily_sales_trend")
 
-    df_inv = df_dim_p.agg(
+    df_inv = df_dim_prod.agg(
         _count("product_id").alias("total_skus"),
         _sum("current_stock").alias("total_stock_units"),
         _round(_sum(col("current_stock") * col("cost_price")), 2).alias("total_inventory_cost_value"),

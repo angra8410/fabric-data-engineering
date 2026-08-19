@@ -35,10 +35,10 @@ const PORTFOLIO_DATA = {
             embedUrl: "https://app.fabric.microsoft.com/reportEmbed?reportId=565d03ab-33b9-4493-a0b0-6b586185e5f4&autoAuth=true&ctid=9da4a1e2-db93-42a7-a588-957fd6292e87",
             description: "Omnichannel sales analytics, transaction volume, gross profit margins, and top product ranking across physical POS and Web.",
             metrics: [
-              { label: "Total Revenue", value: "$16.24M" },
+              { label: "Total Revenue", value: "$23.55M" },
               { label: "Transactions", value: "412" },
-              { label: "Net Profit", value: "$2.09M" },
-              { label: "Total Purchases", value: "$14.68M" }
+              { label: "Net Profit", value: "$3.03M" },
+              { label: "Total Purchases", value: "$21.29M" }
             ]
           },
           {
@@ -61,7 +61,7 @@ const PORTFOLIO_DATA = {
             metrics: [
               { label: "Active SKUs", value: "275" },
               { label: "Stock-Out Alerts", value: "263 SKUs" },
-              { label: "Total Expenses", value: "$691.60K" },
+              { label: "Total Expenses", value: "$1.00M" },
               { label: "Expense Ratio", value: "4.3%" }
             ]
           }

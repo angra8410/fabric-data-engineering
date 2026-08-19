@@ -1,0 +1,98 @@
+table dim_dates
+	lineageTag: 03fa9fb0-9bc8-43d9-9fb8-ef951e70e28f
+	sourceLineageTag: [dbo].[dim_dates]
+
+	column date_key
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 88123456-7890-abcd-ef12-345678901234
+		sourceLineageTag: date_key
+		summarizeBy: none
+		sourceColumn: date_key
+
+	column year
+		dataType: int64
+		formatString: 0
+		lineageTag: 88123456-7890-abcd-ef12-345678901235
+		sourceLineageTag: year
+		summarizeBy: sum
+		sourceColumn: year
+
+		annotation SummarizationSetBy = Automatic
+
+	column quarter
+		dataType: int64
+		formatString: 0
+		lineageTag: 88123456-7890-abcd-ef12-345678901236
+		sourceLineageTag: quarter
+		summarizeBy: sum
+		sourceColumn: quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_number
+		dataType: int64
+		formatString: 0
+		lineageTag: 88123456-7890-abcd-ef12-345678901237
+		sourceLineageTag: month_number
+		summarizeBy: sum
+		sourceColumn: month_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_name
+		dataType: string
+		lineageTag: 88123456-7890-abcd-ef12-345678901238
+		sourceLineageTag: month_name
+		summarizeBy: none
+		sourceColumn: month_name
+
+	column year_month
+		dataType: string
+		lineageTag: 88123456-7890-abcd-ef12-345678901239
+		sourceLineageTag: year_month
+		summarizeBy: none
+		sourceColumn: year_month
+
+	column day_of_month
+		dataType: int64
+		formatString: 0
+		lineageTag: 88123456-7890-abcd-ef12-345678901240
+		sourceLineageTag: day_of_month
+		summarizeBy: sum
+		sourceColumn: day_of_month
+
+		annotation SummarizationSetBy = Automatic
+
+	column day_of_week
+		dataType: int64
+		formatString: 0
+		lineageTag: 88123456-7890-abcd-ef12-345678901241
+		sourceLineageTag: day_of_week
+		summarizeBy: sum
+		sourceColumn: day_of_week
+
+		annotation SummarizationSetBy = Automatic
+
+	column day_name
+		dataType: string
+		lineageTag: 88123456-7890-abcd-ef12-345678901242
+		sourceLineageTag: day_name
+		summarizeBy: none
+		sourceColumn: day_name
+
+	column is_weekend
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 88123456-7890-abcd-ef12-345678901243
+		sourceLineageTag: is_weekend
+		summarizeBy: none
+		sourceColumn: is_weekend
+
+	partition dim_dates = entity
+		mode: directLake
+		source
+			entityName: dim_dates
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
+

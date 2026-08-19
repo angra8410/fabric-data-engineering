@@ -1,0 +1,207 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "5020a175b4ec03d66a70",
+  "position": {
+    "x": 758.03366511429692,
+    "y": 173.30045962316987,
+    "z": 8000,
+    "height": 546.08346269747051,
+    "width": 494.96606093811823,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_purchases"
+                    }
+                  },
+                  "Property": "supplier"
+                }
+              },
+              "queryRef": "fact_purchases.supplier",
+              "nativeQueryRef": "supplier"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_purchases"
+                    }
+                  },
+                  "Property": "Total Purchases"
+                }
+              },
+              "queryRef": "fact_purchases.Total Purchases",
+              "nativeQueryRef": "Total Purchases"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_purchases"
+                    }
+                  },
+                  "Property": "Procurement Purchase Count"
+                }
+              },
+              "queryRef": "fact_purchases.Procurement Purchase Count",
+              "nativeQueryRef": "Procurement Purchase Count"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fact_purchases"
+                  }
+                },
+                "Property": "Total Purchases"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "231.5203892551923D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fact_purchases.supplier"
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {}
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Resumen de Abastecimiento y Compras por Proveedor'"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            },
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'center'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "13D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "d8f9989bfd67adbcc233",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_purchases"
+              }
+            },
+            "Property": "supplier"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "02217a21ff6e082f6910",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_purchases"
+              }
+            },
+            "Property": "Total Purchases"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "96ff701ce57894e40e0a",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_purchases"
+              }
+            },
+            "Property": "Procurement Purchase Count"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

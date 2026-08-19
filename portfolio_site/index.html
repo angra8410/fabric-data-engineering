@@ -112,7 +112,7 @@
           <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
             <div style="display: flex; align-items: center; gap: 6px;">
               <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600;">Year:</span>
-              <select id="filter-year" class="report-dropdown" style="padding: 6px 12px; font-size: 0.8rem; min-width: 90px;">
+              <select id="filter-year" class="report-dropdown" onchange="if(window.updateDashboardCharts) window.updateDashboardCharts();" style="padding: 6px 12px; font-size: 0.8rem; min-width: 90px; cursor: pointer;">
                 <option value="ALL">All Years</option>
                 <option value="2026">2026</option>
                 <option value="2025">2025</option>
@@ -120,7 +120,7 @@
             </div>
             <div style="display: flex; align-items: center; gap: 6px;">
               <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600;">Origin:</span>
-              <select id="filter-channel" class="report-dropdown" style="padding: 6px 12px; font-size: 0.8rem; min-width: 110px;">
+              <select id="filter-channel" class="report-dropdown" onchange="if(window.updateDashboardCharts) window.updateDashboardCharts();" style="padding: 6px 12px; font-size: 0.8rem; min-width: 110px; cursor: pointer;">
                 <option value="ALL">All Channels</option>
                 <option value="Tienda">Tienda POS</option>
                 <option value="Whatsapp">WhatsApp Bot</option>

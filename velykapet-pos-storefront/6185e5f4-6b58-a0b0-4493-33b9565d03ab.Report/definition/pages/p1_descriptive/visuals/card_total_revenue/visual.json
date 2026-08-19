@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.3.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
   "name": "card_total_revenue",
   "position": {
     "x": 20,
     "y": 20,
     "z": 1,
-    "width": 230,
-    "height": 110
+    "height": 110,
+    "width": 230
   },
   "visual": {
     "visualType": "card",
@@ -31,5 +31,23 @@
         }
       }
     }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "f678a63f6260c3556d66",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_sales"
+              }
+            },
+            "Property": "Total Revenue"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
   }
 }

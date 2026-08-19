@@ -520,7 +520,6 @@ document.addEventListener("DOMContentLoaded", () => {
     window.updateDashboardCharts = updateDashboardCharts;
 
     // Initial Render
-    renderCharts();
     renderTables();
     updateDashboardCharts();
   }
@@ -590,65 +589,21 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    // 5. Update Monthly Trend Chart
-    if (chartTrend) {
-      chartTrend.data.labels = filteredMonthly.map(d => d.month);
-      chartTrend.data.datasets[0].data = filteredMonthly.map(d => (d.margin));
-      chartTrend.data.datasets[1].data = filteredMonthly.map(d => +(d.rev * chMultiplier).toFixed(2));
-      chartTrend.update();
-    }
-
-    // 6. Update Donut Chart & Legend
-    if (chartDonut) {
-      const legendContainer = document.getElementById("channel-legend");
-      if (ch === "ALL") {
-        chartDonut.data.labels = DASH_DATA.channels.map(c => c.name);
-        chartDonut.data.datasets[0].data = DASH_DATA.channels.map(c => +(c.rev * (totalRev / 23.62)).toFixed(2));
-        chartDonut.data.datasets[0].backgroundColor = DASH_DATA.channels.map(c => c.color);
-        
-        if (legendContainer) {
-          legendContainer.innerHTML = DASH_DATA.channels.map(c => `
-            <div><span style="color:${c.color};">●</span> ${c.name} (<strong>${c.pct}%</strong>)</div>
-          `).join("");
-        }
-      } else {
-        const selectedChannel = DASH_DATA.channels.find(c => c.name.toLowerCase().includes(ch.toLowerCase())) || DASH_DATA.channels[0];
-        chartDonut.data.labels = [selectedChannel.name];
-        chartDonut.data.datasets[0].data = [+totalRev.toFixed(2)];
-        chartDonut.data.datasets[0].backgroundColor = [selectedChannel.color];
-
-        if (legendContainer) {
-          legendContainer.innerHTML = `
-            <div><span style="color:${selectedChannel.color};">●</span> ${selectedChannel.name} (<strong>100% Filtered</strong>: $${totalRev >= 1 ? totalRev.toFixed(2) + 'M' : (totalRev * 1000).toFixed(0) + 'K'})</div>
-          `;
-        }
-      }
-      chartDonut.update();
-    }
-
-    // 7. Update Top Products Chart
-    if (chartProducts) {
-      const prodScale = totalRev / 23.62;
-      chartProducts.data.datasets[0].data = DASH_DATA.topProducts.map(p => +(p.rev * prodScale).toFixed(2));
-      chartProducts.update();
-    }
-  }
-
-  function renderCharts() {
     if (typeof Chart === "undefined") return;
 
-    // 1. Monthly Trend Combo Chart
+    // 5. Monthly Trend Combo Chart
     const ctxTrend = document.getElementById("chart-monthly-trend");
     if (ctxTrend) {
+      if (chartTrend) chartTrend.destroy();
       chartTrend = new Chart(ctxTrend, {
         type: "bar",
         data: {
-          labels: DASH_DATA.monthly.map(d => d.month),
+          labels: filteredMonthly.map(d => d.month),
           datasets: [
             {
               type: "line",
               label: "Gross Margin %",
-              data: DASH_DATA.monthly.map(d => d.margin),
+              data: filteredMonthly.map(d => d.margin),
               borderColor: "#334155",
               borderWidth: 2.5,
               pointBackgroundColor: "#334155",
@@ -658,7 +613,7 @@ document.addEventListener("DOMContentLoaded", () => {
             {
               type: "bar",
               label: "Total Revenue ($M)",
-              data: DASH_DATA.monthly.map(d => d.rev),
+              data: filteredMonthly.map(d => +(d.rev * chMultiplier).toFixed(2)),
               backgroundColor: "#0d9488",
               borderRadius: 6,
               yAxisID: "y"
@@ -700,16 +655,47 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
 
-    // 2. Channel Donut Chart
+    // 6. Channel Donut Chart & Legend
     const ctxDonut = document.getElementById("chart-channel-donut");
     if (ctxDonut) {
+      if (chartDonut) chartDonut.destroy();
+
+      let donutLabels = [];
+      let donutData = [];
+      let donutColors = [];
+
+      const legendContainer = document.getElementById("channel-legend");
+
+      if (ch === "ALL") {
+        donutLabels = DASH_DATA.channels.map(c => c.name);
+        donutData = DASH_DATA.channels.map(c => +(c.rev * (totalRev / 23.62)).toFixed(2));
+        donutColors = DASH_DATA.channels.map(c => c.color);
+
+        if (legendContainer) {
+          legendContainer.innerHTML = DASH_DATA.channels.map(c => `
+            <div><span style="color:${c.color};">●</span> ${c.name} (<strong>${c.pct}%</strong>)</div>
+          `).join("");
+        }
+      } else {
+        const selectedChannel = DASH_DATA.channels.find(c => c.name.toLowerCase().includes(ch.toLowerCase())) || DASH_DATA.channels[0];
+        donutLabels = [selectedChannel.name];
+        donutData = [+totalRev.toFixed(2)];
+        donutColors = [selectedChannel.color];
+
+        if (legendContainer) {
+          legendContainer.innerHTML = `
+            <div><span style="color:${selectedChannel.color};">●</span> ${selectedChannel.name} (<strong>100% Filtered</strong>: $${totalRev >= 1 ? totalRev.toFixed(2) + 'M' : (totalRev * 1000).toFixed(0) + 'K'})</div>
+          `;
+        }
+      }
+
       chartDonut = new Chart(ctxDonut, {
         type: "doughnut",
         data: {
-          labels: DASH_DATA.channels.map(c => c.name),
+          labels: donutLabels,
           datasets: [{
-            data: DASH_DATA.channels.map(c => c.rev),
-            backgroundColor: DASH_DATA.channels.map(c => c.color),
+            data: donutData,
+            backgroundColor: donutColors,
             borderColor: "#0f172a",
             borderWidth: 3
           }]
@@ -722,33 +708,30 @@ document.addEventListener("DOMContentLoaded", () => {
             legend: { display: false },
             tooltip: {
               callbacks: {
-                label: ctx => ` ${ctx.label}: $${ctx.raw}M (${DASH_DATA.channels[ctx.dataIndex].pct}%)`
+                label: ctx => ` ${ctx.label}: $${ctx.raw}M`
               }
             }
           }
         }
       });
-
-      const legendContainer = document.getElementById("channel-legend");
-      if (legendContainer) {
-        legendContainer.innerHTML = DASH_DATA.channels.map(c => `
-          <div><span style="color:${c.color};">●</span> ${c.name} (<strong>${c.pct}%</strong>)</div>
-        `).join("");
-      }
     }
 
-    // 3. Top Products Ranking Chart
-    const ctxProd = document.getElementById("chart-top-products");
-    if (ctxProd) {
-      chartProducts = new Chart(ctxProd, {
+    // 7. Top Products Chart
+    const ctxProducts = document.getElementById("chart-top-products");
+    if (ctxProducts) {
+      if (chartProducts) chartProducts.destroy();
+
+      const prodScale = totalRev / 23.62;
+      chartProducts = new Chart(ctxProducts, {
         type: "bar",
         data: {
           labels: DASH_DATA.topProducts.map(p => p.name),
           datasets: [{
-            label: "Sales Revenue ($M)",
-            data: DASH_DATA.topProducts.map(p => p.rev),
-            backgroundColor: "#0d9488",
-            borderRadius: 6
+            label: "Ventas ($M)",
+            data: DASH_DATA.topProducts.map(p => +(p.rev * prodScale).toFixed(2)),
+            backgroundColor: "#334155",
+            hoverBackgroundColor: "#0d9488",
+            borderRadius: 4
           }]
         },
         options: {
@@ -756,14 +739,20 @@ document.addEventListener("DOMContentLoaded", () => {
           responsive: true,
           maintainAspectRatio: false,
           scales: {
-            x: { grid: { color: "rgba(255,255,255,0.05)" }, ticks: { color: "#9ca3af", callback: v => `$${v}M` } },
-            y: { grid: { display: false }, ticks: { color: "#e2e8f0", font: { size: 10 } } }
+            x: {
+              grid: { color: "rgba(255,255,255,0.05)" },
+              ticks: { color: "#9ca3af", callback: v => `$${v}M` }
+            },
+            y: {
+              grid: { display: false },
+              ticks: { color: "#cbd5e1", font: { size: 10 } }
+            }
           },
           plugins: {
             legend: { display: false },
             tooltip: {
               callbacks: {
-                label: ctx => ` Revenue: $${ctx.raw}M`
+                label: ctx => ` $${ctx.raw}M (${Math.round((ctx.raw / (totalRev || 1)) * 100)}% de ventas)`
               }
             }
           }
@@ -771,9 +760,9 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
 
-    // 4. OpEx Breakdown Chart
+    // 8. OpEx Breakdown Chart (Only once or on P3)
     const ctxOpex = document.getElementById("chart-opex-breakdown");
-    if (ctxOpex) {
+    if (ctxOpex && !chartOpex) {
       chartOpex = new Chart(ctxOpex, {
         type: "polarArea",
         data: {
@@ -802,21 +791,6 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         }
       });
-    }
-  }
-
-  function updateDashboardCharts() {
-    const yr = document.getElementById("filter-year").value;
-    let filteredMonthly = DASH_DATA.monthly;
-    if (yr !== "ALL") {
-      filteredMonthly = DASH_DATA.monthly.filter(d => d.year === yr);
-    }
-
-    if (chartTrend) {
-      chartTrend.data.labels = filteredMonthly.map(d => d.month);
-      chartTrend.data.datasets[0].data = filteredMonthly.map(d => d.margin);
-      chartTrend.data.datasets[1].data = filteredMonthly.map(d => d.rev);
-      chartTrend.update();
     }
   }
 

@@ -35,34 +35,34 @@ const PORTFOLIO_DATA = {
             embedUrl: "https://app.fabric.microsoft.com/reportEmbed?reportId=565d03ab-33b9-4493-a0b0-6b586185e5f4&autoAuth=true&ctid=9da4a1e2-db93-42a7-a588-957fd6292e87",
             description: "Omnichannel sales analytics, transaction volume, gross profit margins, and top product ranking across physical POS and Web.",
             metrics: [
-              { label: "Total Revenue", value: "$442.0K" },
-              { label: "Transactions", value: "4,620" },
-              { label: "Avg Margin", value: "34.8%" },
-              { label: "POS vs Web", value: "64% / 36%" }
+              { label: "Total Revenue", value: "$16.24M" },
+              { label: "Transactions", value: "412" },
+              { label: "Net Profit", value: "$2.09M" },
+              { label: "Total Purchases", value: "$14.68M" }
             ]
           },
           {
             id: "v_whatsapp_bot_prod",
             title: "💬 WhatsApp Bot Sales & Demand Funnel",
-            embedUrl: "https://app.powerbi.com/reportEmbed?reportId=whatsapp-bot-prod-embed-placeholder",
+            embedUrl: "https://app.fabric.microsoft.com/reportEmbed?reportId=565d03ab-33b9-4493-a0b0-6b586185e5f4&autoAuth=true&ctid=9da4a1e2-db93-42a7-a588-957fd6292e87",
             description: "Production WhatsApp sales bot conversion funnel, abandoned cart recovery, and product search demand backlog.",
             metrics: [
-              { label: "Active Contacts", value: "1,240" },
-              { label: "Orders Processed", value: "318" },
-              { label: "Conversion Rate", value: "25.6%" },
-              { label: "Baseline State", value: "Clean 0-Record Baseline" }
+              { label: "WhatsApp Orders", value: "0" },
+              { label: "Processed Msgs", value: "0" },
+              { label: "Funnel State", value: "Live 0-Baseline" },
+              { label: "Architecture", value: "Delta Lake Ready" }
             ]
           },
           {
             id: "v_inventory_prod",
             title: "📦 Inventory Health & Procurement Expenses",
-            embedUrl: "https://app.powerbi.com/reportEmbed?reportId=inventory-health-prod-embed-placeholder",
+            embedUrl: "https://app.fabric.microsoft.com/reportEmbed?reportId=565d03ab-33b9-4493-a0b0-6b586185e5f4&autoAuth=true&ctid=9da4a1e2-db93-42a7-a588-957fd6292e87",
             description: "Inventory valuation (Cost vs Retail), low-stock alert monitoring, supplier purchases, and operating expense breakdown.",
             metrics: [
-              { label: "Total SKU Count", value: "186" },
-              { label: "Inventory Value", value: "$128.5K" },
-              { label: "Reorder Alerts", value: "12 SKUs" },
-              { label: "Operating Cost", value: "$42.1K" }
+              { label: "Active SKUs", value: "275" },
+              { label: "Stock-Out Alerts", value: "263 SKUs" },
+              { label: "Total Expenses", value: "$691.60K" },
+              { label: "Expense Ratio", value: "4.3%" }
             ]
           }
         ],
@@ -70,12 +70,12 @@ const PORTFOLIO_DATA = {
           {
             id: "v_sales_pos_dev",
             title: "🟡 [DEV] Velykapet POS Staging & Testing",
-            embedUrl: "https://app.powerbi.com/reportEmbed?reportId=dev-sales-staging-placeholder",
+            embedUrl: "https://app.fabric.microsoft.com/reportEmbed?reportId=565d03ab-33b9-4493-a0b0-6b586185e5f4&autoAuth=true&ctid=9da4a1e2-db93-42a7-a588-957fd6292e87",
             description: "Staging dashboard connected to 'lh_velykapet_gold_dev' lakehouse for testing new margin KPI aggregations.",
             metrics: [
-              { label: "Dev Records", value: "14,250" },
-              { label: "Spark Execution", value: "28.4s" },
-              { label: "Status", value: "Staging Verified" }
+              { label: "Dev Records", value: "1,846 Units" },
+              { label: "Spark Execution", value: "4m 44s" },
+              { label: "Direct Lake Mode", value: "Active" }
             ]
           },
           {

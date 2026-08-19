@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
-  "name": "17aebf3273a903a0f15c",
+  "name": "3141d89d43259ae280dd",
   "position": {
-    "x": 192.34942996973041,
-    "y": 119.34934510170018,
-    "z": 6000,
-    "height": 44.03179722198648,
-    "width": 296.63526549548783,
-    "tabOrder": 0
+    "x": 16.207956655404377,
+    "y": 138.39101451922198,
+    "z": 3003,
+    "height": 72.3124220010349,
+    "width": 300.47058107326575,
+    "tabOrder": 3
   },
   "visual": {
     "visualType": "slicer",
@@ -20,14 +20,14 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "fact_sales"
+                      "Entity": "dim_products"
                     }
                   },
-                  "Property": "payment_method"
+                  "Property": "category"
                 }
               },
-              "queryRef": "fact_sales.payment_method",
-              "nativeQueryRef": "payment_method",
+              "queryRef": "dim_products.category",
+              "nativeQueryRef": "category",
               "active": true
             }
           ]
@@ -41,7 +41,7 @@
             "mode": {
               "expr": {
                 "Literal": {
-                  "Value": "'Basic'"
+                  "Value": "'Dropdown'"
                 }
               }
             }
@@ -50,31 +50,28 @@
       ],
       "general": [
         {
-          "properties": {
-            "orientation": {
-              "expr": {
-                "Literal": {
-                  "Value": "1D"
-                }
-              }
-            }
-          }
-        }
-      ],
-      "header": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
-                }
-              }
-            }
-          }
+          "properties": {}
         }
       ]
     },
     "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "0be78316c81e4b62f0fb",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_products"
+              }
+            },
+            "Property": "category"
+          }
+        },
+        "type": "Categorical"
+      }
+    ]
   }
 }

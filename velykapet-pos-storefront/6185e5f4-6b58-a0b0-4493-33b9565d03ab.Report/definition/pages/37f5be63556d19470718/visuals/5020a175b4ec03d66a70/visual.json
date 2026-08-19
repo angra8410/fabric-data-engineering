@@ -1,52 +1,61 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
-  "name": "ea5490b9733f96d2d05a",
+  "name": "5020a175b4ec03d66a70",
   "position": {
     "x": 758.03366511429692,
     "y": 173.30045962316987,
     "z": 8000,
-    "height": 259.32730648647004,
+    "height": 546.08346269747051,
     "width": 494.96606093811823,
     "tabOrder": 2000
   },
   "visual": {
-    "visualType": "donutChart",
+    "visualType": "tableEx",
     "query": {
       "queryState": {
-        "Category": {
+        "Values": {
           "projections": [
             {
               "field": {
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "fact_sales"
+                      "Entity": "fact_purchases"
                     }
                   },
-                  "Property": "sale_origin"
+                  "Property": "supplier"
                 }
               },
-              "queryRef": "fact_sales.sale_origin",
-              "nativeQueryRef": "sale_origin",
-              "active": true
-            }
-          ]
-        },
-        "Y": {
-          "projections": [
+              "queryRef": "fact_purchases.supplier",
+              "nativeQueryRef": "supplier"
+            },
             {
               "field": {
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "fact_sales"
+                      "Entity": "fact_purchases"
                     }
                   },
-                  "Property": "Total Revenue"
+                  "Property": "Total Purchases"
                 }
               },
-              "queryRef": "fact_sales.Total Revenue",
-              "nativeQueryRef": "Total Revenue"
+              "queryRef": "fact_purchases.Total Purchases",
+              "nativeQueryRef": "Total Purchases"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_purchases"
+                    }
+                  },
+                  "Property": "Procurement Purchase Count"
+                }
+              },
+              "queryRef": "fact_purchases.Procurement Purchase Count",
+              "nativeQueryRef": "Procurement Purchase Count"
             }
           ]
         }
@@ -58,56 +67,37 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "fact_sales"
+                    "Entity": "fact_purchases"
                   }
                 },
-                "Property": "Total Revenue"
+                "Property": "Total Purchases"
               }
             },
             "direction": "Descending"
           }
-        ],
-        "isDefaultSort": true
+        ]
       }
     },
     "objects": {
-      "legend": [
+      "columnWidth": [
         {
           "properties": {
-            "position": {
+            "value": {
               "expr": {
                 "Literal": {
-                  "Value": "'Top'"
+                  "Value": "231.5203892551923D"
                 }
               }
             }
+          },
+          "selector": {
+            "metadata": "fact_purchases.supplier"
           }
         }
       ],
-      "labels": [
+      "columnHeaders": [
         {
-          "properties": {
-            "labelStyle": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Data value, percent of total'"
-                }
-              }
-            }
-          }
-        }
-      ],
-      "slices": [
-        {
-          "properties": {
-            "startAngle": {
-              "expr": {
-                "Literal": {
-                  "Value": "60L"
-                }
-              }
-            }
-          }
+          "properties": {}
         }
       ]
     },
@@ -115,17 +105,24 @@
       "title": [
         {
           "properties": {
-            "bold": {
+            "show": {
               "expr": {
                 "Literal": {
                   "Value": "true"
                 }
               }
             },
-            "fontSize": {
+            "text": {
               "expr": {
                 "Literal": {
-                  "Value": "13D"
+                  "Value": "'Resumen de Abastecimiento y Compras por Proveedor'"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
                 }
               }
             },
@@ -147,6 +144,13 @@
                   "Value": "'center'"
                 }
               }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "13D"
+                }
+              }
             }
           }
         }
@@ -157,29 +161,43 @@
   "filterConfig": {
     "filters": [
       {
-        "name": "6b291b372823ffbcce6a",
+        "name": "d8f9989bfd67adbcc233",
         "field": {
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "fact_sales"
+                "Entity": "fact_purchases"
               }
             },
-            "Property": "sale_origin"
+            "Property": "supplier"
           }
         },
         "type": "Categorical"
       },
       {
-        "name": "7f8abaf7183907dbac9e",
+        "name": "02217a21ff6e082f6910",
         "field": {
           "Measure": {
             "Expression": {
               "SourceRef": {
-                "Entity": "fact_sales"
+                "Entity": "fact_purchases"
               }
             },
-            "Property": "Total Revenue"
+            "Property": "Total Purchases"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "96ff701ce57894e40e0a",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_purchases"
+              }
+            },
+            "Property": "Procurement Purchase Count"
           }
         },
         "type": "Advanced"

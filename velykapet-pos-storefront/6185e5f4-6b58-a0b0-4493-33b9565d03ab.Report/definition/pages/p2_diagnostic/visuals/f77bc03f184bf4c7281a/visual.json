@@ -1,10 +1,10 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
-  "name": "card_stockout_alert",
+  "name": "f77bc03f184bf4c7281a",
   "position": {
-    "x": 19.948254345113078,
+    "x": 652.05856390588372,
     "y": 38.649742793656593,
-    "z": 0,
+    "z": 2000,
     "height": 100,
     "width": 280
   },
@@ -22,20 +22,39 @@
                       "Entity": "dim_products"
                     }
                   },
-                  "Property": "Stock-Out Alert SKUs"
+                  "Property": "Inventory Retail Valuation"
                 }
               },
-              "queryRef": "dim_products.Stock-Out Alert SKUs"
+              "queryRef": "dim_products.Inventory Retail Valuation",
+              "nativeQueryRef": "Inventory Retail Valuation"
             }
           ]
         }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "dim_products"
+                  }
+                },
+                "Property": "Inventory Retail Valuation"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
       }
     }
   },
   "filterConfig": {
     "filters": [
       {
-        "name": "79943bdee822ed10e77c",
+        "name": "f1a435f8e7843458274a",
         "field": {
           "Measure": {
             "Expression": {
@@ -43,7 +62,7 @@
                 "Entity": "dim_products"
               }
             },
-            "Property": "Stock-Out Alert SKUs"
+            "Property": "Inventory Retail Valuation"
           }
         },
         "type": "Advanced"

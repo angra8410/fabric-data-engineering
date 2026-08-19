@@ -146,85 +146,83 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // 2. Multi-Report Dropdown & Embed Hub
-    const reportsList = proj.reports[currentEnv] || proj.reports.prod || [];
-    reportDropdown.innerHTML = "";
+    const reportsList = (proj.reports && (proj.reports[currentEnv] || proj.reports.prod)) || [];
+    if (reportDropdown) {
+      reportDropdown.innerHTML = "";
 
-    if (reportsList.length === 0) {
-      reportDropdown.innerHTML = `<option value="">No reports available for ${currentEnv.toUpperCase()}</option>`;
-      showFallbackIframe("No Report Configured");
-    } else {
-      reportsList.forEach(rep => {
-        const opt = document.createElement("option");
-        opt.value = rep.id;
-        opt.textContent = rep.title;
-        reportDropdown.appendChild(opt);
-      });
+      if (reportsList.length === 0) {
+        reportDropdown.innerHTML = `<option value="">No reports available for ${currentEnv.toUpperCase()}</option>`;
+        showFallbackIframe("No Report Configured");
+      } else {
+        reportsList.forEach(rep => {
+          const opt = document.createElement("option");
+          opt.value = rep.id;
+          opt.textContent = rep.title;
+          reportDropdown.appendChild(opt);
+        });
 
-      reportDropdown.onchange = (e) => {
-        const selectedRep = reportsList.find(r => r.id === e.target.value);
-        if (selectedRep) loadReportEmbed(selectedRep);
-      };
+        reportDropdown.onchange = (e) => {
+          const selectedRep = reportsList.find(r => r.id === e.target.value);
+          if (selectedRep) loadReportEmbed(selectedRep);
+        };
+      }
+    }
 
-      // Load first report by default
+    if (reportsList.length > 0) {
       loadReportEmbed(reportsList[0]);
     }
 
     // 3. Medallion Layer Visualizer
-    renderMedallionGrid(proj.medallion);
+    if (medallionContainer) renderMedallionGrid(proj.medallion);
 
     // 4. Code Inspector
-    renderCodeInspector(proj.codeSnippets);
+    if (codeTabsContainer && codeContent) renderCodeInspector(proj.codeSnippets);
 
     // 5. ALM & Optimization
-    renderALM(proj.alm);
+    if (almContainer) renderALM(proj.alm);
   }
 
   // Load Selected Power BI Report
   function loadReportEmbed(report) {
-    reportDescription.textContent = report.description || "";
-    customUrlInput.value = report.embedUrl || "";
+    if (!report) return;
+    if (reportDescription) reportDescription.textContent = report.description || "";
+    if (customUrlInput) customUrlInput.value = report.embedUrl || "";
 
     // Metrics Grid
-    reportMetricsContainer.innerHTML = "";
-    if (report.metrics && report.metrics.length > 0) {
-      report.metrics.forEach(m => {
-        const div = document.createElement("div");
-        div.className = "metric-card";
-        div.innerHTML = `
-          <div class="metric-value">${m.value}</div>
-          <div class="metric-label">${m.label}</div>
-        `;
-        reportMetricsContainer.appendChild(div);
-      });
+    if (reportMetricsContainer) {
+      reportMetricsContainer.innerHTML = "";
+      if (report.metrics && report.metrics.length > 0) {
+        report.metrics.forEach(m => {
+          const div = document.createElement("div");
+          div.className = "metric-card";
+          div.innerHTML = `
+            <div class="metric-value">${m.value}</div>
+            <div class="metric-label">${m.label}</div>
+          `;
+          reportMetricsContainer.appendChild(div);
+        });
+      }
     }
 
-    // Check if embedUrl is valid public link vs placeholder/tenant embed
-    const isPlaceholder = !report.embedUrl || report.embedUrl.includes("placeholder") || report.embedUrl.includes("YOUR_PUBLIC") || report.embedUrl.includes("ctid=");
-    if (report.embedUrl && report.embedUrl.startsWith("http") && !isPlaceholder) {
+    if (pbiIframe && report.embedUrl && report.embedUrl.startsWith("http")) {
       pbiIframe.style.display = "block";
-      iframeFallback.style.display = "none";
+      if (iframeFallback) iframeFallback.style.display = "none";
       pbiIframe.src = report.embedUrl;
-    } else {
-      showFallbackIframe(report.title, report.embedUrl);
     }
   }
 
   function showFallbackIframe(reportTitle, rawUrl) {
-    pbiIframe.style.display = "none";
-    iframeFallback.style.display = "flex";
-    iframeFallback.innerHTML = `
-      <div class="iframe-fallback-icon">📊</div>
-      <h3 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 8px;">${reportTitle}</h3>
-      <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto 16px; font-size: 0.9rem;">
-        This Power BI report container is ready for public embedding. To showcase live reports to recruiters without requiring Azure AD login, use <strong>File ➔ Embed report ➔ Publish to web (public)</strong> in Power BI.
-      </p>
-      <div style="background: rgba(99, 102, 241, 0.1); border: 1px solid var(--border-active); padding: 12px 20px; border-radius: 10px; margin-bottom: 16px; font-size: 0.85rem; color: var(--accent-blue);">
-        💡 Paste your public Power BI link (e.g. <code>https://app.powerbi.com/view?r=...</code>) into the bottom input bar to preview live.
-      </div>
-      <div style="font-size: 0.8rem; color: var(--text-dim);">
-        Environment: <strong>${currentEnv.toUpperCase()} Workspace</strong>
-      </div>
-    `;
+    if (pbiIframe) pbiIframe.style.display = "none";
+    if (iframeFallback) {
+      iframeFallback.style.display = "flex";
+      iframeFallback.innerHTML = `
+        <div class="iframe-fallback-icon">📊</div>
+        <h3 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 8px;">${reportTitle}</h3>
+        <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto 16px; font-size: 0.9rem;">
+          Direct Lake report endpoint connected to Microsoft Fabric.
+        </p>
+      `;
+    }
   }
 
   // Apply Custom Embed URL

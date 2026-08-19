@@ -275,10 +275,45 @@ def run_gold_stage():
         _round(_sum(col("current_stock") * col("cost_price")), 2).alias("total_inventory_cost_value"),
         _round(_sum(col("current_stock") * col("sale_price")), 2).alias("total_inventory_retail_value")
     ).withColumn("_calculated_at", current_timestamp())
-    df_inv.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.kpi_inventory_health")
-    print("  └── 📈 'kpi_daily_sales_trend' & 'kpi_inventory_health' generados.")
+    # 8. Masked Tables for Public Portfolio (Recruiters & Public Web)
+    print("  └── 🎭 Generando tablas Gold Masked para el Portafolio Público (Scale: 1.45x)...")
+    clean_supplier = when(upper(trim(col("supplier"))).contains("FINCA URBANA"), "NutriPet Wholesale") \
+        .when(upper(trim(col("supplier"))).contains("CDM"), "Global Pet Logistics") \
+        .when(upper(trim(col("supplier"))).contains("MANAGRO"), "AgroPet Supply Co.") \
+        .when(upper(trim(col("supplier"))).contains("AGRO MIS MASCOTAS"), "AgroVets Distribution") \
+        .when(upper(trim(col("supplier"))).contains("LAIKA"), "OmniPet Direct") \
+        .when(upper(trim(col("supplier"))).contains("ANIMAL KAN"), "Kanine Care Supply") \
+        .when(upper(trim(col("supplier"))).contains("TIENDA MAYORISTA"), "Prime Pet Wholesaler") \
+        .when(upper(trim(col("supplier"))).contains("CALABAZAPET"), "Pet Essentials Hub") \
+        .when(upper(trim(col("supplier"))).contains("FARMASCOTA"), "PharmaVet Logistics") \
+        .when(upper(trim(col("supplier"))).contains("TIERRAGRO"), "BioPet Nutrition") \
+        .when(upper(trim(col("supplier"))).contains("AMAZON"), "E-Commerce Partner") \
+        .when(upper(trim(col("supplier"))).contains("EXITO") | upper(trim(col("supplier"))).contains("OLIMPICA") | upper(trim(col("supplier"))).contains("DOLLARCITY"), "Retail Vendor Network") \
+        .otherwise("Regional Pet Partner")
 
-    print("✅ Capa Gold completada exitosamente.")
+    df_dim_prod.withColumn("supplier", clean_supplier) \
+        .withColumn("cost_price", _round(col("cost_price") * lit(1.45), 2)) \
+        .withColumn("sale_price", _round(col("sale_price") * lit(1.45), 2)) \
+        .withColumn("_masked_for_portfolio", lit(True)) \
+        .write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.dim_products_masked")
+
+    df_fact_sales.withColumn("unit_cost", _round(col("unit_cost") * lit(1.45), 2)) \
+        .withColumn("unit_price", _round(col("unit_price") * lit(1.45), 2)) \
+        .withColumn("total_item_revenue", _round(col("total_item_revenue") * lit(1.45), 2)) \
+        .withColumn("item_gross_profit", _round(col("item_gross_profit") * lit(1.45), 2)) \
+        .withColumn("_masked_for_portfolio", lit(True)) \
+        .write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.fact_sales_masked")
+
+    df_fact_exp.withColumn("expense_amount", _round(col("expense_amount") * lit(1.45), 2)) \
+        .withColumn("_masked_for_portfolio", lit(True)) \
+        .write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.fact_expenses_masked")
+
+    df_fact_pur.withColumn("supplier", clean_supplier) \
+        .withColumn("purchase_amount", _round(col("purchase_amount") * lit(1.45), 2)) \
+        .withColumn("_masked_for_portfolio", lit(True)) \
+        .write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{GOLD_SCHEMA}.fact_purchases_masked")
+
+    print("✅ Capa Gold completada exitosamente (Tablas Reales y Tablas Masked).")
 
 if __name__ == "__main__":
     print("🚀 EJECUTANDO PIPELINE MASTER MEDALLION COMPLETO EN UNA SOLA SESIÓN SPARK...")

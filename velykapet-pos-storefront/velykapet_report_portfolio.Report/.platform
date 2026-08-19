@@ -2,10 +2,10 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
   "metadata": {
     "type": "Report",
-    "displayName": "velykapet_report"
+    "displayName": "velykapet_report_portfolio"
   },
   "config": {
     "version": "2.0",
-    "logicalId": "6185e5f4-6b58-a0b0-4493-33b9565d03ab"
+    "logicalId": "b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e"
   }
 }

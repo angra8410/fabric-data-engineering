@@ -32,7 +32,7 @@ const PORTFOLIO_DATA = {
           {
             id: "v_sales_pos_prod",
             title: "📊 Velykapet Executive Revenue & Sales POS",
-            embedUrl: "https://app.fabric.microsoft.com/reportEmbed?reportId=565d03ab-33b9-4493-a0b0-6b586185e5f4&autoAuth=true&ctid=9da4a1e2-db93-42a7-a588-957fd6292e87",
+            embedUrl: "https://app.fabric.microsoft.com/reportEmbed?reportId=2712136d-9fc9-4fda-b800-ce21d8ab0c80&autoAuth=true&ctid=9da4a1e2-db93-42a7-a588-957fd6292e87",
             description: "Omnichannel sales analytics, transaction volume, gross profit margins, and top product ranking across physical POS and Web.",
             metrics: [
               { label: "Total Revenue", value: "$23.55M" },
@@ -44,7 +44,7 @@ const PORTFOLIO_DATA = {
           {
             id: "v_whatsapp_bot_prod",
             title: "💬 WhatsApp Bot Sales & Demand Funnel",
-            embedUrl: "https://app.fabric.microsoft.com/reportEmbed?reportId=565d03ab-33b9-4493-a0b0-6b586185e5f4&autoAuth=true&ctid=9da4a1e2-db93-42a7-a588-957fd6292e87",
+            embedUrl: "https://app.fabric.microsoft.com/reportEmbed?reportId=2712136d-9fc9-4fda-b800-ce21d8ab0c80&autoAuth=true&ctid=9da4a1e2-db93-42a7-a588-957fd6292e87",
             description: "Production WhatsApp sales bot conversion funnel, abandoned cart recovery, and product search demand backlog.",
             metrics: [
               { label: "WhatsApp Orders", value: "0" },
@@ -56,7 +56,7 @@ const PORTFOLIO_DATA = {
           {
             id: "v_inventory_prod",
             title: "📦 Inventory Health & Procurement Expenses",
-            embedUrl: "https://app.fabric.microsoft.com/reportEmbed?reportId=565d03ab-33b9-4493-a0b0-6b586185e5f4&autoAuth=true&ctid=9da4a1e2-db93-42a7-a588-957fd6292e87",
+            embedUrl: "https://app.fabric.microsoft.com/reportEmbed?reportId=2712136d-9fc9-4fda-b800-ce21d8ab0c80&autoAuth=true&ctid=9da4a1e2-db93-42a7-a588-957fd6292e87",
             description: "Inventory valuation (Cost vs Retail), low-stock alert monitoring, supplier purchases, and operating expense breakdown.",
             metrics: [
               { label: "Active SKUs", value: "275" },
@@ -70,7 +70,7 @@ const PORTFOLIO_DATA = {
           {
             id: "v_sales_pos_dev",
             title: "🟡 [DEV] Velykapet POS Staging & Testing",
-            embedUrl: "https://app.fabric.microsoft.com/reportEmbed?reportId=565d03ab-33b9-4493-a0b0-6b586185e5f4&autoAuth=true&ctid=9da4a1e2-db93-42a7-a588-957fd6292e87",
+            embedUrl: "https://app.fabric.microsoft.com/reportEmbed?reportId=2712136d-9fc9-4fda-b800-ce21d8ab0c80&autoAuth=true&ctid=9da4a1e2-db93-42a7-a588-957fd6292e87",
             description: "Staging dashboard connected to 'lh_velykapet_gold_dev' lakehouse for testing new margin KPI aggregations.",
             metrics: [
               { label: "Dev Records", value: "1,846 Units" },

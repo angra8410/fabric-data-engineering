@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_harmonize_supplier_prices"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "ba74ade5-f95d-9e9d-4a2d-007c4b72a376"
+  }
+}

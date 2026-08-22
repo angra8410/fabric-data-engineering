@@ -1019,5 +1019,77 @@
       ],
       "sentiment": "neutral"
     }
+  },
+  {
+    "title": "Presidente Abelardo De La Espriella firmó el decreto que reactiva oficialmente las exportaciones de carbón a Israel: “Lo que llevamos son 15 días en el gobierno” - NTN24",
+    "link": "https://news.google.com/rss/articles/CBMisAJBVV95cUxOd3MwZlJ5cm9DR3d2Z040VmpDNWtEN0tqdDhJY3JEZ29LemZmR1hRVkIyR1FwSU9fZWxTUDRGVzFyQ0FRX3cyRnoxT1NCOXh0Tk9GcDhZZXVOVWRVbEJQbTFWSVJHZXVIeVZPb2hIQ2EyLUFOQmMtbG16dFRTNENXZTBoTTJWT2xuTFdiZ3R3Z2x5N1p2dzNjeXZfd1VKT1pVeHJPeUFMLVZ0NXNWRzVNYUNfVFMxQUxBRnRrUDU1UTh3SFJyZVhxSHZPWTdzRXpmeHExN3hHaEFYREplQVpaczNfbWpDazQ5aXlYaGxhYUtCb09YbUVmSnlQQWJfVGV3U2o4SXhZM0c3WXpUTV9QVEJ5RkdEc2xrYTZXQUdFZmZQbG5IX0RhRVljejVDN0Y40gGwAkFVX3lxTFA1Zl9DeEZFbkNrV2YtWldVNHlPbnZFdV8zQVloRXprVExBYUxZQk15YkhTNzdlSm9QaU91bVFYX3JnVXcwc1hSLXpFRmNPWGR0d25VRVlsTlAwRGoyMG4zaGstWFdZUWxVZTE5dWpUU3UyZEp4MUhMTER0LXdOVDdGQTU4aEpuRkszbDR6eGRUVHFYSGVqMWdoUHpPX09RWWdtQTI4aFA5RFVOcjlwb3ZFV2tGZzItWW5XbVJYYmlCeGZIT1h0Mmt6U2RCeXNXMVYzaDhGUE1Vb0tpdEJjWDdLNzRjdlIwRGRrRVBFQVgzUVlwdlVnLWdmd3NQOVZtdzM0UmpURW1pS0Etdk5Tc210MkEzVm1VVlp6N3RWM2Z1WDdhZmNkWXNsVkRSSVBtYko?oc=5",
+    "source": "NTN24",
+    "published_at": "2026-08-22T01:37:48+00:00",
+    "fetched_query": "presidente de Colombia",
+    "summary_raw": "<a href=\"https://news.google.com/rss/articles/CBMisAJBVV95cUxOd3MwZlJ5cm9DR3d2Z040VmpDNWtEN0tqdDhJY3JEZ29LemZmR1hRVkIyR1FwSU9fZWxTUDRGVzFyQ0FRX3cyRnoxT1NCOXh0Tk9GcDhZZXVOVWRVbEJQbTFWSVJHZXVIeVZPb2hIQ2EyLUFOQmMtbG16dFRTNENXZTBoTTJWT2xuTFdiZ3R3Z2x5N1p2dzNjeXZfd1VKT1pVeHJPeUFMLVZ0NXNWRzVNYUNfVFMxQUxBRnRrUDU1UTh3SFJyZVhxSHZPWTdzRXpmeHExN3hHaEFYREplQVpaczNfbWpDazQ5aXlYaGxhYUtCb09YbUVmSnlQQWJfVGV3U2o4SXhZM0c3WXpUTV9QVEJ5RkdEc2xrYTZXQUdFZmZQbG5IX0RhRVljejVDN0Y40gGwAkFVX3lxTFA1Zl9DeEZFbkNrV2YtWldVNHlPbnZFdV8zQVloRXprVExBYUxZQk15YkhTNzdlSm9QaU91bVFYX3JnVXcwc1hSLXpFRmNPWGR0d25VRVlsTlAwRGoyMG4zaGstWFdZUWxVZTE5dWpUU3UyZEp4MUhMTER0LXdOVDdGQTU4aEpuRkszbDR6eGRUVHFYSGVqMWdoUHpPX09RWWdtQTI4aFA5RFVOcjlwb3ZFV2tGZzItWW5XbVJYYmlCeGZIT1h0Mmt6U2RCeXNXMVYzaDhGUE1Vb0tpdEJjWDdLNzRjdlIwRGRrRVBFQVgzUVlwdlVnLWdmd3NQOVZtdzM0UmpURW1pS0Etdk5Tc210MkEzVm1VVlp6N3RWM2Z1WDdhZmNkWXNsVkRSSVBtYko?oc=5\" target=\"_blank\">Presidente Abelardo De La Espriella firmó el decreto que reactiva oficialmente las exportaciones de carbón a Israel: “Lo que llevamos son 15 días en el gobierno”</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">NTN24</font>",
+    "analysis": {
+      "relevant": false,
+      "error": "Error calling model 'gemini-3.6-flash' (INVALID_ARGUMENT): 400 INVALID_ARGUMENT. {'error': {'code': 400, 'message': 'Request contains an invalid argument.', 'status': 'INVALID_ARGUMENT'}}"
+    }
+  },
+  {
+    "title": "Colombia reactivará exportaciones de carbón a Israel - Yahoo",
+    "link": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPazZGVElWZ29RYTk1ckdyY2ktaml1bEw5UXhjSzhSVnlwdjdQSzJhTlhvZ2pHTTBIZWpGZUpMVWJsa0JIX3JGZzlPR0NrUkVjRWtxeGNCa3FDVWRjcDJ0RkprWkdrOXMwcjhUb1BYQmpMMUJxZWNOTnptZGJNd2RPbXBybk0tcHRUa0dnSW1pZXE1SW1iZlFRUnBFSV9qNXpaZVNwSU1aX2g?oc=5",
+    "source": "Yahoo",
+    "published_at": "2026-08-22T03:32:00+00:00",
+    "fetched_query": "presidente de Colombia",
+    "summary_raw": "<a href=\"https://news.google.com/rss/articles/CBMiqAFBVV95cUxPazZGVElWZ29RYTk1ckdyY2ktaml1bEw5UXhjSzhSVnlwdjdQSzJhTlhvZ2pHTTBIZWpGZUpMVWJsa0JIX3JGZzlPR0NrUkVjRWtxeGNCa3FDVWRjcDJ0RkprWkdrOXMwcjhUb1BYQmpMMUJxZWNOTnptZGJNd2RPbXBybk0tcHRUa0dnSW1pZXE1SW1iZlFRUnBFSV9qNXpaZVNwSU1aX2g?oc=5\" target=\"_blank\">Colombia reactivará exportaciones de carbón a Israel</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">Yahoo</font>",
+    "analysis": {
+      "relevant": false,
+      "error": "Error calling model 'gemini-3.6-flash' (INVALID_ARGUMENT): 400 INVALID_ARGUMENT. {'error': {'code': 400, 'message': 'Request contains an invalid argument.', 'status': 'INVALID_ARGUMENT'}}"
+    }
+  },
+  {
+    "title": "El partido del presidente Abelardo de la Espriella - EL PAÍS",
+    "link": "https://news.google.com/rss/articles/CBMipAFBVV95cUxNdjJNNERCLVkwcHFTVWVlWXk1RGE3WUFJREF2U1p3XzBUUWl0QkVxbWIta2VCUEpDZWJXd1drYmNlMWFYS3I3clczWGdRcVg4bnk1LUJWVzFMVEhKbmllc255UDhoTmxiWlhURVdxczJrckhnTUdrV0tyVXE0bHNzS19BOU9ac0c1clo2WjVaNFoxV2YxV28zMHhKaXBva3BUaUxxX9IBuAFBVV95cUxOQkVYa3FwWl9yOWJTYlFDaGYyMklNVzRJbGlseEI4aEJQU1JJajQycl9TWkxMRHQ3UFh6Z195cmNRRm1paV9aaVIwN3N3VklWRTlWUUdMRTBYQm41a3ZfVzNtSDlVaW9xcU5qT2pOVThyUGtoaXdDVFYwT0pHdDRmcktpbDFmbmIxbzEyR1Q1akJKWldIMVpPVzE2UGRjZVBpRUJJdVRZUWFjLWtuQkZjTnpiNTk4NmJ1?oc=5",
+    "source": "EL PAÍS",
+    "published_at": "2026-08-06T07:00:00+00:00",
+    "fetched_query": "Colombia president",
+    "summary_raw": "<a href=\"https://news.google.com/rss/articles/CBMipAFBVV95cUxNdjJNNERCLVkwcHFTVWVlWXk1RGE3WUFJREF2U1p3XzBUUWl0QkVxbWIta2VCUEpDZWJXd1drYmNlMWFYS3I3clczWGdRcVg4bnk1LUJWVzFMVEhKbmllc255UDhoTmxiWlhURVdxczJrckhnTUdrV0tyVXE0bHNzS19BOU9ac0c1clo2WjVaNFoxV2YxV28zMHhKaXBva3BUaUxxX9IBuAFBVV95cUxOQkVYa3FwWl9yOWJTYlFDaGYyMklNVzRJbGlseEI4aEJQU1JJajQycl9TWkxMRHQ3UFh6Z195cmNRRm1paV9aaVIwN3N3VklWRTlWUUdMRTBYQm41a3ZfVzNtSDlVaW9xcU5qT2pOVThyUGtoaXdDVFYwT0pHdDRmcktpbDFmbmIxbzEyR1Q1akJKWldIMVpPVzE2UGRjZVBpRUJJdVRZUWFjLWtuQkZjTnpiNTk4NmJ1?oc=5\" target=\"_blank\">El partido del presidente Abelardo de la Espriella</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">EL PAÍS</font>",
+    "analysis": {
+      "relevant": false,
+      "error": "Error calling model 'gemini-3.6-flash' (INVALID_ARGUMENT): 400 INVALID_ARGUMENT. {'error': {'code': 400, 'message': 'Request contains an invalid argument.', 'status': 'INVALID_ARGUMENT'}}"
+    }
+  },
+  {
+    "title": "Gobierno de Abelardo De La Espriella anunció que Colombia retomará exportaciones de carbón a Israel tras la suspensión en 2024 - El Tiempo",
+    "link": "https://news.google.com/rss/articles/CBMiigJBVV95cUxOV3ZWNDk0QlUybEtMNEpJc09QNDFZOGNGSm1CemdVeGxnN0FGaDVUQkRGQ2dpNFF5SDBQQzFYbktvNm1oVGx5dk5ERVpUbjhiY0JNYXRsVzJVZ3lGRFhaaHRlSVVtT0I1MEZkVEo1TU02a3NVTzVrOTk2VDVPcWRsbzg2eGc5Z1VUdXlWc25fb3dxR2NYak83cW1taVN1Mm1mUEV2RkE3YUw3a3czSkplclNmbno5YkFib1ZzSDYyeTdiWndWVXprVjBYdzFQa1Nub2ZZZHhMSThqazU5c0pvdXcyVkpRU1BhWGNFWm1ZWGN2bGhFVE0tT05lWWt2VS1ia3RKaWdqM3dUUdIBjwJBVV95cUxQYUgyNXlVSHZacF9KMlA2c2Fqc3l4YmJIcTk5S1ViaTlYNnF3VmNLMm5QcEsyRGhERTVoVDJVRm40V0JCeVVjb2NSN3JfcHpPaWJpRi1Rb1owMk1peE0xakhFay1jTkVGbjgyakltT285N3dZTjgxdXpkTjQ2MmtBY2dGR2h0UFdsN01Td18wYTRPcm1MUzdKeFFCM3lEeVpDcEpheWgwYk9SUTM4SnpmVGYwMlVkTGk1TmJldmkxQzc0MVUwLTlwa25mWTk4T0FfZ3VTX3h0dGIxdHd2UUFQYkJMWnVkb3FTQ1R2amtXZmVod1M1Y1U1SVlya2VUdF9vYUQxVndpMHhBOEs1bG93?oc=5",
+    "source": "El Tiempo",
+    "published_at": "2026-08-22T02:23:11+00:00",
+    "fetched_query": "gobierno Colombia",
+    "summary_raw": "<a href=\"https://news.google.com/rss/articles/CBMiigJBVV95cUxOV3ZWNDk0QlUybEtMNEpJc09QNDFZOGNGSm1CemdVeGxnN0FGaDVUQkRGQ2dpNFF5SDBQQzFYbktvNm1oVGx5dk5ERVpUbjhiY0JNYXRsVzJVZ3lGRFhaaHRlSVVtT0I1MEZkVEo1TU02a3NVTzVrOTk2VDVPcWRsbzg2eGc5Z1VUdXlWc25fb3dxR2NYak83cW1taVN1Mm1mUEV2RkE3YUw3a3czSkplclNmbno5YkFib1ZzSDYyeTdiWndWVXprVjBYdzFQa1Nub2ZZZHhMSThqazU5c0pvdXcyVkpRU1BhWGNFWm1ZWGN2bGhFVE0tT05lWWt2VS1ia3RKaWdqM3dUUdIBjwJBVV95cUxQYUgyNXlVSHZacF9KMlA2c2Fqc3l4YmJIcTk5S1ViaTlYNnF3VmNLMm5QcEsyRGhERTVoVDJVRm40V0JCeVVjb2NSN3JfcHpPaWJpRi1Rb1owMk1peE0xakhFay1jTkVGbjgyakltT285N3dZTjgxdXpkTjQ2MmtBY2dGR2h0UFdsN01Td18wYTRPcm1MUzdKeFFCM3lEeVpDcEpheWgwYk9SUTM4SnpmVGYwMlVkTGk1TmJldmkxQzc0MVUwLTlwa25mWTk4T0FfZ3VTX3h0dGIxdHd2UUFQYkJMWnVkb3FTQ1R2amtXZmVod1M1Y1U1SVlya2VUdF9vYUQxVndpMHhBOEs1bG93?oc=5\" target=\"_blank\">Gobierno de Abelardo De La Espriella anunció que Colombia retomará exportaciones de carbón a Israel tras la suspensión en 2024</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">El Tiempo</font>",
+    "analysis": {
+      "relevant": false,
+      "error": "Error calling model 'gemini-3.6-flash' (INVALID_ARGUMENT): 400 INVALID_ARGUMENT. {'error': {'code': 400, 'message': 'Request contains an invalid argument.', 'status': 'INVALID_ARGUMENT'}}"
+    }
+  },
+  {
+    "title": "Gobierno de Abelardo De La Espriella fusionará oficinas de ProColombia con embajadas y consulados para reducir costos | El Colombiano - El Colombiano",
+    "link": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPUVhyTEs5ZU5RcFJfYjVMWno2ei1aSXYteWRnc2lUdnU5WWJ4X3dhN2xYbVVtb1hjNVk5UmFtb3BIS3BURWRwajdxZ2VYdmJ5ekNkeHprM0l1MGFjR3Y0NHJ0Z0NPcGd2akRLV0Z0U2FTR1AxZGNPUjlTN2VVLXBrb2pXeFpILTN2Z3VPSXdBY1dtQVBMVWxKOTYtSEx3alZ1US1wX1Rrbjdrd1FsT0V0b1h3Nl9ZMTdO0gG-AUFVX3lxTE1kVTJ6U2RpLWMyNU9INHJvajhxNXBQQkYxV01YMGRITUlpaG5RQ05RQjJkQ3NyR3VxbW5RU0o5Q1RVTndYeW9LNkhHRG5RUVpBMGpoWXBUeHZFenhwVzBwWU1ZN2ZXRURDcXhvRERRQXFaLXJJRnhUbGhxZTZ4dDNZODd6bUZmMklDdW0wOWtWSk8wM0tBelpCclZFMlJfXzU5cXhEQjdZd1M1NXlKR3N2bVJhZkQyZEQ0R0FkLVE?oc=5",
+    "source": "El Colombiano",
+    "published_at": "2026-08-22T02:24:03+00:00",
+    "fetched_query": "gobierno Colombia",
+    "summary_raw": "<a href=\"https://news.google.com/rss/articles/CBMiuAFBVV95cUxPUVhyTEs5ZU5RcFJfYjVMWno2ei1aSXYteWRnc2lUdnU5WWJ4X3dhN2xYbVVtb1hjNVk5UmFtb3BIS3BURWRwajdxZ2VYdmJ5ekNkeHprM0l1MGFjR3Y0NHJ0Z0NPcGd2akRLV0Z0U2FTR1AxZGNPUjlTN2VVLXBrb2pXeFpILTN2Z3VPSXdBY1dtQVBMVWxKOTYtSEx3alZ1US1wX1Rrbjdrd1FsT0V0b1h3Nl9ZMTdO0gG-AUFVX3lxTE1kVTJ6U2RpLWMyNU9INHJvajhxNXBQQkYxV01YMGRITUlpaG5RQ05RQjJkQ3NyR3VxbW5RU0o5Q1RVTndYeW9LNkhHRG5RUVpBMGpoWXBUeHZFenhwVzBwWU1ZN2ZXRURDcXhvRERRQXFaLXJJRnhUbGhxZTZ4dDNZODd6bUZmMklDdW0wOWtWSk8wM0tBelpCclZFMlJfXzU5cXhEQjdZd1M1NXlKR3N2bVJhZkQyZEQ0R0FkLVE?oc=5\" target=\"_blank\">Gobierno de Abelardo De La Espriella fusionará oficinas de ProColombia con embajadas y consulados para reducir costos | El Colombiano</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">El Colombiano</font>",
+    "analysis": {
+      "relevant": false,
+      "error": "Error calling model 'gemini-3.6-flash' (INVALID_ARGUMENT): 400 INVALID_ARGUMENT. {'error': {'code': 400, 'message': 'Request contains an invalid argument.', 'status': 'INVALID_ARGUMENT'}}"
+    }
+  },
+  {
+    "title": "Gobierno deroga 11 circulares del anterior Mintrabajo: ¿qué cambia para los trabajadores? - El Espectador",
+    "link": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxONXVaY0k0ZEtsSkZ6Mnpxd210ckc0c3dJY3h4R1UyOUhUUXAySm9mN3ZxRDVuS0xOUklQdVBfY3dpWDY2b3FhbWF6VXQyb2xPd3FqX1VRcDFLM2xvWTllRGVEQU9FdjREMTBXbTdPcVpJVjRpYXNBNFhmMDJ5LVZWNjJKQXZMQzI1eGxGOTFWSGRrdU5sd0tnRXJUUmc5TEx5V185TEhQQ0ZmLUk?oc=5",
+    "source": "El Espectador",
+    "published_at": "2026-08-21T16:30:00+00:00",
+    "fetched_query": "gobierno Colombia",
+    "summary_raw": "<a href=\"https://news.google.com/rss/articles/CBMiqwFBVV95cUxONXVaY0k0ZEtsSkZ6Mnpxd210ckc0c3dJY3h4R1UyOUhUUXAySm9mN3ZxRDVuS0xOUklQdVBfY3dpWDY2b3FhbWF6VXQyb2xPd3FqX1VRcDFLM2xvWTllRGVEQU9FdjREMTBXbTdPcVpJVjRpYXNBNFhmMDJ5LVZWNjJKQXZMQzI1eGxGOTFWSGRrdU5sd0tnRXJUUmc5TEx5V185TEhQQ0ZmLUk?oc=5\" target=\"_blank\">Gobierno deroga 11 circulares del anterior Mintrabajo: ¿qué cambia para los trabajadores?</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">El Espectador</font>",
+    "analysis": {
+      "relevant": false,
+      "error": "Error calling model 'gemini-3.6-flash' (INVALID_ARGUMENT): 400 INVALID_ARGUMENT. {'error': {'code': 400, 'message': 'Request contains an invalid argument.', 'status': 'INVALID_ARGUMENT'}}"
+    }
   }
 ]

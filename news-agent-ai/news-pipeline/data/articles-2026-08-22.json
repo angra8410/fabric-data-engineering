@@ -1172,5 +1172,167 @@
       "relevant": false,
       "error": "Error calling model 'gemini-3.6-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.6-flash\\nPlease retry in 6.535556423s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.6-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '6s'}]}}"
     }
+  },
+  {
+    "title": "🇨🇴 Gustavo Petro deja la presidencia de Colombia sin dejar indiferentes Cederá el poder este 7 de agosto a Abelardo de la Espriella, un presidente que hizo de su cruzada retórica contra la izquierda y el petrismo un activo de campaña. Guste más o menos - facebook.com",
+    "link": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxQZnJRSXhFM1paaGh4Vko4S2p2S0FCcGRFOHZfT0plMEptRVRPb1A2dVNORGlJOUR2eXpBQmNsNFEzRllWVnpMc0Z0Si1YZGdLLXBha3dVaDd4UTAyblpqV2JfOWpaLXlTSW5FSUplWUNEQ2JDNE1BSFptdG0zckZLc1BYMzNqT3JLd2RCVGlVbU1tU2Y2TlljbU5iWmxGQVh0UUFadzJBSnYzYVFUMUhyQWlQLVBtcjBNUHNtaDdXUW44QWcxY05GbV9uNHpHUVpJaVNnSEE5WFlYUzdPdUxDWg?oc=5",
+    "source": "facebook.com",
+    "published_at": "2026-08-04T07:00:00+00:00",
+    "fetched_query": "presidente de Colombia",
+    "summary_raw": "<a href=\"https://news.google.com/rss/articles/CBMi4AFBVV95cUxQZnJRSXhFM1paaGh4Vko4S2p2S0FCcGRFOHZfT0plMEptRVRPb1A2dVNORGlJOUR2eXpBQmNsNFEzRllWVnpMc0Z0Si1YZGdLLXBha3dVaDd4UTAyblpqV2JfOWpaLXlTSW5FSUplWUNEQ2JDNE1BSFptdG0zckZLc1BYMzNqT3JLd2RCVGlVbU1tU2Y2TlljbU5iWmxGQVh0UUFadzJBSnYzYVFUMUhyQWlQLVBtcjBNUHNtaDdXUW44QWcxY05GbV9uNHpHUVpJaVNnSEE5WFlYUzdPdUxDWg?oc=5\" target=\"_blank\">🇨🇴 Gustavo Petro deja la presidencia de Colombia sin dejar indiferentes Cederá el poder este 7 de agosto a Abelardo de la Espriella, un presidente que hizo de su cruzada retórica contra la izquierda y el petrismo un activo de campaña. Guste más o menos</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">facebook.com</font>",
+    "analysis": {
+      "relevant": true,
+      "summary_es": "El presidente Gustavo Petro finalizará su mandato en Colombia el próximo 7 de agosto. Cederá el poder a Abelardo de la Espriella, cuya campaña estuvo marcada por su fuerte discurso contra la izquierda y el petrismo.",
+      "topics": [
+        "política",
+        "transición de gobierno",
+        "elecciones"
+      ],
+      "sentiment": "neutral"
+    }
+  },
+  {
+    "title": "Presidente de Colombia pide a Trump que suspenda aranceles por el terremoto - Telemundo Chicago",
+    "link": "https://news.google.com/rss/articles/CBMixgFBVV95cUxNX2lLYlpMTnkzVWRDTlRJdG92aElsc1dmSmJvTmRCdHdJUzVBc2JBR3A4RldqZVB6dExwcE5rTnpHRDhZejYtdURyMzhocklnTXVHMTlpRzNHVzh2SW9YOHJsc2xmUTl1SXRlUFQ2WXRlcHVlZW90RDRBY2JLZVpOUWs0WFhkaHlQSXdfcklheE84d2hRRlNmZ0FuNTJzUEkzSExUaFZ3RG5BeE8xMENtTU95bDlNRXJUV2hjbU53SExhMVUyM3fSAc4BQVVfeXFMUGZYbW1wU2F5OHNTT1p3RXM4X3JIMUJLNnNZOGxNd29sZDUtZHF1VVl4azc5TXFVcGRpa1BuLW5uRktSZlVDY1ZxY19RbFNNeUgxRmZxamVPNWIyYklQR0tUbmdSTm42eGpmNW1qWHJCTTJjbGQyYjQ4ZjRrTGNPZEEySHJETmVGNUl6clFFdC15YjVMSlk3TUNYdFctTXYtNjhvV2gzNGpCcnNad29HMHJhVlFGSDJRbmg2UmFRR21tRFlXYThMSy1TbjJ6NUE?oc=5",
+    "source": "Telemundo Chicago",
+    "published_at": "2026-08-20T19:17:14+00:00",
+    "fetched_query": "Colombia president",
+    "summary_raw": "<a href=\"https://news.google.com/rss/articles/CBMixgFBVV95cUxNX2lLYlpMTnkzVWRDTlRJdG92aElsc1dmSmJvTmRCdHdJUzVBc2JBR3A4RldqZVB6dExwcE5rTnpHRDhZejYtdURyMzhocklnTXVHMTlpRzNHVzh2SW9YOHJsc2xmUTl1SXRlUFQ2WXRlcHVlZW90RDRBY2JLZVpOUWs0WFhkaHlQSXdfcklheE84d2hRRlNmZ0FuNTJzUEkzSExUaFZ3RG5BeE8xMENtTU95bDlNRXJUV2hjbU53SExhMVUyM3fSAc4BQVVfeXFMUGZYbW1wU2F5OHNTT1p3RXM4X3JIMUJLNnNZOGxNd29sZDUtZHF1VVl4azc5TXFVcGRpa1BuLW5uRktSZlVDY1ZxY19RbFNNeUgxRmZxamVPNWIyYklQR0tUbmdSTm42eGpmNW1qWHJCTTJjbGQyYjQ4ZjRrTGNPZEEySHJETmVGNUl6clFFdC15YjVMSlk3TUNYdFctTXYtNjhvV2gzNGpCcnNad29HMHJhVlFGSDJRbmg2UmFRR21tRFlXYThMSy1TbjJ6NUE?oc=5\" target=\"_blank\">Presidente de Colombia pide a Trump que suspenda aranceles por el terremoto</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">Telemundo Chicago</font>",
+    "analysis": {
+      "relevant": true,
+      "summary_es": "El presidente de Colombia solicitó formalmente al gobierno de Donald Trump la suspensión de los aranceles a productos colombianos. La petición surge a raíz de los daños e impacto económico causados por un reciente terremoto en el país.",
+      "topics": [
+        "relaciones internacionales",
+        "economía",
+        "desastres naturales"
+      ],
+      "sentiment": "neutral"
+    }
+  },
+  {
+    "title": "Exesposa de Abelardo de la Espriella, Yoly Beatriz Illidge, será superintendente delegada de Notariado | El Colombiano - El Colombiano",
+    "link": "https://news.google.com/rss/articles/CBMiygFBVV95cUxNUlhFalh3WldRdFN3Z2hzZW45c19BOUZfaU9TV1htVTZwWDVmYXBpdXVBWjkwZ3pxUEFtVlBmN2VnWXJhOUdqM3k3YVlnbWRFNmozY0FvanJCa2tkeGRiTVR1RGxtZzhOQ0t2Z2dVYmV3MHFab2d3TGxJV0RCelBRWEVLVjJ0dk1Yb2tOVWtIU3ZCVWE0QkR2TkhQQUtGT3pVbmZFQkl6cmdudEV6aXc1bVNDdy1wd2V5VmU4VndQNjFjWnViX0VZVFNR0gHPAUFVX3lxTE5GbzhHU0tWd3pvYnk1RDkxTEpCV3dZbFE0RVl4cml0WUh5eHlOcWREYndDX2JNVThEZXhMcXRtRWtwQ1BvT3ZUQURDbkNSc05oMXdaczdjWG94UTdPY3NkQXlCMUdTMl9wdURDd3RMTXFLamdDazcxQURMc20wZl9FSnNGd1MwUW9URy1xQV95YnFISUYzczFNSlAyaXNLWUNHOFZrYmRxNzhMSWdaTjNvMlBYQ2VPOEUyZEZidEZhaXg0OGY1ZktMU3h3YmozUQ?oc=5",
+    "source": "El Colombiano",
+    "published_at": "2026-08-21T14:37:34+00:00",
+    "fetched_query": "Colombia president",
+    "summary_raw": "<a href=\"https://news.google.com/rss/articles/CBMiygFBVV95cUxNUlhFalh3WldRdFN3Z2hzZW45c19BOUZfaU9TV1htVTZwWDVmYXBpdXVBWjkwZ3pxUEFtVlBmN2VnWXJhOUdqM3k3YVlnbWRFNmozY0FvanJCa2tkeGRiTVR1RGxtZzhOQ0t2Z2dVYmV3MHFab2d3TGxJV0RCelBRWEVLVjJ0dk1Yb2tOVWtIU3ZCVWE0QkR2TkhQQUtGT3pVbmZFQkl6cmdudEV6aXc1bVNDdy1wd2V5VmU4VndQNjFjWnViX0VZVFNR0gHPAUFVX3lxTE5GbzhHU0tWd3pvYnk1RDkxTEpCV3dZbFE0RVl4cml0WUh5eHlOcWREYndDX2JNVThEZXhMcXRtRWtwQ1BvT3ZUQURDbkNSc05oMXdaczdjWG94UTdPY3NkQXlCMUdTMl9wdURDd3RMTXFLamdDazcxQURMc20wZl9FSnNGd1MwUW9URy1xQV95YnFISUYzczFNSlAyaXNLWUNHOFZrYmRxNzhMSWdaTjNvMlBYQ2VPOEUyZEZidEZhaXg0OGY1ZktMU3h3YmozUQ?oc=5\" target=\"_blank\">Exesposa de Abelardo de la Espriella, Yoly Beatriz Illidge, será superintendente delegada de Notariado | El Colombiano</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">El Colombiano</font>",
+    "analysis": {
+      "relevant": true,
+      "summary_es": "Yoly Beatriz Illidge, exesposa del abogado Abelardo de la Espriella, asumirá el cargo de superintendente delegada para el Notariado. Su designación forma parte de los nombramientos en la Superintendencia de Notariado y Registro de Colombia.",
+      "topics": [
+        "gobierno",
+        "nombramientos",
+        "política"
+      ],
+      "sentiment": "neutral"
+    }
+  },
+  {
+    "title": "Gustavo Petro ya informó de su primer destino internacional como expresidente: irá a México por este motivo - Infobae",
+    "link": "https://news.google.com/rss/articles/CBMi5gFBVV95cUxOSWROTkdVREUtdFNDNDJTcjRWSEYxSF9aemxYVGFfTWtfUEJYUGtVZ0FSeEtIMVU4MGVoaWQ1dDBGM0VGVWFzb0xjcExTM2dDNUQySVNZWGE0ekY4MDNVSkhkRnA4Q3pmSGNKRGR6ci1EeURKLTh5bVBUUWpxY3dydHRJeHp2NEJ2YWpxUnNGTU5HUFdBVDhuR1hvb0hwUmJnT0NielFEanFuOGRGcjN5ck9tV2djaHFGbV80VTlPRmNha2FmY3ZkVDdTenBpV2QyZXBWMHRJbjZTZXFvOWdxOTM4azRVd9IBgAJBVV95cUxPWmRpeXk0ZndjWVVZM3hrTHo0NWhONkVwU1c5Z3hDckRUWEhUMGYtbENJX1BmSFd2UVhsVGJiUHFrQ0J0ZWUzb2lKaFBodGpHdDhxTmMwbDVIZWw2TjN2cVlYWWR4VmlHdkEyVkNfUzRmSnZ1MDF2VVRfeVh6MHVsbmFrb2g3dzRZQmRPVWU3dGQzemQ3cVV6SXk2VFN3YVFZdF90TjhjRnNQWENSV1pkRDVTeVg5VWF2d1NZM3Q4cXBESWhGdkNjZGI1aWhrRTFwZlBMWm1rU01hSjlCczRCY1lzcGREWXNlNEhWZEhOWF9EUDY5aFR4T2E3ZzNzZFc3?oc=5",
+    "source": "Infobae",
+    "published_at": "2026-08-22T00:44:00+00:00",
+    "fetched_query": "Colombia president",
+    "summary_raw": "<a href=\"https://news.google.com/rss/articles/CBMi5gFBVV95cUxOSWROTkdVREUtdFNDNDJTcjRWSEYxSF9aemxYVGFfTWtfUEJYUGtVZ0FSeEtIMVU4MGVoaWQ1dDBGM0VGVWFzb0xjcExTM2dDNUQySVNZWGE0ekY4MDNVSkhkRnA4Q3pmSGNKRGR6ci1EeURKLTh5bVBUUWpxY3dydHRJeHp2NEJ2YWpxUnNGTU5HUFdBVDhuR1hvb0hwUmJnT0NielFEanFuOGRGcjN5ck9tV2djaHFGbV80VTlPRmNha2FmY3ZkVDdTenBpV2QyZXBWMHRJbjZTZXFvOWdxOTM4azRVd9IBgAJBVV95cUxPWmRpeXk0ZndjWVVZM3hrTHo0NWhONkVwU1c5Z3hDckRUWEhUMGYtbENJX1BmSFd2UVhsVGJiUHFrQ0J0ZWUzb2lKaFBodGpHdDhxTmMwbDVIZWw2TjN2cVlYWWR4VmlHdkEyVkNfUzRmSnZ1MDF2VVRfeVh6MHVsbmFrb2g3dzRZQmRPVWU3dGQzemQ3cVV6SXk2VFN3YVFZdF90TjhjRnNQWENSV1pkRDVTeVg5VWF2d1NZM3Q4cXBESWhGdkNjZGI1aWhrRTFwZlBMWm1rU01hSjlCczRCY1lzcGREWXNlNEhWZEhOWF9EUDY5aFR4T2E3ZzNzZFc3?oc=5\" target=\"_blank\">Gustavo Petro ya informó de su primer destino internacional como expresidente: irá a México por este motivo</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">Infobae</font>",
+    "analysis": {
+      "relevant": true,
+      "summary_es": "El presidente Gustavo Petro reveló que México será su primer destino internacional una vez concluya su mandato presidencial en Colombia. El mandatario detalló los motivos de su viaje a territorio mexicano tras dejar la jefatura de Estado.",
+      "topics": [
+        "política",
+        "relaciones internacionales"
+      ],
+      "sentiment": "neutral"
+    }
+  },
+  {
+    "title": "Gobierno de Abelardo De La Espriella anunció que Colombia retomará exportaciones de carbón a Israel tras la suspensión en 2024 - El Tiempo",
+    "link": "https://news.google.com/rss/articles/CBMiggJBVV95cUxQd2FWTXdySnVIRVVKQVR2a2NHcjFNMFV3RzRKS2w2YTd4VndUWHY5djlMUlpWZHVzZzZ1dzcxNTF5aS0tWFV2d1pqTmRicXJHY2IyTjJPM1hsbllkR0dyTVFlTGk5ZUsxRzVvZmRPUTBwTFYyQnVORS1ST3lTTWFHZ0hpblp0VmdTWFF3Tks2SGJqbXNLNm9QNVdULXJsMXNlWW5pQXBqamRvNHJNWTRYNkRta2JhMFdZSUNGRVJaY2pHd3NadWNMM2xzVktjclVacVRBT1FOdUNvd2s5RFlTOXBOT0JSTHVGLVh3YUhDSk12YmZTamduVzNFQVJoZTAtMWfSAYcCQVVfeXFMTzRQcjJUcjhjbXREa0tEN0xaMVg4aFE1Uml1S2Y0LUJ2V1JKTXhfR1h3WVRtN1B0S3l3RUVuVFBwVzYxLXRxcXNYNzhIaHl4Q3NMWDBCWGl2SEFKQTlQS05BcmttSlVQZ1k2ZFpKTV9IVTRGM2lRV1lCSm1lRDVhaDZNSlRrT1REQ0xSeEg0Q3JpdlZUVFpIWHhFTk0yQ3c3WG1Ma094QWxaQmUwMUVOVFMxazhDNGpVNHRnUzE2MS1vTEJYTF93TFB2bGRyWHhOLXF6WEotcUhkZkZLODZlTHIwbmNkOG5MblhtaTNodW11ZVRQWWJRWEtCSThCOVl5cUVGNUc5Mkk?oc=5",
+    "source": "El Tiempo",
+    "published_at": "2026-08-22T02:23:11+00:00",
+    "fetched_query": "gobierno Colombia",
+    "summary_raw": "<a href=\"https://news.google.com/rss/articles/CBMiggJBVV95cUxQd2FWTXdySnVIRVVKQVR2a2NHcjFNMFV3RzRKS2w2YTd4VndUWHY5djlMUlpWZHVzZzZ1dzcxNTF5aS0tWFV2d1pqTmRicXJHY2IyTjJPM1hsbllkR0dyTVFlTGk5ZUsxRzVvZmRPUTBwTFYyQnVORS1ST3lTTWFHZ0hpblp0VmdTWFF3Tks2SGJqbXNLNm9QNVdULXJsMXNlWW5pQXBqamRvNHJNWTRYNkRta2JhMFdZSUNGRVJaY2pHd3NadWNMM2xzVktjclVacVRBT1FOdUNvd2s5RFlTOXBOT0JSTHVGLVh3YUhDSk12YmZTamduVzNFQVJoZTAtMWfSAYcCQVVfeXFMTzRQcjJUcjhjbXREa0tEN0xaMVg4aFE1Uml1S2Y0LUJ2V1JKTXhfR1h3WVRtN1B0S3l3RUVuVFBwVzYxLXRxcXNYNzhIaHl4Q3NMWDBCWGl2SEFKQTlQS05BcmttSlVQZ1k2ZFpKTV9IVTRGM2lRV1lCSm1lRDVhaDZNSlRrT1REQ0xSeEg0Q3JpdlZUVFpIWHhFTk0yQ3c3WG1Ma094QWxaQmUwMUVOVFMxazhDNGpVNHRnUzE2MS1vTEJYTF93TFB2bGRyWHhOLXF6WEotcUhkZkZLODZlTHIwbmNkOG5MblhtaTNodW11ZVRQWWJRWEtCSThCOVl5cUVGNUc5Mkk?oc=5\" target=\"_blank\">Gobierno de Abelardo De La Espriella anunció que Colombia retomará exportaciones de carbón a Israel tras la suspensión en 2024</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">El Tiempo</font>",
+    "analysis": {
+      "relevant": true,
+      "summary_es": "El gobierno anunció que Colombia reanudará las exportaciones de carbón hacia Israel. La decisión revierte la suspensión de estos envíos comerciales que se había decretado en 2024.",
+      "topics": [
+        "comercio exterior",
+        "relaciones internacionales",
+        "minería"
+      ],
+      "sentiment": "neutral"
+    }
+  },
+  {
+    "title": "El terremoto de Colombia pone a prueba la transparencia del nuevo gobierno - LatAm Journalism Review",
+    "link": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQS2NLcFBzbDVJVDV2RS14WXM0cExVSENLQ2NQd3Z1RFAycEVDWm9hc3Q0Y0xQWGlhVEs5U0lMLXFCMzB2bU1RdUNvVWM0WHVGRXo3UkN3MzFaTFB5bkNDQm8wWFI0Q3d5Tko3T3V1TE1fN0xWRk1ZdlJVQXVRak5MdHd1dG82WW1SVTZFSDdRcWF0LTlqWFVqb0ZNcWlmdzZ0RzVCUEphRF9FVVVrNE1QV2I1aUJWSUlyVlZrYnJB?oc=5",
+    "source": "LatAm Journalism Review",
+    "published_at": "2026-08-10T07:00:00+00:00",
+    "fetched_query": "gobierno Colombia",
+    "summary_raw": "<a href=\"https://news.google.com/rss/articles/CBMivgFBVV95cUxQS2NLcFBzbDVJVDV2RS14WXM0cExVSENLQ2NQd3Z1RFAycEVDWm9hc3Q0Y0xQWGlhVEs5U0lMLXFCMzB2bU1RdUNvVWM0WHVGRXo3UkN3MzFaTFB5bkNDQm8wWFI0Q3d5Tko3T3V1TE1fN0xWRk1ZdlJVQXVRak5MdHd1dG82WW1SVTZFSDdRcWF0LTlqWFVqb0ZNcWlmdzZ0RzVCUEphRF9FVVVrNE1QV2I1aUJWSUlyVlZrYnJB?oc=5\" target=\"_blank\">El terremoto de Colombia pone a prueba la transparencia del nuevo gobierno</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">LatAm Journalism Review</font>",
+    "analysis": {
+      "relevant": true,
+      "summary_es": "Un terremoto en Colombia pone a prueba la política de acceso a la información y gestión de crisis del nuevo gobierno nacional. El artículo analiza el grado de transparencia con el que la administración entrante responde ante la emergencia y se comunica con los medios. Este evento representa un importante examen para los compromisos de rendición de cuentas del ejecutivo.",
+      "topics": [
+        "política",
+        "transparencia",
+        "desastres naturales",
+        "libertad de prensa"
+      ],
+      "sentiment": "neutral"
+    }
+  },
+  {
+    "title": "Cúpula militar y propuestas de seguridad para el nuevo gobierno: Proyecto Colombia en Hora 20 - Caracol Radio",
+    "link": "https://news.google.com/rss/articles/CBMixgFBVV95cUxPMklhdGRUejQwcl9ycGZfczUxbjkyRG5zRkpONFB4YjlkWTh5RWhhQkhVdzhTcDVkQXNSODJ0Ui1pUTlWUUQ3WmVISDYwdVJZeEdrcmREVnZreGk5YXUzbk5VVWRyYWNmTllRMjlrTTRWZ0p2ZGxpM2xEMDFOdDJ0LWJ0enFtenhNVUEta0hGb3ZuaTA1U25NUVYyQWVDSUpKdW8xNWd0UkFjS0RpTy1vVzU5TVhDWVBINnZZTzZra3ZqY3BtSUHSAdoBQVVfeXFMUERsUnFtMVNHd191NGJDeWJFMzU5Um92THdIZUd6d0o0aVUzcGRaNktzZTRTazc2TjhzeVVJXzk2X0lDbk9PZXdaR2VvLTF5M2R6RURBZzNSR0daQ3FNNkhwT2U1N1kteUVrVmdxU2pQZWNMbHRQVWZVOE9KVElRX25pcXVhUFVoTklGNnN1X2gxclZyV0pjanRZSzU5Y1RQSUE2aVpNSXlDVmR6dHhwajZBRl92YkI5MGIxaERWdldSdGROUUxJbGpjeUlBUk9NYnMxS0JwMHhJT0E?oc=5",
+    "source": "Caracol Radio",
+    "published_at": "2026-08-21T02:55:26+00:00",
+    "fetched_query": "gobierno Colombia",
+    "summary_raw": "<a href=\"https://news.google.com/rss/articles/CBMixgFBVV95cUxPMklhdGRUejQwcl9ycGZfczUxbjkyRG5zRkpONFB4YjlkWTh5RWhhQkhVdzhTcDVkQXNSODJ0Ui1pUTlWUUQ3WmVISDYwdVJZeEdrcmREVnZreGk5YXUzbk5VVWRyYWNmTllRMjlrTTRWZ0p2ZGxpM2xEMDFOdDJ0LWJ0enFtenhNVUEta0hGb3ZuaTA1U25NUVYyQWVDSUpKdW8xNWd0UkFjS0RpTy1vVzU5TVhDWVBINnZZTzZra3ZqY3BtSUHSAdoBQVVfeXFMUERsUnFtMVNHd191NGJDeWJFMzU5Um92THdIZUd6d0o0aVUzcGRaNktzZTRTazc2TjhzeVVJXzk2X0lDbk9PZXdaR2VvLTF5M2R6RURBZzNSR0daQ3FNNkhwT2U1N1kteUVrVmdxU2pQZWNMbHRQVWZVOE9KVElRX25pcXVhUFVoTklGNnN1X2gxclZyV0pjanRZSzU5Y1RQSUE2aVpNSXlDVmR6dHhwajZBRl92YkI5MGIxaERWdldSdGROUUxJbGpjeUlBUk9NYnMxS0JwMHhJT0E?oc=5\" target=\"_blank\">Cúpula militar y propuestas de seguridad para el nuevo gobierno: Proyecto Colombia en Hora 20</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">Caracol Radio</font>",
+    "analysis": {
+      "relevant": true,
+      "summary_es": "El programa Hora 20 de Caracol Radio debatió sobre las propuestas de seguridad y el papel de la cúpula militar de cara al nuevo gobierno. Durante el análisis se abordaron las estrategias y retos principales para enfrentar los problemas de orden público y defensa en Colombia.",
+      "topics": [
+        "seguridad",
+        "defensa",
+        "gobierno"
+      ],
+      "sentiment": "neutral"
+    }
+  },
+  {
+    "title": "Entidades públicas fortalecieron su transformación digital: MinTIC presenta resultados del Índice de Gobierno Digital 2025 - mintic.gov.co",
+    "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTE8zQUJlakFyV2ZSRVhnU1AtOXA1T3NsZTZHRlFqVTZWc2hPek5XYW1JT21PN2Y5Uk9qeER6OXR5M1hpOGdlRHR3M3RZaHJoeVRDdExnMDA2QXRLdVIyWUhYNVVxWU8xN0drUHJF?oc=5",
+    "source": "mintic.gov.co",
+    "published_at": "2026-08-18T16:55:50+00:00",
+    "fetched_query": "gobierno Colombia",
+    "summary_raw": "<a href=\"https://news.google.com/rss/articles/CBMia0FVX3lxTE8zQUJlakFyV2ZSRVhnU1AtOXA1T3NsZTZHRlFqVTZWc2hPek5XYW1JT21PN2Y5Uk9qeER6OXR5M1hpOGdlRHR3M3RZaHJoeVRDdExnMDA2QXRLdVIyWUhYNVVxWU8xN0drUHJF?oc=5\" target=\"_blank\">Entidades públicas fortalecieron su transformación digital: MinTIC presenta resultados del Índice de Gobierno Digital 2025</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">mintic.gov.co</font>",
+    "analysis": {
+      "relevant": true,
+      "summary_es": "El Ministerio de las TIC presentó los resultados del Índice de Gobierno Digital 2025, destacando el progreso en la transformación digital de las entidades públicas. El informe evidencia el fortalecimiento de la tecnología y la mejora en la prestación de servicios estatales en Colombia.",
+      "topics": [
+        "tecnología",
+        "gobierno digital",
+        "transformación digital"
+      ],
+      "sentiment": "positivo"
+    }
+  },
+  {
+    "title": "La TV pública no es del gobierno de turno - Forbes Colombia",
+    "link": "https://news.google.com/rss/articles/CBMiigFBVV95cUxObXFaV2x2UEJtM2J6eVRGZm9ORHMtbF82NDl0TkdydXFZVDhLU01nV0ZQaF9qMFJHNlpMMmplcXJUNWdMUks5RWNzSGhTR1owdDUtV0FKcWhmWDU2Q1VIbXVMWjdKRHlpWDZ3elRRSGVZT2VZV3dvTk9rcjdEN0FfY0M3dy1ZbnU0c2c?oc=5",
+    "source": "Forbes Colombia",
+    "published_at": "2026-08-22T11:19:29+00:00",
+    "fetched_query": "gobierno Colombia",
+    "summary_raw": "<a href=\"https://news.google.com/rss/articles/CBMiigFBVV95cUxObXFaV2x2UEJtM2J6eVRGZm9ORHMtbF82NDl0TkdydXFZVDhLU01nV0ZQaF9qMFJHNlpMMmplcXJUNWdMUks5RWNzSGhTR1owdDUtV0FKcWhmWDU2Q1VIbXVMWjdKRHlpWDZ3elRRSGVZT2VZV3dvTk9rcjdEN0FfY0M3dy1ZbnU0c2c?oc=5\" target=\"_blank\">La TV pública no es del gobierno de turno</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">Forbes Colombia</font>",
+    "analysis": {
+      "relevant": true,
+      "summary_es": "El artículo analiza el rol de la televisión pública en Colombia y sostiene que debe mantener su independencia frente al gobierno de turno. Se enfatiza que los medios estatales pertenecen a la ciudadanía y deben garantizar el pluralismo informativo sin convertirse en herramientas del poder político.",
+      "topics": [
+        "medios de comunicación",
+        "gobierno",
+        "libertad de prensa"
+      ],
+      "sentiment": "neutral"
+    }
   }
 ]

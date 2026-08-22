@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "95d8bc915abe80d9b8aa",
   "position": {
     "x": 758.03366511429692,
@@ -10,7 +10,7 @@
     "tabOrder": 3000
   },
   "visual": {
-    "visualType": "clusteredColumnChart",
+    "visualType": "clusteredBarChart",
     "query": {
       "queryState": {
         "Category": {
@@ -232,7 +232,7 @@
         }
       },
       {
-        "name": "afe3a95eca014f2982bf",
+        "name": "c867cb15d473a8273a41",
         "field": {
           "Measure": {
             "Expression": {

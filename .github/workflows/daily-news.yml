@@ -20,24 +20,24 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        working-directory: news-pipeline
+        working-directory: news-agent-ai/news-pipeline
         run: pip install -r requirements.txt
 
       - name: Run pipeline (Gemini)
-        working-directory: news-pipeline
+        working-directory: news-agent-ai/news-pipeline
         env:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
         run: python run_pipeline.py gemini
 
       - name: Generate monthly report (1st of month)
-        working-directory: news-pipeline
-        if: github.event.schedule == '0 12 1 * *'
+        working-directory: news-agent-ai/news-pipeline
+        if: github.event.schedule == '0 13 1 * *'
         env:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
-        run: python monthly_report.py gemini
+        run: python report.py gemini
 
       - name: Commit data
-        working-directory: news-pipeline
+        working-directory: news-agent-ai/news-pipeline
         run: |
           git config user.name "news-bot"
           git config user.email "news-bot@users.noreply.github.com"

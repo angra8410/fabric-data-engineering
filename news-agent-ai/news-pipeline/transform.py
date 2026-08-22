@@ -28,11 +28,7 @@ def _get_llm(provider: str = "ollama"):
     if provider == "gemini":
         from langchain_google_genai import ChatGoogleGenerativeAI
 
-        return ChatGoogleGenerativeAI(
-            model="gemini-3.6-flash",
-            temperature=0,
-            model_kwargs={"thinking_config": {"thinking_budget": 0}},
-        )
+        return ChatGoogleGenerativeAI(model="gemini-3.6-flash")
     from langchain_ollama import ChatOllama
 
     return ChatOllama(

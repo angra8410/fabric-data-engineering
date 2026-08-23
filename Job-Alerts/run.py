@@ -82,6 +82,64 @@ def _clean(text: str, limit: int = 600) -> str:
     return text[:limit]
 
 
+def _fetch_json(url: str):
+    import requests
+
+    r = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=30)
+    r.raise_for_status()
+    return r.json()
+
+
+def fetch_remotive() -> list[dict]:
+    """Remotive JSON API (their RSS feed is dead)."""
+    jobs = []
+    try:
+        for j in _fetch_json("https://remotive.com/api/remote-jobs").get("jobs", []):
+            pub = j["publication_date"]
+            published = (
+                datetime.fromisoformat(pub.replace("Z", "+00:00"))
+                if isinstance(pub, str)
+                else datetime.fromtimestamp(int(pub), tz=timezone.utc)
+            )
+            jobs.append(
+                {
+                    "id": j["url"],
+                    "title": j.get("title", "").strip(),
+                    "company": j.get("company_name", "").strip() or "Unknown",
+                    "link": j["url"],
+                    "summary": _clean(j.get("description", "")),
+                    "published": published,
+                    "source": "Remotive",
+                }
+            )
+    except Exception as exc:
+        print(f"Remotive API failed: {exc}")
+    return jobs
+
+
+def fetch_remoteok() -> list[dict]:
+    """RemoteOK JSON API (their RSS feed is dead). First element is metadata."""
+    jobs = []
+    try:
+        for j in _fetch_json("https://remoteok.com/api")[1:]:
+            jobs.append(
+                {
+                    "id": j.get("url") or j.get("apply_url", ""),
+                    "title": (j.get("position") or "").strip(),
+                    "company": (j.get("company") or "").strip() or "Unknown",
+                    "link": j.get("url") or j.get("apply_url", ""),
+                    "summary": _clean(j.get("description", "")),
+                    "published": datetime.fromtimestamp(
+                        int(j.get("epoch", 0)), tz=timezone.utc
+                    ),
+                    "source": "Remote OK",
+                }
+            )
+    except Exception as exc:
+        print(f"RemoteOK API failed: {exc}")
+    return jobs
+
+
 def keyword_filter(job: dict) -> bool:
     text = f"{job['title']} {job['summary']}".lower()
     if any(k.lower() in text for k in EXCLUDE):
@@ -94,8 +152,11 @@ def keyword_filter(job: dict) -> bool:
 def age_filter(job: dict) -> bool:
     if not job["published"]:
         return True  # keep unknown-age postings
+    published = job["published"]
+    if published.tzinfo is None:
+        published = published.replace(tzinfo=timezone.utc)
     cutoff = datetime.now(timezone.utc) - timedelta(days=MAX_AGE_DAYS)
-    return job["published"] >= cutoff
+    return published >= cutoff
 
 
 def score_jobs(jobs: list[dict]) -> list[dict]:
@@ -138,7 +199,15 @@ def build_digest(jobs: list[dict]) -> str:
 def main() -> None:
     print("Fetching feeds...")
     jobs = fetch_jobs()
-    print(f"Fetched {len(jobs)} postings")
+    print(f"Fetched {len(jobs)} postings from RSS")
+
+    api_jobs = fetch_remotive() + fetch_remoteok()
+    print(f"Fetched {len(api_jobs)} postings from JSON APIs")
+    jobs += api_jobs
+
+    api_jobs = fetch_remotive() + fetch_remoteok()
+    print(f"Fetched {len(api_jobs)} postings from JSON APIs")
+    jobs += api_jobs
 
     seen = load_seen()
     fresh = [j for j in jobs if j["id"] and j["id"] not in seen]

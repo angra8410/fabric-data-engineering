@@ -1,19 +1,13 @@
 """Configuration for the job-boards agent. Edit this to customize."""
 
 # RSS feeds of job boards (free, no API keys needed)
+# NOTE: RemoteOK and Remotive RSS feeds are dead (410/404) — those boards are
+# fetched via their JSON APIs in run.py (fetch_remoteok / fetch_remotive).
 FEEDS = [
-    # Remote OK
-    "https://remoteok.com/remote-dev-jobs.rss",
     # WeWorkRemotely (programming category)
     "https://weworkremotely.com/categories/remote-programming-jobs.rss",
     # Hacker News "Who is hiring" companion feed
     "https://hnrss.org/jobs",
-    # Remotive
-    "https://remotive.com/feed/remote/software-development",
-    # Remotive — Data / Analytics roles
-    "https://remotive.com/feed/remote/data",
-    # Remote OK — all jobs (catches analyst/BI titles)
-    "https://remoteok.com/remote-jobs.rss",
 ]
 
 # Keywords that must appear in title or summary (case-insensitive).

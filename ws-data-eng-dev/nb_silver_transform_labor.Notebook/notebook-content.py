@@ -17,6 +17,9 @@
 # META         },
 # META         {
 # META           "id": "e51cb337-26fe-4a52-8011-3fc4abb74ebb"
+# META         },
+# META         {
+# META           "id": "db58c705-bf28-4bc1-bd0f-b7527e9d3d9d"
 # META         }
 # META       ]
 # META     }
@@ -11154,6 +11157,95 @@ df_final.groupBy("year").agg(
 # META }
 
 # CELL ********************
+
+# =====================================================================
+# 🟡 CONSTRUCCIÓN COMPLETA DE LA CAPA GOLD (EN nb_silver_transform_labor)
+# =====================================================================
+from pyspark.sql import functions as F
+from pyspark.sql.types import StructType, StructField, StringType
+
+print("⚡ Construyendo las tablas de la Capa Gold...")
+
+silver_table = "Tables/dbo/silver_dane_labor_market"
+df_silver = spark.read.format("delta").load(silver_table)
+
+# 1. Dimensión Oficial DIVIPOLA (Catálogo DANE)
+divipola_data = [
+    ("05", "Antioquia"), ("08", "Atlántico"), ("11", "Bogotá, D.C."), ("13", "Bolívar"),
+    ("15", "Boyacá"), ("17", "Caldas"), ("18", "Caquetá"), ("19", "Cauca"),
+    ("20", "Cesar"), ("23", "Córdoba"), ("25", "Cundinamarca"), ("27", "Chocó"),
+    ("41", "Huila"), ("44", "La Guajira"), ("47", "Magdalena"), ("50", "Meta"),
+    ("52", "Nariño"), ("54", "Norte de Santander"), ("63", "Quindío"), ("66", "Risaralda"),
+    ("68", "Santander"), ("70", "Sucre"), ("73", "Tolima"), ("76", "Valle del Cauca"),
+    ("81", "Arauca"), ("85", "Casanare"), ("86", "Putumayo"), ("88", "Archipiélago de San Andrés"),
+    ("91", "Amazonas"), ("94", "Guainía"), ("95", "Guaviare"), ("97", "Vaupés"), ("99", "Vichada")
+]
+
+schema_div = StructType([
+    StructField("codigo_departamento", StringType(), False),
+    StructField("nombre_departamento", StringType(), False)
+])
+
+dim_departamentos = spark.createDataFrame(divipola_data, schema=schema_div)
+dim_departamentos.write.format("delta").mode("overwrite").save("Tables/dbo/gold_dim_departamentos")
+print("  ✅ 1. 'gold_dim_departamentos' creada exitosamente!")
+
+# 2. Fact Departamental (Con nombres oficiales DIVIPOLA)
+gold_dpto = df_silver.filter((F.col("codigo_departamento") != "00") & (F.col("codigo_departamento").isNotNull())) \
+    .groupBy("year", "codigo_departamento").agg(
+        F.countDistinct("month").alias("meses_reportados"),
+        F.round(F.sum(F.when(F.col("status") == "ocupado", F.col("total_weight")).otherwise(0)) / F.countDistinct("month"), 0).alias("ocupados_promedio"),
+        F.round(F.sum(F.when(F.col("status") == "desocupado", F.col("total_weight")).otherwise(0)) / F.countDistinct("month"), 0).alias("desocupados_promedio")
+    ).withColumn(
+        "fuerza_laboral", F.col("ocupados_promedio") + F.col("desocupados_promedio")
+    ).withColumn(
+        "tasa_desempleo_pct", F.round((F.col("desocupados_promedio") / F.col("fuerza_laboral")) * 100, 2)
+    ).join(
+        dim_departamentos, on="codigo_departamento", how="left"
+    ).select(
+        "year",
+        "codigo_departamento",
+        F.coalesce(F.col("nombre_departamento"), F.concat(F.lit("Depto "), F.col("codigo_departamento"))).alias("departamento"),
+        "ocupados_promedio",
+        "desocupados_promedio",
+        "fuerza_laboral",
+        "tasa_desempleo_pct"
+    ).orderBy("year", "codigo_departamento")
+
+gold_dpto.write.format("delta").mode("overwrite").save("Tables/dbo/gold_fact_labor_by_department")
+print("  ✅ 2. 'gold_fact_labor_by_department' creada exitosamente!")
+
+# 3. Fact Mensual Nacional (Series de Tiempo 2004 - 2026)
+gold_monthly = df_silver.groupBy("year", "month").agg(
+    F.round(F.sum(F.when(F.col("status") == "ocupado", F.col("total_weight")).otherwise(0)), 0).alias("ocupados"),
+    F.round(F.sum(F.when(F.col("status") == "desocupado", F.col("total_weight")).otherwise(0)), 0).alias("desocupados")
+).withColumn(
+    "fuerza_laboral", F.col("ocupados") + F.col("desocupados")
+).withColumn(
+    "tasa_desempleo_pct", F.round((F.col("desocupados") / F.col("fuerza_laboral")) * 100, 2)
+).withColumn(
+    "fecha", F.to_date(F.concat_ws("-", F.col("year"), F.lpad(F.col("month"), 2, "0"), F.lit("01")))
+).orderBy("year", "month")
+
+gold_monthly.write.format("delta").mode("overwrite").save("Tables/dbo/gold_fact_monthly_labor")
+print("  ✅ 3. 'gold_fact_monthly_labor' creada exitosamente!")
+
+# 4. Fact Urbano vs Rural
+gold_geo = df_silver.groupBy("year", "geo_source").agg(
+    F.countDistinct("month").alias("meses"),
+    F.round(F.sum(F.when(F.col("status") == "ocupado", F.col("total_weight")).otherwise(0)) / F.countDistinct("month"), 0).alias("ocupados"),
+    F.round(F.sum(F.when(F.col("status") == "desocupado", F.col("total_weight")).otherwise(0)) / F.countDistinct("month"), 0).alias("desocupados")
+).withColumn("fuerza_laboral", F.col("ocupados") + F.col("desocupados")) \
+ .withColumn("tasa_desempleo_pct", F.round((F.col("desocupados") / F.col("fuerza_laboral")) * 100, 2))
+
+gold_geo.write.format("delta").mode("overwrite").save("Tables/dbo/gold_fact_urban_rural_labor")
+print("  ✅ 4. 'gold_fact_urban_rural_labor' creada exitosamente!")
+
+print("\n🏆 ¡Toda la Capa Gold (4 tablas analíticas) construida y lista en Delta Lake!")
+
+# Muestra del Top Departamentos en 2025
+print("\n📊 Top Departamentos en 2025:")
+gold_dpto.filter(F.col("year") == 2025).orderBy(F.desc("ocupados_promedio")).show(10, truncate=False)
 
 
 # METADATA ********************

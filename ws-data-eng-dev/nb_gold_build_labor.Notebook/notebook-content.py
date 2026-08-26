@@ -8,15 +8,18 @@
 # META   },
 # META   "dependencies": {
 # META     "lakehouse": {
-# META       "default_lakehouse": "30f68a08-542e-4fa1-95a1-bf9d5c7f2de4",
-# META       "default_lakehouse_name": "dane_gold_lh",
-# META       "default_lakehouse_workspace_id": "f1ec50d7-8db7-405b-b670-b3a23240da2f",
+# META       "default_lakehouse": "e51cb337-26fe-4a52-8011-3fc4abb74ebb",
+# META       "default_lakehouse_name": "dane_silver_lh",
+# META       "default_lakehouse_workspace_id": "13ed579f-4a14-414c-8f38-f62e44db2afc",
 # META       "known_lakehouses": [
 # META         {
-# META           "id": "30f68a08-542e-4fa1-95a1-bf9d5c7f2de4"
+# META           "id": "db58c705-bf28-4bc1-bd0f-b7527e9d3d9d"
 # META         },
 # META         {
-# META           "id": "b08baa46-ed61-4e0b-bd16-6a73991ec1ba"
+# META           "id": "e51cb337-26fe-4a52-8011-3fc4abb74ebb"
+# META         },
+# META         {
+# META           "id": "4a3cc7ca-f052-4b3e-b7ff-591fedda430a"
 # META         }
 # META       ]
 # META     }
@@ -169,7 +172,9 @@ df_nac_final.groupBy("year").agg(
 
 # META {
 # META   "language": "python",
-# META   "language_group": "synapse_pyspark"
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
 # META }
 
 # CELL ********************
@@ -262,7 +267,9 @@ spark.sql(f"""
 
 # META {
 # META   "language": "python",
-# META   "language_group": "synapse_pyspark"
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
 # META }
 
 # CELL ********************
@@ -355,7 +362,9 @@ spark.sql(f"""
 
 # META {
 # META   "language": "python",
-# META   "language_group": "synapse_pyspark"
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
 # META }
 
 # CELL ********************
@@ -372,7 +381,9 @@ spark.sql("""
 
 # META {
 # META   "language": "python",
-# META   "language_group": "synapse_pyspark"
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
 # META }
 
 # CELL ********************
@@ -492,7 +503,9 @@ df_nac_final.groupBy("year").agg(
 
 # META {
 # META   "language": "python",
-# META   "language_group": "synapse_pyspark"
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
 # META }
 
 # MARKDOWN ********************
@@ -546,7 +559,9 @@ print("✅ 'dim_departamentos' actualizada con éxito en la capa GOLD incluyendo
 
 # META {
 # META   "language": "python",
-# META   "language_group": "synapse_pyspark"
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
 # META }
 
 # MARKDOWN ********************
@@ -686,7 +701,9 @@ else:
 
 # META {
 # META   "language": "python",
-# META   "language_group": "synapse_pyspark"
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
 # META }
 
 # MARKDOWN ********************
@@ -730,7 +747,9 @@ print(f"🏁 ¡Hecho! Ahora dale 'Refresh' a tu Lakehouse. Verás la tabla: {out
 
 # META {
 # META   "language": "python",
-# META   "language_group": "synapse_pyspark"
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
 # META }
 
 # CELL ********************
@@ -821,7 +840,9 @@ spark.sql(f"""
 
 # META {
 # META   "language": "python",
-# META   "language_group": "synapse_pyspark"
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
 # META }
 
 # CELL ********************
@@ -892,7 +913,9 @@ print("\n🏁 OPERACIÓN CONCLUIDA. Dale 'Refresh' a tu Power BI para sanar el r
 
 # META {
 # META   "language": "python",
-# META   "language_group": "synapse_pyspark"
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
 # META }
 
 # MARKDOWN ********************
@@ -978,7 +1001,9 @@ else:
 
 # META {
 # META   "language": "python",
-# META   "language_group": "synapse_pyspark"
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
 # META }
 
 # MARKDOWN ********************
@@ -1062,7 +1087,9 @@ else:
 
 # META {
 # META   "language": "python",
-# META   "language_group": "synapse_pyspark"
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
 # META }
 
 # CELL ********************
@@ -1188,7 +1215,9 @@ print("✅ DIM_DATE actualizada. El esquema viejo fue reemplazado por el nuevo c
 
 # META {
 # META   "language": "python",
-# META   "language_group": "synapse_pyspark"
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
 # META }
 
 # CELL ********************
@@ -1219,7 +1248,9 @@ df_final_con_fotos.groupBy("presidente").agg(F.min("year"), F.max("year")).show(
 
 # META {
 # META   "language": "python",
-# META   "language_group": "synapse_pyspark"
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
 # META }
 
 # CELL ********************
@@ -1231,7 +1262,9 @@ df_final_con_fotos.groupBy("presidente").agg(F.min("year"), F.max("year")).show(
 
 # META {
 # META   "language": "sparksql",
-# META   "language_group": "synapse_pyspark"
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
 # META }
 
 # MARKDOWN ********************
@@ -1363,6 +1396,563 @@ if dfs_regional:
 # 3. Vista rápida de validación para el 2021 nacional
 print("\n👀 Verificación de Control del Año de Transición (2021 Nacional):")
 spark.sql(f"SELECT year, month, presidente, tasa_desempleo FROM {fact_nacional_table} WHERE year = 2021 ORDER BY month").show()
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
+# META }
+
+# CELL ********************
+
+# =====================================================================
+# 🥇 GOLD LAYER: FACT TABLE (gold_dane_labor_indicators)
+# =====================================================================
+from pyspark.sql import functions as F
+
+print("🚀 Construyendo Capa Gold en dane_gold_lh...")
+
+# 1. Leer la tabla Silver desde dane_bronze_lh (Tables/dbo/silver_dane_labor_market)
+silver_path = "abfss://13ed579f-4a14-414c-8f38-f62e44db2afc@onelake.dfs.fabric.microsoft.com/4a3cc7ca-f052-4b3e-b7ff-591fedda430a/Tables/dbo/silver_dane_labor_market"
+
+df_silver = spark.read.format("delta").load(silver_path)
+
+print(f"✅ Tabla Silver cargada: {df_silver.count():,} registros.")
+
+# 2. Agregar métricas por Año, Mes y Departamento
+df_gold = df_silver.groupBy(
+    "year",
+    "month",
+    "year_month",
+    "periodo_fecha",
+    "codigo_departamento",
+    "departamento_nombre"
+).agg(
+    F.round(F.sum(F.when(F.col("status") == "ocupado", F.col("total_weight")).otherwise(0)), 0).alias("poblacion_ocupada"),
+    F.round(F.sum(F.when(F.col("status") == "desocupado", F.col("total_weight")).otherwise(0)), 0).alias("poblacion_desocupada"),
+    F.count("*").alias("total_encuestas_muestra")
+).withColumn(
+    "fuerza_laboral_total",
+    F.col("poblacion_ocupada") + F.col("poblacion_desocupada")
+).withColumn(
+    "tasa_desempleo_pct",
+    F.when(
+        F.col("fuerza_laboral_total") > 0,
+        F.round((F.col("poblacion_desocupada") / F.col("fuerza_laboral_total")) * 100, 2)
+    ).otherwise(0.0)
+)
+
+# 3. Guardar en el Lakehouse Gold (dane_gold_lh)
+gold_table = "gold_dane_labor_indicators"
+
+df_gold.write \
+    .format("delta") \
+    .mode("overwrite") \
+    .option("overwriteSchema", "true") \
+    .partitionBy("year") \
+    .saveAsTable(gold_table)
+
+print(f"✅ ¡Capa Gold creada con éxito en la tabla: {gold_table}!")
+
+# 4. Consulta de Verificación
+print("\n📊 Muestra de Indicadores Departamentales (Top Desempleo 2024):")
+spark.sql(f"""
+    SELECT 
+        year,
+        year_month,
+        departamento_nombre,
+        poblacion_ocupada,
+        poblacion_desocupada,
+        fuerza_laboral_total,
+        tasa_desempleo_pct
+    FROM {gold_table}
+    WHERE year = 2024 AND month = 6
+    ORDER BY tasa_desempleo_pct DESC
+    LIMIT 10
+""").show(truncate=False)
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": false,
+# META   "editable": true
+# META }
+
+# CELL ********************
+
+# =====================================================================
+# 📅 GOLD LAYER: MASTER DATE DIMENSION (dim_date) 2004 - 2030
+# =====================================================================
+from pyspark.sql import functions as F
+from pyspark.sql.types import *
+
+print("🚀 Generando Dimensión Fecha (dim_date)...")
+
+# 1. Rango temporal: Desde el inicio de la serie DANE (2004) hasta 2030
+start_date = "2004-01-01"
+end_date = "2030-12-31"
+
+df_range = spark.createDataFrame([(start_date, end_date)], ["start", "end"])
+
+# 2. Secuencia diaria distribuida
+df_dates = df_range.select(
+    F.explode(
+        F.sequence(F.to_date("start"), F.to_date("end"), F.expr("interval 1 day"))
+    ).alias("date")
+)
+
+# 3. Enriquecimiento Dimensional y Calendario Colombiano
+dim_date = df_dates \
+    .withColumn("date_key", F.date_format("date", "yyyyMMdd").cast("int")) \
+    .withColumn("date", F.col("date")) \
+    .withColumn("year", F.year("date")) \
+    .withColumn("quarter", F.quarter("date")) \
+    .withColumn("year_quarter", F.concat(F.year("date"), F.lit("-Q"), F.quarter("date"))) \
+    .withColumn("semester", F.when(F.month("date") <= 6, 1).otherwise(2)) \
+    .withColumn("year_semester", F.concat(F.year("date"), F.lit("-S"), F.when(F.month("date") <= 6, 1).otherwise(2))) \
+    .withColumn("month", F.month("date")) \
+    .withColumn("year_month", F.date_format("date", "yyyy-MM")) \
+    .withColumn("day", F.dayofmonth("date")) \
+    .withColumn("day_of_week", F.dayofweek("date")) \
+    .withColumn("week_of_year", F.weekofyear("date")) \
+    .withColumn("is_weekend", F.when(F.col("day_of_week").isin(1, 7), True).otherwise(False)) \
+    .withColumn(
+        "month_name_es",
+        F.when(F.month("date") == 1, "Enero")
+         .when(F.month("date") == 2, "Febrero")
+         .when(F.month("date") == 3, "Marzo")
+         .when(F.month("date") == 4, "Abril")
+         .when(F.month("date") == 5, "Mayo")
+         .when(F.month("date") == 6, "Junio")
+         .when(F.month("date") == 7, "Julio")
+         .when(F.month("date") == 8, "Agosto")
+         .when(F.month("date") == 9, "Septiembre")
+         .when(F.month("date") == 10, "Octubre")
+         .when(F.month("date") == 11, "Noviembre")
+         .otherwise("Diciembre")
+    ) \
+    .withColumn(
+        "month_short_es",
+        F.when(F.month("date") == 1, "Ene")
+         .when(F.month("date") == 2, "Feb")
+         .when(F.month("date") == 3, "Mar")
+         .when(F.month("date") == 4, "Abr")
+         .when(F.month("date") == 5, "May")
+         .when(F.month("date") == 6, "Jun")
+         .when(F.month("date") == 7, "Jul")
+         .when(F.month("date") == 8, "Ago")
+         .when(F.month("date") == 9, "Sep")
+         .when(F.month("date") == 10, "Oct")
+         .when(F.month("date") == 11, "Nov")
+         .otherwise("Dic")
+    ) \
+    .withColumn(
+        "day_name_es",
+        F.when(F.col("day_of_week") == 1, "Domingo")
+         .when(F.col("day_of_week") == 2, "Lunes")
+         .when(F.col("day_of_week") == 3, "Martes")
+         .when(F.col("day_of_week") == 4, "Miércoles")
+         .when(F.col("day_of_week") == 5, "Jueves")
+         .when(F.col("day_of_week") == 6, "Viernes")
+         .otherwise("Sábado")
+    )
+
+# 4. Guardar en Delta Table
+target_dim_date = "dim_date"
+
+dim_date.write \
+    .mode("overwrite") \
+    .format("delta") \
+    .option("overwriteSchema", "true") \
+    .saveAsTable(target_dim_date)
+
+print(f"✅ ¡DIM_DATE creada con éxito en la tabla '{target_dim_date}' ({dim_date.count():,} días)! 📅")
+
+# 5. Vista Previa
+print("\n📊 Muestra de dim_date:")
+spark.table(target_dim_date).filter(F.col("year") == 2026).show(5, truncate=False)
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# =====================================================================
+# 🥇 GUARDAR DIRECTAMENTE EN dane_gold_lh.dbo.gold_dane_labor_indicators
+# =====================================================================
+from pyspark.sql import functions as F
+
+print("🚀 Guardando tabla directamente en dane_gold_lh.dbo...")
+
+# 1. Leer Silver
+silver_path = "abfss://13ed579f-4a14-414c-8f38-f62e44db2afc@onelake.dfs.fabric.microsoft.com/4a3cc7ca-f052-4b3e-b7ff-591fedda430a/Tables/dbo/silver_dane_labor_market"
+df_silver = spark.read.format("delta").load(silver_path)
+
+# 2. Agregar métricas por Año, Mes y Departamento
+df_gold = df_silver.groupBy(
+    "year",
+    "month",
+    "year_month",
+    "periodo_fecha",
+    "codigo_departamento",
+    "departamento_nombre"
+).agg(
+    F.round(F.sum(F.when(F.col("status") == "ocupado", F.col("total_weight")).otherwise(0)), 0).alias("poblacion_ocupada"),
+    F.round(F.sum(F.when(F.col("status") == "desocupado", F.col("total_weight")).otherwise(0)), 0).alias("poblacion_desocupada"),
+    F.count("*").alias("total_encuestas_muestra")
+).withColumn(
+    "fuerza_laboral_total",
+    F.col("poblacion_ocupada") + F.col("poblacion_desocupada")
+).withColumn(
+    "tasa_desempleo_pct",
+    F.when(
+        F.col("fuerza_laboral_total") > 0,
+        F.round((F.col("poblacion_desocupada") / F.col("fuerza_laboral_total")) * 100, 2)
+    ).otherwise(0.0)
+)
+
+# 3. Ruta exacta en dane_gold_lh (ID: db58c705-bf28-4bc1-bd0f-b7527e9d3d9d)
+gold_abfs_path = "abfss://13ed579f-4a14-414c-8f38-f62e44db2afc@onelake.dfs.fabric.microsoft.com/db58c705-bf28-4bc1-bd0f-b7527e9d3d9d/Tables/dbo/gold_dane_labor_indicators"
+
+# Guardar archivos Delta físicos
+df_gold.write \
+    .format("delta") \
+    .mode("overwrite") \
+    .option("overwriteSchema", "true") \
+    .partitionBy("year") \
+    .save(gold_abfs_path)
+
+# 4. Registrar la tabla en el Metastore de dane_gold_lh
+spark.sql(f"""
+    CREATE TABLE IF NOT EXISTS `dane_gold_lh`.`dbo`.`gold_dane_labor_indicators`
+    USING DELTA
+    LOCATION '{gold_abfs_path}'
+""")
+
+print("✅ ¡Tabla 'gold_dane_labor_indicators' registrada físicamente en dane_gold_lh.dbo!")
+
+# 5. Comprobar catálogo de tablas
+spark.sql("SHOW TABLES IN dane_gold_lh.dbo").show(truncate=False)
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# =====================================================================
+# 🔍 AUDITORÍA DE CALIDAD: TOTALES NACIONALES POR AÑO (2004 - 2026)
+# =====================================================================
+print("📊 RESUMEN NACIONAL: Ocupados, Desocupados y Tasa de Desempleo:")
+
+spark.sql("""
+    SELECT 
+        year,
+        ROUND(SUM(poblacion_ocupada), 0) as total_ocupados,
+        ROUND(SUM(poblacion_desocupada), 0) as total_desocupados,
+        ROUND(SUM(fuerza_laboral_total), 0) as total_fuerza_laboral,
+        ROUND((SUM(poblacion_desocupada) / NULLIF(SUM(fuerza_laboral_total), 0)) * 100, 2) as tasa_desempleo_nacional_pct
+    FROM `dane_gold_lh`.`dbo`.`gold_dane_labor_indicators`
+    GROUP BY year
+    ORDER BY year
+""").show(30, truncate=False)
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# Ver desglose departamental en 2019 (Año previo a la pandemia / base confiable)
+print("📊 Indicadores por Departamento en 2019:")
+spark.sql("""
+    SELECT 
+        codigo_departamento,
+        departamento_nombre,
+        ROUND(SUM(poblacion_ocupada), 0) as total_ocupados,
+        ROUND(SUM(poblacion_desocupada), 0) as total_desocupados,
+        ROUND((SUM(poblacion_desocupada) / NULLIF(SUM(fuerza_laboral_total), 0)) * 100, 2) as tasa_desempleo_pct
+    FROM `dane_gold_lh`.`dbo`.`gold_dane_labor_indicators`
+    WHERE year = 2019
+    GROUP BY codigo_departamento, departamento_nombre
+    ORDER BY total_ocupados DESC
+""").show(40, truncate=False)
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# Ver encabezado exacto de 2024 desde dane_bronze_lh
+bronze_path = "abfss://13ed579f-4a14-414c-8f38-f62e44db2afc@onelake.dfs.fabric.microsoft.com/4a3cc7ca-f052-4b3e-b7ff-591fedda430a/Files/raw/dane"
+
+sample_2024 = spark.read.format("text").load(f"{bronze_path}/year=2024/*/*").limit(1).collect()[0]['value']
+cols_2024 = sample_2024.split(";") if ";" in sample_2024 else sample_2024.split(",")
+
+print(f"📋 Total columnas en 2024: {len(cols_2024)}")
+print("🔍 Primeras 15 columnas:", [c.replace('"', '').strip() for c in cols_2024[:15]])
+
+# Encontrar índices de DPTO y FEX
+dpto_idx = [i for i, c in enumerate(cols_2024) if "DPTO" in c.upper().replace('"', '')]
+fex_idx = [i for i, c in enumerate(cols_2024) if "FEX" in c.upper().replace('"', '')]
+
+print("📍 Índice de DPTO:", dpto_idx, [cols_2024[i] for i in dpto_idx])
+print("📍 Índice de FEX / Peso:", fex_idx, [cols_2024[i] for i in fex_idx])
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# =====================================================================
+# 📊 CONTROL DE CALIDAD 2020 - 2026
+# =====================================================================
+from pyspark.sql import functions as F
+from pyspark.sql.types import *
+
+
+silver_table_path = "abfss://13ed579f-4a14-414c-8f38-f62e44db2afc@onelake.dfs.fabric.microsoft.com/4a3cc7ca-f052-4b3e-b7ff-591fedda430a/Tables/dbo/silver_dane_labor_market"
+
+df_test = spark.read.format("delta").load(silver_table_path)
+
+print("📊 RESULTADOS DANE OFICIALES 2020 - 2026:")
+df_test.filter(F.col("year") >= 2020).groupBy("year").agg(
+    F.round(F.sum(F.when(F.col("status") == "ocupado", F.col("total_weight")).otherwise(0)) / F.countDistinct("month"), 0).alias("ocupados_promedio_mensual"),
+    F.round(F.sum(F.when(F.col("status") == "desocupado", F.col("total_weight")).otherwise(0)) / F.countDistinct("month"), 0).alias("desocupados_promedio_mensual")
+).withColumn(
+    "fuerza_laboral", F.col("ocupados_promedio_mensual") + F.col("desocupados_promedio_mensual")
+).withColumn(
+    "tasa_desempleo_pct", F.round((F.col("desocupados_promedio_mensual") / F.col("fuerza_laboral")) * 100, 2)
+).orderBy("year").show(truncate=False)
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# =====================================================================
+# 🎯 BLOQUE 1: INGESTA CALIBRADA ERA MODERNA DANE (2022 - 2026)
+# =====================================================================
+from pyspark.sql import functions as F
+from pyspark.sql.types import *
+
+silver_table_path = "abfss://13ed579f-4a14-414c-8f38-f62e44db2afc@onelake.dfs.fabric.microsoft.com/4a3cc7ca-f052-4b3e-b7ff-591fedda430a/Tables/dbo/silver_dane_labor_market"
+df_test = spark.read.format("delta").load(silver_table_path)
+print("📊 RESULTADOS DANE OFICIALES CALIBRADOS 2020 - 2026:")
+df_test.filter(F.col("year") >= 2020).groupBy("year").agg(
+    F.round(F.sum(F.when(F.col("status") == "ocupado", F.col("total_weight")).otherwise(0)) / F.countDistinct("month"), 0).alias("ocupados_promedio_mensual"),
+    F.round(F.sum(F.when(F.col("status") == "desocupado", F.col("total_weight")).otherwise(0)) / F.countDistinct("month"), 0).alias("desocupados_promedio_mensual")
+).withColumn(
+    "fuerza_laboral", F.col("ocupados_promedio_mensual") + F.col("desocupados_promedio_mensual")
+).withColumn(
+    "tasa_desempleo_pct", F.round((F.col("desocupados_promedio_mensual") / F.col("fuerza_laboral")) * 100, 2)
+).orderBy("year").show(truncate=False)
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# =====================================================================
+# 📊 CONTROL DE CALIDAD 2020 - 2026
+# =====================================================================
+from pyspark.sql import functions as F
+
+silver_table_path = "abfss://13ed579f-4a14-414c-8f38-f62e44db2afc@onelake.dfs.fabric.microsoft.com/4a3cc7ca-f052-4b3e-b7ff-591fedda430a/Tables/dbo/silver_dane_labor_market"
+
+df_test = spark.read.format("delta").load(silver_table_path)
+
+print("📊 RESULTADOS DANE OFICIALES CALIBRADOS 2020 - 2026:")
+df_test.filter(F.col("year") >= 2020).groupBy("year").agg(
+    F.round(F.sum(F.when(F.col("status") == "ocupado", F.col("total_weight")).otherwise(0)) / F.countDistinct("month"), 0).alias("ocupados_promedio_mensual"),
+    F.round(F.sum(F.when(F.col("status") == "desocupado", F.col("total_weight")).otherwise(0)) / F.countDistinct("month"), 0).alias("desocupados_promedio_mensual")
+).withColumn(
+    "fuerza_laboral", F.col("ocupados_promedio_mensual") + F.col("desocupados_promedio_mensual")
+).withColumn(
+    "tasa_desempleo_pct", F.round((F.col("desocupados_promedio_mensual") / F.col("fuerza_laboral")) * 100, 2)
+).orderBy("year").show(truncate=False)
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# =====================================================================
+# 🎯 CALIBRACIÓN ESPECÍFICA PARA EL AÑO DE TRANSICIÓN 2022
+# =====================================================================
+import re
+from pyspark.sql import functions as F
+
+
+yr = 2022
+bronze_path = "abfss://13ed579f-4a14-414c-8f38-f62e44db2afc@onelake.dfs.fabric.microsoft.com/4a3cc7ca-f052-4b3e-b7ff-591fedda430a/Files/raw/dane/year=2022"
+silver_table_path = "abfss://13ed579f-4a14-414c-8f38-f62e44db2afc@onelake.dfs.fabric.microsoft.com/4a3cc7ca-f052-4b3e-b7ff-591fedda430a/Tables/dbo/silver_dane_labor_market"
+
+print(f"🚀 Procesando Año {yr} con Adaptación Mes a Mes...")
+
+processed_2022_dfs = []
+
+for month_dir in mssparkutils.fs.ls(bronze_path):
+    m_val = int(re.search(r"month=(\d+)", month_dir.name).group(1))
+    
+    # Listar archivos del mes
+    month_files = mssparkutils.fs.ls(month_dir.path)
+    
+    for f in month_files:
+        fn_low = f.name.lower()
+        if not ("ocupados" in fn_low):
+            continue
+        if any(x in fn_low for x in ["caracteristicas", "inactivos", "fuerza", "vivienda", "ingresos"]):
+            continue
+            
+        # 1. Detectar delimitador de este archivo específico
+        sample = spark.read.format("text").load(f.path).limit(1).collect()[0]['value']
+        delim = ";" if ";" in sample else ","
+        
+        # 2. Leer archivo con su delimitador propio
+        df_f = spark.read.format("csv").option("header", "true").option("delimiter", delim).load(f.path)
+        
+        # Normalizar nombres de columnas a mayúsculas
+        for c in df_f.columns:
+            df_f = df_f.withColumnRenamed(c, c.upper().strip())
+            
+        cols = df_f.columns
+        dpto_col = next((c for c in ["DPTO", "COD_DPTO", "DEP"] if c in cols), None)
+        fex_col = next((c for c in ["FEX_C18", "FEX_C_2011", "FEX_C", "PESO", "FACTOR"] if c in cols), None)
+        dsi_col = next((c for c in ["DSI", "P49", "FT"] if c in cols), None)
+        
+        if not dpto_col or not fex_col:
+            continue
+            
+        is_desocupado = "no ocupados" in fn_low or "no_ocupados" in fn_low or "desocupados" in fn_low
+        status_label = "desocupado" if is_desocupado else "ocupado"
+        
+        # Filtro estricto DSI para Desocupados
+        if is_desocupado and dsi_col:
+            df_f = df_f.filter(F.trim(F.col(dsi_col)).isin("1", "1.0", "1,0"))
+            
+        df_clean_file = df_f.select(
+            F.lit(yr).alias("year"),
+            F.lit(m_val).alias("month"),
+            F.lit(status_label).alias("status"),
+            F.lit("cabecera").alias("geo_source"),
+            F.lpad(F.regexp_replace(F.col(dpto_col), r'[\s"]', ''), 2, "0").alias("codigo_departamento"),
+            F.regexp_replace(F.regexp_replace(F.col(fex_col), r'[\s"]', ''), ",", ".").cast("double").alias("total_weight"),
+            F.lit(f.path).alias("source_file"),
+            F.current_timestamp().alias("ingestion_timestamp")
+        ).filter(F.col("total_weight") > 0)
+        
+        processed_2022_dfs.append(df_clean_file)
+
+if processed_2022_dfs:
+    df_2022_unified = processed_2022_dfs[0]
+    for d in processed_2022_dfs[1:]:
+        df_2022_unified = df_2022_unified.unionByName(d)
+        
+    # Guardar / Reemplazar la partición de 2022 en la tabla Delta
+    df_2022_unified.write \
+        .format("delta") \
+        .mode("overwrite") \
+        .option("replaceWhere", "year = 2022") \
+        .save(silver_table_path)
+        
+    print(f"✅ ¡Año 2022 calibrado y guardado con éxito! {df_2022_unified.count():,} registros.")
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# =====================================================================
+# 🔍 MES A MES 2020 (Detectar meses con Desempleo Oculto / Cuarentena)
+# =====================================================================
+from pyspark.sql import functions as F
+
+silver_table_path = "abfss://13ed579f-4a14-414c-8f38-f62e44db2afc@onelake.dfs.fabric.microsoft.com/4a3cc7ca-f052-4b3e-b7ff-591fedda430a/Tables/dbo/silver_dane_labor_market"
+
+df_test = spark.read.format("delta").load(silver_table_path)
+
+df_test.filter(F.col("year") == 2020).groupBy("month").agg(
+    F.round(F.sum(F.when(F.col("status") == "ocupado", F.col("total_weight")).otherwise(0)), 0).alias("ocupados"),
+    F.round(F.sum(F.when(F.col("status") == "desocupado", F.col("total_weight")).otherwise(0)), 0).alias("desocupados")
+).withColumn(
+    "fuerza_laboral", F.col("ocupados") + F.col("desocupados")
+).withColumn(
+    "tasa_desempleo_mes_pct", F.round((F.col("desocupados") / F.col("fuerza_laboral")) * 100, 2)
+).orderBy("month").show(15, truncate=False)
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# Ver qué variables identifican desocupados en Abril 2020
+fuerza_04 = spark.read.format("csv").option("header", "true").load("abfss://13ed579f-4a14-414c-8f38-f62e44db2afc@onelake.dfs.fabric.microsoft.com/4a3cc7ca-f052-4b3e-b7ff-591fedda430a/Files/raw/dane/year=2020/month=04/Fuerza de trabajo.CSV")
+
+for c in fuerza_04.columns: fuerza_04 = fuerza_04.withColumnRenamed(c, c.upper().strip())
+
+print("Columnas en Fuerza de trabajo Abril 2020:")
+print(fuerza_04.columns)
+
+# Ver columnas que clasifican condición de actividad
+for col_test in ["FT", "DSI", "P6240", "P6250", "P6260", "P6280"]:
+    if col_test in fuerza_04.columns:
+        print(f"\nDistribución de {col_test}:")
+        fuerza_04.groupBy(col_test).count().show(5)
+
 
 # METADATA ********************
 

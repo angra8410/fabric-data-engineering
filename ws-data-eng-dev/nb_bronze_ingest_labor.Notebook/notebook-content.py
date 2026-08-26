@@ -8,12 +8,12 @@
 # META   },
 # META   "dependencies": {
 # META     "lakehouse": {
-# META       "default_lakehouse": "85a8b62f-66cf-4fdb-bcfe-3f3563b677d5",
+# META       "default_lakehouse": "4a3cc7ca-f052-4b3e-b7ff-591fedda430a",
 # META       "default_lakehouse_name": "dane_bronze_lh",
-# META       "default_lakehouse_workspace_id": "f1ec50d7-8db7-405b-b670-b3a23240da2f",
+# META       "default_lakehouse_workspace_id": "13ed579f-4a14-414c-8f38-f62e44db2afc",
 # META       "known_lakehouses": [
 # META         {
-# META           "id": "85a8b62f-66cf-4fdb-bcfe-3f3563b677d5"
+# META           "id": "4a3cc7ca-f052-4b3e-b7ff-591fedda430a"
 # META         }
 # META       ]
 # META     }
@@ -158,7 +158,9 @@ print("✅ ¡Pipeline finalizado con éxito! Datos almacenados en Bronze.")
 
 # META {
 # META   "language": "python",
-# META   "language_group": "synapse_pyspark"
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
 # META }
 
 # MARKDOWN ********************
@@ -688,7 +690,9 @@ except Exception as e:
 
 # META {
 # META   "language": "python",
-# META   "language_group": "synapse_pyspark"
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
 # META }
 
 # CELL ********************
@@ -829,10 +833,337 @@ except Exception as e:
 
 # META {
 # META   "language": "python",
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
+# META }
+
+# CELL ********************
+
+# =====================================================================
+# 🚀 MOTOR CALIBRADO DANE 2004-2026 (METODOLOGÍA OFICIAL GEIH)
+# =====================================================================
+from pyspark.sql import functions as F
+from pyspark.sql.types import *
+import re
+
+raw_base_path = "abfss://13ed579f-4a14-414c-8f38-f62e44db2afc@onelake.dfs.fabric.microsoft.com/4a3cc7ca-f052-4b3e-b7ff-591fedda430a/Files/raw/dane"
+silver_table_path = "abfss://13ed579f-4a14-414c-8f38-f62e44db2afc@onelake.dfs.fabric.microsoft.com/4a3cc7ca-f052-4b3e-b7ff-591fedda430a/Tables/dbo/silver_dane_labor_market"
+
+years_available = [2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026]
+
+print("🚀 Iniciando Ingesta Calibrada DANE (2004 - 2026)...")
+
+for yr in years_available:
+    year_path = f"{raw_base_path}/year={yr}"
+    print(f"\n==================================================")
+    print(f"⏳ PROCESANDO AÑO: {yr}")
+    print(f"==================================================")
+
+    try:
+        # Delimitadores por época
+        if yr <= 2015:
+            delim = "\t"
+            path_glob = f"{year_path}/*/*.txt"
+        elif yr == 2016:
+            delim = ";"
+            path_glob = f"{year_path}/*/*/*.csv"
+        elif 2017 <= yr <= 2019:
+            delim = ";"
+            path_glob = f"{year_path}/*/*.csv"
+        elif yr in [2020, 2021]:
+            delim = ","
+            path_glob = f"{year_path}/*/*.CSV"
+        else:
+            delim = ";"
+            path_glob = f"{year_path}/*/*.[cC][sS][vV]"
+
+        # 1. Cargar archivos del año
+        df_raw = spark.read \
+            .format("csv") \
+            .option("header", "true") \
+            .option("delimiter", delim) \
+            .load(path_glob) \
+            .withColumn("source_file", F.input_file_name()) \
+            .withColumn("fn_low", F.lower(F.col("source_file")))
+
+        # 2. FILTRADO ESTRICTO DE MÓDULOS (Evita duplicar población con módulos de subempleo o secundario)
+        # Excluye 'area' para no doblar cabecera+resto
+        df_mod = df_raw.filter(
+            ~F.col("fn_low").rlike("(?i)ingresos|vivienda|seguridad|formas|inact|inactivos|fuerza|caracteristicas|otras|subempleo|secundario|area") &
+            F.col("fn_low").rlike("(?i)ocupa|desocu|no.*ocu")
+        )
+
+        # 3. Normalizar nombres de columna a mayúsculas
+        cols_map = {c: c.upper().strip() for c in df_mod.columns}
+        df_upper = df_mod
+        for old_c, new_c in cols_map.items():
+            df_upper = df_upper.withColumnRenamed(old_c, new_c)
+
+        cols_list = df_upper.columns
+        dpto_col = next((c for c in ["DPTO", "COD_DPTO", "DEP"] if c in cols_list), None)
+        fex_col = next((c for c in ["FEX_C18", "FEX_C_2011", "FEX_C", "PESO", "FACTOR"] if c in cols_list), None)
+        dsi_col = next((c for c in ["DSI", "P49", "FT"] if c in cols_list), None)
+
+        if not dpto_col or not fex_col:
+            print(f"⚠️ Columnas no encontradas en {yr} (DPTO={dpto_col}, FEX={fex_col})")
+            continue
+
+        # 4. Clasificación y filtro de Desempleo (DSI == 1 para No Ocupados)
+        df_proc = df_upper.withColumn(
+            "status",
+            F.when(F.col("FN_LOW").rlike("(?i)desocu|no.*ocu"), "desocupado").otherwise("ocupado")
+        ).withColumn(
+            "month",
+            F.coalesce(F.regexp_extract(F.col("SOURCE_FILE"), r"month=(\d+)", 1).cast("int"), F.lit(1))
+        ).withColumn(
+            "geo_source",
+            F.when(F.col("FN_LOW").rlike("(?i)resto"), "resto").otherwise("cabecera")
+        )
+
+        # Si el módulo es de No Ocupados (2022-2026), filtrar solo DSI=1 (Desocupados reales)
+        if yr >= 2022 and dsi_col:
+            df_proc = df_proc.filter(
+                (F.col("status") == "ocupado") |
+                ((F.col("status") == "desocupado") & (F.trim(F.col(dsi_col)).isin("1", "1.0", "1,0")))
+            )
+
+        # 5. Seleccionar y limpiar columnas
+        df_clean = df_proc.select(
+            F.lit(yr).alias("year"),
+            F.col("month"),
+            F.col("status"),
+            F.col("geo_source"),
+            F.lpad(F.regexp_replace(F.col(dpto_col), r'[\s"]', ''), 2, "0").alias("codigo_departamento"),
+            F.regexp_replace(F.regexp_replace(F.col(fex_col), r'[\s"]', ''), ",", ".").cast("double").alias("total_weight"),
+            F.col("SOURCE_FILE").alias("source_file"),
+            F.current_timestamp().alias("ingestion_timestamp")
+        ).filter(
+            F.col("total_weight").isNotNull() & 
+            (F.col("total_weight") > 0) & 
+            (F.col("codigo_departamento") != "00")
+        )
+
+        mode_w = "overwrite" if yr == 2004 else "append"
+        df_clean.write \
+            .format("delta") \
+            .mode(mode_w) \
+            .option("overwriteSchema", "true" if yr == 2004 else "false") \
+            .partitionBy("year") \
+            .save(silver_table_path)
+
+        count_yr = df_clean.count()
+        print(f"✅ Año {yr} procesado: {count_yr:,} registros guardados en Silver. (DPTO={dpto_col}, FEX={fex_col})")
+
+    except Exception as e:
+        print(f"❌ Error en año {yr}: {e}")
+
+print("\n🎉 ¡Procesamiento Silver Calibrado Finalizado!")
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": false,
+# META   "editable": true
+# META }
+
+# CELL ********************
+
+# =====================================================================
+# 🎯 CALIBRACIÓN ESTRICTA ERA PANDEMIA (2020 Y 2021)
+# =====================================================================
+import re
+from pyspark.sql import functions as F
+
+silver_table_path = "abfss://13ed579f-4a14-414c-8f38-f62e44db2afc@onelake.dfs.fabric.microsoft.com/4a3cc7ca-f052-4b3e-b7ff-591fedda430a/Tables/dbo/silver_dane_labor_market"
+raw_base_path = "abfss://13ed579f-4a14-414c-8f38-f62e44db2afc@onelake.dfs.fabric.microsoft.com/4a3cc7ca-f052-4b3e-b7ff-591fedda430a/Files/raw/dane"
+
+for yr in [2020, 2021]:
+    year_path = f"{raw_base_path}/year={yr}"
+    print(f"\n==================== PROCESANDO AÑO {yr} ====================")
+    
+    processed_dfs = []
+    
+    for month_dir in mssparkutils.fs.ls(year_path):
+        m_val = int(re.search(r"month=(\d+)", month_dir.name).group(1))
+        month_files = mssparkutils.fs.ls(month_dir.path)
+        file_names = [f.name for f in month_files]
+        
+        has_desocu_file = any("desocu" in f.lower() or "desoucp" in f.lower() for f in file_names)
+        
+        for f in month_files:
+            fn = f.name
+            fn_low = fn.lower()
+            
+            # En 2021: solo tomamos Cabecera y Resto (ignoramos archivos que empiecen con 'Area - ')
+            if yr == 2021 and fn.startswith("Area - "):
+                continue
+                
+            # Identificar qué archivo procesar
+            is_ocupado = "ocupados" in fn_low and not ("desocu" in fn_low or "desoucp" in fn_low or "no" in fn_low)
+            is_desocupado = "desocu" in fn_low or "desoucp" in fn_low
+            is_fuerza = "fuerza" in fn_low and not has_desocu_file  # Usar Fuerza de trabajo solo si falta Desocupados
+            
+            if not (is_ocupado or is_desocupado or is_fuerza):
+                continue
+                
+            sample = spark.read.format("text").load(f.path).limit(1).collect()[0]['value']
+            delim = ";" if ";" in sample else ("," if "," in sample else "\t")
+            
+            df_f = spark.read.format("csv").option("header", "true").option("delimiter", delim).load(f.path)
+            
+            # Normalizar columnas
+            for c in df_f.columns:
+                df_f = df_f.withColumnRenamed(c, c.upper().strip())
+                
+            cols = df_f.columns
+            dpto_col = next((c for c in ["DPTO", "COD_DPTO", "DEP"] if c in cols), None)
+            fex_col = next((c for c in ["FEX_C_2011", "FEX_C", "FEX_C18", "PESO", "FACTOR"] if c in cols), None)
+            dsi_col = next((c for c in ["DSI", "P49", "FT", "RAMA4D_D_R4"] if c in cols), None)
+            
+            if not dpto_col or not fex_col:
+                continue
+                
+            if is_ocupado:
+                status_label = "ocupado"
+            elif is_desocupado:
+                status_label = "desocupado"
+            elif is_fuerza:
+                # Filtrar solo desempleados dentro de Fuerza de Trabajo
+                status_label = "desocupado"
+                if dsi_col:
+                    df_f = df_f.filter(F.trim(F.col(dsi_col)).isin("1", "1.0", "1,0", "2"))
+                    
+            geo_label = "resto" if "resto" in fn_low else "cabecera"
+            
+            df_clean = df_f.select(
+                F.lit(yr).alias("year"),
+                F.lit(m_val).alias("month"),
+                F.lit(status_label).alias("status"),
+                F.lit(geo_label).alias("geo_source"),
+                F.lpad(F.regexp_replace(F.col(dpto_col), r'[\s"]', ''), 2, "0").alias("codigo_departamento"),
+                F.regexp_replace(F.regexp_replace(F.col(fex_col), r'[\s"]', ''), ",", ".").cast("double").alias("total_weight"),
+                F.lit(f.path).alias("source_file"),
+                F.current_timestamp().alias("ingestion_timestamp")
+            ).filter(F.col("total_weight") > 0)
+            
+            processed_dfs.append(df_clean)
+
+    if processed_dfs:
+        df_yr_unified = processed_dfs[0]
+        for d in processed_dfs[1:]:
+            df_yr_unified = df_yr_unified.unionByName(d)
+            
+        df_yr_unified.write \
+            .format("delta") \
+            .mode("overwrite") \
+            .option("replaceWhere", f"year = {yr}") \
+            .save(silver_table_path)
+            
+        print(f"✅ ¡Año {yr} completado con éxito! {df_yr_unified.count():,} registros.")
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
 # META   "language_group": "synapse_pyspark"
 # META }
 
 # CELL ********************
+
+# =====================================================================
+# 🎯 CALIBRACIÓN DEFINITIVA AÑO PANDEMIA 2020
+# =====================================================================
+import re
+from pyspark.sql import functions as F
+
+silver_table_path = "abfss://13ed579f-4a14-414c-8f38-f62e44db2afc@onelake.dfs.fabric.microsoft.com/4a3cc7ca-f052-4b3e-b7ff-591fedda430a/Tables/dbo/silver_dane_labor_market"
+raw_base_path = "abfss://13ed579f-4a14-414c-8f38-f62e44db2afc@onelake.dfs.fabric.microsoft.com/4a3cc7ca-f052-4b3e-b7ff-591fedda430a/Files/raw/dane/year=2020"
+
+yr = 2020
+print(f"🚀 Procesando Año {yr} con Calibración Exacta FT...")
+
+processed_2020_dfs = []
+
+for month_dir in mssparkutils.fs.ls(raw_base_path):
+    m_val = int(re.search(r"month=(\d+)", month_dir.name).group(1))
+    month_files = mssparkutils.fs.ls(month_dir.path)
+    file_names = [f.name for f in month_files]
+    
+    # 1. Leer Ocupados del mes
+    ocu_file = next((f.path for f in month_files if "ocupados" in f.name.lower() and not any(x in f.name.lower() for x in ["desocu", "no"])), None)
+    if ocu_file:
+        df_ocu = spark.read.format("csv").option("header", "true").option("delimiter", ",").load(ocu_file)
+        for c in df_ocu.columns: df_ocu = df_ocu.withColumnRenamed(c, c.upper().strip())
+        
+        df_clean_ocu = df_ocu.select(
+            F.lit(yr).alias("year"),
+            F.lit(m_val).alias("month"),
+            F.lit("ocupado").alias("status"),
+            F.lit("cabecera").alias("geo_source"),
+            F.lpad(F.regexp_replace(F.col("DPTO"), r'[\s"]', ''), 2, "0").alias("codigo_departamento"),
+            F.regexp_replace(F.regexp_replace(F.col("FEX_C"), r'[\s"]', ''), ",", ".").cast("double").alias("total_weight"),
+            F.lit(ocu_file).alias("source_file"),
+            F.current_timestamp().alias("ingestion_timestamp")
+        ).filter(F.col("total_weight") > 0)
+        processed_2020_dfs.append(df_clean_ocu)
+        
+    # 2. Leer Desocupados del mes (o de Fuerza de trabajo si falta el archivo)
+    desocu_file = next((f.path for f in month_files if "desocu" in f.name.lower() or "desoucp" in f.name.lower()), None)
+    
+    if desocu_file:
+        df_des = spark.read.format("csv").option("header", "true").option("delimiter", ",").load(desocu_file)
+        for c in df_des.columns: df_des = df_des.withColumnRenamed(c, c.upper().strip())
+        
+        df_clean_des = df_des.select(
+            F.lit(yr).alias("year"),
+            F.lit(m_val).alias("month"),
+            F.lit("desocupado").alias("status"),
+            F.lit("cabecera").alias("geo_source"),
+            F.lpad(F.regexp_replace(F.col("DPTO"), r'[\s"]', ''), 2, "0").alias("codigo_departamento"),
+            F.regexp_replace(F.regexp_replace(F.col("FEX_C"), r'[\s"]', ''), ",", ".").cast("double").alias("total_weight"),
+            F.lit(desocu_file).alias("source_file"),
+            F.current_timestamp().alias("ingestion_timestamp")
+        ).filter(F.col("total_weight") > 0)
+        processed_2020_dfs.append(df_clean_des)
+    else:
+        # Extraer desempleados desde Fuerza de Trabajo (Ft == 2 o DSI == 1)
+        fuerza_file = next((f.path for f in month_files if "fuerza" in f.name.lower()), None)
+        if fuerza_file:
+            df_ft = spark.read.format("csv").option("header", "true").option("delimiter", ",").load(fuerza_file)
+            for c in df_ft.columns: df_ft = df_ft.withColumnRenamed(c, c.upper().strip())
+            
+            # FT == 2 es la definición de desocupados en el módulo Fuerza de trabajo
+            df_ft_des = df_ft.filter(F.trim(F.col("FT")) == "2")
+            
+            df_clean_ft = df_ft_des.select(
+                F.lit(yr).alias("year"),
+                F.lit(m_val).alias("month"),
+                F.lit("desocupado").alias("status"),
+                F.lit("cabecera").alias("geo_source"),
+                F.lpad(F.regexp_replace(F.col("DPTO"), r'[\s"]', ''), 2, "0").alias("codigo_departamento"),
+                F.regexp_replace(F.regexp_replace(F.col("FEX_C"), r'[\s"]', ''), ",", ".").cast("double").alias("total_weight"),
+                F.lit(fuerza_file).alias("source_file"),
+                F.current_timestamp().alias("ingestion_timestamp")
+            ).filter(F.col("total_weight") > 0)
+            processed_2020_dfs.append(df_clean_ft)
+
+if processed_2020_dfs:
+    df_2020_unified = processed_2020_dfs[0]
+    for d in processed_2020_dfs[1:]:
+        df_2020_unified = df_2020_unified.unionByName(d)
+        
+    df_2020_unified.write \
+        .format("delta") \
+        .mode("overwrite") \
+        .option("replaceWhere", "year = 2020") \
+        .save(silver_table_path)
+        
+    print(f"✅ ¡Año 2020 calibrado con éxito! {df_2020_unified.count():,} registros.")
 
 
 # METADATA ********************

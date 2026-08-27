@@ -1,0 +1,117 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "11111111111111111106",
+  "position": {
+    "x": 40,
+    "y": 190,
+    "z": 6,
+    "height": 420,
+    "width": 1200,
+    "tabOrder": 6
+  },
+  "visual": {
+    "visualType": "lineChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_date"
+                    }
+                  },
+                  "Property": "date"
+                }
+              },
+              "queryRef": "dim_date.date",
+              "nativeQueryRef": "Fecha",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_monthly_labor"
+                    }
+                  },
+                  "Property": "Tasa de Desempleo %"
+                }
+              },
+              "queryRef": "fact_monthly_labor.Tasa de Desempleo %",
+              "nativeQueryRef": "Tasa de Desempleo %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_monthly_labor"
+                    }
+                  },
+                  "Property": "Tasa de Desempleo % Promedio Movil 12M"
+                }
+              },
+              "queryRef": "fact_monthly_labor.Tasa de Desempleo % Promedio Movil 12M",
+              "nativeQueryRef": "Promedio Móvil 12 Meses"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "284e7627ace4d201b509",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_date"
+              }
+            },
+            "Property": "date"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "8d2c0f30ec3a1ff88d63",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_monthly_labor"
+              }
+            },
+            "Property": "Tasa de Desempleo %"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "429e3be184ab1460ce0b",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_monthly_labor"
+              }
+            },
+            "Property": "Tasa de Desempleo % Promedio Movil 12M"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

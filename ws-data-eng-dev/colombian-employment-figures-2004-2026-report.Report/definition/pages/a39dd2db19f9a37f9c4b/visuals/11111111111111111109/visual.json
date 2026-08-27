@@ -1,0 +1,90 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "11111111111111111109",
+  "position": {
+    "x": 1000,
+    "y": 630,
+    "z": 9,
+    "height": 410,
+    "width": 880,
+    "tabOrder": 9
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_urban_rural_labor"
+                    }
+                  },
+                  "Property": "year"
+                }
+              },
+              "queryRef": "fact_urban_rural_labor.year",
+              "nativeQueryRef": "Año",
+              "active": true
+            }
+          ]
+        },
+        "Columns": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_urban_rural_labor"
+                    }
+                  },
+                  "Property": "geo_source"
+                }
+              },
+              "queryRef": "fact_urban_rural_labor.geo_source",
+              "nativeQueryRef": "Dominio Geográfico",
+              "active": true
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_urban_rural_labor"
+                    }
+                  },
+                  "Property": "Tasa de Desempleo % (Urbano-Rural)"
+                }
+              },
+              "queryRef": "fact_urban_rural_labor.Tasa de Desempleo % (Urbano-Rural)",
+              "nativeQueryRef": "Tasa Desempleo %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_urban_rural_labor"
+                    }
+                  },
+                  "Property": "Ocupados (Urbano-Rural)"
+                }
+              },
+              "queryRef": "fact_urban_rural_labor.Ocupados (Urbano-Rural)",
+              "nativeQueryRef": "Ocupados"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

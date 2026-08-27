@@ -578,6 +578,59 @@ print("\n🏆 ¡Todas las tablas guardadas exitosamente en 'Tables/dbo/' de 'dan
 
 # CELL ********************
 
+# =====================================================================
+# 🟡 ACTUALIZACIÓN DIM_DATE: INCLUYE PRESIDENTES Y MANDATOS
+# =====================================================================
+from pyspark.sql import functions as F
+
+print("🟡 Actualizando dim_date con periodos presidenciales...")
+
+df_dates = spark.sql("SELECT explode(sequence(to_date('2004-01-01'), to_date('2026-12-31'), interval 1 day)) as date")
+
+df_dim_date_enhanced = df_dates.select(
+    F.col("date"),
+    F.date_format("date", "yyyyMMdd").cast("long").alias("date_key"),
+    F.year("date").alias("year"),
+    F.quarter("date").alias("quarter"),
+    F.concat_ws("-Q", F.year("date"), F.quarter("date")).alias("year_quarter"),
+    F.when(F.month("date") <= 6, 1).otherwise(2).alias("semester"),
+    F.concat_ws("-S", F.year("date"), F.when(F.month("date") <= 6, 1).otherwise(2)).alias("year_semester"),
+    F.month("date").alias("month"),
+    F.date_format("date", "yyyy-MM").alias("year_month"),
+    F.dayofmonth("date").alias("day"),
+    F.dayofweek("date").alias("day_of_week"),
+    F.weekofyear("date").alias("week_of_year"),
+    F.when(F.dayofweek("date").isin(1, 7), True).otherwise(False).alias("is_weekend"),
+    F.when(F.month("date") == 1, "Enero").when(F.month("date") == 2, "Febrero").when(F.month("date") == 3, "Marzo").when(F.month("date") == 4, "Abril").when(F.month("date") == 5, "Mayo").when(F.month("date") == 6, "Junio").when(F.month("date") == 7, "Julio").when(F.month("date") == 8, "Agosto").when(F.month("date") == 9, "Septiembre").when(F.month("date") == 10, "Octubre").when(F.month("date") == 11, "Noviembre").otherwise("Diciembre").alias("month_name_es"),
+    F.when(F.month("date") == 1, "Ene").when(F.month("date") == 2, "Feb").when(F.month("date") == 3, "Mar").when(F.month("date") == 4, "Abr").when(F.month("date") == 5, "May").when(F.month("date") == 6, "Jun").when(F.month("date") == 7, "Jul").when(F.month("date") == 8, "Ago").when(F.month("date") == 9, "Sep").when(F.month("date") == 10, "Oct").when(F.month("date") == 11, "Nov").otherwise("Dic").alias("month_short_es"),
+    F.date_format("date", "EEEE").alias("day_name_es"),
+    # Columnas presidenciales
+    F.when(F.col("date") < "2006-08-07", "Álvaro Uribe Vélez")
+     .when((F.col("date") >= "2006-08-07") & (F.col("date") < "2010-08-07"), "Álvaro Uribe Vélez")
+     .when((F.col("date") >= "2010-08-07") & (F.col("date") < "2014-08-07"), "Juan Manuel Santos Calderón")
+     .when((F.col("date") >= "2014-08-07") & (F.col("date") < "2018-08-07"), "Juan Manuel Santos Calderón")
+     .when((F.col("date") >= "2018-08-07") & (F.col("date") < "2022-08-07"), "Iván Duque Márquez")
+     .otherwise("Gustavo Petro Urrego").alias("presidente"),
+    F.when(F.col("date") < "2006-08-07", "Primer Mandato (Uribe)")
+     .when((F.col("date") >= "2006-08-07") & (F.col("date") < "2010-08-07"), "Segundo Mandato (Uribe)")
+     .when((F.col("date") >= "2010-08-07") & (F.col("date") < "2014-08-07"), "Primer Mandato (Santos)")
+     .when((F.col("date") >= "2014-08-07") & (F.col("date") < "2018-08-07"), "Segundo Mandato (Santos)")
+     .when((F.col("date") >= "2018-08-07") & (F.col("date") < "2022-08-07"), "Mandato Constitucional (Duque)")
+     .otherwise("Mandato Constitucional (Petro)").alias("mandato")
+)
+
+df_dim_date_enhanced.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("dim_date")
+print("✅ dim_date actualizada exitosamente con periodos presidenciales!")
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
 from pyspark.sql import functions as F
 from pyspark.sql.types import *
 

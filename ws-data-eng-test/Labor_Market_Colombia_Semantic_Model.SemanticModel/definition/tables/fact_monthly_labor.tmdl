@@ -163,20 +163,10 @@ table fact_monthly_labor
 	column es_imputado
 		dataType: boolean
 		formatString: """TRUE"";""TRUE"";""FALSE"""
-		lineageTag: 095eacce-cb9a-40ce-8299-a15ebba6f07e
+		lineageTag: 5f74d41f-ea58-4779-b533-a1459d3d3d35
 		sourceLineageTag: es_imputado
 		summarizeBy: none
 		sourceColumn: es_imputado
-
-		annotation SummarizationSetBy = Automatic
-
-	column id_periodo
-		dataType: int64
-		formatString: 0
-		lineageTag: c382a991-4d12-4f18-8f12-0b10a295c999
-		sourceLineageTag: id_periodo
-		summarizeBy: sum
-		sourceColumn: id_periodo
 
 		annotation SummarizationSetBy = Automatic
 

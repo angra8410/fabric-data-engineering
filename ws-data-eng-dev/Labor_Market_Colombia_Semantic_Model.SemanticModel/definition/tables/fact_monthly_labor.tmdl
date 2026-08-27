@@ -1,0 +1,85 @@
+table fact_monthly_labor
+	lineageTag: db154422-b2a8-4e19-acc9-d51b991e9ef9
+	sourceLineageTag: [dbo].[fact_monthly_labor]
+
+	column year
+		dataType: int64
+		formatString: 0
+		lineageTag: 88ae57bb-d790-4924-89c8-4b5ad06b5eba
+		sourceLineageTag: year
+		summarizeBy: sum
+		sourceColumn: year
+
+		annotation SummarizationSetBy = Automatic
+
+	column month
+		dataType: int64
+		formatString: 0
+		lineageTag: 966f6dd2-7dd2-4dba-872b-26c49f280532
+		sourceLineageTag: month
+		summarizeBy: sum
+		sourceColumn: month
+
+		annotation SummarizationSetBy = Automatic
+
+	column ocupados
+		dataType: double
+		lineageTag: ddccd6c3-8cf1-4241-80e2-edd5a37ab981
+		sourceLineageTag: ocupados
+		summarizeBy: sum
+		sourceColumn: ocupados
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column desocupados
+		dataType: double
+		lineageTag: 62d30390-efb1-49d1-b6a4-e5b5d3dd6cbe
+		sourceLineageTag: desocupados
+		summarizeBy: sum
+		sourceColumn: desocupados
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column fuerza_laboral
+		dataType: double
+		lineageTag: 861aa8a4-f4d1-4d98-83ec-6fd8079d1046
+		sourceLineageTag: fuerza_laboral
+		summarizeBy: sum
+		sourceColumn: fuerza_laboral
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column tasa_desempleo_pct
+		dataType: double
+		lineageTag: 74bcd468-111c-4397-a5b9-5342af1cf284
+		sourceLineageTag: tasa_desempleo_pct
+		summarizeBy: sum
+		sourceColumn: tasa_desempleo_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column fecha
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 5abf500a-6ebb-4097-8d12-9cbabc806833
+		sourceLineageTag: fecha
+		summarizeBy: none
+		sourceColumn: fecha
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_monthly_labor = entity
+		mode: directLake
+		source
+			entityName: fact_monthly_labor
+			schemaName: dbo
+			expressionSource: 'DirectLake - dane_gold_lh'
+

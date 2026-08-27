@@ -1,0 +1,9 @@
+expression 'DirectLake - dane_gold_lh' =
+		let
+		    Source = AzureStorage.DataLake("https://onelake.dfs.fabric.microsoft.com/13ed579f-4a14-414c-8f38-f62e44db2afc/db58c705-bf28-4bc1-bd0f-b7527e9d3d9d", [HierarchicalNavigation=true])
+		in
+		    Source
+	lineageTag: e6678d56-522a-4971-a96e-5b97aadbd7f7
+
+	annotation PBI_IncludeFutureArtifacts = False
+

@@ -57,6 +57,21 @@ table fact_monthly_labor
 		formatString: 0.00%
 		displayFolder: 02 Comparativos Temporales
 
+	/// Promedio mensual de personas ocupadas en el periodo filtrado (e.g. ~22-23M).
+	measure 'Promedio Ocupados Mensual' = AVERAGEX(fact_monthly_labor, fact_monthly_labor[ocupados])
+		formatString: #,##0
+		displayFolder: 01 KPIs Nacionales
+
+	/// Promedio mensual de personas desocupadas en el periodo filtrado (e.g. ~2.5-3M).
+	measure 'Promedio Desocupados Mensual' = AVERAGEX(fact_monthly_labor, fact_monthly_labor[desocupados])
+		formatString: #,##0
+		displayFolder: 01 KPIs Nacionales
+
+	/// Promedio mensual de fuerza laboral (PEA) en el periodo filtrado (e.g. ~25-26M).
+	measure 'Promedio Fuerza Laboral Mensual' = AVERAGEX(fact_monthly_labor, fact_monthly_labor[fuerza_laboral])
+		formatString: #,##0
+		displayFolder: 01 KPIs Nacionales
+
 	column year
 		dataType: int64
 		formatString: 0

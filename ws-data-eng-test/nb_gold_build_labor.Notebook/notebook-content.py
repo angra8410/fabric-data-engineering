@@ -631,6 +631,78 @@ print("✅ dim_date actualizada exitosamente con periodos presidenciales!")
 
 # CELL ********************
 
+# =====================================================================
+# 🟡 GOLD MASTER STAR FACT (GENERADA DIRECTAMENTE EN DANE_GOLD_LH)
+# =====================================================================
+from pyspark.sql import functions as F
+
+print("🟡 Generando gold_dane_labor_indicators directamente en Gold...")
+
+# 1. Leemos los hechos departamentales ya existentes en Gold
+df_dept = spark.table("fact_labor_by_department")
+
+# 2. Construimos la tabla de hechos central unificada con id_periodo para los presidentes
+df_gold_star = df_dept.select(
+    F.col("year"),
+    F.lit(1).alias("month"),
+    F.to_date(F.concat_ws("-", F.col("year"), F.lit("01"), F.lit("01"))).alias("periodo_fecha"),
+    F.col("codigo_departamento"),
+    F.col("departamento").alias("departamento_nombre"),
+    F.col("ocupados_promedio").alias("poblacion_ocupada"),
+    F.col("desocupados_promedio").alias("poblacion_desocupada"),
+    F.col("fuerza_laboral").alias("fuerza_laboral_total"),
+    F.col("tasa_desempleo_pct"),
+    F.when(F.col("year") <= 2006, 1)
+     .when((F.col("year") >= 2007) & (F.col("year") <= 2010), 2)
+     .when((F.col("year") >= 2011) & (F.col("year") <= 2014), 3)
+     .when((F.col("year") >= 2015) & (F.col("year") <= 2018), 4)
+     .when((F.col("year") >= 2019) & (F.col("year") <= 2022), 5)
+     .otherwise(6).alias("id_periodo")
+)
+
+df_gold_star.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("gold_dane_labor_indicators")
+print(f"✅ gold_dane_labor_indicators creada con éxito ({df_gold_star.count():,} registros) con id_periodo incluido!")
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# =====================================================================
+# 🟡 ENLAZANDO FACT_MONTHLY_LABOR DIRECTAMENTE A DIM_PRESIDENTES
+# =====================================================================
+from pyspark.sql import functions as F
+
+print("🟡 Agregando id_periodo a fact_monthly_labor...")
+
+df_monthly = spark.table("fact_monthly_labor").withColumn(
+    "id_periodo",
+    F.when(F.col("fecha") < "2006-08-07", 1)
+     .when((F.col("fecha") >= "2006-08-07") & (F.col("fecha") < "2010-08-07"), 2)
+     .when((F.col("fecha") >= "2010-08-07") & (F.col("fecha") < "2014-08-07"), 3)
+     .when((F.col("fecha") >= "2014-08-07") & (F.col("fecha") < "2018-08-07"), 4)
+     .when((F.col("fecha") >= "2018-08-07") & (F.col("fecha") < "2022-08-07"), 5)
+     .otherwise(6)
+)
+
+df_monthly.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("fact_monthly_labor")
+print("✅ fact_monthly_labor actualizada exitosamente con id_periodo!")
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
 from pyspark.sql import functions as F
 from pyspark.sql.types import *
 

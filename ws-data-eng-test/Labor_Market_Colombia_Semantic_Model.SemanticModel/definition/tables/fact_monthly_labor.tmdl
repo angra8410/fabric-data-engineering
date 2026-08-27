@@ -6,71 +6,85 @@ table fact_monthly_labor
 	measure 'Total Ocupados' = SUM(fact_monthly_labor[ocupados])
 		formatString: #,##0
 		displayFolder: 01 KPIs Nacionales
+		lineageTag: 79a82d48-ce52-454e-8010-a4b082fe6053
 
 	/// Total de personas desocupadas a nivel nacional (serie mensual DANE).
 	measure 'Total Desocupados' = SUM(fact_monthly_labor[desocupados])
 		formatString: #,##0
 		displayFolder: 01 KPIs Nacionales
+		lineageTag: cd82baba-c605-46a1-b0e2-09e147819c5b
 
 	/// Fuerza laboral total = Ocupados + Desocupados.
 	measure 'Total Fuerza Laboral' = SUM(fact_monthly_labor[fuerza_laboral])
 		formatString: #,##0
 		displayFolder: 01 KPIs Nacionales
+		lineageTag: 44388e8b-3486-47dc-903a-86817c1faafe
 
-	/// Tasa de desempleo unificada y reactiva a filtros de fecha y departamento.
-	measure 'Tasa de Desempleo %' = IF(ISFILTERED(dim_departamentos[nombre_departamento]) || ISFILTERED(dim_departamentos[codigo_departamento]), DIVIDE(SUM(gold_dane_labor_indicators[poblacion_desocupada]), SUM(gold_dane_labor_indicators[fuerza_laboral_total])), DIVIDE(SUM(fact_monthly_labor[desocupados]), SUM(fact_monthly_labor[fuerza_laboral])))
+	/// Tasa de desempleo ponderada = Desocupados / Fuerza Laboral. Se calcula asi (en vez de promediar la columna tasa_desempleo_pct) para que agregue correctamente en cualquier periodo.
+	measure 'Tasa de Desempleo %' = DIVIDE([Total Desocupados], [Total Fuerza Laboral])
 		formatString: 0.00%
 		displayFolder: 01 KPIs Nacionales
+		lineageTag: b186f59b-6400-4df7-b830-be53fffa11a8
 
 	/// Tasa de desempleo del mismo mes del año anterior.
 	measure 'Tasa de Desempleo % (Año Anterior)' = CALCULATE([Tasa de Desempleo %], SAMEPERIODLASTYEAR(dim_date[date]))
 		formatString: 0.00%
 		displayFolder: 02 Comparativos Temporales
+		lineageTag: 51251874-bf24-4b9d-bd8f-dc61df4313fc
 
 	/// Variacion en puntos porcentuales de la tasa de desempleo vs. el mismo mes del año anterior.
 	measure 'Tasa de Desempleo % var. pp YoY' = VAR CurrentValue = [Tasa de Desempleo %] RETURN IF(NOT ISBLANK(CurrentValue), CurrentValue - [Tasa de Desempleo % (Año Anterior)])
 		formatString: 0.00%;-0.00%
 		displayFolder: 02 Comparativos Temporales
+		lineageTag: 506c84de-e932-4570-80bd-7e708dde5a42
 
 	/// Ocupados del mismo mes del año anterior.
 	measure 'Total Ocupados (Año Anterior)' = CALCULATE([Total Ocupados], SAMEPERIODLASTYEAR(dim_date[date]))
 		formatString: #,##0
 		displayFolder: 02 Comparativos Temporales
+		lineageTag: 72662c3b-e89b-4087-aed0-7e61ddc29a6a
 
 	/// Variacion porcentual de ocupados vs. el mismo mes del año anterior.
 	measure 'Ocupados % var. YoY' = VAR CurrentValue = [Total Ocupados] RETURN IF(NOT ISBLANK(CurrentValue), DIVIDE(CurrentValue - [Total Ocupados (Año Anterior)], [Total Ocupados (Año Anterior)]))
 		formatString: 0.0%;-0.0%
 		displayFolder: 02 Comparativos Temporales
+		lineageTag: 3401f5b7-ff26-455c-9d05-b679b6d1299c
 
 	/// Desocupados del mes calendario anterior.
 	measure 'Total Desocupados (Mes Anterior)' = CALCULATE([Total Desocupados], DATEADD(dim_date[date], -1, MONTH))
 		formatString: #,##0
 		displayFolder: 02 Comparativos Temporales
+		lineageTag: 3f29d89d-e421-49ea-9817-280979caa64f
 
 	/// Variacion absoluta de desocupados vs. el mes calendario anterior.
 	measure 'Desocupados var. MoM' = VAR CurrentValue = [Total Desocupados] RETURN IF(NOT ISBLANK(CurrentValue), CurrentValue - [Total Desocupados (Mes Anterior)])
 		formatString: #,##0;-#,##0
 		displayFolder: 02 Comparativos Temporales
+		lineageTag: 1e3deb47-19a6-445b-a33b-6890c389ca80
 
 	/// Promedio movil de 12 meses de la tasa de desempleo, para suavizar la estacionalidad.
 	measure 'Tasa de Desempleo % Promedio Movil 12M' = AVERAGEX(DATESINPERIOD(dim_date[date], MAX(dim_date[date]), -12, MONTH), [Tasa de Desempleo %])
 		formatString: 0.00%
 		displayFolder: 02 Comparativos Temporales
+		lineageTag: a5fe72e9-356b-4215-8140-91829e1c1762
 
-	/// Promedio mensual de personas ocupadas en el periodo filtrado.
-	measure 'Promedio Ocupados Mensual' = IF(ISFILTERED(dim_departamentos[nombre_departamento]) || ISFILTERED(dim_departamentos[codigo_departamento]), SUM(gold_dane_labor_indicators[poblacion_ocupada]) / DISTINCTCOUNT(dim_date[year_month]), AVERAGEX(fact_monthly_labor, fact_monthly_labor[ocupados]))
+	/// Promedio mensual de personas ocupadas en el periodo filtrado (e.g. ~22-23M).
+	measure 'Promedio Ocupados Mensual' = AVERAGEX(fact_monthly_labor, fact_monthly_labor[ocupados])
 		formatString: #,##0
 		displayFolder: 01 KPIs Nacionales
+		lineageTag: feab7c7b-6c7d-4e0e-84a8-4fe02a0ac92e
 
-	/// Promedio mensual de personas desocupadas en el periodo filtrado.
-	measure 'Promedio Desocupados Mensual' = IF(ISFILTERED(dim_departamentos[nombre_departamento]) || ISFILTERED(dim_departamentos[codigo_departamento]), SUM(gold_dane_labor_indicators[poblacion_desocupada]) / DISTINCTCOUNT(dim_date[year_month]), AVERAGEX(fact_monthly_labor, fact_monthly_labor[desocupados]))
+	/// Promedio mensual de personas desocupadas en el periodo filtrado (e.g. ~2.5-3M).
+	measure 'Promedio Desocupados Mensual' = AVERAGEX(fact_monthly_labor, fact_monthly_labor[desocupados])
 		formatString: #,##0
 		displayFolder: 01 KPIs Nacionales
+		lineageTag: 5b507e8c-5b22-457f-a2f0-33742848c89a
 
-	/// Promedio mensual de fuerza laboral (PEA) en el periodo filtrado.
-	measure 'Promedio Fuerza Laboral Mensual' = IF(ISFILTERED(dim_departamentos[nombre_departamento]) || ISFILTERED(dim_departamentos[codigo_departamento]), SUM(gold_dane_labor_indicators[fuerza_laboral_total]) / DISTINCTCOUNT(dim_date[year_month]), AVERAGEX(fact_monthly_labor, fact_monthly_labor[fuerza_laboral]))
+	/// Promedio mensual de fuerza laboral (PEA) en el periodo filtrado (e.g. ~25-26M).
+	measure 'Promedio Fuerza Laboral Mensual' = AVERAGEX(fact_monthly_labor, fact_monthly_labor[fuerza_laboral])
 		formatString: #,##0
 		displayFolder: 01 KPIs Nacionales
+		lineageTag: dff99e9b-ac34-4197-83dc-8a8f2a9ceddc
 
 	column year
 		dataType: int64
@@ -143,6 +157,26 @@ table fact_monthly_labor
 		sourceLineageTag: fecha
 		summarizeBy: none
 		sourceColumn: fecha
+
+		annotation SummarizationSetBy = Automatic
+
+	column es_imputado
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 095eacce-cb9a-40ce-8299-a15ebba6f07e
+		sourceLineageTag: es_imputado
+		summarizeBy: none
+		sourceColumn: es_imputado
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_periodo
+		dataType: int64
+		formatString: 0
+		lineageTag: c382a991-4d12-4f18-8f12-0b10a295c999
+		sourceLineageTag: id_periodo
+		summarizeBy: sum
+		sourceColumn: id_periodo
 
 		annotation SummarizationSetBy = Automatic
 

@@ -2,6 +2,31 @@ table gold_dane_labor_indicators
 	lineageTag: 8814f158-b770-48fc-9bb2-c392b7223e66
 	sourceLineageTag: [dbo].[gold_dane_labor_indicators]
 
+	/// Poblacion ocupada mensual por departamento (fuente DANE gold table). Nota: ~22% de las filas son 'No Especificado' y no cruzan con un departamento concreto.
+	measure 'Poblacion Ocupada (Depto-Mes)' = SUM(gold_dane_labor_indicators[poblacion_ocupada])
+		formatString: #,##0
+		displayFolder: 04 Departamentos (mensual)
+
+	/// Poblacion desocupada mensual por departamento.
+	measure 'Poblacion Desocupada (Depto-Mes)' = SUM(gold_dane_labor_indicators[poblacion_desocupada])
+		formatString: #,##0
+		displayFolder: 04 Departamentos (mensual)
+
+	/// Fuerza laboral total mensual por departamento.
+	measure 'Fuerza Laboral Total (Depto-Mes)' = SUM(gold_dane_labor_indicators[fuerza_laboral_total])
+		formatString: #,##0
+		displayFolder: 04 Departamentos (mensual)
+
+	/// Tasa de desempleo ponderada mensual por departamento = Poblacion Desocupada / Fuerza Laboral Total.
+	measure 'Tasa de Desempleo % (Depto-Mes)' = DIVIDE([Poblacion Desocupada (Depto-Mes)], [Fuerza Laboral Total (Depto-Mes)])
+		formatString: 0.00%
+		displayFolder: 04 Departamentos (mensual)
+
+	/// Tamano total de la muestra encuestada (numero de encuestas DANE), util como indicador de confiabilidad estadistica del dato.
+	measure 'Tamano Muestra Encuestas' = SUM(gold_dane_labor_indicators[total_encuestas_muestra])
+		formatString: #,##0
+		displayFolder: 04 Departamentos (mensual)
+
 	column year
 		dataType: int64
 		formatString: 0

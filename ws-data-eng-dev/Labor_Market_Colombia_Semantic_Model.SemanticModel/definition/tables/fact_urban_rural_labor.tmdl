@@ -2,6 +2,26 @@ table fact_urban_rural_labor
 	lineageTag: dd8cca4a-8d9e-4e6b-8dc5-507debd1668f
 	sourceLineageTag: [dbo].[fact_urban_rural_labor]
 
+	/// Ocupados por año y zona (Urbano/Rural, columna geo_source). Esta tabla solo tiene grano anual (columna year), no fecha exacta, por lo que no esta relacionada con dim_date; filtrar usando su propio campo Year.
+	measure 'Ocupados (Urbano-Rural)' = SUM(fact_urban_rural_labor[ocupados])
+		formatString: #,##0
+		displayFolder: 05 Urbano-Rural (anual)
+
+	/// Desocupados por año y zona (Urbano/Rural).
+	measure 'Desocupados (Urbano-Rural)' = SUM(fact_urban_rural_labor[desocupados])
+		formatString: #,##0
+		displayFolder: 05 Urbano-Rural (anual)
+
+	/// Fuerza laboral por año y zona (Urbano/Rural).
+	measure 'Fuerza Laboral (Urbano-Rural)' = SUM(fact_urban_rural_labor[fuerza_laboral])
+		formatString: #,##0
+		displayFolder: 05 Urbano-Rural (anual)
+
+	/// Tasa de desempleo ponderada por año y zona = Desocupados / Fuerza Laboral.
+	measure 'Tasa de Desempleo % (Urbano-Rural)' = DIVIDE([Desocupados (Urbano-Rural)], [Fuerza Laboral (Urbano-Rural)])
+		formatString: 0.00%
+		displayFolder: 05 Urbano-Rural (anual)
+
 	column year
 		dataType: int64
 		formatString: 0

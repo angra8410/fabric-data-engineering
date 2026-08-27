@@ -1,0 +1,124 @@
+table fact_labor_by_president
+	lineageTag: 765e2cc5-12d0-4fa5-bf1a-54ebda1c7573
+	sourceLineageTag: [dbo].[fact_labor_by_president]
+
+	column id_periodo
+		dataType: int64
+		formatString: 0
+		lineageTag: 6f02b110-3daa-435e-be61-cd1130125c6d
+		sourceLineageTag: id_periodo
+		summarizeBy: sum
+		sourceColumn: id_periodo
+
+		annotation SummarizationSetBy = Automatic
+
+	column presidente
+		dataType: string
+		lineageTag: 0aa06527-508d-4af0-b32f-9ae9730f2e3d
+		sourceLineageTag: presidente
+		summarizeBy: none
+		sourceColumn: presidente
+
+		annotation SummarizationSetBy = Automatic
+
+	column periodo_texto
+		dataType: string
+		lineageTag: 039c40c4-3635-490b-bbb2-6d35e758c189
+		sourceLineageTag: periodo_texto
+		summarizeBy: none
+		sourceColumn: periodo_texto
+
+		annotation SummarizationSetBy = Automatic
+
+	column mandato
+		dataType: string
+		lineageTag: b230a8c9-712a-4034-83c8-7f9afabc9b56
+		sourceLineageTag: mandato
+		summarizeBy: none
+		sourceColumn: mandato
+
+		annotation SummarizationSetBy = Automatic
+
+	column meses_evaluados
+		dataType: int64
+		formatString: 0
+		lineageTag: eee2a89b-4c46-427a-bf1f-37bdbb636c2a
+		sourceLineageTag: meses_evaluados
+		summarizeBy: sum
+		sourceColumn: meses_evaluados
+
+		annotation SummarizationSetBy = Automatic
+
+	column promedio_ocupados_mensual
+		dataType: double
+		lineageTag: 1dedb500-921d-4720-bf2a-7c99492e8ece
+		sourceLineageTag: promedio_ocupados_mensual
+		summarizeBy: sum
+		sourceColumn: promedio_ocupados_mensual
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column promedio_desocupados_mensual
+		dataType: double
+		lineageTag: 7a27cb05-ae53-4605-890c-eb05285400a7
+		sourceLineageTag: promedio_desocupados_mensual
+		summarizeBy: sum
+		sourceColumn: promedio_desocupados_mensual
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column tasa_desempleo_ponderada_pct
+		dataType: double
+		lineageTag: cb9dbfc8-1d52-4b36-a1b9-b01494f107d0
+		sourceLineageTag: tasa_desempleo_ponderada_pct
+		summarizeBy: sum
+		sourceColumn: tasa_desempleo_ponderada_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column tasa_minima_mes_pct
+		dataType: double
+		lineageTag: 6b53818e-a917-4fb8-93a6-74c0583fa9bf
+		sourceLineageTag: tasa_minima_mes_pct
+		summarizeBy: sum
+		sourceColumn: tasa_minima_mes_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column tasa_maxima_mes_pct
+		dataType: double
+		lineageTag: 27fbf4b9-f5a1-4ea5-8b3e-c50a9d4d673a
+		sourceLineageTag: tasa_maxima_mes_pct
+		summarizeBy: sum
+		sourceColumn: tasa_maxima_mes_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column fuerza_laboral_promedio
+		dataType: double
+		lineageTag: 785c4ab2-f690-4099-b51d-42d054391c18
+		sourceLineageTag: fuerza_laboral_promedio
+		summarizeBy: sum
+		sourceColumn: fuerza_laboral_promedio
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition fact_labor_by_president = entity
+		mode: directLake
+		source
+			entityName: fact_labor_by_president
+			schemaName: dbo
+			expressionSource: 'DirectLake - dane_gold_lh'
+

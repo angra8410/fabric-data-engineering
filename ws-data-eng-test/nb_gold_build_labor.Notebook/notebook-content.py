@@ -703,6 +703,37 @@ print("✅ fact_monthly_labor actualizada exitosamente con id_periodo!")
 
 # CELL ********************
 
+# =====================================================================
+# 🟡 AGREGANDO ID_PERIODO A FACT_MONTHLY_LABOR EN DANE_GOLD_LH
+# =====================================================================
+from pyspark.sql import functions as F
+
+print("🟡 Actualizando fact_monthly_labor con id_periodo...")
+
+df_monthly = spark.table("fact_monthly_labor").withColumn(
+    "id_periodo",
+    F.when(F.col("fecha") < "2006-08-07", 1)
+     .when((F.col("fecha") >= "2006-08-07") & (F.col("fecha") < "2010-08-07"), 2)
+     .when((F.col("fecha") >= "2010-08-07") & (F.col("fecha") < "2014-08-07"), 3)
+     .when((F.col("fecha") >= "2014-08-07") & (F.col("fecha") < "2018-08-07"), 4)
+     .when((F.col("fecha") >= "2018-08-07") & (F.col("fecha") < "2022-08-07"), 5)
+     .otherwise(6)
+)
+
+# Sobrescribimos el esquema de la tabla Delta para incluir la nueva columna
+df_monthly.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("fact_monthly_labor")
+print(f"✅ fact_monthly_labor actualizada exitosamente ({df_monthly.count():,} registros con id_periodo)!")
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
 from pyspark.sql import functions as F
 from pyspark.sql.types import *
 

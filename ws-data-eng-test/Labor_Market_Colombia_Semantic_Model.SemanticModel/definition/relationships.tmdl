@@ -18,8 +18,3 @@ relationship FactLaborByPresident_IdPeriodo_DimPresidentes
 	fromColumn: fact_labor_by_president.id_periodo
 	toColumn: dim_presidentes.id_periodo
 
-relationship FactMonthlyLabor_IdPeriodo_DimPresidentes
-	crossFilteringBehavior: bothDirections
-	fromColumn: fact_monthly_labor.id_periodo
-	toColumn: dim_presidentes.id_periodo
-

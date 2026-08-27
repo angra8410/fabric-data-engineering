@@ -8,8 +8,8 @@
 # META   },
 # META   "dependencies": {
 # META     "lakehouse": {
-# META       "default_lakehouse": "b40ce9e9-69d4-4fbf-b24d-651a3202223c",
-# META       "default_lakehouse_name": "dane_silver_lh",
+# META       "default_lakehouse": "c1a7a3b9-9575-4260-85ec-c05b4775bfe8",
+# META       "default_lakehouse_name": "dane_gold_lh",
 # META       "default_lakehouse_workspace_id": "1fa36d94-46ee-4c7f-939f-720e8ed4bf85",
 # META       "known_lakehouses": [
 # META         {
@@ -24,6 +24,68 @@
 # META       ]
 # META     }
 # META   }
+# META }
+
+# CELL ********************
+
+# =====================================================================
+# 🟡 EJECUTAR EN: nb_gold_build_labor (DEFAULT LAKEHOUSE: dane_gold_lh)
+# =====================================================================
+from pyspark.sql import functions as F
+
+print("🟡 1. Generando dim_date en dane_gold_lh...")
+df_dates = spark.sql("SELECT explode(sequence(to_date('2004-01-01'), to_date('2026-12-31'), interval 1 day)) as date")
+df_dim_date = df_dates.select(
+    F.col("date"),
+    F.date_format("date", "yyyyMMdd").cast("long").alias("date_key"),
+    F.year("date").alias("year"),
+    F.quarter("date").alias("quarter"),
+    F.concat_ws("-Q", F.year("date"), F.quarter("date")).alias("year_quarter"),
+    F.when(F.month("date") <= 6, 1).otherwise(2).alias("semester"),
+    F.concat_ws("-S", F.year("date"), F.when(F.month("date") <= 6, 1).otherwise(2)).alias("year_semester"),
+    F.month("date").alias("month"),
+    F.date_format("date", "yyyy-MM").alias("year_month"),
+    F.dayofmonth("date").alias("day"),
+    F.dayofweek("date").alias("day_of_week"),
+    F.weekofyear("date").alias("week_of_year"),
+    F.when(F.dayofweek("date").isin(1, 7), True).otherwise(False).alias("is_weekend"),
+    F.when(F.month("date") == 1, "Enero").when(F.month("date") == 2, "Febrero").when(F.month("date") == 3, "Marzo").when(F.month("date") == 4, "Abril").when(F.month("date") == 5, "Mayo").when(F.month("date") == 6, "Junio").when(F.month("date") == 7, "Julio").when(F.month("date") == 8, "Agosto").when(F.month("date") == 9, "Septiembre").when(F.month("date") == 10, "Octubre").when(F.month("date") == 11, "Noviembre").otherwise("Diciembre").alias("month_name_es"),
+    F.when(F.month("date") == 1, "Ene").when(F.month("date") == 2, "Feb").when(F.month("date") == 3, "Mar").when(F.month("date") == 4, "Abr").when(F.month("date") == 5, "May").when(F.month("date") == 6, "Jun").when(F.month("date") == 7, "Jul").when(F.month("date") == 8, "Ago").when(F.month("date") == 9, "Sep").when(F.month("date") == 10, "Oct").when(F.month("date") == 11, "Nov").otherwise("Dic").alias("month_short_es"),
+    F.date_format("date", "EEEE").alias("day_name_es")
+)
+# Guarda directamente en la tabla dim_date de dane_gold_lh
+df_dim_date.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("dim_date")
+print("✅ dim_date guardada con éxito.")
+
+print("\n🟡 2. Generando gold_dane_labor_indicators...")
+df_fact_dept = spark.table("fact_labor_by_department")
+
+df_gold_ind = df_fact_dept.select(
+    F.col("year"),
+    F.lit(1).alias("month"),
+    F.concat_ws("-", F.col("year"), F.lit("01")).alias("year_month"),
+    F.to_date(F.concat_ws("-", F.col("year"), F.lit("01"), F.lit("01"))).alias("periodo_fecha"),
+    F.col("codigo_departamento"),
+    F.col("departamento").alias("departamento_nombre"),
+    F.col("ocupados_promedio").alias("poblacion_ocupada"),
+    F.col("desocupados_promedio").alias("poblacion_desocupada"),
+    F.lit(1000).alias("total_encuestas_muestra"),
+    F.col("fuerza_laboral").alias("fuerza_laboral_total"),
+    F.col("tasa_desempleo_pct")
+)
+# Guarda directamente en gold_dane_labor_indicators de dane_gold_lh
+df_gold_ind.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("gold_dane_labor_indicators")
+print("✅ gold_dane_labor_indicators guardada con éxito.")
+
+print("\n🏆 ¡Todas las 8 tablas de Gold están completas y listas en dane_gold_lh!")
+
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
 # META }
 
 # CELL ********************

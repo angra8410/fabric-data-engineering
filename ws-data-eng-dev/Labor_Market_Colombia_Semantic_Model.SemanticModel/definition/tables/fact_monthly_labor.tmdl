@@ -2,6 +2,61 @@ table fact_monthly_labor
 	lineageTag: db154422-b2a8-4e19-acc9-d51b991e9ef9
 	sourceLineageTag: [dbo].[fact_monthly_labor]
 
+	/// Total de personas ocupadas a nivel nacional (serie mensual DANE).
+	measure 'Total Ocupados' = SUM(fact_monthly_labor[ocupados])
+		formatString: #,##0
+		displayFolder: 01 KPIs Nacionales
+
+	/// Total de personas desocupadas a nivel nacional (serie mensual DANE).
+	measure 'Total Desocupados' = SUM(fact_monthly_labor[desocupados])
+		formatString: #,##0
+		displayFolder: 01 KPIs Nacionales
+
+	/// Fuerza laboral total = Ocupados + Desocupados.
+	measure 'Total Fuerza Laboral' = SUM(fact_monthly_labor[fuerza_laboral])
+		formatString: #,##0
+		displayFolder: 01 KPIs Nacionales
+
+	/// Tasa de desempleo ponderada = Desocupados / Fuerza Laboral. Se calcula asi (en vez de promediar la columna tasa_desempleo_pct) para que agregue correctamente en cualquier periodo.
+	measure 'Tasa de Desempleo %' = DIVIDE([Total Desocupados], [Total Fuerza Laboral])
+		formatString: 0.00%
+		displayFolder: 01 KPIs Nacionales
+
+	/// Tasa de desempleo del mismo mes del año anterior.
+	measure 'Tasa de Desempleo % (Año Anterior)' = CALCULATE([Tasa de Desempleo %], SAMEPERIODLASTYEAR(dim_date[date]))
+		formatString: 0.00%
+		displayFolder: 02 Comparativos Temporales
+
+	/// Variacion en puntos porcentuales de la tasa de desempleo vs. el mismo mes del año anterior.
+	measure 'Tasa de Desempleo % var. pp YoY' = VAR CurrentValue = [Tasa de Desempleo %] RETURN IF(NOT ISBLANK(CurrentValue), CurrentValue - [Tasa de Desempleo % (Año Anterior)])
+		formatString: 0.00%;-0.00%
+		displayFolder: 02 Comparativos Temporales
+
+	/// Ocupados del mismo mes del año anterior.
+	measure 'Total Ocupados (Año Anterior)' = CALCULATE([Total Ocupados], SAMEPERIODLASTYEAR(dim_date[date]))
+		formatString: #,##0
+		displayFolder: 02 Comparativos Temporales
+
+	/// Variacion porcentual de ocupados vs. el mismo mes del año anterior.
+	measure 'Ocupados % var. YoY' = VAR CurrentValue = [Total Ocupados] RETURN IF(NOT ISBLANK(CurrentValue), DIVIDE(CurrentValue - [Total Ocupados (Año Anterior)], [Total Ocupados (Año Anterior)]))
+		formatString: 0.0%;-0.0%
+		displayFolder: 02 Comparativos Temporales
+
+	/// Desocupados del mes calendario anterior.
+	measure 'Total Desocupados (Mes Anterior)' = CALCULATE([Total Desocupados], DATEADD(dim_date[date], -1, MONTH))
+		formatString: #,##0
+		displayFolder: 02 Comparativos Temporales
+
+	/// Variacion absoluta de desocupados vs. el mes calendario anterior.
+	measure 'Desocupados var. MoM' = VAR CurrentValue = [Total Desocupados] RETURN IF(NOT ISBLANK(CurrentValue), CurrentValue - [Total Desocupados (Mes Anterior)])
+		formatString: #,##0;-#,##0
+		displayFolder: 02 Comparativos Temporales
+
+	/// Promedio movil de 12 meses de la tasa de desempleo, para suavizar la estacionalidad.
+	measure 'Tasa de Desempleo % Promedio Movil 12M' = AVERAGEX(DATESINPERIOD(dim_date[date], MAX(dim_date[date]), -12, MONTH), [Tasa de Desempleo %])
+		formatString: 0.00%
+		displayFolder: 02 Comparativos Temporales
+
 	column year
 		dataType: int64
 		formatString: 0

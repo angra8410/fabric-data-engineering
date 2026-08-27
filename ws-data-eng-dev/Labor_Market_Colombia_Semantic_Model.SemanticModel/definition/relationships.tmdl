@@ -1,0 +1,20 @@
+relationship FactMonthlyLabor_Fecha_DimDate
+	fromColumn: fact_monthly_labor.fecha
+	toColumn: dim_date.date
+
+relationship GoldDaneLaborIndicators_PeriodoFecha_DimDate
+	fromColumn: gold_dane_labor_indicators.periodo_fecha
+	toColumn: dim_date.date
+
+relationship FactLaborByDept_CodigoDept_DimDept
+	fromColumn: fact_labor_by_department.codigo_departamento
+	toColumn: dim_departamentos.codigo_departamento
+
+relationship GoldDaneLaborIndicators_CodigoDept_DimDept
+	fromColumn: gold_dane_labor_indicators.codigo_departamento
+	toColumn: dim_departamentos.codigo_departamento
+
+relationship FactLaborByPresident_IdPeriodo_DimPresidentes
+	fromColumn: fact_labor_by_president.id_periodo
+	toColumn: dim_presidentes.id_periodo
+

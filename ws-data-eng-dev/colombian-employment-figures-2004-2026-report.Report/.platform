@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "colombian-employment-figures-2004-2026-report"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "8e380246-484c-a6e2-4e6f-d07492c4fd14"
+  }
+}

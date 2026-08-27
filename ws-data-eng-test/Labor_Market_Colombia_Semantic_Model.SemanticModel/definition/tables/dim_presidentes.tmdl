@@ -7,7 +7,7 @@ table dim_presidentes
 		formatString: 0
 		lineageTag: 72f6c46f-f2e6-4714-a4b1-83f4377ae993
 		sourceLineageTag: id_periodo
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: id_periodo
 
 		annotation SummarizationSetBy = Automatic

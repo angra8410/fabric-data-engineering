@@ -6,31 +6,37 @@ table fact_labor_by_president
 	measure 'Promedio Ocupados Mensual (Mandato)' = SUM(fact_labor_by_president[promedio_ocupados_mensual])
 		formatString: #,##0
 		displayFolder: 06 Por Presidente (usar de a 1 mandato)
+		lineageTag: 792bc69d-59b4-41aa-b11f-ea8232a39162
 
 	/// Promedio mensual de desocupados durante el mandato. Valido solo por mandato individual.
 	measure 'Promedio Desocupados Mensual (Mandato)' = SUM(fact_labor_by_president[promedio_desocupados_mensual])
 		formatString: #,##0
 		displayFolder: 06 Por Presidente (usar de a 1 mandato)
+		lineageTag: d6955f00-e6c7-4de7-a22b-bbfa4eb29622
 
 	/// Tasa de desempleo ponderada durante el mandato (precalculada en la fuente). Valido solo por mandato individual.
 	measure 'Tasa Desempleo Ponderada % (Mandato)' = SUM(fact_labor_by_president[tasa_desempleo_ponderada_pct])
 		formatString: 0.00"%"
 		displayFolder: 06 Por Presidente (usar de a 1 mandato)
+		lineageTag: 3b61887f-e7bd-467f-963e-04793aa94c6d
 
 	/// Tasa de desempleo minima registrada en un mes durante el mandato.
 	measure 'Tasa Minima del Mandato %' = SUM(fact_labor_by_president[tasa_minima_mes_pct])
 		formatString: 0.00"%"
 		displayFolder: 06 Por Presidente (usar de a 1 mandato)
+		lineageTag: e9e0cdbc-6dac-429f-ba13-36d9018fcc50
 
 	/// Tasa de desempleo maxima registrada en un mes durante el mandato.
 	measure 'Tasa Maxima del Mandato %' = SUM(fact_labor_by_president[tasa_maxima_mes_pct])
 		formatString: 0.00"%"
 		displayFolder: 06 Por Presidente (usar de a 1 mandato)
+		lineageTag: 5ed3c86d-fc2a-4786-a871-72a7c9ac7395
 
 	/// Numero de meses con datos evaluados dentro del mandato.
 	measure 'Meses Evaluados (Mandato)' = SUM(fact_labor_by_president[meses_evaluados])
 		formatString: 0
 		displayFolder: 06 Por Presidente (usar de a 1 mandato)
+		lineageTag: 967363c9-8f9c-45d8-9bb5-35a9507e9851
 
 	column id_periodo
 		dataType: int64

@@ -6,26 +6,31 @@ table fact_labor_by_department
 	measure 'Ocupados Promedio Anual (Depto)' = SUM(fact_labor_by_department[ocupados_promedio])
 		formatString: #,##0
 		displayFolder: 03 Departamentos (anual)
+		lineageTag: 900e5f56-aa84-4e49-b302-08189be9e00a
 
 	/// Promedio anual de desocupados por departamento.
 	measure 'Desocupados Promedio Anual (Depto)' = SUM(fact_labor_by_department[desocupados_promedio])
 		formatString: #,##0
 		displayFolder: 03 Departamentos (anual)
+		lineageTag: 2d055039-b86c-4f32-b206-108d16f81297
 
 	/// Fuerza laboral anual por departamento.
 	measure 'Fuerza Laboral Anual (Depto)' = SUM(fact_labor_by_department[fuerza_laboral])
 		formatString: #,##0
 		displayFolder: 03 Departamentos (anual)
+		lineageTag: 1ed24dfb-c22f-4b42-afdf-f116fa9680e8
 
 	/// Tasa de desempleo ponderada por departamento y año = Desocupados / Fuerza Laboral.
 	measure 'Tasa de Desempleo % (Depto Anual)' = DIVIDE([Desocupados Promedio Anual (Depto)], [Fuerza Laboral Anual (Depto)])
 		formatString: 0.00%
 		displayFolder: 03 Departamentos (anual)
+		lineageTag: a45ba080-a464-4b79-8c94-cfa26a9f4246
 
 	/// Puesto del departamento segun su tasa de desempleo (1 = tasa mas alta). Usar con la tabla dim_departamentos.
 	measure 'Ranking Desempleo (Depto)' = IF(NOT ISBLANK([Tasa de Desempleo % (Depto Anual)]), RANKX(ALLSELECTED(dim_departamentos[nombre_departamento]), [Tasa de Desempleo % (Depto Anual)],, DESC))
 		formatString: 0
 		displayFolder: 03 Departamentos (anual)
+		lineageTag: 09b2bfe3-81a1-48ad-9f60-3ad615f7e5d5
 
 	column year
 		dataType: int64

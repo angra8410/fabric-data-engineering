@@ -1,0 +1,26 @@
+[
+  {
+    "name": "dane",
+    "path": "/Files/raw",
+    "target": {
+      "type": "AzureBlobStorage",
+      "azureBlobStorage": {
+        "connectionId": "67558cf6-4b3c-4486-bcfc-8a9ee691f599",
+        "location": "https://trustedworkspacestorage.blob.core.windows.net",
+        "subpath": "/raw-data/raw/dane"
+      }
+    }
+  },
+  {
+    "name": "codigos davipola",
+    "path": "/Files/raw",
+    "target": {
+      "type": "AzureBlobStorage",
+      "azureBlobStorage": {
+        "connectionId": "67558cf6-4b3c-4486-bcfc-8a9ee691f599",
+        "location": "https://trustedworkspacestorage.blob.core.windows.net",
+        "subpath": "/raw-data/codigos davipola"
+      }
+    }
+  }
+]

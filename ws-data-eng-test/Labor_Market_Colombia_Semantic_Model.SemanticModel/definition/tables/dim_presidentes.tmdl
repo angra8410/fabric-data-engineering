@@ -1,0 +1,68 @@
+table dim_presidentes
+	lineageTag: 1af5da6c-8907-4215-b94e-0adda506f05e
+	sourceLineageTag: [dbo].[dim_presidentes]
+
+	column id_periodo
+		dataType: int64
+		formatString: 0
+		lineageTag: 72f6c46f-f2e6-4714-a4b1-83f4377ae993
+		sourceLineageTag: id_periodo
+		summarizeBy: sum
+		sourceColumn: id_periodo
+
+		annotation SummarizationSetBy = Automatic
+
+	column presidente
+		dataType: string
+		lineageTag: dbf89f5b-fc87-48b6-8c25-3cfb75456bcb
+		sourceLineageTag: presidente
+		summarizeBy: none
+		sourceColumn: presidente
+
+		annotation SummarizationSetBy = Automatic
+
+	column periodo_texto
+		dataType: string
+		lineageTag: 425652ca-1c1c-46b8-8d52-72d1bbc0d8ea
+		sourceLineageTag: periodo_texto
+		summarizeBy: none
+		sourceColumn: periodo_texto
+
+		annotation SummarizationSetBy = Automatic
+
+	column mandato
+		dataType: string
+		lineageTag: f13910bf-ca21-4bbd-bc05-bab9833c0604
+		sourceLineageTag: mandato
+		summarizeBy: none
+		sourceColumn: mandato
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_inicio
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: ca860b74-fda5-4e62-afcb-c619060bb243
+		sourceLineageTag: fecha_inicio
+		summarizeBy: none
+		sourceColumn: fecha_inicio
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_fin
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: efe5f7b2-f180-48cc-b78d-89753bc7b066
+		sourceLineageTag: fecha_fin
+		summarizeBy: none
+		sourceColumn: fecha_fin
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_presidentes = entity
+		mode: directLake
+		source
+			entityName: dim_presidentes
+			schemaName: dbo
+			expressionSource: 'DirectLake - dane_gold_lh'
+

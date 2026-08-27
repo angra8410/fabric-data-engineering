@@ -1,0 +1,147 @@
+table gold_dane_labor_indicators
+	lineageTag: 8814f158-b770-48fc-9bb2-c392b7223e66
+	sourceLineageTag: [dbo].[gold_dane_labor_indicators]
+
+	/// Poblacion ocupada mensual por departamento (fuente DANE gold table). Nota: ~22% de las filas son 'No Especificado' y no cruzan con un departamento concreto.
+	measure 'Poblacion Ocupada (Depto-Mes)' = SUM(gold_dane_labor_indicators[poblacion_ocupada])
+		formatString: #,##0
+		displayFolder: 04 Departamentos (mensual)
+
+	/// Poblacion desocupada mensual por departamento.
+	measure 'Poblacion Desocupada (Depto-Mes)' = SUM(gold_dane_labor_indicators[poblacion_desocupada])
+		formatString: #,##0
+		displayFolder: 04 Departamentos (mensual)
+
+	/// Fuerza laboral total mensual por departamento.
+	measure 'Fuerza Laboral Total (Depto-Mes)' = SUM(gold_dane_labor_indicators[fuerza_laboral_total])
+		formatString: #,##0
+		displayFolder: 04 Departamentos (mensual)
+
+	/// Tasa de desempleo ponderada mensual por departamento = Poblacion Desocupada / Fuerza Laboral Total.
+	measure 'Tasa de Desempleo % (Depto-Mes)' = DIVIDE([Poblacion Desocupada (Depto-Mes)], [Fuerza Laboral Total (Depto-Mes)])
+		formatString: 0.00%
+		displayFolder: 04 Departamentos (mensual)
+
+	/// Tamano total de la muestra encuestada (numero de encuestas DANE), util como indicador de confiabilidad estadistica del dato.
+	measure 'Tamano Muestra Encuestas' = SUM(gold_dane_labor_indicators[total_encuestas_muestra])
+		formatString: #,##0
+		displayFolder: 04 Departamentos (mensual)
+
+	column year
+		dataType: int64
+		formatString: 0
+		lineageTag: e6596671-0700-4d1d-93c6-9c1b3eb03d07
+		sourceLineageTag: year
+		summarizeBy: sum
+		sourceColumn: year
+
+		annotation SummarizationSetBy = Automatic
+
+	column month
+		dataType: int64
+		formatString: 0
+		lineageTag: e21afb6d-2569-4278-9869-e35d51545aa5
+		sourceLineageTag: month
+		summarizeBy: sum
+		sourceColumn: month
+
+		annotation SummarizationSetBy = Automatic
+
+	column year_month
+		dataType: string
+		lineageTag: fd397b9d-44d6-43dc-b863-621a3b3553f4
+		sourceLineageTag: year_month
+		summarizeBy: none
+		sourceColumn: year_month
+
+		annotation SummarizationSetBy = Automatic
+
+	column periodo_fecha
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: ad3ee2ee-5d33-4fea-ac30-0f05f93e502f
+		sourceLineageTag: periodo_fecha
+		summarizeBy: none
+		sourceColumn: periodo_fecha
+
+		annotation SummarizationSetBy = Automatic
+
+	column codigo_departamento
+		dataType: string
+		lineageTag: 31c4e6a2-e7d4-48bc-9fab-e1e7c89e066a
+		sourceLineageTag: codigo_departamento
+		summarizeBy: none
+		sourceColumn: codigo_departamento
+
+		annotation SummarizationSetBy = Automatic
+
+	column departamento_nombre
+		dataType: string
+		lineageTag: d72f0665-f97c-48fd-a68a-d03cc376895d
+		sourceLineageTag: departamento_nombre
+		summarizeBy: none
+		sourceColumn: departamento_nombre
+
+		annotation SummarizationSetBy = Automatic
+
+	column poblacion_ocupada
+		dataType: double
+		lineageTag: e89ad99e-1d35-4466-85ef-299b81057b61
+		sourceLineageTag: poblacion_ocupada
+		summarizeBy: sum
+		sourceColumn: poblacion_ocupada
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column poblacion_desocupada
+		dataType: double
+		lineageTag: 0f73e84c-2f03-4448-b633-87efe1f7614c
+		sourceLineageTag: poblacion_desocupada
+		summarizeBy: sum
+		sourceColumn: poblacion_desocupada
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_encuestas_muestra
+		dataType: int64
+		formatString: 0
+		lineageTag: 466bb036-b4a4-41fa-9261-6962c46b2b3b
+		sourceLineageTag: total_encuestas_muestra
+		summarizeBy: sum
+		sourceColumn: total_encuestas_muestra
+
+		annotation SummarizationSetBy = Automatic
+
+	column fuerza_laboral_total
+		dataType: double
+		lineageTag: 66e69803-9251-4521-9931-c650fdb8ec2b
+		sourceLineageTag: fuerza_laboral_total
+		summarizeBy: sum
+		sourceColumn: fuerza_laboral_total
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column tasa_desempleo_pct
+		dataType: double
+		lineageTag: 0ab814ba-6019-412c-841f-ecc458bf550c
+		sourceLineageTag: tasa_desempleo_pct
+		summarizeBy: sum
+		sourceColumn: tasa_desempleo_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition gold_dane_labor_indicators = entity
+		mode: directLake
+		source
+			entityName: gold_dane_labor_indicators
+			schemaName: dbo
+			expressionSource: 'DirectLake - dane_gold_lh'
+

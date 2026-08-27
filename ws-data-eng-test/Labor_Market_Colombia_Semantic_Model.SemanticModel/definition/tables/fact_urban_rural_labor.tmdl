@@ -1,0 +1,104 @@
+table fact_urban_rural_labor
+	lineageTag: dd8cca4a-8d9e-4e6b-8dc5-507debd1668f
+	sourceLineageTag: [dbo].[fact_urban_rural_labor]
+
+	/// Ocupados por año y zona (Urbano/Rural, columna geo_source). Esta tabla solo tiene grano anual (columna year), no fecha exacta, por lo que no esta relacionada con dim_date; filtrar usando su propio campo Year.
+	measure 'Ocupados (Urbano-Rural)' = SUM(fact_urban_rural_labor[ocupados])
+		formatString: #,##0
+		displayFolder: 05 Urbano-Rural (anual)
+
+	/// Desocupados por año y zona (Urbano/Rural).
+	measure 'Desocupados (Urbano-Rural)' = SUM(fact_urban_rural_labor[desocupados])
+		formatString: #,##0
+		displayFolder: 05 Urbano-Rural (anual)
+
+	/// Fuerza laboral por año y zona (Urbano/Rural).
+	measure 'Fuerza Laboral (Urbano-Rural)' = SUM(fact_urban_rural_labor[fuerza_laboral])
+		formatString: #,##0
+		displayFolder: 05 Urbano-Rural (anual)
+
+	/// Tasa de desempleo ponderada por año y zona = Desocupados / Fuerza Laboral.
+	measure 'Tasa de Desempleo % (Urbano-Rural)' = DIVIDE([Desocupados (Urbano-Rural)], [Fuerza Laboral (Urbano-Rural)])
+		formatString: 0.00%
+		displayFolder: 05 Urbano-Rural (anual)
+
+	column year
+		dataType: int64
+		formatString: 0
+		lineageTag: 49cfbde7-b9ce-44e5-8e59-8c69f718ae79
+		sourceLineageTag: year
+		summarizeBy: sum
+		sourceColumn: year
+
+		annotation SummarizationSetBy = Automatic
+
+	column geo_source
+		dataType: string
+		lineageTag: d9f7e52e-6743-4951-84cd-087fae66f7ea
+		sourceLineageTag: geo_source
+		summarizeBy: none
+		sourceColumn: geo_source
+
+		annotation SummarizationSetBy = Automatic
+
+	column meses
+		dataType: int64
+		formatString: 0
+		lineageTag: 33ee7066-d503-4aff-84f3-7a53fd1d6cf1
+		sourceLineageTag: meses
+		summarizeBy: sum
+		sourceColumn: meses
+
+		annotation SummarizationSetBy = Automatic
+
+	column ocupados
+		dataType: double
+		lineageTag: af7d85b2-8708-43f9-949d-eb5ba160ce38
+		sourceLineageTag: ocupados
+		summarizeBy: sum
+		sourceColumn: ocupados
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column desocupados
+		dataType: double
+		lineageTag: 40493e3c-6a58-44c1-9979-66886f86007c
+		sourceLineageTag: desocupados
+		summarizeBy: sum
+		sourceColumn: desocupados
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column fuerza_laboral
+		dataType: double
+		lineageTag: 64bb7394-d24b-4d1d-b43d-448e46ec0e7a
+		sourceLineageTag: fuerza_laboral
+		summarizeBy: sum
+		sourceColumn: fuerza_laboral
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column tasa_desempleo_pct
+		dataType: double
+		lineageTag: e5f738e4-b79f-4342-a299-a6013b6dbc4f
+		sourceLineageTag: tasa_desempleo_pct
+		summarizeBy: sum
+		sourceColumn: tasa_desempleo_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition fact_urban_rural_labor = entity
+		mode: directLake
+		source
+			entityName: fact_urban_rural_labor
+			schemaName: dbo
+			expressionSource: 'DirectLake - dane_gold_lh'
+

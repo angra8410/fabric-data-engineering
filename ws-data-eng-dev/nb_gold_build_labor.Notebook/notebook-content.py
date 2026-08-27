@@ -256,6 +256,141 @@ fact_presidential_labor.select(
 
 # CELL ********************
 
+# =====================================================================
+# 🟡 MATERIALIZACIÓN CORRECTA EN 'Tables/dbo/...' DE 'dane_gold_lh'
+# =====================================================================
+from pyspark.sql import functions as F
+from pyspark.sql.types import StructType, StructField, StringType, IntegerType
+
+print("⚡ Obteniendo ruta física de 'dane_gold_lh'...")
+
+bronze_lh_path = mssparkutils.lakehouse.get("dane_bronze_lh").properties["abfsPath"]
+gold_lh_path   = mssparkutils.lakehouse.get("dane_gold_lh").properties["abfsPath"]
+
+# 1. Dimensión DIVIPOLA (Departamentos)
+divipola_data = [
+    ("05", "Antioquia"), ("08", "Atlántico"), ("11", "Bogotá, D.C."), ("13", "Bolívar"),
+    ("15", "Boyacá"), ("17", "Caldas"), ("18", "Caquetá"), ("19", "Cauca"),
+    ("20", "Cesar"), ("23", "Córdoba"), ("25", "Cundinamarca"), ("27", "Chocó"),
+    ("41", "Huila"), ("44", "La Guajira"), ("47", "Magdalena"), ("50", "Meta"),
+    ("52", "Nariño"), ("54", "Norte de Santander"), ("63", "Quindío"), ("66", "Risaralda"),
+    ("68", "Santander"), ("70", "Sucre"), ("73", "Tolima"), ("76", "Valle del Cauca"),
+    ("81", "Arauca"), ("85", "Casanare"), ("86", "Putumayo"), ("88", "Archipiélago de San Andrés"),
+    ("91", "Amazonas"), ("94", "Guainía"), ("95", "Guaviare"), ("97", "Vaupés"), ("99", "Vichada")
+]
+schema_div = StructType([StructField("codigo_departamento", StringType(), False), StructField("nombre_departamento", StringType(), False)])
+dim_departamentos = spark.createDataFrame(divipola_data, schema=schema_div)
+dim_departamentos.write.format("delta").mode("overwrite").option("overwriteSchema", "true").save(f"{gold_lh_path}/Tables/dbo/dim_departamentos")
+print("  ✅ 1. 'dim_departamentos' guardada en Tables/dbo/!")
+
+# 2. Dimensión Presidentes (2002 - 2030)
+presidents_data = [
+    (1, "Álvaro Uribe Vélez", "2002-08-07", "2006-08-07", "2002 - 2006", "Primer Mandato"),
+    (2, "Álvaro Uribe Vélez", "2006-08-07", "2010-08-07", "2006 - 2010", "Segundo Mandato"),
+    (3, "Juan Manuel Santos Calderón", "2010-08-07", "2014-08-07", "2010 - 2014", "Primer Mandato"),
+    (4, "Juan Manuel Santos Calderón", "2014-08-07", "2018-08-07", "2014 - 2018", "Segundo Mandato"),
+    (5, "Iván Duque Márquez", "2018-08-07", "2022-08-07", "2018 - 2022", "Mandato Constitucional"),
+    (6, "Gustavo Petro Urrego", "2022-08-07", "2026-08-07", "2022 - 2026", "Mandato Constitucional"),
+    (7, "Abelardo De La Espriella", "2026-08-07", "2030-08-07", "2026 - 2030", "Proyección 2026-2030")
+]
+schema_pres = StructType([
+    StructField("id_periodo", IntegerType(), False),
+    StructField("presidente", StringType(), False),
+    StructField("fecha_inicio_str", StringType(), False),
+    StructField("fecha_fin_str", StringType(), False),
+    StructField("periodo_texto", StringType(), False),
+    StructField("mandato", StringType(), False)
+])
+dim_presidentes = spark.createDataFrame(presidents_data, schema=schema_pres) \
+    .withColumn("fecha_inicio", F.to_date("fecha_inicio_str")) \
+    .withColumn("fecha_fin", F.to_date("fecha_fin_str")) \
+    .drop("fecha_inicio_str", "fecha_fin_str")
+dim_presidentes.write.format("delta").mode("overwrite").option("overwriteSchema", "true").save(f"{gold_lh_path}/Tables/dbo/dim_presidentes")
+print("  ✅ 2. 'dim_presidentes' guardada en Tables/dbo/!")
+
+# 3. Cargar Silver y Generar Facts
+df_silver = spark.read.format("delta").load(f"{bronze_lh_path}/Tables/dbo/silver_dane_labor_market")
+
+# Fact Departamental
+gold_dpto = df_silver.filter((F.col("codigo_departamento") != "00") & (F.col("codigo_departamento").isNotNull())) \
+    .groupBy("year", "codigo_departamento").agg(
+        F.countDistinct("month").alias("meses_reportados"),
+        F.round(F.sum(F.when(F.col("status") == "ocupado", F.col("total_weight")).otherwise(0)) / F.countDistinct("month"), 0).alias("ocupados_promedio"),
+        F.round(F.sum(F.when(F.col("status") == "desocupado", F.col("total_weight")).otherwise(0)) / F.countDistinct("month"), 0).alias("desocupados_promedio")
+    ).withColumn(
+        "fuerza_laboral", F.col("ocupados_promedio") + F.col("desocupados_promedio")
+    ).withColumn(
+        "tasa_desempleo_pct", F.round((F.col("desocupados_promedio") / F.col("fuerza_laboral")) * 100, 2)
+    ).join(
+        dim_departamentos, on="codigo_departamento", how="left"
+    ).select(
+        "year",
+        "codigo_departamento",
+        F.coalesce(F.col("nombre_departamento"), F.concat(F.lit("Depto "), F.col("codigo_departamento"))).alias("departamento"),
+        "ocupados_promedio",
+        "desocupados_promedio",
+        "fuerza_laboral",
+        "tasa_desempleo_pct"
+    ).orderBy("year", "codigo_departamento")
+gold_dpto.write.format("delta").mode("overwrite").option("overwriteSchema", "true").save(f"{gold_lh_path}/Tables/dbo/fact_labor_by_department")
+print("  ✅ 3. 'fact_labor_by_department' guardada en Tables/dbo/!")
+
+# Fact Mensual Nacional
+gold_monthly = df_silver.groupBy("year", "month").agg(
+    F.round(F.sum(F.when(F.col("status") == "ocupado", F.col("total_weight")).otherwise(0)), 0).alias("ocupados"),
+    F.round(F.sum(F.when(F.col("status") == "desocupado", F.col("total_weight")).otherwise(0)), 0).alias("desocupados")
+).withColumn(
+    "fuerza_laboral", F.col("ocupados") + F.col("desocupados")
+).withColumn(
+    "tasa_desempleo_pct", F.round((F.col("desocupados") / F.col("fuerza_laboral")) * 100, 2)
+).withColumn(
+    "fecha", F.to_date(F.concat_ws("-", F.col("year"), F.lpad(F.col("month"), 2, "0"), F.lit("01")))
+).orderBy("year", "month")
+gold_monthly.write.format("delta").mode("overwrite").option("overwriteSchema", "true").save(f"{gold_lh_path}/Tables/dbo/fact_monthly_labor")
+print("  ✅ 4. 'fact_monthly_labor' guardada en Tables/dbo/!")
+
+# Fact Urbano vs Rural
+gold_geo = df_silver.groupBy("year", "geo_source").agg(
+    F.countDistinct("month").alias("meses"),
+    F.round(F.sum(F.when(F.col("status") == "ocupado", F.col("total_weight")).otherwise(0)) / F.countDistinct("month"), 0).alias("ocupados"),
+    F.round(F.sum(F.when(F.col("status") == "desocupado", F.col("total_weight")).otherwise(0)) / F.countDistinct("month"), 0).alias("desocupados")
+).withColumn("fuerza_laboral", F.col("ocupados") + F.col("desocupados")) \
+ .withColumn("tasa_desempleo_pct", F.round((F.col("desocupados") / F.col("fuerza_laboral")) * 100, 2))
+gold_geo.write.format("delta").mode("overwrite").option("overwriteSchema", "true").save(f"{gold_lh_path}/Tables/dbo/fact_urban_rural_labor")
+print("  ✅ 5. 'fact_urban_rural_labor' guardada en Tables/dbo/!")
+
+# Fact por Mandato Presidencial
+fact_presidential_labor = gold_monthly.join(
+    dim_presidentes,
+    (gold_monthly.fecha >= dim_presidentes.fecha_inicio) & (gold_monthly.fecha < dim_presidentes.fecha_fin),
+    how="inner"
+).groupBy(
+    "id_periodo", "presidente", "periodo_texto", "mandato"
+).agg(
+    F.count("fecha").alias("meses_evaluados"),
+    F.round(F.sum("ocupados") / F.count("fecha"), 0).alias("promedio_ocupados_mensual"),
+    F.round(F.sum("desocupados") / F.count("fecha"), 0).alias("promedio_desocupados_mensual"),
+    F.round((F.sum("desocupados") / (F.sum("ocupados") + F.sum("desocupados"))) * 100, 2).alias("tasa_desempleo_ponderada_pct"),
+    F.round(F.min("tasa_desempleo_pct"), 2).alias("tasa_minima_mes_pct"),
+    F.round(F.max("tasa_desempleo_pct"), 2).alias("tasa_maxima_mes_pct")
+).withColumn(
+    "fuerza_laboral_promedio", F.col("promedio_ocupados_mensual") + F.col("promedio_desocupados_mensual")
+).orderBy("id_periodo")
+fact_presidential_labor.write.format("delta").mode("overwrite").option("overwriteSchema", "true").save(f"{gold_lh_path}/Tables/dbo/fact_labor_by_president")
+print("  ✅ 6. 'fact_labor_by_president' guardada en Tables/dbo/!")
+
+print("\n🏆 ¡Todas las tablas guardadas exitosamente en 'Tables/dbo/' de 'dane_gold_lh'!")
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
 from pyspark.sql import functions as F
 from pyspark.sql.types import *
 

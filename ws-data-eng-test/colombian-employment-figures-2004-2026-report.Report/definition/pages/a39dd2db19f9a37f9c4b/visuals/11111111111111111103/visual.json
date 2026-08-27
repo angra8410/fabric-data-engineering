@@ -1,0 +1,38 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "11111111111111111103",
+  "position": {
+    "x": 760,
+    "y": 40,
+    "z": 3,
+    "height": 130,
+    "width": 340,
+    "tabOrder": 3
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_monthly_labor"
+                    }
+                  },
+                  "Property": "Promedio Fuerza Laboral Mensual"
+                }
+              },
+              "queryRef": "fact_monthly_labor.Promedio Fuerza Laboral Mensual",
+              "nativeQueryRef": "Promedio Fuerza Laboral Mensual"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

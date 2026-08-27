@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Labor_Market_Colombia_Semantic_Model"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "6f6b2b01-300c-b931-400f-f5eea183d0b3"
+  }
+}

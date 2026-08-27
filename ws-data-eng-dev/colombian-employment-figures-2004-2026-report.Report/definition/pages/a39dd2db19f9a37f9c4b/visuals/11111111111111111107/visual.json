@@ -1,0 +1,57 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "11111111111111111107",
+  "position": {
+    "x": 1260,
+    "y": 190,
+    "z": 7,
+    "height": 420,
+    "width": 620,
+    "tabOrder": 7
+  },
+  "visual": {
+    "visualType": "barChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_labor_by_president"
+                    }
+                  },
+                  "Property": "mandato"
+                }
+              },
+              "queryRef": "fact_labor_by_president.mandato",
+              "nativeQueryRef": "Mandato Presidencial",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_labor_by_president"
+                    }
+                  },
+                  "Property": "Tasa Desempleo Ponderada % (Mandato)"
+                }
+              },
+              "queryRef": "fact_labor_by_president.Tasa Desempleo Ponderada % (Mandato)",
+              "nativeQueryRef": "Tasa Desempleo Promedio %"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

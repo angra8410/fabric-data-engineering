@@ -6,21 +6,25 @@ table fact_urban_rural_labor
 	measure 'Ocupados (Urbano-Rural)' = SUM(fact_urban_rural_labor[ocupados])
 		formatString: #,##0
 		displayFolder: 05 Urbano-Rural (anual)
+		lineageTag: 9fb10c02-1ec4-4215-8dec-fb43ca5fa8c2
 
 	/// Desocupados por año y zona (Urbano/Rural).
 	measure 'Desocupados (Urbano-Rural)' = SUM(fact_urban_rural_labor[desocupados])
 		formatString: #,##0
 		displayFolder: 05 Urbano-Rural (anual)
+		lineageTag: f5d90fca-449a-4fc5-be52-78aa84beb697
 
 	/// Fuerza laboral por año y zona (Urbano/Rural).
 	measure 'Fuerza Laboral (Urbano-Rural)' = SUM(fact_urban_rural_labor[fuerza_laboral])
 		formatString: #,##0
 		displayFolder: 05 Urbano-Rural (anual)
+		lineageTag: 98a7ccef-701b-4c6a-8a18-9ad0725c4253
 
 	/// Tasa de desempleo ponderada por año y zona = Desocupados / Fuerza Laboral.
 	measure 'Tasa de Desempleo % (Urbano-Rural)' = DIVIDE([Desocupados (Urbano-Rural)], [Fuerza Laboral (Urbano-Rural)])
 		formatString: 0.00%
 		displayFolder: 05 Urbano-Rural (anual)
+		lineageTag: bb699478-4dc5-4468-b41d-2b4641f31dd7
 
 	column year
 		dataType: int64

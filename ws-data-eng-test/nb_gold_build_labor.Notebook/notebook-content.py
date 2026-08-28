@@ -771,15 +771,17 @@ print("✅ fact_monthly_labor actualizada exitosamente con presidente y periodo_
 # CELL ********************
 
 # =====================================================================
-# 🟡 ACTUALIZACIÓN DIM_DATE: INYECCIÓN MAESTRA DE ID_PERIODO (2004 - 2026)
+# 🟡 RE-CREACIÓN TOTAL DE DIM_DATE CON ID_PERIODO (SQL DIRECTO)
 # =====================================================================
 from pyspark.sql import functions as F
 
-print("🟡 Inyectando id_periodo en dim_date...")
+print("🟡 1. Eliminando tabla antigua de dim_date...")
+spark.sql("DROP TABLE IF EXISTS dim_date")
 
+print("🟡 2. Generando y guardando nueva dim_date con id_periodo...")
 df_dates = spark.sql("SELECT explode(sequence(to_date('2004-01-01'), to_date('2026-12-31'), interval 1 day)) as date")
 
-df_dim_date_bridged = df_dates.select(
+df_dim_date = df_dates.select(
     F.col("date"),
     F.date_format("date", "yyyyMMdd").cast("long").alias("date_key"),
     F.year("date").alias("year"),
@@ -796,7 +798,7 @@ df_dim_date_bridged = df_dates.select(
     F.when(F.month("date") == 1, "Enero").when(F.month("date") == 2, "Febrero").when(F.month("date") == 3, "Marzo").when(F.month("date") == 4, "Abril").when(F.month("date") == 5, "Mayo").when(F.month("date") == 6, "Junio").when(F.month("date") == 7, "Julio").when(F.month("date") == 8, "Agosto").when(F.month("date") == 9, "Septiembre").when(F.month("date") == 10, "Octubre").when(F.month("date") == 11, "Noviembre").otherwise("Diciembre").alias("month_name_es"),
     F.when(F.month("date") == 1, "Ene").when(F.month("date") == 2, "Feb").when(F.month("date") == 3, "Mar").when(F.month("date") == 4, "Abr").when(F.month("date") == 5, "May").when(F.month("date") == 6, "Jun").when(F.month("date") == 7, "Jul").when(F.month("date") == 8, "Ago").when(F.month("date") == 9, "Sep").when(F.month("date") == 10, "Oct").when(F.month("date") == 11, "Nov").otherwise("Dic").alias("month_short_es"),
     F.date_format("date", "EEEE").alias("day_name_es"),
-    # 🎯 ID_PERIODO LIMPIO Y SIN AMBIGÜEDAD EN TRANSICIONES:
+    # Asignación de periodos presidenciales por fecha:
     F.when(F.col("date") < "2006-08-07", 1)
      .when((F.col("date") >= "2006-08-07") & (F.col("date") < "2010-08-07"), 2)
      .when((F.col("date") >= "2010-08-07") & (F.col("date") < "2014-08-07"), 3)
@@ -805,8 +807,11 @@ df_dim_date_bridged = df_dates.select(
      .otherwise(6).alias("id_periodo")
 )
 
-df_dim_date_bridged.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("dim_date")
-print("✅ dim_date actualizada exitosamente con id_periodo!")
+df_dim_date.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("dim_date")
+print(f"✅ ¡dim_date re-creada físicamente con éxito ({df_dim_date.count():,} días y columna id_periodo confirmada)!")
+
+# Verificación de prueba en pantalla:
+spark.sql("SELECT date, year, id_periodo FROM dim_date WHERE year IN (2005, 2012, 2020, 2024) AND day = 15 AND month = 6").show()
 
 
 # METADATA ********************

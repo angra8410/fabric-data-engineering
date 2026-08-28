@@ -1,0 +1,46 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "a39dd2db19f9a37f9c4b",
+  "displayName": "Mercado Laboral 2004-2026",
+  "displayOption": "FitToPage",
+  "height": 1080,
+  "width": 1920,
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#0A0F1D'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0D"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visualInteractions": [
+    {
+      "source": "11111111111111111107",
+      "target": "11111111111111111108",
+      "type": "HighlightFilter"
+    },
+    {
+      "source": "11111111111111111107",
+      "target": "11111111111111111106",
+      "type": "DataFilter"
+    }
+  ]
+}

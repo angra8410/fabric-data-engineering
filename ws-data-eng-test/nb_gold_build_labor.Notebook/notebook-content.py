@@ -823,6 +823,1025 @@ spark.sql("SELECT date, year, id_periodo FROM dim_date WHERE year IN (2005, 2012
 
 # CELL ********************
 
+# =====================================================================
+# 🟡 RE-CALCULAR FACT_LABOR_BY_PRESIDENT (INCLUYENDO 2022 - 2026 PETRO)
+# =====================================================================
+from pyspark.sql import functions as F
+
+print("🟡 Generando fact_labor_by_president completa (2002 - 2026)...")
+
+df_pres = spark.table("dim_presidentes")
+df_fact_monthly = spark.table("fact_monthly_labor")
+
+df_fact_pres = df_fact_monthly.groupBy("id_periodo").agg(
+    F.count("month").alias("meses_evaluados"),
+    F.avg("ocupados").alias("promedio_ocupados_mensual"),
+    F.avg("desocupados").alias("promedio_desocupados_mensual"),
+    F.avg("fuerza_laboral").alias("fuerza_laboral_promedio"),
+    (F.sum("desocupados") / F.sum("fuerza_laboral") * 100).alias("tasa_desempleo_ponderada_pct"),
+    F.min("tasa_desempleo_pct").alias("tasa_minima_mes_pct"),
+    F.max("tasa_desempleo_pct").alias("tasa_maxima_mes_pct")
+).join(df_pres, "id_periodo", "inner") \
+ .select(
+    "id_periodo", 
+    "presidente", 
+    "periodo_texto", 
+    "mandato", 
+    "meses_evaluados", 
+    "promedio_ocupados_mensual", 
+    "promedio_desocupados_mensual", 
+    "tasa_desempleo_ponderada_pct", 
+    "tasa_minima_mes_pct", 
+    "tasa_maxima_mes_pct", 
+    "fuerza_laboral_promedio"
+ )
+
+df_fact_pres.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("fact_labor_by_president")
+print("✅ fact_labor_by_president actualizada exitosamente!")
+
+# Verificación de los 6 periodos en pantalla:
+spark.table("fact_labor_by_president").select("id_periodo", "presidente", "periodo_texto", "tasa_desempleo_ponderada_pct").show()
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# =====================================================================
+# 🚀 PROCESAMIENTO VECTORIZADO 2021 - 2026 DESDE DANE_BRONZE_LH
+# =====================================================================
+import notebookutils
+from pyspark.sql import functions as F
+
+bronze_root = "abfss://1fa36d94-46ee-4c7f-939f-720e8ed4bf85@onelake.dfs.fabric.microsoft.com/64101340-700e-4c22-9d3d-c930021add77/Files/raw/dane"
+
+print("🚀 Leyendo archivos de 2021 a 2026 desde dane_bronze_lh...")
+
+def get_files_recursive(path):
+    all_files = []
+    try:
+        for item in notebookutils.fs.ls(path):
+            if item.isDir:
+                all_files.extend(get_files_recursive(item.path))
+            else:
+                all_files.append(item.path)
+    except: pass
+    return all_files
+
+recent_years = [2021, 2022, 2023, 2024, 2025, 2026]
+dfs_recent = []
+
+for yr in recent_years:
+    paths = get_files_recursive(f"{bronze_root}/year={yr}")
+    
+    valid_paths = [
+        p for p in paths 
+        if not any(x in p.lower() for x in ["area", "vivienda", "ingresos", "caracteristicas", "inactivos", "ayudas", "subempleo", "seguridad", "formas"])
+        and any(x in p.lower() for x in ["ocupa", "desocu", "desoucp", "no_ocu", "no ocu"])
+    ]
+    
+    if not valid_paths:
+        print(f"⚠️ No se encontraron rutas válidas para {yr}")
+        continue
+    
+    delim = "," if yr == 2021 else ";"
+    
+    try:
+        df_raw = spark.read.format("csv").option("header", "true").option("delimiter", delim).load(valid_paths) \
+            .withColumn("source_file", F.input_file_name()) \
+            .withColumn("fn_low", F.lower(F.col("source_file")))
+            
+        for c in df_raw.columns:
+            df_raw = df_raw.withColumnRenamed(c, c.upper().strip().replace('"', ''))
+            
+        cols = df_raw.columns
+        fex_col = next((c for c in ["FEX_C_2011", "FEX_C", "FEX_C18", "PESO", "FACTOR", "FEX_DANE", "FEX", "W_FEX"] if c in cols), None)
+        
+        if not fex_col:
+            print(f"⚠️ FEX no encontrado en {yr}")
+            continue
+
+        df_parsed = df_raw.select(
+            F.lit(yr).alias("year"),
+            F.coalesce(F.regexp_extract(F.col("SOURCE_FILE"), r"month=(\d+)", 1).cast("int"), F.lit(1)).alias("month"),
+            F.when(F.col("FN_LOW").rlike("(?i)desocu|desoucp|no_ocu|no ocu"), "desocupado").otherwise("ocupado").alias("status"),
+            F.regexp_replace(F.regexp_replace(F.col(fex_col), r'[\s"]', ''), ",", ".").cast("double").alias("total_weight")
+        ).filter(
+            F.col("total_weight").isNotNull() & (F.col("total_weight") > 0) & (F.col("total_weight") < 50000)
+        )
+        
+        df_monthly_yr = df_parsed.groupBy("year", "month").agg(
+            F.sum(F.when(F.col("status") == "ocupado", F.col("total_weight")).otherwise(0)).alias("ocupados"),
+            F.sum(F.when(F.col("status") == "desocupado", F.col("total_weight")).otherwise(0)).alias("desocupados")
+        ).withColumn("fuerza_laboral", F.col("ocupados") + F.col("desocupados")) \
+         .withColumn("tasa_desempleo_pct", F.when(F.col("fuerza_laboral") > 0, (F.col("desocupados") / F.col("fuerza_laboral")) * 100).otherwise(0.0)) \
+         .withColumn("fecha", F.to_date(F.concat_ws("-", F.col("year"), F.lpad(F.col("month"), 2, "0"), F.lit("01"))))
+         
+        dfs_recent.append(df_monthly_yr)
+        print(f"   ✅ ¡Año {yr} procesado exitosamente!")
+    except Exception as e:
+        print(f"   ⚠️ Error en {yr}: {e}")
+
+# 2. Unificar con el histórico
+df_hist = spark.table("fact_monthly_labor").filter(F.col("year") < 2021)
+all_dfs = [df_hist] + dfs_recent
+
+df_full = all_dfs[0]
+for nxt in all_dfs[1:]:
+    df_full = df_full.unionByName(nxt, allowMissingColumns=True)
+
+df_full_final = df_full.dropDuplicates(["year", "month"]).withColumn(
+    "id_periodo",
+    F.when(F.col("year") <= 2006, 1)
+     .when((F.col("year") >= 2007) & (F.col("year") <= 2010), 2)
+     .when((F.col("year") >= 2011) & (F.col("year") <= 2014), 3)
+     .when((F.col("year") >= 2015) & (F.col("year") <= 2018), 4)
+     .when((F.col("year") >= 2019) & (F.col("year") <= 2022), 5)
+     .otherwise(6)  # 2023 - 2026 (Gustavo Petro)
+)
+
+df_full_final.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("fact_monthly_labor")
+
+# 3. Actualizamos fact_labor_by_president con los 6 periodos
+df_pres = spark.table("dim_presidentes")
+df_fact_pres = df_full_final.groupBy("id_periodo").agg(
+    F.count("month").alias("meses_evaluados"),
+    F.avg("ocupados").alias("promedio_ocupados_mensual"),
+    F.avg("desocupados").alias("promedio_desocupados_mensual"),
+    F.avg("fuerza_laboral").alias("fuerza_laboral_promedio"),
+    (F.sum("desocupados") / F.sum("fuerza_laboral") * 100).alias("tasa_desempleo_ponderada_pct"),
+    F.min("tasa_desempleo_pct").alias("tasa_minima_mes_pct"),
+    F.max("tasa_desempleo_pct").alias("tasa_maxima_mes_pct")
+).join(df_pres, "id_periodo", "inner") \
+ .select(
+    "id_periodo", "presidente", "periodo_texto", "mandato", "meses_evaluados", 
+    "promedio_ocupados_mensual", "promedio_desocupados_mensual", 
+    "tasa_desempleo_ponderada_pct", "tasa_minima_mes_pct", "tasa_maxima_mes_pct", 
+    "fuerza_laboral_promedio"
+ )
+
+df_fact_pres.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("fact_labor_by_president")
+
+print("\n🏆 ¡AÑOS CONFIRMADOS EN FACT_MONTHLY_LABOR:")
+spark.table("fact_monthly_labor").select("year").distinct().orderBy("year").show(30)
+
+print("\n🏆 ¡TABLA FINAL DE LOS 6 PRESIDENTES:")
+spark.table("fact_labor_by_president").select("id_periodo", "presidente", "periodo_texto", "tasa_desempleo_ponderada_pct").orderBy("id_periodo").show()
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# =====================================================================
+# 🚀 INGESTA Y PARCHEO EXCLUSIVO DEL AÑO 2021
+# =====================================================================
+import notebookutils
+from pyspark.sql import functions as F
+
+bronze_root = "abfss://1fa36d94-46ee-4c7f-939f-720e8ed4bf85@onelake.dfs.fabric.microsoft.com/64101340-700e-4c22-9d3d-c930021add77/Files/raw/dane"
+
+def get_files_recursive(path):
+    all_files = []
+    try:
+        for item in notebookutils.fs.ls(path):
+            if item.isDir:
+                all_files.extend(get_files_recursive(item.path))
+            else:
+                all_files.append(item.path)
+    except: pass
+    return all_files
+
+print("🚀 Procesando año 2021...")
+paths_2021 = get_files_recursive(f"{bronze_root}/year=2021")
+
+valid_paths = [
+    p for p in paths_2021 
+    if not any(x in p.lower() for x in ["area", "vivienda", "ingresos", "caracteristicas", "inactivos", "ayudas", "subempleo", "seguridad", "formas"])
+    and any(x in p.lower() for x in ["ocupa", "desocu", "desoucp", "no_ocu", "no ocu"])
+]
+
+# Intentamos con punto y coma y luego coma
+for delim in [";", ","]:
+    try:
+        df_raw = spark.read.format("csv").option("header", "true").option("delimiter", delim).load(valid_paths) \
+            .withColumn("source_file", F.input_file_name()) \
+            .withColumn("fn_low", F.lower(F.col("source_file")))
+            
+        for c in df_raw.columns:
+            df_raw = df_raw.withColumnRenamed(c, c.upper().strip().replace('"', ''))
+            
+        cols = df_raw.columns
+        fex_col = next((c for c in cols if "FEX" in c or "PESO" in c or "FACTOR" in c), None)
+        
+        if fex_col:
+            print(f"   🎯 Delimitador '{delim}' detectado con columna FEX: {fex_col}")
+            df_2021_parsed = df_raw.select(
+                F.lit(2021).alias("year"),
+                F.coalesce(F.regexp_extract(F.col("SOURCE_FILE"), r"month=(\d+)", 1).cast("int"), F.lit(1)).alias("month"),
+                F.when(F.col("FN_LOW").rlike("(?i)desocu|desoucp|no_ocu|no ocu"), "desocupado").otherwise("ocupado").alias("status"),
+                F.regexp_replace(F.regexp_replace(F.col(fex_col), r'[\s"]', ''), ",", ".").cast("double").alias("total_weight")
+            ).filter(
+                F.col("total_weight").isNotNull() & (F.col("total_weight") > 0) & (F.col("total_weight") < 50000)
+            )
+            
+            df_m_2021 = df_2021_parsed.groupBy("year", "month").agg(
+                F.sum(F.when(F.col("status") == "ocupado", F.col("total_weight")).otherwise(0)).alias("ocupados"),
+                F.sum(F.when(F.col("status") == "desocupado", F.col("total_weight")).otherwise(0)).alias("desocupados")
+            ).withColumn("fuerza_laboral", F.col("ocupados") + F.col("desocupados")) \
+             .withColumn("tasa_desempleo_pct", F.when(F.col("fuerza_laboral") > 0, (F.col("desocupados") / F.col("fuerza_laboral")) * 100).otherwise(0.0)) \
+             .withColumn("fecha", F.to_date(F.concat_ws("-", F.col("year"), F.lpad(F.col("month"), 2, "0"), F.lit("01"))))
+             
+            # Unir con fact_monthly_labor
+            df_all = spark.table("fact_monthly_labor").filter(F.col("year") != 2021) \
+                          .unionByName(df_m_2021, allowMissingColumns=True) \
+                          .dropDuplicates(["year", "month"]) \
+                          .withColumn(
+                              "id_periodo",
+                              F.when(F.col("year") <= 2006, 1)
+                               .when((F.col("year") >= 2007) & (F.col("year") <= 2010), 2)
+                               .when((F.col("year") >= 2011) & (F.col("year") <= 2014), 3)
+                               .when((F.col("year") >= 2015) & (F.col("year") <= 2018), 4)
+                               .when((F.col("year") >= 2019) & (F.col("year") <= 2022), 5)
+                               .otherwise(6)
+                          )
+            
+            df_all.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("fact_monthly_labor")
+            
+            # Re-generar fact_labor_by_president
+            df_pres = spark.table("dim_presidentes")
+            df_fact_pres = df_all.groupBy("id_periodo").agg(
+                F.count("month").alias("meses_evaluados"),
+                F.avg("ocupados").alias("promedio_ocupados_mensual"),
+                F.avg("desocupados").alias("promedio_desocupados_mensual"),
+                F.avg("fuerza_laboral").alias("fuerza_laboral_promedio"),
+                (F.sum("desocupados") / F.sum("fuerza_laboral") * 100).alias("tasa_desempleo_ponderada_pct"),
+                F.min("tasa_desempleo_pct").alias("tasa_minima_mes_pct"),
+                F.max("tasa_desempleo_pct").alias("tasa_maxima_mes_pct")
+            ).join(df_pres, "id_periodo", "inner") \
+             .select(
+                "id_periodo", "presidente", "periodo_texto", "mandato", "meses_evaluados", 
+                "promedio_ocupados_mensual", "promedio_desocupados_mensual", 
+                "tasa_desempleo_ponderada_pct", "tasa_minima_mes_pct", "tasa_maxima_mes_pct", 
+                "fuerza_laboral_promedio"
+             )
+            df_fact_pres.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("fact_labor_by_president")
+            
+            print("✅ ¡Año 2021 incorporado exitosamente!")
+            break
+    except Exception as e:
+        continue
+
+print("\n🏆 ¡AÑOS TOTALES EN FACT_MONTHLY_LABOR:")
+spark.table("fact_monthly_labor").select("year").distinct().orderBy("year").show(30)
+
+print("\n🏆 ¡TABLA FINAL DE LOS 6 PRESIDENTES:")
+spark.table("fact_labor_by_president").select("id_periodo", "presidente", "periodo_texto", "tasa_desempleo_ponderada_pct").orderBy("id_periodo").show()
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# =====================================================================
+# 🚀 CALIBRACIÓN DEFINITIVA DANE 2022 - 2026 (OCUPADOS + NO OCUPADOS DSI=1)
+# =====================================================================
+import notebookutils
+from pyspark.sql import functions as F
+
+bronze_root = "abfss://1fa36d94-46ee-4c7f-939f-720e8ed4bf85@onelake.dfs.fabric.microsoft.com/64101340-700e-4c22-9d3d-c930021add77/Files/raw/dane"
+
+def get_files_recursive(path):
+    all_files = []
+    try:
+        for item in notebookutils.fs.ls(path):
+            if item.isDir:
+                all_files.extend(get_files_recursive(item.path))
+            else:
+                all_files.append(item.path)
+    except: pass
+    return all_files
+
+dfs_petro_years = []
+
+for yr in range(2022, 2027):
+    print(f"⚡ Procesando {yr} (Ocupados + No Ocupados DSI=1)...")
+    paths = get_files_recursive(f"{bronze_root}/year={yr}")
+    
+    ocu_paths = [p for p in paths if "ocupa" in p.lower() and not any(x in p.lower() for x in ["no_ocu", "no ocu", "desocu", "vivienda", "ingresos", "caracteristicas", "inactivos", "ayudas", "subempleo", "seguridad"])]
+    no_ocu_paths = [p for p in paths if any(x in p.lower() for x in ["no_ocu", "no ocu", "desocu"]) and not any(x in p.lower() for x in ["vivienda", "ingresos", "caracteristicas", "inactivos", "ayudas", "subempleo", "seguridad"])]
+    
+    if not ocu_paths:
+        continue
+        
+    # 1. Ocupados
+    df_ocu_raw = spark.read.format("csv").option("header", "true").option("delimiter", ";").load(ocu_paths) \
+        .withColumn("source_file", F.input_file_name())
+    for c in df_ocu_raw.columns: df_ocu_raw = df_ocu_raw.withColumnRenamed(c, c.upper().strip().replace('"', ''))
+    
+    fex_o = next((c for c in df_ocu_raw.columns if "FEX" in c or "PESO" in c or "FACTOR" in c), "FEX_C_2011")
+    
+    df_ocu = df_ocu_raw.select(
+        F.lit(yr).alias("year"),
+        F.coalesce(F.regexp_extract(F.col("SOURCE_FILE"), r"month=(\d+)", 1).cast("int"), F.lit(1)).alias("month"),
+        F.lit("ocupado").alias("status"),
+        F.regexp_replace(F.regexp_replace(F.col(fex_o), r'[\s"]', ''), ",", ".").cast("double").alias("weight")
+    ).filter((F.col("weight") > 0) & (F.col("weight") < 50000))
+    
+    # 2. Desocupados (No Ocupados con DSI == 1)
+    if no_ocu_paths:
+        df_no_raw = spark.read.format("csv").option("header", "true").option("delimiter", ";").load(no_ocu_paths) \
+            .withColumn("source_file", F.input_file_name())
+        for c in df_no_raw.columns: df_no_raw = df_no_raw.withColumnRenamed(c, c.upper().strip().replace('"', ''))
+        
+        fex_d = next((c for c in df_no_raw.columns if "FEX" in c or "PESO" in c or "FACTOR" in c), "FEX_C_2011")
+        dsi_col = next((c for c in df_no_raw.columns if c in ["DSI", "DESOCUPADO", "FT", "RAMA"]), None)
+        
+        if dsi_col:
+            df_des_filtered = df_no_raw.filter(F.col(dsi_col) == "1")
+        else:
+            df_des_filtered = df_no_raw
+            
+        df_des = df_des_filtered.select(
+            F.lit(yr).alias("year"),
+            F.coalesce(F.regexp_extract(F.col("SOURCE_FILE"), r"month=(\d+)", 1).cast("int"), F.lit(1)).alias("month"),
+            F.lit("desocupado").alias("status"),
+            F.regexp_replace(F.regexp_replace(F.col(fex_d), r'[\s"]', ''), ",", ".").cast("double").alias("weight")
+        ).filter((F.col("weight") > 0) & (F.col("weight") < 50000))
+        
+        df_yr_all = df_ocu.unionByName(df_des)
+    else:
+        df_yr_all = df_ocu
+        
+    df_m = df_yr_all.groupBy("year", "month").agg(
+        F.sum(F.when(F.col("status") == "ocupado", F.col("weight")).otherwise(0)).alias("ocupados"),
+        F.sum(F.when(F.col("status") == "desocupado", F.col("weight")).otherwise(0)).alias("desocupados")
+    ).withColumn("fuerza_laboral", F.col("ocupados") + F.col("desocupados")) \
+     .withColumn("tasa_desempleo_pct", F.when(F.col("fuerza_laboral") > 0, (F.col("desocupados") / F.col("fuerza_laboral")) * 100).otherwise(0.0)) \
+     .withColumn("fecha", F.to_date(F.concat_ws("-", F.col("year"), F.lpad(F.col("month"), 2, "0"), F.lit("01"))))
+     
+    dfs_petro_years.append(df_m)
+    print(f"   ✅ {yr} completado con ocupados y desocupados reales!")
+
+# Unir todo el histórico 2004-2026
+df_hist = spark.table("fact_monthly_labor").filter(F.col("year") < 2022)
+df_rebuilt = df_hist
+for nxt in dfs_petro_years:
+    df_rebuilt = df_rebuilt.unionByName(nxt, allowMissingColumns=True)
+
+df_rebuilt_clean = df_rebuilt.dropDuplicates(["year", "month"]).withColumn(
+    "id_periodo",
+    F.when(F.col("fecha") < "2006-08-07", 1)
+     .when((F.col("fecha") >= "2006-08-07") & (F.col("fecha") < "2010-08-07"), 2)
+     .when((F.col("fecha") >= "2010-08-07") & (F.col("fecha") < "2014-08-07"), 3)
+     .when((F.col("fecha") >= "2014-08-07") & (F.col("fecha") < "2018-08-07"), 4)
+     .when((F.col("fecha") >= "2018-08-07") & (F.col("fecha") < "2022-08-07"), 5)
+     .otherwise(6)  # 2022 - 2026 (Gustavo Petro)
+)
+
+df_rebuilt_clean.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("fact_monthly_labor")
+
+# Re-generar fact_labor_by_president
+df_pres = spark.table("dim_presidentes")
+df_fact_pres = df_rebuilt_clean.groupBy("id_periodo").agg(
+    F.count("month").alias("meses_evaluados"),
+    F.avg("ocupados").alias("promedio_ocupados_mensual"),
+    F.avg("desocupados").alias("promedio_desocupados_mensual"),
+    F.avg("fuerza_laboral").alias("fuerza_laboral_promedio"),
+    (F.sum("desocupados") / F.sum("fuerza_laboral") * 100).alias("tasa_desempleo_ponderada_pct"),
+    F.min("tasa_desempleo_pct").alias("tasa_minima_mes_pct"),
+    F.max("tasa_desempleo_pct").alias("tasa_maxima_mes_pct")
+).join(df_pres, "id_periodo", "inner") \
+ .select(
+    "id_periodo", "presidente", "periodo_texto", "mandato", "meses_evaluados", 
+    "promedio_ocupados_mensual", "promedio_desocupados_mensual", 
+    "tasa_desempleo_ponderada_pct", "tasa_minima_mes_pct", "tasa_maxima_mes_pct", 
+    "fuerza_laboral_promedio"
+ )
+
+df_fact_pres.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("fact_labor_by_president")
+
+print("\n🏆 ¡TABLA FINAL DE LOS 6 PRESIDENTES CON DESEMPLEO REAL (2002 - 2026):")
+spark.table("fact_labor_by_president").select("id_periodo", "presidente", "periodo_texto", "tasa_desempleo_ponderada_pct").orderBy("id_periodo").show()
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# 🔍 Verificación mes a mes del periodo Petro (2022-08 a 2026):
+print("📊 Tasa de desempleo mensual calculada (2022 a 2026):")
+spark.table("fact_monthly_labor").filter(F.col("fecha") >= "2022-08-01") \
+     .select("year", "month", "ocupados", "desocupados", "fuerza_laboral", "tasa_desempleo_pct") \
+     .orderBy("year", "month").show(40)
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# =====================================================================
+# 🚀 PARSEO EXACTO DE 2022 (FEX_C18 + DSI == 1)
+# =====================================================================
+import notebookutils
+from pyspark.sql import functions as F
+
+bronze_root = "abfss://1fa36d94-46ee-4c7f-939f-720e8ed4bf85@onelake.dfs.fabric.microsoft.com/64101340-700e-4c22-9d3d-c930021add77/Files/raw/dane"
+
+def get_files_recursive(path):
+    all_files = []
+    try:
+        for item in notebookutils.fs.ls(path):
+            if item.isDir: all_files.extend(get_files_recursive(item.path))
+            else: all_files.append(item.path)
+    except: pass
+    return all_files
+
+print("⚡ Procesando los 12 meses de 2022 con FEX_C18...")
+
+months_2022 = []
+
+for m in range(1, 13):
+    m_str = f"{m:02d}"
+    path_ocu = f"{bronze_root}/year=2022/month={m_str}/Ocupados.CSV"
+    path_no = f"{bronze_root}/year=2022/month={m_str}/No ocupados.CSV"
+    
+    # 1. Leer Ocupados
+    try:
+        df_o = spark.read.format("csv").option("header", "true").option("delimiter", ";").load(path_ocu)
+        for c in df_o.columns: df_o = df_o.withColumnRenamed(c, c.upper().strip())
+        fex_col = next((c for c in df_o.columns if "FEX" in c or "PESO" in c), "FEX_C18")
+        
+        sum_ocu = df_o.select(
+            F.regexp_replace(F.regexp_replace(F.col(fex_col), r'[\s"]', ''), ",", ".").cast("double").alias("w")
+        ).filter(F.col("w").isNotNull() & (F.col("w") > 0)).agg(F.sum("w")).collect()[0][0] or 0.0
+    except Exception as e:
+        sum_ocu = 0.0
+
+    # 2. Leer Desocupados (Filtrado estricto DSI == '1' o FT == '1')
+    try:
+        df_no = spark.read.format("csv").option("header", "true").option("delimiter", ";").load(path_no)
+        for c in df_no.columns: df_no = df_no.withColumnRenamed(c, c.upper().strip())
+        fex_col_no = next((c for c in df_no.columns if "FEX" in c or "PESO" in c), "FEX_C18")
+        
+        # Filtro de desocupado abierto
+        if "DSI" in df_no.columns:
+            df_no_filt = df_no.filter(F.col("DSI") == "1")
+        elif "FT" in df_no.columns:
+            df_no_filt = df_no.filter(F.col("FT") == "1")
+        else:
+            df_no_filt = df_no
+            
+        sum_des = df_no_filt.select(
+            F.regexp_replace(F.regexp_replace(F.col(fex_col_no), r'[\s"]', ''), ",", ".").cast("double").alias("w")
+        ).filter(F.col("w").isNotNull() & (F.col("w") > 0)).agg(F.sum("w")).collect()[0][0] or 0.0
+    except Exception as e:
+        sum_des = 0.0
+
+    fuerza = sum_ocu + sum_des
+    tasa = (sum_des / fuerza * 100) if fuerza > 0 else 0.0
+    
+    print(f"   📅 2022-{m_str}: Ocupados={sum_ocu/1e6:.2f}M | Desocupados={sum_des/1e6:.2f}M | Tasa={tasa:.2f}%")
+    
+    months_2022.append((2022, m, float(sum_ocu), float(sum_des), float(fuerza), float(tasa), f"2022-{m_str}-01"))
+
+schema = ["year", "month", "ocupados", "desocupados", "fuerza_laboral", "tasa_desempleo_pct", "fecha"]
+df_2022_rebuilt = spark.createDataFrame(months_2022, schema).withColumn("fecha", F.to_date("fecha"))
+
+# 3. Unir 2022 saneado con el resto del histórico (2004-2021 y 2023-2026)
+df_other_years = spark.table("fact_monthly_labor").filter(F.col("year") != 2022)
+df_final_all = df_other_years.unionByName(df_2022_rebuilt, allowMissingColumns=True).withColumn(
+    "id_periodo",
+    F.when(F.col("fecha") < "2006-08-07", 1)
+     .when((F.col("fecha") >= "2006-08-07") & (F.col("fecha") < "2010-08-07"), 2)
+     .when((F.col("fecha") >= "2010-08-07") & (F.col("fecha") < "2014-08-07"), 3)
+     .when((F.col("fecha") >= "2014-08-07") & (F.col("fecha") < "2018-08-07"), 4)
+     .when((F.col("fecha") >= "2018-08-07") & (F.col("fecha") < "2022-08-07"), 5)
+     .otherwise(6)  # 2022-08-07 a 2026 (Gustavo Petro)
+)
+
+df_final_all.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("fact_monthly_labor")
+
+# 4. Actualizamos fact_labor_by_president
+df_pres = spark.table("dim_presidentes")
+df_fact_pres = df_final_all.groupBy("id_periodo").agg(
+    F.count("month").alias("meses_evaluados"),
+    F.avg("ocupados").alias("promedio_ocupados_mensual"),
+    F.avg("desocupados").alias("promedio_desocupados_mensual"),
+    F.avg("fuerza_laboral").alias("fuerza_laboral_promedio"),
+    (F.sum("desocupados") / F.sum("fuerza_laboral") * 100).alias("tasa_desempleo_ponderada_pct"),
+    F.min("tasa_desempleo_pct").alias("tasa_minima_mes_pct"),
+    F.max("tasa_desempleo_pct").alias("tasa_maxima_mes_pct")
+).join(df_pres, "id_periodo", "inner") \
+ .select(
+    "id_periodo", "presidente", "periodo_texto", "mandato", "meses_evaluados", 
+    "promedio_ocupados_mensual", "promedio_desocupados_mensual", 
+    "tasa_desempleo_ponderada_pct", "tasa_minima_mes_pct", "tasa_maxima_mes_pct", 
+    "fuerza_laboral_promedio"
+ )
+
+df_fact_pres.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("fact_labor_by_president")
+
+print("\n🏆 ¡TABLA FINAL DE LOS 6 PRESIDENTES CON DATOS OFICIALES REALES DANE:")
+spark.table("fact_labor_by_president").select("id_periodo", "presidente", "periodo_texto", "tasa_desempleo_ponderada_pct").orderBy("id_periodo").show()
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# =====================================================================
+# 🚀 GENERACIÓN DEPARTAMENTAL 2021 - 2026 EN GOLD_DANE_LABOR_INDICATORS
+# =====================================================================
+import notebookutils
+from pyspark.sql import functions as F
+
+bronze_root = "abfss://1fa36d94-46ee-4c7f-939f-720e8ed4bf85@onelake.dfs.fabric.microsoft.com/64101340-700e-4c22-9d3d-c930021add77/Files/raw/dane"
+
+def get_files_recursive(path):
+    all_files = []
+    try:
+        for item in notebookutils.fs.ls(path):
+            if item.isDir: all_files.extend(get_files_recursive(item.path))
+            else: all_files.append(item.path)
+    except: pass
+    return all_files
+
+print("⚡ Procesando datos departamentales 2021 a 2026...")
+
+dfs_dept_recent = []
+
+for yr in range(2021, 2027):
+    paths = get_files_recursive(f"{bronze_root}/year={yr}")
+    
+    ocu_paths = [p for p in paths if "ocupa" in p.lower() and not any(x in p.lower() for x in ["no_ocu", "no ocu", "desocu", "vivienda", "ingresos", "caracteristicas", "inactivos", "ayudas", "subempleo", "seguridad"])]
+    no_paths = [p for p in paths if any(x in p.lower() for x in ["no_ocu", "no ocu", "desocu"]) and not any(x in p.lower() for x in ["vivienda", "ingresos", "caracteristicas", "inactivos", "ayudas", "subempleo", "seguridad"])]
+    
+    if not ocu_paths: continue
+    delim = "," if yr == 2021 else ";"
+    
+    try:
+        # Ocupados por departamento
+        df_ocu_r = spark.read.format("csv").option("header", "true").option("delimiter", delim).load(ocu_paths).withColumn("source_file", F.input_file_name())
+        for c in df_ocu_r.columns: df_ocu_r = df_ocu_r.withColumnRenamed(c, c.upper().strip().replace('"', ''))
+        
+        fex_col = next((c for c in df_ocu_r.columns if "FEX" in c or "PESO" in c or "FACTOR" in c), "FEX_C_2011")
+        dpto_col = next((c for c in df_ocu_r.columns if "DPTO" in c or "DEPT" in c or "COD_DPTO" in c), "DPTO")
+        
+        df_ocu_p = df_ocu_r.select(
+            F.lit(yr).alias("year"),
+            F.coalesce(F.regexp_extract(F.col("SOURCE_FILE"), r"month=(\d+)", 1).cast("int"), F.lit(1)).alias("month"),
+            F.lpad(F.trim(F.col(dpto_col)).cast("int").cast("string"), 2, "0").alias("codigo_departamento"),
+            F.lit("ocupado").alias("status"),
+            F.regexp_replace(F.regexp_replace(F.col(fex_col), r'[\s"]', ''), ",", ".").cast("double").alias("weight")
+        ).filter(F.col("weight").isNotNull() & (F.col("weight") > 0) & (F.col("weight") < 50000))
+        
+        # Desocupados por departamento
+        if no_paths:
+            df_no_r = spark.read.format("csv").option("header", "true").option("delimiter", delim).load(no_paths).withColumn("source_file", F.input_file_name())
+            for c in df_no_r.columns: df_no_r = df_no_r.withColumnRenamed(c, c.upper().strip().replace('"', ''))
+            
+            fex_no = next((c for c in df_no_r.columns if "FEX" in c or "PESO" in c or "FACTOR" in c), "FEX_C_2011")
+            dpto_no = next((c for c in df_no_r.columns if "DPTO" in c or "DEPT" in c or "COD_DPTO" in c), "DPTO")
+            dsi_col = next((c for c in df_no_r.columns if c in ["DSI", "DESOCUPADO", "FT"]), None)
+            
+            df_no_filt = df_no_r.filter(F.col(dsi_col) == "1") if dsi_col else df_no_r
+            
+            df_des_p = df_no_filt.select(
+                F.lit(yr).alias("year"),
+                F.coalesce(F.regexp_extract(F.col("SOURCE_FILE"), r"month=(\d+)", 1).cast("int"), F.lit(1)).alias("month"),
+                F.lpad(F.trim(F.col(dpto_no)).cast("int").cast("string"), 2, "0").alias("codigo_departamento"),
+                F.lit("desocupado").alias("status"),
+                F.regexp_replace(F.regexp_replace(F.col(fex_no), r'[\s"]', ''), ",", ".").cast("double").alias("weight")
+            ).filter(F.col("weight").isNotNull() & (F.col("weight") > 0) & (F.col("weight") < 50000))
+            
+            df_combined = df_ocu_p.unionByName(df_des_p)
+        else:
+            df_combined = df_ocu_p
+
+        df_m_dept = df_combined.filter(~F.col("codigo_departamento").isin("00", "0", None)).groupBy("year", "month", "codigo_departamento").agg(
+            F.sum(F.when(F.col("status") == "ocupado", F.col("weight")).otherwise(0)).alias("ocupados"),
+            F.sum(F.when(F.col("status") == "desocupado", F.col("weight")).otherwise(0)).alias("desocupados")
+        ).withColumn("fuerza_laboral", F.col("ocupados") + F.col("desocupados")) \
+         .withColumn("tasa_desempleo_pct", F.when(F.col("fuerza_laboral") > 0, (F.col("desocupados") / F.col("fuerza_laboral")) * 100).otherwise(0.0)) \
+         .withColumn("periodo_fecha", F.to_date(F.concat_ws("-", F.col("year"), F.lpad(F.col("month"), 2, "0"), F.lit("01"))))
+         
+        dfs_dept_recent.append(df_m_dept)
+        print(f"   ✅ Departamento - Año {yr} procesado exitosamente!")
+    except Exception as e:
+        print(f"   ⚠️ Error en {yr}: {e}")
+
+# 2. Unir con el histórico de gold_dane_labor_indicators
+df_dept_hist = spark.table("gold_dane_labor_indicators").filter(F.year("periodo_fecha") < 2021)
+all_depts = [df_dept_hist] + dfs_dept_recent
+
+df_dept_full = all_depts[0]
+for nxt in all_depts[1:]:
+    df_dept_full = df_dept_full.unionByName(nxt, allowMissingColumns=True)
+
+# Cruzamos con dim_departamentos
+df_dim_d = spark.table("dim_departamentos")
+df_gold_indicators_final = df_dept_full.alias("f") \
+    .join(df_dim_d.alias("d"), F.col("f.codigo_departamento") == F.col("d.codigo_departamento"), "left") \
+    .select(
+        F.col("f.year"),
+        F.col("f.month"),
+        F.col("f.periodo_fecha"),
+        F.col("f.codigo_departamento"),
+        F.coalesce(F.col("d.nombre_departamento"), F.lit("Desconocido")).alias("nombre_departamento"),
+        F.coalesce(F.col("d.region_geografica"), F.lit("Nacional")).alias("region_geografica"),
+        F.col("f.ocupados"),
+        F.col("f.desocupados"),
+        F.col("f.fuerza_laboral"),
+        F.col("f.tasa_desempleo_pct")
+    ).dropDuplicates(["periodo_fecha", "codigo_departamento"])
+
+df_gold_indicators_final.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("gold_dane_labor_indicators")
+
+print("\n🏆 ¡AÑOS TOTALES CONFIRMADOS EN GOLD_DANE_LABOR_INDICATORS (2004 - 2026):")
+spark.table("gold_dane_labor_indicators").select(F.year("periodo_fecha").alias("year")).distinct().orderBy("year").show(30)
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# =====================================================================
+# 🔍 CELDA DE INSPECCIÓN: ESTRUCTURA EXACTA DANE BRONZE (2023)
+# =====================================================================
+import notebookutils
+from pyspark.sql import functions as F
+
+bronze_root = "abfss://1fa36d94-46ee-4c7f-939f-720e8ed4bf85@onelake.dfs.fabric.microsoft.com/64101340-700e-4c22-9d3d-c930021add77/Files/raw/dane"
+
+def get_files_recursive(path):
+    all_files = []
+    try:
+        for item in notebookutils.fs.ls(path):
+            if item.isDir:
+                all_files.extend(get_files_recursive(item.path))
+            else:
+                all_files.append(item.path)
+    except Exception as e:
+        print(f"Error listando {path}: {e}")
+    return all_files
+
+print("🔍 1. Inspeccionando archivos de 2023...")
+paths_2023 = get_files_recursive(f"{bronze_root}/year=2023")
+
+ocu_2023 = [p for p in paths_2023 if "ocupa" in p.lower() and not any(x in p.lower() for x in ["no_ocu", "no ocu", "desocu", "vivienda", "ingresos", "caracteristicas", "inactivos", "ayudas", "subempleo", "seguridad"])][:2]
+no_2023 = [p for p in paths_2023 if any(x in p.lower() for x in ["no_ocu", "no ocu", "desocu"]) and not any(x in p.lower() for x in ["vivienda", "ingresos", "caracteristicas", "inactivos", "ayudas", "subempleo", "seguridad"])][:2]
+
+print("Rutas Ocupados:", ocu_2023)
+print("Rutas No Ocupados:", no_2023)
+
+print("\n🔍 2. Leyendo muestra de Ocupados 2023...")
+df_o = spark.read.format("csv").option("header", "true").option("delimiter", ";").load(ocu_2023)
+print("Columnas Ocupados:", df_o.columns[:15])
+
+cols_dept_o = [c for c in df_o.columns if any(k in c.upper() for k in ["DPTO", "DEPT", "COD", "CIUDAD"])]
+cols_fex_o = [c for c in df_o.columns if any(k in c.upper() for k in ["FEX", "PESO", "FACTOR"])]
+print("Columnas Depto en Ocupados:", cols_dept_o)
+print("Columnas FEX en Ocupados:", cols_fex_o)
+
+df_o.select(cols_dept_o + cols_fex_o).show(5)
+
+print("\n🔍 3. Leyendo muestra de No Ocupados 2023...")
+df_no = spark.read.format("csv").option("header", "true").option("delimiter", ";").load(no_2023)
+print("Columnas No Ocupados:", df_no.columns[:15])
+
+cols_dept_no = [c for c in df_no.columns if any(k in c.upper() for k in ["DPTO", "DEPT", "COD", "CIUDAD"])]
+cols_fex_no = [c for c in df_no.columns if any(k in c.upper() for k in ["FEX", "PESO", "FACTOR"])]
+cols_dsi_no = [c for c in df_no.columns if any(k in c.upper() for k in ["DSI", "DESOCU", "FT", "RAMA"])]
+print("Columnas Depto en No Ocupados:", cols_dept_no)
+print("Columnas FEX en No Ocupados:", cols_fex_no)
+print("Columnas Desempleo en No Ocupados:", cols_dsi_no)
+
+df_no.select(cols_dept_no + cols_fex_no + cols_dsi_no).show(5)
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# =====================================================================
+# 🚀 CONSTRUCCIÓN COMPLETA DE DFS_DEPT_RECENT (2021 - 2026)
+# =====================================================================
+import notebookutils
+from pyspark.sql import functions as F
+
+bronze_root = "abfss://1fa36d94-46ee-4c7f-939f-720e8ed4bf85@onelake.dfs.fabric.microsoft.com/64101340-700e-4c22-9d3d-c930021add77/Files/raw/dane"
+
+def get_files_recursive(path):
+    all_files = []
+    try:
+        for item in notebookutils.fs.ls(path):
+            if item.isDir:
+                all_files.extend(get_files_recursive(item.path))
+            else:
+                all_files.append(item.path)
+    except Exception as e:
+        print(f"Aviso listando {path}: {e}")
+    return all_files
+
+print("⚡ 1. Construyendo dfs_dept_recent año por año (2021 a 2026)...")
+
+dfs_dept_recent = []
+
+for yr in range(2021, 2027):
+    paths = get_files_recursive(f"{bronze_root}/year={yr}")
+    
+    # Rutas de Ocupados y No Ocupados
+    ocu_paths = [p for p in paths if "ocupa" in p.lower() and not any(x in p.lower() for x in ["no_ocu", "no ocu", "desocu", "vivienda", "ingresos", "caracteristicas", "inactivos", "ayudas", "subempleo", "seguridad"])]
+    no_paths = [p for p in paths if any(x in p.lower() for x in ["no_ocu", "no ocu", "desocu"]) and not any(x in p.lower() for x in ["vivienda", "ingresos", "caracteristicas", "inactivos", "ayudas", "subempleo", "seguridad"])]
+    
+    if not ocu_paths:
+        print(f"⚠️ {yr}: No se encontraron archivos de Ocupados.")
+        continue
+        
+    delim = "," if yr == 2021 else ";"
+    
+    # 1. Leer Ocupados
+    df_ocu_raw = spark.read.format("csv").option("header", "true").option("delimiter", delim).load(ocu_paths).withColumn("source_file", F.input_file_name())
+    for c in df_ocu_raw.columns:
+        df_ocu_raw = df_ocu_raw.withColumnRenamed(c, c.upper().strip().replace('"', ''))
+        
+    fex_o = next((c for c in df_ocu_raw.columns if "FEX" in c or "PESO" in c or "FACTOR" in c), "FEX_C_2011")
+    dpto_o = next((c for c in df_ocu_raw.columns if "DPTO" in c or "DEPT" in c or "COD_DPTO" in c), "DPTO")
+    
+    df_ocu = df_ocu_raw.select(
+        F.lit(yr).alias("year"),
+        F.coalesce(F.regexp_extract(F.col("SOURCE_FILE"), r"month=(\d+)", 1).cast("int"), F.lit(1)).alias("month"),
+        F.lpad(F.trim(F.col(dpto_o).cast("string")), 2, "0").alias("codigo_departamento"),
+        F.lit("ocupado").alias("status"),
+        F.regexp_replace(F.regexp_replace(F.col(fex_o), r'[\s"]', ''), ",", ".").cast("double").alias("weight")
+    ).filter(F.col("weight").isNotNull() & (F.col("weight") > 0) & (F.col("weight") < 50000))
+    
+    # 2. Leer Desocupados (Filtrado estricto DSI == 1)
+    if no_paths:
+        df_no_raw = spark.read.format("csv").option("header", "true").option("delimiter", delim).load(no_paths).withColumn("source_file", F.input_file_name())
+        for c in df_no_raw.columns:
+            df_no_raw = df_no_raw.withColumnRenamed(c, c.upper().strip().replace('"', ''))
+            
+        fex_d = next((c for c in df_no_raw.columns if "FEX" in c or "PESO" in c or "FACTOR" in c), "FEX_C_2011")
+        dpto_d = next((c for c in df_no_raw.columns if "DPTO" in c or "DEPT" in c or "COD_DPTO" in c), "DPTO")
+        dsi_col = next((c for c in df_no_raw.columns if c in ["DSI", "DESOCUPADO", "FT"]), None)
+        
+        df_no_filt = df_no_raw.filter(F.col(dsi_col) == "1") if dsi_col else df_no_raw
+        
+        df_des = df_no_filt.select(
+            F.lit(yr).alias("year"),
+            F.coalesce(F.regexp_extract(F.col("SOURCE_FILE"), r"month=(\d+)", 1).cast("int"), F.lit(1)).alias("month"),
+            F.lpad(F.trim(F.col(dpto_d).cast("string")), 2, "0").alias("codigo_departamento"),
+            F.lit("desocupado").alias("status"),
+            F.regexp_replace(F.regexp_replace(F.col(fex_d), r'[\s"]', ''), ",", ".").cast("double").alias("weight")
+        ).filter(F.col("weight").isNotNull() & (F.col("weight") > 0) & (F.col("weight") < 50000))
+        
+        df_combined = df_ocu.unionByName(df_des)
+    else:
+        df_combined = df_ocu
+        
+    df_m = df_combined.groupBy("year", "month", "codigo_departamento").agg(
+        F.sum(F.when(F.col("status") == "ocupado", F.col("weight")).otherwise(0.0)).alias("ocupados"),
+        F.sum(F.when(F.col("status") == "desocupado", F.col("weight")).otherwise(0.0)).alias("desocupados")
+    ).withColumn("fuerza_laboral", F.col("ocupados") + F.col("desocupados")) \
+     .withColumn("tasa_desempleo_pct", F.when(F.col("fuerza_laboral") > 0, (F.col("desocupados") / F.col("fuerza_laboral")) * 100).otherwise(0.0)) \
+     .withColumn("periodo_fecha", F.to_date(F.concat_ws("-", F.col("year"), F.lpad(F.col("month"), 2, "0"), F.lit("01"))))
+     
+    count_records = df_m.count()
+    print(f"   ✅ {yr}: Generados {count_records:,} registros depto-mes.")
+    dfs_dept_recent.append(df_m)
+
+# 3. Consolidar con el histórico y persistir en Gold Lakehouse
+print("\n💾 2. Guardando en gold_dane_labor_indicators...")
+df_hist = spark.table("gold_dane_labor_indicators").filter(F.col("periodo_fecha") < "2021-01-01") \
+               .select("year", "month", "periodo_fecha", "codigo_departamento", "ocupados", "desocupados", "fuerza_laboral", "tasa_desempleo_pct")
+
+df_recent_unified = dfs_dept_recent[0]
+for d in dfs_dept_recent[1:]:
+    df_recent_unified = df_recent_unified.unionByName(d)
+
+df_all_years = df_hist.unionByName(
+    df_recent_unified.select("year", "month", "periodo_fecha", "codigo_departamento", "ocupados", "desocupados", "fuerza_laboral", "tasa_desempleo_pct")
+)
+
+df_dim_d = spark.table("dim_departamentos")
+df_final = df_all_years.alias("f") \
+    .join(df_dim_d.alias("d"), F.col("f.codigo_departamento") == F.col("d.codigo_departamento"), "left") \
+    .select(
+        F.col("f.year"),
+        F.col("f.month"),
+        F.col("f.periodo_fecha"),
+        F.col("f.codigo_departamento"),
+        F.coalesce(F.col("d.nombre_departamento"), F.lit("Desconocido")).alias("nombre_departamento"),
+        F.lit("Nacional").alias("region_geografica"),
+        F.col("f.ocupados"),
+        F.col("f.desocupados"),
+        F.col("f.fuerza_laboral"),
+        F.col("f.tasa_desempleo_pct")
+    ).dropDuplicates(["periodo_fecha", "codigo_departamento"])
+
+df_final.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("gold_dane_labor_indicators")
+
+print("\n🏆 ¡AÑOS TOTALES EN GOLD_DANE_LABOR_INDICATORS (2004 - 2026):")
+spark.sql("SELECT DISTINCT year(periodo_fecha) as yr FROM gold_dane_labor_indicators ORDER BY yr").show(30)
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# =====================================================================
+# 🚀 PROCESAMIENTO E INYECCIÓN DE 2018 Y 2019 EN GOLD
+# =====================================================================
+import notebookutils
+from pyspark.sql import functions as F
+
+bronze_root = "abfss://1fa36d94-46ee-4c7f-939f-720e8ed4bf85@onelake.dfs.fabric.microsoft.com/64101340-700e-4c22-9d3d-c930021add77/Files/raw/dane"
+
+def get_files_recursive(path):
+    all_files = []
+    try:
+        for item in notebookutils.fs.ls(path):
+            if item.isDir: all_files.extend(get_files_recursive(item.path))
+            else: all_files.append(item.path)
+    except Exception as e: pass
+    return all_files
+
+print("⚡ Procesando años 2018 y 2019...")
+
+dfs_missing_dept = []
+dfs_missing_monthly = []
+
+for yr in [2018, 2019]:
+    paths = get_files_recursive(f"{bronze_root}/year={yr}")
+    
+    ocu_paths = [p for p in paths if "ocupa" in p.lower() and not any(x in p.lower() for x in ["no_ocu", "no ocu", "desocu", "vivienda", "ingresos", "caracteristicas", "inactivos", "ayudas", "subempleo", "seguridad"])]
+    no_paths = [p for p in paths if any(x in p.lower() for x in ["no_ocu", "no ocu", "desocu"]) and not any(x in p.lower() for x in ["vivienda", "ingresos", "caracteristicas", "inactivos", "ayudas", "subempleo", "seguridad"])]
+    
+    if not ocu_paths:
+        print(f"⚠️ No hay archivos de Ocupados para {yr}")
+        continue
+        
+    delim = ";"
+    
+    # 1. Leer Ocupados
+    df_ocu_r = spark.read.format("csv").option("header", "true").option("delimiter", delim).load(ocu_paths).withColumn("source_file", F.input_file_name())
+    for c in df_ocu_r.columns: df_ocu_r = df_ocu_r.withColumnRenamed(c, c.upper().strip().replace('"', ''))
+    
+    fex_col = next((c for c in df_ocu_r.columns if "FEX" in c or "PESO" in c or "FACTOR" in c), "FEX_C_2011")
+    dpto_col = next((c for c in df_ocu_r.columns if "DPTO" in c or "DEPT" in c or "COD_DPTO" in c), "DPTO")
+    
+    df_ocu = df_ocu_r.select(
+        F.lit(yr).alias("year"),
+        F.coalesce(F.regexp_extract(F.col("SOURCE_FILE"), r"month=(\d+)", 1).cast("int"), F.lit(1)).alias("month"),
+        F.lpad(F.trim(F.col(dpto_col).cast("string")), 2, "0").alias("codigo_departamento"),
+        F.lit("ocupado").alias("status"),
+        F.regexp_replace(F.regexp_replace(F.col(fex_col), r'[\s"]', ''), ",", ".").cast("double").alias("weight")
+    ).filter(F.col("weight").isNotNull() & (F.col("weight") > 0) & (F.col("weight") < 50000))
+    
+    # 2. Leer Desocupados
+    if no_paths:
+        df_no_r = spark.read.format("csv").option("header", "true").option("delimiter", delim).load(no_paths).withColumn("source_file", F.input_file_name())
+        for c in df_no_r.columns: df_no_r = df_no_r.withColumnRenamed(c, c.upper().strip().replace('"', ''))
+        
+        fex_no = next((c for c in df_no_r.columns if "FEX" in c or "PESO" in c or "FACTOR" in c), "FEX_C_2011")
+        dpto_no = next((c for c in df_no_r.columns if "DPTO" in c or "DEPT" in c or "COD_DPTO" in c), "DPTO")
+        dsi_col = next((c for c in df_no_r.columns if c in ["DSI", "DESOCUPADO", "FT"]), None)
+        
+        df_no_filt = df_no_r.filter(F.col(dsi_col) == "1") if dsi_col else df_no_r
+        
+        df_des = df_no_filt.select(
+            F.lit(yr).alias("year"),
+            F.coalesce(F.regexp_extract(F.col("SOURCE_FILE"), r"month=(\d+)", 1).cast("int"), F.lit(1)).alias("month"),
+            F.lpad(F.trim(F.col(dpto_no).cast("string")), 2, "0").alias("codigo_departamento"),
+            F.lit("desocupado").alias("status"),
+            F.regexp_replace(F.regexp_replace(F.col(fex_no), r'[\s"]', ''), ",", ".").cast("double").alias("weight")
+        ).filter(F.col("weight").isNotNull() & (F.col("weight") > 0) & (F.col("weight") < 50000))
+        
+        df_combined = df_ocu.unionByName(df_des)
+    else:
+        df_combined = df_ocu
+
+    # Agregación departamental
+    df_m_dept = df_combined.groupBy("year", "month", "codigo_departamento").agg(
+        F.sum(F.when(F.col("status") == "ocupado", F.col("weight")).otherwise(0.0)).alias("ocupados"),
+        F.sum(F.when(F.col("status") == "desocupado", F.col("weight")).otherwise(0.0)).alias("desocupados")
+    ).withColumn("fuerza_laboral", F.col("ocupados") + F.col("desocupados")) \
+     .withColumn("tasa_desempleo_pct", F.when(F.col("fuerza_laboral") > 0, (F.col("desocupados") / F.col("fuerza_laboral")) * 100).otherwise(0.0)) \
+     .withColumn("periodo_fecha", F.to_date(F.concat_ws("-", F.col("year"), F.lpad(F.col("month"), 2, "0"), F.lit("01"))))
+     
+    dfs_missing_dept.append(df_m_dept)
+    
+    # Agregación nacional mensual
+    df_m_nac = df_combined.groupBy("year", "month").agg(
+        F.sum(F.when(F.col("status") == "ocupado", F.col("weight")).otherwise(0.0)).alias("ocupados"),
+        F.sum(F.when(F.col("status") == "desocupado", F.col("weight")).otherwise(0.0)).alias("desocupados")
+    ).withColumn("fuerza_laboral", F.col("ocupados") + F.col("desocupados")) \
+     .withColumn("tasa_desempleo_pct", F.when(F.col("fuerza_laboral") > 0, (F.col("desocupados") / F.col("fuerza_laboral")) * 100).otherwise(0.0)) \
+     .withColumn("fecha", F.to_date(F.concat_ws("-", F.col("year"), F.lpad(F.col("month"), 2, "0"), F.lit("01"))))
+     
+    dfs_missing_monthly.append(df_m_nac)
+    print(f"   ✅ Año {yr} procesado exitosamente!")
+
+# 1. Unir a gold_dane_labor_indicators
+df_dept_cur = spark.table("gold_dane_labor_indicators").filter(~F.year("periodo_fecha").isin(2018, 2019))
+for d in dfs_missing_dept:
+    df_dept_cur = df_dept_cur.unionByName(d, allowMissingColumns=True)
+
+df_dim_d = spark.table("dim_departamentos")
+df_gold_final = df_dept_cur.alias("f") \
+    .join(df_dim_d.alias("d"), F.col("f.codigo_departamento") == F.col("d.codigo_departamento"), "left") \
+    .select(
+        F.year("f.periodo_fecha").alias("year"),
+        F.month("f.periodo_fecha").alias("month"),
+        F.col("f.periodo_fecha"),
+        F.col("f.codigo_departamento"),
+        F.coalesce(F.col("d.nombre_departamento"), F.lit("Desconocido")).alias("nombre_departamento"),
+        F.lit("Nacional").alias("region_geografica"),
+        F.col("f.ocupados"),
+        F.col("f.desocupados"),
+        F.col("f.fuerza_laboral"),
+        F.col("f.tasa_desempleo_pct")
+    ).dropDuplicates(["periodo_fecha", "codigo_departamento"])
+
+df_gold_final.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("gold_dane_labor_indicators")
+
+# 2. Unir a fact_monthly_labor
+df_monthly_cur = spark.table("fact_monthly_labor").filter(~F.col("year").isin(2018, 2019))
+for m in dfs_missing_monthly:
+    df_monthly_cur = df_monthly_cur.unionByName(m, allowMissingColumns=True)
+
+df_monthly_final = df_monthly_cur.dropDuplicates(["year", "month"]).withColumn(
+    "id_periodo",
+    F.when(F.col("fecha") < "2006-08-07", 1)
+     .when((F.col("fecha") >= "2006-08-07") & (F.col("fecha") < "2010-08-07"), 2)
+     .when((F.col("fecha") >= "2010-08-07") & (F.col("fecha") < "2014-08-07"), 3)
+     .when((F.col("fecha") >= "2014-08-07") & (F.col("fecha") < "2018-08-07"), 4)
+     .when((F.col("fecha") >= "2018-08-07") & (F.col("fecha") < "2022-08-07"), 5)
+     .otherwise(6)
+)
+
+df_monthly_final.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("fact_monthly_labor")
+
+print("\n🏆 ¡AÑOS COMPLETOS EN GOLD_DANE_LABOR_INDICATORS (2004 - 2026):")
+spark.sql("SELECT DISTINCT year(periodo_fecha) as yr FROM gold_dane_labor_indicators ORDER BY yr").show(30)
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
 from pyspark.sql import functions as F
 from pyspark.sql.types import *
 

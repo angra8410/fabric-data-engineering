@@ -1867,6 +1867,42 @@ print("✅ Columnas alineadas con éxito en OneLake!")
 
 # CELL ********************
 
+# =====================================================================
+# 🟡 ALINEACIÓN DEFINITIVA DE ESQUEMA EN GOLD_DANE_LABOR_INDICATORS
+# =====================================================================
+from pyspark.sql import functions as F
+
+print("🟡 Alineando nombres de columnas en gold_dane_labor_indicators...")
+
+df_ind = spark.table("gold_dane_labor_indicators") \
+    .withColumn("departamento_nombre", F.coalesce(F.col("nombre_departamento"), F.lit("Desconocido"))) \
+    .withColumn("poblacion_ocupada", F.col("ocupados")) \
+    .withColumn("poblacion_desocupada", F.col("desocupados")) \
+    .withColumn("fuerza_laboral_total", F.col("fuerza_laboral")) \
+    .withColumn(
+        "id_periodo",
+        F.when(F.col("periodo_fecha") < "2006-08-07", 1)
+         .when((F.col("periodo_fecha") >= "2006-08-07") & (F.col("periodo_fecha") < "2010-08-07"), 2)
+         .when((F.col("periodo_fecha") >= "2010-08-07") & (F.col("periodo_fecha") < "2014-08-07"), 3)
+         .when((F.col("periodo_fecha") >= "2014-08-07") & (F.col("periodo_fecha") < "2018-08-07"), 4)
+         .when((F.col("periodo_fecha") >= "2018-08-07") & (F.col("periodo_fecha") < "2022-08-07"), 5)
+         .otherwise(6)
+    )
+
+df_ind.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("gold_dane_labor_indicators")
+
+print("✅ gold_dane_labor_indicators alineada y guardada exitosamente!")
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
 from pyspark.sql import functions as F
 from pyspark.sql.types import *
 

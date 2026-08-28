@@ -1842,6 +1842,31 @@ spark.sql("SELECT DISTINCT year(periodo_fecha) as yr FROM gold_dane_labor_indica
 
 # CELL ********************
 
+# =====================================================================
+# 🟡 ALINEACIÓN DE COLUMNAS EN GOLD_DANE_LABOR_INDICATORS
+# =====================================================================
+from pyspark.sql import functions as F
+
+print("🟡 Agregando departamento_nombre y nombre_departamento...")
+
+df_indicators = spark.table("gold_dane_labor_indicators") \
+                     .withColumn("departamento_nombre", F.col("nombre_departamento")) \
+                     .withColumn("nombre_departamento", F.col("nombre_departamento"))
+
+df_indicators.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("gold_dane_labor_indicators")
+
+print("✅ Columnas alineadas con éxito en OneLake!")
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
 from pyspark.sql import functions as F
 from pyspark.sql.types import *
 

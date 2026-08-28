@@ -156,16 +156,6 @@ table dim_date
 
 		annotation SummarizationSetBy = Automatic
 
-	column id_periodo
-		dataType: int64
-		formatString: 0
-		lineageTag: e8a91234-d125-4f93-8f13-1d20a295c333
-		sourceLineageTag: id_periodo
-		summarizeBy: none
-		sourceColumn: id_periodo
-
-		annotation SummarizationSetBy = Automatic
-
 	partition dim_date = entity
 		mode: directLake
 		source

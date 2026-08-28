@@ -14,7 +14,3 @@ relationship FactLaborByPresident_IdPeriodo_DimPresidentes
 	fromColumn: fact_labor_by_president.id_periodo
 	toColumn: dim_presidentes.id_periodo
 
-relationship DimDate_IdPeriodo_DimPresidentes
-	fromColumn: dim_date.id_periodo
-	toColumn: dim_presidentes.id_periodo
-

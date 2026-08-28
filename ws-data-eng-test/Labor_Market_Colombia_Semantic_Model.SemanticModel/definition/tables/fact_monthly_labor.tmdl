@@ -5,58 +5,72 @@ table fact_monthly_labor
 	measure 'Total Ocupados' = SUM(fact_monthly_labor[ocupados])
 		formatString: #,##0
 		displayFolder: 01 KPIs Nacionales
+		lineageTag: f19f4e00-c81a-4c34-b095-f1abb4c37876
 
 	measure 'Total Desocupados' = SUM(fact_monthly_labor[desocupados])
 		formatString: #,##0
 		displayFolder: 01 KPIs Nacionales
+		lineageTag: ed69bf19-bb8e-42bf-8367-ef623fd09c24
 
 	measure 'Total Fuerza Laboral' = SUM(fact_monthly_labor[fuerza_laboral])
 		formatString: #,##0
 		displayFolder: 01 KPIs Nacionales
+		lineageTag: d705d4a6-83fc-4182-8641-f201d29c16b9
 
 	measure 'Tasa de Desempleo %' = DIVIDE([Total Desocupados], [Total Fuerza Laboral])
 		formatString: 0.00%
 		displayFolder: 01 KPIs Nacionales
+		lineageTag: 368a7505-accc-43c0-8046-914df4e007d6
 
 	measure 'Tasa de Desempleo % (Año Anterior)' = CALCULATE([Tasa de Desempleo %], SAMEPERIODLASTYEAR(dim_date[date]))
 		formatString: 0.00%
 		displayFolder: 02 Comparativos Temporales
+		lineageTag: 4b02b55e-c15c-4410-9914-e15621bb90c8
 
 	measure 'Tasa de Desempleo % var. pp YoY' = VAR CurrentValue = [Tasa de Desempleo %] RETURN IF(NOT ISBLANK(CurrentValue), CurrentValue - [Tasa de Desempleo % (Año Anterior)])
 		formatString: 0.00%;-0.00%
 		displayFolder: 02 Comparativos Temporales
+		lineageTag: d2cd4d9f-74de-468f-82d1-9859f7960df0
 
 	measure 'Total Ocupados (Año Anterior)' = CALCULATE([Total Ocupados], SAMEPERIODLASTYEAR(dim_date[date]))
 		formatString: #,##0
 		displayFolder: 02 Comparativos Temporales
+		lineageTag: dccfaea9-5b94-4874-925c-bf23d4f13d96
 
 	measure 'Ocupados % var. YoY' = VAR CurrentValue = [Total Ocupados] RETURN IF(NOT ISBLANK(CurrentValue), DIVIDE(CurrentValue - [Total Ocupados (Año Anterior)], [Total Ocupados (Año Anterior)]))
 		formatString: 0.0%;-0.0%
 		displayFolder: 02 Comparativos Temporales
+		lineageTag: 1073ac6e-e951-43cd-b277-359cb032aae1
 
 	measure 'Total Desocupados (Mes Anterior)' = CALCULATE([Total Desocupados], DATEADD(dim_date[date], -1, MONTH))
 		formatString: #,##0
 		displayFolder: 02 Comparativos Temporales
+		lineageTag: 0a1237b3-c47f-482b-92c2-d5c81e15a192
 
 	measure 'Desocupados var. MoM' = VAR CurrentValue = [Total Desocupados] RETURN IF(NOT ISBLANK(CurrentValue), CurrentValue - [Total Desocupados (Mes Anterior)])
 		formatString: #,##0;-#,##0
 		displayFolder: 02 Comparativos Temporales
+		lineageTag: 169865d5-b0da-44c7-aa90-d99728fd66ce
 
 	measure 'Tasa de Desempleo % Promedio Movil 12M' = AVERAGEX(DATESINPERIOD(dim_date[date], MAX(dim_date[date]), -12, MONTH), [Tasa de Desempleo %])
 		formatString: 0.00%
 		displayFolder: 02 Comparativos Temporales
+		lineageTag: 371befed-53c3-44f3-8c75-7e18e0748755
 
 	measure 'Promedio Ocupados Mensual' = AVERAGEX(fact_monthly_labor, fact_monthly_labor[ocupados])
 		formatString: #,##0
 		displayFolder: 01 KPIs Nacionales
+		lineageTag: 2290ad73-6e16-4309-b4ec-60b0a49874b4
 
 	measure 'Promedio Desocupados Mensual' = AVERAGEX(fact_monthly_labor, fact_monthly_labor[desocupados])
 		formatString: #,##0
 		displayFolder: 01 KPIs Nacionales
+		lineageTag: 2c6f2809-663c-4075-b075-757a6f7ca0e2
 
 	measure 'Promedio Fuerza Laboral Mensual' = AVERAGEX(fact_monthly_labor, fact_monthly_labor[fuerza_laboral])
 		formatString: #,##0
 		displayFolder: 01 KPIs Nacionales
+		lineageTag: d9042cf0-1478-4772-9a4a-2cc68481ade4
 
 	column year
 		dataType: int64
@@ -132,13 +146,13 @@ table fact_monthly_labor
 
 		annotation SummarizationSetBy = Automatic
 
-	column id_periodo
-		dataType: int64
-		formatString: 0
-		lineageTag: c382a991-4d12-4f18-8f12-0b10a295c999
-		sourceLineageTag: id_periodo
-		summarizeBy: sum
-		sourceColumn: id_periodo
+	column es_imputado
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: c2d3fcea-c7dc-4304-b317-f04edc340c03
+		sourceLineageTag: es_imputado
+		summarizeBy: none
+		sourceColumn: es_imputado
 
 		annotation SummarizationSetBy = Automatic
 

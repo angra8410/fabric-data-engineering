@@ -1,0 +1,38 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "11111111111111111101",
+  "position": {
+    "x": 40,
+    "y": 40,
+    "z": 1,
+    "height": 130,
+    "width": 340,
+    "tabOrder": 1
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_monthly_labor"
+                    }
+                  },
+                  "Property": "Tasa de Desempleo %"
+                }
+              },
+              "queryRef": "fact_monthly_labor.Tasa de Desempleo %",
+              "nativeQueryRef": "Tasa de Desempleo %"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "11111111111111111102",
+  "position": {
+    "x": 400,
+    "y": 40,
+    "z": 2,
+    "height": 130,
+    "width": 340,
+    "tabOrder": 2
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_monthly_labor"
+                    }
+                  },
+                  "Property": "Promedio Ocupados Mensual"
+                }
+              },
+              "queryRef": "fact_monthly_labor.Promedio Ocupados Mensual",
+              "nativeQueryRef": "Promedio Ocupados Mensual"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

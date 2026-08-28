@@ -156,6 +156,34 @@ table fact_monthly_labor
 
 		annotation SummarizationSetBy = Automatic
 
+	column id_periodo
+		dataType: int64
+		formatString: 0
+		lineageTag: a9d85c20-093a-45af-8600-6ae3061e188a
+		sourceLineageTag: id_periodo
+		summarizeBy: sum
+		sourceColumn: id_periodo
+
+		annotation SummarizationSetBy = Automatic
+
+	column presidente
+		dataType: string
+		lineageTag: 94f56ffb-c697-4a4c-8407-baec6e831ba6
+		sourceLineageTag: presidente
+		summarizeBy: none
+		sourceColumn: presidente
+
+		annotation SummarizationSetBy = Automatic
+
+	column periodo_texto
+		dataType: string
+		lineageTag: 549cbea2-c385-427c-8413-47ca8456314d
+		sourceLineageTag: periodo_texto
+		summarizeBy: none
+		sourceColumn: periodo_texto
+
+		annotation SummarizationSetBy = Automatic
+
 	partition fact_monthly_labor = entity
 		mode: directLake
 		source

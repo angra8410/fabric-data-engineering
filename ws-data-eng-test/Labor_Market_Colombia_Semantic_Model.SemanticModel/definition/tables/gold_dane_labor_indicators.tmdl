@@ -52,15 +52,6 @@ table gold_dane_labor_indicators
 
 		annotation SummarizationSetBy = Automatic
 
-	column year_month
-		dataType: string
-		lineageTag: fd397b9d-44d6-43dc-b863-621a3b3553f4
-		sourceLineageTag: year_month
-		summarizeBy: none
-		sourceColumn: year_month
-
-		annotation SummarizationSetBy = Automatic
-
 	column periodo_fecha
 		dataType: dateTime
 		formatString: General Date
@@ -111,16 +102,6 @@ table gold_dane_labor_indicators
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	column total_encuestas_muestra
-		dataType: int64
-		formatString: 0
-		lineageTag: 466bb036-b4a4-41fa-9261-6962c46b2b3b
-		sourceLineageTag: total_encuestas_muestra
-		summarizeBy: sum
-		sourceColumn: total_encuestas_muestra
-
-		annotation SummarizationSetBy = Automatic
-
 	column fuerza_laboral_total
 		dataType: double
 		lineageTag: 66e69803-9251-4521-9931-c650fdb8ec2b
@@ -142,6 +123,16 @@ table gold_dane_labor_indicators
 		annotation SummarizationSetBy = Automatic
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column id_periodo
+		dataType: int64
+		formatString: 0
+		lineageTag: 242ebb15-b6cd-4e8f-8a15-07999bed424f
+		sourceLineageTag: id_periodo
+		summarizeBy: sum
+		sourceColumn: id_periodo
+
+		annotation SummarizationSetBy = Automatic
 
 	partition gold_dane_labor_indicators = entity
 		mode: directLake

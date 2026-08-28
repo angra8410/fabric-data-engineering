@@ -1,0 +1,102 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "11111111111111111109",
+  "position": {
+    "x": 990,
+    "y": 630,
+    "z": 9,
+    "height": 420,
+    "width": 890,
+    "tabOrder": 9
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_date"
+                    }
+                  },
+                  "Property": "year"
+                }
+              },
+              "queryRef": "dim_date.year",
+              "nativeQueryRef": "Año",
+              "active": true
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_monthly_labor"
+                    }
+                  },
+                  "Property": "Tasa de Desempleo %"
+                }
+              },
+              "queryRef": "fact_monthly_labor.Tasa de Desempleo %",
+              "nativeQueryRef": "Tasa Desempleo %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_monthly_labor"
+                    }
+                  },
+                  "Property": "Total Ocupados"
+                }
+              },
+              "queryRef": "fact_monthly_labor.Total Ocupados",
+              "nativeQueryRef": "Ocupados"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_monthly_labor"
+                    }
+                  },
+                  "Property": "Total Desocupados"
+                }
+              },
+              "queryRef": "fact_monthly_labor.Total Desocupados",
+              "nativeQueryRef": "Desocupados"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "dim_date"
+                  }
+                },
+                "Property": "year"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ]
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

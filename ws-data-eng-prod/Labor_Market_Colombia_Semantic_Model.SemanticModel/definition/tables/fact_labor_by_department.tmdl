@@ -1,0 +1,113 @@
+table fact_labor_by_department
+	lineageTag: 375c5d56-6070-455f-b281-50f8df625395
+	sourceLineageTag: [dbo].[fact_labor_by_department]
+
+	/// Promedio anual de ocupados por departamento. OJO: 66 de 99 codigos en esta tabla son placeholders ('Depto NN') sin nombre real de departamento y no cruzan con dim_departamentos (~23% de las filas).
+	measure 'Ocupados Promedio Anual (Depto)' = SUM(fact_labor_by_department[ocupados_promedio])
+		formatString: #,##0
+		displayFolder: 03 Departamentos (anual)
+		lineageTag: 900e5f56-aa84-4e49-b302-08189be9e00a
+
+	/// Promedio anual de desocupados por departamento.
+	measure 'Desocupados Promedio Anual (Depto)' = SUM(fact_labor_by_department[desocupados_promedio])
+		formatString: #,##0
+		displayFolder: 03 Departamentos (anual)
+		lineageTag: 2d055039-b86c-4f32-b206-108d16f81297
+
+	/// Fuerza laboral anual por departamento.
+	measure 'Fuerza Laboral Anual (Depto)' = SUM(fact_labor_by_department[fuerza_laboral])
+		formatString: #,##0
+		displayFolder: 03 Departamentos (anual)
+		lineageTag: 1ed24dfb-c22f-4b42-afdf-f116fa9680e8
+
+	/// Tasa de desempleo ponderada por departamento y año = Desocupados / Fuerza Laboral.
+	measure 'Tasa de Desempleo % (Depto Anual)' = DIVIDE([Desocupados Promedio Anual (Depto)], [Fuerza Laboral Anual (Depto)])
+		formatString: 0.00%
+		displayFolder: 03 Departamentos (anual)
+		lineageTag: a45ba080-a464-4b79-8c94-cfa26a9f4246
+
+	/// Puesto del departamento segun su tasa de desempleo (1 = tasa mas alta). Usar con la tabla dim_departamentos.
+	measure 'Ranking Desempleo (Depto)' = IF(NOT ISBLANK([Tasa de Desempleo % (Depto Anual)]), RANKX(ALLSELECTED(dim_departamentos[nombre_departamento]), [Tasa de Desempleo % (Depto Anual)],, DESC))
+		formatString: 0
+		displayFolder: 03 Departamentos (anual)
+		lineageTag: 09b2bfe3-81a1-48ad-9f60-3ad615f7e5d5
+
+	column year
+		dataType: int64
+		formatString: 0
+		lineageTag: d0d847f4-6d7a-4997-878a-4c106481b92d
+		sourceLineageTag: year
+		summarizeBy: sum
+		sourceColumn: year
+
+		annotation SummarizationSetBy = Automatic
+
+	column codigo_departamento
+		dataType: string
+		lineageTag: 72783083-17e6-4541-8d62-fa1724f9a141
+		sourceLineageTag: codigo_departamento
+		summarizeBy: none
+		sourceColumn: codigo_departamento
+
+		annotation SummarizationSetBy = Automatic
+
+	column departamento
+		dataType: string
+		lineageTag: ccd6867d-bd04-4a14-936b-d1f06ab3434a
+		sourceLineageTag: departamento
+		summarizeBy: none
+		sourceColumn: departamento
+
+		annotation SummarizationSetBy = Automatic
+
+	column ocupados_promedio
+		dataType: double
+		lineageTag: 5db6a2d9-89be-4f6f-9076-8cf8f31f7144
+		sourceLineageTag: ocupados_promedio
+		summarizeBy: sum
+		sourceColumn: ocupados_promedio
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column desocupados_promedio
+		dataType: double
+		lineageTag: adaccc6f-b258-4aaa-bf40-420b5880f5ae
+		sourceLineageTag: desocupados_promedio
+		summarizeBy: sum
+		sourceColumn: desocupados_promedio
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column fuerza_laboral
+		dataType: double
+		lineageTag: 79f62678-b59e-4144-bf9e-960c5442f6de
+		sourceLineageTag: fuerza_laboral
+		summarizeBy: sum
+		sourceColumn: fuerza_laboral
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column tasa_desempleo_pct
+		dataType: double
+		lineageTag: 6f6d443b-bae2-413c-985a-bc5bfca27f78
+		sourceLineageTag: tasa_desempleo_pct
+		summarizeBy: sum
+		sourceColumn: tasa_desempleo_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition fact_labor_by_department = entity
+		mode: directLake
+		source
+			entityName: fact_labor_by_department
+			schemaName: dbo
+			expressionSource: 'DirectLake - dane_gold_lh'
+

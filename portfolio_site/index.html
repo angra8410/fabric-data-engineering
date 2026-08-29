@@ -120,31 +120,13 @@
       <div id="interactive-dashboard-wrapper">
         <!-- Sub-page Navigation Tabs -->
         <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; background: rgba(15, 23, 42, 0.6); padding: 10px 16px; border-radius: 12px; border: 1px solid var(--border-color);">
-          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-            <button class="dash-page-tab active" data-page="p1">📈 Descriptive Analytics</button>
-            <button class="dash-page-tab" data-page="p2">🚨 Diagnostic Analytics</button>
-            <button class="dash-page-tab" data-page="p3">💸 Financial & Procurement</button>
+          <div id="dash-tabs-container" style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <!-- Dynamic sub-tabs injected via app.js -->
           </div>
 
           <!-- Slicers / Interactive Filters -->
-          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-            <div style="display: flex; align-items: center; gap: 6px;">
-              <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600;">Year:</span>
-              <select id="filter-year" class="report-dropdown" onchange="if(window.updateDashboardCharts) window.updateDashboardCharts();" style="padding: 6px 12px; font-size: 0.8rem; min-width: 90px; cursor: pointer;">
-                <option value="ALL">All Years</option>
-                <option value="2026">2026</option>
-                <option value="2025">2025</option>
-              </select>
-            </div>
-            <div style="display: flex; align-items: center; gap: 6px;">
-              <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600;">Origin:</span>
-              <select id="filter-channel" class="report-dropdown" onchange="if(window.updateDashboardCharts) window.updateDashboardCharts();" style="padding: 6px 12px; font-size: 0.8rem; min-width: 110px; cursor: pointer;">
-                <option value="ALL">All Channels</option>
-                <option value="Tienda">Tienda POS</option>
-                <option value="Whatsapp">WhatsApp Bot</option>
-                <option value="Rappi">Rappi</option>
-              </select>
-            </div>
+          <div id="dash-slicers-container" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <!-- Dynamic slicers injected via app.js -->
           </div>
         </div>
 
@@ -165,23 +147,35 @@
               <div style="position: relative; height: 300px; width: 100%;">
                 <canvas id="chart-monthly-trend"></canvas>
               </div>
+        <!-- PAGE 1: DESCRIPTIVE / OVERVIEW ANALYTICS -->
+        <div id="dash-page-p1" class="dash-page-view">
+          <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 24px;">
+            <!-- Monthly Revenue & Margin Combo Chart / Trend -->
+            <div class="card-inner-box" style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 14px; padding: 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                <h3 id="card-title-trend" style="font-size: 1rem; font-weight: 700; color: var(--text-main);">📈 Evolución Mensual</h3>
+                <span id="card-subtitle-trend" style="font-size: 0.75rem; color: var(--prod-color); font-weight: 600;">● Serie Temporal</span>
+              </div>
+              <div style="position: relative; height: 300px; width: 100%;">
+                <canvas id="chart-monthly-trend"></canvas>
+              </div>
             </div>
 
-            <!-- Revenue by Channel Donut -->
+            <!-- Revenue by Channel / Presidential Donut -->
             <div class="card-inner-box" style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 14px; padding: 20px;">
-              <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin-bottom: 14px;">🍩 Total Revenue por sale_origin</h3>
+              <h3 id="card-title-donut" style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin-bottom: 14px;">🍩 Distribución Segmentada</h3>
               <div style="position: relative; height: 260px; width: 100%; display: flex; align-items: center; justify-content: center;">
                 <canvas id="chart-channel-donut"></canvas>
               </div>
-              <div id="channel-legend" style="display: flex; justify-content: space-around; font-size: 0.75rem; margin-top: 10px; color: var(--text-muted);">
+              <div id="channel-legend" style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 8px; font-size: 0.75rem; margin-top: 10px; color: var(--text-muted);">
                 <!-- Dynamic legend -->
               </div>
             </div>
           </div>
 
-          <!-- Top Products Bar Chart -->
+          <!-- Top Products / Top Departments Bar Chart -->
           <div class="card-inner-box" style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 14px; padding: 20px;">
-            <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin-bottom: 14px;">🏆 Top 10 Ranking de Productos por Ventas</h3>
+            <h3 id="card-title-ranking" style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin-bottom: 14px;">🏆 Ranking Comparativo</h3>
             <div style="position: relative; height: 260px; width: 100%;">
               <canvas id="chart-top-products"></canvas>
             </div>
@@ -191,20 +185,20 @@
         <!-- PAGE 2: DIAGNOSTIC ANALYTICS -->
         <div id="dash-page-p2" class="dash-page-view" style="display: none;">
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-            <!-- Stock-Out Alert Table -->
+            <!-- Stock-Out / Presidential Term Breakdown -->
             <div class="card-inner-box" style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 14px; padding: 20px;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-                <h3 style="font-size: 1rem; font-weight: 700; color: var(--accent-pink);">🚨 Alerta de Quiebre de Stock (Stock &le; 5 Unidades)</h3>
-                <span class="status-pill status-alert">269 SKUs Críticos</span>
+                <h3 id="card-title-table1" style="font-size: 1rem; font-weight: 700; color: var(--accent-pink);">🚨 Análisis Detallado</h3>
+                <span id="badge-table1" class="status-pill status-alert">Vista Activa</span>
               </div>
               <div style="overflow-x: auto; max-height: 380px;">
                 <table class="portfolio-table" id="table-stockout">
-                  <thead>
+                  <thead id="thead-table1">
                     <tr>
-                      <th>Product Name</th>
-                      <th>Supplier</th>
-                      <th>Stock Units</th>
-                      <th>Sale Price</th>
+                      <th>Columna 1</th>
+                      <th>Columna 2</th>
+                      <th>Columna 3</th>
+                      <th>Columna 4</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -214,20 +208,20 @@
               </div>
             </div>
 
-            <!-- Profitability Matrix -->
+            <!-- Profitability / Departmental Matrix -->
             <div class="card-inner-box" style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 14px; padding: 20px;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-                <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-main);">🔍 Detección de Productos de Bajo Margen / Pérdida</h3>
-                <span style="font-size: 0.75rem; color: var(--text-muted);">Semáforo de Rentabilidad</span>
+                <h3 id="card-title-table2" style="font-size: 1rem; font-weight: 700; color: var(--text-main);">🔍 Matriz Comparativa</h3>
+                <span id="badge-table2" style="font-size: 0.75rem; color: var(--text-muted);">Tabla Dinámica</span>
               </div>
               <div style="overflow-x: auto; max-height: 380px;">
                 <table class="portfolio-table" id="table-margins">
-                  <thead>
+                  <thead id="thead-table2">
                     <tr>
-                      <th>Product Name</th>
-                      <th>Supplier</th>
-                      <th>Total Revenue</th>
-                      <th>Gross Margin %</th>
+                      <th>Columna 1</th>
+                      <th>Columna 2</th>
+                      <th>Columna 3</th>
+                      <th>Columna 4</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -239,31 +233,31 @@
           </div>
         </div>
 
-        <!-- PAGE 3: FINANCIAL & PROCUREMENT -->
+        <!-- PAGE 3: FINANCIAL & PROCUREMENT / ANNUAL MATRIX -->
         <div id="dash-page-p3" class="dash-page-view" style="display: none;">
           <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 20px;">
-            <!-- OpEx Breakdown -->
+            <!-- OpEx Breakdown / Regional Structure -->
             <div class="card-inner-box" style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 14px; padding: 20px;">
-              <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin-bottom: 14px;">💸 Desglose de Gastos Operativos (OpEx) por Categoría</h3>
+              <h3 id="card-title-chart3" style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin-bottom: 14px;">💸 Desglose Estructural</h3>
               <div style="position: relative; height: 320px; width: 100%;">
                 <canvas id="chart-opex-breakdown"></canvas>
               </div>
             </div>
 
-            <!-- Procurement Spend Summary Table -->
+            <!-- Procurement Spend / Historical Annual Matrix Table -->
             <div class="card-inner-box" style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 14px; padding: 20px;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-                <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-main);">📦 Abastecimiento y Compras por Proveedor</h3>
-                <span class="status-pill status-synced">724 Órdenes</span>
+                <h3 id="card-title-table3" style="font-size: 1rem; font-weight: 700; color: var(--text-main);">📦 Matriz Histórica</h3>
+                <span id="badge-table3" class="status-pill status-synced">Direct Lake DW</span>
               </div>
               <div style="overflow-x: auto; max-height: 340px;">
                 <table class="portfolio-table" id="table-procurement">
-                  <thead>
+                  <thead id="thead-table3">
                     <tr>
-                      <th>Sanitized Supplier</th>
-                      <th>Total Purchases</th>
-                      <th>Orders Count</th>
-                      <th>Share %</th>
+                      <th>Columna 1</th>
+                      <th>Columna 2</th>
+                      <th>Columna 3</th>
+                      <th>Columna 4</th>
                     </tr>
                   </thead>
                   <tbody>

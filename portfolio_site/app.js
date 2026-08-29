@@ -658,6 +658,40 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
 
+    // 4. Polar Area Chart for Regional / Presidential Indicators (P3)
+    const ctxOpex = document.getElementById("chart-opex-breakdown");
+    if (ctxOpex) {
+      if (chartOpex) chartOpex.destroy();
+      chartOpex = new Chart(ctxOpex, {
+        type: "polarArea",
+        data: {
+          labels: data.presidents.map(p => p.period),
+          datasets: [{
+            data: data.presidents.map(p => p.rate),
+            backgroundColor: data.presidents.map(p => p.color)
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              grid: { color: "rgba(255,255,255,0.05)" },
+              ticks: { display: false }
+            }
+          },
+          plugins: {
+            legend: { position: "right", labels: { color: "#94a3b8", font: { size: 10 } } },
+            tooltip: {
+              callbacks: {
+                label: ctx => ` ${data.presidents[ctx.dataIndex].name}: ${ctx.raw}% Desempleo`
+              }
+            }
+          }
+        }
+      });
+    }
+
     // 4. Tables
     const tbStockout = document.querySelector("#table-stockout tbody");
     if (tbStockout) {

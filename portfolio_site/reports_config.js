@@ -198,7 +198,100 @@ def build_kpi_whatsapp_conversion():
     conv_rate = (completed_orders / total_msgs * 100.0) if total_msgs > 0 else 0.0
     print(f"📊 WhatsApp Bot Conversion Rate: {conv_rate:.2f}%")`
         }
-      ]
+      ],
+      dashboardData: {
+        filterOptions: {
+          slicer1: { label: "Year:", id: "filter-year", options: [
+            { value: "ALL", label: "All Years" },
+            { value: "2026", label: "2026" },
+            { value: "2025", label: "2025" }
+          ]},
+          slicer2: { label: "Origin:", id: "filter-channel", options: [
+            { value: "ALL", label: "All Channels" },
+            { value: "Tienda", label: "Tienda POS" },
+            { value: "Whatsapp", label: "WhatsApp Bot" },
+            { value: "Rappi", label: "Rappi" }
+          ]}
+        },
+        monthly: [
+          { month: "2025-09", year: "2025", rev: 0.09, profit: 0.02, margin: 25.0, tx: 3 },
+          { month: "2025-10", year: "2025", rev: 0.50, profit: 0.07, margin: 13.7, tx: 12 },
+          { month: "2025-11", year: "2025", rev: 0.73, profit: 0.15, margin: 20.1, tx: 18 },
+          { month: "2025-12", year: "2025", rev: 1.49, profit: 0.44, margin: 29.3, tx: 32 },
+          { month: "2026-01", year: "2026", rev: 1.44, profit: 0.18, margin: 12.8, tx: 28 },
+          { month: "2026-02", year: "2026", rev: 2.16, profit: 0.29, margin: 13.5, tx: 41 },
+          { month: "2026-03", year: "2026", rev: 1.38, profit: 0.19, margin: 13.7, tx: 25 },
+          { month: "2026-04", year: "2026", rev: 2.42, profit: 0.43, margin: 17.7, tx: 46 },
+          { month: "2026-05", year: "2026", rev: 3.03, profit: 0.55, margin: 18.0, tx: 58 },
+          { month: "2026-06", year: "2026", rev: 3.69, profit: 0.63, margin: 17.2, tx: 69 },
+          { month: "2026-07", year: "2026", rev: 4.53, profit: 0.78, margin: 17.2, tx: 84 },
+          { month: "2026-08", year: "2026", rev: 2.45, profit: 0.44, margin: 17.8, tx: 47 }
+        ],
+        channels: [
+          { name: "Tienda POS", rev: 21.64, pct: 91.63, color: "#0d9488" },
+          { name: "WhatsApp Bot", rev: 1.91, pct: 8.07, color: "#38bdf8" },
+          { name: "Rappi Delivery", rev: 0.07, pct: 0.29, color: "#f43f5e" }
+        ],
+        topProducts: [
+          { name: "ARENA MAIZ CAT 10 KG", rev: 1.74 },
+          { name: "PRO PLAN VETE DIETS", rev: 1.60 },
+          { name: "AGILITY ADULTO GATO 3KG", rev: 1.23 },
+          { name: "AGILITY GOLD GATITOS 1.5KG", rev: 1.11 },
+          { name: "C MAX PERRO JARABE", rev: 0.54 },
+          { name: "FORTIFLORA PERRO SOBRE", rev: 0.45 },
+          { name: "NEXGARD SPECTRA 15-30KG", rev: 0.43 },
+          { name: "PRO PLAN EXIGENT", rev: 0.41 },
+          { name: "NUSKÉ CABALLO", rev: 0.40 },
+          { name: "INABA GATO CHURU", rev: 0.39 }
+        ],
+        stockouts: [
+          { name: "ROYAL CANIN GASTROINTESTINAL FIBRE", supplier: "PharmaVet Logistics", stock: 0, price: "$253,750" },
+          { name: "ROYAL CANIN KITTEN STERILISED 400 GR", supplier: "PharmaVet Logistics", stock: 0, price: "$44,950" },
+          { name: "ROYAL CANIN KITTEN STERILISED 2 KG", supplier: "NutriPet Wholesale", stock: 0, price: "$200,100" },
+          { name: "ROYAL CANIN PUPPY MINI INDOOR 1.5KG", supplier: "NutriPet Wholesale", stock: 0, price: "$128,150" },
+          { name: "PRO PLAN VETE DIETS EN PERRO 379GR", supplier: "NutriPet Wholesale", stock: 0, price: "$36,250" },
+          { name: "DR CLAUDERS GATO BANDEJA CAMARONES", supplier: "Global Pet Logistics", stock: 0, price: "$15,370" },
+          { name: "NEXGARD COMBO GATO 2.5 - 7.5 KG", supplier: "NutriPet Wholesale", stock: 0, price: "$82,650" },
+          { name: "CALMING COLLAR FOR DOGS", supplier: "E-Commerce Partner", stock: 0, price: "$29,055" },
+          { name: "HILLS SD SMALL MINI ADULTO 1.5KG", supplier: "OmniPet Direct", stock: 0, price: "$138,050" }
+        ],
+        profitability: [
+          { name: "BAÑO SECO IKIPETS PERROS 200 ML", supplier: "Retail Vendor Network", rev: "$17,400", margin: "-33.3%", status: "loss" },
+          { name: "ARENA ULTRA CAT TOFU CAFÉ X2.5KG", supplier: "Regional Pet Partner", rev: "$68,700", margin: "-13.7%", status: "loss" },
+          { name: "ALIMENTO HÚMEDO GATITOS ATÚN WHISKAS", supplier: "AgroPet Supply Co.", rev: "$4,205", margin: "0.0%", status: "warn" },
+          { name: "ALIMENTO HÚMEDO GATOS POUCH ATÚN", supplier: "Regional Pet Partner", rev: "$3,680", margin: "0.0%", status: "warn" },
+          { name: "ARENA PARA GATO CALABAZA ROSA X4.5KG", supplier: "Pet Essentials Hub", rev: "$15,857", margin: "0.0%", status: "warn" },
+          { name: "ARNES D2 MORADO", supplier: "Prime Pet Wholesaler", rev: "$23,345", margin: "0.0%", status: "warn" },
+          { name: "ARNES NYLON D1", supplier: "Prime Pet Wholesaler", rev: "$36,260", margin: "0.0%", status: "warn" },
+          { name: "BEEFS DRY BATH 200 ML", supplier: "NutriPet Wholesale", rev: "$39,875", margin: "0.0%", status: "warn" },
+          { name: "CHUNKY ADULTO CORDERO ARROZ X 1.5KG", supplier: "NutriPet Wholesale", rev: "$34,220", margin: "16.0%", status: "healthy" }
+        ],
+        opex: [
+          { category: "Transporte & Logística", amount: 340740, pct: 34.1, color: "#0d9488" },
+          { category: "Documentación Legal & Notarial", amount: 178210, pct: 17.8, color: "#334155" },
+          { category: "Trade & Marketing POS", amount: 165450, pct: 16.5, color: "#f43f5e" },
+          { category: "Eventos & Ferias Pet", amount: 101500, pct: 10.2, color: "#eab308" },
+          { category: "Operativo & Mantenimiento", amount: 67640, pct: 6.8, color: "#64748b" },
+          { category: "Donaciones & Rescate Animal", amount: 58000, pct: 5.8, color: "#38bdf8" },
+          { category: "Equipos & Tecnología", amount: 48720, pct: 4.9, color: "#f97316" },
+          { category: "Papelería & Suministros", amount: 36760, pct: 3.7, color: "#a855f7" }
+        ],
+        procurement: [
+          { supplier: "NutriPet Wholesale", spend: "$7,315,135.97", orders: 187, share: "33.2%" },
+          { supplier: "Global Pet Logistics", spend: "$4,642,058.22", orders: 230, share: "21.0%" },
+          { supplier: "Regional Pet Partner", spend: "$3,025,439.81", orders: 119, share: "13.7%" },
+          { supplier: "AgroVets Distribution", spend: "$1,954,165.00", orders: 27, share: "8.9%" },
+          { supplier: "AgroPet Supply Co.", spend: "$1,564,695.00", orders: 29, share: "7.1%" },
+          { supplier: "OmniPet Direct", spend: "$833,683.30", orders: 17, share: "3.8%" },
+          { supplier: "Kanine Care Supply", spend: "$771,650.00", orders: 16, share: "3.5%" },
+          { supplier: "Prime Pet Wholesaler", spend: "$649,745.00", orders: 67, share: "2.9%" },
+          { supplier: "Pet Essentials Hub", spend: "$523,328.94", orders: 12, share: "2.4%" },
+          { supplier: "PharmaVet Logistics", spend: "$332,630.00", orders: 3, share: "1.5%" },
+          { supplier: "BioPet Nutrition", spend: "$265,654.50", orders: 7, share: "1.2%" },
+          { supplier: "E-Commerce Partner", spend: "$120,832.85", orders: 2, share: "0.5%" },
+          { supplier: "Retail Vendor Network", spend: "$62,219.50", orders: 8, share: "0.3%" }
+        ]
+      }
     },
     {
       id: "colombian_labor",
@@ -332,7 +425,102 @@ df_monthly = df_silver.groupBy("year", "month").agg(
 
 df_monthly.write.format("delta").mode("overwrite").saveAsTable("fact_monthly_labor")`
         }
-      ]
+      ],
+      dashboardData: {
+        filterOptions: {
+          slicer1: { label: "President:", id: "filter-president", options: [
+            { value: "ALL", label: "All Presidential Terms" },
+            { value: "1", label: "2002-2006 (Álvaro Uribe Vélez)" },
+            { value: "2", label: "2006-2010 (Álvaro Uribe Vélez)" },
+            { value: "3", label: "2010-2014 (Juan Manuel Santos)" },
+            { value: "4", label: "2014-2018 (Juan Manuel Santos)" },
+            { value: "5", label: "2018-2022 (Iván Duque Márquez)" },
+            { value: "6", label: "2022-2026 (Gustavo Petro Urrego)" }
+          ]},
+          slicer2: { label: "Year Filter:", id: "filter-labor-year", options: [
+            { value: "ALL", label: "All Years (2004–2026)" },
+            { value: "2026", label: "2026 (En Curso)" },
+            { value: "2025", label: "2025" },
+            { value: "2024", label: "2024" },
+            { value: "2023", label: "2023" },
+            { value: "2022", label: "2022" },
+            { value: "2021", label: "2021" },
+            { value: "2020", label: "2020 (Pandemia)" },
+            { value: "2019", label: "2019" },
+            { value: "2018", label: "2018" },
+            { value: "2016", label: "2016" },
+            { value: "2015", label: "2015" },
+            { value: "2014", label: "2014" },
+            { value: "2013", label: "2013" },
+            { value: "2012", label: "2012" },
+            { value: "2011", label: "2011" },
+            { value: "2010", label: "2010" },
+            { value: "2009", label: "2009" },
+            { value: "2008", label: "2008" },
+            { value: "2007", label: "2007" },
+            { value: "2006", label: "2006" },
+            { value: "2005", label: "2005" },
+            { value: "2004", label: "2004" }
+          ]}
+        },
+        kpiTotals: {
+          unemployment: "10.88%",
+          ocupados: "22.9M",
+          fuerzaLaboral: "25.7M",
+          desocupados: "2.8M",
+          records: "8.8M Microdatos"
+        },
+        presidents: [
+          { id: 1, name: "Álvaro Uribe Vélez (2002-2006)", period: "2002 - 2006", rate: 12.88, color: "#38bdf8", avgOcup: "18.2M", avgDesoc: "2.7M", status: "Primer Mandato" },
+          { id: 2, name: "Álvaro Uribe Vélez (2006-2010)", period: "2006 - 2010", rate: 11.75, color: "#0284c7", avgOcup: "19.5M", avgDesoc: "2.6M", status: "Segundo Mandato" },
+          { id: 3, name: "Juan Manuel Santos (2010-2014)", period: "2010 - 2014", rate: 10.41, color: "#0d9488", avgOcup: "21.1M", avgDesoc: "2.4M", status: "Primer Mandato" },
+          { id: 4, name: "Juan Manuel Santos (2014-2018)", period: "2014 - 2018", rate: 8.51, color: "#14b8a6", avgOcup: "22.4M", avgDesoc: "2.1M", status: "Segundo Mandato" },
+          { id: 5, name: "Iván Duque Márquez (2018-2022)", period: "2018 - 2022", rate: 14.61, color: "#ec4899", avgOcup: "21.8M", avgDesoc: "3.7M", status: "Único Mandato (COVID)" },
+          { id: 6, name: "Gustavo Petro Urrego (2022-2026)", period: "2022 - 2026", rate: 9.52, color: "#eab308", avgOcup: "23.4M", avgDesoc: "2.4M", status: "Mandato en Curso" }
+        ],
+        annualSeries: [
+          { year: "2004", rate: 13.79, ocupados: "201.8M", desocupados: "32.3M", presId: 1 },
+          { year: "2005", rate: 12.20, ocupados: "206.6M", desocupados: "28.7M", presId: 1 },
+          { year: "2006", rate: 12.43, ocupados: "105.5M", desocupados: "15.0M", presId: 1 },
+          { year: "2007", rate: 11.48, ocupados: "162.8M", desocupados: "21.1M", presId: 2 },
+          { year: "2008", rate: 11.38, ocupados: "223.4M", desocupados: "28.7M", presId: 2 },
+          { year: "2009", rate: 11.94, ocupados: "229.4M", desocupados: "31.1M", presId: 2 },
+          { year: "2010", rate: 11.61, ocupados: "237.6M", desocupados: "31.2M", presId: 2 },
+          { year: "2011", rate: 10.92, ocupados: "244.8M", desocupados: "30.0M", presId: 3 },
+          { year: "2012", rate: 10.22, ocupados: "252.3M", desocupados: "28.7M", presId: 3 },
+          { year: "2013", rate: 9.71, ocupados: "255.9M", desocupados: "27.5M", presId: 3 },
+          { year: "2014", rate: 9.10, ocupados: "257.9M", desocupados: "25.8M", presId: 3 },
+          { year: "2015", rate: 8.92, ocupados: "264.2M", desocupados: "25.9M", presId: 4 },
+          { year: "2016", rate: 9.21, ocupados: "178.0M", desocupados: "18.1M", presId: 4 },
+          { year: "2018", rate: 9.83, ocupados: "366.8M", desocupados: "40.0M", presId: 5 },
+          { year: "2019", rate: 10.73, ocupados: "396.9M", desocupados: "47.7M", presId: 5 },
+          { year: "2020", rate: 20.58, ocupados: "229.2M", desocupados: "59.4M", presId: 5 },
+          { year: "2021", rate: 13.70, ocupados: "252.5M", desocupados: "40.0M", presId: 5 },
+          { year: "2022", rate: 10.90, ocupados: "243.7M", desocupados: "29.8M", presId: 6 },
+          { year: "2023", rate: 10.16, ocupados: "273.5M", desocupados: "30.9M", presId: 6 },
+          { year: "2024", rate: 9.31, ocupados: "276.4M", desocupados: "28.4M", presId: 6 },
+          { year: "2025", rate: 8.89, ocupados: "285.9M", desocupados: "27.9M", presId: 6 },
+          { year: "2026", rate: 9.62, ocupados: "71.7M", desocupados: "7.6M", presId: 6 }
+        ],
+        departments: [
+          { name: "Quindío", rate: "15.76%", unempCount: "42,800", region: "Andina" },
+          { name: "Norte de Santander", rate: "15.12%", unempCount: "108,500", region: "Andina" },
+          { name: "Caldas", rate: "14.23%", unempCount: "68,200", region: "Andina" },
+          { name: "Tolima", rate: "13.45%", unempCount: "94,100", region: "Andina" },
+          { name: "Risaralda", rate: "12.89%", unempCount: "64,300", region: "Andina" },
+          { name: "Antioquia", rate: "11.55%", unempCount: "382,400", region: "Andina" },
+          { name: "Valle del Cauca", rate: "11.48%", unempCount: "258,900", region: "Pacífica" },
+          { name: "Bogotá, D.C.", rate: "10.84%", unempCount: "472,100", region: "Andina" },
+          { name: "Meta", rate: "10.49%", unempCount: "52,600", region: "Orinoquía" },
+          { name: "Santander", rate: "10.39%", unempCount: "115,200", region: "Andina" },
+          { name: "Boyacá", rate: "9.84%", unempCount: "61,200", region: "Andina" },
+          { name: "Cundinamarca", rate: "9.52%", unempCount: "134,800", region: "Andina" },
+          { name: "Atlántico", rate: "8.89%", unempCount: "112,400", region: "Caribe" },
+          { name: "Bolívar", rate: "8.29%", unempCount: "86,300", region: "Caribe" },
+          { name: "Nariño", rate: "8.28%", unempCount: "71,500", region: "Pacífica" },
+          { name: "Huila", rate: "7.82%", unempCount: "44,700", region: "Andina" }
+        ]
+      }
     }
   ]
 };

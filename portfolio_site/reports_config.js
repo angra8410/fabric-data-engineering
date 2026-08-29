@@ -199,6 +199,140 @@ def build_kpi_whatsapp_conversion():
     print(f"📊 WhatsApp Bot Conversion Rate: {conv_rate:.2f}%")`
         }
       ]
+    },
+    {
+      id: "colombian_labor",
+      title: "Colombia Labor Market & Macroeconomics (2004-2026)",
+      category: "Macroeconomic Big Data Platform",
+      badge: "DANE GEIH Big Data & Direct Lake",
+      icon: "🇨🇴",
+      summary: "Comprehensive Macroeconomic Labor Intelligence Platform on Microsoft Fabric processing 22+ years (2004–2026) of DANE GEIH national surveys (8.8M+ microdata records) across 6 presidential administrations and 33 departments with sub-second Direct Lake Power BI cross-filtering.",
+      tags: ["Microsoft Fabric", "DANE GEIH", "PySpark", "Delta Lake", "Direct Lake", "Star Schema", "Power BI Desktop"],
+      reports: {
+        prod: [
+          {
+            id: "labor_market_prod",
+            title: "🇨🇴 Colombian Labor Market Figures (2004–2026)",
+            embedUrl: "https://app.fabric.microsoft.com/reportEmbed?reportId=194e03e4-600b-47b9-8291-e7ef04133e25&autoAuth=true&ctid=9da4a1e2-db93-42a7-a588-957fd6292e87",
+            description: "Direct Lake Power BI Executive Report featuring monthly labor trends, 12M moving average, presidential term comparisons, and departmental unemployment rankings.",
+            metrics: [
+              { label: "Historical Span", value: "2004–2026 (22 Yrs)" },
+              { label: "Average Unemployment", value: "10.88%" },
+              { label: "Monthly Labor Force", value: "~24M" },
+              { label: "Microdata Records", value: "8.8M+" }
+            ]
+          }
+        ],
+        dev: [
+          {
+            id: "labor_market_dev",
+            title: "🟡 [DEV] Colombian Labor Market Direct Lake",
+            embedUrl: "https://app.fabric.microsoft.com/reportEmbed?reportId=c32cf431-7788-468e-9080-33767cb29fa8&autoAuth=true&ctid=9da4a1e2-db93-42a7-a588-957fd6292e87",
+            description: "Staging direct lake model connected to ws-data-eng-dev for testing time intelligence DAX and presidential cross-filter cascading.",
+            metrics: [
+              { label: "Dev Records", value: "8.8M Rows" },
+              { label: "Direct Lake Mode", value: "Active" },
+              { label: "Query Latency", value: "< 250ms" }
+            ]
+          }
+        ]
+      },
+      medallion: {
+        bronze: {
+          name: "dane_bronze_lh",
+          type: "Raw Ingestion (OneLake Shortcuts)",
+          description: "OneLake ADLS Gen2 shortcut storage containing raw monthly DANE GEIH survey microdata files partitioned by year (2004–2026) in CSV/TXT formats (Tab, Comma, Semicolon delimited).",
+          tableCount: 1,
+          tables: ["Files/raw/dane (1,318 survey files)"]
+        },
+        silver: {
+          name: "dane_silver_lh",
+          type: "Harmonized Survey Microdata",
+          description: "Vectorized PySpark pipeline unifying 22+ years of changing DANE survey schemas, auto-detecting delimiters (\\t, ;, ,), standardizing expansion factor weights (FEX_C, FEX_C_2011, FEX_C18), department codes, and open unemployment (DSI=1).",
+          tableCount: 1,
+          tables: ["silver_dane_labor_market (8,828,567 rows)"]
+        },
+        gold: {
+          name: "dane_gold_lh",
+          type: "Direct Lake Star Schema & Dimensions",
+          description: "Production Data Warehouse Star Schema optimized for Direct Lake querying: `dim_date` (with presidential bridge `id_periodo`), `dim_presidentes` (6 administrations), `dim_departamentos` (33 regions), `fact_monthly_labor`, and `gold_dane_labor_indicators`.",
+          tableCount: 6,
+          tables: ["dim_date", "dim_presidentes", "dim_departamentos", "fact_monthly_labor", "fact_labor_by_president", "gold_dane_labor_indicators"]
+        }
+      },
+      alm: {
+        pipeline: "Deployment Pipeline (ws-data-eng)",
+        stages: [
+          { name: "🟢 Development", workspace: "ws-data-eng-dev", lakehouses: "dane_*_lh (Dev)" },
+          { name: "🟡 Test", workspace: "ws-data-eng-test", lakehouses: "dane_*_lh (Test)" },
+          { name: "🔴 Production", workspace: "ws-data-eng-prod", lakehouses: "dane_*_lh (Prod)" }
+        ],
+        optimization: "Cascading Star Schema (dim_presidentes ➔ dim_date ➔ fact_monthly_labor / gold_dane_labor_indicators) enables sub-second Direct Lake Power BI cross-filtering across 22 years of data without circular deadlocks."
+      },
+      codeSnippets: [
+        {
+          id: "silver_transformation",
+          title: "nb_silver_transform_labor.Notebook",
+          language: "python",
+          description: "Vectorized PySpark batch ingestion parsing 1,300+ DANE GEIH files across changing survey delimiters and expansion factor schemas.",
+          code: `# Vectorized PySpark Silver Pipeline (2004 - 2026 DANE GEIH)
+import notebookutils
+from pyspark.sql import functions as F
+
+bronze_root = "abfss://ws-data-eng@onelake.dfs.fabric.microsoft.com/dane_bronze_lh/Files/raw/dane"
+all_files = get_files_recursive(bronze_root)
+
+dfs_by_year = []
+for yr in range(2004, 2027):
+    yr_paths = [p for p in valid_paths if f"year={yr}" in p]
+    delims = ["\\t", ";", ","] if yr <= 2015 else ([",", ";"] if yr == 2021 else [";", ","])
+    
+    for delim in delims:
+        df_raw = spark.read.format("csv").option("header", "true").option("delimiter", delim).load(yr_paths)
+        # Dynamic FEX, DPTO, and DSI extraction...
+        df_clean = df_raw.select(
+            F.lit(yr).alias("year"),
+            F.regexp_extract("SOURCE_FILE", r"month=(\\d+)", 1).alias("month"),
+            F.lpad("DPTO", 2, "0").alias("codigo_departamento"),
+            F.when(col("FN_LOW").rlike("(?i)desocu|no_ocu"), "desocupado").otherwise("ocupado").alias("status"),
+            F.col("FEX").cast("double").alias("total_weight")
+        )
+        dfs_by_year.append(df_clean)
+
+df_silver = dfs_by_year[0]
+for d in dfs_by_year[1:]: df_silver = df_silver.unionByName(d)
+df_silver.write.format("delta").mode("overwrite").saveAsTable("silver_dane_labor_market")`
+        },
+        {
+          id: "gold_dw_builder",
+          title: "nb_gold_build_labor.Notebook",
+          language: "python",
+          description: "Gold Data Warehouse Star Schema builder creating dim_date bridge, dim_presidentes, fact_monthly_labor, and departmental indicators.",
+          code: `# Gold Lakehouse DW Star Schema Builder
+from pyspark.sql import functions as F
+
+# 1. DIM_DATE with Presidential Term Bridge (id_periodo)
+df_dim_date = spark.sql("SELECT explode(sequence(to_date('2004-01-01'), to_date('2026-12-31'), interval 1 day)) as date") \\
+    .withColumn("id_periodo",
+        F.when(F.col("date") < "2006-08-07", 1)
+         .when((F.col("date") >= "2006-08-07") & (F.col("date") < "2010-08-07"), 2)
+         .when((F.col("date") >= "2010-08-07") & (F.col("date") < "2014-08-07"), 3)
+         .when((F.col("date") >= "2014-08-07") & (F.col("date") < "2018-08-07"), 4)
+         .when((F.col("date") >= "2018-08-07") & (F.col("date") < "2022-08-07"), 5)
+         .otherwise(6)
+    )
+df_dim_date.write.format("delta").mode("overwrite").saveAsTable("dim_date")
+
+# 2. FACT_MONTHLY_LABOR
+df_monthly = df_silver.groupBy("year", "month").agg(
+    F.sum(F.when(F.col("status") == "ocupado", F.col("total_weight"))).alias("ocupados"),
+    F.sum(F.when(F.col("status") == "desocupado", F.col("total_weight"))).alias("desocupados")
+).withColumn("fuerza_laboral", F.col("ocupados") + F.col("desocupados")) \\
+ .withColumn("tasa_desempleo_pct", (F.col("desocupados") / F.col("fuerza_laboral")) * 100)
+
+df_monthly.write.format("delta").mode("overwrite").saveAsTable("fact_monthly_labor")`
+        }
+      ]
     }
   ]
 };

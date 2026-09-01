@@ -1,9 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/pagesMetadata/1.1.0/schema.json",
   "pageOrder": [
+    "p9_executive_insights",
     "p1_descriptive",
     "p2_diagnostic",
-    "37f5be63556d19470718"
+    "37f5be63556d19470718",
+    "p6_strategic_decisions",
+    "p7_assortment_pricing_actions",
+    "p8_procurement_working_capital"
   ],
   "activePageName": "p2_diagnostic"
 }

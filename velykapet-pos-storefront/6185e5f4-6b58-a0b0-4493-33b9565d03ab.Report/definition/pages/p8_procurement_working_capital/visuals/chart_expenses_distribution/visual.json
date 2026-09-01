@@ -1,0 +1,53 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "chart_expenses_distribution",
+  "position": {
+    "x": 640,
+    "y": 130,
+    "z": 6,
+    "height": 270,
+    "width": 620
+  },
+  "visual": {
+    "visualType": "donutChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_expenses"
+                    }
+                  },
+                  "Property": "category"
+                }
+              },
+              "queryRef": "fact_expenses.category",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_expenses"
+                    }
+                  },
+                  "Property": "Total Expenses"
+                }
+              },
+              "queryRef": "fact_expenses.Total Expenses"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

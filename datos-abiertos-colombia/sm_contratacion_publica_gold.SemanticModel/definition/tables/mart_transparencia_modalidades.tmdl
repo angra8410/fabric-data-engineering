@@ -1,0 +1,139 @@
+table mart_transparencia_modalidades
+	lineageTag: ed1f8373-6404-4daa-8bb4-af46d3f59531
+	sourceLineageTag: [dbo].[mart_transparencia_modalidades]
+
+	column nit_entidad
+		dataType: string
+		lineageTag: ceb2d67f-3bc2-4406-9c92-61c25ef56ed0
+		sourceLineageTag: nit_entidad
+		summarizeBy: none
+		sourceColumn: nit_entidad
+
+		annotation SummarizationSetBy = Automatic
+
+	column nombre_entidad
+		dataType: string
+		lineageTag: 9c68938b-f1a9-4a2f-bac2-b5ce1fe76793
+		sourceLineageTag: nombre_entidad
+		summarizeBy: none
+		sourceColumn: nombre_entidad
+
+		annotation SummarizationSetBy = Automatic
+
+	column orden_entidad
+		dataType: string
+		lineageTag: 05ed76ee-e89b-427c-9c72-13158251d6fa
+		sourceLineageTag: orden_entidad
+		summarizeBy: none
+		sourceColumn: orden_entidad
+
+		annotation SummarizationSetBy = Automatic
+
+	column sector_entidad
+		dataType: string
+		lineageTag: 6c48b0db-a0cd-46bc-a673-d000735a787c
+		sourceLineageTag: sector_entidad
+		summarizeBy: none
+		sourceColumn: sector_entidad
+
+		annotation SummarizationSetBy = Automatic
+
+	column modalidad_contratacion
+		dataType: string
+		lineageTag: 66ec0032-05d0-4b07-b464-c9a0c9982cb4
+		sourceLineageTag: modalidad_contratacion
+		summarizeBy: none
+		sourceColumn: modalidad_contratacion
+
+		annotation SummarizationSetBy = Automatic
+
+	column anno_firma
+		dataType: int64
+		formatString: 0
+		lineageTag: 8d636602-c9ae-4da3-8872-6ae883327b43
+		sourceLineageTag: anno_firma
+		summarizeBy: sum
+		sourceColumn: anno_firma
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_contratos
+		dataType: int64
+		formatString: 0
+		lineageTag: f828e3f8-372e-44e1-9e53-6bce1363928e
+		sourceLineageTag: total_contratos
+		summarizeBy: sum
+		sourceColumn: total_contratos
+
+		annotation SummarizationSetBy = Automatic
+
+	column monto_total_cop
+		dataType: double
+		lineageTag: 7c0ef958-0f8a-44f8-aeae-ae524092b816
+		sourceLineageTag: monto_total_cop
+		summarizeBy: sum
+		sourceColumn: monto_total_cop
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column monto_pagado_cop
+		dataType: double
+		lineageTag: d518dfb3-daef-42ce-9927-56173a4d1478
+		sourceLineageTag: monto_pagado_cop
+		summarizeBy: sum
+		sourceColumn: monto_pagado_cop
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column contratos_directos
+		dataType: int64
+		formatString: 0
+		lineageTag: a0f38eb9-df7f-473d-8456-d5a38cd95d68
+		sourceLineageTag: contratos_directos
+		summarizeBy: sum
+		sourceColumn: contratos_directos
+
+		annotation SummarizationSetBy = Automatic
+
+	column monto_directo_cop
+		dataType: double
+		lineageTag: 9fba4304-2c24-4419-b399-792a4b5b64e7
+		sourceLineageTag: monto_directo_cop
+		summarizeBy: sum
+		sourceColumn: monto_directo_cop
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column pct_contratacion_directa
+		dataType: double
+		lineageTag: 3bae360c-5fe4-4ef8-a8dd-54124d915a70
+		sourceLineageTag: pct_contratacion_directa
+		summarizeBy: sum
+		sourceColumn: pct_contratacion_directa
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column _gold_processed_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 1fa57cdf-e8fe-4777-a77e-83ec828a2a20
+		sourceLineageTag: _gold_processed_at
+		summarizeBy: none
+		sourceColumn: _gold_processed_at
+
+		annotation SummarizationSetBy = Automatic
+
+	partition mart_transparencia_modalidades = entity
+		mode: directLake
+		source
+			entityName: mart_transparencia_modalidades
+			expressionSource: 'DirectLake - datos_abiertos_gold_lh_dev'
+

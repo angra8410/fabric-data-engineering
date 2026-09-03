@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_silver_transform_secop",
+    "description": "Transformación Medallion Silver: Modelo Estrella (fact_contratos, dim_entidades, dim_proveedores, dim_geografia)"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "aa79f729-906a-a0a0-4b94-479cf29ca34d"
+  }
+}

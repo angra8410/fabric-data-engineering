@@ -1,0 +1,14 @@
+table dim_suppliers
+	lineageTag: a0fa9fb0-9bc8-43d9-9fb8-ef951e70e29a
+
+	column supplier
+		dataType: string
+		isKey: true
+		lineageTag: a1eb1145-d1d1-4388-a492-04fce83a2341
+		summarizeBy: none
+		sourceColumn: [supplier]
+
+	partition dim_suppliers = calculated
+		mode: import
+		source = DISTINCT(UNION(DISTINCT(dim_products[supplier]), DISTINCT(fact_purchases[supplier])))
+

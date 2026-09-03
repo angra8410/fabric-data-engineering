@@ -1,0 +1,58 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.3.0/schema.json",
+  "name": "card_insight_growth",
+  "position": {
+    "x": 640,
+    "y": 360,
+    "z": 4,
+    "width": 620,
+    "height": 335
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "📈 4. FINANZAS & CRECIMIENTO: HOLGURA OPERATIVA\n",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontSize": "14pt",
+                      "color": "#06B6D4"
+                    }
+                  },
+                  {
+                    "value": "• Gastos Operativos (OpEx) representan solo el 4.22% ($743K) de los ingresos ($17.60M).\n• La Utilidad Neta Operativa se ubica en $2.28M con un margen neto del 12.95%.\n\n",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#F9FAFB"
+                    }
+                  },
+                  {
+                    "value": "DECISIÓN & ACCIÓN:\n",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontSize": "11pt",
+                      "color": "#F59E0B"
+                    }
+                  },
+                  {
+                    "value": "1. Reinvertir entre 2% y 3% de las ventas en pauta digital (Instagram/Meta Ads) directa a WhatsApp.\n2. Con el AOV actual ($41k) y conversión alta, la adquisición de nuevos clientes tiene retorno positivo garantizado.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#D1D5DB"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

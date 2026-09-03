@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buscador de Precios - Italcol 2026 | Velykapet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: #131b2e;
+      --card-border: #1e293b;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --accent: #10b981;
+      --accent-badge: rgba(16, 185, 129, 0.15);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --table-header: #1e293b;
+      --row-hover: #1e293b66;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      padding: 2rem 1rem;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.35rem 0.8rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: var(--accent-badge);
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #22d3ee 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 1rem;
+    }
+
+    .controls-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .controls-card {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .search-wrapper {
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.85rem 1rem 0.85rem 2.75rem;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 0.75rem;
+      color: var(--text);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 0.9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      width: 1.1rem;
+      height: 1.1rem;
+    }
+
+    .filter-select {
+      padding: 0.85rem 1rem;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 0.75rem;
+      color: var(--text);
+      font-size: 0.95rem;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .filter-select:focus {
+      border-color: var(--primary);
+    }
+
+    .stats-badge {
+      padding: 0.85rem 1.25rem;
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 0.75rem;
+      color: #93c5fd;
+      font-size: 0.9rem;
+      font-weight: 600;
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    .table-container {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 1rem;
+      overflow-x: auto;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    thead {
+      background: var(--table-header);
+    }
+
+    th {
+      padding: 1rem 1.25rem;
+      color: #cbd5e1;
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    td {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid #1e293b55;
+      color: #e2e8f0;
+      vertical-align: middle;
+    }
+
+    tr:hover td {
+      background: var(--row-hover);
+    }
+
+    .code-badge {
+      font-family: monospace;
+      font-size: 0.8rem;
+      background: #0f172a;
+      padding: 0.2rem 0.4rem;
+      border-radius: 0.3rem;
+      color: #94a3b8;
+      border: 1px solid #334155;
+    }
+
+    .price-tag {
+      font-weight: 700;
+      color: #38bdf8;
+    }
+
+    .price-final {
+      font-weight: 700;
+      color: #34d399;
+      background: rgba(16, 185, 129, 0.1);
+      padding: 0.35rem 0.6rem;
+      border-radius: 0.4rem;
+      display: inline-block;
+    }
+
+    .category-pill {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.4rem;
+      background: #334155;
+      color: #cbd5e1;
+      display: inline-block;
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <span class="badge">Velykapet Pricing Tool</span>
+      <h1>Lista de Precios Italcol 2026</h1>
+      <p class="subtitle">Búsqueda rápida y consulta de precios en tiempo real</p>
+    </header>
+
+    <div class="controls-card">
+      <div class="search-wrapper">
+        <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <input type="text" id="searchInput" class="search-input" placeholder="Buscar por producto, código de barras, código interno...">
+      </div>
+
+      <select id="categorySelect" class="filter-select">
+        <option value="">Todas las Categorías</option>
+      </select>
+
+      <div id="statsBadge" class="stats-badge">320 Productos</div>
+    </div>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Categoría</th>
+            <th>Cód. Barras</th>
+            <th>Cód. Int.</th>
+            <th>Descripción</th>
+            <th>Precio Base</th>
+            <th>Antes IVA</th>
+            <th>IVA Incluido</th>
+            <th>Dto. 3% Incl.</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <!-- Rows injected via JS -->
+        </tbody>
+      </table>
+      <div id="noResults" class="no-results" style="display: none;">
+        No se encontraron productos coincidentes.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let products = [];
+    const searchInput = document.getElementById('searchInput');
+    const categorySelect = document.getElementById('categorySelect');
+    const tableBody = document.getElementById('tableBody');
+    const statsBadge = document.getElementById('statsBadge');
+    const noResults = document.getElementById('noResults');
+
+    function formatCOP(val) {
+      return new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        maximumFractionDigits: 0
+      }).format(val);
+    }
+
+    async function loadData() {
+      try {
+        const res = await fetch('lista_precios_italcol.json');
+        products = await res.json();
+        populateCategories();
+        renderTable(products);
+      } catch (e) {
+        console.error('Error cargando los precios:', e);
+      }
+    }
+
+    function populateCategories() {
+      const categories = [...new Set(products.map(p => p.categoria))].sort();
+      categories.forEach(cat => {
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.textContent = cat;
+        categorySelect.appendChild(opt);
+      });
+    }
+
+    function renderTable(items) {
+      if (items.length === 0) {
+        tableBody.innerHTML = '';
+        noResults.style.display = 'block';
+        statsBadge.textContent = '0 Productos';
+        return;
+      }
+
+      noResults.style.display = 'none';
+      statsBadge.textContent = `${items.length} Productos`;
+
+      tableBody.innerHTML = items.map(p => `
+        <tr>
+          <td><span class="category-pill">${p.categoria}</span></td>
+          <td><span class="code-badge">${p.codigo_barras}</span></td>
+          <td><span class="code-badge">${p.codigo_interno}</span></td>
+          <td style="font-weight: 500;">${p.descripcion}</td>
+          <td>${formatCOP(p.precio_base)}</td>
+          <td>${formatCOP(p.precio_antes_iva)}</td>
+          <td class="price-tag">${formatCOP(p.precio_iva_incluido)}</td>
+          <td><span class="price-final">${formatCOP(p.precio_descuento_3_pct)}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    function filterData() {
+      const query = searchInput.value.toLowerCase().trim();
+      const selectedCat = categorySelect.value;
+
+      const filtered = products.filter(p => {
+        const matchesCat = !selectedCat || p.categoria === selectedCat;
+        const matchesQuery = !query ||
+          p.descripcion.toLowerCase().includes(query) ||
+          p.codigo_barras.toLowerCase().includes(query) ||
+          p.codigo_interno.toLowerCase().includes(query) ||
+          p.categoria.toLowerCase().includes(query);
+
+        return matchesCat && matchesQuery;
+      });
+
+      renderTable(filtered);
+    }
+
+    searchInput.addEventListener('input', filterData);
+    categorySelect.addEventListener('change', filterData);
+
+    loadData();
+  </script>
+</body>
+</html>

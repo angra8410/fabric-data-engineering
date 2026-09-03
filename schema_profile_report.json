@@ -1,0 +1,2361 @@
+{
+  "2004": [
+    {
+      "file": "Cabecera - Desocupados.txt",
+      "path": "raw/dane/year=2004/month=01/Cabecera - Desocupados.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 26,
+      "weights": [
+        "Fex_c",
+        "Fex_c_2011"
+      ],
+      "geo": [
+        "Reg",
+        "Clase",
+        "Dpto"
+      ],
+      "ids": [
+        "Orden",
+        "Hogar",
+        "Llave_viv",
+        "Llave_hog"
+      ],
+      "sample_cols_preview": [
+        "Reg",
+        "Orden",
+        "Hogar",
+        "Clase",
+        "Fex_c",
+        "P49",
+        "P50",
+        "P51",
+        "P52",
+        "P52a"
+      ]
+    },
+    {
+      "file": "Cabecera - Ocupados - Empleo Secundario.txt",
+      "path": "raw/dane/year=2004/month=01/Cabecera - Ocupados - Empleo Secundario.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 29,
+      "weights": [
+        "Fex_c",
+        "Fex_c_2011"
+      ],
+      "geo": [
+        "Reg",
+        "Clase",
+        "Dpto"
+      ],
+      "ids": [
+        "Orden",
+        "Hogar",
+        "Llave_viv",
+        "Llave_hog"
+      ],
+      "sample_cols_preview": [
+        "Reg",
+        "Orden",
+        "Hogar",
+        "Clase",
+        "Fex_c",
+        "P37",
+        "Valor38",
+        "P39",
+        "P40",
+        "P41"
+      ]
+    },
+    {
+      "file": "Resto - Desocupados.txt",
+      "path": "raw/dane/year=2004/month=01/Resto - Desocupados.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 26,
+      "weights": [
+        "Fex_c",
+        "Fex_c_2011"
+      ],
+      "geo": [
+        "Reg",
+        "Clase",
+        "Dpto"
+      ],
+      "ids": [
+        "Orden",
+        "Hogar",
+        "Llave_viv",
+        "Llave_hog"
+      ],
+      "sample_cols_preview": [
+        "Reg",
+        "Orden",
+        "Hogar",
+        "Clase",
+        "Fex_c",
+        "P49",
+        "P50",
+        "P51",
+        "P52",
+        "P52a"
+      ]
+    }
+  ],
+  "2005": [
+    {
+      "file": "Cabecera - Desocupados.txt",
+      "path": "raw/dane/year=2005/month=01/Cabecera - Desocupados.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 26,
+      "weights": [
+        "Fex_c",
+        "Fex_c_2011"
+      ],
+      "geo": [
+        "Reg",
+        "Clase",
+        "Dpto"
+      ],
+      "ids": [
+        "Orden",
+        "Hogar",
+        "Llave_viv",
+        "Llave_hog"
+      ],
+      "sample_cols_preview": [
+        "Reg",
+        "Orden",
+        "Hogar",
+        "Clase",
+        "Fex_c",
+        "P49",
+        "P50",
+        "P51",
+        "P52",
+        "P52a"
+      ]
+    },
+    {
+      "file": "Cabecera - Ocupados - Empleo Secundario.txt",
+      "path": "raw/dane/year=2005/month=01/Cabecera - Ocupados - Empleo Secundario.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 29,
+      "weights": [
+        "Fex_c",
+        "Fex_c_2011"
+      ],
+      "geo": [
+        "Reg",
+        "Clase",
+        "Dpto"
+      ],
+      "ids": [
+        "Orden",
+        "Hogar",
+        "Llave_viv",
+        "Llave_hog"
+      ],
+      "sample_cols_preview": [
+        "Reg",
+        "Orden",
+        "Hogar",
+        "Clase",
+        "Fex_c",
+        "P37",
+        "Valor38",
+        "P39",
+        "P40",
+        "P41"
+      ]
+    },
+    {
+      "file": "Resto - Desocupados.txt",
+      "path": "raw/dane/year=2005/month=01/Resto - Desocupados.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 26,
+      "weights": [
+        "Fex_c",
+        "Fex_c_2011"
+      ],
+      "geo": [
+        "Reg",
+        "Clase",
+        "Dpto"
+      ],
+      "ids": [
+        "Orden",
+        "Hogar",
+        "Llave_viv",
+        "Llave_hog"
+      ],
+      "sample_cols_preview": [
+        "Reg",
+        "Orden",
+        "Hogar",
+        "Clase",
+        "Fex_c",
+        "P49",
+        "P50",
+        "P51",
+        "P52",
+        "P52a"
+      ]
+    }
+  ],
+  "2006": [
+    {
+      "file": "Cabecera - Desocupados.txt",
+      "path": "raw/dane/year=2006/month=01/Cabecera - Desocupados.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 25,
+      "weights": [
+        "Fex_c",
+        "Fex_c_2011"
+      ],
+      "geo": [
+        "Reg"
+      ],
+      "ids": [
+        "Orden",
+        "Hogar",
+        "Llave_viv",
+        "Llave_hog"
+      ],
+      "sample_cols_preview": [
+        "Reg",
+        "Orden",
+        "Hogar",
+        "Fex_c",
+        "P49",
+        "P50",
+        "P51",
+        "P52",
+        "P52a",
+        "P53"
+      ]
+    },
+    {
+      "file": "Cabecera - Ocupados - Empleo Secundario.txt",
+      "path": "raw/dane/year=2006/month=01/Cabecera - Ocupados - Empleo Secundario.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 28,
+      "weights": [
+        "Fex_c",
+        "Fex_c_2011"
+      ],
+      "geo": [
+        "Reg"
+      ],
+      "ids": [
+        "Orden",
+        "Hogar",
+        "Llave_viv",
+        "Llave_hog"
+      ],
+      "sample_cols_preview": [
+        "Reg",
+        "Orden",
+        "Hogar",
+        "Fex_c",
+        "P37",
+        "P37a",
+        "Valor38",
+        "P39",
+        "P40",
+        "P41"
+      ]
+    },
+    {
+      "file": "Resto - Desocupados.txt",
+      "path": "raw/dane/year=2006/month=01/Resto - Desocupados.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 25,
+      "weights": [
+        "Fex_c",
+        "Fex_c_2011"
+      ],
+      "geo": [
+        "Reg"
+      ],
+      "ids": [
+        "Orden",
+        "Hogar",
+        "Llave_viv",
+        "Llave_hog"
+      ],
+      "sample_cols_preview": [
+        "Reg",
+        "Orden",
+        "Hogar",
+        "Fex_c",
+        "P49",
+        "P50",
+        "P51",
+        "P52",
+        "P52a",
+        "P53"
+      ]
+    }
+  ],
+  "2007": [
+    {
+      "file": "Cabecera - Desocupados.csv",
+      "path": "raw/dane/year=2007/month=01/Cabecera - Desocupados.csv",
+      "delim": "; (SEMICOLON)",
+      "total_cols": 45,
+      "weights": [
+        "Fex_c_2011"
+      ],
+      "geo": [
+        "Regis",
+        "Clase",
+        "Dpto",
+        "Area"
+      ],
+      "ids": [
+        "\ufeffDirectorio",
+        "Secuencia_p",
+        "Orden"
+      ],
+      "sample_cols_preview": [
+        "\ufeffDirectorio",
+        "Secuencia_p",
+        "Orden",
+        "Regis",
+        "P7250",
+        "P7260",
+        "P7280",
+        "P7280s1",
+        "P7290",
+        "P7300"
+      ]
+    },
+    {
+      "file": "Cabecera - Ocupados.csv",
+      "path": "raw/dane/year=2007/month=01/Cabecera - Ocupados.csv",
+      "delim": "; (SEMICOLON)",
+      "total_cols": 238,
+      "weights": [
+        "Fex_c_2011"
+      ],
+      "geo": [
+        "Regis",
+        "Clase",
+        "Dpto",
+        "Area"
+      ],
+      "ids": [
+        "\ufeffDirectorio",
+        "Secuencia_p",
+        "Orden"
+      ],
+      "sample_cols_preview": [
+        "\ufeffDirectorio",
+        "Secuencia_p",
+        "Orden",
+        "Regis",
+        "P6440",
+        "P6450",
+        "P6460",
+        "P6460s1",
+        "P6465",
+        "P6465s1a1"
+      ]
+    },
+    {
+      "file": "Resto - Desocupados.csv",
+      "path": "raw/dane/year=2007/month=01/Resto - Desocupados.csv",
+      "delim": "; (SEMICOLON)",
+      "total_cols": 44,
+      "weights": [
+        "Fex_c_2011"
+      ],
+      "geo": [
+        "Regis",
+        "Clase",
+        "Dpto"
+      ],
+      "ids": [
+        "\ufeffDirectorio",
+        "Secuencia_p",
+        "Orden"
+      ],
+      "sample_cols_preview": [
+        "\ufeffDirectorio",
+        "Secuencia_p",
+        "Orden",
+        "Regis",
+        "P7250",
+        "P7260",
+        "P7280",
+        "P7280s1",
+        "P7290",
+        "P7300"
+      ]
+    }
+  ],
+  "2008": [
+    {
+      "file": "Cabecera - Desocupados.txt",
+      "path": "raw/dane/year=2008/month=01/Cabecera - Desocupados.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 37,
+      "weights": [
+        "fex_c_2011"
+      ],
+      "geo": [
+        "REGIS",
+        "CLASE",
+        "DPTO",
+        "AREA"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN"
+      ],
+      "sample_cols_preview": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "REGIS",
+        "P7250",
+        "P7260",
+        "P7280",
+        "P7280S1",
+        "P7310",
+        "P7320"
+      ]
+    },
+    {
+      "file": "Cabecera - Ocupados.txt",
+      "path": "raw/dane/year=2008/month=01/Cabecera - Ocupados.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 177,
+      "weights": [
+        "fex_c_2011"
+      ],
+      "geo": [
+        "REGIS",
+        "CLASE",
+        "DPTO",
+        "AREA"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN"
+      ],
+      "sample_cols_preview": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "REGIS",
+        "P6440",
+        "P6450",
+        "P6460",
+        "P6460S1",
+        "P6400",
+        "P6422"
+      ]
+    },
+    {
+      "file": "Resto - Desocupados.txt",
+      "path": "raw/dane/year=2008/month=01/Resto - Desocupados.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 36,
+      "weights": [
+        "fex_c_2011"
+      ],
+      "geo": [
+        "REGIS",
+        "CLASE",
+        "DPTO"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN"
+      ],
+      "sample_cols_preview": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "REGIS",
+        "P7250",
+        "P7260",
+        "P7280",
+        "P7280S1",
+        "P7310",
+        "P7320"
+      ]
+    }
+  ],
+  "2009": [
+    {
+      "file": "Cabecera - Desocupados.txt",
+      "path": "raw/dane/year=2009/month=01/Cabecera - Desocupados.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 39,
+      "weights": [
+        "fex_c_2011"
+      ],
+      "geo": [
+        "REGIS",
+        "CLASE",
+        "DPTO",
+        "AREA"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "CLASE",
+        "P7250",
+        "P7260",
+        "P7280",
+        "P7280S1"
+      ]
+    },
+    {
+      "file": "Cabecera - Ocupados.txt",
+      "path": "raw/dane/year=2009/month=01/Cabecera - Ocupados.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 178,
+      "weights": [
+        "fex_c_2011"
+      ],
+      "geo": [
+        "REGIS",
+        "CLASE",
+        "DPTO",
+        "AREA"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "CLASE",
+        "P6440",
+        "P6450",
+        "P6460",
+        "P6460S1"
+      ]
+    },
+    {
+      "file": "Resto - Desocupados.txt",
+      "path": "raw/dane/year=2009/month=01/Resto - Desocupados.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 38,
+      "weights": [
+        "fex_c_2011"
+      ],
+      "geo": [
+        "REGIS",
+        "CLASE",
+        "DPTO"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "CLASE",
+        "P7250",
+        "P7260",
+        "P7280",
+        "P7280S1"
+      ]
+    }
+  ],
+  "2010": [
+    {
+      "file": "Cabecera - Desocupados.txt",
+      "path": "raw/dane/year=2010/month=01/Cabecera - Desocupados.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 40,
+      "weights": [
+        "fex_c_2011"
+      ],
+      "geo": [
+        "REGIS",
+        "CLASE",
+        "DPTO",
+        "AREA"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "CLASE",
+        "P7250",
+        "P7260",
+        "P7280",
+        "P7280S1"
+      ]
+    },
+    {
+      "file": "Cabecera - Ocupados.txt",
+      "path": "raw/dane/year=2010/month=01/Cabecera - Ocupados.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 184,
+      "weights": [
+        "fex_c_2011"
+      ],
+      "geo": [
+        "REGIS",
+        "CLASE",
+        "DPTO",
+        "AREA"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "CLASE",
+        "P6440",
+        "P6450",
+        "P6460",
+        "P6460S1"
+      ]
+    },
+    {
+      "file": "Resto - Desocupados.txt",
+      "path": "raw/dane/year=2010/month=01/Resto - Desocupados.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 39,
+      "weights": [
+        "fex_c_2011"
+      ],
+      "geo": [
+        "REGIS",
+        "CLASE",
+        "DPTO"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "CLASE",
+        "P7250",
+        "P7260",
+        "P7280",
+        "P7280S1"
+      ]
+    }
+  ],
+  "2011": [
+    {
+      "file": "Cabecera - Desocupados.txt",
+      "path": "raw/dane/year=2011/month=01/Cabecera - Desocupados.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 40,
+      "weights": [
+        "fex_c_2011"
+      ],
+      "geo": [
+        "REGIS",
+        "CLASE",
+        "DPTO",
+        "AREA"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "CLASE",
+        "P7250",
+        "P7260",
+        "P7280",
+        "P7280S1"
+      ]
+    },
+    {
+      "file": "Cabecera - Ocupados.txt",
+      "path": "raw/dane/year=2011/month=01/Cabecera - Ocupados.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 184,
+      "weights": [
+        "fex_c_2011"
+      ],
+      "geo": [
+        "REGIS",
+        "CLASE",
+        "DPTO",
+        "AREA"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "CLASE",
+        "P6440",
+        "P6450",
+        "P6460",
+        "P6460S1"
+      ]
+    },
+    {
+      "file": "Resto - Desocupados.txt",
+      "path": "raw/dane/year=2011/month=01/Resto - Desocupados.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 39,
+      "weights": [
+        "fex_c_2011"
+      ],
+      "geo": [
+        "REGIS",
+        "CLASE",
+        "DPTO"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "CLASE",
+        "P7250",
+        "P7260",
+        "P7280",
+        "P7280S1"
+      ]
+    }
+  ],
+  "2012": [
+    {
+      "file": "Cabecera - Desocupados.txt",
+      "path": "raw/dane/year=2012/month=01/Cabecera - Desocupados.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 40,
+      "weights": [
+        "Fex_c_2011"
+      ],
+      "geo": [
+        "Regis",
+        "Clase",
+        "Dpto",
+        "Area"
+      ],
+      "ids": [
+        "Directorio",
+        "Secuencia_p",
+        "Orden",
+        "Hogar"
+      ],
+      "sample_cols_preview": [
+        "Directorio",
+        "Secuencia_p",
+        "Orden",
+        "Hogar",
+        "Regis",
+        "Clase",
+        "P7250",
+        "P7260",
+        "P7280",
+        "P7280s1"
+      ]
+    },
+    {
+      "file": "Cabecera - Ocupados.txt",
+      "path": "raw/dane/year=2012/month=01/Cabecera - Ocupados.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 184,
+      "weights": [
+        "Fex_c_2011"
+      ],
+      "geo": [
+        "Regis",
+        "Clase",
+        "Dpto",
+        "Area"
+      ],
+      "ids": [
+        "Directorio",
+        "Secuencia_p",
+        "Orden",
+        "Hogar"
+      ],
+      "sample_cols_preview": [
+        "Directorio",
+        "Secuencia_p",
+        "Orden",
+        "Hogar",
+        "Regis",
+        "Clase",
+        "P6440",
+        "P6450",
+        "P6460",
+        "P6460s1"
+      ]
+    },
+    {
+      "file": "Resto - Desocupados.txt",
+      "path": "raw/dane/year=2012/month=01/Resto - Desocupados.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 39,
+      "weights": [
+        "Fex_c_2011"
+      ],
+      "geo": [
+        "Regis",
+        "Clase",
+        "Dpto"
+      ],
+      "ids": [
+        "Directorio",
+        "Secuencia_p",
+        "Orden",
+        "Hogar"
+      ],
+      "sample_cols_preview": [
+        "Directorio",
+        "Secuencia_p",
+        "Orden",
+        "Hogar",
+        "Regis",
+        "Clase",
+        "P7250",
+        "P7260",
+        "P7280",
+        "P7280s1"
+      ]
+    }
+  ],
+  "2013": [
+    {
+      "file": "Cabecera - Desocupados.txt",
+      "path": "raw/dane/year=2013/month=01/Cabecera - Desocupados.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 40,
+      "weights": [
+        "Fex_c_2011"
+      ],
+      "geo": [
+        "Regis",
+        "Clase",
+        "Dpto",
+        "Area"
+      ],
+      "ids": [
+        "Directorio",
+        "Secuencia_p",
+        "Orden",
+        "Hogar"
+      ],
+      "sample_cols_preview": [
+        "Directorio",
+        "Secuencia_p",
+        "Orden",
+        "Hogar",
+        "Regis",
+        "Clase",
+        "P7250",
+        "P7260",
+        "P7280",
+        "P7280s1"
+      ]
+    },
+    {
+      "file": "Cabecera - Ocupados.txt",
+      "path": "raw/dane/year=2013/month=01/Cabecera - Ocupados.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 185,
+      "weights": [
+        "Fex_c_2011"
+      ],
+      "geo": [
+        "Regis",
+        "Clase",
+        "Dpto",
+        "Area"
+      ],
+      "ids": [
+        "Directorio",
+        "Secuencia_p",
+        "Orden",
+        "Hogar"
+      ],
+      "sample_cols_preview": [
+        "Directorio",
+        "Secuencia_p",
+        "Orden",
+        "Hogar",
+        "Regis",
+        "Clase",
+        "P6440",
+        "P6450",
+        "P6460",
+        "P6460s1"
+      ]
+    },
+    {
+      "file": "Resto - Desocupados.txt",
+      "path": "raw/dane/year=2013/month=01/Resto - Desocupados.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 39,
+      "weights": [
+        "Fex_c_2011"
+      ],
+      "geo": [
+        "Regis",
+        "Clase",
+        "Dpto"
+      ],
+      "ids": [
+        "Directorio",
+        "Secuencia_p",
+        "Orden",
+        "Hogar"
+      ],
+      "sample_cols_preview": [
+        "Directorio",
+        "Secuencia_p",
+        "Orden",
+        "Hogar",
+        "Regis",
+        "Clase",
+        "P7250",
+        "P7260",
+        "P7280",
+        "P7280s1"
+      ]
+    }
+  ],
+  "2014": [
+    {
+      "file": "Cabecera - Desocupados.txt",
+      "path": "raw/dane/year=2014/month=01/Cabecera - Desocupados.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 40,
+      "weights": [
+        "Fex_c_2011"
+      ],
+      "geo": [
+        "Regis",
+        "Clase",
+        "Dpto",
+        "Area"
+      ],
+      "ids": [
+        "Directorio",
+        "Secuencia_p",
+        "Orden",
+        "Hogar"
+      ],
+      "sample_cols_preview": [
+        "Directorio",
+        "Secuencia_p",
+        "Orden",
+        "Hogar",
+        "Regis",
+        "Clase",
+        "P7250",
+        "P7260",
+        "P7280",
+        "P7280s1"
+      ]
+    },
+    {
+      "file": "Cabecera - Ocupados.txt",
+      "path": "raw/dane/year=2014/month=01/Cabecera - Ocupados.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 160,
+      "weights": [
+        "Fex_c_2011"
+      ],
+      "geo": [
+        "Regis",
+        "Clase",
+        "Dpto",
+        "Area"
+      ],
+      "ids": [
+        "Directorio",
+        "Secuencia_p",
+        "Orden",
+        "Hogar"
+      ],
+      "sample_cols_preview": [
+        "Directorio",
+        "Secuencia_p",
+        "Orden",
+        "Hogar",
+        "Regis",
+        "Clase",
+        "P6440",
+        "P6450",
+        "P6460",
+        "P6460s1"
+      ]
+    },
+    {
+      "file": "Resto - Desocupados.txt",
+      "path": "raw/dane/year=2014/month=01/Resto - Desocupados.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 39,
+      "weights": [
+        "Fex_c_2011"
+      ],
+      "geo": [
+        "Regis",
+        "Clase",
+        "Dpto"
+      ],
+      "ids": [
+        "Directorio",
+        "Secuencia_p",
+        "Orden",
+        "Hogar"
+      ],
+      "sample_cols_preview": [
+        "Directorio",
+        "Secuencia_p",
+        "Orden",
+        "Hogar",
+        "Regis",
+        "Clase",
+        "P7250",
+        "P7260",
+        "P7280",
+        "P7280s1"
+      ]
+    }
+  ],
+  "2015": [
+    {
+      "file": "Cabecera - Desocupados.txt",
+      "path": "raw/dane/year=2015/month=01/Cabecera - Desocupados.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 40,
+      "weights": [
+        "Fex_c_2011"
+      ],
+      "geo": [
+        "Regis",
+        "Clase",
+        "Dpto",
+        "Area"
+      ],
+      "ids": [
+        "Directorio",
+        "Secuencia_p",
+        "Orden",
+        "Hogar"
+      ],
+      "sample_cols_preview": [
+        "Directorio",
+        "Secuencia_p",
+        "Orden",
+        "Hogar",
+        "Regis",
+        "Clase",
+        "P7250",
+        "P7260",
+        "P7280",
+        "P7280s1"
+      ]
+    },
+    {
+      "file": "Cabecera - Ocupados.txt",
+      "path": "raw/dane/year=2015/month=01/Cabecera - Ocupados.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 155,
+      "weights": [
+        "Fex_c_2011"
+      ],
+      "geo": [
+        "Regis",
+        "Clase",
+        "Dpto",
+        "Area"
+      ],
+      "ids": [
+        "Directorio",
+        "Secuencia_p",
+        "Orden",
+        "Hogar"
+      ],
+      "sample_cols_preview": [
+        "Directorio",
+        "Secuencia_p",
+        "Orden",
+        "Hogar",
+        "Regis",
+        "Clase",
+        "P6440",
+        "P6450",
+        "P6460",
+        "P6460s1"
+      ]
+    },
+    {
+      "file": "Resto - Desocupados.txt",
+      "path": "raw/dane/year=2015/month=01/Resto - Desocupados.txt",
+      "delim": "\\t (TAB)",
+      "total_cols": 39,
+      "weights": [
+        "Fex_c_2011"
+      ],
+      "geo": [
+        "Regis",
+        "Clase",
+        "Dpto"
+      ],
+      "ids": [
+        "Directorio",
+        "Secuencia_p",
+        "Orden",
+        "Hogar"
+      ],
+      "sample_cols_preview": [
+        "Directorio",
+        "Secuencia_p",
+        "Orden",
+        "Hogar",
+        "Regis",
+        "Clase",
+        "P7250",
+        "P7260",
+        "P7280",
+        "P7280s1"
+      ]
+    }
+  ],
+  "2016": [
+    {
+      "file": "Cabecera - Desocupados.csv",
+      "path": "raw/dane/year=2016/month=01/Enero.csv/Cabecera - Desocupados.csv",
+      "delim": "; (SEMICOLON)",
+      "total_cols": 40,
+      "weights": [
+        "Fex_c_2011"
+      ],
+      "geo": [
+        "Regis",
+        "Clase",
+        "Dpto",
+        "Area"
+      ],
+      "ids": [
+        "\ufeffDirectorio",
+        "Secuencia_p",
+        "Orden",
+        "Hogar"
+      ],
+      "sample_cols_preview": [
+        "\ufeffDirectorio",
+        "Secuencia_p",
+        "Orden",
+        "Hogar",
+        "Regis",
+        "Clase",
+        "P7250",
+        "P7260",
+        "P7280",
+        "P7280s1"
+      ]
+    },
+    {
+      "file": "Cabecera - Ocupados.csv",
+      "path": "raw/dane/year=2016/month=01/Enero.csv/Cabecera - Ocupados.csv",
+      "delim": "; (SEMICOLON)",
+      "total_cols": 155,
+      "weights": [
+        "Fex_c_2011"
+      ],
+      "geo": [
+        "Regis",
+        "Clase",
+        "Dpto",
+        "Area"
+      ],
+      "ids": [
+        "\ufeffDirectorio",
+        "Secuencia_p",
+        "Orden",
+        "Hogar"
+      ],
+      "sample_cols_preview": [
+        "\ufeffDirectorio",
+        "Secuencia_p",
+        "Orden",
+        "Hogar",
+        "Regis",
+        "Clase",
+        "P6440",
+        "P6450",
+        "P6460",
+        "P6460s1"
+      ]
+    },
+    {
+      "file": "Resto - Desocupados.csv",
+      "path": "raw/dane/year=2016/month=01/Enero.csv/Resto - Desocupados.csv",
+      "delim": "; (SEMICOLON)",
+      "total_cols": 39,
+      "weights": [
+        "Fex_c_2011"
+      ],
+      "geo": [
+        "Regis",
+        "Clase",
+        "Dpto"
+      ],
+      "ids": [
+        "\ufeffDirectorio",
+        "Secuencia_p",
+        "Orden",
+        "Hogar"
+      ],
+      "sample_cols_preview": [
+        "\ufeffDirectorio",
+        "Secuencia_p",
+        "Orden",
+        "Hogar",
+        "Regis",
+        "Clase",
+        "P7250",
+        "P7260",
+        "P7280",
+        "P7280s1"
+      ]
+    }
+  ],
+  "2018": [
+    {
+      "file": "Area - Desocupados.csv",
+      "path": "raw/dane/year=2018/month=02/Area - Desocupados.csv",
+      "delim": "; (SEMICOLON)",
+      "total_cols": 42,
+      "weights": [
+        "fex_c_2011"
+      ],
+      "geo": [
+        "REGIS",
+        "AREA",
+        "DPTO"
+      ],
+      "ids": [
+        "\ufeffDIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "\ufeffDIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "AREA",
+        "P7250",
+        "P7260",
+        "P7280",
+        "P7280S1"
+      ]
+    },
+    {
+      "file": "Area - Ocupados.csv",
+      "path": "raw/dane/year=2018/month=02/Area - Ocupados.csv",
+      "delim": "; (SEMICOLON)",
+      "total_cols": 165,
+      "weights": [
+        "fex_c_2011"
+      ],
+      "geo": [
+        "REGIS",
+        "AREA",
+        "DPTO"
+      ],
+      "ids": [
+        "\ufeffDIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "\ufeffDIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "AREA",
+        "P388",
+        "P6440",
+        "P6450",
+        "P6460"
+      ]
+    },
+    {
+      "file": "Cabecera - Desocupados.csv",
+      "path": "raw/dane/year=2018/month=02/Cabecera - Desocupados.csv",
+      "delim": "; (SEMICOLON)",
+      "total_cols": 43,
+      "weights": [
+        "fex_c_2011"
+      ],
+      "geo": [
+        "REGIS",
+        "CLASE",
+        "DPTO",
+        "AREA"
+      ],
+      "ids": [
+        "\ufeffDIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "\ufeffDIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "CLASE",
+        "P7250",
+        "P7260",
+        "P7280",
+        "P7280S1"
+      ]
+    }
+  ],
+  "2019": [
+    {
+      "file": "Area - Desocupados.csv",
+      "path": "raw/dane/year=2019/month=01/Area - Desocupados.csv",
+      "delim": "; (SEMICOLON)",
+      "total_cols": 42,
+      "weights": [
+        "fex_c_2011"
+      ],
+      "geo": [
+        "REGIS",
+        "AREA",
+        "DPTO"
+      ],
+      "ids": [
+        "\ufeffDIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "\ufeffDIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "AREA",
+        "P7250",
+        "P7260",
+        "P7280",
+        "P7280S1"
+      ]
+    },
+    {
+      "file": "Area - Ocupados.csv",
+      "path": "raw/dane/year=2019/month=01/Area - Ocupados.csv",
+      "delim": "; (SEMICOLON)",
+      "total_cols": 165,
+      "weights": [
+        "fex_c_2011"
+      ],
+      "geo": [
+        "REGIS",
+        "AREA",
+        "DPTO"
+      ],
+      "ids": [
+        "\ufeffDIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "\ufeffDIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "AREA",
+        "P388",
+        "P6440",
+        "P6450",
+        "P6460"
+      ]
+    },
+    {
+      "file": "Cabecera - Desocupados.csv",
+      "path": "raw/dane/year=2019/month=01/Cabecera - Desocupados.csv",
+      "delim": "; (SEMICOLON)",
+      "total_cols": 43,
+      "weights": [
+        "fex_c_2011"
+      ],
+      "geo": [
+        "REGIS",
+        "CLASE",
+        "DPTO",
+        "AREA"
+      ],
+      "ids": [
+        "\ufeffDIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "\ufeffDIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "CLASE",
+        "P7250",
+        "P7260",
+        "P7280",
+        "P7280S1"
+      ]
+    }
+  ],
+  "2020": [
+    {
+      "file": "Desocupados.CSV",
+      "path": "raw/dane/year=2020/month=02/Desocupados.CSV",
+      "delim": ", (COMMA)",
+      "total_cols": 40,
+      "weights": [
+        "FEX_C"
+      ],
+      "geo": [
+        "AREA",
+        "CLASE",
+        "DPTO",
+        "REGIS"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "AREA",
+        "CLASE",
+        "RAMA4D_D_R4",
+        "RAMA2D_D_R4",
+        "DSI",
+        "FEX_C"
+      ]
+    },
+    {
+      "file": "Ocupados.CSV",
+      "path": "raw/dane/year=2020/month=02/Ocupados.CSV",
+      "delim": ", (COMMA)",
+      "total_cols": 151,
+      "weights": [
+        "FEX_C"
+      ],
+      "geo": [
+        "AREA",
+        "CLASE",
+        "DPTO",
+        "REGIS"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "AREA",
+        "CLASE",
+        "RAMA4D_R4",
+        "RAMA2D_R4",
+        "OCI",
+        "FEX_C"
+      ]
+    },
+    {
+      "file": "Desocupados.CSV",
+      "path": "raw/dane/year=2020/month=06/Desocupados.CSV",
+      "delim": ", (COMMA)",
+      "total_cols": 41,
+      "weights": [
+        "FEX_C"
+      ],
+      "geo": [
+        "AREA",
+        "CLASE",
+        "DPTO",
+        "REGIS"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "AREA",
+        "HOGAR",
+        "CLASE",
+        "DSI",
+        "RAMA4D_D_R4",
+        "RAMA2D_D_R4",
+        "FEX_C"
+      ]
+    }
+  ],
+  "2021": [
+    {
+      "file": "Area - Desocupados.CSV",
+      "path": "raw/dane/year=2021/month=01/Area - Desocupados.CSV",
+      "delim": ", (COMMA)",
+      "total_cols": 42,
+      "weights": [
+        "fex_c_2011"
+      ],
+      "geo": [
+        "REGIS",
+        "AREA",
+        "DPTO"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "AREA",
+        "P7250",
+        "P7260",
+        "P7280",
+        "P7280S1"
+      ]
+    },
+    {
+      "file": "Area - Ocupados.CSV",
+      "path": "raw/dane/year=2021/month=01/Area - Ocupados.CSV",
+      "delim": ", (COMMA)",
+      "total_cols": 165,
+      "weights": [
+        "fex_c_2011"
+      ],
+      "geo": [
+        "REGIS",
+        "AREA",
+        "DPTO"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "AREA",
+        "P388",
+        "P6440",
+        "P6450",
+        "P6460"
+      ]
+    },
+    {
+      "file": "Cabecera - Desocupados.CSV",
+      "path": "raw/dane/year=2021/month=01/Cabecera - Desocupados.CSV",
+      "delim": ", (COMMA)",
+      "total_cols": 43,
+      "weights": [
+        "fex_c_2011"
+      ],
+      "geo": [
+        "REGIS",
+        "AREA",
+        "CLASE",
+        "DPTO"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "AREA",
+        "CLASE",
+        "P7250",
+        "P7260",
+        "P7280"
+      ]
+    }
+  ],
+  "2022": [
+    {
+      "file": "Ocupados.csv",
+      "path": "raw/dane/year=2022/month=01/Ocupados.csv",
+      "delim": ", (COMMA)",
+      "total_cols": 199,
+      "weights": [
+        "FEX_C18"
+      ],
+      "geo": [
+        "CLASE",
+        "AREA",
+        "DPTO",
+        "REGIS"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "P3044",
+        "P6440",
+        "P6450",
+        "P6460",
+        "P6460S1",
+        "P6400"
+      ]
+    },
+    {
+      "file": "No ocupados.CSV",
+      "path": "raw/dane/year=2022/month=02/No ocupados.CSV",
+      "delim": "; (SEMICOLON)",
+      "total_cols": 38,
+      "weights": [
+        "FEX_C18"
+      ],
+      "geo": [
+        "CLASE",
+        "AREA",
+        "DPTO",
+        "REGIS"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "P7250",
+        "P7280",
+        "P744",
+        "P3074",
+        "P7260",
+        "P1806"
+      ]
+    },
+    {
+      "file": "Caracteristicas generales, seguridad social en salud y educaci\u00f3n.CSV",
+      "path": "raw/dane/year=2022/month=02/Caracteristicas generales, seguridad social en salud y educaci\u00f3n.CSV",
+      "delim": "; (SEMICOLON)",
+      "total_cols": 74,
+      "weights": [
+        "FEX_C18"
+      ],
+      "geo": [
+        "CLASE",
+        "AREA",
+        "DPTO",
+        "REGIS"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "P6016",
+        "P3271",
+        "P6030S1",
+        "P6030S3",
+        "P6040",
+        "P6050",
+        "P6083"
+      ]
+    },
+    {
+      "file": "Caracteristicas generales, seguridad social en salud y educaci\u00f3n.CSV",
+      "path": "raw/dane/year=2022/month=03/Caracteristicas generales, seguridad social en salud y educaci\u00f3n.CSV",
+      "delim": "; (SEMICOLON)",
+      "total_cols": 74,
+      "weights": [
+        "FEX_C18"
+      ],
+      "geo": [
+        "CLASE",
+        "AREA",
+        "DPTO",
+        "REGIS"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "P6016",
+        "P3271",
+        "P6030S1",
+        "P6030S3",
+        "P6040",
+        "P6050",
+        "P6083"
+      ]
+    }
+  ],
+  "2023": [
+    {
+      "file": "No ocupados.CSV",
+      "path": "raw/dane/year=2023/month=01/No ocupados.CSV",
+      "delim": "; (SEMICOLON)",
+      "total_cols": 38,
+      "weights": [
+        "FEX_C18"
+      ],
+      "geo": [
+        "REGIS",
+        "AREA",
+        "CLASE",
+        "DPTO"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "PERIODO",
+        "MES",
+        "PER",
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "AREA",
+        "CLASE"
+      ]
+    },
+    {
+      "file": "Ocupados.CSV",
+      "path": "raw/dane/year=2023/month=01/Ocupados.CSV",
+      "delim": "; (SEMICOLON)",
+      "total_cols": 200,
+      "weights": [
+        "FEX_C18"
+      ],
+      "geo": [
+        "REGIS",
+        "AREA",
+        "CLASE",
+        "DPTO"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "PERIODO",
+        "MES",
+        "PER",
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "AREA",
+        "CLASE"
+      ]
+    },
+    {
+      "file": "Caracteristicas generales, seguridad social en salud y educaci\u00a2n.CSV",
+      "path": "raw/dane/year=2023/month=02/Caracteristicas generales, seguridad social en salud y educaci\u00a2n.CSV",
+      "delim": "; (SEMICOLON)",
+      "total_cols": 74,
+      "weights": [
+        "FEX_C18"
+      ],
+      "geo": [
+        "REGIS",
+        "AREA",
+        "CLASE",
+        "DPTO"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "PERIODO",
+        "MES",
+        "PER",
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "AREA",
+        "CLASE"
+      ]
+    },
+    {
+      "file": "Caracteristicas generales, seguridad social en salud y educaci\u00a2n.CSV",
+      "path": "raw/dane/year=2023/month=03/Caracteristicas generales, seguridad social en salud y educaci\u00a2n.CSV",
+      "delim": "; (SEMICOLON)",
+      "total_cols": 67,
+      "weights": [
+        "FEX_C18"
+      ],
+      "geo": [
+        "REGIS",
+        "AREA",
+        "CLASE",
+        "DPTO"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "PERIODO",
+        "MES",
+        "PER",
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "AREA",
+        "CLASE"
+      ]
+    }
+  ],
+  "2024": [
+    {
+      "file": "No ocupados.CSV",
+      "path": "raw/dane/year=2024/month=01/No ocupados.CSV",
+      "delim": "; (SEMICOLON)",
+      "total_cols": 37,
+      "weights": [
+        "FEX_C18"
+      ],
+      "geo": [
+        "REGIS",
+        "AREA",
+        "CLASE",
+        "DPTO"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "PERIODO",
+        "MES",
+        "PER",
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "AREA",
+        "CLASE"
+      ]
+    },
+    {
+      "file": "Ocupados.CSV",
+      "path": "raw/dane/year=2024/month=01/Ocupados.CSV",
+      "delim": "; (SEMICOLON)",
+      "total_cols": 200,
+      "weights": [
+        "FEX_C18"
+      ],
+      "geo": [
+        "REGIS",
+        "AREA",
+        "CLASE",
+        "DPTO"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "PERIODO",
+        "MES",
+        "PER",
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "AREA",
+        "CLASE"
+      ]
+    },
+    {
+      "file": "Caracteristicas generales, seguridad social en salud y educaci\u00a2n.CSV",
+      "path": "raw/dane/year=2024/month=01/Caracteristicas generales, seguridad social en salud y educaci\u00a2n.CSV",
+      "delim": "; (SEMICOLON)",
+      "total_cols": 67,
+      "weights": [
+        "FEX_C18"
+      ],
+      "geo": [
+        "REGIS",
+        "AREA",
+        "CLASE",
+        "DPTO"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "PERIODO",
+        "MES",
+        "PER",
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "AREA",
+        "CLASE"
+      ]
+    },
+    {
+      "file": "Caracteristicas generales, seguridad social en salud y educaci\u00a2n.CSV",
+      "path": "raw/dane/year=2024/month=02/Caracteristicas generales, seguridad social en salud y educaci\u00a2n.CSV",
+      "delim": "; (SEMICOLON)",
+      "total_cols": 67,
+      "weights": [
+        "FEX_C18"
+      ],
+      "geo": [
+        "REGIS",
+        "AREA",
+        "CLASE",
+        "DPTO"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "PERIODO",
+        "MES",
+        "PER",
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "AREA",
+        "CLASE"
+      ]
+    }
+  ],
+  "2025": [
+    {
+      "file": "No ocupados.CSV",
+      "path": "raw/dane/year=2025/month=01/No ocupados.CSV",
+      "delim": "; (SEMICOLON)",
+      "total_cols": 37,
+      "weights": [
+        "FEX_C18"
+      ],
+      "geo": [
+        "REGIS",
+        "AREA",
+        "CLASE",
+        "DPTO"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "PERIODO",
+        "MES",
+        "PER",
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "AREA",
+        "CLASE"
+      ]
+    },
+    {
+      "file": "Ocupados.CSV",
+      "path": "raw/dane/year=2025/month=01/Ocupados.CSV",
+      "delim": "; (SEMICOLON)",
+      "total_cols": 202,
+      "weights": [
+        "FEX_C18"
+      ],
+      "geo": [
+        "REGIS",
+        "AREA",
+        "CLASE",
+        "DPTO"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "PERIODO",
+        "MES",
+        "PER",
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "AREA",
+        "CLASE"
+      ]
+    },
+    {
+      "file": "Caracteristicas generales, seguridad social en salud y educaci\u00f3n.CSV",
+      "path": "raw/dane/year=2025/month=01/Caracteristicas generales, seguridad social en salud y educaci\u00f3n.CSV",
+      "delim": "; (SEMICOLON)",
+      "total_cols": 55,
+      "weights": [
+        "FEX_C18"
+      ],
+      "geo": [
+        "REGIS",
+        "AREA",
+        "CLASE",
+        "DPTO"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "PERIODO",
+        "MES",
+        "PER",
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "AREA",
+        "CLASE"
+      ]
+    },
+    {
+      "file": "Caracteristicas generales, seguridad social en salud y educaci\u00f3n.CSV",
+      "path": "raw/dane/year=2025/month=02/Caracteristicas generales, seguridad social en salud y educaci\u00f3n.CSV",
+      "delim": "; (SEMICOLON)",
+      "total_cols": 55,
+      "weights": [
+        "FEX_C18"
+      ],
+      "geo": [
+        "REGIS",
+        "AREA",
+        "CLASE",
+        "DPTO"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "PERIODO",
+        "MES",
+        "PER",
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "AREA",
+        "CLASE"
+      ]
+    }
+  ],
+  "2026": [
+    {
+      "file": "No ocupados.CSV",
+      "path": "raw/dane/year=2026/month=01/No ocupados.CSV",
+      "delim": "; (SEMICOLON)",
+      "total_cols": 36,
+      "weights": [
+        "FEX_C18"
+      ],
+      "geo": [
+        "REGIS",
+        "AREA",
+        "CLASE",
+        "DPTO"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "PERIODO",
+        "MES",
+        "PER",
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "AREA",
+        "CLASE"
+      ]
+    },
+    {
+      "file": "Ocupados.CSV",
+      "path": "raw/dane/year=2026/month=01/Ocupados.CSV",
+      "delim": "; (SEMICOLON)",
+      "total_cols": 208,
+      "weights": [
+        "FEX_C18"
+      ],
+      "geo": [
+        "REGIS",
+        "AREA",
+        "CLASE",
+        "DPTO"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "PERIODO",
+        "MES",
+        "PER",
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "AREA",
+        "CLASE"
+      ]
+    },
+    {
+      "file": "Caracteristicas generales, seguridad social en salud y educaci\u00f3n.CSV",
+      "path": "raw/dane/year=2026/month=01/Caracteristicas generales, seguridad social en salud y educaci\u00f3n.CSV",
+      "delim": "; (SEMICOLON)",
+      "total_cols": 55,
+      "weights": [
+        "FEX_C18"
+      ],
+      "geo": [
+        "REGIS",
+        "AREA",
+        "CLASE",
+        "DPTO"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "PERIODO",
+        "MES",
+        "PER",
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "AREA",
+        "CLASE"
+      ]
+    },
+    {
+      "file": "Caracteristicas generales, seguridad social en salud y educaci\u00f3n.CSV",
+      "path": "raw/dane/year=2026/month=02/Caracteristicas generales, seguridad social en salud y educaci\u00f3n.CSV",
+      "delim": "; (SEMICOLON)",
+      "total_cols": 55,
+      "weights": [
+        "FEX_C18"
+      ],
+      "geo": [
+        "REGIS",
+        "AREA",
+        "CLASE",
+        "DPTO"
+      ],
+      "ids": [
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR"
+      ],
+      "sample_cols_preview": [
+        "PERIODO",
+        "MES",
+        "PER",
+        "DIRECTORIO",
+        "SECUENCIA_P",
+        "ORDEN",
+        "HOGAR",
+        "REGIS",
+        "AREA",
+        "CLASE"
+      ]
+    }
+  ]
+}

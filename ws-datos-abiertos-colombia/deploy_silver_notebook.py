@@ -125,8 +125,8 @@ def main():
                     "DIM_PROVEEDORES_TABLE = 'dim_proveedores'\n",
                     "DIM_GEOGRAFIA_TABLE = 'dim_geografia'\n",
                     "\n",
-                    "# Ruta canónica OneLake ABFSS inter-lakehouse (infalible en Fabric)\n",
-                    "BRONZE_PATH = f'abfss://{WORKSPACE_ID}@onelake.dfs.fabric.microsoft.com/{BRONZE_LH_ID}/Tables/{BRONZE_TABLE}'\n",
+                    "# Ruta canónica OneLake ABFSS inter-lakehouse (con esquema dbo habilitado)\n",
+                    "BRONZE_PATH = f'abfss://{WORKSPACE_ID}@onelake.dfs.fabric.microsoft.com/{BRONZE_LH_ID}/Tables/dbo/{BRONZE_TABLE}'\n",
                     "\n",
                     "print(f'🚀 Origen canónico Bronze OneLake: {BRONZE_PATH}')\n"
                 ],

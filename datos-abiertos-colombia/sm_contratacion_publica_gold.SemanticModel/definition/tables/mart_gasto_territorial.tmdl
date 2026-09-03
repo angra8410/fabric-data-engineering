@@ -1,0 +1,122 @@
+table mart_gasto_territorial
+	lineageTag: 1a2cf170-95b8-43da-b4f2-ad24ffb549e1
+	sourceLineageTag: [dbo].[mart_gasto_territorial]
+
+	column departamento_norm
+		dataType: string
+		lineageTag: 2edfa4c8-5aa0-43cd-ab52-48f0adf21825
+		sourceLineageTag: departamento_norm
+		summarizeBy: none
+		sourceColumn: departamento_norm
+
+		annotation SummarizationSetBy = Automatic
+
+	column ciudad_norm
+		dataType: string
+		lineageTag: 1041606d-c89e-4670-8d94-8f79eb3093ce
+		sourceLineageTag: ciudad_norm
+		summarizeBy: none
+		sourceColumn: ciudad_norm
+
+		annotation SummarizationSetBy = Automatic
+
+	column anno_firma
+		dataType: int64
+		formatString: 0
+		lineageTag: 6a25e3a3-53dc-4a93-8352-42503e9b1182
+		sourceLineageTag: anno_firma
+		summarizeBy: sum
+		sourceColumn: anno_firma
+
+		annotation SummarizationSetBy = Automatic
+
+	column mes_firma
+		dataType: int64
+		formatString: 0
+		lineageTag: 598b4981-c8f7-4d3f-91af-96d70af65878
+		sourceLineageTag: mes_firma
+		summarizeBy: sum
+		sourceColumn: mes_firma
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_contratos
+		dataType: int64
+		formatString: 0
+		lineageTag: 5cb54de4-32d2-4571-9ace-068a72741ce0
+		sourceLineageTag: total_contratos
+		summarizeBy: sum
+		sourceColumn: total_contratos
+
+		annotation SummarizationSetBy = Automatic
+
+	column inversion_total_cop
+		dataType: double
+		lineageTag: 1df76aa9-c2ad-47ea-8ab0-a78c1362c4f5
+		sourceLineageTag: inversion_total_cop
+		summarizeBy: sum
+		sourceColumn: inversion_total_cop
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column gasto_promedio_contrato
+		dataType: double
+		lineageTag: 94a5811d-49cf-4294-aa11-9b44a0c0298d
+		sourceLineageTag: gasto_promedio_contrato
+		summarizeBy: sum
+		sourceColumn: gasto_promedio_contrato
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_pagado_cop
+		dataType: double
+		lineageTag: 33bddfa2-434c-4b7e-8447-5d9cc7cd8092
+		sourceLineageTag: total_pagado_cop
+		summarizeBy: sum
+		sourceColumn: total_pagado_cop
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column contratos_megacuantia
+		dataType: int64
+		formatString: 0
+		lineageTag: 0807f68b-a755-4e3f-b8cd-30ed2cef4e4b
+		sourceLineageTag: contratos_megacuantia
+		summarizeBy: sum
+		sourceColumn: contratos_megacuantia
+
+		annotation SummarizationSetBy = Automatic
+
+	column duracion_promedio_dias
+		dataType: double
+		lineageTag: 85c491b6-06fd-4faf-a779-7fab510fa425
+		sourceLineageTag: duracion_promedio_dias
+		summarizeBy: sum
+		sourceColumn: duracion_promedio_dias
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column _gold_processed_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: ec5a5102-8b10-46ee-89fc-f504b35429a9
+		sourceLineageTag: _gold_processed_at
+		summarizeBy: none
+		sourceColumn: _gold_processed_at
+
+		annotation SummarizationSetBy = Automatic
+
+	partition mart_gasto_territorial = entity
+		mode: directLake
+		source
+			entityName: mart_gasto_territorial
+			expressionSource: 'DirectLake - datos_abiertos_gold_lh_dev'
+

@@ -10,7 +10,7 @@ relationship 7bf7d409-a04a-06c7-a769-9719133fa518
 	fromColumn: fact_purchases.purchase_date
 	toColumn: dim_dates.date_key
 
-relationship 2f325ac7-0c68-2806-5d4b-89a570e7e6f2
-	fromColumn: fact_sales.product_id
-	toColumn: dim_products.product_id
+relationship 6c4888b4-6416-44d6-f9dd-4f7ca5607b7b
+	fromColumn: fact_sales.product_name
+	toColumn: dim_products.product_name
 

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_bronze_ingest_secop",
+    "description": "Ingesta masiva e incremental de SECOP II (datos.gov.co) hacia Lakehouse datos_abiertos_lh_dev"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "ee0c6634-ac81-4156-ab1a-c90d0c403905"
+  }
+}

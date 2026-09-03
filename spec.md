@@ -68,4 +68,5 @@
 - [x] Implementado control de throttling y reintentos exponenciales contra bloqueos y caídas.
 - [x] Estructurado el espacio de trabajo local correspondiente a `ws-datos-abiertos-colombia` con el Lakehouse `datos_abiertos_lh_dev`.
 - [x] Creado el Notebook de ingesta Bronze compatible con Microsoft Fabric (`nb_bronze_ingest_secop.Notebook`).
-- [x] Verificación de descarga y persistencia con el dataset `jbjy-vk9h` de `datos.gov.co` (probado exitosamente con contratos reales).
+- [x] Verificación de descarga y persistencia con el dataset `jbjy-vk9h` de `datos.gov.co`.
+- [x] **Hito Histórico Alcanzado:** Ingesta del 100.00% del dataset SECOP II completada exitosamente en el Lakehouse (`6,013,832 / 6,013,832` registros, 0 faltantes). Sincronización incremental diaria lista para ejecución desatendida.

@@ -1,0 +1,25 @@
+table Dim_Anno
+	lineageTag: 7306cc5e-c1ea-4fbf-bf24-cc6743616426
+
+	column Año
+		formatString: 0
+		lineageTag: 264d1703-f42b-42c3-b288-712c6a58ee13
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Año]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Anno = calculated
+		mode: import
+		source = ```
+				
+				SELECTCOLUMNS (
+				    GENERATESERIES ( 2015, 2026, 1 ),
+				    "Año", [Value]
+				)
+				
+				```
+
+	annotation PBI_Id = d6f140327b9e4b32b274549bd6628711
+

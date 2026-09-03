@@ -160,7 +160,32 @@ Estructuración en tablas Delta normalizadas y optimizadas para Power BI:
 
 ---
 
-## 4. Criterios de Aceptación
+## 4. Especificaciones de la Capa Gold (Data Marts de Dominio Analítico)
+
+### RF-09: Lakehouse Gold Dedicado en Fabric (`datos_abiertos_gold_lh_dev`)
+- Aprovisionamiento de un Lakehouse independiente para el consumo analítico final, reportes de alta gerencia y modelos semánticos en Power BI Direct Lake.
+- Origen de datos: Tablas dimensionales curadas de `datos_abiertos_silver_lh_dev`.
+
+### RF-10: Construcción de Data Marts Temáticos de Alto Rendimiento
+1. **`mart_gasto_territorial` (Inversión Geográfica y Departamental):**
+   - Cruce: `fact_contratos` $\bowtie$ `dim_geografia`.
+   - Granularidad: Departamento $\times$ Municipio $\times$ Año $\times$ Mes.
+   - Métricas: `total_contratos`, `inversion_total_cop`, `gasto_promedio_contrato`, `contratos_megacuantia`, `duracion_promedio_dias`.
+2. **`mart_transparencia_modalidades` (Integridad y Riesgo en Compras Públicas):**
+   - Cruce: `fact_contratos` $\bowtie$ `dim_entidades`.
+   - Granularidad: Entidad pública $\times$ Sector $\times$ Modalidad de contratación $\times$ Año.
+   - Métricas: `total_contratos`, `monto_total_cop`, `monto_contratacion_directa_cop`, `pct_contratacion_directa` (Índice de asignación a dedo).
+3. **`mart_concentracion_proveedores` (Monitoreo de Megacontratistas):**
+   - Cruce: `fact_contratos` $\bowtie$ `dim_proveedores` $\bowtie$ `dim_entidades`.
+   - Granularidad: Proveedor $\times$ Sector $\times$ Año.
+   - Métricas: `monto_total_adjudicado_cop`, `total_contratos_ganados`, `entidades_distintas_cliente`, `es_megacontratista`.
+4. **`mart_ejecucion_financiera` (Seguimiento de Pagos y Cartera Pública):**
+   - Granularidad: Tipo de contrato $\times$ Estado del contrato $\times$ Rango de cuantía $\times$ Año.
+   - Métricas: `monto_contratado_cop`, `monto_pagado_cop`, `monto_facturado_cop`, `saldo_pendiente_pago_cop`, `tasa_pago_efectivo_pct`.
+
+---
+
+## 5. Criterios de Aceptación
 - [x] Módulo/Cliente SODA implementado con soporte para paginación por lotes y SoQL (`datos_abiertos/soda_client.py`).
 - [x] Implementado control de throttling y reintentos exponenciales contra bloqueos y caídas.
 - [x] Estructurado el espacio de trabajo local correspondiente a `ws-datos-abiertos-colombia` con el Lakehouse `datos_abiertos_lh_dev`.
@@ -178,4 +203,8 @@ Estructuración en tablas Delta normalizadas y optimizadas para Power BI:
   - Surrogate Keys numéricas `BIGINT` generadas determinísticamente vía `F.xxhash64()`.
   - Clasificación por rangos de cuantía (`195,946` sin cuantía, `4,737,490` mínima cuantía, `914,096` menor, `139,695` mayor y `26,605` megacontratos).
   - Protección de fechas históricas y compatibilidad total con V-Order en Microsoft Fabric.
+- [ ] **Hito Gold:** Aprovisionamiento del Lakehouse dedicado `datos_abiertos_gold_lh_dev` en Fabric.
+- [ ] **Hito Gold:** Creación y despliegue del Notebook de agregación `nb_gold_build_marts.Notebook`.
+- [ ] **Hito Gold:** Construcción y persistencia de los 4 Data Marts temáticos (`mart_gasto_territorial`, `mart_transparencia_modalidades`, `mart_concentracion_proveedores`, `mart_ejecucion_financiera`).
+
 

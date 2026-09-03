@@ -43,7 +43,7 @@ table mart_concentracion_proveedores
 		formatString: 0
 		lineageTag: 4d72a534-2e04-4639-9d8a-9fb4f11db6aa
 		sourceLineageTag: anno_firma
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: anno_firma
 
 		annotation SummarizationSetBy = Automatic
@@ -91,11 +91,14 @@ table mart_concentracion_proveedores
 
 	column _gold_processed_at
 		dataType: dateTime
+		isHidden
 		formatString: General Date
 		lineageTag: 39b63c57-579d-47ee-b391-a9d712ee4e75
 		sourceLineageTag: _gold_processed_at
 		summarizeBy: none
 		sourceColumn: _gold_processed_at
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 

@@ -1,0 +1,16 @@
+relationship 41776dc2-d5b3-0678-0453-edc126a72e4d
+	fromColumn: mart_concentracion_proveedores.anno_firma
+	toColumn: Dim_Anno.Año
+
+relationship 9a3186d6-1119-33f4-f72c-18615a102459
+	fromColumn: mart_ejecucion_financiera.anno_firma
+	toColumn: Dim_Anno.Año
+
+relationship 0dc0c3e5-94f3-308d-d3b8-3e68e72f16b8
+	fromColumn: mart_gasto_territorial.anno_firma
+	toColumn: Dim_Anno.Año
+
+relationship 9c67ec6c-c757-b9e4-df13-4610cf143162
+	fromColumn: mart_transparencia_modalidades.anno_firma
+	toColumn: Dim_Anno.Año
+

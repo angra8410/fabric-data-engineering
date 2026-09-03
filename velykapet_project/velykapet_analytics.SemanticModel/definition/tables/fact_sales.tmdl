@@ -86,6 +86,70 @@ table fact_sales
 		formatString: \$#,0.00
 		lineageTag: m_gp_ytd
 
+
+	measure 'Previous Purchase Date' = 
+		VAR CurrentDate = MAX(fact_sales[sale_date])
+		VAR CurrentCustomer = SELECTEDVALUE(fact_sales[customer_id])
+		VAR CurrentProduct = SELECTEDVALUE(dim_products[product_name], SELECTEDVALUE(fact_sales[product_name]))
+		RETURN
+			CALCULATE(
+				MAX(fact_sales[sale_date]),
+				FILTER(
+					ALL(fact_sales),
+					fact_sales[customer_id] = CurrentCustomer &&
+					fact_sales[product_name] = CurrentProduct &&
+					fact_sales[sale_date] < CurrentDate
+				)
+			)
+		formatString: Short Date
+		lineageTag: m_prev_purch_date
+
+	measure 'Days Between Purchases' = 
+		VAR PrevDate = [Previous Purchase Date]
+		VAR CurrentDate = MAX(fact_sales[sale_date])
+		RETURN
+			IF(NOT ISBLANK(PrevDate), DATEDIFF(PrevDate, CurrentDate, DAY), BLANK())
+		formatString: #,0
+		lineageTag: m_days_between_purch
+
+	measure 'Avg Days Between Repurchases' = 
+		AVERAGEX(
+			SUMMARIZE(fact_sales, fact_sales[sale_id], fact_sales[customer_id], fact_sales[product_name]),
+			[Days Between Purchases]
+		)
+		formatString: #,0.0
+		lineageTag: m_avg_days_between_purch
+
+	measure 'Repeat Purchase Transactions' = 
+		COUNTROWS(
+			FILTER(
+				SUMMARIZE(fact_sales, fact_sales[sale_id], fact_sales[customer_id], fact_sales[product_name]),
+				NOT ISBLANK([Days Between Purchases])
+			)
+		)
+		formatString: #,0
+		lineageTag: m_repeat_trans_count
+
+	measure 'Repeat Customers Count' = 
+		COUNTROWS(
+			FILTER(
+				VALUES(fact_sales[customer_id]),
+				CALCULATE([Repeat Purchase Transactions]) > 0
+			)
+		)
+		formatString: #,0
+		lineageTag: m_repeat_cust_count
+
+
+	column customer_id
+		dataType: string
+		lineageTag: c7a8b6e47-customer-id-lineage-001
+		sourceLineageTag: customer_id
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+
 	column item_id
 		dataType: int64
 		formatString: 0
@@ -202,3 +266,4 @@ table fact_sales
 			entityName: fact_sales
 			schemaName: dbo
 			expressionSource: 'DirectLake - lh_velykapet_gold_dev'
+

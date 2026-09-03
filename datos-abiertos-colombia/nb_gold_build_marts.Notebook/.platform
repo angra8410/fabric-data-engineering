@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_gold_build_marts",
+    "description": "Capa Gold: Construcción de Data Marts temáticos (Gasto Territorial, Transparencia, Contratistas, Ejecución Financiera)"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "96c52d48-6203-9007-45e0-34cbd9cbe176"
+  }
+}

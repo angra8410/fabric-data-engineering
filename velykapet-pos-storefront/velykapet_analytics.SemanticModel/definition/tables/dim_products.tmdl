@@ -106,7 +106,7 @@ table dim_products
 
 	column category
 		dataType: string
-		lineageTag: 71eb1145-d1d1-4388-a492-04fce83a2345
+		lineageTag: 64947da4-d6ac-4b58-9ea9-aca577701ada
 		sourceLineageTag: category
 		summarizeBy: none
 		sourceColumn: category

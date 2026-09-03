@@ -1,0 +1,36 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "card_exp_ratio",
+  "position": {
+    "x": 20,
+    "y": 20,
+    "z": 0,
+    "height": 120,
+    "width": 350,
+    "tabOrder": 5000
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_expenses"
+                    }
+                  },
+                  "Property": "Expense to Revenue Ratio %"
+                }
+              },
+              "queryRef": "fact_expenses.Expense to Revenue Ratio %"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

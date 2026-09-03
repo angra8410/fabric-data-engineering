@@ -198,15 +198,6 @@ table fact_sales
 
 		annotation SummarizationSetBy = Automatic
 
-	column product_id
-		dataType: string
-		lineageTag: a2b8d81f-1073-4f40-b0b8-e773756a1199
-		sourceLineageTag: product_id
-		summarizeBy: none
-		sourceColumn: product_id
-
-		annotation SummarizationSetBy = Automatic
-
 	column product_name
 		dataType: string
 		lineageTag: 6410b62d-4674-4fa7-9cf1-7fe7f858a6fa
@@ -227,7 +218,7 @@ table fact_sales
 		annotation SummarizationSetBy = Automatic
 
 	column total_item_revenue
-		dataType: decimal
+		dataType: double
 		formatString: \$#,0.00
 		lineageTag: 166478f7-2096-4a94-b272-6b4684315bee
 		sourceLineageTag: total_item_revenue
@@ -239,7 +230,7 @@ table fact_sales
 		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
 
 	column item_gross_profit
-		dataType: decimal
+		dataType: double
 		formatString: \$#,0.00
 		lineageTag: c0140a9a-9bcd-43d1-8cd1-8ef93ce6d802
 		sourceLineageTag: item_gross_profit
@@ -271,7 +262,7 @@ table fact_sales
 		annotation SummarizationSetBy = Automatic
 
 	column unit_cost
-		dataType: decimal
+		dataType: double
 		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
 		lineageTag: 3eaeca38-41d2-456a-8402-bef851be9c88
 		sourceLineageTag: unit_cost
@@ -283,7 +274,7 @@ table fact_sales
 		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
 
 	column unit_price
-		dataType: decimal
+		dataType: double
 		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
 		lineageTag: 2513292d-67bc-46e3-b1a1-d847e8da7849
 		sourceLineageTag: unit_price
@@ -293,6 +284,44 @@ table fact_sales
 		annotation SummarizationSetBy = Automatic
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column product_id
+		dataType: string
+		lineageTag: 209d44c8-447d-4fe7-968a-bec3316aa8c3
+		sourceLineageTag: product_id
+		summarizeBy: none
+		sourceColumn: product_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column delivery_tower
+		dataType: string
+		lineageTag: c620c176-9dae-4275-b808-789c4fb07bdf
+		sourceLineageTag: delivery_tower
+		summarizeBy: none
+		sourceColumn: delivery_tower
+
+		annotation SummarizationSetBy = Automatic
+
+	column delivery_apartment
+		dataType: string
+		lineageTag: a1f45c47-321d-44e7-88d7-a39e9188e249
+		sourceLineageTag: delivery_apartment
+		summarizeBy: none
+		sourceColumn: delivery_apartment
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+	column delivery_complex
+		dataType: string
+		lineageTag: 78a1f57d-159c-4e33-8018-c482ae709834
+		sourceLineageTag: delivery_complex
+		summarizeBy: none
+		sourceColumn: delivery_complex
+
+		annotation SummarizationSetBy = Automatic
 
 	partition fact_sales = entity
 		mode: directLake

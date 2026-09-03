@@ -1,0 +1,61 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.3.0/schema.json",
+  "name": "table_procurement_action_plan",
+  "position": {
+    "x": 20,
+    "y": 415,
+    "z": 7,
+    "width": 1240,
+    "height": 285
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_purchases"
+                    }
+                  },
+                  "Property": "supplier"
+                }
+              },
+              "queryRef": "fact_purchases.supplier"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_purchases"
+                    }
+                  },
+                  "Property": "Procurement Purchase Count"
+                }
+              },
+              "queryRef": "fact_purchases.Procurement Purchase Count"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_purchases"
+                    }
+                  },
+                  "Property": "Total Purchases"
+                }
+              },
+              "queryRef": "fact_purchases.Total Purchases"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -78,3 +78,15 @@
   - Eliminar contratos sin valor: Descartado porque distorsiona el conteo total de procesos estatales ejecutados.
 - **Consecuencias:** Auditoría 100% fiel a los 6M de contratos con capacidad de excluir montos cero en medidas agregadas.
 
+---
+
+## [ADR-008] Segregación Física de la Capa Gold (`datos_abiertos_gold_lh_dev`) y Construcción de Data Marts Temáticos
+- **Fecha:** 2026-09-03
+- **Estado:** Aprobado
+- **Contexto:** Habilitar consumo de negocio para Power BI y reportes ejecutivos sobre los 6M de contratos sin forzar a los tableros a escanear tablas atómicas gigantes en cada interacción.
+- **Decisión Tomada:** Aprovisionar un Lakehouse dedicado `datos_abiertos_gold_lh_dev` y construir cuatro Data Marts temáticos agregados (`mart_gasto_territorial`, `mart_transparencia_modalidades`, `mart_concentracion_proveedores`, `mart_ejecucion_financiera`) optimizados con V-Order nativo.
+- **Alternativas Consideradas:**
+  - Conectar Power BI directamente a las 6M de filas atómicas de Silver: Descartado para tableros ejecutivos agregados por sobrecarga computacional innecesaria en DAX.
+- **Consecuencias:** Tiempos de respuesta inferiores a 1 segundo en Power BI, granularidad de negocio pre-calculada y total gobernanza Medallion (Bronze ➔ Silver ➔ Gold).
+
+

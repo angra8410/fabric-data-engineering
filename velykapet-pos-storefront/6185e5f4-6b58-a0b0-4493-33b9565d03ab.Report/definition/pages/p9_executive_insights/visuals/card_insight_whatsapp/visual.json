@@ -1,0 +1,99 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "card_insight_whatsapp",
+  "position": {
+    "x": 20,
+    "y": 20,
+    "z": 1,
+    "height": 320,
+    "width": 600
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "🚀 1. CANAL WHATSAPP: MOTOR DE RENTABILIDAD",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontSize": "14pt",
+                      "color": "#10b981"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "• El 91.7% de los ingresos ($16.14M) proviene de WhatsApp con un ticket promedio (AOV) de $41,173 y margen del 17.78%.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#000000"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "• La Tienda Física solo genera $1.36M con AOV de $29,693 y margen de apenas 9.98%.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#000000"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "DECISIÓN & ACCIÓN:",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontSize": "11pt",
+                      "color": "#f59e0b"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "1. Implementar programa de recompra automática quincenal en WhatsApp.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#000000"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "2. Prohibir descuentos en caja física y colocar snacks/accesorios de impulso (>35% margen) en el mostrador para elevar el ticket presencial.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#000000"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

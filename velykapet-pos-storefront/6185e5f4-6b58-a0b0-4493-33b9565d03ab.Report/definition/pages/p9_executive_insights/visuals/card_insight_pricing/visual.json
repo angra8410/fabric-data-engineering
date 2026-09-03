@@ -1,0 +1,99 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "card_insight_pricing",
+  "position": {
+    "x": 640,
+    "y": 20,
+    "z": 2,
+    "height": 320,
+    "width": 620
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "🏷️ 2. PRECIOS: PRO PLAN URINARY VS ARENA MAIZ",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontSize": "14pt",
+                      "color": "#ec4899"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "• 'PRO PLAN URINARY' factura $1.20M pero deja solo $113,400 de ganancia (margen de 9.45%).",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#000000"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "• 'ARENA MAIZ CAT 10KG' factura $1.20M dejando $284,000 de ganancia (margen de 23.63%, más del doble).",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#000000"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "DECISIÓN & ACCIÓN:",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontSize": "11pt",
+                      "color": "#f59e0b"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "1. Subir PVP entre 5% y 8% en Pro Plan Urinary (demanda medicada inelástica).",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#000000"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "2. Configurar recomendación cruzada en el bot de WhatsApp para promover Arena Maiz a dueños de felinos.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#000000"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

@@ -286,15 +286,14 @@ df_fact = (
     )
 )
 
-# Persistencia particionada optimizada con repartition para evitar sobrecarga en OneLake
-print('Persistiendo 6M de filas en fact_contratos optimizada con repartition por anno_firma...')
+# Persistencia optimizada en Delta Lake con V-Order nativo de Microsoft Fabric
+print('Persistiendo 6M de filas en fact_contratos (Delta Lake con V-Order)...')
 (
-    df_fact.repartition('anno_firma')
+    df_fact
     .write
     .format('delta')
     .mode('overwrite')
     .option('overwriteSchema', 'true')
-    .partitionBy('anno_firma')
     .saveAsTable(FACT_TABLE)
 )
 

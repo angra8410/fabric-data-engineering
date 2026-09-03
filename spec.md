@@ -203,8 +203,13 @@ Estructuración en tablas Delta normalizadas y optimizadas para Power BI:
   - Surrogate Keys numéricas `BIGINT` generadas determinísticamente vía `F.xxhash64()`.
   - Clasificación por rangos de cuantía (`195,946` sin cuantía, `4,737,490` mínima cuantía, `914,096` menor, `139,695` mayor y `26,605` megacontratos).
   - Protección de fechas históricas y compatibilidad total con V-Order en Microsoft Fabric.
-- [ ] **Hito Gold:** Aprovisionamiento del Lakehouse dedicado `datos_abiertos_gold_lh_dev` en Fabric.
-- [ ] **Hito Gold:** Creación y despliegue del Notebook de agregación `nb_gold_build_marts.Notebook`.
-- [ ] **Hito Gold:** Construcción y persistencia de los 4 Data Marts temáticos (`mart_gasto_territorial`, `mart_transparencia_modalidades`, `mart_concentracion_proveedores`, `mart_ejecucion_financiera`).
+- [x] **Hito Gold:** Aprovisionamiento del Lakehouse dedicado `datos_abiertos_gold_lh_dev` en Fabric.
+- [x] **Hito Gold:** Creación y despliegue del Notebook de agregación `nb_gold_build_marts.Notebook` (13 de 13 Spark jobs exitosos en 5.8s).
+- [x] **Hito Gold:** Construcción y persistencia de los 4 Data Marts temáticos:
+  - `mart_gasto_territorial`: **37,913 filas** (Agrupación Depto/Municipio/Año/Mes para mapas).
+  - `mart_transparencia_modalidades`: **73,021 filas** (Índice de Contratación Directa por Entidad).
+  - `mart_concentracion_proveedores`: **3,765,363 filas** (Monitoreo de Megacontratistas y Concentración).
+  - `mart_ejecucion_financiera`: **3,854 filas** (Resumen de Pagos, Anticipos y Saldos Pendientes).
+
 
 

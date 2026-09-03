@@ -227,6 +227,9 @@ print(f'✅ dim_geografia persistida con éxito. Total ubicaciones únicas: {cou
 # =====================================================================
 print('Construyendo fact_contratos con llaves foráneas numéricas BIGINT...')
 
+# Cálculo seguro del año para evitar anomalías en particiones
+raw_year = F.year(F.col('fecha_firma'))
+
 # Claves subrogadas numéricas de 64 bits (xxhash64) para máximo rendimiento VertiPaq
 df_fact = (
     df_base
@@ -241,65 +244,62 @@ df_fact = (
     .withColumn('duracion_dias', F.coalesce(F.datediff(F.col('fecha_fin'), F.col('fecha_inicio')), F.lit(0)))
     
     # Partición temporal de análisis (delimitada entre 2000 y 2030)
-    raw_year = F.year(F.col('fecha_firma'))
-    df_fact = (
-        df_fact
-        .withColumn('anno_firma', F.when(raw_year.between(2000, 2030), raw_year).otherwise(F.lit(1900)))
-        .withColumn('mes_firma', F.coalesce(F.month(F.col('fecha_firma')), F.lit(0)))
-        
-        # Clasificación por Rango de Cuantía oficial de contratación
-        .withColumn(
-            'rango_cuantia',
-            F.when(F.col('es_cuantia_cero') == True, F.lit('0. Sin Cuantía / Indeterminada'))
-            .when(F.col('valor_contrato') < 50000000, F.lit('1. Mínima Cuantía (< $50M)'))
-            .when(F.col('valor_contrato') < 500000000, F.lit('2. Menor Cuantía ($50M - $500M)'))
-            .when(F.col('valor_contrato') < 5000000000, F.lit('3. Mayor Cuantía ($500M - $5.000M)'))
-            .otherwise(F.lit('4. Megacontratos (> $5.000M)'))
-        )
-        .withColumn('_silver_processed_at', F.current_timestamp())
-        
-        # Selección final optimizada para el Data Warehouse
-        .select(
-            'id_contrato',
-            'proceso_de_compra',
-            'referencia_contrato',
-            'id_entidad_sk',
-            'id_proveedor_sk',
-            'id_geografia_sk',
-            'estado_contrato',
-            'tipo_contrato',
-            'modalidad_contratacion',
-            'fecha_firma',
-            'fecha_inicio',
-            'fecha_fin',
-            'anno_firma',
-            'mes_firma',
-            'duracion_dias',
-            'valor_contrato',
-            'valor_pagado',
-            'valor_facturado',
-            'valor_pendiente_pago',
-            'valor_anticipo',
-            'es_cuantia_cero',
-            'rango_cuantia',
-            '_silver_processed_at'
-        )
-    )
+    .withColumn('anno_firma', F.when(raw_year.between(2000, 2030), raw_year).otherwise(F.lit(1900)))
+    .withColumn('mes_firma', F.coalesce(F.month(F.col('fecha_firma')), F.lit(0)))
     
-    # Persistencia particionada optimizada con repartition para evitar sobrecarga en OneLake
-    print('Persistiendo 6M de filas en fact_contratos optimizada con repartition por anno_firma...')
-    (
-        df_fact.repartition('anno_firma')
-        .write
-        .format('delta')
-        .mode('overwrite')
-        .option('overwriteSchema', 'true')
-        .partitionBy('anno_firma')
-        .saveAsTable(FACT_TABLE)
+    # Clasificación por Rango de Cuantía oficial de contratación
+    .withColumn(
+        'rango_cuantia',
+        F.when(F.col('es_cuantia_cero') == True, F.lit('0. Sin Cuantía / Indeterminada'))
+        .when(F.col('valor_contrato') < 50000000, F.lit('1. Mínima Cuantía (< $50M)'))
+        .when(F.col('valor_contrato') < 500000000, F.lit('2. Menor Cuantía ($50M - $500M)'))
+        .when(F.col('valor_contrato') < 5000000000, F.lit('3. Mayor Cuantía ($500M - $5.000M)'))
+        .otherwise(F.lit('4. Megacontratos (> $5.000M)'))
     )
+    .withColumn('_silver_processed_at', F.current_timestamp())
     
-    count_fact = spark.table(FACT_TABLE).count()
-    print(f'🎉 fact_contratos persistida con éxito. Total filas: {count_fact:,}')
+    # Selección final optimizada para el Data Warehouse
+    .select(
+        'id_contrato',
+        'proceso_de_compra',
+        'referencia_contrato',
+        'id_entidad_sk',
+        'id_proveedor_sk',
+        'id_geografia_sk',
+        'estado_contrato',
+        'tipo_contrato',
+        'modalidad_contratacion',
+        'fecha_firma',
+        'fecha_inicio',
+        'fecha_fin',
+        'anno_firma',
+        'mes_firma',
+        'duracion_dias',
+        'valor_contrato',
+        'valor_pagado',
+        'valor_facturado',
+        'valor_pendiente_pago',
+        'valor_anticipo',
+        'es_cuantia_cero',
+        'rango_cuantia',
+        '_silver_processed_at'
+    )
+)
+
+# Persistencia particionada optimizada con repartition para evitar sobrecarga en OneLake
+print('Persistiendo 6M de filas en fact_contratos optimizada con repartition por anno_firma...')
+(
+    df_fact.repartition('anno_firma')
+    .write
+    .format('delta')
+    .mode('overwrite')
+    .option('overwriteSchema', 'true')
+    .partitionBy('anno_firma')
+    .saveAsTable(FACT_TABLE)
+)
+
+count_fact = spark.table(FACT_TABLE).count()
+print(f'🎉 fact_contratos persistida con éxito. Total filas: {count_fact:,}')
 
 
 # CELL ********************

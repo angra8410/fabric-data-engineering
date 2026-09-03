@@ -39,23 +39,21 @@
 # =====================================================================
 # ⚙️ CELDA DE PARÁMETROS Y CONFIGURACIÓN MEDALLION
 # =====================================================================
-BRONZE_LAKEHOUSE = 'datos_abiertos_lh_dev'
+# Identificadores canónicos de Microsoft Fabric
+WORKSPACE_ID = '2ba52c07-88c2-43c6-9dc0-1ff1dfb52c6e'     # ws-datos-abiertos-colombia
+BRONZE_LH_ID = 'f95e26b3-c404-4e86-be37-c64906ebe3f9'     # datos_abiertos_lh_dev
 BRONZE_TABLE = 'bronze_secop_contratos'
-SILVER_LAKEHOUSE = 'datos_abiertos_silver_lh_dev'
 
-# Tablas destino en Silver
+# Tablas destino en Silver (se persisten en el default lakehouse: datos_abiertos_silver_lh_dev)
 FACT_TABLE = 'fact_contratos'
 DIM_ENTIDADES_TABLE = 'dim_entidades'
 DIM_PROVEEDORES_TABLE = 'dim_proveedores'
 DIM_GEOGRAFIA_TABLE = 'dim_geografia'
 
-# Rutas directas ABFSS para lectura/escritura inter-lakehouse de alto rendimiento
-WORKSPACE_NAME = 'ws-datos-abiertos-colombia'
-BRONZE_PATH = f'abfss://{WORKSPACE_NAME}@onelake.dfs.fabric.microsoft.com/{BRONZE_LAKEHOUSE}.Lakehouse/Tables/{BRONZE_TABLE}'
-SILVER_BASE_PATH = f'abfss://{WORKSPACE_NAME}@onelake.dfs.fabric.microsoft.com/{SILVER_LAKEHOUSE}.Lakehouse/Tables'
+# Ruta canónica OneLake ABFSS inter-lakehouse (infalible en Fabric)
+BRONZE_PATH = f'abfss://{WORKSPACE_ID}@onelake.dfs.fabric.microsoft.com/{BRONZE_LH_ID}/Tables/{BRONZE_TABLE}'
 
-print(f'🚀 Origen Bronze: {BRONZE_PATH}')
-print(f'🎯 Destino Silver: {SILVER_BASE_PATH}')
+print(f'🚀 Origen canónico Bronze OneLake: {BRONZE_PATH}')
 
 
 # CELL ********************
@@ -66,12 +64,8 @@ print(f'🎯 Destino Silver: {SILVER_BASE_PATH}')
 from pyspark.sql import functions as F
 from pyspark.sql.types import *
 
-print('Cargando datos desde Bronze Delta Lake...')
-try:
-    df_raw = spark.read.table(f'{BRONZE_LAKEHOUSE}.{BRONZE_TABLE}')
-except Exception:
-    print('Lectura vía catálogo falló, usando ruta ABFSS directa de OneLake...')
-    df_raw = spark.read.format('delta').load(BRONZE_PATH)
+print(f'Cargando 6 millones de registros desde Bronze OneLake: {BRONZE_PATH}...')
+df_raw = spark.read.format('delta').load(BRONZE_PATH)
 
 total_bronze = df_raw.count()
 print(f'✅ Total registros cargados desde Bronze: {total_bronze:,}')

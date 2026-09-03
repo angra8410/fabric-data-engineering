@@ -145,7 +145,7 @@ print('✅ Limpieza base completada.')
 # =====================================================================
 # 🏛️ 3. DIMENSIÓN ENTIDADES PÚBLICAS (dim_entidades)
 # =====================================================================
-print('Construyendo dim_entidades...')
+print('Construyendo dim_entidades con Surrogate Key numérica (BIGINT)...')
 
 df_entidades = (
     df_base.select(
@@ -159,7 +159,7 @@ df_entidades = (
     .dropDuplicates(['nit_entidad', 'nombre_entidad'])
     .withColumn(
         'id_entidad_sk',
-        F.sha2(F.concat_ws('||', F.col('nit_entidad'), F.col('nombre_entidad')), 256)
+        F.xxhash64(F.col('nit_entidad'), F.col('nombre_entidad'))
     )
 )
 
@@ -173,7 +173,7 @@ print(f'✅ dim_entidades persistida con éxito. Total entidades únicas: {count
 # =====================================================================
 # 🏢 4. DIMENSIÓN PROVEEDORES Y CONTRATISTAS (dim_proveedores)
 # =====================================================================
-print('Construyendo dim_proveedores...')
+print('Construyendo dim_proveedores con Surrogate Key numérica (BIGINT)...')
 
 df_proveedores = (
     df_base.select(
@@ -186,7 +186,7 @@ df_proveedores = (
     .dropDuplicates(['tipo_doc_proveedor', 'nit_cc_proveedor'])
     .withColumn(
         'id_proveedor_sk',
-        F.sha2(F.concat_ws('||', F.col('tipo_doc_proveedor'), F.col('nit_cc_proveedor')), 256)
+        F.xxhash64(F.col('tipo_doc_proveedor'), F.col('nit_cc_proveedor'))
     )
 )
 
@@ -200,7 +200,7 @@ print(f'✅ dim_proveedores persistida con éxito. Total proveedores únicos: {c
 # =====================================================================
 # 📍 5. DIMENSIÓN GEOGRAFÍA DE COLOMBIA (dim_geografia)
 # =====================================================================
-print('Construyendo dim_geografia...')
+print('Construyendo dim_geografia con Surrogate Key numérica (BIGINT)...')
 
 # Normalización de tildes para municipios y departamentos
 def remove_accents(c):
@@ -215,7 +215,7 @@ df_geografia = (
     .dropDuplicates(['departamento_norm', 'ciudad_norm'])
     .withColumn(
         'id_geografia_sk',
-        F.sha2(F.concat_ws('||', F.col('departamento_norm'), F.col('ciudad_norm')), 256)
+        F.xxhash64(F.col('departamento_norm'), F.col('ciudad_norm'))
     )
 )
 
@@ -227,16 +227,16 @@ print(f'✅ dim_geografia persistida con éxito. Total ubicaciones únicas: {cou
 # CELL ********************
 
 # =====================================================================
-# 📊 6. TABLA DE HECHOS: fact_contratos (ENRIQUECIMIENTO COMPLETO)
+# 📊 6. TABLA DE HECHOS: fact_contratos (CON SURROGATE KEYS NUMÉRICAS)
 # =====================================================================
-print('Construyendo fact_contratos con métricas calculadas y llaves foráneas...')
+print('Construyendo fact_contratos con llaves foráneas numéricas BIGINT...')
 
-# Claves subrogadas foráneas
+# Claves subrogadas numéricas de 64 bits (xxhash64) para máximo rendimiento VertiPaq
 df_fact = (
     df_base
-    .withColumn('id_entidad_sk', F.sha2(F.concat_ws('||', F.col('nit_entidad'), F.col('nombre_entidad')), 256))
-    .withColumn('id_proveedor_sk', F.sha2(F.concat_ws('||', F.col('tipo_doc_proveedor'), F.col('nit_cc_proveedor')), 256))
-    .withColumn('id_geografia_sk', F.sha2(F.concat_ws('||', remove_accents(F.col('departamento')), remove_accents(F.col('ciudad'))), 256))
+    .withColumn('id_entidad_sk', F.xxhash64(F.col('nit_entidad'), F.col('nombre_entidad')))
+    .withColumn('id_proveedor_sk', F.xxhash64(F.col('tipo_doc_proveedor'), F.col('nit_cc_proveedor')))
+    .withColumn('id_geografia_sk', F.xxhash64(remove_accents(F.col('departamento')), remove_accents(F.col('ciudad'))))
     
     # Regla de Negocio ADR-007: Bandera de cuantía cero o nula
     .withColumn('es_cuantia_cero', F.when(F.col('valor_contrato') <= 0, F.lit(True)).otherwise(F.lit(False)))

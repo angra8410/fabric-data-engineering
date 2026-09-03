@@ -3,6 +3,9 @@
 # METADATA ********************
 
 # META {
+# META   "kernel_info": {
+# META     "name": "synapse_pyspark"
+# META   },
 # META   "dependencies": {
 # META     "lakehouse": {
 # META       "default_lakehouse": "f95e26b3-c404-4e86-be37-c64906ebe3f9",
@@ -34,13 +37,20 @@
 # =====================================================================
 DATASET_ID = 'jbjy-vk9h'               # Identificador 4x4 SODA (SECOP II)
 TARGET_TABLE = 'bronze_secop_contratos' # Tabla Delta en datos_abiertos_lh_dev
-BATCH_SIZE = 10000                     # Tamaño de lote por llamada (máx 50,000 en Socrata)
+BATCH_SIZE = 50000                     # Tamaño de lote por llamada (máx 50,000 en Socrata)
 MAX_RECORDS = None                     # None para sincronizar todo, o entero (ej. 50000) para pruebas
 WATERMARK_COLUMN = 'fecha_de_firma'    # Columna temporal para filtrado incremental
 RATE_LIMIT_DELAY_SEC = 0.5             # Pausa preventiva entre llamadas (segundos)
 MAX_RETRIES = 5                        # Reintentos máximos con espera exponencial
 APP_TOKEN = None                       # Socrata App Token (opcional para mayor cuota)
 
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
 
 # CELL ********************
 
@@ -109,6 +119,13 @@ class FabricSodaExtractor:
 print('✅ Extractor SODA inicializado correctamente.')
 
 
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
 # CELL ********************
 
 # =====================================================================
@@ -136,6 +153,13 @@ except Exception:
 total_available = extractor.get_count(where_clause=watermark_filter)
 print(f'📊 Registros identificados en datos.gov.co para extracción: {total_available:,}')
 
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
 
 # CELL ********************
 
@@ -200,6 +224,13 @@ else:
     print(f'\n🎉 Ingesta Bronze completada. Total registros persistidos: {total_written:,}')
 
 
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
 # CELL ********************
 
 # =====================================================================
@@ -218,3 +249,121 @@ display(result_df.select(
     '_ingestion_timestamp'
 ).limit(10))
 
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# ==============================================================================
+# 🚀 CIERRE DE BRECHA: DESCARGA DEL FALTANTE HISTÓRICO HASTA EL 100%
+# ==============================================================================
+import json
+import time
+from pyspark.sql import functions as F
+
+print("🏁 Iniciando sincronización del faltante histórico...")
+
+# 1. Punto de partida: arrancamos exactamente desde la fila donde está tu tabla
+total_actual = spark.table(TARGET_TABLE).count()
+total_objetivo = extractor.get_count()
+faltantes_reales = total_objetivo - total_actual
+
+print(f"📍 Registros en tabla:   {total_actual:,}")
+print(f"🎯 Total en la API:      {total_objetivo:,}")
+print(f"📦 Por descargar:        {faltantes_reales:,}")
+
+if faltantes_reales <= 0:
+    print("🎉 ¡Tu tabla ya tiene el 100% de los datos!")
+else:
+    # Parámetros optimizados para volumen masivo
+    LOTE_SIZE = 50000  # Máximo por lote permitido por Socrata
+    offset = total_actual
+    total_descargado_sesion = 0
+    batch_num = 1
+    run_id = f"gap_fill_{int(time.time())}"
+
+    while offset < total_objetivo:
+        limite = min(LOTE_SIZE, total_objetivo - offset)
+        print(f"📦 Lote #{batch_num}: offset={offset:,}, límite={limite:,}...")
+
+        # Consulta sin filtro WHERE para capturar tanto históricos como sin fecha_de_firma
+        batch_data = extractor.execute_request({
+            "$limit": limite,
+            "$offset": offset,
+            "$order": ":id"
+        })
+
+        if not batch_data:
+            print("🏁 No hay más registros devueltos por el endpoint.")
+            break
+
+        # Convertir a DataFrame Spark y enriquecer
+        batch_rdd = spark.sparkContext.parallelize([json.dumps(row) for row in batch_data])
+        batch_df = spark.read.json(batch_rdd)
+
+        enriched_df = (
+            batch_df
+            .withColumn("_ingestion_timestamp", F.current_timestamp())
+            .withColumn("_source_dataset_id", F.lit(DATASET_ID))
+            .withColumn("_batch_id", F.lit(f"{run_id}_{batch_num}"))
+        )
+
+        # Append en la tabla Delta
+        enriched_df.write.format("delta").mode("append").saveAsTable(TARGET_TABLE)
+
+        filas_lote = len(batch_data)
+        total_descargado_sesion += filas_lote
+        offset += filas_lote
+        batch_num += 1
+
+        progreso_global = ((total_actual + total_descargado_sesion) / total_objetivo) * 100
+        print(f"  💾 Guardados {filas_lote:,} registros. Progreso total: {total_actual + total_descargado_sesion:,}/{total_objetivo:,} ({progreso_global:.2f}%)")
+
+        if filas_lote < limite:
+            break
+
+        # Pausa preventiva para no saturar SODA
+        time.sleep(RATE_LIMIT_DELAY_SEC)
+
+    print(f"\n🎉 ¡Sincronización de faltantes completada! Registros nuevos agregados: {total_descargado_sesion:,}")
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# =====================================================================
+# 🔍 VERIFICACIÓN DE COBERTURA: API vs LAKEHOUSE
+# =====================================================================
+# 1. Conteo total oficial en datos.gov.co (sin filtros)
+total_api = extractor.get_count()
+
+# 2. Conteo total en tu tabla Delta de Fabric
+total_lakehouse = spark.table(TARGET_TABLE).count()
+
+# 3. Métricas de sincronización
+cobertura_pct = (total_lakehouse / total_api) * 100
+faltantes = total_api - total_lakehouse
+
+print(f"🌐 Total en Socrata API (datos.gov.co): {total_api:,}")
+print(f"🏛️ Total en tu Lakehouse Delta:          {total_lakehouse:,}")
+print(f"📊 Cobertura actual:                     {cobertura_pct:.2f}%")
+print(f"⏳ Registros restantes por sincronizar:  {faltantes:,}")
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "rp_contratacion_publica"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "39bd5b4f-8053-be9d-42ab-9b1700e3156f"
+  }
+}

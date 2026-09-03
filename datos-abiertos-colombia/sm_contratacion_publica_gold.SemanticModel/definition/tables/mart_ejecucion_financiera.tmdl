@@ -1,0 +1,133 @@
+table mart_ejecucion_financiera
+	lineageTag: e2f8b9d7-ac3a-48b0-87e9-c1584a713cd2
+	sourceLineageTag: [dbo].[mart_ejecucion_financiera]
+
+	column tipo_contrato
+		dataType: string
+		lineageTag: b05e325a-b03d-465d-90d1-b14d3bd0ad0c
+		sourceLineageTag: tipo_contrato
+		summarizeBy: none
+		sourceColumn: tipo_contrato
+
+		annotation SummarizationSetBy = Automatic
+
+	column estado_contrato
+		dataType: string
+		lineageTag: f46d45e6-29cd-4beb-9e56-ce4c9156d483
+		sourceLineageTag: estado_contrato
+		summarizeBy: none
+		sourceColumn: estado_contrato
+
+		annotation SummarizationSetBy = Automatic
+
+	column rango_cuantia
+		dataType: string
+		lineageTag: 13dd8b43-f482-4c77-bf30-239bedb7be75
+		sourceLineageTag: rango_cuantia
+		summarizeBy: none
+		sourceColumn: rango_cuantia
+
+		annotation SummarizationSetBy = Automatic
+
+	column anno_firma
+		dataType: int64
+		formatString: 0
+		lineageTag: b58c4e61-6008-4edb-95bf-2e8eb464a069
+		sourceLineageTag: anno_firma
+		summarizeBy: sum
+		sourceColumn: anno_firma
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_contratos
+		dataType: int64
+		formatString: 0
+		lineageTag: d9b11be4-6126-471f-8f7d-8bd0bc201405
+		sourceLineageTag: total_contratos
+		summarizeBy: sum
+		sourceColumn: total_contratos
+
+		annotation SummarizationSetBy = Automatic
+
+	column monto_contratado_cop
+		dataType: double
+		lineageTag: 0c87fb31-0a09-4710-bcef-85f2d017d29c
+		sourceLineageTag: monto_contratado_cop
+		summarizeBy: sum
+		sourceColumn: monto_contratado_cop
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column monto_pagado_cop
+		dataType: double
+		lineageTag: 9e16d078-efcc-4957-8dc1-5d48ba045e57
+		sourceLineageTag: monto_pagado_cop
+		summarizeBy: sum
+		sourceColumn: monto_pagado_cop
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column monto_facturado_cop
+		dataType: double
+		lineageTag: e580ca6c-9de0-492b-a9d4-fa389e741b3e
+		sourceLineageTag: monto_facturado_cop
+		summarizeBy: sum
+		sourceColumn: monto_facturado_cop
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column saldo_pendiente_pago_cop
+		dataType: double
+		lineageTag: 66876933-b026-4998-ae2a-d163f4ee85f5
+		sourceLineageTag: saldo_pendiente_pago_cop
+		summarizeBy: sum
+		sourceColumn: saldo_pendiente_pago_cop
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_anticipos_cop
+		dataType: double
+		lineageTag: 4abf986c-64f9-47ac-862b-127d62befa3a
+		sourceLineageTag: total_anticipos_cop
+		summarizeBy: sum
+		sourceColumn: total_anticipos_cop
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column tasa_pago_efectivo_pct
+		dataType: double
+		lineageTag: d9c4ded7-3925-4eb4-8d09-993f450adad3
+		sourceLineageTag: tasa_pago_efectivo_pct
+		summarizeBy: sum
+		sourceColumn: tasa_pago_efectivo_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column _gold_processed_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 234ff5a0-592d-4de1-9f0a-86c061b8bd16
+		sourceLineageTag: _gold_processed_at
+		summarizeBy: none
+		sourceColumn: _gold_processed_at
+
+		annotation SummarizationSetBy = Automatic
+
+	partition mart_ejecucion_financiera = entity
+		mode: directLake
+		source
+			entityName: mart_ejecucion_financiera
+			expressionSource: 'DirectLake - datos_abiertos_gold_lh_dev'
+

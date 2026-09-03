@@ -1,0 +1,107 @@
+table mart_concentracion_proveedores
+	lineageTag: a488a3a1-fd19-479c-972c-399e30898daf
+	sourceLineageTag: [dbo].[mart_concentracion_proveedores]
+
+	column tipo_doc_proveedor
+		dataType: string
+		lineageTag: cb75b524-e294-4a0d-8388-abfbbc238ae8
+		sourceLineageTag: tipo_doc_proveedor
+		summarizeBy: none
+		sourceColumn: tipo_doc_proveedor
+
+		annotation SummarizationSetBy = Automatic
+
+	column nit_cc_proveedor
+		dataType: string
+		lineageTag: 6f76833a-2f56-432d-b067-99db722f9414
+		sourceLineageTag: nit_cc_proveedor
+		summarizeBy: none
+		sourceColumn: nit_cc_proveedor
+
+		annotation SummarizationSetBy = Automatic
+
+	column nombre_proveedor
+		dataType: string
+		lineageTag: 8d87af49-d66c-41db-9691-ee8ab129fbe9
+		sourceLineageTag: nombre_proveedor
+		summarizeBy: none
+		sourceColumn: nombre_proveedor
+
+		annotation SummarizationSetBy = Automatic
+
+	column sector_entidad
+		dataType: string
+		lineageTag: fa4d5521-fbd4-4ce0-9a01-184c9527cad2
+		sourceLineageTag: sector_entidad
+		summarizeBy: none
+		sourceColumn: sector_entidad
+
+		annotation SummarizationSetBy = Automatic
+
+	column anno_firma
+		dataType: int64
+		formatString: 0
+		lineageTag: 4d72a534-2e04-4639-9d8a-9fb4f11db6aa
+		sourceLineageTag: anno_firma
+		summarizeBy: sum
+		sourceColumn: anno_firma
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_contratos_ganados
+		dataType: int64
+		formatString: 0
+		lineageTag: a06396c1-db7f-4e26-aa4c-bd6050517a7a
+		sourceLineageTag: total_contratos_ganados
+		summarizeBy: sum
+		sourceColumn: total_contratos_ganados
+
+		annotation SummarizationSetBy = Automatic
+
+	column monto_total_adjudicado_cop
+		dataType: double
+		lineageTag: e237dc71-e2fa-4a30-b442-f2d1dfad55e7
+		sourceLineageTag: monto_total_adjudicado_cop
+		summarizeBy: sum
+		sourceColumn: monto_total_adjudicado_cop
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column entidades_distintas_cliente
+		dataType: int64
+		formatString: 0
+		lineageTag: 8285e597-dac7-4104-bce5-ab55efeb42e4
+		sourceLineageTag: entidades_distintas_cliente
+		summarizeBy: sum
+		sourceColumn: entidades_distintas_cliente
+
+		annotation SummarizationSetBy = Automatic
+
+	column es_megacontratista
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: f55a2b28-5cdf-4221-902f-63b548012b8b
+		sourceLineageTag: es_megacontratista
+		summarizeBy: none
+		sourceColumn: es_megacontratista
+
+		annotation SummarizationSetBy = Automatic
+
+	column _gold_processed_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 39b63c57-579d-47ee-b391-a9d712ee4e75
+		sourceLineageTag: _gold_processed_at
+		summarizeBy: none
+		sourceColumn: _gold_processed_at
+
+		annotation SummarizationSetBy = Automatic
+
+	partition mart_concentracion_proveedores = entity
+		mode: directLake
+		source
+			entityName: mart_concentracion_proveedores
+			expressionSource: 'DirectLake - datos_abiertos_gold_lh_dev'
+

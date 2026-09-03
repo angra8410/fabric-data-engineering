@@ -44,14 +44,17 @@
 
 ---
 
-## [ADR-005] Adopción de Modelo Dimensional Estrella para la Capa Silver
+## [ADR-005] Adopción de Modelo Dimensional Estrella con Surrogate Keys Numéricas (BIGINT / xxhash64)
 - **Fecha:** 2026-09-03
 - **Estado:** Aprobado
-- **Contexto:** Transformar 6M de contratos crudos en una estructura analítica. Se evaluó entre una tabla única plana (OBT) o un modelo dimensional estrella (Star Schema).
-- **Decisión Tomada:** Implementar un Modelo Dimensional Estrella con `fact_contratos`, `dim_entidades`, `dim_proveedores` y `dim_geografia`.
+- **Contexto:** Transformar 6M de contratos crudos en una estructura analítica. Se evaluó el uso de Natural Keys vs Surrogate Keys de tipo texto (SHA-256) vs Surrogate Keys numéricas (BIGINT).
+- **Decisión Tomada:** Implementar un Modelo Dimensional Estrella (`fact_contratos`, `dim_entidades`, `dim_proveedores`, `dim_geografia`) utilizando **Surrogate Keys numéricas de 64 bits (`BIGINT`) generadas determinísticamente mediante `F.xxhash64()`**.
 - **Alternativas Consideradas:**
-  - *One Big Table (OBT):* Aunque simple, genera redundancia masiva de textos largos (nombres de entidades y proveedores repetidos millones de veces) y degrada el rendimiento de filtrado en Power BI.
-- **Consecuencias:** Óptima compresión Delta y rendimiento analítico de alta velocidad en DAX / Power BI.
+  - *Natural Keys directas:* Descartadas por inconsistencias en los datos origen (NITs nulos, consorcios sin identificación única, llaves compuestas de texto).
+  - *Hashes String SHA-256 (64 caracteres):* Descartados para las relaciones porque ocupan excesiva memoria en el diccionario VertiPaq de Power BI / Direct Lake.
+  - *IDs Autoincrementales centralizados:* Descartados por requerir bloqueos de secuencia en cargas incrementales distribuidas.
+- **Consecuencias:** Máxima velocidad de compresión y filtrado en Power BI / Direct Lake (8 bytes por llave vs 64 bytes de texto), total independencia de secuencias y determinismo 100% en cargas diarias incrementales.
+
 
 ---
 

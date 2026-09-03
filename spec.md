@@ -167,7 +167,15 @@ Estructuración en tablas Delta normalizadas y optimizadas para Power BI:
 - [x] Creado el Notebook de ingesta Bronze compatible con Microsoft Fabric (`nb_bronze_ingest_secop.Notebook`).
 - [x] Verificación de descarga y persistencia con el dataset `jbjy-vk9h` de `datos.gov.co`.
 - [x] **Hito Bronze:** Ingesta del 100.00% del dataset SECOP II completada exitosamente en el Lakehouse (`6,013,832 / 6,013,832` registros).
-- [x] Creación y aprovisionamiento del nuevo Lakehouse Silver `datos_abiertos_silver_lh_dev` en Fabric.
-- [x] Implementación y despliegue del Notebook PySpark `nb_silver_transform_secop.Notebook` en Fabric y Git.
-- [x] Definición completa del modelo estrella: `dim_entidades`, `dim_proveedores`, `dim_geografia` y `fact_contratos`.
-- [x] Implementación de reglas de calidad (`es_cuantia_cero`, normalización textual, duraciones, rangos de cuantía).
+- [x] **Hito Silver (Aprovisionamiento):** Creación y aprovisionamiento del nuevo Lakehouse Silver dedicado `datos_abiertos_silver_lh_dev` en Fabric.
+- [x] **Hito Silver (Despliegue y Ejecución):** Implementación y ejecución del Notebook PySpark `nb_silver_transform_secop.Notebook` (13 de 13 Spark jobs exitosos en 5.9s).
+- [x] **Hito Silver (Modelo Estrella Verificado):**
+  - `fact_contratos`: **6,013,832 registros** (100.00% integridad exacta contra Bronze).
+  - `dim_entidades`: **6,505 entidades públicas únicas** identificadas.
+  - `dim_proveedores`: **1,226,613 proveedores y contratistas únicos** mapeados.
+  - `dim_geografia`: **1,013 municipios y departamentos únicos** normalizados.
+- [x] **Reglas de Calidad y Rendimiento Validadas:**
+  - Surrogate Keys numéricas `BIGINT` generadas determinísticamente vía `F.xxhash64()`.
+  - Clasificación por rangos de cuantía (`195,946` sin cuantía, `4,737,490` mínima cuantía, `914,096` menor, `139,695` mayor y `26,605` megacontratos).
+  - Protección de fechas históricas y compatibilidad total con V-Order en Microsoft Fabric.
+

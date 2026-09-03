@@ -227,7 +227,10 @@ print(f'✅ dim_geografia persistida con éxito. Total ubicaciones únicas: {cou
 # =====================================================================
 print('Construyendo fact_contratos con llaves foráneas numéricas BIGINT...')
 
-# Cálculo seguro del año para evitar anomalías en particiones
+# Limpieza previa de metastore para asegurar creación desde cero
+spark.sql(f'DROP TABLE IF EXISTS {FACT_TABLE}')
+
+# Cálculo seguro del año para métricas
 raw_year = F.year(F.col('fecha_firma'))
 
 # Claves subrogadas numéricas de 64 bits (xxhash64) para máximo rendimiento VertiPaq

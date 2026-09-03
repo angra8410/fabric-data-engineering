@@ -7,7 +7,10 @@
     "p2_omnichannel",
     "p3_financial",
     "p4_inventory",
-    "p5_whatsapp"
+    "p5_whatsapp",
+    "p6_strategic_decisions",
+    "p7_assortment_pricing_actions",
+    "p8_procurement_working_capital"
   ],
-  "activePageName": "p1_descriptive"
+  "activePageName": "p6_strategic_decisions"
 }

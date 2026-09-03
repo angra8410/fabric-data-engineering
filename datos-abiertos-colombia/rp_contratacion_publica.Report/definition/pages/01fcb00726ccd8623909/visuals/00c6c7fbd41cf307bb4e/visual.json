@@ -1,0 +1,74 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "00c6c7fbd41cf307bb4e",
+  "position": {
+    "x": 974.907438801112,
+    "y": 44.995727944666712,
+    "z": 1000,
+    "height": 153.31877670034584,
+    "width": 241.64372414728419,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "mart_ejecucion_financiera"
+                    }
+                  },
+                  "Property": "Indice_Contratacion_Directa_Pct"
+                }
+              },
+              "queryRef": "mart_ejecucion_financiera.Indice_Contratacion_Directa_Pct",
+              "nativeQueryRef": "Indice_Contratacion_Directa_Pct"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "mart_ejecucion_financiera"
+                  }
+                },
+                "Property": "Indice_Contratacion_Directa_Pct"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "4dc9adfa0a53f65dbe99",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "mart_ejecucion_financiera"
+              }
+            },
+            "Property": "Indice_Contratacion_Directa_Pct"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

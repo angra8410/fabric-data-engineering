@@ -2,6 +2,92 @@ table mart_ejecucion_financiera
 	lineageTag: e2f8b9d7-ac3a-48b0-87e9-c1584a713cd2
 	sourceLineageTag: [dbo].[mart_ejecucion_financiera]
 
+	measure Inversion_Total_Billones = ```
+			
+			DIVIDE ( 
+			    SUM ( mart_gasto_territorial[inversion_total_cop] ), 
+			    1000000000000, 
+			    0 
+			)
+			
+			```
+		displayFolder: Measures
+		lineageTag: e9a2772f-6a5a-4603-ba83-ec3568b45e0d
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Total_Contratos_ = ```
+			
+			SUM ( mart_gasto_territorial[total_contratos] )
+			
+			```
+		formatString: 0
+		displayFolder: Measures
+		lineageTag: a7e0143c-a6d1-4ef3-a611-bbb4f3b91985
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+	measure Indice_Contratacion_Directa_Pct = ```
+			
+			DIVIDE ( 
+			    SUM ( mart_transparencia_modalidades[monto_directo_cop] ), 
+			    SUM ( mart_transparencia_modalidades[monto_total_cop] ), 
+			    0 
+			)
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Measures
+		lineageTag: 5de6a14b-4f26-45ad-94fe-529e870abfa0
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure Tasa_Pago_Efectivo_Pct_ = ```
+			
+			DIVIDE ( 
+			    SUM ( mart_ejecucion_financiera[monto_pagado_cop] ), 
+			    SUM ( mart_ejecucion_financiera[monto_contratado_cop] ), 
+			    0 
+			)
+			
+			```
+		displayFolder: Measures
+		lineageTag: 8e22777b-98d4-45ab-856d-ac8be3b0680d
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Saldo_Pendiente_Billones = ```
+			
+			DIVIDE ( 
+			    SUM ( mart_ejecucion_financiera[saldo_pendiente_pago_cop] ), 
+			    1000000000000, 
+			    0 
+			)
+			
+			```
+		displayFolder: Measures
+		lineageTag: 01e8dd2a-2b58-44b3-8952-54f4bed27e76
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
 	column tipo_contrato
 		dataType: string
 		lineageTag: b05e325a-b03d-465d-90d1-b14d3bd0ad0c
@@ -34,7 +120,7 @@ table mart_ejecucion_financiera
 		formatString: 0
 		lineageTag: b58c4e61-6008-4edb-95bf-2e8eb464a069
 		sourceLineageTag: anno_firma
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: anno_firma
 
 		annotation SummarizationSetBy = Automatic
@@ -117,11 +203,14 @@ table mart_ejecucion_financiera
 
 	column _gold_processed_at
 		dataType: dateTime
+		isHidden
 		formatString: General Date
 		lineageTag: 234ff5a0-592d-4de1-9f0a-86c061b8bd16
 		sourceLineageTag: _gold_processed_at
 		summarizeBy: none
 		sourceColumn: _gold_processed_at
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 

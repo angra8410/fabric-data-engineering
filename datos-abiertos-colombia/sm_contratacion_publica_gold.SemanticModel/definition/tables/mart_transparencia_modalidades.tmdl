@@ -52,7 +52,7 @@ table mart_transparencia_modalidades
 		formatString: 0
 		lineageTag: 8d636602-c9ae-4da3-8872-6ae883327b43
 		sourceLineageTag: anno_firma
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: anno_firma
 
 		annotation SummarizationSetBy = Automatic
@@ -123,11 +123,14 @@ table mart_transparencia_modalidades
 
 	column _gold_processed_at
 		dataType: dateTime
+		isHidden
 		formatString: General Date
 		lineageTag: 1fa57cdf-e8fe-4777-a77e-83ec828a2a20
 		sourceLineageTag: _gold_processed_at
 		summarizeBy: none
 		sourceColumn: _gold_processed_at
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 

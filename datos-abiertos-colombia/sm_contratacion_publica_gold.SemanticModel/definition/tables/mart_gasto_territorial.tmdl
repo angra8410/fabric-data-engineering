@@ -6,8 +6,11 @@ table mart_gasto_territorial
 		dataType: string
 		lineageTag: 2edfa4c8-5aa0-43cd-ab52-48f0adf21825
 		sourceLineageTag: departamento_norm
+		dataCategory: StateOrProvince
 		summarizeBy: none
 		sourceColumn: departamento_norm
+
+		changedProperty = DataCategory
 
 		annotation SummarizationSetBy = Automatic
 
@@ -25,7 +28,7 @@ table mart_gasto_territorial
 		formatString: 0
 		lineageTag: 6a25e3a3-53dc-4a93-8352-42503e9b1182
 		sourceLineageTag: anno_firma
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: anno_firma
 
 		annotation SummarizationSetBy = Automatic
@@ -106,11 +109,37 @@ table mart_gasto_territorial
 
 	column _gold_processed_at
 		dataType: dateTime
+		isHidden
 		formatString: General Date
 		lineageTag: ec5a5102-8b10-46ee-89fc-f504b35429a9
 		sourceLineageTag: _gold_processed_at
 		summarizeBy: none
 		sourceColumn: _gold_processed_at
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ubicacion_Colombia = ```
+			
+			SWITCH (
+			    mart_gasto_territorial[departamento_norm],
+			    "AMAZONAS", "Leticia, Amazonas, Colombia",
+			    "SAN ANDRES, PROVIDENCIA Y SANTA CATALINA", "San Andres Islas, Colombia",
+			    "DISTRITO CAPITAL DE BOGOTA", "Bogota, Colombia",
+			    "CORDOBA", "Colombia",
+			    mart_gasto_territorial[departamento_norm] & ", Colombia"
+			)
+			
+			```
+		lineageTag: d05ddf63-6451-4461-8427-ff9f93d87f83
+		dataCategory: StateOrProvince
+		summarizeBy: none
+		expressionContext: userContext
+
+		changedProperty = Name
+
+		changedProperty = DataCategory
 
 		annotation SummarizationSetBy = Automatic
 

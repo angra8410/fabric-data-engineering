@@ -10,10 +10,11 @@ annotation __PBI_TimeIntelligenceEnabled = 1
 
 annotation PBI_QueryOrder = ["DirectLake - datos_abiertos_gold_lh_dev"]
 
-annotation PBI_ProTooling = ["DirectLakeOnOneLakeInWeb"]
+annotation PBI_ProTooling = ["DirectLakeOnOneLakeInWeb","WebModelingEdit"]
 
 ref table mart_ejecucion_financiera
 ref table mart_concentracion_proveedores
 ref table mart_gasto_territorial
 ref table mart_transparencia_modalidades
+ref table Dim_Anno
 

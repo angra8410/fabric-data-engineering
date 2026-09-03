@@ -41,3 +41,37 @@
 - **Alternativas Consideradas:**
   - Hardcodear esquemas fijos: Descartado por limitar la escalabilidad del proyecto.
 - **Consecuencias:** Máxima reutilización y extensibilidad del código dentro del ecosistema de Datos Abiertos.
+
+---
+
+## [ADR-005] Adopción de Modelo Dimensional Estrella para la Capa Silver
+- **Fecha:** 2026-09-03
+- **Estado:** Aprobado
+- **Contexto:** Transformar 6M de contratos crudos en una estructura analítica. Se evaluó entre una tabla única plana (OBT) o un modelo dimensional estrella (Star Schema).
+- **Decisión Tomada:** Implementar un Modelo Dimensional Estrella con `fact_contratos`, `dim_entidades`, `dim_proveedores` y `dim_geografia`.
+- **Alternativas Consideradas:**
+  - *One Big Table (OBT):* Aunque simple, genera redundancia masiva de textos largos (nombres de entidades y proveedores repetidos millones de veces) y degrada el rendimiento de filtrado en Power BI.
+- **Consecuencias:** Óptima compresión Delta y rendimiento analítico de alta velocidad en DAX / Power BI.
+
+---
+
+## [ADR-006] Creación de Lakehouse Silver Dedicado (`datos_abiertos_silver_lh_dev`)
+- **Fecha:** 2026-09-03
+- **Estado:** Aprobado
+- **Contexto:** Definir la ubicación física de las tablas Silver.
+- **Decisión Tomada:** Aprovisionar un nuevo Lakehouse en Microsoft Fabric (`datos_abiertos_silver_lh_dev`) para segregar estrictamente la capa Bronze (cruda) de la capa Silver (curada/dimensional).
+- **Alternativas Consideradas:**
+  - Almacenar todo en `datos_abiertos_lh_dev`: Descartado para mantener gobernanza limpia de la arquitectura Medallion.
+- **Consecuencias:** Clara segregación de permisos, ciclo de vida independiente y mantenimiento limpio.
+
+---
+
+## [ADR-007] Tratamiento de Cuantías Cero y Columnas Enriquecidas de Negocio
+- **Fecha:** 2026-09-03
+- **Estado:** Aprobado
+- **Contexto:** Manejo de contratos con valor <= 0 o nulo y enriquecimiento de métricas operativas.
+- **Decisión Tomada:** Conservar todos los registros con bandera booleana `es_cuantia_cero = True`, calcular duración en días (`duracion_dias`), particiones temporales (`anno_firma`, `mes_firma`) y segmentación por `rango_cuantia` (Mínima, Menor, Mayor y Megacontratos).
+- **Alternativas Consideradas:**
+  - Eliminar contratos sin valor: Descartado porque distorsiona el conteo total de procesos estatales ejecutados.
+- **Consecuencias:** Auditoría 100% fiel a los 6M de contratos con capacidad de excluir montos cero en medidas agregadas.
+

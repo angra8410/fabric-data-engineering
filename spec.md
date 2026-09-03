@@ -31,42 +31,65 @@
   - `_batch_id`: Identificador único de la corrida.
 
 ### RF-05: Empaquetado para Orquestación en Fabric
-- Estructuración del código en un Fabric Notebook (`nb_bronze_ingest_socrata.Notebook`) y/o script de utilidad reproducible, listo para ser agendado (*Schedule*) o encadenado en un Data Pipeline de Fabric en `ws-datos-abiertos-colombia`.
+- Estructuración del código en un Fabric Notebook (`nb_bronze_ingest_secop.Notebook`) y script de utilidad reproducible, agendado en Microsoft Fabric.
 
 ---
 
-## 3. Modelo de Dominio y Variables de Negocio
+## 3. Especificaciones de la Capa Silver (Modelo Dimensional Estrella)
 
-- **Configuración de Dataset:**
-  - `dataset_id`: Identificador de 4x4 (alfanumérico con guion).
-  - `batch_size`: Registros por petición (por defecto 10,000; configurable hasta el límite de SODA de 50,000).
-  - `rate_limit_delay_sec`: Tiempo de espera prudencial entre peticiones (ej. 0.5s - 1.0s).
-  - `watermark_column`: Columna temporal del dataset para filtrado incremental (ej. `fecha_creacion`, `fecha_firma`).
-- **Estados de Ejecución:** `IN_PROGRESS`, `SUCCESS`, `THROTTLED_RETRY`, `FAILED`.
+### RF-06: Lakehouse Silver Dedicado en Fabric (`datos_abiertos_silver_lh_dev`)
+- Creación y vinculación de un Lakehouse independiente en `ws-datos-abiertos-colombia` exclusivo para la capa curada Silver, manteniendo la separación física de capas Bronze y Silver.
+- Lectura de origen desde `datos_abiertos_lh_dev.bronze_secop_contratos` (6,013,832 registros).
+
+### RF-07: Modelo Dimensional Estrella (Star Schema)
+Estructuración en tablas Delta normalizadas y optimizadas para Power BI:
+1. **`fact_contratos`:**
+   - Granularidad: 1 fila por contrato público.
+   - Claves foráneas: `id_entidad_sk`, `id_proveedor_sk`, `id_geografia_sk`.
+   - Métricas: `valor_contrato`, `valor_pago_adelantado`, `valor_facturado`, `valor_pagado`, `valor_pendiente_pago`, `duracion_dias`.
+   - Banderas: `es_cuantia_cero` (booleano para valores <= 0 o nulos).
+   - Dimensiones degeneradas: `id_contrato`, `proceso_compra`, `estado_contrato`, `tipo_contrato`, `modalidad_contratacion`, `rango_cuantia`, `anno_firma`, `mes_firma`.
+
+2. **`dim_entidades`:**
+   - Granularidad: Entidad estatal única.
+   - Clave primaria subrogada: `id_entidad_sk` (hash MD5/SHA de NIT o nombre).
+   - Atributos: `nit_entidad`, `nombre_entidad`, `orden` (Nacional/Territorial), `sector`, `rama`, `entidad_centralizada`.
+
+3. **`dim_proveedores`:**
+   - Granularidad: Contratista o proveedor adjudicado único.
+   - Clave primaria subrogada: `id_proveedor_sk` (hash de tipo y número de identificación).
+   - Atributos: `tipo_documento_contratista`, `identificacion_contratista`, `razon_social_proveedor`, `representante_legal`, `genero_representante_legal`.
+
+4. **`dim_geografia`:**
+   - Granularidad: Municipio / Departamento de ejecución.
+   - Clave primaria subrogada: `id_geografia_sk`.
+   - Atributos: `departamento` (normalizado en mayúsculas sin tildes), `ciudad` (normalizado), `localizacion`.
+
+### RF-08: Reglas de Transformación y Limpieza (Data Cleaning)
+- **Valores Monetarios:** Casteo seguro a tipo numérico `Double`/`Decimal(18,2)`. Valores nulos o <= 0 se preservan con `es_cuantia_cero = True`.
+- **Parseo de Fechas:** Conversión de cadenas ISO a tipo `Date`/`Timestamp` (`fecha_firma`, `fecha_inicio`, `fecha_fin`).
+- **Columnas Calculadas de Negocio:**
+  - `duracion_dias`: `datediff(fecha_fin_contrato, fecha_inicio_contrato)`.
+  - `anno_firma`: `year(fecha_firma)`.
+  - `mes_firma`: `month(fecha_firma)`.
+  - `rango_cuantia`: Clasificación de montos:
+    - *Mínima Cuantía:* < $50,000,000 COP
+    - *Menor Cuantía:* $50,000,000 COP - $500,000,000 COP
+    - *Mayor Cuantía:* $500,000,000 COP - $5,000,000,000 COP
+    - *Megacontratos / Licitación Masiva:* > $5,000,000,000 COP
+    - *Sin Cuantía Definida:* Si `es_cuantia_cero = True`
+- **Cobertura de Estados:** Conservar el 100% de estados históricos (Borrador, En ejecución, Celebrado, Liquidado, etc.).
 
 ---
 
-## 4. Flujos de Trabajo (Workflows)
-
-### 1. Flujo de Ingesta Diaria (Happy Path)
-1. El pipeline/notebook se ejecuta automáticamente según el cron diario en Fabric.
-2. Consulta el último *watermark* persistido en la tabla de control/delta del Lakehouse.
-3. Solicita a `https://www.datos.gov.co/resource/{dataset_id}.json` el conteo o primer bloque mediante `$limit` y `$where [watermark_col] > 'última_marca'`.
-4. Itera extrayendo lotes con pausas controladas hasta que la respuesta retorne un lote vacío (`[]`).
-5. Transforma los registros a DataFrame Spark y realiza un `append` o `upsert` en la tabla Delta de `datos_abiertos_lh_dev`.
-6. Actualiza el log de ejecución y finaliza exitosamente.
-
-### 2. Manejo de Errores y Excepciones
-- **HTTP 429 / Rate Limit Exceeded:** El cliente entra en espera exponencial (espera 2s, 4s, 8s...) antes de reintentar el lote actual sin abortar el proceso.
-- **Conexión Interrumpida:** Reintento automático hasta 3 veces por lote antes de registrar error crítico y notificar.
-- **Dataset no encontrado (HTTP 404):** Validación previa de metadatos de Socrata.
-
----
-
-## 5. Criterios de Aceptación
+## 4. Criterios de Aceptación
 - [x] Módulo/Cliente SODA implementado con soporte para paginación por lotes y SoQL (`datos_abiertos/soda_client.py`).
 - [x] Implementado control de throttling y reintentos exponenciales contra bloqueos y caídas.
 - [x] Estructurado el espacio de trabajo local correspondiente a `ws-datos-abiertos-colombia` con el Lakehouse `datos_abiertos_lh_dev`.
 - [x] Creado el Notebook de ingesta Bronze compatible con Microsoft Fabric (`nb_bronze_ingest_secop.Notebook`).
 - [x] Verificación de descarga y persistencia con el dataset `jbjy-vk9h` de `datos.gov.co`.
-- [x] **Hito Histórico Alcanzado:** Ingesta del 100.00% del dataset SECOP II completada exitosamente en el Lakehouse (`6,013,832 / 6,013,832` registros, 0 faltantes). Sincronización incremental diaria lista para ejecución desatendida.
+- [x] **Hito Bronze:** Ingesta del 100.00% del dataset SECOP II completada exitosamente en el Lakehouse (`6,013,832 / 6,013,832` registros).
+- [ ] Creación y aprovisionamiento del nuevo Lakehouse Silver `datos_abiertos_silver_lh_dev` en Fabric.
+- [ ] Implementación del Notebook de transformación PySpark `nb_silver_transform_secop.Notebook`.
+- [ ] Construcción y persistencia del modelo estrella: `dim_entidades`, `dim_proveedores`, `dim_geografia` y `fact_contratos`.
+- [ ] Validación de reglas de calidad (`es_cuantia_cero`, cálculo de duraciones, rangos de cuantía).

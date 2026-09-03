@@ -1,0 +1,92 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "f29f428cbd09c74bc246",
+  "position": {
+    "x": 334.9681969214077,
+    "y": 44.995727944666712,
+    "z": 0,
+    "height": 153.31877670034584,
+    "width": 274.97389299518545,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "mart_ejecucion_financiera"
+                    }
+                  },
+                  "Property": "Inversion_Total_Billones"
+                }
+              },
+              "queryRef": "mart_ejecucion_financiera.Inversion_Total_Billones",
+              "nativeQueryRef": "Inversion_Total_Billones"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "mart_ejecucion_financiera"
+                  }
+                },
+                "Property": "Inversion_Total_Billones"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "value": [
+        {
+          "properties": {
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "mart_ejecucion_financiera.Inversion_Total_Billones"
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "06c5543777b59d2f4b32",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "mart_ejecucion_financiera"
+              }
+            },
+            "Property": "Inversion_Total_Billones"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

@@ -87,6 +87,11 @@ def parse_currency(col_name):
         F.lit(0.0)
     )
 
+# Sanitización de fechas: evita errores de SparkUpgradeException en años previos a 1582 (ej. 0001)
+def parse_clean_date(col_name):
+    d = F.to_date(F.col(col_name))
+    return F.when(F.year(d).between(1990, 2040), d).otherwise(F.lit(None))
+
 # Dataset base con tipos estandarizados
 df_base = df_raw.select(
     # Identificadores de negocio
@@ -119,10 +124,10 @@ df_base = df_raw.select(
     clean_str('ciudad').alias('ciudad'),
     clean_str('localizaci_n').alias('localizacion'),
     
-    # Fechas parseadas a DateType
-    F.to_date(F.col('fecha_de_firma')).alias('fecha_firma'),
-    F.to_date(F.col('fecha_de_inicio_del_contrato')).alias('fecha_inicio'),
-    F.to_date(F.col('fecha_de_fin_del_contrato')).alias('fecha_fin'),
+    # Fechas parseadas y protegidas contra fechas anómalas de SECOP II
+    parse_clean_date('fecha_de_firma').alias('fecha_firma'),
+    parse_clean_date('fecha_de_inicio_del_contrato').alias('fecha_inicio'),
+    parse_clean_date('fecha_de_fin_del_contrato').alias('fecha_fin'),
     
     # Métricas monetarias
     parse_currency('valor_del_contrato').alias('valor_contrato'),
@@ -226,6 +231,11 @@ print(f'✅ dim_geografia persistida con éxito. Total ubicaciones únicas: {cou
 # 📊 6. TABLA DE HECHOS: fact_contratos (CON SURROGATE KEYS NUMÉRICAS)
 # =====================================================================
 print('Construyendo fact_contratos con llaves foráneas numéricas BIGINT...')
+
+# Configuración oficial de compatibilidad para Parquet DateTime en Spark 3.x
+spark.conf.set('spark.sql.parquet.datetimeRebaseModeInWrite', 'CORRECTED')
+spark.conf.set('spark.sql.parquet.int96RebaseModeInWrite', 'CORRECTED')
+spark.conf.set('spark.sql.parquet.datetimeRebaseModeInRead', 'CORRECTED')
 
 # Limpieza previa de metastore para asegurar creación desde cero
 spark.sql(f'DROP TABLE IF EXISTS {FACT_TABLE}')

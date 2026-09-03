@@ -106,12 +106,13 @@ df_base = df_raw.select(
     clean_str('rama').alias('rama_entidad'),
     clean_str('entidad_centralizada').alias('entidad_centralizada'),
     
-    # Proveedores / Contratistas
-    clean_str('tipo_de_documento_del_contratista').alias('tipo_doc_proveedor'),
-    clean_str('identificacion_del_contratista').alias('nit_cc_proveedor'),
+    # Proveedores / Contratistas (Nombres exactos de SECOP II)
+    clean_str('tipodocproveedor').alias('tipo_doc_proveedor'),
+    clean_str('documento_proveedor').alias('nit_cc_proveedor'),
     clean_str('proveedor_adjudicado').alias('nombre_proveedor'),
-    clean_str('identificacion_representante_legal').alias('nit_cc_representante'),
-    clean_str('genero_representante_legal').alias('genero_representante'),
+    clean_str('nombre_representante_legal').alias('nombre_representante'),
+    clean_str('identificaci_n_representante_legal').alias('nit_cc_representante'),
+    clean_str('g_nero_representante_legal').alias('genero_representante'),
     
     # Ubicación geográfica
     clean_str('departamento').alias('departamento'),
@@ -174,6 +175,7 @@ df_proveedores = (
         'tipo_doc_proveedor',
         'nit_cc_proveedor',
         'nombre_proveedor',
+        'nombre_representante',
         'nit_cc_representante',
         'genero_representante'
     )

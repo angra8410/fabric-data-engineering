@@ -143,6 +143,65 @@ table mart_gasto_territorial
 
 		annotation SummarizationSetBy = Automatic
 
+	column region_natural = ```
+			
+			SWITCH (
+			    mart_gasto_territorial[departamento_norm],
+			    // Región Caribe e Insular
+			    "ATLANTICO", "Región Caribe",
+			    "BOLIVAR", "Región Caribe",
+			    "CESAR", "Región Caribe",
+			    "CORDOBA", "Región Caribe",
+			    "LA GUAJIRA", "Región Caribe",
+			    "MAGDALENA", "Región Caribe",
+			    "SUCRE", "Región Caribe",
+			    "SAN ANDRES, PROVIDENCIA Y SANTA CATALINA", "Región Caribe",
+			    
+			    // Región Andina
+			    "ANTIOQUIA", "Región Andina",
+			    "BOYACA", "Región Andina",
+			    "CALDAS", "Región Andina",
+			    "CUNDINAMARCA", "Región Andina",
+			    "DISTRITO CAPITAL DE BOGOTA", "Región Andina",
+			    "HUILA", "Región Andina",
+			    "NORTE DE SANTANDER", "Región Andina",
+			    "QUINDIO", "Región Andina",
+			    "RISARALDA", "Región Andina",
+			    "SANTANDER", "Región Andina",
+			    "TOLIMA", "Región Andina",
+			    
+			    // Región Pacífica
+			    "CAUCA", "Región Pacífica",
+			    "CHOCO", "Región Pacífica",
+			    "NARINO", "Región Pacífica",
+			    "VALLE DEL CAUCA", "Región Pacífica",
+			    
+			    // Región Orinoquía
+			    "ARAUCA", "Región Orinoquía",
+			    "CASANARE", "Región Orinoquía",
+			    "META", "Región Orinoquía",
+			    "VICHADA", "Región Orinoquía",
+			    
+			    // Región Amazonía
+			    "AMAZONAS", "Región Amazonía",
+			    "CAQUETA", "Región Amazonía",
+			    "GUAINIA", "Región Amazonía",
+			    "GUAVIARE", "Región Amazonía",
+			    "PUTUMAYO", "Región Amazonía",
+			    "VAUPES", "Región Amazonía",
+			    
+			    "Otra / No Definida"
+			)
+			
+			```
+		lineageTag: c011838e-8bf0-40cd-962b-2f774339f44f
+		summarizeBy: none
+		expressionContext: userContext
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
 	partition mart_gasto_territorial = entity
 		mode: directLake
 		source

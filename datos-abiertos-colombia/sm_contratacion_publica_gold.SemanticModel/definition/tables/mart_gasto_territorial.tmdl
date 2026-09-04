@@ -143,6 +143,15 @@ table mart_gasto_territorial
 
 		annotation SummarizationSetBy = Automatic
 
+	column region_natural
+		dataType: string
+		lineageTag: a64a7137-a94e-45cf-a378-429fb075187e
+		sourceLineageTag: region_natural
+		summarizeBy: none
+		sourceColumn: region_natural
+
+		annotation SummarizationSetBy = Automatic
+
 	partition mart_gasto_territorial = entity
 		mode: directLake
 		source

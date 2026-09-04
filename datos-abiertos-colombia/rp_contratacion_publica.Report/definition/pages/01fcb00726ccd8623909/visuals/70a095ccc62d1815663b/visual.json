@@ -98,6 +98,20 @@
               },
               "queryRef": "mart_gasto_territorial.departamento_norm",
               "nativeQueryRef": "departamento_norm"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "mart_ejecucion_financiera"
+                    }
+                  },
+                  "Property": "Inversion_Saneada_Billones"
+                }
+              },
+              "queryRef": "mart_ejecucion_financiera.Inversion_Saneada_Billones",
+              "nativeQueryRef": "Inversion_Saneada_Billones"
             }
           ]
         }

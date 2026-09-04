@@ -89,4 +89,16 @@
   - Conectar Power BI directamente a las 6M de filas atómicas de Silver: Descartado para tableros ejecutivos agregados por sobrecarga computacional innecesaria en DAX.
 - **Consecuencias:** Tiempos de respuesta inferiores a 1 segundo en Power BI, granularidad de negocio pre-calculada y total gobernanza Medallion (Bronze ➔ Silver ➔ Gold).
 
+---
+
+## [ADR-009] Enriquecimiento Geográfico Upstream con Regiones Naturales de Colombia
+- **Fecha:** 2026-09-04
+- **Estado:** Aprobado
+- **Contexto:** Necesidad de agregar y filtrar el gasto público por las 5 grandes regiones geográficas de Colombia (Caribe, Andina, Pacífica, Orinoquía, Amazonía) tanto en Power BI como en análisis aguas abajo.
+- **Decisión Tomada:** Enriquecer de forma nativa upstream en PySpark la dimensión `dim_geografia` (Capa Silver) y el Data Mart `mart_gasto_territorial` (Capa Gold) con el atributo `region_natural`.
+- **Alternativas Consideradas:**
+  - Crear columnas calculadas en DAX en Power BI: Descartado para evitar sobrecostos de memoria RAM en VertiPaq y garantizar consistencia en OneLake para cualquier consumidor.
+- **Consecuencias:** Jerarquía territorial nativa completa (Región ➔ Departamento ➔ Municipio) persistida directamente en Delta Lake con rendimiento sub-segundo.
+
+
 

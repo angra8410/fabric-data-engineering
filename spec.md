@@ -138,10 +138,10 @@ Estructuración en tablas Delta normalizadas y optimizadas para Power BI:
    - Clave primaria subrogada: `id_proveedor_sk` (hash de tipo y número de identificación).
    - Atributos: `tipo_documento_contratista`, `identificacion_contratista`, `razon_social_proveedor`, `representante_legal`, `genero_representante_legal`.
 
-4. **`dim_geografia`:**
-   - Granularidad: Municipio / Departamento de ejecución.
-   - Clave primaria subrogada: `id_geografia_sk`.
-   - Atributos: `departamento` (normalizado en mayúsculas sin tildes), `ciudad` (normalizado), `localizacion`.
+4. **`dim_geografia` (Dimensión Territorial):**
+  - Granularidad: Municipio / Departamento.
+  - Atributos: `id_geografia_sk` (BIGINT), `departamento_norm`, `ciudad_norm`, `localizacion_norm`, `region_natural` (Región Caribe, Andina, Pacífica, Orinoquía, Amazonía).
+  - Reglas de calidad: Limpieza de caracteres diacríticos, mayúsculas sostenidas y mapeo geográfico de regiones naturales de Colombia.
 
 ### RF-08: Reglas de Transformación y Limpieza (Data Cleaning)
 - **Valores Monetarios:** Casteo seguro a tipo numérico `Double`/`Decimal(18,2)`. Valores nulos o <= 0 se preservan con `es_cuantia_cero = True`.
@@ -169,8 +169,10 @@ Estructuración en tablas Delta normalizadas y optimizadas para Power BI:
 ### RF-10: Construcción de Data Marts Temáticos de Alto Rendimiento
 1. **`mart_gasto_territorial` (Inversión Geográfica y Departamental):**
    - Cruce: `fact_contratos` $\bowtie$ `dim_geografia`.
-   - Granularidad: Departamento $\times$ Municipio $\times$ Año $\times$ Mes.
+   - Granularidad: Región Natural $\times$ Departamento $\times$ Municipio $\times$ Año $\times$ Mes.
+   - Atributos: `region_natural`, `departamento_norm`, `ciudad_norm`, `anno_firma`, `mes_firma`.
    - Métricas: `total_contratos`, `inversion_total_cop`, `gasto_promedio_contrato`, `contratos_megacuantia`, `duracion_promedio_dias`.
+
 2. **`mart_transparencia_modalidades` (Integridad y Riesgo en Compras Públicas):**
    - Cruce: `fact_contratos` $\bowtie$ `dim_entidades`.
    - Granularidad: Entidad pública $\times$ Sector $\times$ Modalidad de contratación $\times$ Año.

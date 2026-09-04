@@ -93,25 +93,25 @@
                       "Entity": "mart_gasto_territorial"
                     }
                   },
+                  "Property": "region_natural"
+                }
+              },
+              "queryRef": "mart_gasto_territorial.region_natural",
+              "nativeQueryRef": "region_natural"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "mart_gasto_territorial"
+                    }
+                  },
                   "Property": "departamento_norm"
                 }
               },
               "queryRef": "mart_gasto_territorial.departamento_norm",
               "nativeQueryRef": "departamento_norm"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "mart_ejecucion_financiera"
-                    }
-                  },
-                  "Property": "Inversion_Saneada_Billones"
-                }
-              },
-              "queryRef": "mart_ejecucion_financiera.Inversion_Saneada_Billones",
-              "nativeQueryRef": "Inversion_Saneada_Billones"
             }
           ]
         }

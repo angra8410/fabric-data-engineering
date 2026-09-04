@@ -2,8 +2,8 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "70a095ccc62d1815663b",
   "position": {
-    "x": 66,
-    "y": 759,
+    "x": 66.458698346224523,
+    "y": 759.106021110209,
     "z": 4002,
     "height": 320,
     "width": 810,
@@ -34,14 +34,28 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
+                      "Entity": "Dim_Region"
+                    }
+                  },
+                  "Property": "Region"
+                }
+              },
+              "queryRef": "Dim_Region.Region",
+              "nativeQueryRef": "Region"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
                       "Entity": "mart_concentracion_proveedores"
                     }
                   },
-                  "Property": "es_megacontratista"
+                  "Property": "departamento_norm"
                 }
               },
-              "queryRef": "mart_concentracion_proveedores.es_megacontratista",
-              "nativeQueryRef": "es_megacontratista"
+              "queryRef": "mart_concentracion_proveedores.departamento_norm",
+              "nativeQueryRef": "departamento_norm"
             },
             {
               "field": {
@@ -84,34 +98,6 @@
               },
               "queryRef": "mart_ejecucion_financiera.Contratos_Por_Proveedor",
               "nativeQueryRef": "Contratos_Por_Proveedor"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "mart_gasto_territorial"
-                    }
-                  },
-                  "Property": "region_natural"
-                }
-              },
-              "queryRef": "mart_gasto_territorial.region_natural",
-              "nativeQueryRef": "region_natural"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "mart_gasto_territorial"
-                    }
-                  },
-                  "Property": "departamento_norm"
-                }
-              },
-              "queryRef": "mart_gasto_territorial.departamento_norm",
-              "nativeQueryRef": "departamento_norm"
             }
           ]
         }
@@ -141,7 +127,7 @@
             "value": {
               "expr": {
                 "Literal": {
-                  "Value": "238.2336227615645D"
+                  "Value": "148.2312182023172D"
                 }
               }
             }
@@ -169,7 +155,7 @@
             "value": {
               "expr": {
                 "Literal": {
-                  "Value": "106.44538026507061D"
+                  "Value": "128.59950943638626D"
                 }
               }
             }

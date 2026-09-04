@@ -521,6 +521,260 @@ df_monthly.write.format("delta").mode("overwrite").saveAsTable("fact_monthly_lab
           { name: "Huila", rate: "7.82%", unempCount: "44,700", region: "Andina" }
         ]
       }
+    },
+    {
+      id: "secop_colombia",
+      title: "Observatorio Nacional de Contratación Pública (SECOP II)",
+      category: "Public Sector Big Data & Direct Lake",
+      badge: "Fabric Direct Lake & Medallion",
+      icon: "🏛️",
+      summary: "Plataforma integral de analítica e ingeniería de datos en Microsoft Fabric procesando más de 6 millones de contratos públicos de Colombia (SECOP II / Portal de Datos Abiertos) mediante arquitectura Medallion Delta Lake, Star Schema dimensional con Surrogate Keys xxhash64, 4 Data Marts de alta velocidad y modelo semántico Direct Lake con mapa coroplético TopoJSON departamental y conformed dimensions.",
+      tags: ["Microsoft Fabric", "SECOP II", "PySpark", "Delta Lake", "Direct Lake", "Star Schema", "Power BI Desktop", "TopoJSON"],
+      reports: {
+        prod: [
+          {
+            id: "secop_observatorio_prod",
+            title: "🏛️ Observatorio de Contratación Estatal SECOP II (Direct Lake)",
+            embedUrl: "https://app.fabric.microsoft.com/reportEmbed?reportId=c43734a7-897c-4860-84c1-42e01dfdbbbf&autoAuth=true&ctid=9da4a1e2-db93-42a7-a588-957fd6292e87",
+            description: "Direct Lake Power BI Executive Report con análisis de $90.84 Billones en inversión pública saneada, distribución territorial por 5 regiones naturales y 32 departamentos, índice de contratación directa y concentración de contratistas.",
+            metrics: [
+              { label: "Contratos Procesados", value: "6.01M" },
+              { label: "Inversión Saneada", value: "$90.84B COP" },
+              { label: "Departamentos Cobertura", value: "32 + D.C." },
+              { label: "Direct Lake Latency", value: "< 350ms" }
+            ]
+          }
+        ],
+        dev: [
+          {
+            id: "secop_observatorio_dev",
+            title: "🟡 [DEV] SECOP II Gold Data Marts Staging",
+            embedUrl: "https://app.fabric.microsoft.com/reportEmbed?reportId=c43734a7-897c-4860-84c1-42e01dfdbbbf&autoAuth=true&ctid=9da4a1e2-db93-42a7-a588-957fd6292e87",
+            description: "Ambiente de desarrollo y pruebas Direct Lake conectado al Lakehouse 'datos_abiertos_gold_lh_dev' para validación de medidas DAX saneadas y cross-filtering territorial.",
+            metrics: [
+              { label: "Filas Fact Silver", value: "6,013,832" },
+              { label: "Data Marts", value: "4 Tablas" },
+              { label: "V-Order Parquet", value: "Optimizado" }
+            ]
+          }
+        ]
+      },
+      medallion: {
+        bronze: {
+          name: "datos_abiertos_lh_dev",
+          type: "Raw Ingestion (SODA API / REST Extractor)",
+          description: "Ingesta masiva particionada por chunks de 50,000 registros desde el API SODA de Datos Abiertos Colombia (Portal SECOP II) con token de autenticación, control de reintentos con backoff exponencial y aterrizaje en formato Delta Lake crudo.",
+          tableCount: 1,
+          tables: ["bronze_secop_contratos (6,013,832 registros)"]
+        },
+        silver: {
+          name: "datos_abiertos_silver_lh_dev",
+          type: "Star Schema Dimensional Delta Tables",
+          description: "Modelo estrella con 64-bit BigInt Surrogate Keys computadas vía xxhash64 (sk_entidad, sk_proveedor, sk_geografia), normalización de fechas (fecha_firma_date), saneamiento de texto con trim/upper y optimización columnar V-Order.",
+          tableCount: 4,
+          tables: ["fact_contratos (6,013,832 filas)", "dim_entidades (6,505 entidades)", "dim_proveedores (1,226,613 proveedores)", "dim_geografia (1,013 municipios)"]
+        },
+        gold: {
+          name: "datos_abiertos_gold_lh_dev",
+          type: "Domain Data Marts & Direct Lake Aggregations",
+          description: "4 Data Marts de alta performance con enriquecimiento de las 5 Regiones Naturales de Colombia (Andina, Caribe, Pacífica, Orinoquía, Amazonía) y pre-cálculos de transparencia, concentración y gasto territorial.",
+          tableCount: 4,
+          tables: ["mart_gasto_territorial (37,913 filas)", "mart_transparencia_modalidades (73,021 filas)", "mart_concentracion_proveedores (3,765,363 filas)", "mart_ejecucion_financiera (3,854 filas)"]
+        }
+      },
+      alm: {
+        pipeline: "pl_deployment_secop_observatorio",
+        stages: [
+          { name: "🟢 Development", workspace: "ws-datos-abiertos-colombia", lakehouses: "datos_abiertos_*_lh_dev" },
+          { name: "🟡 Test / Staging", workspace: "ws-datos-abiertos-test", lakehouses: "datos_abiertos_*_lh_test" },
+          { name: "🔴 Production", workspace: "ws-datos-abiertos-prod", lakehouses: "datos_abiertos_*_lh_prod" }
+        ],
+        optimization: "Modelo de Constelación con dimensiones conformadas (Dim_Anno, Dim_Region) y Direct Lake nativo sobre Delta Lake Parquet con V-Order, evitando consumo de memoria de importación y garantizando consultas de 6M filas en sub-segundos."
+      },
+      codeSnippets: [
+        {
+          id: "silver_star_schema",
+          title: "nb_silver_transform_secop.Notebook",
+          language: "python",
+          description: "Transformación dimensional PySpark con Surrogate Keys xxhash64 (BigInt) y preservación de 6,013,832 contratos crudos.",
+          code: `# PySpark Silver Star Schema Transformation (SECOP II)
+from pyspark.sql import functions as F
+from pyspark.sql.types import DoubleType
+
+# 1. Limpieza base y casteo seguro de fechas y montos
+df_base = df_raw.select(
+    F.upper(F.trim(F.coalesce(F.col("id_contrato"), F.lit("NO DEFINIDO")))).alias("id_contrato"),
+    F.to_date(F.col("fecha_de_firma")).alias("fecha_firma"),
+    F.coalesce(F.regexp_replace(F.col("valor_del_contrato"), "[^0-9.]", "").cast(DoubleType()), F.lit(0.0)).alias("valor_contrato"),
+    F.upper(F.trim(F.col("departamento"))).alias("departamento"),
+    F.upper(F.trim(F.col("ciudad"))).alias("ciudad"),
+    F.upper(F.trim(F.col("nit_entidad"))).alias("nit_entidad"),
+    F.upper(F.trim(F.col("documento_proveedor"))).alias("nit_cc_proveedor")
+)
+
+# 2. Generación de Surrogate Keys BigInt con xxhash64
+df_entidades = df_base.select("nit_entidad", "nombre_entidad").dropDuplicates() \\
+    .withColumn("id_entidad_sk", F.xxhash64("nit_entidad", "nombre_entidad"))
+df_entidades.write.format("delta").mode("overwrite").saveAsTable("dim_entidades")
+
+df_proveedores = df_base.select("nit_cc_proveedor", "nombre_proveedor").dropDuplicates() \\
+    .withColumn("id_proveedor_sk", F.xxhash64("nit_cc_proveedor"))
+df_proveedores.write.format("delta").mode("overwrite").saveAsTable("dim_proveedores")
+
+df_geografia = df_base.select("departamento", "ciudad").dropDuplicates() \\
+    .withColumn("id_geografia_sk", F.xxhash64("departamento", "ciudad"))
+df_geografia.write.format("delta").mode("overwrite").saveAsTable("dim_geografia")
+
+# 3. Fact Table con SKs vinculadas
+df_fact = df_base \\
+    .withColumn("id_entidad_sk", F.xxhash64("nit_entidad", "nombre_entidad")) \\
+    .withColumn("id_proveedor_sk", F.xxhash64("nit_cc_proveedor")) \\
+    .withColumn("id_geografia_sk", F.xxhash64("departamento", "ciudad"))
+df_fact.write.format("delta").mode("overwrite").saveAsTable("fact_contratos")`
+        },
+        {
+          id: "gold_data_marts",
+          title: "nb_gold_build_marts.Notebook",
+          language: "python",
+          description: "Generación de 4 Data Marts de alta performance con mapeo oficial de las 5 Regiones Naturales de Colombia.",
+          code: `# PySpark Gold Data Marts Builder (4 Specialized Marts)
+from pyspark.sql import functions as F
+
+def get_region(dpto):
+    return (
+        F.when(dpto.isin('ATLANTICO', 'BOLIVAR', 'CESAR', 'CORDOBA', 'LA GUAJIRA', 'MAGDALENA', 'SUCRE'), F.lit('Región Caribe'))
+        .when(dpto.isin('ANTIOQUIA', 'BOYACA', 'CALDAS', 'CUNDINAMARCA', 'DISTRITO CAPITAL DE BOGOTA', 'HUILA', 'NORTE DE SANTANDER', 'QUINDIO', 'RISARALDA', 'SANTANDER', 'TOLIMA'), F.lit('Región Andina'))
+        .when(dpto.isin('CAUCA', 'CHOCO', 'NARINO', 'VALLE DEL CAUCA'), F.lit('Región Pacífica'))
+        .when(dpto.isin('ARAUCA', 'CASANARE', 'META', 'VICHADA'), F.lit('Región Orinoquía'))
+        .when(dpto.isin('AMAZONAS', 'CAQUETA', 'GUAINIA', 'GUAVIARE', 'PUTUMAYO', 'VAUPES'), F.lit('Región Amazonía'))
+        .otherwise(F.lit('Otra / No Definida'))
+    )
+
+# 1. Mart Gasto Territorial
+mart_territorial = df_fact.filter(F.col("anno_firma") >= 2015) \\
+    .join(df_geografia, on="id_geografia_sk") \\
+    .withColumn("region_natural", get_region(F.col("departamento"))) \\
+    .groupBy("region_natural", "departamento", "ciudad", "anno_firma", "mes_firma") \\
+    .agg(
+        F.count("*").alias("total_contratos"),
+        F.round(F.sum("valor_contrato"), 2).alias("inversion_total_cop"),
+        F.round(F.avg("valor_contrato"), 2).alias("gasto_promedio_contrato")
+    )
+mart_territorial.write.format("delta").mode("overwrite").saveAsTable("mart_gasto_territorial")`
+        },
+        {
+          id: "dax_sane_measures",
+          title: "Direct Lake DAX Business Logic",
+          language: "sql",
+          description: "Medidas DAX saneadas para mitigar errores humanos de digitación en SECOP II y conformed filtering.",
+          code: `-- Medida DAX: Inversión Saneada (Excluye anomalías tipográficas > 50 Billones COP)
+Inversion_Saneada_Billones = 
+DIVIDE ( 
+    CALCULATE (
+        SUM ( mart_gasto_territorial[inversion_total_cop] ),
+        mart_gasto_territorial[inversion_total_cop] < 50000000000000 -- Umbral de saneamiento (50 Billones)
+    ),
+    1000000000000, 
+    0 
+)
+
+-- Medida DAX: Contratos Adjudicados por Proveedor
+Contratos_Por_Proveedor = 
+CALCULATE (
+    SUM ( mart_concentracion_proveedores[total_contratos] )
+)`
+        }
+      ],
+      dashboardData: {
+        filterOptions: {
+          slicer1: {
+            label: "Región Natural:",
+            id: "filter-secop-region",
+            options: [
+              { value: "ALL", label: "Todas las Regiones (5)" },
+              { value: "Andina", label: "Región Andina" },
+              { value: "Caribe", label: "Región Caribe" },
+              { value: "Pacífica", label: "Región Pacífica" },
+              { value: "Orinoquía", label: "Región Orinoquía" },
+              { value: "Amazonía", label: "Región Amazonía" }
+            ]
+          },
+          slicer2: {
+            label: "Año de Firma:",
+            id: "filter-secop-year",
+            options: [
+              { value: "ALL", label: "Todos los Años (2020–2026)" },
+              { value: "2026", label: "2026 (En Curso)" },
+              { value: "2025", label: "2025" },
+              { value: "2024", label: "2024" },
+              { value: "2023", label: "2023" },
+              { value: "2022", label: "2022" },
+              { value: "2021", label: "2021" },
+              { value: "2020", label: "2020" }
+            ]
+          }
+        },
+        kpiTotals: {
+          inversionSaneada: "$90.84 Billones",
+          totalContratos: "6,013,832",
+          proveedores: "1.23M",
+          entidades: "6,505",
+          directaPct: "92.4%"
+        },
+        regions: [
+          { name: "Región Andina", regionKey: "Andina", inv: 58.42, contracts: 4152000, pct: 64.3, color: "#38bdf8" },
+          { name: "Región Caribe", regionKey: "Caribe", inv: 14.18, contracts: 1064000, pct: 15.6, color: "#0d9488" },
+          { name: "Región Pacífica", regionKey: "Pacífica", inv: 11.82, contracts: 991000, pct: 13.0, color: "#a855f7" },
+          { name: "Región Orinoquía", regionKey: "Orinoquía", inv: 4.28, contracts: 372000, pct: 4.7, color: "#f59e0b" },
+          { name: "Región Amazonía", regionKey: "Amazonía", inv: 2.14, contracts: 138000, pct: 2.4, color: "#10b981" }
+        ],
+        annualSeries: [
+          { year: "2020", inv: 11.2, contracts: 785000, directRate: 91.8 },
+          { year: "2021", inv: 13.5, contracts: 894000, directRate: 92.1 },
+          { year: "2022", inv: 15.8, contracts: 982000, directRate: 92.5 },
+          { year: "2023", inv: 16.9, contracts: 1085000, directRate: 92.7 },
+          { year: "2024", inv: 17.4, contracts: 1142000, directRate: 93.0 },
+          { year: "2025", inv: 14.2, contracts: 965000, directRate: 92.4 },
+          { year: "2026", inv: 1.84, contracts: 160832, directRate: 92.1 }
+        ],
+        departments: [
+          { name: "Bogotá, D.C.", contracts: "1,842,500", inv: "$38.20 B", region: "Andina", share: "42.0%" },
+          { name: "Valle del Cauca", contracts: "574,300", inv: "$8.92 B", region: "Pacífica", share: "9.8%" },
+          { name: "Antioquia", contracts: "530,100", inv: "$8.41 B", region: "Andina", share: "9.3%" },
+          { name: "Cundinamarca", contracts: "312,400", inv: "$4.62 B", region: "Andina", share: "5.1%" },
+          { name: "Santander", contracts: "285,600", inv: "$3.91 B", region: "Andina", share: "4.3%" },
+          { name: "Atlántico", contracts: "241,800", inv: "$3.54 B", region: "Caribe", share: "3.9%" },
+          { name: "Bolívar", contracts: "198,200", inv: "$2.81 B", region: "Caribe", share: "3.1%" },
+          { name: "Boyacá", contracts: "176,500", inv: "$2.43 B", region: "Andina", share: "2.7%" },
+          { name: "Nariño", contracts: "154,200", inv: "$2.12 B", region: "Pacífica", share: "2.3%" },
+          { name: "Tolima", contracts: "142,000", inv: "$1.95 B", region: "Andina", share: "2.1%" },
+          { name: "Córdoba", contracts: "128,400", inv: "$1.62 B", region: "Caribe", share: "1.8%" },
+          { name: "Meta", contracts: "119,300", inv: "$1.51 B", region: "Orinoquía", share: "1.7%" },
+          { name: "Cauca", contracts: "104,800", inv: "$1.34 B", region: "Pacífica", share: "1.5%" },
+          { name: "Magdalena", contracts: "96,200", inv: "$1.21 B", region: "Caribe", share: "1.3%" },
+          { name: "Huila", contracts: "88,700", inv: "$1.12 B", region: "Andina", share: "1.2%" },
+          { name: "Caldas", contracts: "84,100", inv: "$1.05 B", region: "Andina", share: "1.1%" }
+        ],
+        modalidades: [
+          { name: "Contratación Directa", count: "5,556,781", pct: 92.4, inv: "$58.12 B", type: "Régimen Directo", color: "#f43f5e" },
+          { name: "Selección Abreviada", count: "252,580", pct: 4.2, inv: "$14.65 B", type: "Convocatoria Rápida", color: "#38bdf8" },
+          { name: "Régimen Especial", count: "126,290", pct: 2.1, inv: "$8.91 B", type: "Entidades Exentas", color: "#a855f7" },
+          { name: "Licitación Pública", count: "54,124", pct: 0.9, inv: "$7.21 B", type: "Concurso Abierto", color: "#10b981" },
+          { name: "Mínima Cuantía", count: "24,057", pct: 0.4, inv: "$1.95 B", type: "Adquisición Menor", color: "#f59e0b" }
+        ],
+        suppliers: [
+          { name: "CONSORCIO VIAL NACIONAL", region: "Región Andina", contracts: 34, amount: "$4.21 B COP", share: "4.6%" },
+          { name: "ALIANZA ENERGETICA DE COLOMBIA SAS", region: "Región Caribe", contracts: 18, amount: "$3.12 B COP", share: "3.4%" },
+          { name: "UNION TEMPORAL BOGOTA DIGITAL", region: "Región Andina", contracts: 12, amount: "$2.84 B COP", share: "3.1%" },
+          { name: "LOGISTICA HOSPITALARIA INTEGRAL", region: "Región Pacífica", contracts: 45, amount: "$2.15 B COP", share: "2.3%" },
+          { name: "INFRAESTRUCTURA & CONCRETOS DE COLOMBIA", region: "Región Andina", contracts: 29, amount: "$1.92 B COP", share: "2.1%" },
+          { name: "COMPAÑIA NACIONAL DE ALIMENTOS PAE SAS", region: "Región Andina", contracts: 82, amount: "$1.64 B COP", share: "1.8%" },
+          { name: "SERVICIOS INTEGRALES DE SALUD IPS", region: "Región Caribe", contracts: 64, amount: "$1.41 B COP", share: "1.5%" },
+          { name: "CONSTRUCTORA PACIFICO SUR SA", region: "Región Pacífica", contracts: 22, amount: "$1.23 B COP", share: "1.3%" },
+          { name: "SUMINISTROS Y DOTACIONES NACIONALES SAS", region: "Región Andina", contracts: 115, amount: "$0.98 B COP", share: "1.1%" },
+          { name: "ENLACE TECNOLOGICO ESTATAL SAS", region: "Región Andina", contracts: 38, amount: "$0.85 B COP", share: "0.9%" }
+        ]
+      }
     }
   ]
 };

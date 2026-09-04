@@ -14,6 +14,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Check URL params & Developer Mode
   const urlParams = new URLSearchParams(window.location.search);
+  const projectParam = urlParams.get("project");
+  if (projectParam && data.projects.some(p => p.id === projectParam)) {
+    activeProjectId = projectParam;
+  }
   let isDevModeAllowed = urlParams.get("dev") === "true" || window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
 
   // Elements
@@ -408,7 +412,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 1. Setup Tabs based on project
     if (tabsContainer) {
-      if (proj.id === "colombian_labor") {
+      if (proj.id === "secop_colombia") {
+        tabsContainer.innerHTML = `
+          <button class="dash-page-tab active" data-page="p1">🏛️ Gasto & Cobertura Territorial</button>
+          <button class="dash-page-tab" data-page="p2">⚖️ Transparencia & Modalidades</button>
+          <button class="dash-page-tab" data-page="p3">🏢 Concentración de Proveedores</button>
+        `;
+      } else if (proj.id === "colombian_labor") {
         tabsContainer.innerHTML = `
           <button class="dash-page-tab active" data-page="p1">🇨🇴 Macro Series & Trends</button>
           <button class="dash-page-tab" data-page="p2">🏛️ Presidential Comparisons</button>
@@ -474,10 +484,288 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Update Dynamic Charts & KPIs
   function updateActiveDashboardCharts(proj) {
-    if (proj.id === "colombian_labor") {
+    if (proj.id === "secop_colombia") {
+      updateSecopDashboard(proj.dashboardData);
+    } else if (proj.id === "colombian_labor") {
       updateLaborDashboard(proj.dashboardData);
     } else {
       updateVelykapetDashboard(proj.dashboardData);
+    }
+  }
+
+  // -------------------------------------------------------------
+  // 🏛️ SECOP II COLOMBIA PUBLIC PROCUREMENT DASHBOARD RENDERER
+  // -------------------------------------------------------------
+  function updateSecopDashboard(data) {
+    const filterRegionEl = document.getElementById("filter-secop-region");
+    const filterYrEl = document.getElementById("filter-secop-year");
+
+    const selRegion = filterRegionEl ? filterRegionEl.value : "ALL";
+    const selYr = filterYrEl ? filterYrEl.value : "ALL";
+
+    let filteredSeries = data.annualSeries;
+    let filteredDepts = data.departments;
+    let filteredRegions = data.regions;
+
+    if (selYr !== "ALL") {
+      filteredSeries = filteredSeries.filter(d => d.year === selYr);
+    }
+    if (selRegion !== "ALL") {
+      filteredDepts = filteredDepts.filter(d => d.region.toLowerCase().includes(selRegion.toLowerCase()));
+      filteredRegions = filteredRegions.filter(r => r.regionKey.toLowerCase().includes(selRegion.toLowerCase()));
+    }
+
+    // Update Titles & Subtitles
+    const titleTrend = document.getElementById("card-title-trend");
+    const subTrend = document.getElementById("card-subtitle-trend");
+    const titleDonut = document.getElementById("card-title-donut");
+    const titleRank = document.getElementById("card-title-ranking");
+    const titleT1 = document.getElementById("card-title-table1");
+    const badgeT1 = document.getElementById("badge-table1");
+    const titleT2 = document.getElementById("card-title-table2");
+    const badgeT2 = document.getElementById("badge-table2");
+    const titleC3 = document.getElementById("card-title-chart3");
+    const titleT3 = document.getElementById("card-title-table3");
+    const badgeT3 = document.getElementById("badge-table3");
+
+    if (titleTrend) titleTrend.innerHTML = "📈 Evolución Anual: Inversión Saneada y Contratos";
+    if (subTrend) subTrend.innerHTML = "● Inversión ($ Billones COP) — Contratos Registrados";
+    if (titleDonut) titleDonut.innerHTML = "🗺️ Inversión por Región Natural";
+    if (titleRank) titleRank.innerHTML = "🏛️ Top 10 Departamentos por Inversión";
+    if (titleT1) titleT1.innerHTML = "⚖️ Modalidades de Selección y Adjudicación";
+    if (badgeT1) { badgeT1.className = "status-pill status-alert"; badgeT1.textContent = "5 Modalidades"; }
+    if (titleT2) titleT2.innerHTML = "📍 Gasto Territorial por Departamento";
+    if (badgeT2) badgeT2.textContent = `${filteredDepts.length} Departamentos`;
+    if (titleC3) titleC3.innerHTML = "📊 Participación por Modalidad de Contratación";
+    if (titleT3) titleT3.innerHTML = "🏢 Concentración: Top Contratistas del Estado";
+    if (badgeT3) { badgeT3.className = "status-pill status-synced"; badgeT3.textContent = "Data Mart Proveedores"; }
+
+    // Table Headers
+    const th1 = document.getElementById("thead-table1");
+    if (th1) th1.innerHTML = `<tr><th>Modalidad de Selección</th><th>Tipo Proceso</th><th>Contratos Totales</th><th>Inversión (COP)</th><th>Participación %</th></tr>`;
+
+    const th2 = document.getElementById("thead-table2");
+    if (th2) th2.innerHTML = `<tr><th>Departamento</th><th>Región Natural</th><th>Contratos Registrados</th><th>Inversión Saneada</th><th>Share Nacional</th></tr>`;
+
+    const th3 = document.getElementById("thead-table3");
+    if (th3) th3.innerHTML = `<tr><th>Contratista / Proveedor</th><th>Región Principal</th><th>Contratos</th><th>Monto Total (COP)</th><th>Share Mercado</th></tr>`;
+
+    // Compute active metrics
+    const totalInv = filteredRegions.reduce((acc, r) => acc + r.inv, 0);
+    const totalContracts = filteredSeries.reduce((acc, s) => acc + s.contracts, 0);
+    const avgDirectRate = filteredSeries.length > 0
+      ? (filteredSeries.reduce((acc, s) => acc + s.directRate, 0) / filteredSeries.length).toFixed(1) + "%"
+      : "92.4%";
+
+    const kpiGrid = document.getElementById("dynamic-kpis-grid");
+    if (kpiGrid) {
+      kpiGrid.innerHTML = `
+        <div class="report-meta-card"><div class="meta-label">Inversión Saneada (COP)</div><div class="meta-value" style="color:var(--accent-blue);">$${totalInv.toFixed(2)}B</div></div>
+        <div class="report-meta-card"><div class="meta-label">Total Contratos SECOP II</div><div class="meta-value">${(totalContracts > 0 ? totalContracts : 6013832).toLocaleString()}</div></div>
+        <div class="report-meta-card"><div class="meta-label">Direct Contracting Index</div><div class="meta-value" style="color:var(--accent-pink);">${avgDirectRate}</div></div>
+        <div class="report-meta-card"><div class="meta-label">Proveedores Adjudicados</div><div class="meta-value">1,226,613</div></div>
+        <div class="report-meta-card"><div class="meta-label">Entidades Estatales</div><div class="meta-value" style="color:var(--prod-color);">6,505</div></div>
+      `;
+    }
+
+    if (typeof Chart === "undefined") return;
+
+    // 1. Line / Bar Combo Chart: Annual Inversion & Contracts
+    const ctxTrend = document.getElementById("chart-monthly-trend");
+    if (ctxTrend) {
+      if (chartTrend) chartTrend.destroy();
+      chartTrend = new Chart(ctxTrend, {
+        type: "bar",
+        data: {
+          labels: filteredSeries.map(d => d.year),
+          datasets: [
+            {
+              type: "line",
+              label: "Contratos Adjudicados",
+              data: filteredSeries.map(d => d.contracts),
+              borderColor: "#f59e0b",
+              backgroundColor: "rgba(245, 158, 11, 0.1)",
+              borderWidth: 2.5,
+              pointBackgroundColor: "#fbbf24",
+              pointRadius: 4,
+              yAxisID: "y1"
+            },
+            {
+              type: "bar",
+              label: "Inversión Saneada ($ Billones COP)",
+              data: filteredSeries.map(d => d.inv),
+              backgroundColor: "#0284c7",
+              hoverBackgroundColor: "#38bdf8",
+              borderRadius: 6,
+              yAxisID: "y"
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { grid: { color: "rgba(255,255,255,0.05)" }, ticks: { color: "#9ca3af" } },
+            y: { grid: { color: "rgba(255,255,255,0.05)" }, ticks: { color: "#9ca3af", callback: v => `$${v}B` } },
+            y1: {
+              type: "linear",
+              position: "right",
+              grid: { drawOnChartArea: false },
+              ticks: { color: "#f59e0b", callback: v => `${(v / 1000).toFixed(0)}k` }
+            }
+          },
+          plugins: {
+            legend: { display: true, labels: { color: "#cbd5e1" } },
+            tooltip: {
+              callbacks: {
+                label: ctx => ctx.dataset.type === "line"
+                  ? ` Contratos: ${ctx.raw.toLocaleString()}`
+                  : ` Inversión: $${ctx.raw} Billones COP`
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // 2. Natural Regions Donut Chart
+    const ctxDonut = document.getElementById("chart-channel-donut");
+    if (ctxDonut) {
+      if (chartDonut) chartDonut.destroy();
+      chartDonut = new Chart(ctxDonut, {
+        type: "doughnut",
+        data: {
+          labels: data.regions.map(r => r.name),
+          datasets: [{
+            data: data.regions.map(r => r.inv),
+            backgroundColor: data.regions.map(r => r.color),
+            borderColor: "#0f172a",
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: "65%",
+          plugins: {
+            legend: { display: false },
+            tooltip: { callbacks: { label: ctx => ` ${data.regions[ctx.dataIndex].name}: $${ctx.raw}B COP (${data.regions[ctx.dataIndex].pct}%)` } }
+          }
+        }
+      });
+
+      const legendContainer = document.getElementById("channel-legend");
+      if (legendContainer) {
+        legendContainer.innerHTML = data.regions.map(r => `
+          <div style="font-size:0.75rem; color:var(--text-muted);">
+            <span style="color:${r.color};">●</span> ${r.name}: <strong>$${r.inv}B</strong> (${r.pct}%)
+          </div>
+        `).join("");
+      }
+    }
+
+    // 3. Top Departments Horizontal Bar Chart
+    const ctxProducts = document.getElementById("chart-top-products");
+    if (ctxProducts) {
+      if (chartProducts) chartProducts.destroy();
+      const top10 = filteredDepts.slice(0, 10);
+      chartProducts = new Chart(ctxProducts, {
+        type: "bar",
+        data: {
+          labels: top10.map(d => d.name),
+          datasets: [{
+            label: "Inversión Saneada ($ Billones COP)",
+            data: top10.map(d => parseFloat(d.inv.replace("$", "").replace(" B", ""))),
+            backgroundColor: "#0d9488",
+            hoverBackgroundColor: "#14b8a6",
+            borderRadius: 4
+          }]
+        },
+        options: {
+          indexAxis: "y",
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { grid: { color: "rgba(255,255,255,0.05)" }, ticks: { color: "#9ca3af", callback: v => `$${v}B` } },
+            y: { grid: { display: false }, ticks: { color: "#cbd5e1", font: { size: 10 } } }
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: { callbacks: { label: ctx => ` Inversión: $${ctx.raw} Billones COP` } }
+          }
+        }
+      });
+    }
+
+    // 4. Modalidades Breakdown Polar / Doughnut Chart (Page 3)
+    const ctxOpex = document.getElementById("chart-opex-breakdown");
+    if (ctxOpex) {
+      if (chartOpex) chartOpex.destroy();
+      chartOpex = new Chart(ctxOpex, {
+        type: "doughnut",
+        data: {
+          labels: data.modalidades.map(m => m.name),
+          datasets: [{
+            data: data.modalidades.map(m => m.pct),
+            backgroundColor: data.modalidades.map(m => m.color),
+            borderColor: "#0f172a",
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: "60%",
+          plugins: {
+            legend: { position: "right", labels: { color: "#94a3b8", font: { size: 10 } } },
+            tooltip: {
+              callbacks: {
+                label: ctx => ` ${data.modalidades[ctx.dataIndex].name}: ${ctx.raw}% (${data.modalidades[ctx.dataIndex].inv})`
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // 5. Tables
+    const tbStockout = document.querySelector("#table-stockout tbody");
+    if (tbStockout) {
+      tbStockout.innerHTML = data.modalidades.map(m => `
+        <tr>
+          <td style="font-weight:600; color:var(--text-main);">${m.name}</td>
+          <td style="color:var(--accent-blue);">${m.type}</td>
+          <td style="font-family:var(--font-code);">${m.count}</td>
+          <td style="font-family:var(--font-code); color:var(--prod-color);">${m.inv}</td>
+          <td><span class="${m.pct > 50 ? 'badge-loss' : 'badge-healthy'}">${m.pct}%</span></td>
+        </tr>
+      `).join("");
+    }
+
+    const tbMargins = document.querySelector("#table-margins tbody");
+    if (tbMargins) {
+      tbMargins.innerHTML = filteredDepts.slice(0, 15).map(d => `
+        <tr>
+          <td style="font-weight:600; color:var(--text-main);">${d.name}</td>
+          <td style="color:var(--text-muted);">${d.region}</td>
+          <td style="font-family:var(--font-code);">${d.contracts}</td>
+          <td style="font-family:var(--font-code); color:var(--accent-blue);">${d.inv}</td>
+          <td><span class="badge-healthy">${d.share}</span></td>
+        </tr>
+      `).join("");
+    }
+
+    const tbProc = document.querySelector("#table-procurement tbody");
+    if (tbProc) {
+      tbProc.innerHTML = data.suppliers.map(s => `
+        <tr>
+          <td style="font-weight:600; color:var(--text-main);">${s.name}</td>
+          <td style="color:var(--text-muted);">${s.region}</td>
+          <td style="font-family:var(--font-code);">${s.contracts} adjudicaciones</td>
+          <td style="font-family:var(--font-code); color:var(--prod-color);">${s.amount}</td>
+          <td><strong style="color:var(--accent-blue);">${s.share}</strong></td>
+        </tr>
+      `).join("");
     }
   }
 

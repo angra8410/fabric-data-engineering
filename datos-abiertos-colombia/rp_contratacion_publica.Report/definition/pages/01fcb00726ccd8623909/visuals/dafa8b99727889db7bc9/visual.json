@@ -20,14 +20,14 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "mart_gasto_territorial"
+                      "Entity": "Dim_Region"
                     }
                   },
-                  "Property": "region_natural"
+                  "Property": "Region"
                 }
               },
-              "queryRef": "mart_gasto_territorial.region_natural",
-              "nativeQueryRef": "region_natural",
+              "queryRef": "Dim_Region.Region",
+              "nativeQueryRef": "Region",
               "active": true
             },
             {
@@ -46,9 +46,6 @@
               "active": false
             }
           ]
-        },
-        "Series": {
-          "projections": []
         },
         "Y": {
           "projections": [

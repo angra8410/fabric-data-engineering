@@ -22,7 +22,7 @@ table mart_ejecucion_financiera
 
 	measure Total_Contratos_ = ```
 			
-			SUM ( mart_gasto_territorial[total_contratos] )
+			CALCULATE(SUM ( mart_gasto_territorial[total_contratos] ))
 			
 			```
 		formatString: 0
@@ -87,6 +87,17 @@ table mart_ejecucion_financiera
 		changedProperty = Name
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Contratos_Por_Proveedor =
+			
+			SUM ( mart_concentracion_proveedores[total_contratos_ganados] )
+		formatString: 0
+		displayFolder: Measures
+		lineageTag: a8e52547-29d5-4e10-9629-61a46c848555
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
 
 	column tipo_contrato
 		dataType: string

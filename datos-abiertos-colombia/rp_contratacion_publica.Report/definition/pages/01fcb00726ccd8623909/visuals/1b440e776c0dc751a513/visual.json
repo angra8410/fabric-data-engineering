@@ -3,14 +3,14 @@
   "name": "1b440e776c0dc751a513",
   "position": {
     "x": 66.458698346224523,
-    "y": 214.14469467116791,
+    "y": 197.89923507542414,
     "z": 2000,
     "height": 533.2827015664202,
     "width": 809.92310300400072,
     "tabOrder": 2000
   },
   "visual": {
-    "visualType": "azureMap",
+    "visualType": "shapeMap",
     "query": {
       "queryState": {
         "Category": {
@@ -23,16 +23,15 @@
                       "Entity": "mart_gasto_territorial"
                     }
                   },
-                  "Property": "Ubicacion_Colombia"
+                  "Property": "departamento_norm"
                 }
               },
-              "queryRef": "mart_gasto_territorial.Ubicacion_Colombia",
-              "nativeQueryRef": "Ubicacion_Colombia",
-              "active": true
+              "queryRef": "mart_gasto_territorial.departamento_norm",
+              "nativeQueryRef": "departamento_norm"
             }
           ]
         },
-        "Size": {
+        "Value": {
           "projections": [
             {
               "field": {
@@ -55,72 +54,144 @@
     "objects": {
       "dataPoint": [
         {
-          "properties": {}
+          "properties": {
+            "fillRule": {
+              "linearGradient2": {
+                "min": {
+                  "color": {
+                    "expr": {
+                      "Literal": {
+                        "Value": "'minColor'"
+                      }
+                    }
+                  }
+                },
+                "max": {
+                  "color": {
+                    "expr": {
+                      "Literal": {
+                        "Value": "'maxColor'"
+                      }
+                    }
+                  }
+                },
+                "nullColoringStrategy": {
+                  "strategy": {
+                    "expr": {
+                      "Literal": {
+                        "Value": "'asZero'"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       ],
-      "mapControls": [
+      "shape": [
         {
           "properties": {
-            "zoom": {
+            "datasourceType": {
               "expr": {
                 "Literal": {
-                  "Value": "3.98D"
+                  "Value": "'file_upload'"
                 }
               }
             },
-            "centerLatitude": {
-              "expr": {
-                "Literal": {
-                  "Value": "4.963665036447992D"
+            "map": {
+              "geoJson": {
+                "type": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'packaged'"
+                    }
+                  }
+                },
+                "name": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'colombia_departamentos_shape.json'"
+                    }
+                  }
+                },
+                "content": {
+                  "expr": {
+                    "ResourcePackageItem": {
+                      "PackageName": "RegisteredResources",
+                      "PackageType": 1,
+                      "ItemName": "colombia_departamentos_shape4348901599301017.json"
+                    }
+                  }
                 }
               }
             },
-            "centerLongitude": {
+            "projectionEnum": {
               "expr": {
                 "Literal": {
-                  "Value": "-75.18730545043947D"
+                  "Value": "'mercator'"
                 }
               }
-            },
-            "showCountryRegionBorders": {
+            }
+          }
+        }
+      ],
+      "zoom": [
+        {
+          "properties": {
+            "autoZoom": {
               "expr": {
                 "Literal": {
                   "Value": "true"
                 }
               }
             },
-            "worldWrap": {
+            "selectionZoom": {
               "expr": {
                 "Literal": {
                   "Value": "false"
                 }
               }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Inversion Total en Billones por Departamento'"
+                }
+              }
             },
-            "showBuildingFootprints": {
+            "bold": {
               "expr": {
                 "Literal": {
                   "Value": "true"
                 }
               }
             },
-            "showRoadDetails": {
+            "alignment": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
-                }
-              }
-            },
-            "showLabels": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            },
-            "defaultStyle": {
-              "expr": {
-                "Literal": {
-                  "Value": "'grayscale_light'"
+                  "Value": "'center'"
                 }
               }
             }
@@ -188,7 +259,6 @@
             }
           ]
         },
-        "howCreated": "User",
         "objects": {
           "general": [
             {

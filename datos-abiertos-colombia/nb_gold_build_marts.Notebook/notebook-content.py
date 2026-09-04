@@ -3,9 +3,6 @@
 # METADATA ********************
 
 # META {
-# META   "kernel_info": {
-# META     "name": "synapse_pyspark"
-# META   },
 # META   "dependencies": {
 # META     "lakehouse": {
 # META       "default_lakehouse": "836d80d4-d5f4-45b2-9fe2-22051b2cf93a",
@@ -62,13 +59,6 @@ print(f'🚀 Origen Silver OneLake: {SILVER_BASE}')
 print(f'🎯 Destino Gold Lakehouse: datos_abiertos_gold_lh_dev')
 
 
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
-
 # CELL ********************
 
 # =====================================================================
@@ -93,24 +83,29 @@ print(f'✅ dim_proveedores:   {df_proveedores.count():,} contratistas')
 print(f'✅ dim_geografia:     {df_geografia.count():,} municipios/deptos')
 
 
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
-
 # CELL ********************
 
 # =====================================================================
 # 🗺️ 2. DATA MART: GASTO TERRITORIAL Y DEPARTAMENTAL
 # =====================================================================
 print(f'Construyendo {MART_TERRITORIAL}...')
+# Mapeo oficial de las 5 Regiones Naturales de Colombia
+def get_region(dpto):
+    return (
+        F.when(dpto.isin('ATLANTICO', 'BOLIVAR', 'CESAR', 'CORDOBA', 'LA GUAJIRA', 'MAGDALENA', 'SUCRE', 'SAN ANDRES, PROVIDENCIA Y SANTA CATALINA'), F.lit('Región Caribe'))
+        .when(dpto.isin('ANTIOQUIA', 'BOYACA', 'CALDAS', 'CUNDINAMARCA', 'DISTRITO CAPITAL DE BOGOTA', 'HUILA', 'NORTE DE SANTANDER', 'QUINDIO', 'RISARALDA', 'SANTANDER', 'TOLIMA'), F.lit('Región Andina'))
+        .when(dpto.isin('CAUCA', 'CHOCO', 'NARINO', 'VALLE DEL CAUCA'), F.lit('Región Pacífica'))
+        .when(dpto.isin('ARAUCA', 'CASANARE', 'META', 'VICHADA'), F.lit('Región Orinoquía'))
+        .when(dpto.isin('AMAZONAS', 'CAQUETA', 'GUAINIA', 'GUAVIARE', 'PUTUMAYO', 'VAUPES'), F.lit('Región Amazonía'))
+        .otherwise(F.lit('Otra / No Definida'))
+    )
 
 mart_territorial = (
     df_fact.filter(F.col('anno_firma') >= 2015)
     .join(df_geografia, on='id_geografia_sk', how='inner')
+    .withColumn('region_natural', get_region(F.col('departamento_norm')))
     .groupBy(
+        'region_natural',
         'departamento_norm',
         'ciudad_norm',
         'anno_firma',
@@ -131,13 +126,6 @@ spark.sql(f'DROP TABLE IF EXISTS {MART_TERRITORIAL}')
 mart_territorial.write.format('delta').mode('overwrite').option('overwriteSchema', 'true').saveAsTable(MART_TERRITORIAL)
 print(f'✅ {MART_TERRITORIAL} persistido exitosamente con {spark.table(MART_TERRITORIAL).count():,} filas.')
 
-
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
 
 # CELL ********************
 
@@ -176,13 +164,6 @@ mart_transparencia.write.format('delta').mode('overwrite').option('overwriteSche
 print(f'✅ {MART_TRANSPARENCIA} persistido exitosamente con {spark.table(MART_TRANSPARENCIA).count():,} filas.')
 
 
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
-
 # CELL ********************
 
 # =====================================================================
@@ -217,13 +198,6 @@ spark.sql(f'DROP TABLE IF EXISTS {MART_CONTRATISTAS}')
 mart_contratistas.write.format('delta').mode('overwrite').option('overwriteSchema', 'true').saveAsTable(MART_CONTRATISTAS)
 print(f'✅ {MART_CONTRATISTAS} persistido exitosamente con {spark.table(MART_CONTRATISTAS).count():,} filas.')
 
-
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
 
 # CELL ********************
 
@@ -260,13 +234,6 @@ mart_financiero.write.format('delta').mode('overwrite').option('overwriteSchema'
 print(f'✅ {MART_FINANCIERO} persistido exitosamente con {spark.table(MART_FINANCIERO).count():,} filas.')
 
 
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
-
 # CELL ********************
 
 # =====================================================================
@@ -298,10 +265,3 @@ display(
     .limit(10)
 )
 
-
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }

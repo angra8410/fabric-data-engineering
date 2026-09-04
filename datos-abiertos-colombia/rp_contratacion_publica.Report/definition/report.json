@@ -39,6 +39,19 @@
       }
     ]
   },
+  "resourcePackages": [
+    {
+      "name": "RegisteredResources",
+      "type": "RegisteredResources",
+      "items": [
+        {
+          "name": "colombia_departamentos_shape4348901599301017.json",
+          "path": "colombia_departamentos_shape4348901599301017.json",
+          "type": "ShapeMap"
+        }
+      ]
+    }
+  ],
   "settings": {
     "useStylableVisualContainerHeader": true,
     "exportDataMode": "AllowSummarized",

@@ -17,4 +17,5 @@ ref table mart_concentracion_proveedores
 ref table mart_gasto_territorial
 ref table mart_transparencia_modalidades
 ref table Dim_Anno
+ref table Dim_Region
 

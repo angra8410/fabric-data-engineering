@@ -306,7 +306,7 @@ def build_kpi_whatsapp_conversion():
           {
             id: "labor_market_prod",
             title: "🇨🇴 Colombian Labor Market Figures (2004–2026)",
-            embedUrl: "https://app.fabric.microsoft.com/reportEmbed?reportId=194e03e4-600b-47b9-8291-e7ef04133e25&autoAuth=true&ctid=9da4a1e2-db93-42a7-a588-957fd6292e87",
+            embedUrl: "https://app.fabric.microsoft.com/reportEmbed?reportId=72eff533-883e-4526-a49a-19b3ae2945f7&autoAuth=true&ctid=9da4a1e2-db93-42a7-a588-957fd6292e87",
             description: "Direct Lake Power BI Executive Report featuring monthly labor trends, 12M moving average, presidential term comparisons, and departmental unemployment rankings.",
             metrics: [
               { label: "Historical Span", value: "2004–2026 (22 Yrs)" },

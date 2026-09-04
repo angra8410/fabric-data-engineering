@@ -41,11 +41,11 @@
                       "Entity": "mart_ejecucion_financiera"
                     }
                   },
-                  "Property": "Inversion_Total_Billones"
+                  "Property": "Inversion_Saneada_Billones"
                 }
               },
-              "queryRef": "mart_ejecucion_financiera.Inversion_Total_Billones",
-              "nativeQueryRef": "Inversion_Total_Billones"
+              "queryRef": "mart_ejecucion_financiera.Inversion_Saneada_Billones",
+              "nativeQueryRef": "Inversion_Saneada_Billones"
             }
           ]
         }

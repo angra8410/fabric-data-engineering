@@ -1,0 +1,176 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "70a095ccc62d1815663b",
+  "position": {
+    "x": 66,
+    "y": 759,
+    "z": 4002,
+    "height": 320,
+    "width": 810,
+    "tabOrder": 4002
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Anno"
+                    }
+                  },
+                  "Property": "Año"
+                }
+              },
+              "queryRef": "Dim_Anno.Año",
+              "nativeQueryRef": "Año"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "mart_concentracion_proveedores"
+                    }
+                  },
+                  "Property": "es_megacontratista"
+                }
+              },
+              "queryRef": "mart_concentracion_proveedores.es_megacontratista",
+              "nativeQueryRef": "es_megacontratista"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "mart_concentracion_proveedores"
+                    }
+                  },
+                  "Property": "sector_entidad"
+                }
+              },
+              "queryRef": "mart_concentracion_proveedores.sector_entidad",
+              "nativeQueryRef": "sector_entidad"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "mart_concentracion_proveedores"
+                    }
+                  },
+                  "Property": "nombre_proveedor"
+                }
+              },
+              "queryRef": "mart_concentracion_proveedores.nombre_proveedor",
+              "nativeQueryRef": "nombre_proveedor"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "mart_ejecucion_financiera"
+                    }
+                  },
+                  "Property": "Contratos_Por_Proveedor"
+                }
+              },
+              "queryRef": "mart_ejecucion_financiera.Contratos_Por_Proveedor",
+              "nativeQueryRef": "Contratos_Por_Proveedor"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "mart_gasto_territorial"
+                    }
+                  },
+                  "Property": "departamento_norm"
+                }
+              },
+              "queryRef": "mart_gasto_territorial.departamento_norm",
+              "nativeQueryRef": "departamento_norm"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "mart_concentracion_proveedores"
+                  }
+                },
+                "Property": "nombre_proveedor"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "238.2336227615645D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "mart_concentracion_proveedores.nombre_proveedor"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "217.9124603690709D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "mart_concentracion_proveedores.sector_entidad"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "106.44538026507061D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "mart_ejecucion_financiera.Contratos_Por_Proveedor"
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {}
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

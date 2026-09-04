@@ -3,9 +3,6 @@
 # METADATA ********************
 
 # META {
-# META   "kernel_info": {
-# META     "name": "synapse_pyspark"
-# META   },
 # META   "dependencies": {
 # META     "lakehouse": {
 # META       "default_lakehouse": "dee59c18-2af7-4f0f-9100-fd6655a63309",
@@ -37,7 +34,6 @@
 #   4. `dim_geografia`: Normalización geográfica de departamentos y municipios de Colombia.
 # - **Reglas de Calidad:** Preservación del 100% histórico con bandera `es_cuantia_cero = True` para contratos <= $0 o nulos.
 
-
 # PARAMETERS CELL ********************
 
 # =====================================================================
@@ -60,13 +56,6 @@ BRONZE_PATH = f'abfss://{WORKSPACE_ID}@onelake.dfs.fabric.microsoft.com/{BRONZE_
 print(f'🚀 Origen canónico Bronze OneLake: {BRONZE_PATH}')
 
 
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
-
 # CELL ********************
 
 # =====================================================================
@@ -81,13 +70,6 @@ df_raw = spark.read.format('delta').load(BRONZE_PATH)
 total_bronze = df_raw.count()
 print(f'✅ Total registros cargados desde Bronze: {total_bronze:,}')
 
-
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
 
 # CELL ********************
 
@@ -158,13 +140,6 @@ df_base = df_raw.select(
 print('✅ Limpieza base completada.')
 
 
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
-
 # CELL ********************
 
 # =====================================================================
@@ -192,13 +167,6 @@ df_entidades.write.format('delta').mode('overwrite').saveAsTable(DIM_ENTIDADES_T
 count_entidades = spark.table(DIM_ENTIDADES_TABLE).count()
 print(f'✅ dim_entidades persistida con éxito. Total entidades únicas: {count_entidades:,}')
 
-
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
 
 # CELL ********************
 
@@ -228,13 +196,6 @@ count_proveedores = spark.table(DIM_PROVEEDORES_TABLE).count()
 print(f'✅ dim_proveedores persistida con éxito. Total proveedores únicos: {count_proveedores:,}')
 
 
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
-
 # CELL ********************
 
 # =====================================================================
@@ -245,6 +206,17 @@ print('Construyendo dim_geografia con Surrogate Key numérica (BIGINT)...')
 # Normalización de tildes para municipios y departamentos
 def remove_accents(c):
     return F.translate(c, 'ÁÉÍÓÚáéíóúÑñÜü', 'AEIOUAEIOUNNUU')
+
+# Mapeo oficial de las 5 Regiones Naturales de Colombia
+def get_region(dpto):
+    return (
+        F.when(dpto.isin('ATLANTICO', 'BOLIVAR', 'CESAR', 'CORDOBA', 'LA GUAJIRA', 'MAGDALENA', 'SUCRE', 'SAN ANDRES, PROVIDENCIA Y SANTA CATALINA'), F.lit('Región Caribe'))
+        .when(dpto.isin('ANTIOQUIA', 'BOYACA', 'CALDAS', 'CUNDINAMARCA', 'DISTRITO CAPITAL DE BOGOTA', 'HUILA', 'NORTE DE SANTANDER', 'QUINDIO', 'RISARALDA', 'SANTANDER', 'TOLIMA'), F.lit('Región Andina'))
+        .when(dpto.isin('CAUCA', 'CHOCO', 'NARINO', 'VALLE DEL CAUCA'), F.lit('Región Pacífica'))
+        .when(dpto.isin('ARAUCA', 'CASANARE', 'META', 'VICHADA'), F.lit('Región Orinoquía'))
+        .when(dpto.isin('AMAZONAS', 'CAQUETA', 'GUAINIA', 'GUAVIARE', 'PUTUMAYO', 'VAUPES'), F.lit('Región Amazonía'))
+        .otherwise(F.lit('Otra / No Definida'))
+    )
 
 df_geografia = (
     df_base.select(
@@ -257,19 +229,13 @@ df_geografia = (
         'id_geografia_sk',
         F.xxhash64(F.col('departamento_norm'), F.col('ciudad_norm'))
     )
+    .withColumn('region_natural', get_region(F.col('departamento_norm')))
 )
 
 df_geografia.write.format('delta').mode('overwrite').saveAsTable(DIM_GEOGRAFIA_TABLE)
 count_geografia = spark.table(DIM_GEOGRAFIA_TABLE).count()
 print(f'✅ dim_geografia persistida con éxito. Total ubicaciones únicas: {count_geografia:,}')
 
-
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
 
 # CELL ********************
 
@@ -360,13 +326,6 @@ count_fact = spark.table(FACT_TABLE).count()
 print(f'🎉 fact_contratos persistida con éxito. Total filas: {count_fact:,}')
 
 
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
-
 # CELL ********************
 
 # =====================================================================
@@ -400,10 +359,3 @@ display(
     .orderBy('rango_cuantia')
 )
 
-
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }

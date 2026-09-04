@@ -14,3 +14,11 @@ relationship 9c67ec6c-c757-b9e4-df13-4610cf143162
 	fromColumn: mart_transparencia_modalidades.anno_firma
 	toColumn: Dim_Anno.Año
 
+relationship ec4392b7-5541-a157-16fd-0c600212fbd5
+	fromColumn: mart_gasto_territorial.region_natural
+	toColumn: Dim_Region.Region
+
+relationship ae9559b3-27b7-612c-8ab4-8f63921e37b7
+	fromColumn: mart_concentracion_proveedores.region_natural
+	toColumn: Dim_Region.Region
+

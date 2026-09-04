@@ -1,0 +1,30 @@
+table Dim_Region
+	lineageTag: a2ebc94f-a8e7-481d-920b-669ffc28985a
+
+	column Region
+		lineageTag: a57eeae1-7ccd-4375-a374-43443de9d561
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Region]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Region = calculated
+		mode: import
+		source = ```
+				
+				DATATABLE (
+				    "Region", STRING,
+				    {
+				        { "Región Andina" },
+				        { "Región Caribe" },
+				        { "Región Pacífica" },
+				        { "Región Orinoquía" },
+				        { "Región Amazonía" }
+				    }
+				)
+				
+				```
+
+	annotation PBI_Id = 52959e6418c4473980cbc9148f8474f2
+

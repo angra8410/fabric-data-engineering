@@ -23,12 +23,27 @@
                       "Entity": "mart_gasto_territorial"
                     }
                   },
+                  "Property": "region_natural"
+                }
+              },
+              "queryRef": "mart_gasto_territorial.region_natural",
+              "nativeQueryRef": "region_natural",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "mart_gasto_territorial"
+                    }
+                  },
                   "Property": "departamento_norm"
                 }
               },
               "queryRef": "mart_gasto_territorial.departamento_norm",
               "nativeQueryRef": "departamento_norm",
-              "active": true
+              "active": false
             }
           ]
         },

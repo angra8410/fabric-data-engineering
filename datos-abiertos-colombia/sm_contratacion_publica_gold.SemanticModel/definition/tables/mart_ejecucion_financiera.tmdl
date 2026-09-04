@@ -99,6 +99,27 @@ table mart_ejecucion_financiera
 
 		changedProperty = Name
 
+	measure Inversion_Saneada_Billones = ```
+			
+			DIVIDE ( 
+			    CALCULATE (
+			        SUM ( mart_gasto_territorial[inversion_total_cop] ),
+			        mart_gasto_territorial[inversion_total_cop] < 50000000000000 // Menor a 50 Billones
+			    ),
+			    1000000000000, 
+			    0 
+			)
+			
+			```
+		displayFolder: Measures
+		lineageTag: 948baa87-66b6-4d8e-85c4-501befabda42
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
 	column tipo_contrato
 		dataType: string
 		lineageTag: b05e325a-b03d-465d-90d1-b14d3bd0ad0c

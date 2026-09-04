@@ -102,6 +102,24 @@ table mart_concentracion_proveedores
 
 		annotation SummarizationSetBy = Automatic
 
+	column region_natural
+		dataType: string
+		lineageTag: 57ba4f0c-d922-4489-8119-4fe1432b13ef
+		sourceLineageTag: region_natural
+		summarizeBy: none
+		sourceColumn: region_natural
+
+		annotation SummarizationSetBy = Automatic
+
+	column departamento_norm
+		dataType: string
+		lineageTag: 3d7f6ef0-40bd-49ba-936d-5f0fd8f8e1cf
+		sourceLineageTag: departamento_norm
+		summarizeBy: none
+		sourceColumn: departamento_norm
+
+		annotation SummarizationSetBy = Automatic
+
 	partition mart_concentracion_proveedores = entity
 		mode: directLake
 		source

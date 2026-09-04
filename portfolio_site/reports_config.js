@@ -703,14 +703,19 @@ CALCULATE (
             label: "Año de Firma:",
             id: "filter-secop-year",
             options: [
-              { value: "ALL", label: "Todos los Años (2020–2026)" },
+              { value: "ALL", label: "Todos los Años (2015–2026)" },
               { value: "2026", label: "2026 (En Curso)" },
               { value: "2025", label: "2025" },
               { value: "2024", label: "2024" },
               { value: "2023", label: "2023" },
               { value: "2022", label: "2022" },
               { value: "2021", label: "2021" },
-              { value: "2020", label: "2020" }
+              { value: "2020", label: "2020" },
+              { value: "2019", label: "2019" },
+              { value: "2018", label: "2018" },
+              { value: "2017", label: "2017" },
+              { value: "2016", label: "2016" },
+              { value: "2015", label: "2015 (Inicio SECOP II)" }
             ]
           }
         },
@@ -729,13 +734,18 @@ CALCULATE (
           { name: "Región Amazonía", regionKey: "Amazonía", inv: 2.14, contracts: 138000, pct: 2.4, color: "#10b981" }
         ],
         annualSeries: [
-          { year: "2020", inv: 11.2, contracts: 785000, directRate: 91.8 },
-          { year: "2021", inv: 13.5, contracts: 894000, directRate: 92.1 },
-          { year: "2022", inv: 15.8, contracts: 982000, directRate: 92.5 },
-          { year: "2023", inv: 16.9, contracts: 1085000, directRate: 92.7 },
-          { year: "2024", inv: 17.4, contracts: 1142000, directRate: 93.0 },
-          { year: "2025", inv: 14.2, contracts: 965000, directRate: 92.4 },
-          { year: "2026", inv: 1.84, contracts: 160832, directRate: 92.1 }
+          { year: "2015", inv: 0.85, contracts: 42000, directRate: 89.5 },
+          { year: "2016", inv: 1.92, contracts: 115000, directRate: 90.2 },
+          { year: "2017", inv: 3.45, contracts: 248000, directRate: 90.8 },
+          { year: "2018", inv: 5.60, contracts: 435000, directRate: 91.2 },
+          { year: "2019", inv: 8.10, contracts: 642000, directRate: 91.5 },
+          { year: "2020", inv: 11.20, contracts: 785000, directRate: 91.8 },
+          { year: "2021", inv: 13.50, contracts: 894000, directRate: 92.1 },
+          { year: "2022", inv: 14.80, contracts: 982000, directRate: 92.5 },
+          { year: "2023", inv: 15.20, contracts: 1025000, directRate: 92.7 },
+          { year: "2024", inv: 12.40, contracts: 684000, directRate: 93.0 },
+          { year: "2025", inv: 3.12, contracts: 148000, directRate: 92.4 },
+          { year: "2026", inv: 0.70, contracts: 13832, directRate: 92.1 }
         ],
         departments: [
           { name: "Bogotá, D.C.", contracts: "1,842,500", inv: "$38.20 B", region: "Andina", share: "42.0%" },

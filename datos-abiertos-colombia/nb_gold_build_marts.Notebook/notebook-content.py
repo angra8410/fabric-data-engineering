@@ -3,6 +3,9 @@
 # METADATA ********************
 
 # META {
+# META   "kernel_info": {
+# META     "name": "synapse_pyspark"
+# META   },
 # META   "dependencies": {
 # META     "lakehouse": {
 # META       "default_lakehouse": "836d80d4-d5f4-45b2-9fe2-22051b2cf93a",
@@ -59,6 +62,13 @@ print(f'🚀 Origen Silver OneLake: {SILVER_BASE}')
 print(f'🎯 Destino Gold Lakehouse: datos_abiertos_gold_lh_dev')
 
 
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
 # CELL ********************
 
 # =====================================================================
@@ -82,6 +92,13 @@ print(f'✅ dim_entidades:     {df_entidades.count():,} entidades')
 print(f'✅ dim_proveedores:   {df_proveedores.count():,} contratistas')
 print(f'✅ dim_geografia:     {df_geografia.count():,} municipios/deptos')
 
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
 
 # CELL ********************
 
@@ -127,6 +144,13 @@ mart_territorial.write.format('delta').mode('overwrite').option('overwriteSchema
 print(f'✅ {MART_TERRITORIAL} persistido exitosamente con {spark.table(MART_TERRITORIAL).count():,} filas.')
 
 
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
 # CELL ********************
 
 # =====================================================================
@@ -163,6 +187,13 @@ spark.sql(f'DROP TABLE IF EXISTS {MART_TRANSPARENCIA}')
 mart_transparencia.write.format('delta').mode('overwrite').option('overwriteSchema', 'true').saveAsTable(MART_TRANSPARENCIA)
 print(f'✅ {MART_TRANSPARENCIA} persistido exitosamente con {spark.table(MART_TRANSPARENCIA).count():,} filas.')
 
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
 
 # CELL ********************
 
@@ -203,6 +234,13 @@ mart_contratistas.write.format('delta').mode('overwrite').option('overwriteSchem
 print(f'✅ {MART_CONTRATISTAS} persistido exitosamente con {spark.table(MART_CONTRATISTAS).count():,} filas.')
 
 
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
 # CELL ********************
 
 # =====================================================================
@@ -238,6 +276,13 @@ mart_financiero.write.format('delta').mode('overwrite').option('overwriteSchema'
 print(f'✅ {MART_FINANCIERO} persistido exitosamente con {spark.table(MART_FINANCIERO).count():,} filas.')
 
 
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
 # CELL ********************
 
 # =====================================================================
@@ -269,3 +314,10 @@ display(
     .limit(10)
 )
 
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }

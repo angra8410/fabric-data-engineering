@@ -535,7 +535,7 @@ df_monthly.write.format("delta").mode("overwrite").saveAsTable("fact_monthly_lab
           {
             id: "secop_observatorio_prod",
             title: "🏛️ Observatorio de Contratación Estatal SECOP II (Direct Lake)",
-            embedUrl: "https://app.fabric.microsoft.com/reportEmbed?reportId=c43734a7-897c-4860-84c1-42e01dfdbbbf&autoAuth=true&ctid=9da4a1e2-db93-42a7-a588-957fd6292e87",
+            embedUrl: "https://app.fabric.microsoft.com/reportEmbed?reportId=00e3156f-9b17-42ab-be9d-805339bd5b4f&autoAuth=true&ctid=9da4a1e2-db93-42a7-a588-957fd6292e87",
             description: "Direct Lake Power BI Executive Report con análisis de $90.84 Billones en inversión pública saneada, distribución territorial por 5 regiones naturales y 32 departamentos, índice de contratación directa y concentración de contratistas.",
             metrics: [
               { label: "Contratos Procesados", value: "6.01M" },
@@ -549,7 +549,7 @@ df_monthly.write.format("delta").mode("overwrite").saveAsTable("fact_monthly_lab
           {
             id: "secop_observatorio_dev",
             title: "🟡 [DEV] SECOP II Gold Data Marts Staging",
-            embedUrl: "https://app.fabric.microsoft.com/reportEmbed?reportId=c43734a7-897c-4860-84c1-42e01dfdbbbf&autoAuth=true&ctid=9da4a1e2-db93-42a7-a588-957fd6292e87",
+            embedUrl: "https://app.fabric.microsoft.com/reportEmbed?reportId=00e3156f-9b17-42ab-be9d-805339bd5b4f&autoAuth=true&ctid=9da4a1e2-db93-42a7-a588-957fd6292e87",
             description: "Ambiente de desarrollo y pruebas Direct Lake conectado al Lakehouse 'datos_abiertos_gold_lh_dev' para validación de medidas DAX saneadas y cross-filtering territorial.",
             metrics: [
               { label: "Filas Fact Silver", value: "6,013,832" },

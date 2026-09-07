@@ -23,11 +23,11 @@
                       "Entity": "Dim_Location"
                     }
                   },
-                  "Property": "Neighborhood"
+                  "Property": "zip"
                 }
               },
-              "queryRef": "Dim_Location.Neighborhood",
-              "nativeQueryRef": "Neighborhood",
+              "queryRef": "Dim_Location.zip",
+              "nativeQueryRef": "zip",
               "active": true
             }
           ]
@@ -99,7 +99,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'🏪 COMMERCIAL BUSINESS DENSITY BY SEATTLE NEIGHBORHOOD'"
+                  "Value": "'🏪 COMMERCIAL BUSINESS DENSITY BY SEATTLE AREA (TOP 10)'"
                 }
               }
             },
@@ -137,7 +137,7 @@
   "filterConfig": {
     "filters": [
       {
-        "name": "filter_clean_neighborhood",
+        "name": "filter_clean_zip",
         "field": {
           "Column": {
             "Expression": {
@@ -145,7 +145,7 @@
                 "Entity": "Dim_Location"
               }
             },
-            "Property": "Neighborhood"
+            "Property": "zip"
           }
         },
         "type": "Categorical",
@@ -172,7 +172,7 @@
                                 "Source": "d"
                               }
                             },
-                            "Property": "Neighborhood"
+                            "Property": "zip"
                           }
                         }
                       ],
@@ -216,7 +216,7 @@
         }
       },
       {
-        "name": "filter_top10_neighborhood",
+        "name": "filter_top10_zip",
         "field": {
           "Column": {
             "Expression": {
@@ -224,7 +224,7 @@
                 "Entity": "Dim_Location"
               }
             },
-            "Property": "Neighborhood"
+            "Property": "zip"
           }
         },
         "type": "TopN",
@@ -257,7 +257,7 @@
                               "Source": "d"
                             }
                           },
-                          "Property": "Neighborhood"
+                          "Property": "zip"
                         },
                         "Name": "field"
                       }
@@ -301,7 +301,7 @@
                             "Source": "d"
                           }
                         },
-                        "Property": "Neighborhood"
+                        "Property": "zip"
                       }
                     }
                   ],

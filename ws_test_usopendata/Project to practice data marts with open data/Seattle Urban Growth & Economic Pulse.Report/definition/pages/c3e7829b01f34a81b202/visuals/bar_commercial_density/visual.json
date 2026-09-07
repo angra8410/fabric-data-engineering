@@ -1,16 +1,16 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
-  "name": "scatter_synergy",
+  "name": "bar_commercial_density",
   "position": {
     "x": 960,
     "y": 215,
-    "z": 6000,
-    "height": 260,
+    "z": 4100,
+    "height": 410,
     "width": 940,
-    "tabOrder": 6000
+    "tabOrder": 4100
   },
   "visual": {
-    "visualType": "scatterChart",
+    "visualType": "clusteredBarChart",
     "query": {
       "queryState": {
         "Category": {
@@ -32,24 +32,6 @@
             }
           ]
         },
-        "X": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Fact_Permits"
-                    }
-                  },
-                  "Property": "Total Investment"
-                }
-              },
-              "queryRef": "Fact_Permits.Total Investment",
-              "nativeQueryRef": "Total Investment"
-            }
-          ]
-        },
         "Y": {
           "projections": [
             {
@@ -68,7 +50,40 @@
             }
           ]
         }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Fact_Businesses"
+                  }
+                },
+                "Property": "Total Businesses"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
       }
+    },
+    "objects": {
+      "labels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
     },
     "visualContainerObjects": {
       "title": [
@@ -84,7 +99,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'📈 NEIGHBORHOOD CORRELATION: CONSTRUCTION INVESTMENT ⟷ BUSINESS FORMATION'"
+                  "Value": "'🏪 COMMERCIAL BUSINESS DENSITY BY SEATTLE NEIGHBORHOOD'"
                 }
               }
             },
@@ -115,44 +130,6 @@
             }
           }
         }
-      ],
-      "subTitle": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            },
-            "text": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Top-Right Quadrant highlights premier growth hotspots with high capital & high commercial density'"
-                }
-              }
-            },
-            "fontSize": {
-              "expr": {
-                "Literal": {
-                  "Value": "8.5D"
-                }
-              }
-            },
-            "fontColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#64748B'"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
       ]
     },
     "drillFilterOtherVisuals": true
@@ -160,7 +137,7 @@
   "filterConfig": {
     "filters": [
       {
-        "name": "filter_clean_scatter_neighborhood",
+        "name": "filter_clean_neighborhood",
         "field": {
           "Column": {
             "Expression": {
@@ -230,6 +207,107 @@
                   "expr": {
                     "Literal": {
                       "Value": "true"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "filter_top10_neighborhood",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Dim_Location"
+              }
+            },
+            "Property": "Neighborhood"
+          }
+        },
+        "type": "TopN",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "subquery",
+              "Expression": {
+                "Subquery": {
+                  "Query": {
+                    "Version": 2,
+                    "From": [
+                      {
+                        "Name": "d",
+                        "Entity": "Dim_Location",
+                        "Type": 0
+                      },
+                      {
+                        "Name": "f",
+                        "Entity": "Fact_Businesses",
+                        "Type": 0
+                      }
+                    ],
+                    "Select": [
+                      {
+                        "Column": {
+                          "Expression": {
+                            "SourceRef": {
+                              "Source": "d"
+                            }
+                          },
+                          "Property": "Neighborhood"
+                        },
+                        "Name": "field"
+                      }
+                    ],
+                    "OrderBy": [
+                      {
+                        "Direction": 2,
+                        "Expression": {
+                          "Measure": {
+                            "Expression": {
+                              "SourceRef": {
+                                "Source": "f"
+                              }
+                            },
+                            "Property": "Total Businesses"
+                          }
+                        }
+                      }
+                    ],
+                    "Top": 10
+                  }
+                }
+              },
+              "Type": 2
+            },
+            {
+              "Name": "d",
+              "Entity": "Dim_Location",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "In": {
+                  "Expressions": [
+                    {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Source": "d"
+                          }
+                        },
+                        "Property": "Neighborhood"
+                      }
+                    }
+                  ],
+                  "Table": {
+                    "SourceRef": {
+                      "Source": "subquery"
                     }
                   }
                 }

@@ -20,6 +20,17 @@ table Fact_Businesses
 
 		changedProperty = DisplayFolder
 
+	measure 'Average Business Age' = AVERAGEX(Fact_Businesses, Fact_Businesses[age_in_years])
+		formatString: 0.0 "Years"
+		displayFolder: Business Measures
+		lineageTag: 3c9b7402-998f-4cb1-80a2-ec72f0db3811
+
+	measure 'Active Industries' = DISTINCTCOUNT(Fact_Businesses[industry_key])
+		formatString: #,##0
+		displayFolder: Business Measures
+		lineageTag: 7a82ef41-2856-4cf2-8356-91b61df40cc4
+
+
 	column business_legal_name
 		dataType: string
 		sourceProviderType: varchar(8000)

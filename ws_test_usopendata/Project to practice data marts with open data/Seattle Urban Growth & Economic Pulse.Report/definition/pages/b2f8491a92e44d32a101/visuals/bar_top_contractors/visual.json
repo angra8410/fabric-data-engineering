@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
-  "name": "bar_top10_neighborhoods",
+  "name": "bar_top_contractors",
   "position": {
-    "x": 960,
-    "y": 490,
-    "z": 7000,
-    "height": 260,
-    "width": 940,
-    "tabOrder": 7000
+    "x": 600,
+    "y": 640,
+    "z": 5100,
+    "height": 415,
+    "width": 640,
+    "tabOrder": 5100
   },
   "visual": {
     "visualType": "clusteredBarChart",
@@ -20,14 +20,14 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Dim_Location"
+                      "Entity": "Dim_Contractor"
                     }
                   },
-                  "Property": "Neighborhood"
+                  "Property": "contractor_name"
                 }
               },
-              "queryRef": "Dim_Location.Neighborhood",
-              "nativeQueryRef": "Neighborhood",
+              "queryRef": "Dim_Contractor.contractor_name",
+              "nativeQueryRef": "contractor_name",
               "active": true
             }
           ]
@@ -47,20 +47,6 @@
               },
               "queryRef": "Fact_Permits.Total Investment",
               "nativeQueryRef": "Total Investment"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Fact_Businesses"
-                    }
-                  },
-                  "Property": "Total Businesses"
-                }
-              },
-              "queryRef": "Fact_Businesses.Total Businesses",
-              "nativeQueryRef": "Total Businesses"
             }
           ]
         }
@@ -113,7 +99,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'📊 TOP 10 NEIGHBORHOODS BY INVESTMENT (CAPITAL VS BUSINESSES)'"
+                  "Value": "'🏆 TOP 10 GENERAL CONTRACTORS BY CAPITAL VALUE'"
                 }
               }
             },
@@ -151,15 +137,15 @@
   "filterConfig": {
     "filters": [
       {
-        "name": "filter_clean_neighborhood",
+        "name": "filter_clean_contractor",
         "field": {
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "Dim_Location"
+                "Entity": "Dim_Contractor"
               }
             },
-            "Property": "Neighborhood"
+            "Property": "contractor_name"
           }
         },
         "type": "Categorical",
@@ -168,7 +154,7 @@
           "From": [
             {
               "Name": "d",
-              "Entity": "Dim_Location",
+              "Entity": "Dim_Contractor",
               "Type": 0
             }
           ],
@@ -186,7 +172,7 @@
                                 "Source": "d"
                               }
                             },
-                            "Property": "Neighborhood"
+                            "Property": "contractor_name"
                           }
                         }
                       ],
@@ -230,15 +216,15 @@
         }
       },
       {
-        "name": "filter_top10_neighborhood",
+        "name": "filter_top10_contractor",
         "field": {
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "Dim_Location"
+                "Entity": "Dim_Contractor"
               }
             },
-            "Property": "Neighborhood"
+            "Property": "contractor_name"
           }
         },
         "type": "TopN",
@@ -254,7 +240,7 @@
                     "From": [
                       {
                         "Name": "d",
-                        "Entity": "Dim_Location",
+                        "Entity": "Dim_Contractor",
                         "Type": 0
                       },
                       {
@@ -271,7 +257,7 @@
                               "Source": "d"
                             }
                           },
-                          "Property": "Neighborhood"
+                          "Property": "contractor_name"
                         },
                         "Name": "field"
                       }
@@ -299,7 +285,7 @@
             },
             {
               "Name": "d",
-              "Entity": "Dim_Location",
+              "Entity": "Dim_Contractor",
               "Type": 0
             }
           ],
@@ -315,7 +301,7 @@
                             "Source": "d"
                           }
                         },
-                        "Property": "Neighborhood"
+                        "Property": "contractor_name"
                       }
                     }
                   ],

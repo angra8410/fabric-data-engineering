@@ -1,19 +1,19 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
-  "name": "scatter_synergy",
+  "name": "slicer_neighborhood",
   "position": {
-    "x": 960,
-    "y": 215,
-    "z": 6000,
-    "height": 260,
-    "width": 940,
-    "tabOrder": 6000
+    "x": 1260,
+    "y": 15,
+    "z": 2100,
+    "height": 65,
+    "width": 320,
+    "tabOrder": 2100
   },
   "visual": {
-    "visualType": "scatterChart",
+    "visualType": "slicer",
     "query": {
       "queryState": {
-        "Category": {
+        "Values": {
           "projections": [
             {
               "field": {
@@ -31,123 +31,61 @@
               "active": true
             }
           ]
-        },
-        "X": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Fact_Permits"
-                    }
-                  },
-                  "Property": "Total Investment"
-                }
-              },
-              "queryRef": "Fact_Permits.Total Investment",
-              "nativeQueryRef": "Total Investment"
-            }
-          ]
-        },
-        "Y": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Fact_Businesses"
-                    }
-                  },
-                  "Property": "Total Businesses"
-                }
-              },
-              "queryRef": "Fact_Businesses.Total Businesses",
-              "nativeQueryRef": "Total Businesses"
-            }
-          ]
         }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Dim_Location"
+                  }
+                },
+                "Property": "Neighborhood"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": true
       }
     },
-    "visualContainerObjects": {
-      "title": [
+    "objects": {
+      "data": [
         {
           "properties": {
-            "show": {
+            "mode": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
-                }
-              }
-            },
-            "text": {
-              "expr": {
-                "Literal": {
-                  "Value": "'📈 NEIGHBORHOOD CORRELATION: CONSTRUCTION INVESTMENT ⟷ BUSINESS FORMATION'"
-                }
-              }
-            },
-            "bold": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            },
-            "fontSize": {
-              "expr": {
-                "Literal": {
-                  "Value": "11D"
-                }
-              }
-            },
-            "fontColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#0F172A'"
-                    }
-                  }
+                  "Value": "'Dropdown'"
                 }
               }
             }
           }
         }
       ],
-      "subTitle": [
+      "selection": [
         {
           "properties": {
-            "show": {
+            "selectAllCheckboxEnabled": {
               "expr": {
                 "Literal": {
                   "Value": "true"
                 }
               }
-            },
+            }
+          }
+        }
+      ],
+      "header": [
+        {
+          "properties": {
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Top-Right Quadrant highlights premier growth hotspots with high capital & high commercial density'"
-                }
-              }
-            },
-            "fontSize": {
-              "expr": {
-                "Literal": {
-                  "Value": "8.5D"
-                }
-              }
-            },
-            "fontColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#64748B'"
-                    }
-                  }
+                  "Value": "'📍 Seattle Neighborhood'"
                 }
               }
             }
@@ -160,7 +98,7 @@
   "filterConfig": {
     "filters": [
       {
-        "name": "filter_clean_scatter_neighborhood",
+        "name": "filter_clean_neighborhood",
         "field": {
           "Column": {
             "Expression": {

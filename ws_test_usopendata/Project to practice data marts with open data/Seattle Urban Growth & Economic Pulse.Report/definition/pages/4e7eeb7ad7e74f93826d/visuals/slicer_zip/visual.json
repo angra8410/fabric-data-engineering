@@ -23,11 +23,11 @@
                       "Entity": "Dim_Location"
                     }
                   },
-                  "Property": "zip"
+                  "Property": "Neighborhood"
                 }
               },
-              "queryRef": "Dim_Location.zip",
-              "nativeQueryRef": "zip",
+              "queryRef": "Dim_Location.Neighborhood",
+              "nativeQueryRef": "Neighborhood",
               "active": true
             }
           ]
@@ -43,7 +43,7 @@
                     "Entity": "Dim_Location"
                   }
                 },
-                "Property": "zip"
+                "Property": "Neighborhood"
               }
             },
             "direction": "Ascending"
@@ -85,7 +85,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'📍 Neighborhood (ZIP)'"
+                  "Value": "'📍 Seattle Neighborhood'"
                 }
               }
             }
@@ -98,7 +98,7 @@
   "filterConfig": {
     "filters": [
       {
-        "name": "filter_clean_zip",
+        "name": "filter_clean_neighborhood",
         "field": {
           "Column": {
             "Expression": {
@@ -106,7 +106,7 @@
                 "Entity": "Dim_Location"
               }
             },
-            "Property": "zip"
+            "Property": "Neighborhood"
           }
         },
         "type": "Categorical",
@@ -133,7 +133,7 @@
                                 "Source": "d"
                               }
                             },
-                            "Property": "zip"
+                            "Property": "Neighborhood"
                           }
                         }
                       ],

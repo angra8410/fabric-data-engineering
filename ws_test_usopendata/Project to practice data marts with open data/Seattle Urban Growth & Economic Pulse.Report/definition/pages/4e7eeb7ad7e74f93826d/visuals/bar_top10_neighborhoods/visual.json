@@ -23,11 +23,11 @@
                       "Entity": "Dim_Location"
                     }
                   },
-                  "Property": "zip"
+                  "Property": "Neighborhood"
                 }
               },
-              "queryRef": "Dim_Location.zip",
-              "nativeQueryRef": "zip",
+              "queryRef": "Dim_Location.Neighborhood",
+              "nativeQueryRef": "Neighborhood",
               "active": true
             }
           ]
@@ -151,7 +151,7 @@
   "filterConfig": {
     "filters": [
       {
-        "name": "filter_clean_zip",
+        "name": "filter_clean_neighborhood",
         "field": {
           "Column": {
             "Expression": {
@@ -159,7 +159,7 @@
                 "Entity": "Dim_Location"
               }
             },
-            "Property": "zip"
+            "Property": "Neighborhood"
           }
         },
         "type": "Categorical",
@@ -186,7 +186,7 @@
                                 "Source": "d"
                               }
                             },
-                            "Property": "zip"
+                            "Property": "Neighborhood"
                           }
                         }
                       ],
@@ -230,7 +230,7 @@
         }
       },
       {
-        "name": "filter_top10_zip",
+        "name": "filter_top10_neighborhood",
         "field": {
           "Column": {
             "Expression": {
@@ -238,7 +238,7 @@
                 "Entity": "Dim_Location"
               }
             },
-            "Property": "zip"
+            "Property": "Neighborhood"
           }
         },
         "type": "TopN",
@@ -271,7 +271,7 @@
                               "Source": "d"
                             }
                           },
-                          "Property": "zip"
+                          "Property": "Neighborhood"
                         },
                         "Name": "field"
                       }
@@ -315,7 +315,7 @@
                             "Source": "d"
                           }
                         },
-                        "Property": "zip"
+                        "Property": "Neighborhood"
                       }
                     }
                   ],

@@ -100,5 +100,37 @@
       ]
     },
     "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "47c38d4452f124294ef5",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Dim_Ownership"
+              }
+            },
+            "Property": "ownership_type"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "55ec3fafe8c0045cf838",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Fact_Businesses"
+              }
+            },
+            "Property": "Total Businesses"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
   }
 }

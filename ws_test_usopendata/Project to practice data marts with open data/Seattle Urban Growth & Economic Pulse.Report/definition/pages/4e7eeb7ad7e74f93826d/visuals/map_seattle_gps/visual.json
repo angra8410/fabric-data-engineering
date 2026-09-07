@@ -13,8 +13,86 @@
     "visualType": "azureMap",
     "query": {
       "queryState": {
+        "Latitude": {
+          "projections": [
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dim_Location"
+                        }
+                      },
+                      "Property": "latitude"
+                    }
+                  },
+                  "Function": 1
+                }
+              },
+              "queryRef": "Average(Dim_Location.latitude)",
+              "nativeQueryRef": "latitude"
+            }
+          ]
+        },
+        "Longitude": {
+          "projections": [
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dim_Location"
+                        }
+                      },
+                      "Property": "longitude"
+                    }
+                  },
+                  "Function": 1
+                }
+              },
+              "queryRef": "Average(Dim_Location.longitude)",
+              "nativeQueryRef": "longitude"
+            }
+          ]
+        },
         "Size": {
           "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fact_Permits"
+                    }
+                  },
+                  "Property": "Total Investment"
+                }
+              },
+              "queryRef": "Fact_Permits.Total Investment",
+              "nativeQueryRef": "Total Investment"
+            }
+          ]
+        },
+        "Tooltips": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Location"
+                    }
+                  },
+                  "Property": "zip"
+                }
+              },
+              "queryRef": "Dim_Location.zip",
+              "nativeQueryRef": "zip"
+            },
             {
               "field": {
                 "Measure": {
@@ -45,7 +123,7 @@
                 }
               },
               "queryRef": "Dim_Location.longitude",
-              "nativeQueryRef": "longitude"
+              "nativeQueryRef": "longitude1"
             }
           ]
         },
@@ -63,117 +141,34 @@
                 }
               },
               "queryRef": "Dim_Location.latitude",
-              "nativeQueryRef": "latitude"
-            }
-          ]
-        },
-        "Tooltips": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Dim_Location"
-                    }
-                  },
-                  "Property": "zip"
-                }
-              },
-              "queryRef": "Dim_Location.zip",
-              "nativeQueryRef": "zip"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Dim_Location"
-                    }
-                  },
-                  "Property": "address"
-                }
-              },
-              "queryRef": "Dim_Location.address",
-              "nativeQueryRef": "address"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Fact_Permits"
-                    }
-                  },
-                  "Property": "Total Investment"
-                }
-              },
-              "queryRef": "Fact_Permits.Total Investment",
-              "nativeQueryRef": "Total Investment"
+              "nativeQueryRef": "latitude1"
             }
           ]
         }
       }
     },
     "objects": {
-      "bubbles": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            },
-            "color": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#0D9488'"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      ],
-      "legend": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
-                }
-              }
-            }
-          }
-        }
-      ],
       "mapControls": [
         {
           "properties": {
             "zoom": {
               "expr": {
                 "Literal": {
-                  "Value": "10.68D"
+                  "Value": "9.55D"
                 }
               }
             },
             "centerLatitude": {
               "expr": {
                 "Literal": {
-                  "Value": "47.61525030583985D"
+                  "Value": "47.61142899405618D"
                 }
               }
             },
             "centerLongitude": {
               "expr": {
                 "Literal": {
-                  "Value": "-122.338086675D"
+                  "Value": "-122.32841810000002D"
                 }
               }
             }
@@ -221,19 +216,6 @@
                       "Value": "'#0F172A'"
                     }
                   }
-                }
-              }
-            }
-          }
-        }
-      ],
-      "subTitle": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
                 }
               }
             }
@@ -388,6 +370,137 @@
             }
           ]
         }
+      },
+      {
+        "name": "filter_clean_zip",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Dim_Location"
+              }
+            },
+            "Property": "zip"
+          }
+        },
+        "type": "Categorical",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "d",
+              "Entity": "Dim_Location",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "Not": {
+                  "Expression": {
+                    "In": {
+                      "Expressions": [
+                        {
+                          "Column": {
+                            "Expression": {
+                              "SourceRef": {
+                                "Source": "d"
+                              }
+                            },
+                            "Property": "zip"
+                          }
+                        }
+                      ],
+                      "Values": [
+                        [
+                          {
+                            "Literal": {
+                              "Value": "'Unknown'"
+                            }
+                          }
+                        ],
+                        [
+                          {
+                            "Literal": {
+                              "Value": "null"
+                            }
+                          }
+                        ]
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "objects": {
+          "general": [
+            {
+              "properties": {
+                "isInvertedSelectionMode": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "true"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "8fa2f63ece3e29469f51",
+        "field": {
+          "Aggregation": {
+            "Expression": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Dim_Location"
+                  }
+                },
+                "Property": "latitude"
+              }
+            },
+            "Function": 1
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "86d80f64b0c196028223",
+        "field": {
+          "Aggregation": {
+            "Expression": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Dim_Location"
+                  }
+                },
+                "Property": "longitude"
+              }
+            },
+            "Function": 1
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "cfe17e17a734e147ea57",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Fact_Permits"
+              }
+            },
+            "Property": "Total Investment"
+          }
+        },
+        "type": "Advanced"
       }
     ]
   }

@@ -1,12 +1,12 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
-  "name": "header_title",
+  "name": "header_title_p3",
   "position": {
     "x": 20,
     "y": 15,
     "z": 1000,
     "height": 65,
-    "width": 900,
+    "width": 1400,
     "tabOrder": 1000
   },
   "visual": {

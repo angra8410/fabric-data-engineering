@@ -1,0 +1,88 @@
+{
+  "formatVersion": "202502",
+  "computeEngineSettings": {
+    "allowModernEvaluationEngine": true
+  },
+  "name": "DF_Gen2_Seattle_Permits",
+  "queryGroups": [],
+  "documentLocale": "en-US",
+  "queriesMetadata": {
+    "Bronze_Ingestion_Seattle_Permits": {
+      "queryId": "f62e1fa1-88e5-4adc-a1dd-100c1065ef82",
+      "queryName": "Bronze_Ingestion_Seattle_Permits",
+      "loadEnabled": false
+    },
+    "Silver_Transformation_Seattle_Permits (2)": {
+      "queryId": "3a37a607-b86e-4fcc-8457-68ebcda90e1f",
+      "queryName": "Silver_Transformation_Seattle_Permits (2)",
+      "loadEnabled": false
+    },
+    "Dim_Contractor": {
+      "queryId": "d8b9d51c-e3e6-4471-afba-9ac1ac1254c0",
+      "queryName": "Dim_Contractor",
+      "loadEnabled": false
+    },
+    "Dim_PermitType": {
+      "queryId": "91dccc9e-5e0a-4857-9bc6-79fb676fa2d3",
+      "queryName": "Dim_PermitType",
+      "loadEnabled": false
+    },
+    "Dim_Location": {
+      "queryId": "7d92b8b1-53a6-4478-8bd5-c4abaa90088a",
+      "queryName": "Dim_Location",
+      "loadEnabled": false
+    },
+    "Dim_Date": {
+      "queryId": "e74b3bdf-5b34-4b2b-ad11-dc5378c81039",
+      "queryName": "Dim_Date",
+      "loadEnabled": false
+    },
+    "Fact_Permits": {
+      "queryId": "270543bf-a76c-4bdf-a62a-0caca2ae65ed",
+      "queryName": "Fact_Permits",
+      "loadEnabled": false
+    },
+    "Dim_Contractor_DataDestination": {
+      "queryId": "6d569f59-1ae4-4a9a-af2d-1b3148f4609a",
+      "queryName": "Dim_Contractor_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "Dim_PermitType_DataDestination": {
+      "queryId": "d8f900e9-19b2-462f-a8d3-e6bf0ce36a8b",
+      "queryName": "Dim_PermitType_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "Dim_Location_DataDestination": {
+      "queryId": "de113b5e-db10-44a8-b72a-ef3430b096e9",
+      "queryName": "Dim_Location_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "Dim_Date_DataDestination": {
+      "queryId": "5d06627f-a7e7-4522-b59f-42993c09e752",
+      "queryName": "Dim_Date_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "Fact_Permits_DataDestination": {
+      "queryId": "aba9b003-d145-43b3-b472-911537710c28",
+      "queryName": "Fact_Permits_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    }
+  },
+  "connections": [
+    {
+      "path": "https://data.seattle.gov/",
+      "kind": "Web",
+      "connectionId": "{\"ClusterId\":\"1b457398-2fda-40e4-aac4-c81b712e894e\",\"DatasourceId\":\"e9bf8772-0b6d-4e44-8b55-8fdab30a8880\"}"
+    },
+    {
+      "path": "Lakehouse",
+      "kind": "Lakehouse",
+      "connectionId": "{\"ClusterId\":\"1b457398-2fda-40e4-aac4-c81b712e894e\",\"DatasourceId\":\"7ff91e66-8632-47f0-a818-bcc99d7c1a0b\"}"
+    }
+  ]
+}

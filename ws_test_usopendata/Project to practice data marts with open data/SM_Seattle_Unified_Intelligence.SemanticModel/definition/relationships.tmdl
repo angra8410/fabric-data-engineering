@@ -1,0 +1,37 @@
+relationship f61aa486-3ee4-7675-5ee5-33741f9bd979
+	fromColumn: Fact_Permits.contractor_key
+	toColumn: Dim_Contractor.contractor_key
+
+relationship 676376a5-3a43-2c0b-106c-bfc95acd9197
+	fromColumn: Fact_Permits.permit_key
+	toColumn: Dim_PermitType.permit_key
+
+relationship 4888692f-ec01-ba9b-e0a7-aa63f255728b
+	fromColumn: Fact_Permits.Location_key
+	toColumn: Dim_Location.Location_key
+
+relationship acd3a156-1b2f-8a2f-08d2-2408525d6d63
+	fromColumn: Fact_Permits.applied_date
+	toColumn: Dim_Date.Date
+
+relationship d6df947d-231e-b779-2bc3-7355d82a767a
+	fromColumn: Fact_Businesses.industry_key
+	toColumn: Dim_Industry.industry_key
+
+relationship ec68f6e6-3c87-9b11-f97c-b571d666a1b9
+	fromColumn: Fact_Businesses.ownership_key
+	toColumn: Dim_Ownership.ownership_key
+
+relationship b052f690-859e-155b-47e2-d1dae6f117da
+	fromColumn: Fact_Businesses.license_start_date
+	toColumn: Dim_Date.Date
+
+relationship ab31b3c6-b1f4-01e8-18c2-523f266a4b5e
+	fromColumn: Fact_Businesses.location_key
+	toColumn: Dim_Location.Location_key
+
+relationship 0955662b-35bf-93c7-000e-80f5fc19c7b8
+	isActive: false
+	fromColumn: Fact_Permits.issued_date
+	toColumn: Dim_Date.Date
+

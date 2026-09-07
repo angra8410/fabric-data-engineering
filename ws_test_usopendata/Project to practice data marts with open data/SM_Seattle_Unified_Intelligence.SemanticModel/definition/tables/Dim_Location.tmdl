@@ -1,0 +1,68 @@
+table Dim_Location
+	lineageTag: df43604f-822b-4937-8098-5d5281f7e82e
+	sourceLineageTag: [dbo].[Dim_Location]
+
+	column Location_key
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 6a8db824-bb35-4d82-bdb9-b52a15650077
+		sourceLineageTag: Location_key
+		summarizeBy: none
+		sourceColumn: Location_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column address
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: c1c82fd1-fa6a-44b1-96e1-07a274d2fd4c
+		sourceLineageTag: address
+		summarizeBy: none
+		sourceColumn: address
+
+		annotation SummarizationSetBy = Automatic
+
+	column zip
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: cc82aed9-07f3-4745-8dd1-2d2ecb4ea255
+		sourceLineageTag: zip
+		summarizeBy: none
+		sourceColumn: zip
+
+		annotation SummarizationSetBy = Automatic
+
+	column latitude
+		dataType: double
+		sourceProviderType: float
+		lineageTag: 12618604-67cc-40cf-831b-e42843ba6662
+		sourceLineageTag: latitude
+		summarizeBy: sum
+		sourceColumn: latitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column longitude
+		dataType: double
+		sourceProviderType: float
+		lineageTag: dc73d986-6551-427d-8d49-a5012adba71f
+		sourceLineageTag: longitude
+		summarizeBy: sum
+		sourceColumn: longitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition Dim_Location = entity
+		mode: directLake
+		source
+			entityName: Dim_Location
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+

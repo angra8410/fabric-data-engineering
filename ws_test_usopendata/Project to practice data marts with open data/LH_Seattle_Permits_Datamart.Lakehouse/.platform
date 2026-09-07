@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Lakehouse",
+    "displayName": "LH_Seattle_Permits_Datamart"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "92ad1ad6-3da8-a61d-4a14-967c1dd7223d"
+  }
+}

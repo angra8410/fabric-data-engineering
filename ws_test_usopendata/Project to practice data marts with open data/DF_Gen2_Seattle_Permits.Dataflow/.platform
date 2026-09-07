@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Dataflow",
+    "displayName": "DF_Gen2_Seattle_Permits"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "6fdf179c-3a84-bf71-4a58-0509d47fd855"
+  }
+}

@@ -1,0 +1,138 @@
+table Fact_Businesses
+	lineageTag: 203cb98f-4f40-463d-accd-63e38fc784aa
+	sourceLineageTag: [dbo].[Fact_Businesses]
+
+	measure 'Total Businesses' = COUNTROWS(Fact_Businesses)
+		formatString: 0
+		displayFolder: Business Measures
+		lineageTag: 848786a0-62a3-45af-8630-357d088a10a9
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+	measure 'Investment per Business' = DIVIDE([Total Investment], [Total Businesses])
+		displayFolder: Business Measures
+		lineageTag: 9e333e90-8b5c-4bff-a6ce-77866a28ff36
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column business_legal_name
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 267485d3-7c1a-4dac-acda-3aac225f4642
+		sourceLineageTag: business_legal_name
+		summarizeBy: none
+		sourceColumn: business_legal_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column trade_name
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 453fc48a-6106-4ccf-8ce0-60b4d84f62b5
+		sourceLineageTag: trade_name
+		summarizeBy: none
+		sourceColumn: trade_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column license_start_date
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: date
+		lineageTag: 60999e64-5e7a-4e71-adbf-c3afbef428ac
+		sourceLineageTag: license_start_date
+		summarizeBy: none
+		sourceColumn: license_start_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column city_account_number
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: ee93777d-0da7-4b4c-87b7-f3cde9a26886
+		sourceLineageTag: city_account_number
+		summarizeBy: none
+		sourceColumn: city_account_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column ubi
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 66703d51-19aa-4d41-afef-58c7b1037cf7
+		sourceLineageTag: ubi
+		summarizeBy: none
+		sourceColumn: ubi
+
+		annotation SummarizationSetBy = Automatic
+
+	column age_in_years
+		dataType: double
+		sourceProviderType: float
+		lineageTag: 65e88750-806c-4dff-8167-41a445e71827
+		sourceLineageTag: age_in_years
+		summarizeBy: sum
+		sourceColumn: age_in_years
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column business_age_formatted
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: e9c5ba30-4a6d-41fb-a3ef-e5a9a835c290
+		sourceLineageTag: business_age_formatted
+		summarizeBy: none
+		sourceColumn: business_age_formatted
+
+		annotation SummarizationSetBy = Automatic
+
+	column industry_key
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 5dec48b3-e9e7-4cee-a6ac-ee45997d123c
+		sourceLineageTag: industry_key
+		summarizeBy: none
+		sourceColumn: industry_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column ownership_key
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 6861f3c9-6528-4498-8c65-327507ebd021
+		sourceLineageTag: ownership_key
+		summarizeBy: none
+		sourceColumn: ownership_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column location_key
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 4d94ed8a-6281-4dd6-b9f2-39827872e514
+		sourceLineageTag: location_key
+		summarizeBy: none
+		sourceColumn: location_key
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Fact_Businesses = entity
+		mode: directLake
+		source
+			entityName: Fact_Businesses
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+

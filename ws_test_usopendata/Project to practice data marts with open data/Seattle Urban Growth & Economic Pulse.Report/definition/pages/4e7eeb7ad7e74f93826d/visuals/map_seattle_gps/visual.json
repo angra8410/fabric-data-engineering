@@ -13,6 +13,25 @@
     "visualType": "azureMap",
     "query": {
       "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Location"
+                    }
+                  },
+                  "Property": "zip"
+                }
+              },
+              "queryRef": "Dim_Location.zip",
+              "nativeQueryRef": "zip",
+              "active": true
+            }
+          ]
+        },
         "Latitude": {
           "projections": [
             {
@@ -66,77 +85,28 @@
               "nativeQueryRef": "Total Investment"
             }
           ]
-        },
-        "Tooltips": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Dim_Location"
-                    }
-                  },
-                  "Property": "address"
-                }
-              },
-              "queryRef": "Dim_Location.address",
-              "nativeQueryRef": "address"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Dim_Location"
-                    }
-                  },
-                  "Property": "zip"
-                }
-              },
-              "queryRef": "Dim_Location.zip",
-              "nativeQueryRef": "zip"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Fact_Permits"
-                    }
-                  },
-                  "Property": "status_category"
-                }
-              },
-              "queryRef": "Fact_Permits.status_category",
-              "nativeQueryRef": "status_category"
-            }
-          ]
         }
       }
     },
     "objects": {
-      "mapControls": [
+      "bubbles": [
         {
           "properties": {
-            "zoom": {
+            "show": {
               "expr": {
                 "Literal": {
-                  "Value": "10.5D"
+                  "Value": "true"
                 }
               }
             },
-            "centerLatitude": {
-              "expr": {
-                "Literal": {
-                  "Value": "47.6062D"
-                }
-              }
-            },
-            "centerLongitude": {
-              "expr": {
-                "Literal": {
-                  "Value": "-122.3321D"
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#0D9488'"
+                    }
+                  }
                 }
               }
             }
@@ -172,7 +142,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "12D"
+                  "Value": "11D"
                 }
               }
             },
@@ -192,5 +162,88 @@
       ]
     },
     "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "filter_map_zip",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Dim_Location"
+              }
+            },
+            "Property": "zip"
+          }
+        },
+        "type": "Categorical",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "d",
+              "Entity": "Dim_Location",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "Not": {
+                  "Expression": {
+                    "In": {
+                      "Expressions": [
+                        {
+                          "Column": {
+                            "Expression": {
+                              "SourceRef": {
+                                "Source": "d"
+                              }
+                            },
+                            "Property": "zip"
+                          }
+                        }
+                      ],
+                      "Values": [
+                        [
+                          {
+                            "Literal": {
+                              "Value": "'Unknown'"
+                            }
+                          }
+                        ],
+                        [
+                          {
+                            "Literal": {
+                              "Value": "null"
+                            }
+                          }
+                        ]
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "objects": {
+          "general": [
+            {
+              "properties": {
+                "isInvertedSelectionMode": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "true"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
   }
 }

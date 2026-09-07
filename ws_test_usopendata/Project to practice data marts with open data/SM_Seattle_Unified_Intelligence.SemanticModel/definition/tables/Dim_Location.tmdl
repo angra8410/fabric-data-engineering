@@ -60,42 +60,6 @@ table Dim_Location
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	column Neighborhood = 
-			SWITCH(
-				TRUE(),
-				ISBLANK(Dim_Location[zip]) || Dim_Location[zip] = "Unknown", "Unknown",
-				Dim_Location[zip] = "98101", "Downtown",
-				Dim_Location[zip] = "98102", "Capitol Hill",
-				Dim_Location[zip] = "98103", "Fremont / Green Lake",
-				Dim_Location[zip] = "98104", "Pioneer Square",
-				Dim_Location[zip] = "98105", "University District",
-				Dim_Location[zip] = "98106", "Delridge",
-				Dim_Location[zip] = "98107", "Ballard",
-				Dim_Location[zip] = "98108", "Beacon Hill",
-				Dim_Location[zip] = "98109", "South Lake Union / Queen Anne",
-				Dim_Location[zip] = "98112", "Madison Park",
-				Dim_Location[zip] = "98115", "Ravenna / Wedgwood",
-				Dim_Location[zip] = "98116", "West Seattle / Alki",
-				Dim_Location[zip] = "98117", "Crown Hill / Ballard",
-				Dim_Location[zip] = "98118", "Columbia City / Rainier Valley",
-				Dim_Location[zip] = "98119", "Queen Anne",
-				Dim_Location[zip] = "98121", "Belltown",
-				Dim_Location[zip] = "98122", "Central District",
-				Dim_Location[zip] = "98125", "Lake City",
-				Dim_Location[zip] = "98126", "High Point",
-				Dim_Location[zip] = "98133", "Bitter Lake",
-				Dim_Location[zip] = "98134", "SODO / Industrial",
-				Dim_Location[zip] = "98136", "Fauntleroy",
-				Dim_Location[zip] = "98144", "Mount Baker",
-				Dim_Location[zip] = "98177", "Broadview",
-				Dim_Location[zip] = "98199", "Magnolia",
-				"Seattle Metro"
-			)
-		dataType: string
-		lineageTag: a381bf41-47d2-43ce-89ef-221147e8ba01
-		summarizeBy: none
-
-		annotation SummarizationSetBy = Automatic
 
 	partition Dim_Location = entity
 		mode: directLake

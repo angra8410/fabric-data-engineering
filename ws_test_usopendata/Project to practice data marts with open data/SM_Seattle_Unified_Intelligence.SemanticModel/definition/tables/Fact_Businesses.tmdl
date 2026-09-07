@@ -12,7 +12,7 @@ table Fact_Businesses
 		changedProperty = DisplayFolder
 
 	measure 'Investment per Business' = DIVIDE([Total Investment], [Total Businesses])
-		formatString: \$#,##0,"K";(\$#,##0,"K");\$0
+		formatString: \$#,##0;(\$#,##0);\$0
 		displayFolder: Business Measures
 		lineageTag: 9e333e90-8b5c-4bff-a6ce-77866a28ff36
 

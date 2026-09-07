@@ -12,7 +12,7 @@ table Fact_Permits
 		changedProperty = DisplayFolder
 
 	measure 'Total Investment' = SUM(Fact_Permits[est_project_cost])
-		formatString: \$#,##0,,,"B";(\$#,##0,,,"B");\$0
+		formatString: \$#,##0;(\$#,##0);\$0
 		displayFolder: Permit Measures
 		lineageTag: 01002513-42f8-4f29-ad84-6ebac57bd546
 

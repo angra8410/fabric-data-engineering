@@ -32,7 +32,7 @@ const PORTFOLIO_DATA = {
           {
             id: "seattle_pulse_prod",
             title: "🏙️ Seattle Urban Growth & Economic Pulse (Direct Lake)",
-            embedUrl: "https://app.fabric.microsoft.com/reportEmbed?reportId=f56151e3-1bfb-bc3d-4502-098c1da44254&autoAuth=true&ctid=9da4a1e2-db93-42a7-a588-957fd6292e87",
+            embedUrl: "https://app.fabric.microsoft.com/reportEmbed?reportId=1da44254-098c-4502-bc3d-1bfbf56151e3&autoAuth=true&ctid=9da4a1e2-db93-42a7-a588-957fd6292e87",
             description: "Executive 3-Page Direct Lake Power BI Story analyzing $2.5B in urban capital deployment, net housing unit expansion (+247K), municipal permit turnaround times, and commercial registration velocity across Seattle ZIP codes.",
             metrics: [
               { label: "Total Capital Investment", value: "$2.5B" },
@@ -46,7 +46,7 @@ const PORTFOLIO_DATA = {
           {
             id: "seattle_pulse_dev",
             title: "🟡 [DEV] Seattle Data Marts & Direct Lake Staging",
-            embedUrl: "https://app.fabric.microsoft.com/reportEmbed?reportId=f56151e3-1bfb-bc3d-4502-098c1da44254&autoAuth=true&ctid=9da4a1e2-db93-42a7-a588-957fd6292e87",
+            embedUrl: "https://app.fabric.microsoft.com/reportEmbed?reportId=1da44254-098c-4502-bc3d-1bfbf56151e3&autoAuth=true&ctid=9da4a1e2-db93-42a7-a588-957fd6292e87",
             description: "Development semantic model connected to LH_Seattle_Permits_Datamart and LH_Seattle_Economy_Datamart for testing DAX Direct Lake measures without memory paging.",
             metrics: [
               { label: "Lakehouse Marts", value: "2 Datamarts" },

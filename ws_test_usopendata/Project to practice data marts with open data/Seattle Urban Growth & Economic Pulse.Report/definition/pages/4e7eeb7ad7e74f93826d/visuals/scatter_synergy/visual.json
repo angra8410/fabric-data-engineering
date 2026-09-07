@@ -23,11 +23,11 @@
                       "Entity": "Dim_Location"
                     }
                   },
-                  "Property": "Neighborhood"
+                  "Property": "zip"
                 }
               },
-              "queryRef": "Dim_Location.Neighborhood",
-              "nativeQueryRef": "Neighborhood",
+              "queryRef": "Dim_Location.zip",
+              "nativeQueryRef": "zip",
               "active": true
             }
           ]
@@ -84,7 +84,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'📈 NEIGHBORHOOD CORRELATION: CONSTRUCTION INVESTMENT ⟷ BUSINESS FORMATION'"
+                  "Value": "'📈 SEATTLE AREA CORRELATION: CONSTRUCTION INVESTMENT ⟷ BUSINESS FORMATION'"
                 }
               }
             },
@@ -160,7 +160,7 @@
   "filterConfig": {
     "filters": [
       {
-        "name": "filter_clean_scatter_neighborhood",
+        "name": "filter_clean_scatter_zip",
         "field": {
           "Column": {
             "Expression": {
@@ -168,7 +168,7 @@
                 "Entity": "Dim_Location"
               }
             },
-            "Property": "Neighborhood"
+            "Property": "zip"
           }
         },
         "type": "Categorical",
@@ -195,7 +195,7 @@
                                 "Source": "d"
                               }
                             },
-                            "Property": "Neighborhood"
+                            "Property": "zip"
                           }
                         }
                       ],

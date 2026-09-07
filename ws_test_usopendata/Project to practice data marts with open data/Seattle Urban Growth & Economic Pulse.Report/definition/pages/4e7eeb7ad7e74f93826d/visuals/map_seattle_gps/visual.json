@@ -77,11 +77,11 @@
                       "Entity": "Dim_Location"
                     }
                   },
-                  "Property": "Neighborhood"
+                  "Property": "zip"
                 }
               },
-              "queryRef": "Dim_Location.Neighborhood",
-              "nativeQueryRef": "Neighborhood"
+              "queryRef": "Dim_Location.zip",
+              "nativeQueryRef": "zip"
             },
             {
               "field": {

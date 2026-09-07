@@ -23,11 +23,11 @@
                       "Entity": "Dim_Location"
                     }
                   },
-                  "Property": "Neighborhood"
+                  "Property": "zip"
                 }
               },
-              "queryRef": "Dim_Location.Neighborhood",
-              "nativeQueryRef": "Neighborhood",
+              "queryRef": "Dim_Location.zip",
+              "nativeQueryRef": "zip",
               "active": true
             }
           ]
@@ -113,7 +113,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'📊 TOP 10 NEIGHBORHOODS BY INVESTMENT (CAPITAL VS BUSINESSES)'"
+                  "Value": "'📊 TOP 10 SEATTLE AREAS BY INVESTMENT (CAPITAL VS BUSINESSES)'"
                 }
               }
             },
@@ -151,7 +151,7 @@
   "filterConfig": {
     "filters": [
       {
-        "name": "filter_clean_neighborhood",
+        "name": "filter_clean_zip",
         "field": {
           "Column": {
             "Expression": {
@@ -159,7 +159,7 @@
                 "Entity": "Dim_Location"
               }
             },
-            "Property": "Neighborhood"
+            "Property": "zip"
           }
         },
         "type": "Categorical",
@@ -186,7 +186,7 @@
                                 "Source": "d"
                               }
                             },
-                            "Property": "Neighborhood"
+                            "Property": "zip"
                           }
                         }
                       ],
@@ -230,7 +230,7 @@
         }
       },
       {
-        "name": "filter_top10_neighborhood",
+        "name": "filter_top10_zip",
         "field": {
           "Column": {
             "Expression": {
@@ -238,7 +238,7 @@
                 "Entity": "Dim_Location"
               }
             },
-            "Property": "Neighborhood"
+            "Property": "zip"
           }
         },
         "type": "TopN",
@@ -271,7 +271,7 @@
                               "Source": "d"
                             }
                           },
-                          "Property": "Neighborhood"
+                          "Property": "zip"
                         },
                         "Name": "field"
                       }
@@ -315,7 +315,7 @@
                             "Source": "d"
                           }
                         },
-                        "Property": "Neighborhood"
+                        "Property": "zip"
                       }
                     }
                   ],

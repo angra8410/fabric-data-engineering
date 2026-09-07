@@ -412,7 +412,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 1. Setup Tabs based on project
     if (tabsContainer) {
-      if (proj.id === "secop_colombia") {
+      if (proj.id === "seattle_pulse") {
+        tabsContainer.innerHTML = `
+          <button class="dash-page-tab active" data-page="p1">🏙️ Executive Command Center</button>
+          <button class="dash-page-tab" data-page="p2">🏗️ Construction & Housing Expansion</button>
+          <button class="dash-page-tab" data-page="p3">💼 Commercial Ecosystem & Footprint</button>
+        `;
+      } else if (proj.id === "secop_colombia") {
         tabsContainer.innerHTML = `
           <button class="dash-page-tab active" data-page="p1">🏛️ Gasto & Cobertura Territorial</button>
           <button class="dash-page-tab" data-page="p2">⚖️ Transparencia & Modalidades</button>
@@ -484,12 +490,287 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Update Dynamic Charts & KPIs
   function updateActiveDashboardCharts(proj) {
-    if (proj.id === "secop_colombia") {
+    if (proj.id === "seattle_pulse") {
+      updateSeattleDashboard(proj.dashboardData);
+    } else if (proj.id === "secop_colombia") {
       updateSecopDashboard(proj.dashboardData);
     } else if (proj.id === "colombian_labor") {
       updateLaborDashboard(proj.dashboardData);
     } else {
       updateVelykapetDashboard(proj.dashboardData);
+    }
+  }
+
+  // -------------------------------------------------------------
+  // 🏙️ SEATTLE URBAN GROWTH & ECONOMIC PULSE DASHBOARD RENDERER
+  // -------------------------------------------------------------
+  function updateSeattleDashboard(data) {
+    const filterYrEl = document.getElementById("filter-seattle-year");
+    const filterAreaEl = document.getElementById("filter-seattle-area");
+
+    const selYr = filterYrEl ? filterYrEl.value : "ALL";
+    const selArea = filterAreaEl ? filterAreaEl.value : "ALL";
+
+    let filteredSeries = data.temporalSeries;
+    let filteredNeighborhoods = data.neighborhoods;
+
+    if (selYr !== "ALL") {
+      filteredSeries = filteredSeries.filter(d => d.year === selYr);
+    }
+    if (selArea !== "ALL") {
+      filteredNeighborhoods = filteredNeighborhoods.filter(n => n.areaKey === selArea);
+    }
+
+    // Update Titles & Subtitles
+    const titleTrend = document.getElementById("card-title-trend");
+    const subTrend = document.getElementById("card-subtitle-trend");
+    const titleDonut = document.getElementById("card-title-donut");
+    const titleRank = document.getElementById("card-title-ranking");
+    const titleT1 = document.getElementById("card-title-table1");
+    const badgeT1 = document.getElementById("badge-table1");
+    const titleT2 = document.getElementById("card-title-table2");
+    const badgeT2 = document.getElementById("badge-table2");
+    const titleC3 = document.getElementById("card-title-chart3");
+    const titleT3 = document.getElementById("card-title-table3");
+    const badgeT3 = document.getElementById("badge-table3");
+
+    if (titleTrend) titleTrend.innerHTML = "📈 Seattle Capital Pulse: Investment & New Business Formations";
+    if (subTrend) subTrend.innerHTML = "● Capital Investment ($B) — New Business Licenses";
+    if (titleDonut) titleDonut.innerHTML = "📑 Permit Lifecycle & Municipal Status";
+    if (titleRank) titleRank.innerHTML = "🏙️ Top Seattle Neighborhoods by Capital Deployed";
+    if (titleT1) titleT1.innerHTML = "🏗️ Top Commercial & Residential General Contractors";
+    if (badgeT1) { badgeT1.className = "status-pill status-synced"; badgeT1.textContent = "8 Contractors"; }
+    if (titleT2) titleT2.innerHTML = "🏘️ Housing Units Added & Turnaround by Postal Area";
+    if (badgeT2) badgeT2.textContent = `${filteredNeighborhoods.length} Neighborhoods`;
+    if (titleC3) titleC3.innerHTML = "💼 Ownership Structure (LLCs vs Corporations)";
+    if (titleT3) titleT3.innerHTML = "🏢 Top NAICS Industry Sectors & Commercial Footprint";
+    if (badgeT3) { badgeT3.className = "status-pill status-synced"; badgeT3.textContent = "8 NAICS Sectors"; }
+
+    // Table Headers
+    const th1 = document.getElementById("thead-table1");
+    if (th1) th1.innerHTML = `<tr><th>General Contractor</th><th>Total Permits</th><th>Capital Investment</th><th>Market Share</th></tr>`;
+
+    const th2 = document.getElementById("thead-table2");
+    if (th2) th2.innerHTML = `<tr><th>Neighborhood / Area</th><th>Capital Deployed</th><th>Net Housing Units</th><th>Active Businesses</th><th>Avg Turnaround</th></tr>`;
+
+    const th3 = document.getElementById("thead-table3");
+    if (th3) th3.innerHTML = `<tr><th>NAICS Industry Sector</th><th>Active Businesses</th><th>Sector Share %</th></tr>`;
+
+    // Dynamic KPI Totals calculation
+    const totalInv = filteredNeighborhoods.reduce((acc, n) => acc + n.inv, 0);
+    const totalHousing = filteredNeighborhoods.reduce((acc, n) => acc + n.housing, 0);
+    const totalBiz = filteredNeighborhoods.reduce((acc, n) => acc + n.businesses, 0);
+    const avgTurn = filteredNeighborhoods.length > 0 
+      ? Math.round(filteredNeighborhoods.reduce((acc, n) => acc + n.turnaround, 0) / filteredNeighborhoods.length)
+      : 97;
+    const investPerBiz = totalBiz > 0 ? `$${((totalInv * 1000000000) / totalBiz / 1000).toFixed(1)}K` : "$29.6K";
+
+    const kpiGrid = document.getElementById("dynamic-kpis-grid");
+    if (kpiGrid) {
+      kpiGrid.innerHTML = `
+        <div class="report-meta-card"><div class="meta-label">Total Capital Investment</div><div class="meta-value" style="color:var(--accent-blue);">$${totalInv.toFixed(2)}B</div></div>
+        <div class="report-meta-card"><div class="meta-label">Active Business Licenses</div><div class="meta-value">${totalBiz.toLocaleString()}</div></div>
+        <div class="report-meta-card"><div class="meta-label">Net Housing Units Added</div><div class="meta-value" style="color:var(--prod-color);">+${totalHousing.toLocaleString()}</div></div>
+        <div class="report-meta-card"><div class="meta-label">Total Building Permits</div><div class="meta-value">193,124</div></div>
+        <div class="report-meta-card"><div class="meta-label">Avg Approval Turnaround</div><div class="meta-value" style="color:var(--accent-pink);">${avgTurn} Days</div></div>
+        <div class="report-meta-card"><div class="meta-label">Investment / Business</div><div class="meta-value">${investPerBiz}</div></div>
+      `;
+    }
+
+    if (typeof Chart === "undefined") return;
+
+    // 1. Line / Bar Combo Chart: Annual Investment ($B) & New Businesses
+    const ctxTrend = document.getElementById("chart-monthly-trend");
+    if (ctxTrend) {
+      if (chartTrend) chartTrend.destroy();
+      chartTrend = new Chart(ctxTrend, {
+        type: "bar",
+        data: {
+          labels: filteredSeries.map(d => d.year),
+          datasets: [
+            {
+              type: "line",
+              label: "New Businesses Registered",
+              data: filteredSeries.map(d => d.newBiz),
+              borderColor: "#f59e0b",
+              backgroundColor: "rgba(245, 158, 11, 0.1)",
+              borderWidth: 2.5,
+              pointBackgroundColor: "#fbbf24",
+              pointRadius: 4,
+              yAxisID: "y1"
+            },
+            {
+              type: "bar",
+              label: "Capital Investment ($B)",
+              data: filteredSeries.map(d => d.inv),
+              backgroundColor: "#0284c7",
+              hoverBackgroundColor: "#38bdf8",
+              borderRadius: 6,
+              yAxisID: "y"
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { grid: { color: "rgba(255,255,255,0.05)" }, ticks: { color: "#9ca3af" } },
+            y: { grid: { color: "rgba(255,255,255,0.05)" }, ticks: { color: "#9ca3af", callback: v => `$${v}B` } },
+            y1: {
+              type: "linear",
+              position: "right",
+              grid: { drawOnChartArea: false },
+              ticks: { color: "#f59e0b", callback: v => `${(v / 1000).toFixed(0)}k` }
+            }
+          },
+          plugins: {
+            legend: { display: true, labels: { color: "#cbd5e1" } },
+            tooltip: {
+              callbacks: {
+                label: ctx => ctx.dataset.type === "line"
+                  ? ` New Businesses: ${ctx.raw.toLocaleString()}`
+                  : ` Capital Investment: $${ctx.raw}B`
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // 2. Permit Lifecycle Donut Chart
+    const ctxDonut = document.getElementById("chart-channel-donut");
+    if (ctxDonut) {
+      if (chartDonut) chartDonut.destroy();
+      chartDonut = new Chart(ctxDonut, {
+        type: "doughnut",
+        data: {
+          labels: data.permitLifecycle.map(p => p.name),
+          datasets: [{
+            data: data.permitLifecycle.map(p => p.pct),
+            backgroundColor: data.permitLifecycle.map(p => p.color),
+            borderColor: "#0f172a",
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: "65%",
+          plugins: {
+            legend: { display: false },
+            tooltip: { callbacks: { label: ctx => ` ${data.permitLifecycle[ctx.dataIndex].name}: ${ctx.raw}% (${data.permitLifecycle[ctx.dataIndex].count} permits)` } }
+          }
+        }
+      });
+
+      const legendContainer = document.getElementById("channel-legend");
+      if (legendContainer) {
+        legendContainer.innerHTML = data.permitLifecycle.map(p => `
+          <div style="font-size:0.75rem; color:var(--text-muted);">
+            <span style="color:${p.color};">●</span> ${p.name}: <strong>${p.pct}%</strong>
+          </div>
+        `).join("");
+      }
+    }
+
+    // 3. Top Neighborhoods Horizontal Bar Chart
+    const ctxProducts = document.getElementById("chart-top-products");
+    if (ctxProducts) {
+      if (chartProducts) chartProducts.destroy();
+      chartProducts = new Chart(ctxProducts, {
+        type: "bar",
+        data: {
+          labels: filteredNeighborhoods.map(n => `${n.name} (${n.zip})`),
+          datasets: [{
+            label: "Capital Investment ($B)",
+            data: filteredNeighborhoods.map(n => n.inv),
+            backgroundColor: "#0d9488",
+            hoverBackgroundColor: "#14b8a6",
+            borderRadius: 4
+          }]
+        },
+        options: {
+          indexAxis: "y",
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { grid: { color: "rgba(255,255,255,0.05)" }, ticks: { color: "#9ca3af", callback: v => `$${v}B` } },
+            y: { grid: { display: false }, ticks: { color: "#cbd5e1", font: { size: 10 } } }
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: { callbacks: { label: ctx => ` Capital Deployed: $${ctx.raw}B` } }
+          }
+        }
+      });
+    }
+
+    // 4. Ownership Structure Doughnut Chart (Page 3)
+    const ctxOpex = document.getElementById("chart-opex-breakdown");
+    if (ctxOpex) {
+      if (chartOpex) chartOpex.destroy();
+      chartOpex = new Chart(ctxOpex, {
+        type: "doughnut",
+        data: {
+          labels: data.ownershipStructure.map(o => o.name),
+          datasets: [{
+            data: data.ownershipStructure.map(o => o.pct),
+            backgroundColor: data.ownershipStructure.map(o => o.color),
+            borderColor: "#0f172a",
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: "60%",
+          plugins: {
+            legend: { position: "right", labels: { color: "#94a3b8", font: { size: 10 } } },
+            tooltip: {
+              callbacks: {
+                label: ctx => ` ${data.ownershipStructure[ctx.dataIndex].name}: ${ctx.raw}% (${data.ownershipStructure[ctx.dataIndex].count} entities)`
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // 5. Tables
+    const tbStockout = document.querySelector("#table-stockout tbody");
+    if (tbStockout) {
+      tbStockout.innerHTML = data.topContractors.map(c => `
+        <tr>
+          <td style="font-weight:600; color:var(--text-main);">${c.name}</td>
+          <td style="font-family:var(--font-code); color:var(--accent-blue);">${c.permits} permits</td>
+          <td style="font-family:var(--font-code); color:var(--prod-color);">${c.inv}</td>
+          <td><span class="badge-healthy">${c.share}</span></td>
+        </tr>
+      `).join("");
+    }
+
+    const tbMargins = document.querySelector("#table-margins tbody");
+    if (tbMargins) {
+      tbMargins.innerHTML = filteredNeighborhoods.map(n => `
+        <tr>
+          <td style="font-weight:600; color:var(--text-main);">${n.name} (${n.zip})</td>
+          <td style="font-family:var(--font-code); color:var(--accent-blue);">$${n.inv}B</td>
+          <td style="font-family:var(--font-code); color:var(--prod-color);">+${n.housing.toLocaleString()}</td>
+          <td style="font-family:var(--font-code);">${n.businesses.toLocaleString()}</td>
+          <td><span class="${n.turnaround > 100 ? 'badge-loss' : 'badge-healthy'}">${n.turnaround} Days</span></td>
+        </tr>
+      `).join("");
+    }
+
+    const tbProc = document.querySelector("#table-procurement tbody");
+    if (tbProc) {
+      tbProc.innerHTML = data.naicsSectors.map(s => `
+        <tr>
+          <td style="font-weight:600; color:var(--text-main);">${s.name}</td>
+          <td style="font-family:var(--font-code); color:var(--prod-color);">${s.businesses} registered</td>
+          <td><strong style="color:var(--accent-blue);">${s.pct}%</strong></td>
+        </tr>
+      `).join("");
     }
   }
 

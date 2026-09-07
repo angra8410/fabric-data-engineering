@@ -60,6 +60,7 @@ table Dim_Date
 		sourceProviderType: varchar(8000)
 		lineageTag: 61bf2860-c17d-47ef-a042-d3e73354d34e
 		sourceLineageTag: YearMonth
+		sortByColumn: YearMonthNumber
 		summarizeBy: none
 		sourceColumn: YearMonth
 

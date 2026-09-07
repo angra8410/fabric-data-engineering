@@ -3,7 +3,7 @@ table Fact_Businesses
 	sourceLineageTag: [dbo].[Fact_Businesses]
 
 	measure 'Total Businesses' = COUNTROWS(Fact_Businesses)
-		formatString: 0
+		formatString: #,##0
 		displayFolder: Business Measures
 		lineageTag: 848786a0-62a3-45af-8630-357d088a10a9
 
@@ -12,14 +12,13 @@ table Fact_Businesses
 		changedProperty = DisplayFolder
 
 	measure 'Investment per Business' = DIVIDE([Total Investment], [Total Businesses])
+		formatString: \$#,##0,"K";(\$#,##0,"K");\$0
 		displayFolder: Business Measures
 		lineageTag: 9e333e90-8b5c-4bff-a6ce-77866a28ff36
 
 		changedProperty = Name
 
 		changedProperty = DisplayFolder
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column business_legal_name
 		dataType: string

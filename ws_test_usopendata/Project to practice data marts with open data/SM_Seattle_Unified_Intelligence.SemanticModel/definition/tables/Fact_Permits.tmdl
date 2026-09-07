@@ -12,6 +12,7 @@ table Fact_Permits
 		changedProperty = DisplayFolder
 
 	measure 'Total Investment' = SUM(Fact_Permits[est_project_cost])
+		formatString: \$#,##0,,,"B";(\$#,##0,,,"B");\$0
 		displayFolder: Permit Measures
 		lineageTag: 01002513-42f8-4f29-ad84-6ebac57bd546
 
@@ -19,20 +20,17 @@ table Fact_Permits
 
 		changedProperty = DisplayFolder
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
 	measure 'Net Housing Units Added' = ```
 			
 			    SUM(Fact_Permits[housing_units_added]) - SUM(Fact_Permits[housing_units_removed])
 			```
+		formatString: +#,##0;-#,##0;0
 		displayFolder: Permit Measures
 		lineageTag: a2aa5b8f-0709-44db-b638-c8ca539caf7c
 
 		changedProperty = Name
 
 		changedProperty = DisplayFolder
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Average Days to Issue' = ```
 			
@@ -45,14 +43,13 @@ table Fact_Permits
 			    DATEDIFF(Fact_Permits[applied_date], Fact_Permits[issued_date], DAY)
 			)
 			```
+		formatString: 0 "Days"
 		displayFolder: Permit Measures
 		lineageTag: f634145d-18a7-4fdf-9eff-a8b010817045
 
 		changedProperty = Name
 
 		changedProperty = DisplayFolder
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column permit_num
 		dataType: string

@@ -25,6 +25,7 @@ table Dim_Location
 
 	column zip
 		dataType: string
+		dataCategory: PostalCode
 		sourceProviderType: varchar(8000)
 		lineageTag: cc82aed9-07f3-4745-8dd1-2d2ecb4ea255
 		sourceLineageTag: zip
@@ -35,10 +36,11 @@ table Dim_Location
 
 	column latitude
 		dataType: double
+		dataCategory: Latitude
 		sourceProviderType: float
 		lineageTag: 12618604-67cc-40cf-831b-e42843ba6662
 		sourceLineageTag: latitude
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: latitude
 
 		annotation SummarizationSetBy = Automatic
@@ -47,10 +49,11 @@ table Dim_Location
 
 	column longitude
 		dataType: double
+		dataCategory: Longitude
 		sourceProviderType: float
 		lineageTag: dc73d986-6551-427d-8d49-a5012adba71f
 		sourceLineageTag: longitude
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: longitude
 
 		annotation SummarizationSetBy = Automatic

@@ -51,6 +51,17 @@ table Fact_Permits
 
 		changedProperty = DisplayFolder
 
+	measure 'Housing Units Added' = SUM(Fact_Permits[housing_units_added])
+		formatString: #,##0
+		displayFolder: Permit Measures
+		lineageTag: 5b881382-72cc-4591-95c9-94364024b432
+
+	measure 'Housing Units Removed' = SUM(Fact_Permits[housing_units_removed])
+		formatString: #,##0
+		displayFolder: Permit Measures
+		lineageTag: 1109aef8-161b-43d9-9599-4d6cbcc10a11
+
+
 	column permit_num
 		dataType: string
 		sourceProviderType: varchar(8000)

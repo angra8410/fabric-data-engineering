@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
-  "name": "bar_top10_neighborhoods",
+  "name": "bar_housing_by_neighborhood",
   "position": {
-    "x": 960,
-    "y": 490,
-    "z": 7000,
-    "height": 260,
-    "width": 940,
-    "tabOrder": 7000
+    "x": 20,
+    "y": 215,
+    "z": 4000,
+    "height": 410,
+    "width": 920,
+    "tabOrder": 4000
   },
   "visual": {
     "visualType": "clusteredBarChart",
@@ -42,25 +42,25 @@
                       "Entity": "Fact_Permits"
                     }
                   },
-                  "Property": "Total Investment"
+                  "Property": "Net Housing Units Added"
                 }
               },
-              "queryRef": "Fact_Permits.Total Investment",
-              "nativeQueryRef": "Total Investment"
+              "queryRef": "Fact_Permits.Net Housing Units Added",
+              "nativeQueryRef": "Net Housing Units Added"
             },
             {
               "field": {
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Fact_Businesses"
+                      "Entity": "Fact_Permits"
                     }
                   },
-                  "Property": "Total Businesses"
+                  "Property": "Housing Units Added"
                 }
               },
-              "queryRef": "Fact_Businesses.Total Businesses",
-              "nativeQueryRef": "Total Businesses"
+              "queryRef": "Fact_Permits.Housing Units Added",
+              "nativeQueryRef": "Housing Units Added"
             }
           ]
         }
@@ -75,7 +75,7 @@
                     "Entity": "Fact_Permits"
                   }
                 },
-                "Property": "Total Investment"
+                "Property": "Net Housing Units Added"
               }
             },
             "direction": "Descending"
@@ -113,7 +113,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'📊 TOP 10 NEIGHBORHOODS BY INVESTMENT (CAPITAL VS BUSINESSES)'"
+                  "Value": "'🏘️ TOP 10 NEIGHBORHOODS: NET HOUSING UNITS EXPANSION'"
                 }
               }
             },
@@ -286,7 +286,7 @@
                                 "Source": "f"
                               }
                             },
-                            "Property": "Total Investment"
+                            "Property": "Net Housing Units Added"
                           }
                         }
                       }

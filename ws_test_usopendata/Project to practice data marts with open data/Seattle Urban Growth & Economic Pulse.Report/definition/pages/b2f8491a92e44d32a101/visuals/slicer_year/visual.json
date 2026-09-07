@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
-  "name": "slicer_zip",
+  "name": "slicer_year",
   "position": {
-    "x": 1540,
+    "x": 940,
     "y": 15,
-    "z": 3000,
+    "z": 2000,
     "height": 65,
-    "width": 360,
-    "tabOrder": 3000
+    "width": 300,
+    "tabOrder": 2000
   },
   "visual": {
     "visualType": "slicer",
@@ -20,14 +20,14 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Dim_Location"
+                      "Entity": "Dim_Date"
                     }
                   },
-                  "Property": "Neighborhood"
+                  "Property": "Year"
                 }
               },
-              "queryRef": "Dim_Location.Neighborhood",
-              "nativeQueryRef": "Neighborhood",
+              "queryRef": "Dim_Date.Year",
+              "nativeQueryRef": "Year",
               "active": true
             }
           ]
@@ -40,13 +40,13 @@
               "Column": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Dim_Location"
+                    "Entity": "Dim_Date"
                   }
                 },
-                "Property": "Neighborhood"
+                "Property": "Year"
               }
             },
-            "direction": "Ascending"
+            "direction": "Descending"
           }
         ],
         "isDefaultSort": true
@@ -85,7 +85,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'📍 Seattle Neighborhood'"
+                  "Value": "'📅 Filter Year'"
                 }
               }
             }
@@ -98,76 +98,69 @@
   "filterConfig": {
     "filters": [
       {
-        "name": "filter_clean_neighborhood",
+        "name": "filter_year_range",
         "field": {
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "Dim_Location"
+                "Entity": "Dim_Date"
               }
             },
-            "Property": "Neighborhood"
+            "Property": "Year"
           }
         },
-        "type": "Categorical",
+        "type": "Advanced",
         "filter": {
           "Version": 2,
           "From": [
             {
               "Name": "d",
-              "Entity": "Dim_Location",
+              "Entity": "Dim_Date",
               "Type": 0
             }
           ],
           "Where": [
             {
               "Condition": {
-                "Not": {
-                  "Expression": {
-                    "In": {
-                      "Expressions": [
-                        {
-                          "Column": {
-                            "Expression": {
-                              "SourceRef": {
-                                "Source": "d"
-                              }
-                            },
-                            "Property": "Neighborhood"
-                          }
+                "And": {
+                  "Left": {
+                    "Comparison": {
+                      "ComparisonKind": 2,
+                      "Left": {
+                        "Column": {
+                          "Expression": {
+                            "SourceRef": {
+                              "Source": "d"
+                            }
+                          },
+                          "Property": "Year"
                         }
-                      ],
-                      "Values": [
-                        [
-                          {
-                            "Literal": {
-                              "Value": "'Unknown'"
-                            }
-                          }
-                        ],
-                        [
-                          {
-                            "Literal": {
-                              "Value": "null"
-                            }
-                          }
-                        ]
-                      ]
+                      },
+                      "Right": {
+                        "Literal": {
+                          "Value": "2020L"
+                        }
+                      }
                     }
-                  }
-                }
-              }
-            }
-          ]
-        },
-        "objects": {
-          "general": [
-            {
-              "properties": {
-                "isInvertedSelectionMode": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "true"
+                  },
+                  "Right": {
+                    "Comparison": {
+                      "ComparisonKind": 3,
+                      "Left": {
+                        "Column": {
+                          "Expression": {
+                            "SourceRef": {
+                              "Source": "d"
+                            }
+                          },
+                          "Property": "Year"
+                        }
+                      },
+                      "Right": {
+                        "Literal": {
+                          "Value": "2026L"
+                        }
+                      }
                     }
                   }
                 }

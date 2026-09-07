@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
-  "name": "bar_top10_neighborhoods",
+  "name": "bar_top_naics",
   "position": {
-    "x": 960,
-    "y": 490,
-    "z": 7000,
-    "height": 260,
-    "width": 940,
-    "tabOrder": 7000
+    "x": 20,
+    "y": 215,
+    "z": 4000,
+    "height": 410,
+    "width": 920,
+    "tabOrder": 4000
   },
   "visual": {
     "visualType": "clusteredBarChart",
@@ -20,34 +20,20 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Dim_Location"
+                      "Entity": "Dim_Industry"
                     }
                   },
-                  "Property": "Neighborhood"
+                  "Property": "naics_description"
                 }
               },
-              "queryRef": "Dim_Location.Neighborhood",
-              "nativeQueryRef": "Neighborhood",
+              "queryRef": "Dim_Industry.naics_description",
+              "nativeQueryRef": "naics_description",
               "active": true
             }
           ]
         },
         "Y": {
           "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Fact_Permits"
-                    }
-                  },
-                  "Property": "Total Investment"
-                }
-              },
-              "queryRef": "Fact_Permits.Total Investment",
-              "nativeQueryRef": "Total Investment"
-            },
             {
               "field": {
                 "Measure": {
@@ -72,10 +58,10 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Fact_Permits"
+                    "Entity": "Fact_Businesses"
                   }
                 },
-                "Property": "Total Investment"
+                "Property": "Total Businesses"
               }
             },
             "direction": "Descending"
@@ -113,7 +99,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'📊 TOP 10 NEIGHBORHOODS BY INVESTMENT (CAPITAL VS BUSINESSES)'"
+                  "Value": "'🏭 TOP 10 NAICS INDUSTRY SECTORS BY ACTIVE BUSINESS COUNT'"
                 }
               }
             },
@@ -151,15 +137,15 @@
   "filterConfig": {
     "filters": [
       {
-        "name": "filter_clean_neighborhood",
+        "name": "filter_clean_industry",
         "field": {
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "Dim_Location"
+                "Entity": "Dim_Industry"
               }
             },
-            "Property": "Neighborhood"
+            "Property": "naics_description"
           }
         },
         "type": "Categorical",
@@ -168,7 +154,7 @@
           "From": [
             {
               "Name": "d",
-              "Entity": "Dim_Location",
+              "Entity": "Dim_Industry",
               "Type": 0
             }
           ],
@@ -186,7 +172,7 @@
                                 "Source": "d"
                               }
                             },
-                            "Property": "Neighborhood"
+                            "Property": "naics_description"
                           }
                         }
                       ],
@@ -230,15 +216,15 @@
         }
       },
       {
-        "name": "filter_top10_neighborhood",
+        "name": "filter_top10_industry",
         "field": {
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "Dim_Location"
+                "Entity": "Dim_Industry"
               }
             },
-            "Property": "Neighborhood"
+            "Property": "naics_description"
           }
         },
         "type": "TopN",
@@ -254,12 +240,12 @@
                     "From": [
                       {
                         "Name": "d",
-                        "Entity": "Dim_Location",
+                        "Entity": "Dim_Industry",
                         "Type": 0
                       },
                       {
                         "Name": "f",
-                        "Entity": "Fact_Permits",
+                        "Entity": "Fact_Businesses",
                         "Type": 0
                       }
                     ],
@@ -271,7 +257,7 @@
                               "Source": "d"
                             }
                           },
-                          "Property": "Neighborhood"
+                          "Property": "naics_description"
                         },
                         "Name": "field"
                       }
@@ -286,7 +272,7 @@
                                 "Source": "f"
                               }
                             },
-                            "Property": "Total Investment"
+                            "Property": "Total Businesses"
                           }
                         }
                       }
@@ -299,7 +285,7 @@
             },
             {
               "Name": "d",
-              "Entity": "Dim_Location",
+              "Entity": "Dim_Industry",
               "Type": 0
             }
           ],
@@ -315,7 +301,7 @@
                             "Source": "d"
                           }
                         },
-                        "Property": "Neighborhood"
+                        "Property": "naics_description"
                       }
                     }
                   ],

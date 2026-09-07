@@ -23,7 +23,7 @@
                     "textStyle": {
                       "fontWeight": "bold",
                       "fontSize": "16pt",
-                      "color": "#0F172A"
+                      "color": "#0f172a"
                     }
                   }
                 ]
@@ -33,9 +33,8 @@
                   {
                     "value": "Executive Command Center | Construction Investments ⟷ Business Formation Synergy",
                     "textStyle": {
-                      "fontWeight": "normal",
                       "fontSize": "10pt",
-                      "color": "#64748B"
+                      "color": "#64748b"
                     }
                   }
                 ]

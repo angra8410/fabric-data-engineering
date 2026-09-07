@@ -100,5 +100,37 @@
       ]
     },
     "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "d42180998794bf705302",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Fact_Permits"
+              }
+            },
+            "Property": "status_category"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "470492c347925e8b6881",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Fact_Permits"
+              }
+            },
+            "Property": "Total Permits"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
   }
 }

@@ -1,0 +1,34 @@
+table Dim_Ownership
+	lineageTag: 5fbc3cc8-91dc-4554-8544-fc666ea7bb87
+	sourceLineageTag: [dbo].[Dim_Ownership]
+
+	column ownership_key
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 264e197f-a9d9-4da1-b8a5-21516c426e5d
+		sourceLineageTag: ownership_key
+		summarizeBy: none
+		sourceColumn: ownership_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column ownership_type
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 1d8fc498-9dda-45bf-b306-4e1bcbc5108c
+		sourceLineageTag: ownership_type
+		summarizeBy: none
+		sourceColumn: ownership_type
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Ownership = entity
+		mode: directLake
+		source
+			entityName: Dim_Ownership
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+

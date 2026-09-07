@@ -1,0 +1,54 @@
+table Dim_PermitType
+	lineageTag: 0301bb87-3034-45cf-bfe9-e64c333df129
+	sourceLineageTag: [dbo].[Dim_PermitType]
+
+	column permit_key
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: eb09a850-6e59-45f2-b294-d015e3c02254
+		sourceLineageTag: permit_key
+		summarizeBy: none
+		sourceColumn: permit_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column permit_type
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: cacd8d91-e9fc-4ed6-9555-1e22c62aaf51
+		sourceLineageTag: permit_type
+		summarizeBy: none
+		sourceColumn: permit_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column permit_class
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 39033a3d-783f-460e-bf5f-9739a0ef5123
+		sourceLineageTag: permit_class
+		summarizeBy: none
+		sourceColumn: permit_class
+
+		annotation SummarizationSetBy = Automatic
+
+	column category
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 8596468b-5712-4b14-adc9-2974c798e70d
+		sourceLineageTag: category
+		summarizeBy: none
+		sourceColumn: category
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_PermitType = entity
+		mode: directLake
+		source
+			entityName: Dim_PermitType
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,75 @@
+{
+  "formatVersion": "202502",
+  "computeEngineSettings": {
+    "allowModernEvaluationEngine": true
+  },
+  "name": "DF_Gen2_Seattle_Businesses",
+  "queryGroups": [],
+  "documentLocale": "en-US",
+  "queriesMetadata": {
+    "Bronze_raw_ingestion": {
+      "queryId": "541db7f9-c804-4ba3-a919-1bb48106ee45",
+      "queryName": "Bronze_raw_ingestion"
+    },
+    "Silver_transformations": {
+      "queryId": "2022bda3-d0d6-4938-9140-bea453162bb3",
+      "queryName": "Silver_transformations"
+    },
+    "Dim_Industry": {
+      "queryId": "e8c551e6-4d35-487f-a48c-be36454e229b",
+      "queryName": "Dim_Industry",
+      "loadEnabled": false
+    },
+    "Dim_Ownership": {
+      "queryId": "31b9ad18-4301-4ad6-9b4f-662a0136c5ee",
+      "queryName": "Dim_Ownership",
+      "loadEnabled": false
+    },
+    "Dim_Location": {
+      "queryId": "d89f2e98-871d-46ee-84e7-f4e5155876ba",
+      "queryName": "Dim_Location",
+      "loadEnabled": false
+    },
+    "Fact_Seattle_Businesses": {
+      "queryId": "50503044-25f0-450d-8d32-63768a22eec7",
+      "queryName": "Fact_Seattle_Businesses",
+      "loadEnabled": false
+    },
+    "Dim_Industry_DataDestination": {
+      "queryId": "18f0d77e-47d6-4c71-a70f-27bd7a75c39c",
+      "queryName": "Dim_Industry_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "Dim_Ownership_DataDestination": {
+      "queryId": "4f59d13c-bdb6-4af1-ba1f-7f6a35ae262d",
+      "queryName": "Dim_Ownership_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "Dim_Location_DataDestination": {
+      "queryId": "928a2bfb-3e7a-4e04-8b94-d1613a259f2a",
+      "queryName": "Dim_Location_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "Fact_Seattle_Businesses_DataDestination": {
+      "queryId": "2f463138-b7e1-4df9-98c1-d5d8b5ffc443",
+      "queryName": "Fact_Seattle_Businesses_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    }
+  },
+  "connections": [
+    {
+      "path": "https://data.seattle.gov/",
+      "kind": "Web",
+      "connectionId": "{\"ClusterId\":\"1b457398-2fda-40e4-aac4-c81b712e894e\",\"DatasourceId\":\"e9bf8772-0b6d-4e44-8b55-8fdab30a8880\"}"
+    },
+    {
+      "path": "Lakehouse",
+      "kind": "Lakehouse",
+      "connectionId": "{\"ClusterId\":\"1b457398-2fda-40e4-aac4-c81b712e894e\",\"DatasourceId\":\"7ff91e66-8632-47f0-a818-bcc99d7c1a0b\"}"
+    }
+  ]
+}

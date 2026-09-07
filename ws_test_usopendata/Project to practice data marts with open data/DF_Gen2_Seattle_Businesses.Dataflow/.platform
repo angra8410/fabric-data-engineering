@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Dataflow",
+    "displayName": "DF_Gen2_Seattle_Businesses"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "fda596a2-95bb-b31d-4774-053a85763d1e"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "SM_Seattle_Unified_Intelligence"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "be72cefd-2610-9940-4cd1-68e6d0ce6146"
+  }
+}

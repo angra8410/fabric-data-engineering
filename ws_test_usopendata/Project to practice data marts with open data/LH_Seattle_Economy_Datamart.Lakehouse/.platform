@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Lakehouse",
+    "displayName": "LH_Seattle_Economy_Datamart"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "e6e14f44-7d3f-a433-4826-f4305c1df261"
+  }
+}

@@ -1,0 +1,44 @@
+table Dim_Industry
+	lineageTag: a94b03ab-5b2c-48a6-96cb-7e9ddf2cb0ca
+	sourceLineageTag: [dbo].[Dim_Industry]
+
+	column industry_key
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: efde0fba-d45b-4a60-bbf2-b5feada55ad5
+		sourceLineageTag: industry_key
+		summarizeBy: none
+		sourceColumn: industry_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column naics_code
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 2aebf840-34e9-480e-bd55-d41511019222
+		sourceLineageTag: naics_code
+		summarizeBy: none
+		sourceColumn: naics_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column naics_description
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 4a542b65-4d1f-4de2-aacd-c5132bed6099
+		sourceLineageTag: naics_description
+		summarizeBy: none
+		sourceColumn: naics_description
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Industry = entity
+		mode: directLake
+		source
+			entityName: Dim_Industry
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+

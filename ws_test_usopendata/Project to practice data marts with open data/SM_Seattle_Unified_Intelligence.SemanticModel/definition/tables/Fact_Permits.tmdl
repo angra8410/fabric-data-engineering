@@ -1,0 +1,218 @@
+table Fact_Permits
+	lineageTag: efa44825-3e65-459a-be9b-4162f98a483f
+	sourceLineageTag: [dbo].[Fact_Permits]
+
+	measure 'Total Permits' = COUNTROWS(Fact_Permits)
+		formatString: 0
+		displayFolder: Permit Measures
+		lineageTag: 758ea406-db1a-4eb6-b4b1-023627d87a54
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+	measure 'Total Investment' = SUM(Fact_Permits[est_project_cost])
+		displayFolder: Permit Measures
+		lineageTag: 01002513-42f8-4f29-ad84-6ebac57bd546
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Net Housing Units Added' = ```
+			
+			    SUM(Fact_Permits[housing_units_added]) - SUM(Fact_Permits[housing_units_removed])
+			```
+		displayFolder: Permit Measures
+		lineageTag: a2aa5b8f-0709-44db-b638-c8ca539caf7c
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average Days to Issue' = ```
+			
+			AVERAGEX(
+			    FILTER(
+			        Fact_Permits, 
+			        NOT(ISBLANK(Fact_Permits[issued_date])) && 
+			        NOT(ISBLANK(Fact_Permits[applied_date]))
+			    ),
+			    DATEDIFF(Fact_Permits[applied_date], Fact_Permits[issued_date], DAY)
+			)
+			```
+		displayFolder: Permit Measures
+		lineageTag: f634145d-18a7-4fdf-9eff-a8b010817045
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column permit_num
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 35c1a3ee-c453-408c-8657-f31f5603a348
+		sourceLineageTag: permit_num
+		summarizeBy: none
+		sourceColumn: permit_num
+
+		annotation SummarizationSetBy = Automatic
+
+	column description
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 93ce69cb-e368-43ee-9d34-afb9c1661b5e
+		sourceLineageTag: description
+		summarizeBy: none
+		sourceColumn: description
+
+		annotation SummarizationSetBy = Automatic
+
+	column status
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 126d7724-8ca0-4dff-9c2d-042ccde9554b
+		sourceLineageTag: status
+		summarizeBy: none
+		sourceColumn: status
+
+		annotation SummarizationSetBy = Automatic
+
+	column applied_date
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: date
+		lineageTag: 05d3c373-16dd-471b-903b-830e27c5ebbd
+		sourceLineageTag: applied_date
+		summarizeBy: none
+		sourceColumn: applied_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column issued_date
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: date
+		lineageTag: bb47c897-582e-4d64-b247-08a3a0d31798
+		sourceLineageTag: issued_date
+		summarizeBy: none
+		sourceColumn: issued_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column est_project_cost
+		dataType: double
+		sourceProviderType: float
+		lineageTag: a5029b2b-04d5-4465-b479-99077da5ae24
+		sourceLineageTag: est_project_cost
+		summarizeBy: sum
+		sourceColumn: est_project_cost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column housing_units_added
+		dataType: double
+		sourceProviderType: float
+		lineageTag: 42cc1577-5f9f-403a-91c4-d6c818df9e5d
+		sourceLineageTag: housing_units_added
+		summarizeBy: sum
+		sourceColumn: housing_units_added
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column housing_units_removed
+		dataType: double
+		sourceProviderType: float
+		lineageTag: 00ac4173-39ca-4ccf-bf69-be7838c96635
+		sourceLineageTag: housing_units_removed
+		summarizeBy: sum
+		sourceColumn: housing_units_removed
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column status_category
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 041e164d-b1ed-42c3-aa2b-e41a7832642c
+		sourceLineageTag: status_category
+		summarizeBy: none
+		sourceColumn: status_category
+
+		annotation SummarizationSetBy = Automatic
+
+	column days_to_issue
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: f30c5dd7-23e9-4228-84ca-84eea6294efa
+		sourceLineageTag: days_to_issue
+		summarizeBy: sum
+		sourceColumn: days_to_issue
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_issued
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: 3638cf95-f834-47c7-a89b-33268fdba8af
+		sourceLineageTag: is_issued
+		summarizeBy: none
+		sourceColumn: is_issued
+
+		annotation SummarizationSetBy = Automatic
+
+	column contractor_key
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 877d1e7c-a0b4-477a-a4b7-13f79cf0b57a
+		sourceLineageTag: contractor_key
+		summarizeBy: none
+		sourceColumn: contractor_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column permit_key
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 24766665-4680-44f9-8b29-b5abd2193b5e
+		sourceLineageTag: permit_key
+		summarizeBy: none
+		sourceColumn: permit_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column Location_key
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 3deee3ad-51ec-47ac-8e78-486644b0a8b9
+		sourceLineageTag: Location_key
+		summarizeBy: none
+		sourceColumn: Location_key
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Fact_Permits = entity
+		mode: directLake
+		source
+			entityName: Fact_Permits
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+

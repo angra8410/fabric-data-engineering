@@ -1,0 +1,41 @@
+[
+  {
+    "name": "Fact_Businesses",
+    "path": "/Tables/dbo",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/dbo/Fact_Businesses",
+        "itemId": "e6e14f44-7d3f-a433-4826-f4305c1df261",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "artifactType": "Lakehouse"
+      }
+    }
+  },
+  {
+    "name": "Dim_Ownership",
+    "path": "/Tables/dbo",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/dbo/Dim_Ownership",
+        "itemId": "e6e14f44-7d3f-a433-4826-f4305c1df261",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "artifactType": "Lakehouse"
+      }
+    }
+  },
+  {
+    "name": "Dim_Industry",
+    "path": "/Tables/dbo",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/dbo/Dim_Industry",
+        "itemId": "e6e14f44-7d3f-a433-4826-f4305c1df261",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "artifactType": "Lakehouse"
+      }
+    }
+  }
+]

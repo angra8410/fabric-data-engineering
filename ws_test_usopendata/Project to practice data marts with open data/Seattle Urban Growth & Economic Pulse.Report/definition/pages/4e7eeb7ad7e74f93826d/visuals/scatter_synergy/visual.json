@@ -46,7 +46,8 @@
                 }
               },
               "queryRef": "Fact_Permits.Total Investment",
-              "nativeQueryRef": "Total Investment"
+              "nativeQueryRef": "Total Investment",
+              "active": true
             }
           ]
         },
@@ -84,7 +85,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'📈 SEATTLE AREA CORRELATION: CONSTRUCTION INVESTMENT ⟷ BUSINESS FORMATION'"
+                  "Value": "'📈 NEIGHBORHOOD CORRELATION: CONSTRUCTION INVESTMENT ⟷ BUSINESS FORMATION'"
                 }
               }
             },
@@ -237,6 +238,34 @@
             }
           ]
         }
+      },
+      {
+        "name": "236018215967784c1a65",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Fact_Permits"
+              }
+            },
+            "Property": "Total Investment"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "930b23f1dbc9ee3f4453",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Fact_Businesses"
+              }
+            },
+            "Property": "Total Businesses"
+          }
+        },
+        "type": "Advanced"
       }
     ]
   }

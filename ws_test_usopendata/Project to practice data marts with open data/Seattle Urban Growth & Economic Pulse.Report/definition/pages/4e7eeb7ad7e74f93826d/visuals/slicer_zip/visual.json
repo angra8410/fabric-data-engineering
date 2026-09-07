@@ -85,11 +85,16 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'📍 Seattle Area (ZIP)'"
+                  "Value": "'📍 Neighborhood (ZIP)'"
                 }
               }
             }
           }
+        }
+      ],
+      "general": [
+        {
+          "properties": {}
         }
       ]
     },

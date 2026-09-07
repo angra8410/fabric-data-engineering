@@ -190,7 +190,8 @@
               }
             }
           ]
-        }
+        },
+        "howCreated": "User"
       },
       {
         "name": "filter_clean_month",
@@ -263,6 +264,34 @@
             }
           ]
         }
+      },
+      {
+        "name": "33016693f32287151482",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Fact_Businesses"
+              }
+            },
+            "Property": "Total Businesses"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "5b1f660de4a72f4c6b92",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Fact_Permits"
+              }
+            },
+            "Property": "Total Investment"
+          }
+        },
+        "type": "Advanced"
       }
     ]
   }

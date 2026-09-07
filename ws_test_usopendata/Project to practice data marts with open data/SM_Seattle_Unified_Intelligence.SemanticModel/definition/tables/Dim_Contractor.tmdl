@@ -1,0 +1,34 @@
+table Dim_Contractor
+	lineageTag: 6f6b0a72-62f5-49e1-9da7-3e187ef82661
+	sourceLineageTag: [dbo].[Dim_Contractor]
+
+	column contractor_key
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 0862e29b-ca33-4b09-aeaf-066dd9a9f354
+		sourceLineageTag: contractor_key
+		summarizeBy: none
+		sourceColumn: contractor_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column contractor_name
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: deeb3553-41bc-43e9-b915-c604dfa83085
+		sourceLineageTag: contractor_name
+		summarizeBy: none
+		sourceColumn: contractor_name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Contractor = entity
+		mode: directLake
+		source
+			entityName: Dim_Contractor
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+

@@ -20,6 +20,248 @@ const PORTFOLIO_DATA = {
 
   projects: [
     {
+      id: "seattle_pulse",
+      title: "Seattle Urban Growth & Economic Pulse",
+      category: "Municipal Open Data & Direct Lake Platform",
+      badge: "Fabric Data Marts & Direct Lake",
+      icon: "🏙️",
+      summary: "End-to-end Urban Planning & Economic Intelligence Platform on Microsoft Fabric ingesting 193K+ Building Permits and 84K+ Active Businesses from Seattle Open Data via Dataflow Gen2 ETL into conformed Lakehouse data marts, served via a Direct Lake Star Schema with sub-second Power BI cross-filtering across 3 executive chapters.",
+      tags: ["Microsoft Fabric", "Direct Lake", "Dataflow Gen2", "Power BI Desktop", "Star Schema", "Open Data", "Azure Maps", "DAX Time Intelligence"],
+      reports: {
+        prod: [
+          {
+            id: "seattle_pulse_prod",
+            title: "🏙️ Seattle Urban Growth & Economic Pulse (Direct Lake)",
+            embedUrl: "https://app.fabric.microsoft.com/reportEmbed?reportId=f56151e3-1bfb-bc3d-4502-098c1da44254&autoAuth=true&ctid=9da4a1e2-db93-42a7-a588-957fd6292e87",
+            description: "Executive 3-Page Direct Lake Power BI Story analyzing $2.5B in urban capital deployment, net housing unit expansion (+247K), municipal permit turnaround times, and commercial registration velocity across Seattle ZIP codes.",
+            metrics: [
+              { label: "Total Capital Investment", value: "$2.5B" },
+              { label: "Active Businesses", value: "84K" },
+              { label: "Net Housing Units", value: "+247K" },
+              { label: "Building Permits", value: "193K" }
+            ]
+          }
+        ],
+        dev: [
+          {
+            id: "seattle_pulse_dev",
+            title: "🟡 [DEV] Seattle Data Marts & Direct Lake Staging",
+            embedUrl: "https://app.fabric.microsoft.com/reportEmbed?reportId=f56151e3-1bfb-bc3d-4502-098c1da44254&autoAuth=true&ctid=9da4a1e2-db93-42a7-a588-957fd6292e87",
+            description: "Development semantic model connected to LH_Seattle_Permits_Datamart and LH_Seattle_Economy_Datamart for testing DAX Direct Lake measures without memory paging.",
+            metrics: [
+              { label: "Lakehouse Marts", value: "2 Datamarts" },
+              { label: "Conformed Model", value: "Star Schema" },
+              { label: "Avg Turnaround", value: "97 Days" }
+            ]
+          }
+        ]
+      },
+      medallion: {
+        bronze: {
+          name: "LH_Seattle_Raw_Ingestion (Socrata API)",
+          type: "Raw Ingestion (Dataflow Gen2 / REST)",
+          description: "Automated ingestion from Seattle Open Data Socrata REST endpoints (Building Permits & Active Business Licenses) into Microsoft Fabric Lakehouse staging delta tables with pagination and schema drift tracking.",
+          tableCount: 2,
+          tables: ["raw_seattle_building_permits (193,124 rows)", "raw_seattle_business_licenses (84,435 rows)"]
+        },
+        silver: {
+          name: "LH_Seattle_Silver_Transform",
+          type: "Cleaned & Conformed Delta Tables",
+          description: "Dataflow Gen2 pipeline performing coordinate parsing (Latitude / Longitude clean cast), permit lifecycle standardization (Issued, Completed, Under Review, Expired), housing unit delta compute, and business tenure calculation.",
+          tableCount: 4,
+          tables: ["silver_permits_cleaned", "silver_businesses_cleaned", "silver_contractors", "silver_geo_lookup"]
+        },
+        gold: {
+          name: "LH_Seattle_Permits_Datamart & LH_Seattle_Economy_Datamart",
+          type: "Conformed Star Schema Data Marts",
+          description: "Dual Gold Lakehouses powering Direct Lake mode: Conformed shared dimensions (Dim_Location, Dim_Date) bridging domain-specific fact tables (Fact_Permits, Fact_Businesses) and specialized dimensions (Dim_PermitType, Dim_Contractor, Dim_Industry, Dim_Ownership).",
+          tableCount: 8,
+          tables: ["Dim_Location", "Dim_Date", "Dim_PermitType", "Dim_Contractor", "Dim_Industry", "Dim_Ownership", "Fact_Permits (193K rows)", "Fact_Businesses (84K rows)"]
+        }
+      },
+      alm: {
+        pipeline: "pl_deployment_seattle_pulse",
+        stages: [
+          { name: "🟢 Development", workspace: "ws_test_usopendata", lakehouses: "LH_Seattle_*_Datamart" },
+          { name: "🟡 Test / Staging", workspace: "ws_seattle_test", lakehouses: "LH_Seattle_*_Test" },
+          { name: "🔴 Production", workspace: "ws_seattle_prod", lakehouses: "LH_Seattle_*_Prod" }
+        ],
+        optimization: "Dual Lakehouse Conformed Dimensions architecture (Dim_Location, Dim_Date) shared across separate Permits and Economy datamarts, enabling cross-domain Direct Lake queries with zero row duplication and sub-second Power BI response times."
+      },
+      codeSnippets: [
+        {
+          id: "dax_direct_lake",
+          title: "Direct Lake DAX Architecture & Measures",
+          language: "sql",
+          description: "Fabric Direct Lake optimized DAX measures avoiding calculated columns to guarantee purely native VertiPaq engine execution without fallback to DirectQuery.",
+          code: `-- Direct Lake Measure: Net Housing Units Added
+Net Housing Units Added = 
+SUM ( Fact_Permits[housing_units_added] ) - SUM ( Fact_Permits[housing_units_removed] )
+
+-- Direct Lake Measure: Average Approval Turnaround Time
+Average Days to Issue = 
+AVERAGEX (
+    FILTER (
+        Fact_Permits, 
+        NOT ( ISBLANK ( Fact_Permits[issued_date] ) ) && 
+        NOT ( ISBLANK ( Fact_Permits[applied_date] ) )
+    ),
+    DATEDIFF ( Fact_Permits[applied_date], Fact_Permits[issued_date], DAY )
+)
+
+-- Direct Lake Cross-Domain Metric: Capital Investment per Business
+Investment per Business = 
+DIVIDE ( [Total Investment], [Total Businesses], 0 )`
+        },
+        {
+          id: "dataflow_m_mashup",
+          title: "DF_Gen2_Seattle_Permits.mashup.pq",
+          language: "powerquery",
+          description: "Power Query M ETL script in Dataflow Gen2 extracting Seattle Open Data API payloads, standardizing coordinates, and landing Delta Lake tables.",
+          code: `// Dataflow Gen2 Power Query M: Seattle Building Permits Ingestion
+let
+    Source = Web.Contents(
+        "https://data.seattle.gov/resource/76t5-zqzr.json",
+        [Query = ["$limit" = "200000", "$$app_token" = #"Socrata_App_Token"]]
+    ),
+    JsonData = Json.Document(Source),
+    TableConverted = Table.FromList(JsonData, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+    ExpandedFields = Table.ExpandRecordColumn(TableConverted, "Column1", 
+        {"permit_num", "description", "status", "applied_date", "issued_date", 
+         "est_project_cost", "housing_units_added", "housing_units_removed", 
+         "contractor_company_name", "original_zip", "latitude", "longitude"}
+    ),
+    CleanTypes = Table.TransformColumnTypes(ExpandedFields, {
+        {"est_project_cost", type number},
+        {"housing_units_added", Int64.Type},
+        {"housing_units_removed", Int64.Type},
+        {"latitude", type number},
+        {"longitude", type number},
+        {"applied_date", type date},
+        {"issued_date", type date}
+    }),
+    Destination = Lakehouse.Contents("LH_Seattle_Permits_Datamart", "dbo.Fact_Permits", CleanTypes)
+in
+    Destination`
+        },
+        {
+          id: "star_schema_tmdl",
+          title: "SM_Seattle_Unified_Intelligence.SemanticModel (TMDL)",
+          language: "tmdl",
+          description: "Tabular Model Definition Language (TMDL) specification defining conformed star schema relationships between Fact_Permits, Fact_Businesses and Dim_Location.",
+          code: `// TMDL Direct Lake Relationships Specification
+relationship 3f8a0029-79ad-4f51-a20c-c76a5b9911e2
+    fromColumn: Fact_Permits.zip
+    toColumn: Dim_Location.zip
+
+relationship b714289a-0e77-4f16-83df-bfa546875bc4
+    fromColumn: Fact_Businesses.zip
+    toColumn: Dim_Location.zip
+
+relationship 8c160a22-3bb0-4d92-bf39-16acde59639c
+    fromColumn: Fact_Permits.permit_type_key
+    toColumn: Dim_PermitType.permit_type_key
+
+relationship 41655be2-4dc2-4876-b638-34857b28246e
+    fromColumn: Fact_Businesses.industry_key
+    toColumn: Dim_Industry.industry_key`
+        }
+      ],
+      dashboardData: {
+        filterOptions: {
+          slicer1: {
+            label: "Year:",
+            id: "filter-seattle-year",
+            options: [
+              { value: "ALL", label: "All Years (Historical)" },
+              { value: "2025", label: "2025" },
+              { value: "2024", label: "2024" },
+              { value: "2023", label: "2023" },
+              { value: "2022", label: "2022" },
+              { value: "2021", label: "2021" },
+              { value: "2020", label: "2020" }
+            ]
+          },
+          slicer2: {
+            label: "Sector / Area:",
+            id: "filter-seattle-area",
+            options: [
+              { value: "ALL", label: "All Seattle Neighborhoods" },
+              { value: "Downtown", label: "Downtown / Financial (98101)" },
+              { value: "SLU", label: "South Lake Union / Queen Anne (98109)" },
+              { value: "Belltown", label: "Belltown (98121)" },
+              { value: "CapitolHill", label: "Capitol Hill / Eastlake (98102)" },
+              { value: "UDistrict", label: "University District (98105)" },
+              { value: "Ballard", label: "Ballard (98107)" },
+              { value: "SoDo", label: "SoDo / Industrial (98134)" }
+            ]
+          }
+        },
+        kpiTotals: {
+          totalInvestment: "$2.5B",
+          totalBusinesses: "84,435",
+          netHousing: "+246,846 Units",
+          totalPermits: "193,124",
+          avgTurnaround: "97 Days",
+          investPerBiz: "$29.6K"
+        },
+        temporalSeries: [
+          { year: "2018", inv: 0.28, newBiz: 7420, permits: 21500, housing: 28400 },
+          { year: "2019", inv: 0.36, newBiz: 8150, permits: 24200, housing: 34100 },
+          { year: "2020", inv: 0.22, newBiz: 6200, permits: 18100, housing: 22800 },
+          { year: "2021", inv: 0.31, newBiz: 8900, permits: 22600, housing: 31500 },
+          { year: "2022", inv: 0.44, newBiz: 9850, permits: 28400, housing: 42300 },
+          { year: "2023", inv: 0.48, newBiz: 10400, permits: 30100, housing: 46200 },
+          { year: "2024", inv: 0.52, newBiz: 11200, permits: 31800, housing: 49600 },
+          { year: "2025", inv: 0.39, newBiz: 8600, permits: 23800, housing: 38200 }
+        ],
+        neighborhoods: [
+          { zip: "98101", name: "Downtown / Financial", inv: 0.62, businesses: 14250, housing: 48500, turnaround: 112, areaKey: "Downtown" },
+          { zip: "98109", name: "South Lake Union / Queen Anne", inv: 0.54, businesses: 11800, housing: 52400, turnaround: 105, areaKey: "SLU" },
+          { zip: "98121", name: "Belltown", inv: 0.38, businesses: 9200, housing: 36100, turnaround: 98, areaKey: "Belltown" },
+          { zip: "98104", name: "Pioneer Square / ID", inv: 0.26, businesses: 8400, housing: 24200, turnaround: 102, areaKey: "Downtown" },
+          { zip: "98102", name: "Capitol Hill / Eastlake", inv: 0.21, businesses: 9100, housing: 26800, turnaround: 89, areaKey: "CapitolHill" },
+          { zip: "98105", name: "University District", inv: 0.17, businesses: 7300, housing: 19500, turnaround: 84, areaKey: "UDistrict" },
+          { zip: "98103", name: "Fremont / Wallingford", inv: 0.14, businesses: 6800, housing: 14200, turnaround: 76, areaKey: "Ballard" },
+          { zip: "98107", name: "Ballard", inv: 0.11, businesses: 5900, housing: 12800, turnaround: 78, areaKey: "Ballard" },
+          { zip: "98134", name: "SoDo / Industrial District", inv: 0.09, businesses: 4600, housing: 3200, turnaround: 94, areaKey: "SoDo" }
+        ],
+        permitLifecycle: [
+          { name: "Issued / Active", count: "108,149", pct: 56.0, color: "#10b981" },
+          { name: "Completed / Finaled", count: "52,143", pct: 27.0, color: "#0284c7" },
+          { name: "Under Review / Plan Check", count: "21,244", pct: 11.0, color: "#f59e0b" },
+          { name: "Expired / Cancelled", count: "11,588", pct: 6.0, color: "#ef4444" }
+        ],
+        ownershipStructure: [
+          { name: "Limited Liability Company (LLC)", count: "43,890", pct: 52.0, color: "#38bdf8" },
+          { name: "Corporation (C-Corp / S-Corp)", count: "20,264", pct: 24.0, color: "#818cf8" },
+          { name: "Sole Proprietorship", count: "13,510", pct: 16.0, color: "#34d399" },
+          { name: "Partnership (General / LP)", count: "4,222", pct: 5.0, color: "#f472b6" },
+          { name: "Non-Profit Organization", count: "2,549", pct: 3.0, color: "#fbbf24" }
+        ],
+        topContractors: [
+          { name: "Sellen Construction Co Inc", permits: 412, inv: "$485M", share: "19.4%" },
+          { name: "Turner Construction Company", permits: 328, inv: "$392M", share: "15.7%" },
+          { name: "Lease Crutcher Lewis WA LLC", permits: 285, inv: "$315M", share: "12.6%" },
+          { name: "Howard S. Wright (Balfour Beatty)", permits: 241, inv: "$264M", share: "10.6%" },
+          { name: "Andersen Construction NW", permits: 198, inv: "$210M", share: "8.4%" },
+          { name: "Mortenson Construction", permits: 174, inv: "$182M", share: "7.3%" },
+          { name: "GLY Construction Inc", permits: 165, inv: "$168M", share: "6.7%" },
+          { name: "Skanska USA Building Inc", permits: 142, inv: "$145M", share: "5.8%" }
+        ],
+        naicsSectors: [
+          { name: "Professional & Scientific Tech", businesses: "18,420", pct: 21.8, color: "#38bdf8" },
+          { name: "Retail Trade", businesses: "14,850", pct: 17.6, color: "#34d399" },
+          { name: "Information & Software Tech", businesses: "13,120", pct: 15.5, color: "#818cf8" },
+          { name: "Accommodation & Food Services", businesses: "10,950", pct: 13.0, color: "#fbbf24" },
+          { name: "Construction & Contracting", businesses: "8,440", pct: 10.0, color: "#f97316" },
+          { name: "Healthcare & Social Assistance", businesses: "7,590", pct: 9.0, color: "#ec4899" },
+          { name: "Real Estate & Rental Leasing", businesses: "6,065", pct: 7.2, color: "#a855f7" },
+          { name: "Other Commercial Services", businesses: "5,000", pct: 5.9, color: "#64748b" }
+        ]
+      }
+    },
+    {
       id: "velykapet",
       title: "Velykapet Retail & WhatsApp Medallion Platform",
       category: "E-Commerce & POS Data Platform",

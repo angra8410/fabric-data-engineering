@@ -100,5 +100,18 @@
   - Crear columnas calculadas en DAX en Power BI: Descartado para evitar sobrecostos de memoria RAM en VertiPaq y garantizar consistencia en OneLake para cualquier consumidor.
 - **Consecuencias:** Jerarquía territorial nativa completa (Región ➔ Departamento ➔ Municipio) persistida directamente en Delta Lake con rendimiento sub-segundo.
 
+---
+
+## [ADR-010] Adopción de Programa de Mentoría Práctica: Fabric, SQL, PySpark, DAX & Enterprise Tooling
+- **Fecha:** 2026-09-11
+- **Estado:** Aprobado
+- **Contexto:** El desarrollador requiere preparación integral y práctica alineada a perfiles Senior BI Developer / Data Engineer / Power BI Architect (JDs: DigX, BairesDev, CluePoints, Gorilla Logic, CuraLinc, Jane App). Se acordó iniciar desde bases en SQL y PySpark e ir escalando hacia conceptos avanzados de Fabric Lakehouse, Modelado Dimensional, DAX, DAX Studio y Tabular Editor 2.
+- **Decisión Tomada:** Adoptar un enfoque de simulación de roles (Mentor/Lead Architect vs. Engineer) guiado por `growme`. Cada ejercicio resolverá un caso de negocio real (HR/Workforce & FinOps/Operational Analytics) con revisión de código tipo PR (evaluando buenas prácticas, SARGabilidad, costo computacional, patrones anti-rendimiento).
+- **Alternativas Consideradas:**
+  - *Preguntas teóricas o quizzes:* Descartado; no entrena la resolución de problemas reales ni prepara para los retos técnicos de las JDs.
+  - *Saltar directo a nivel senior sin diagnóstico inicial:* Descartado a petición del usuario para asegurar bases sólidas en SQL y PySpark.
+- **Consecuencias:** Desarrollo de criterio técnico senior, dominio de herramientas externas (DAX Studio, Tabular Editor 2) y comprensión profunda del motor de ejecución (VertiPaq/Storage Engine vs. Formula Engine vs. Spark Catalyst Optimizer).
+
+
 
 

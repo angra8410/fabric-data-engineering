@@ -120,3 +120,52 @@ df_silver_members = df_raw.select(
 ## 5. Resumen de Buenas Prácticas en Fabric Lakehouse
 - **Evitar bucles `for` o funciones Python nativas en filas individuales:** Siempre usa las funciones nativas de `pyspark.sql.functions` para que el optimizador Catalyst ejecute el cálculo compilado en C++ / Java bytecode.
 - **DataFrames Intermedios:** Crear variables (`df_step1`, `df_step2`) no consume memoria adicional porque Spark opera bajo **Lazy Evaluation** (evaluación perezosa): no calcula nada hasta que se ejecuta una acción (como escribir a Delta Lake con `.write.format("delta").save()`).
+
+---
+
+## 6. Core Mental Models & Production Patterns (Master Notes)
+
+### A. The "Onion Principle" (Inside-Out Functional Composition)
+Instead of procedural loops or nested `if/else`, compose data transformations in concentric layers from the inside out:
+```text
+Layer 4: [ GOVERNANCE ] Fallback Default      -> F.coalesce( ..., F.lit("not_provided@creditunion.org") )
+  Layer 3: [ MISSINGNESS ] Standardize to NULL -> F.nullif( ..., F.lit("") )
+    Layer 2: [ HYGIENE ] Clean & Normalize     -> F.lower( F.trim( ... ) )
+      Layer 1: [ RAW SIGNAL ] Source Column    -> F.col("email")
+```
+
+**Production Implementation:**
+```python
+F.coalesce(
+    F.nullif(F.lower(F.trim(F.col("email"))), F.lit("")),
+    F.lit("not_provided@creditunion.org")
+)
+```
+
+### B. DataFrame Immutability & Method Chaining
+- **DataFrames never mutate in-place:** Every method (`.withColumn()`, `.filter()`, `.select()`) returns a new DataFrame instance.
+- **Method Chaining:** Enclose DataFrame pipelines in parentheses `( ... )` to chain transformations clearly and avoid accidental state bifurcation across notebook cells:
+```python
+df_cleaned = (
+    df_raw
+    .withColumn("full_name", F.initcap(F.trim(F.col("full_name"))))
+    .withColumn("status", F.upper(F.trim(F.col("status"))))
+    .withColumn("email", F.coalesce(
+        F.nullif(F.lower(F.trim(F.col("email"))), F.lit("")),
+        F.lit("not_provided@creditunion.org")
+    ))
+)
+```
+
+### C. Explicit Schemas (`StructType`) vs. Schema Inference
+- **Syntax:** `StructField(name, dataType, nullable)` where `False` means `NOT NULL`.
+- **Architectural Benefits:**
+  1. **Performance:** Eliminates double-reading and expensive schema inference passes over storage.
+  2. **Zero Corruption:** Prevents loss of leading zeros in numeric-like identifiers (e.g., zip codes, member IDs).
+  3. **Data Contract:** Guarantees strict boundary enforcement at Bronze ingestion.
+
+### D. Critical Syntax Differences vs. Pandas
+- **Null check:** Use `.isNull()` (capital **N**), not `.isnull()`.
+- **Constants:** Always inject literal values into Spark expressions using `F.lit("constant")`.
+- **Conditions:** Always wrap logical conditions in parentheses: `(F.col("a") >= 10) & (F.col("b") <= 20)`.
+

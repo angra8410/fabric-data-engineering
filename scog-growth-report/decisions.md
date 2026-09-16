@@ -68,3 +68,17 @@
   3. **Refactorización de Nota de Riesgo a Sensibilidad de Alcance:** En lugar de una advertencia informal interna que sugiera dudas de estimación, refactorizar la nota en la Sección 2.5 a una cláusula formal de "Sensibilidad de Alcance y Entrega", estableciendo que el reporte de 4 páginas se ceñirá estrictamente a plantillas visuales estándar para garantizar el cumplimiento dentro de las 15 horas presupuestadas.
   4. **Atribución de Estimaciones de Mantenimiento:** Etiquetar las estimaciones anuales (20-40 hrs vs 2-4 hrs) como métricas de referencia de consultoría (*benchmarks*) basadas en organismos de planificación regional homólogos, sujetas a calibración post-Año 1.
 - **Consecuencias:** Coherencia total con la documentación oficial vigente de Microsoft, protección comercial de Skagit Consulting y presentación impecable ante la Junta Directiva de SCOG.
+
+---
+
+## [ADR-006] Validación de Integridad mediante Hashing y Checksums en Plantillas Excel (Opción 1)
+- **Fecha:** 2026-09-15
+- **Estado:** Aprobado
+- **Contexto:** En la Opción 1, la vulnerabilidad crítica es la "entropía de Excel": cambios accidentales en nombres de columnas, alteración de tipos de datos o sobreescritura accidental de filas históricas previamente adoptadas por la Junta.
+- **Decisión Tomada:**
+  1. Incorporar en las plantillas maestras de Excel un mecanismo de validación dual:
+     - **Hash/Firma de Esquema:** Concatenación determinista de encabezados de columna comparada con un valor de control preestablecido. Cualquier renombre o eliminación de columna dispara un banner visible de advertencia en Excel antes de intentar la actualización.
+     - **Checksum de Datos Históricos Adoptados:** Cálculo acumulativo sobre los registros históricos de años anteriores para garantizar que no se hayan alterado números pasados al agregar el nuevo año de reporte.
+  2. Configurar en Power Query (M) un gatekeeper liviano que verifique la firma de columnas previo a la carga, fallando con un mensaje descriptivo en lugar de un error críptico de transformación.
+- **Consecuencias:** Se reduce drásticamente la fragilidad operativa de la Opción 1 sin exceder el presupuesto de 15 horas, otorgando a SCOG un control de calidad preventivo en su propio entorno de trabajo.
+

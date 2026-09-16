@@ -340,16 +340,20 @@
 <ol>
   <li>SCOG staff collects annual data from OFM, ESD, and municipal permit offices.</li>
   <li>Staff inputs new annual rows into the pre-formatted Excel Master Tables stored in SharePoint.</li>
-  <li>Staff verifies no column names have changed and that numeric values contain no text characters.</li>
+  <li><strong>Automated Schema & Historical Integrity Validation (Hashing & Checksum):</strong></li>
 </ol>
 <ul>
+  <li><strong>Header & Schema Hash Validation:</strong> Each master workbook includes a dedicated, locked <code>Validation</code> tab and prominent header banner. A deterministic formula concatenates all table headers and generates a schema fingerprint/checksum against the master reference. If any column is renamed, deleted, reordered, or inserted, the banner immediately flags: <code>⚠️ SCHEMA ERROR: Headers altered. Do not trigger Power BI refresh.</code></li>
+  <li><strong>Historical Baseline Immutability Hash:</strong> A cumulative checksum/hash calculated over prior adopted reporting years (e.g., 2010–2025) validates that historical numbers have not been accidentally modified, overwritten, or shifted when inserting the new annual row. If any historical cell changes, an immediate alert flags: <code>⚠️ INTEGRITY ALERT: Historical adopted baseline altered.</code></li>
+  <li><strong>In-Cell Input Constraints:</strong> Native Excel Data Validation rules restrict jurisdiction entries to a closed dropdown matching official IDs and restrict numeric fields (permits, population, jobs) to valid non-negative numbers.</li>
   <li><strong>Naming Conventions:</strong> A single, persistent file naming scheme (e.g., <code>SCOG_Growth_Master_Data.xlsx</code> or partitioned files <code>SCOG_Housing_Master.xlsx</code>, <code>SCOG_Population_Master.xlsx</code>) in a dedicated SharePoint document library.</li>
   <li><strong>Refresh & Validation in Power BI:</strong></li>
 </ul>
 <ol>
   <li>Open Power BI Desktop (or trigger scheduled cloud refresh in Power BI Service).</li>
+  <li><strong>Power Query Schema Gatekeeper:</strong> Power Query executes a lightweight preliminary assertion on column headers and table checksums before loading fact tables, failing gracefully with an actionable notification if Excel structure was altered.</li>
   <li>Click <strong>Refresh</strong>.</li>
-  <li>Review the "Data Audit / QA Visual" (a dedicated validation visual checking row counts and total permits against raw inputs).</li>
+  <li>Review the "Data Audit / QA Visual" (a dedicated validation visual checking row counts, total permits against raw inputs, and schema hash status).</li>
   <li>Publish to the SCOG Power BI Workspace and export the official PDF for Board review.</li>
 </ol>
 <h3>2.4 Pros and Cons</h3>
@@ -360,7 +364,7 @@
   </tr>
   <tr>
     <td><strong>Fastest Delivery:</strong> Fits directly into the active contract scope and minimal budget.</td>
-    <td><strong>Fragility (Excel Entropy):</strong> A renamed column or merged cell breaks the entire Power Query refresh.</td>
+    <td><strong>Fragility (Excel Entropy):</strong> Column alterations break refresh (substantially mitigated by Excel schema hashing and Power Query gatekeeper).</td>
   </tr>
   <tr>
     <td><strong>Zero Added Software Licensing:</strong> Requires only standard M365 and existing Power BI Pro licenses.</td>
@@ -368,7 +372,7 @@
   </tr>
   <tr>
     <td><strong>Low Learning Curve:</strong> SCOG staff is already comfortable manipulating Excel.</td>
-    <td><strong>Weak Audit Trail:</strong> No native versioning or system logs of who altered numbers before publication.</td>
+    <td><strong>Weak Audit Trail:</strong> No native database log of which user altered numbers prior to publication.</td>
   </tr>
   <tr>
     <td><strong>Simple Governance:</strong> No complex Azure or Power Platform environments to administer.</td>
@@ -716,6 +720,7 @@ TOTAL: 90 hrs (MVP) – 124 hrs (Complete)</code></pre>
   <li><strong>Dataverse Capacity & Power Apps Entitlements:</strong> Updated Section 3.5 with verified Microsoft Power Platform entitlements (tenant base grant of <strong>20 GB Database capacity</strong> on qualifying licenses, confirming SCOG's annual growth data will incur <strong>$0 in incremental storage add-on fees</strong>). Clarified Power Apps Premium list pricing at <strong>$20/user/month</strong> for the 1–2 pipeline administrators.</li>
   <li><strong>Annual Maintenance Attribution:</strong> Explicitly attributed the 20–40 hr and 2–4 hr annual figures in Section 4 as consulting benchmarks based on peer regional planning agencies, to be calibrated post-Year 1.</li>
   <li><strong>Scope Sensitivity Reframing:</strong> Reframed the delivery note in Section 2.5 as a professional "Scope Sensitivity & Delivery Note" focusing on standard visual layouts to protect the 15-hour fixed budget.</li>
+  <li><strong>Excel Hashing & Checksum Integrity Validation:</strong> Updated Section 2.3 and Section 2.4 to introduce deterministic header schema hashing and historical baseline checksum validation directly within Excel master templates and Power Query pre-load assertions, hardening Option 1 against schema drift and accidental historical overwrites.</li>
 </ul>
 </div>
 </body>

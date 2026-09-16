@@ -45,29 +45,29 @@
 
 ---
 
-## [ADR-004] Descarte de Shape Map y Actualización de Precios Power BI ($14/mo)
+## [ADR-004] Estandarización en Visuales de Mapas GA (Azure Maps / ArcGIS Maps) y Precios Power BI ($14/mo)
 - **Fecha:** 2026-09-14
 - **Estado:** Aprobado
 - **Contexto:** 
-  1. *Shape Map:* Reportes técnicos confirmaron que Shape Map continúa en estado "preview" y presenta un bug activo en Power BI Service donde el visual desaparece del panel de visualizaciones post-publicación. Como el flujo de SCOG depende de publicar en el Service y exportar el PDF oficial para el Board, este riesgo es inaceptable.
+  1. *Shape Map:* Shape Map es un visual experimental en "preview" perpetuo sin soporte de disponibilidad general (GA) ni SLA de soporte empresarial. En reportes adoptados por el Board donde se exporta a PDF desde el Service, depender de visuales en preview genera riesgos inaceptables de soporte e inconsistencias visuales.
   2. *Precios de Power BI Pro:* Las listas de precios de Microsoft sufrieron un incremento efectivo en abril de 2025, elevando Power BI Pro de $10 a $14/usuario/mes y Premium Per User (PPU) de $20 a $24/usuario/mes.
 - **Decisión Tomada:**
-  1. Descartar definitivamente Shape Map de la arquitectura y adoptar **Azure Maps o ArcGIS Maps for Power BI** como el estándar por defecto para mapas de límites jurisdiccionales.
+  1. Estandarizar estrictamente en **Azure Maps o ArcGIS Maps for Power BI** como visuales nativos soportados en GA con soporte empresarial completo de Microsoft.
   2. Actualizar las referencias de precios en la Sección 3.5 a **$14/usuario/mes (Pro)** y **$24/usuario/mes (PPU)**, instruyendo validar descuentos gubernamentales (GCC/State agreement) con el administrador M365 de SCOG.
-- **Consecuencias:** Se elimina un riesgo técnico severo de renderizado en la nube y se garantiza que el documento refleje datos financieros vigentes ante la Junta Directiva.
+- **Consecuencias:** Se elimina el riesgo de depender de características en preview y se asegura la máxima estabilidad en exportaciones PDF para el Board.
 
 ---
 
-## [ADR-005] Verificación de Entitlements de Dataverse, Power Apps y Enfoque de Sensibilidad de Alcance
+## [ADR-005] Verificación de Almacenamiento Mancomunado en Dataverse y Rangos de Mantenimiento Anual
 - **Fecha:** 2026-09-14
 - **Estado:** Aprobado
-- **Contexto:** Validación final antes de la presentación ante la Junta Directiva sobre las capacidades reales de almacenamiento de Dataverse, costos de Power Apps Premium y redacción de límites contractuales de alcance.
+- **Contexto:** Validación previa a la entrega al Board sobre las capacidades reales de almacenamiento de Dataverse, costos de Power Apps Premium y redacción de estimaciones de mantenimiento anual.
 - **Decisión Tomada:**
-  1. **Capacidad Base de Dataverse (20 GB):** Documentar formalmente que Microsoft otorga una asignación base a nivel de tenant de **20 GB de base de datos** al adquirir licencias Power Apps Premium. Para el volumen anual de SCOG (pocos MBs), el costo incremental por almacenamiento adicional de Dataverse ($40/GB/mes) es exactamente **$0**.
+  1. **Capacidad Mancomunada de Dataverse:** Documentar que los tenants de Power Platform reciben una asignación base de almacenamiento mancomunado (*tenant pooled capacity*) que crece con las licencias adquiridas. Para el volumen anual de SCOG (pocos MBs), el costo incremental por almacenamiento adicional de Dataverse ($40/GB/mes) es prácticamente **$0**, pero debe validarse el saldo real en el Power Platform Admin Center con el admin M365 de SCOG.
   2. **Licenciamiento Power Apps Premium ($20/mo):** Clarificar que solo los 1 o 2 administradores encargados de ejecutar y supervisar los flujos de ingesta en SharePoint/Dataverse requieren licencias de Power Apps Premium ($20/usuario/mes lista). Los consumidores y directores de SCOG que solo consultan el reporte en Power BI no requieren licencias de Power Apps.
   3. **Refactorización de Nota de Riesgo a Sensibilidad de Alcance:** En lugar de una advertencia informal interna que sugiera dudas de estimación, refactorizar la nota en la Sección 2.5 a una cláusula formal de "Sensibilidad de Alcance y Entrega", estableciendo que el reporte de 4 páginas se ceñirá estrictamente a plantillas visuales estándar para garantizar el cumplimiento dentro de las 15 horas presupuestadas.
-  4. **Atribución de Estimaciones de Mantenimiento:** Etiquetar las estimaciones anuales (20-40 hrs vs 2-4 hrs) como métricas de referencia de consultoría (*benchmarks*) basadas en organismos de planificación regional homólogos, sujetas a calibración post-Año 1.
-- **Consecuencias:** Coherencia total con la documentación oficial vigente de Microsoft, protección comercial de Skagit Consulting y presentación impecable ante la Junta Directiva de SCOG.
+  4. **Rangos de Planificación Operativa:** En lugar de atribuir los rangos de 20-40 hrs vs 2-4 hrs a "organismos pares no identificados", presentarlos como escenarios de planificación operativa interna (trabajo manual fragmentado vs ingesta automatizada con excepción), sujetos a calibración directa con el equipo de SCOG post-Año 1.
+- **Consecuencias:** Presentación rigurosa, defendible ante la Junta Directiva de SCOG y libre de supuestos sin fuente demostrable.
 
 ---
 

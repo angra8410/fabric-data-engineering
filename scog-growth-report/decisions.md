@@ -71,14 +71,14 @@
 
 ---
 
-## [ADR-006] Validación de Integridad mediante Hashing y Checksums en Plantillas Excel (Opción 1)
+## [ADR-006] Validación de Integridad Basada en Fórmulas en Plantillas Excel (.xlsx) para Opción 1
 - **Fecha:** 2026-09-15
 - **Estado:** Aprobado
-- **Contexto:** En la Opción 1, la vulnerabilidad crítica es la "entropía de Excel": cambios accidentales en nombres de columnas, alteración de tipos de datos o sobreescritura accidental de filas históricas previamente adoptadas por la Junta.
+- **Contexto:** En la Opción 1, la vulnerabilidad crítica es la "entropía de Excel": cambios accidentales en nombres de columnas, alteración de tipos de datos o sobreescritura accidental de filas históricas previamente adoptadas por la Junta. Se requiere proteger el proceso sin introducir macros (.xlsm) ni exceder el presupuesto fijo de 15 horas.
 - **Decisión Tomada:**
-  1. Incorporar en las plantillas maestras de Excel un mecanismo de validación dual:
-     - **Hash/Firma de Esquema:** Concatenación determinista de encabezados de columna comparada con un valor de control preestablecido. Cualquier renombre o eliminación de columna dispara un banner visible de advertencia en Excel antes de intentar la actualización.
-     - **Checksum de Datos Históricos Adoptados:** Cálculo acumulativo sobre los registros históricos de años anteriores para garantizar que no se hayan alterado números pasados al agregar el nuevo año de reporte.
-  2. Configurar en Power Query (M) un gatekeeper liviano que verifique la firma de columnas previo a la carga, fallando con un mensaje descriptivo en lugar de un error críptico de transformación.
-- **Consecuencias:** Se reduce drásticamente la fragilidad operativa de la Opción 1 sin exceder el presupuesto de 15 horas, otorgando a SCOG un control de calidad preventivo en su propio entorno de trabajo.
+  1. Utilizar **fórmulas nativas de Excel estándar (.xlsx)** preconfiguradas en las plantillas maestras entregadas en la Tarea 1:
+     - **Comparación de Encabezados:** Concatenación (`TEXTJOIN`) de encabezados comparada contra la cadena del esquema oficial. Dispara un banner visual de error si se altera o borra una columna. Compatible 100% con Excel Online y SharePoint sin requerir macros/VBA.
+     - **Total de Control Histórico:** Fórmula `SUMIFS` que valida la suma de control de las filas históricas adoptadas para evitar alteraciones inadvertidas al ingresar el nuevo año.
+  2. En Power Query (Tarea 2), apoyarse en aserciones nativas de selección estricta de columnas (`Table.SelectColumns` con tipado fuerte), deteniendo la carga si faltan columnas requeridas sin incurrir en desarrollo complejo de motores de error fuera del presupuesto de 15 horas.
+- **Consecuencias:** Se blinda técnicamente la Opción 1 frente a los revisores de SCOG manteniendo la viabilidad contractual y operativa dentro del presupuesto de 15 horas.
 

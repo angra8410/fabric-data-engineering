@@ -106,4 +106,20 @@
   - Estimación realista, robusta y defendible que protege los márgenes y la reputación de Skagit Consulting.
   - La distancia relativa entre la Opción 1 (75 hrs baseline) y la Opción 2 MVP (90 hrs) se reduce a solo 15 horas (~20%), fortaleciendo enormemente la justificación de retorno de inversión (ROI) para la Opción 2 empresarial.
 
+---
 
+## [ADR-008] Calibración de Opción 2 a 110–150 hrs y Consolidación de Opción 1 en 55–97 hrs (Baseline 75 hrs) para Revisión 3
+- **Fecha:** 2026-09-16
+- **Estado:** Aprobado / Vigente (Revisión 3)
+- **Contexto:**
+  1. Para la **Revisión 3**, se formaliza la Opción 1 como el alcance contractual base (*base contracted approach*), consolidada en un rango bottom-up de **55 – 97 horas** con un **baseline de 75 horas** a lo largo de seis tareas bien delimitadas.
+  2. La estimación técnica de la Opción 2 (Dataverse + Ingesta automatizada) fue revisada en profundidad para capturar con rigor la envergadura real de la ingeniería de datos: modelado de entidades en Dataverse, arquitectura de biblioteca y carpetas de intake en SharePoint, flujos ETL en Power Query Dataflows y Power Automate con lógica de upsert, reglas de validación/excepciones, migración histórica de 10–15 años de datos y capacitación técnica. Esto elevó el rango de la Opción 2 a **110 – 150 horas** (MVP: 110 hrs, Completo: 150 hrs).
+  3. El posicionamiento estratégico evoluciona hacia un soporte objetivo a la toma de decisiones: se articulan transparentemente los méritos de ambas opciones para que SCOG elija en función de sus prioridades inmediatas de entrega vs. su visión de modernización y capacidad administrativa.
+- **Decisión Tomada:**
+  1. **Consolidar Opción 1:** Rango 55–97 horas (75 hrs baseline). Mantener la validación del estado del prototipo 2025 como el principal factor de ajuste durante la Tarea 1 (Discovery).
+  2. **Recalibrar Opción 2 a 110–150 horas:** Desglose formal de 8 tareas (10/16, 16/20, 18/22, 22/28, 12/18, 18/22, 8/14, 6/10 hrs).
+  3. **Enfoque de Recomendación Neutral y Equilibrada:** Respaldar la decisión de SCOG sin forzar la adopción de Dataverse. La Opción 1 es suficiente, autosuficiente y de entrega directa; la Opción 2 es una inversión de plataforma para eliminar trabajo manual recurrente.
+- **Consecuencias:**
+  - Documentación perfectamente sincronizada entre Markdown, HTML y PDF en Revision 3.
+  - Protección de márgenes ante la complejidad de la ingesta y migración en Power Platform si SCOG opta por la Opción 2.
+  - Claridad absoluta para la reunión de entrega del miércoles.

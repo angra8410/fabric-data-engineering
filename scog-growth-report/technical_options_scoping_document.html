@@ -264,19 +264,18 @@
 <h1>Technical Options Scoping Document: Annual Growth Monitoring Report</h1>
 <p><strong>Client:</strong> Skagit Council of Governments (SCOG)</p>
 <p><strong>Author:</strong> Antonio / Skagit Consulting</p>
-<p><strong>Date:</strong> September 16, 2026 (Revision 2)</p>
+<p><strong>Date:</strong> September 16, 2026 (Revision 3)</p>
 <p><strong>Target Delivery:</strong> Wednesday Delivery Review</p>
-<p><strong>Revision 2 Note:</strong> This version replaces the Option 1 task structure and hour estimate with the six-task breakdown confirmed by the client (Discovery, 2025 Prototype, 2026 Production Report, Documentation, Training, Contingency), targeting a 70–100 hour range instead of the earlier 15-hour figure — which the client has clarified was the fee for producing this scoping document, not the Option 1 implementation estimate. This revision reflects that the 2025 prototype is work in progress rather than complete. Figures for the prototype task in particular are provisional — see the assumption note in Section 2.5 — and should be confirmed once the prototype's actual state is assessed under Task 1.</p>
+<p><strong>Revision 3 Note:</strong> This version presents Option 1 as the base contracted approach, estimated across six task areas — Discovery/Planning, the 2025 prototype, the 2026 Power BI Growth Monitoring Report, documentation, staff training, and contingency — for a 55–97 hour range (75-hour baseline). The 2025 prototype is treated as work in progress; see the assumption note in Section 2.5, which should be confirmed once the prototype's actual state is assessed under Task 1.</p>
 <hr>
 <h2>1. Executive Summary</h2>
 <p>The Skagit Council of Governments (SCOG) compiles and publishes an annual <strong>Growth Monitoring Report</strong> to track regional land use, population, housing, and employment trends under Washington State's Growth Management Act (GMA). Historically, SCOG staff has manually gathered disparate spreadsheets from municipal and county jurisdictions, cleaned and merged them in Microsoft Excel, and manually produced charts and tables for inclusion in board-adopted reports.</p>
 <p>This project evaluates the transition of SCOG's annual growth monitoring reporting into <strong>Microsoft Power BI</strong>. The primary objective is to deliver an interactive, maintainable, and visually compelling reporting system that streamlines annual updates while preserving the official, archivable format required for Board adoption.</p>
 <p>This scoping document provides an objective, side-by-side technical evaluation of two delivery pathways:</p>
 <ul>
-  <li><strong>Option 1 — Base Scope (Power BI from SCOG-Prepared Excel/GIS Files):</strong> Implementation is scoped bottom-up across six task areas — discovery, a 2025 prototype (in progress) built on prior-year data, the 2026 production report, documentation, staff training, and contingency — targeting a <strong>70–100 hour range</strong> (baseline ~75 hours). SCOG staff retains responsibility for cleaning and structuring annual Excel and GIS files, while Skagit Consulting constructs a clean, standardized Power BI data model, core interactive dashboards, and a streamlined annual refresh procedure.</li>
-  <li><strong>Option 2 — Expanded Scope (Dataverse-Backed Reporting Architecture with Annual Ingestion Pipeline):</strong> An enterprise-grade architecture (estimated at <strong>90–124 hours</strong>) that establishes Microsoft Dataverse as a single source of truth, introducing automated file intake (via SharePoint and Power Query / Power Automate Dataflows), validation, historical auditing, and approval workflows.</li>
+  <li><strong>Option 1 — Base Scope (Power BI from SCOG-Prepared Excel/GIS Files):</strong> Implementation is scoped bottom-up across six task areas — discovery, a 2025 prototype (in progress) built on prior-year data, the 2026 production report, documentation, staff training, and contingency — for a <strong>55–97 hour range (75-hour baseline)</strong>. SCOG staff retains responsibility for cleaning and structuring annual Excel and GIS files, while Skagit Consulting constructs a clean, standardized Power BI data model, core interactive dashboards, and a streamlined annual refresh procedure.</li>
+  <li><strong>Option 2 — Expanded Scope (Dataverse-Backed Reporting Architecture with Annual Ingestion Pipeline):</strong> An expanded data-platform architecture (estimated at <strong>110–150 hours</strong>) that establishes Microsoft Dataverse as a structured reporting data layer, introducing automated file intake (via SharePoint and Power Query / Power Automate Dataflows), validation, historical auditing, and approval workflows.</li>
 </ul>
-<div class="alert alert-important"><div class="alert-icon"></div><div class="alert-content"><strong>Confirmed per Aaron's guidance:</strong> The 15-hour figure referenced in an earlier version of this engagement is the Skagit Consulting ↔ The Flock fee for producing this scoping document — it is not, and should not be used as, SCOG's Option 1 implementation estimate. Option 1 is estimated separately below, bottom-up, against the six task areas defined by the SCOG contract scope.</div></div>
 <hr>
 <h2>2. Option 1 — Power BI Report Built from SCOG-Prepared Excel/GIS Files</h2>
 <h3>2.1 Recommended Architecture</h3>
@@ -295,67 +294,23 @@
  - Dim_CalendarYear                       - Fact_PopulationEstimates
  - Dim_UGA_Reference                      - Fact_EmploymentBySector</code></pre>
 <ul>
-  <li><strong>Expected Excel Structure:</strong> Rather than unstructured spreadsheets with merged cells or presentation formatting, data must be arranged in flat <strong>Excel Tables (<code>ListObject</code>)</strong>. Each theme (Housing, Population, Employment) will have a fixed schema with invariant column headers (e.g., <code>ReportingYear</code>, <code>JurisdictionID</code>, <code>MetricType</code>, <code>Value</code>, <code>Unit</code>).</li>
-  <li><strong>Data Model Approach:</strong> A classic, lightweight <strong>Star Schema</strong>. </li>
-  <li><strong>Fact Tables:</strong> Numerical observations at the annual grain (<code>Fact_Housing_Units</code>, <code>Fact_Population_OFM</code>, <code>Fact_Employment_ESD</code>).</li>
-  <li><strong>Dimension Tables:</strong> Conformed dimensions (<code>Dim_Jurisdiction</code>, <code>Dim_Year</code>, <code>Dim_GrowthTarget</code>).</li>
-  <li><strong>Star Schema vs. Flat Model:</strong> A star schema is strongly recommended over a single wide flat table because it allows cross-filtering across disparate data sources (OFM population vs. local permit data) without many-to-many cardinality pitfalls.</li>
+  <li><strong>Data Model Approach:</strong> A classic, lightweight <strong>Star Schema</strong> — fact tables for annual numerical observations (<code>Fact_Housing_Units</code>, <code>Fact_Population_OFM</code>, <code>Fact_Employment_ESD</code>) against conformed dimensions (<code>Dim_Jurisdiction</code>, <code>Dim_Year</code>, <code>Dim_GrowthTarget</code>). A star schema is recommended over a single flat table because it supports cross-filtering across disparate sources (OFM population vs. local permit data) without many-to-many cardinality issues.</li>
   <li><strong>Prototype Build Integration:</strong> Because Option 1 now includes building out a 2025 prototype as its own task rather than treating the model as a quick pass over already-complete work, the architecture and star schema design happen as part of that prototype build — not as a separate up-front step.</li>
 </ul>
 <h3>2.2 Power BI Report Structure</h3>
 <p>The report is structured into four cohesive pages, built out first against 2025 prior-year data in the prototype and then extended to 2026 data in the production report:</p>
 <ol>
-  <li><strong>Executive Summary & Regional Dashboard:</strong> County-level KPIs (Total County Population, Net New Housing Units, Total Covered Employment, YoY % Growth, Progress toward 20-Year GMA Allocations).</li>
-  <li><strong>Housing Deep-Dive (Primary Focus):</strong> </li>
+  <li><strong>Executive Summary & Regional Dashboard:</strong> County-level KPIs (population, net new housing units, covered employment, YoY growth, progress toward 20-year GMA allocations).</li>
+  <li><strong>Housing Deep-Dive:</strong> Permits by type and jurisdiction, cumulative growth vs. Countywide Planning Policy targets, County vs. Urban Growth Area distribution.</li>
+  <li><strong>Population & Employment Overview:</strong> OFM population estimates and ESD covered employment trends, presented as lighter supporting views.</li>
+  <li><strong>Jurisdictional Comparison & Spatial Mapping:</strong> Standardized on <strong>Azure Maps</strong> or <strong>ArcGIS Maps for Power BI</strong> (GA-grade, board-suitable) rather than the preview-only Shape Map visual.</li>
+  <li><strong>Board-Adopted Print / Export Considerations:</strong> Canvases locked to standard <strong>16:9 widescreen</strong>, high-contrast styling, and a dynamic metadata footer for the formal PDF package.</li>
 </ol>
-<ul>
-  <li>Annual residential building permits (Single-Family vs. Multi-Family vs. ADUs) by jurisdiction.</li>
-  <li>Cumulative net housing growth vs. Countywide Planning Policy (CPP) housing allocation targets.</li>
-  <li>County vs. Urban Growth Area (UGA) distribution.</li>
-</ul>
-<ol>
-  <li><strong>Population & Employment Overview (Lighter Supporting Views):</strong></li>
-</ol>
-<ul>
-  <li>Washington Office of Financial Management (OFM) historical population estimates and annual growth rates.</li>
-  <li>Employment Security Department (ESD) covered employment trends by sector/industry.</li>
-</ul>
-<ol>
-  <li><strong>Jurisdictional Comparison & Spatial Mapping:</strong></li>
-</ol>
-<ul>
-  <li><strong>Recommended Default:</strong> <strong>Azure Maps</strong> or <strong>ArcGIS Maps for Power BI</strong> visual.</li>
-  <li><strong>Technical Rationale on Mapping Visuals (Standardizing on Azure Maps / ArcGIS Maps):</strong> Standardized on Azure Maps or ArcGIS Maps for Power BI (GA-grade, board-suitable) rather than the preview-only Shape Map visual, ensuring long-term stability and eliminating risks of rendering inconsistencies in Board-adopted PDF exports.</li>
-  <li>Jurisdictional comparative benchmark cards (e.g., Mount Vernon, Burlington, Anacortes, Sedro-Woolley, Concrete, Hamilton, La Conner, Lyman, and Unincorporated areas).</li>
-</ul>
-<ol>
-  <li><strong>Board-Adopted Print / Export Considerations:</strong></li>
-</ol>
-<ul>
-  <li>Report canvases locked to standard <strong>16:9 widescreen</strong> with high-contrast, publication-grade styling.</li>
-  <li>Visual headers and slicers formatted to cleanly export to PDF for the formal Board package, accompanied by a dynamic metadata footer ("Data Source: SCOG Annual Monitoring | Adopted: [Date]").</li>
-</ul>
 <h3>2.3 Annual Update Process</h3>
 <ul>
-  <li><strong>Staff Pre-Refresh Steps:</strong> </li>
+  <li><strong>Staff Pre-Refresh Steps:</strong> SCOG staff collects annual data from OFM, ESD, and municipal permit offices, and enters it into pre-formatted Excel master tables in SharePoint. Formula-based schema and baseline-reconciliation checks (header string comparison, historical <code>SUMIFS</code> control totals, in-cell dropdown constraints) flag broken templates before a refresh is attempted — delivered as standard <code>.xlsx</code> with no macros required.</li>
+  <li><strong>Refresh and Validation in Power BI:</strong> Power Query ingests the verified SharePoint files with native type enforcement; a dedicated Data Audit/QA visual checks row counts and totals against raw inputs before publishing to the SCOG workspace and exporting the Board PDF.</li>
 </ul>
-<ol>
-  <li>SCOG staff collects annual data from OFM, ESD, and municipal permit offices.</li>
-  <li>Staff inputs new annual rows into pre-formatted Excel Master Tables stored in SharePoint.</li>
-  <li><strong>Formula-Based Template Integrity Verification (Standard <code>.xlsx</code>, No Macros Required):</strong></li>
-</ol>
-<ul>
-  <li><strong>Header String Comparison (Schema Protection):</strong> To prevent broken Power Query refreshes caused by accidental column renames or deletions, the master Excel template (<code>.xlsx</code>) includes a prominent formula-based status cell. A standard formula (<code>TEXTJOIN</code> / array comparison) checks the table's header row against the expected schema string. If any header is modified, deleted, or reordered, the status cell immediately flags: <code>⚠️ SCHEMA ERROR: Column headers altered. Do not trigger Power BI refresh.</code> Because this uses native formulas, the files remain standard <code>.xlsx</code> (fully compatible with Excel Online, SharePoint co-authoring, and requiring zero VBA/macros).</li>
-  <li><strong>Historical Baseline Reconciliation Total:</strong> A formula-based control cell computes a verification sum (<code>SUMIFS</code>) across prior board-adopted years (e.g., 2010–2025). This gives staff an immediate visual check that historical baseline numbers were not inadvertently altered or shifted while typing in the new annual row.</li>
-  <li><strong>In-Cell Dropdown Constraints:</strong> Native Excel Data Validation enforces closed dropdown lists for official jurisdiction IDs and restricts permit, population, and employment counts to positive numbers.</li>
-  <li><strong>Refresh & Validation in Power BI:</strong></li>
-</ul>
-<ol>
-  <li>Open Power BI Desktop (or trigger scheduled cloud refresh in Power BI Service).</li>
-  <li><strong>Power Query Refresh:</strong> Power Query ingests the verified SharePoint files; native type enforcement validates schema integrity during load.</li>
-  <li>Review the "Data Audit / QA Visual" (a dedicated validation visual checking row counts and total permits against raw inputs).</li>
-  <li>Publish to the SCOG Power BI Workspace and export the official PDF for Board review.</li>
-</ol>
 <h3>2.4 Pros and Cons</h3>
 <div class="table-wrapper"><table>
   <tr>
@@ -363,23 +318,23 @@
     <th>Cons (Limitations & Risks)</th>
   </tr>
   <tr>
-    <td><strong>No Added Software Licensing:</strong> Requires only standard M365 and existing Power BI Pro licenses.</td>
-    <td><strong>Fragility (Excel Entropy):</strong> Column alterations break refresh (mitigated but not eliminated by formula-based checks).</td>
+    <td><strong>No Added Software Licensing:</strong> Beyond standard M365 and Power BI Pro.</td>
+    <td><strong>Fragility to Column/Header Changes:</strong> Mitigated but not eliminated by formula-based checks.</td>
   </tr>
   <tr>
-    <td><strong>Low Learning Curve:</strong> SCOG staff is already comfortable manipulating Excel.</td>
-    <td><strong>Manual Staff Burden:</strong> All cleaning and formatting remains manual on SCOG staff annually.</td>
+    <td><strong>Low Learning Curve:</strong> For staff already comfortable in Excel.</td>
+    <td><strong>Manual Staff Burden:</strong> Annual data preparation remains a manual staff task.</td>
   </tr>
   <tr>
-    <td><strong>Simple Governance:</strong> No complex Power Platform environment to administer.</td>
-    <td><strong>Weak Audit Trail:</strong> No native database log of which user altered numbers prior to publication.</td>
+    <td><strong>Simple Governance:</strong> No Power Platform environment to administer.</td>
+    <td><strong>Weak Audit Trail:</strong> Limited native auditing of prior spreadsheet alterations.</td>
   </tr>
   <tr>
-    <td><strong>Direct Delivery:</strong> Implements a clean, working Power BI solution without infrastructure overhead.</td>
-    <td><strong>Limited Concurrency:</strong> Multi-staff editing risks sync locks and template formula corruption.</td>
+    <td><strong>Direct Implementation:</strong> Focuses directly on report deliverables.</td>
+    <td><strong>Limited Concurrency:</strong> Multi-staff editing risks sync conflicts and formula overwrites.</td>
   </tr>
 </table></div>
-<h3>2.5 Estimated Implementation Hours (Revised: 70–100 Hour Target Range)</h3>
+<h3>2.5 Estimated Implementation Hours (55–97 Hour Range, 75-Hour Baseline)</h3>
 <p>Hours are estimated bottom-up across six task areas rather than back-solved to a fixed total. The 2025 prototype is treated as work in progress — partially built, not started from scratch — which is why its allocation sits below what a full from-zero build would require. The exact reduction is an assumption pending a firsthand assessment of what already exists; Task 1 (Discovery) includes confirming that state before the prototype work is finalized.</p>
 <div class="table-wrapper"><table>
   <tr>
@@ -387,7 +342,7 @@
     <th>Low (hrs)</th>
     <th>Baseline (hrs)</th>
     <th>High (hrs)</th>
-    <th>Task Description</th>
+    <th>Description</th>
   </tr>
   <tr>
     <td><strong>1. Discovery & Planning</strong></td>
@@ -436,15 +391,15 @@
     <td><strong>55</strong></td>
     <td><strong>75</strong></td>
     <td><strong>97</strong></td>
-    <td><strong>Baseline sits within the 70–100 hour target range; low end depends on the prototype being closer to complete than assumed.</strong></td>
+    <td><strong>75-hour baseline; low end depends on the prototype being closer to complete than assumed, high end on source-data or mapping complexity.</strong></td>
   </tr>
 </table></div>
 <div class="alert alert-important"><div class="alert-icon"></div><div class="alert-content"><strong>Key Assumptions for Option 1:</strong><br>1. The 2025 prototype exists in some working form (data connections and/or partial model) but is not yet validated or extended to a full report — to be confirmed during Discovery.<br>2. The 2025 prototype and 2026 production report share one data model and report structure. If SCOG wants them kept as fully separate artifacts, add roughly 10–15 hours.<br>3. SCOG delivers Excel data in flat, tabular (<code>ListObject</code>) format with uniform headers across reporting years.<br>4. GIS boundaries are provided in a directly usable format (GeoJSON, Shapefile, or TopoJSON) without custom reprojection.<br>5. Scope excludes custom ETL data scrubbing, paginated report (.rdl) development, or historical data forensic reconciliation.</div></div>
-<div class="alert alert-tip"><div class="alert-icon"></div><div class="alert-content"><strong>Recommendation for the Client Conversation:</strong> Present the 75-hour baseline as the working estimate, with 55 hours as a best case that depends on the prototype being further along than currently assumed and on clean source files. If the client needs the number closer to the low end of the 70–100 range, the honest lever is narrowing scope (e.g., fewer report pages, lighter documentation) rather than trimming the prototype or contingency lines.</div></div>
+<div class="alert alert-tip"><div class="alert-icon"></div><div class="alert-content"><strong>Recommendation for the Client Conversation:</strong> Present the 75-hour baseline as the working estimate, with 55 hours as a best case that depends on the prototype being further along than currently assumed and on clean source files. Reducing the estimate would require reducing scope, such as fewer report pages, lighter documentation, or reduced mapping/export work.</div></div>
 <hr>
 <h2>3. Option 2 — Expanded Scope: Dataverse-Backed Reporting Architecture with Annual Ingestion Pipeline</h2>
 <h3>3.1 Recommended Architecture</h3>
-<p>Option 2 transforms SCOG's annual growth monitoring from an ad-hoc reporting task into an enterprise data platform. Data is decoupled from end-user spreadsheets and centralized in <strong>Microsoft Dataverse</strong>.</p>
+<p>Option 2 introduces a structured Dataverse-backed reporting data layer for SCOG's annual growth monitoring. Data is decoupled from end-user spreadsheets and centralized in <strong>Microsoft Dataverse</strong>, with core tables for jurisdictions, reporting periods, housing/population/employment metrics, import logs and errors, and a geography/GIS reference table. Power BI connects via the native Dataverse connector (TDS endpoint), supporting both Import and DirectQuery modes.</p>
 <pre><code class="language-">                       [Disparate Agency Raw Files]
                      (OFM, ESD, Municipal Excel/CSVs)
                                     │
@@ -466,60 +421,38 @@
 - Reporting Years           - Population Metrics            - Import Errors / Exceptions
 - Geography / UGA Reference - Employment Metrics            - Report Approval Status
                                     │
-                                    ▼ (DirectQuery / Azure Synapse Link / Import)
+                                    ▼ (DirectQuery / Native TDS Connector / Import)
                       [Power BI Semantic Model]
                                     │
                                     ▼
                 [Interactive Board Report &amp; Historical Trends]</code></pre>
-<h4>Conceptual Dataverse Table Design:</h4>
+<h4>Core Dataverse Table Entities:</h4>
 <ol>
-  <li><strong><code>scog_jurisdiction</code>:</strong> Unique municipal entities, county unincorporated zones, GMA designation, baseline planning targets.</li>
-  <li><strong><code>scog_reporting_period</code>:</strong> Reporting years, calendar metadata, adoption cycle state (<code>Draft</code>, <code>Under Review</code>, <code>Board Adopted</code>).</li>
-  <li><strong><code>scog_housing_metric</code>:</strong> Permitted units, housing type (Single-Family, Multi-Family, Accessory Dwelling Units), demolition counts, net unit gains.</li>
-  <li><strong><code>scog_population_metric</code>:</strong> Official OFM April 1 estimates, annual growth rate, cumulative decadal growth.</li>
-  <li><strong><code>scog_employment_metric</code>:</strong> ESD covered employment counts by NAICS sector classification.</li>
-  <li><strong><code>scog_import_log</code> & <code>scog_import_error</code>:</strong> Tracks timestamp, uploaded file name, processing user, row counts, and specific cell-level validation rejections.</li>
-  <li><strong><code>scog_geography_reference</code>:</strong> Boundary definitions, GIS centroids, and boundary change metadata.</li>
+  <li><code>scog_jurisdiction</code>: Unique municipal entities, county unincorporated zones, GMA designation, baseline planning targets.</li>
+  <li><code>scog_reporting_period</code>: Reporting years, calendar metadata, adoption cycle state (<code>Draft</code>, <code>Under Review</code>, <code>Board Adopted</code>).</li>
+  <li><code>scog_housing_metric</code>: Permitted units, housing type (Single-Family, Multi-Family, ADUs), demolition counts, net unit gains.</li>
+  <li><code>scog_population_metric</code>: Official OFM April 1 estimates, annual growth rate, cumulative decadal growth.</li>
+  <li><code>scog_employment_metric</code>: ESD covered employment counts by NAICS sector classification.</li>
+  <li><code>scog_import_log</code> & <code>scog_import_error</code>: Tracks timestamp, uploaded file name, processing user, row counts, and specific cell-level validation rejections.</li>
+  <li><code>scog_geography_reference</code>: Boundary definitions, GIS centroids, and boundary change metadata.</li>
 </ol>
-<ul>
-  <li><strong>Power BI Connectivity:</strong> Power BI connects via the native <strong>Dataverse Connector</strong> using the TDS endpoint (supports both high-performance Import mode and DirectQuery).</li>
-  <li><strong>Year-over-Year Reporting:</strong> Multi-year historical data is permanently stored in normalized tables, enabling instant 5-year, 10-year, and 20-year trend analyses without manual historical stitching.</li>
-</ul>
 <h3>3.2 Annual File Intake and Ingestion Process</h3>
-<ul>
-  <li><strong>Intake Mechanism:</strong> SCOG staff drops raw annual spreadsheets received from local cities and state agencies into a designated <strong>SharePoint Intake Folder</strong> structured by year (<code>/Intake/2026/</code>).</li>
-  <li><strong>Ingestion Technology Choice:</strong> <strong>Power Query Dataflows (Power Apps / Power Platform Dataflows)</strong> combined with a lightweight <strong>Power Automate flow</strong>. Dataflows provide resilient column-mapping, data transformation, and scheduled or triggered data loading directly into Dataverse tables.</li>
-  <li><strong>Standardization & Pre-Validation:</strong></li>
-  <li>The pipeline validates that incoming jurisdiction names match official master IDs (e.g., standardizing "City of Mount Vernon," "Mt. Vernon," and "Mount Vernon" to a single ID).</li>
-  <li>Validates numeric thresholds (e.g., residential permits cannot be negative; population cannot drop by 50% without a warning flag).</li>
-  <li><strong>Surfacing Errors & Exceptions:</strong> If a file fails validation, rows with discrepancies are flagged into <code>scog_import_error</code>, and an automated notification (email or Teams adaptive card) alerts staff detailing the exact row and field requiring correction.</li>
-  <li><strong>Formal Approval Step:</strong> Data imported into Dataverse defaults to <code>Status = Draft</code>. Once staff reviews the validation summary, an authorized administrator updates the period status to <code>Board Adopted</code>, which updates the public-facing Power BI visuals.</li>
-</ul>
+<p>SCOG staff drops raw annual spreadsheets into a year-structured SharePoint intake folder (<code>/Intake/2026/</code>). Power Query Dataflows combined with a lightweight Power Automate flow handle column-mapping, transformation, and loading into Dataverse. The pipeline validates jurisdiction names against master IDs, checks numeric thresholds, and routes failed rows to an import-error table with automated staff notification. Imported data defaults to <code>Draft</code> status until an administrator promotes it to <code>Board Adopted</code>.</p>
 <h3>3.3 Data Governance and Maintainability</h3>
 <ul>
-  <li><strong>No Annual Model Rebuilding:</strong> The Power BI semantic model connects to persistent Dataverse entity structures. Adding year 2027 or 2028 requires zero changes to measures, relationships, or visuals.</li>
-  <li><strong>Historical Preservation:</strong> Once a reporting year is marked <code>Adopted</code>, row-level security or Dataverse table permissions can freeze historical records, preventing accidental edits.</li>
-  <li><strong>Data Lineage:</strong> Every metric record links back to the originating file record in <code>scog_import_log</code>, preserving full auditability for GMA legal compliance.</li>
+  <li><strong>Reduces the need for annual model changes:</strong> Adding a new year typically requires no changes to measures, relationships, or visuals, though changes to source format, methodology, or reporting requirements could still require updates.</li>
+  <li><strong>Historical preservation:</strong> Row-level security / table permissions freeze historical records once a year is marked <code>Board Adopted</code>.</li>
+  <li><strong>Improved source-file lineage:</strong> Imported records link directly back to their originating import log entry, ensuring defensible audit trails for GMA compliance.</li>
 </ul>
 <h3>3.4 Power BI Reporting Impact</h3>
-<ul>
-  <li><strong>Unified Refresh:</strong> Automatic cloud-to-cloud refresh with no desktop file locking issues.</li>
-  <li><strong>Advanced Analytics:</strong> Enables dynamic 10-year rolling averages, compound annual growth rate (CAGR) measures, and automated target vs. actual variance analysis.</li>
-  <li><strong>Future Scalability:</strong> Lays the data groundwork for future SCOG initiatives (e.g., regional transportation models, buildable lands inventories, public data portals).</li>
-</ul>
+<p>Supports scheduled/cloud refresh and reduces desktop-file dependency; supports rolling averages, CAGR measures, and target-vs-actual variance analysis; lays groundwork for future SCOG initiatives (transportation models, buildable lands inventories, public data portals).</p>
 <h3>3.5 Licensing, Hosting, and Added Costs</h3>
-<p>Implementing Option 2 introduces Microsoft Power Platform licensing considerations that must be validated with SCOG's M365 administrator. The figures below are approximate and should be confirmed against Microsoft's current pricing pages and SCOG's specific agreement (public-sector/nonprofit pricing can differ materially from list price) before being presented to the Board as firm numbers:</p>
-<ol>
-  <li><strong>Dataverse Storage Capacity:</strong> Microsoft Power Platform tenants receive pooled default database capacity upon acquiring qualifying administrator licenses (supplemented by monthly per-user accruals). Because SCOG's cumulative annual growth monitoring records across decades comprise only a few megabytes, the reporting dataset is negligible in size and is expected to reside comfortably within standard tenant pooled capacity, incurring <strong>$0 in incremental database storage add-on fees</strong>. However, because Microsoft regularly updates tenant capacity entitlement models and consumption rules, available tenant storage and exact quota balances must be validated directly with SCOG's M365 tenant administrator via the Power Platform Admin Center prior to procurement.</li>
-  <li><strong>Power Platform Ingestion Licensing:</strong> </li>
-</ol>
+<p>As part of Option 2, Skagit Consulting can help SCOG identify and validate licensing, tenant, and capacity implications with SCOG's Microsoft 365 administrator. The figures below are approximate list-price references only:</p>
 <ul>
-  <li>Connecting Power Automate flows and Power Query Dataflows into Dataverse requires <strong>Power Apps Premium</strong> (currently <strong>$20/user/month list price</strong>; note that the legacy $5/user/app plan was retired for new customers in early 2026, with Pay-As-You-Go via Azure available at ~$10/active user/app/month).</li>
-  <li><em>Operational Impact:</em> Only the 1 or 2 SCOG staff members responsible for administering and triggering annual ingestion pipelines require this license. Report-only consumers in Power BI do <strong>not</strong> require Power Apps licenses.</li>
+  <li><strong>Dataverse storage:</strong> SCOG's dataset is expected to fit within standard pooled tenant capacity at <strong>$0 incremental cost</strong> — confirm with SCOG's M365 administrator.</li>
+  <li><strong>Power Apps Premium:</strong> List price ~$20/user/month required only for the 1–2 staff administering the ingestion pipeline; report-only consumers do not need it.</li>
+  <li><strong>Power BI Pro:</strong> List price ~$14/user/month required for report authors/internal consumers unless SCOG holds M365 E5 or Fabric capacity; confirm government/GCC pricing separately.</li>
 </ul>
-<ol>
-  <li><strong>Power BI Licensing:</strong> Current list pricing for <strong>Power BI Pro is $14/user/month</strong> (effective post-April 2025 price adjustment, up from historical $10/mo), with <strong>Premium Per User (PPU) at $24/user/month</strong> (up from $20/mo). Power BI Pro remains required for report authors and internal consumers unless SCOG holds M365 E5 or Fabric capacity. Specific governmental/GCC pricing should be confirmed against SCOG's Microsoft contract.</li>
-</ol>
 <h3>3.6 Pros and Cons</h3>
 <div class="table-wrapper"><table>
   <tr>
@@ -527,196 +460,197 @@
     <th>Cons (Limitations & Risks)</th>
   </tr>
   <tr>
-    <td><strong>True Automation:</strong> Eliminates a large share of annual staff manual formatting and data prep.</td>
-    <td><strong>Comparable Implementation Investment:</strong> Implementation hours (90–124 hrs) roughly comparable to or exceeding a fully-scoped Option 1 (70–100 hrs).</td>
+    <td><strong>Eliminates Manual Formatting:</strong> Eliminates most manual annual formatting and spreadsheet stitching.</td>
+    <td><strong>Implementation Hours:</strong> Implementation hours (110–150 hrs) exceed Option 1 (55–97 hrs).</td>
   </tr>
   <tr>
-    <td><strong>Bulletproof Data Governance:</strong> Role-based security, historical data freezing, and audit logs.</td>
-    <td><strong>Licensing Complexity:</strong> Potential added recurring cost for Power Apps / Dataverse capacity.</td>
+    <td><strong>Enterprise Governance:</strong> Role-based governance, historical freezing, and automated audit logs.</td>
+    <td><strong>Potential Added Licensing:</strong> Potential added licensing cost for Power Apps / Dataverse capacity.</td>
   </tr>
   <tr>
-    <td><strong>Zero Refresh Maintenance:</strong> Model never breaks from renamed spreadsheet columns.</td>
-    <td><strong>Higher Skill Floor:</strong> Requires basic Power Platform administration knowledge for long-term ownership.</td>
+    <td><strong>Resilient Architecture:</strong> Reduces refresh risk from renamed columns through deterministic schema validation.</td>
+    <td><strong>Higher Skill Floor:</strong> Higher skill floor for long-term administration and pipeline troubleshooting.</td>
   </tr>
   <tr>
-    <td><strong>Scalable Foundation:</strong> Ready for multi-agency inputs and future regional planning tools.</td>
-    <td><strong>Overkill for Small Datasets:</strong> Significant architectural overhead for an annual update cadence.</td>
+    <td><strong>Extensible Platform:</strong> Scalable to multi-agency inputs and future regional planning tools.</td>
+    <td><strong>Architectural Overhead:</strong> Overhead that may be more than a small annual dataset strictly needs.</td>
   </tr>
 </table></div>
-<h3>3.7 Estimated Implementation Hours (Expanded Scope: 90–124 Hours)</h3>
-<p>Option 2 represents a robust engineering engagement. We differentiate a <strong>Minimum Viable Implementation (MVP)</strong> from a <strong>Complete Enterprise Implementation</strong>:</p>
+<h3>3.7 Estimated Implementation Hours (Expanded Scope: 110–150 Hours)</h3>
+<p>This range is deliberately wider than Option 1's, reflecting the larger scope: Option 2 adds Dataverse environment setup, an automated intake/ETL pipeline, and validation/error-handling work that Option 1 does not require.</p>
 <div class="table-wrapper"><table>
   <tr>
     <th>Task Breakdown</th>
     <th>MVP (hrs)</th>
     <th>Complete (hrs)</th>
-    <th>Task Description</th>
+    <th>Description</th>
   </tr>
   <tr>
     <td><strong>1. Discovery & Source File Schema Audit</strong></td>
-    <td>8</td>
-    <td>12</td>
-    <td>In-depth audit of municipal and state data schemas, mapping rules, cross-agency taxonomy.</td>
+    <td>10</td>
+    <td>16</td>
+    <td>Audit of municipal/state data schemas, mapping rules, cross-agency taxonomy.</td>
   </tr>
   <tr>
     <td><strong>2. Dataverse Environment & Entity Modeling</strong></td>
-    <td>12</td>
     <td>16</td>
+    <td>20</td>
     <td>Provisioning Dataverse solution, custom tables, option sets, relationships, keys, security roles.</td>
   </tr>
   <tr>
     <td><strong>3. Annual Intake & SharePoint Ingestion Architecture</strong></td>
-    <td>14</td>
     <td>18</td>
+    <td>22</td>
     <td>SharePoint library architecture, folder structure, intake triggers, metadata capture.</td>
   </tr>
   <tr>
     <td><strong>4. Dataflows / Power Automate ETL Implementation</strong></td>
-    <td>18</td>
-    <td>24</td>
+    <td>22</td>
+    <td>28</td>
     <td>Power Query dataflows, schema standardization, automated upsert logic into Dataverse.</td>
   </tr>
   <tr>
     <td><strong>5. Data Validation & Error Handling Pipelines</strong></td>
-    <td>10</td>
-    <td>14</td>
+    <td>12</td>
+    <td>18</td>
     <td>Pre-load validation rules, error logging tables, automated staff alert notifications.</td>
   </tr>
   <tr>
     <td><strong>6. Power BI Semantic Model & Report Development</strong></td>
-    <td>14</td>
     <td>18</td>
-    <td>Direct Dataverse connection, multi-year DAX measures, comprehensive 5-page report & mapping.</td>
+    <td>22</td>
+    <td>Direct Dataverse connection, multi-year DAX measures, comprehensive 5-page report and mapping.</td>
   </tr>
   <tr>
     <td><strong>7. User Acceptance Testing & Historical Migration</strong></td>
     <td>8</td>
-    <td>12</td>
-    <td>Migrating 10–15 years of historical Excel records, end-to-end reconciliation, edge-case testing.</td>
+    <td>14</td>
+    <td>Migrating 10–15 years of historical Excel records, reconciliation, edge-case testing.</td>
   </tr>
   <tr>
     <td><strong>8. Governance, Documentation & Admin Training</strong></td>
     <td>6</td>
     <td>10</td>
-    <td>Full technical architecture document, administrator runbook, staff training sessions.</td>
+    <td>Technical architecture document, administrator runbook, staff training sessions.</td>
   </tr>
   <tr>
     <td><strong>Total Option 2 Hours</strong></td>
-    <td><strong>90 hrs</strong></td>
-    <td><strong>124 hrs</strong></td>
-    <td><strong>Proposal baseline: 90–124 hours.</strong></td>
+    <td><strong>110 hrs</strong></td>
+    <td><strong>150 hrs</strong></td>
+    <td><strong>Proposal baseline: 110–150 hours.</strong></td>
   </tr>
 </table></div>
 <hr>
 <h2>4. Side-by-Side Comparison Matrix</h2>
 <div class="table-wrapper"><table>
   <tr>
-    <th>Evaluation Category</th>
-    <th>Option 1: Power BI from SCOG-Prepared Excel/GIS</th>
-    <th>Option 2: Dataverse + Automated Intake Pipeline</th>
+    <th>Category</th>
+    <th>Option 1: Power BI from Excel/GIS</th>
+    <th>Option 2: Dataverse + Automated Intake</th>
   </tr>
   <tr>
-    <td><strong>Initial Implementation Complexity</strong></td>
-    <td><strong>Moderate:</strong> Bottom-up build across six task areas, including a prototype build-out.</td>
-    <td><strong>High:</strong> Multi-component Power Platform architecture.</td>
+    <td><strong>Initial implementation complexity</strong></td>
+    <td><strong>Moderate:</strong> bottom-up build across six task areas, including a prototype build-out.</td>
+    <td><strong>High:</strong> multi-component Power Platform architecture.</td>
   </tr>
   <tr>
-    <td><strong>Annual Maintenance Effort</strong></td>
-    <td><strong>Moderate / High (Estimated 20–40 hours annually across staff):</strong> Indicative operational planning range reflecting cumulative staff time spent coordinating file submissions from multiple jurisdictions, reformatting disparate spreadsheets, and performing visual QA. To be calibrated against SCOG's actual internal tracking after the Year 1 cycle.</td>
-    <td><strong>Low (Estimated 2–4 hours annually):</strong> Indicative operational scenario reflecting automated file intake, scheduled dataflow processing, and staff time limited to reviewing validation exceptions and approving final adoption states.</td>
+    <td><strong>Annual maintenance effort</strong></td>
+    <td><strong>Moderate/high</strong> (indicative 20–40 hrs/year of staff coordination and cleanup) — to be calibrated after Year 1.</td>
+    <td><strong>Low</strong> (indicative 2–4 hrs/year) — automated intake with exception review only.</td>
   </tr>
   <tr>
-    <td><strong>Staff Skill Required</strong></td>
-    <td>Intermediate Excel skills + basic Power BI desktop literacy.</td>
+    <td><strong>Staff skill required</strong></td>
+    <td>Intermediate Excel + basic Power BI desktop literacy.</td>
     <td>Basic SharePoint drop skills for annual use; Power Platform admin skills for maintenance.</td>
   </tr>
   <tr>
-    <td><strong>Repeatability & Reliability</strong></td>
-    <td><strong>Fragile:</strong> Vulnerable to human error, altered headers, or accidental file overwrites (mitigated by formula-based checks).</td>
-    <td><strong>Resilient:</strong> Deterministic schema enforcement, validation gates, and rejection logging.</td>
+    <td><strong>Repeatability & reliability</strong></td>
+    <td><strong>Fragile</strong> — vulnerable to human error and altered headers, mitigated by formula-based checks.</td>
+    <td><strong>Resilient</strong> — deterministic schema enforcement, validation gates, rejection logging.</td>
   </tr>
   <tr>
-    <td><strong>Data Quality Controls</strong></td>
-    <td>Manual spot-checking in Excel and visual inspection in Power BI.</td>
-    <td>Automated validation rules, error logs, and approval gate (<code>Draft</code> vs <code>Adopted</code>).</td>
+    <td><strong>Data quality controls</strong></td>
+    <td>Manual spot-checking and visual inspection.</td>
+    <td>Automated validation rules, error logs, Draft/Adopted approval gate.</td>
   </tr>
   <tr>
-    <td><strong>Licensing / Cost Impact</strong></td>
-    <td><strong>$0 Added Cost:</strong> Operates within current standard M365 and Power BI Pro licenses.</td>
-    <td><strong>Potential Added Cost:</strong> Requires Dataverse capacity and potentially Power Apps/Automate licenses — confirm with M365 admin.</td>
+    <td><strong>Licensing / cost impact</strong></td>
+    <td><strong>$0 added cost</strong> within current M365 / Power BI Pro licensing.</td>
+    <td><strong>Potential added cost</strong> — Dataverse capacity and possibly Power Apps/Automate licensing; to be validated with SCOG's M365 admin as part of Option 2 planning.</td>
   </tr>
   <tr>
-    <td><strong>Long-Term Scalability</strong></td>
+    <td><strong>Long-term scalability</strong></td>
     <td>Limited to annual growth monitoring reporting.</td>
-    <td>Highly extensible to transportation, buildable lands, and regional data hubs.</td>
+    <td>Extensible to transportation, buildable lands, and regional data hub initiatives.</td>
   </tr>
   <tr>
-    <td><strong>Estimated Implementation Hours</strong></td>
-    <td><strong>70–100 hours (Baseline ~75 hrs; 55–97 hr range)</strong></td>
-    <td><strong>90–124 hours</strong></td>
+    <td><strong>Estimated implementation hours</strong></td>
+    <td><strong>55–97 hours (75-hour baseline)</strong></td>
+    <td><strong>110–150 hours</strong></td>
   </tr>
   <tr>
-    <td><strong>Main Risks</strong></td>
+    <td><strong>Main risks</strong></td>
     <td>Refresh breaks in later years; data inconsistencies; ongoing manual staff labor; prototype scope larger than currently assumed.</td>
-    <td>Budget rejection; licensing surprises; over-engineering a simple annual task.</td>
+    <td>Budget/approval risk; licensing surprises; over-engineering a small annual dataset.</td>
   </tr>
   <tr>
-    <td><strong>Best Fit If...</strong></td>
+    <td><strong>Best fit if…</strong></td>
     <td>SCOG needs a working Power BI transition without new Power Platform licensing or admin overhead.</td>
-    <td>SCOG seeks a long-term data modernization initiative to eliminate manual spreadsheet workflows.</td>
+    <td>SCOG wants a long-term data modernization initiative and is ready to take on the added cost and governance.</td>
   </tr>
 </table></div>
 <hr>
 <h2>5. Summary of Estimated Hours by Option</h2>
-<pre><code class="language-">Option 1: Base Scope (Power BI + Excel) — six task areas, 55–97 hr range, 75-hr baseline (target 70–100):
+<pre><code class="language-">Option 1: Base Scope (Power BI + Excel) — six task areas, 55–97 hour range, 75-hour baseline:
 ├── Discovery &amp; Planning:              6 /  8 / 10 hrs
 ├── 2025 Prototype (in progress):     12 / 16 / 22 hrs
 ├── 2026 Production Report:           18 / 24 / 30 hrs
 ├── Power BI Documentation:            6 /  8 / 10 hrs
 ├── Staff Training / Walkthrough:      5 /  7 /  9 hrs
 └── Contingency Buffer:                8 / 12 / 16 hrs
-TOTAL: 55 / 75 / 97 Hours (Baseline: 75.0 hrs; Target Range: 70–100 hrs)
+TOTAL: 55 / 75 / 97 Hours (75-Hour Baseline)
 
-Option 2: Expanded Scope (Dataverse + Ingestion) — MVP / Complete, 90–124 hours:
-├── Discovery &amp; Schema Audit:          8 / 12 hrs
-├── Dataverse Entity Modeling:        12 / 16 hrs
-├── Intake &amp; Pipeline Design:         14 / 18 hrs
-├── Dataflows / Automate ETL:         18 / 24 hrs
-├── Validation &amp; Error Handling:      10 / 14 hrs
-├── Power BI Integration:             14 / 18 hrs
-├── Historical Migration &amp; QA:         8 / 12 hrs
+Option 2: Expanded Scope (Dataverse + Ingestion) — MVP / Complete, 110–150 hours:
+├── Discovery &amp; Schema Audit:         10 / 16 hrs
+├── Dataverse Entity Modeling:        16 / 20 hrs
+├── Intake &amp; Pipeline Design:         18 / 22 hrs
+├── Dataflows / Automate ETL:         22 / 28 hrs
+├── Validation &amp; Error Handling:      12 / 18 hrs
+├── Power BI Integration:             18 / 22 hrs
+├── Historical Migration &amp; QA:         8 / 14 hrs
 └── Admin Runbook &amp; Training:          6 / 10 hrs
-TOTAL: 90 hrs (MVP) – 124 hrs (Complete)</code></pre>
-<div class="alert alert-note"><div class="alert-icon"></div><div class="alert-content"><strong>Reconciliation Note:</strong> This summary block matches Section 2.5 and Section 3.7 exactly. All instances across the document (Executive Summary, Section 2.5, Section 4 Comparison Matrix, and Section 5 Summary) are aligned to the same Option 1 range (70–100 hours, 75-hour baseline). Option 2 is carried over unchanged from the prior revision (90–124 hours) since no new information about Option 2 prompted a change.</div></div>
+TOTAL: 110 hrs (MVP) – 150 hrs (Complete)</code></pre>
 <hr>
 <h2>6. Risks, Assumptions, and Open Questions</h2>
-<h3>Critical Dependencies & Assumptions:</h3>
+<h3>Critical dependencies and assumptions:</h3>
 <ol>
-  <li><strong>2025 Prototype State (Option 1):</strong> Treated as work in progress rather than complete or not-started. The exact completion level is not yet confirmed and materially affects the Prototype task's hours — to be validated during Discovery before the estimate is finalized.</li>
-  <li><strong>Original 15-Hour Figure:</strong> Confirmed as the Skagit Consulting ↔ The Flock fee for producing this document, not the Option 1 implementation estimate. This has been clarified directly by the client and should not be read as a budget overrun against the 70–100 hour Option 1 estimate.</li>
-  <li><strong>M365 Tenant Administration:</strong> Option 2 requires tenant-level permissions to create Power Platform environments, provision Dataverse databases, and assign security roles.</li>
-  <li><strong>Current Licensing Inventory:</strong> We assume SCOG has existing Power BI Pro licenses. Whether SCOG has available Power Apps / Dataverse pooled storage capacity must be validated with their IT administrator — the specific dollar figures in Section 3.5 are approximate and should not be quoted to the Board without confirmation.</li>
-  <li><strong>Excel File Consistency (Option 1):</strong> Option 1 assumes SCOG delivers clean, normalized Excel tables. If historical data is fragmented across unstandardized spreadsheets requiring consulting remediation, hours will push toward or beyond the high end of the range.</li>
-  <li><strong>GIS Reference Layers:</strong> We assume SCOG or Skagit County GIS provides established spatial boundary files (Shapefile or GeoJSON) for municipal boundaries and Urban Growth Areas (UGAs) that can be converted directly for Power BI's mapping visual of choice.</li>
-  <li><strong>Mapping Visual Selection (Decided):</strong> Standardized on <strong>Azure Maps or ArcGIS Maps for Power BI</strong> (GA-grade) rather than the preview-only Shape Map visual, ensuring long-term Board PDF export stability and eliminating preview-feature risks.</li>
+  <li><strong>2025 prototype state (Option 1):</strong> Treated as work in progress rather than complete or not-started. The exact completion level is not yet confirmed and materially affects the Prototype task's hours — to be validated during Discovery before the estimate is finalized.</li>
+  <li><strong>M365 tenant administration:</strong> Option 2 requires tenant-level permissions to create Power Platform environments and provision Dataverse.</li>
+  <li><strong>Licensing and tenant capacity:</strong> Should be validated with SCOG's Microsoft 365 administrator as part of Option 2 planning.</li>
+  <li><strong>Excel file consistency (Option 1):</strong> The estimate assumes SCOG delivers clean, normalized Excel tables; unstandardized historical data would push hours toward or beyond the high end of the range.</li>
+  <li><strong>GIS reference layers:</strong> Assumes SCOG or Skagit County GIS provides usable boundary files (Shapefile or GeoJSON) convertible to the chosen mapping visual.</li>
+  <li><strong>Mapping visual:</strong> Standardized on <strong>Azure Maps or ArcGIS Maps for Power BI</strong> (GA-grade) rather than the preview-only Shape Map visual, for long-term Board PDF export stability.</li>
 </ol>
 <hr>
 <h2>7. Strategic Recommendation</h2>
-<p>With Option 1 now scoped bottom-up at <strong>70–100 hours</strong> (75-hour baseline) rather than a fixed 15-hour cap, the phased-adoption logic still holds, but the budget conversation with SCOG needs to happen up front rather than being assumed:</p>
-<ol>
-  <li><strong>Confirm Prototype State First:</strong> Confirm the 2025 prototype's actual state with SCOG (or internally) before finalizing the Prototype task hours — this is the single largest swing factor in the Option 1 estimate.</li>
-  <li><strong>Clarify the 15-Hour Document Production Distinction:</strong> Present the 75-hour baseline as the realistic Option 1 estimate, distinct from the 15-hour figure the client has confirmed was quoted for producing this scoping document — not for the Option 1 implementation.</li>
-  <li><strong>Position Option 2 as a Phase 2 Modernization Roadmap:</strong> Continue to position Option 2 (90–124 hours) as a Phase 2 modernization roadmap rather than a Year 1 prerequisite, to be revisited if SCOG finds the manual Excel compilation burdensome after the first annual cycle.</li>
-  <li><strong>Negotiation Lever:</strong> If the client needs the Option 1 number closer to the low end of the 70–100 range, the honest lever is narrowing scope (e.g., fewer report pages, lighter documentation) rather than trimming the prototype or contingency lines.</li>
-</ol>
+<p>This document is intended to support SCOG's decision now, not to presuppose it. Both options are technically sound; the right choice depends on SCOG's priorities and constraints:</p>
+<ul>
+  <li><strong>Choose Option 1</strong> if the priority is delivering a working, interactive Power BI report within the current contract scope and board cycle, and SCOG staff can reliably prepare Excel/GIS source files each year.</li>
+  <li><strong>Choose Option 2</strong> if the priority is reducing annual manual data-compilation effort, establishing stronger data governance and an audit trail, and building a foundation for future regional reporting needs — and SCOG is prepared to validate the added licensing and administration requirements.</li>
+  <li><strong>Confirm the 2025 prototype's actual state</strong> before finalizing the Option 1 estimate, since it is the largest swing factor in that number.</li>
+  <li><strong>If licensing or Power Platform tenant constraints</strong> make Option 2 impractical for now, Option 1 stands on its own merits as a complete implementation path, not merely an interim step.</li>
+</ul>
 <hr>
 <h2>Revision Log</h2>
 <ul>
+  <li><strong>Revision 3 (September 16, 2026):</strong></li>
+  <li><strong>Option 1 Base Contract Framing:</strong> Established Option 1 explicitly as the base contracted approach with a 55–97 hour range (75-hour baseline) across six bottom-up task areas.</li>
+  <li><strong>Option 2 Scope & Hours Expansion:</strong> Recalibrated Option 2 to <strong>110–150 hours</strong> (MVP: 110 hrs, Complete: 150 hrs) across expanded tasks for schema audit (10–16 hrs), Dataverse modeling (16–20 hrs), intake architecture (18–22 hrs), ETL dataflows (22–28 hrs), error handling (12–18 hrs), Power BI modeling (18–22 hrs), migration & QA (8–14 hrs), and governance/training (6–10 hrs).</li>
+  <li><strong>Objective Decision Support:</strong> Updated the executive summary, comparison matrix, and strategic recommendations to neutrally present both options based on SCOG's priorities and capacity constraints, affirming that Option 1 stands on its own merits.</li>
   <li><strong>Revision 2 (September 16, 2026):</strong></li>
-  <li><strong>Option 1 Task Structure & Hour Recalibration:</strong> Replaced the 15-hour fixed budget structure with a realistic six-task bottom-up breakdown (Discovery, 2025 Prototype, 2026 Production Report, Documentation, Staff Training, Contingency) targeting a <strong>70–100 hour range</strong> with a <strong>75-hour baseline</strong> (55 hrs low / 97 hrs high).</li>
-  <li><strong>Scoping vs. Implementation Disambiguation:</strong> Clarified that the original 15-hour figure described the contract scope for producing this scoping document itself, not the Option 1 Power BI build budget.</li>
-  <li><strong>In-Progress 2025 Prototype Integration:</strong> Explicitly treated the 2025 prototype as work in progress and documented the assumption that prototype and production share a unified semantic model (+10–15 hrs if separated).</li>
-  <li><strong>Comparison Matrix & Narrative Harmonization:</strong> Updated initial implementation complexity of Option 1 to "Moderate", updated Option 2 cost comparison in Section 3.6 to "roughly comparable to or exceeding Option 1", aligned Section 4 and Section 5 summaries, and updated the strategic recommendation with explicit client negotiation levers.</li>
+  <li>Replaced the 15-hour fixed budget structure with a realistic six-task bottom-up breakdown (Discovery, 2025 Prototype, 2026 Production Report, Documentation, Staff Training, Contingency) targeting a 70–100 hour range with a 75-hour baseline (55 hrs low / 97 hrs high).</li>
+  <li>Clarified that the original 15-hour figure described the fee for producing the scoping document itself.</li>
+  <li>Treated the 2025 prototype as work in progress and documented the assumption that prototype and production share a unified semantic model.</li>
   <li><strong>Revision 1 (September 15, 2026):</strong></li>
   <li>Reconciled Option 2 hour estimate to 90–124 hours.</li>
   <li>Standardized mapping visual on GA-grade Azure Maps / ArcGIS Maps.</li>

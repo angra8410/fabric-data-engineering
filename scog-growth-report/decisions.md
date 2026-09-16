@@ -12,10 +12,10 @@
 
 ---
 
-## [ADR-002] Calibración de Alcance para Opción 1 con Presupuesto Fijo de 15 Horas
+## [ADR-002] Calibración de Alcance para Opción 1 con Presupuesto Fijo de 15 Horas (SUPERADO)
 - **Fecha:** 2026-09-14
-- **Estado:** Aprobado / Restricción Activa
-- **Contexto:** El cliente / gerencia ha fijado un presupuesto estricto de **15 horas** para la Opción 1 (Base Scope). 15 horas es un presupuesto muy reducido que no permite retrabajo en limpieza de datos desestructurados, ni desarrollo de lógica compleja de transformación o pipelines ETL extensos.
+- **Estado:** Superado por ADR-007 (Revisión 2)
+- **Contexto:** El cliente / gerencia había fijado preliminarmente un presupuesto de **15 horas** para la Opción 1. Posteriormente se identificó que dicha cifra correspondía al alcance de elaboración del documento de scoping y no a la implementación técnica del reporte.
 - **Decisión Tomada:** 
   1. Diseñar el desglose de tareas de la Opción 1 con una suma exacta de 15 horas (con un rango de contingencia de 14-17 horas).
   2. Establecer como **supuesto contractual no negociable** que SCOG entrega archivos Excel 100% limpios, tabulares y normalizados según una plantilla predefinida. Cualquier necesidad de limpieza profunda de datos por parte del consultor consumirá horas fuera del presupuesto de 15 horas.
@@ -74,11 +74,36 @@
 ## [ADR-006] Validación de Integridad Basada en Fórmulas en Plantillas Excel (.xlsx) para Opción 1
 - **Fecha:** 2026-09-15
 - **Estado:** Aprobado
-- **Contexto:** En la Opción 1, la vulnerabilidad crítica es la "entropía de Excel": cambios accidentales en nombres de columnas, alteración de tipos de datos o sobreescritura accidental de filas históricas previamente adoptadas por la Junta. Se requiere proteger el proceso sin introducir macros (.xlsm) ni exceder el presupuesto fijo de 15 horas.
+- **Contexto:** En la Opción 1, la vulnerabilidad crítica es la "entropía de Excel": cambios accidentales en nombres de columnas, alteración de tipos de datos o sobreescritura accidental de filas históricas previamente adoptadas por la Junta. Se requiere proteger el proceso sin introducir macros (.xlsm) ni exceder el presupuesto de la solución.
 - **Decisión Tomada:**
   1. Utilizar **fórmulas nativas de Excel estándar (.xlsx)** preconfiguradas en las plantillas maestras entregadas en la Tarea 1:
      - **Comparación de Encabezados:** Concatenación (`TEXTJOIN`) de encabezados comparada contra la cadena del esquema oficial. Dispara un banner visual de error si se altera o borra una columna. Compatible 100% con Excel Online y SharePoint sin requerir macros/VBA.
      - **Total de Control Histórico:** Fórmula `SUMIFS` que valida la suma de control de las filas históricas adoptadas para evitar alteraciones inadvertidas al ingresar el nuevo año.
-  2. En Power Query (Tarea 2), apoyarse en aserciones nativas de selección estricta de columnas (`Table.SelectColumns` con tipado fuerte), deteniendo la carga si faltan columnas requeridas sin incurrir en desarrollo complejo de motores de error fuera del presupuesto de 15 horas.
-- **Consecuencias:** Se blinda técnicamente la Opción 1 frente a los revisores de SCOG manteniendo la viabilidad contractual y operativa dentro del presupuesto de 15 horas.
+  2. En Power Query (Tarea 2), apoyarse en aserciones nativas de selección estricta de columnas (`Table.SelectColumns` con tipado fuerte), deteniendo la carga si faltan columnas requeridas sin incurrir en desarrollo complejo de motores de error.
+- **Consecuencias:** Se blinda técnicamente la Opción 1 frente a los revisores de SCOG manteniendo la viabilidad contractual y operativa de la solución.
+
+---
+
+## [ADR-007] Recalibración de Alcance para Opción 1 (70–100 hrs) y Desacoplamiento del Presupuesto de Scoping
+- **Fecha:** 2026-09-16
+- **Estado:** Aprobado / Vigente (Revisión 2)
+- **Contexto:** 
+  1. Conforme a la guía y clarificación de Aaron, la cifra de **15 horas** previamente referenciada correspondía a la tarifa de consultoría Skagit Consulting ↔ The Flock para la *producción de este documento técnico de opciones*, no al presupuesto de implementación de la Opción 1 de SCOG.
+  2. El prototipo del reporte para datos de 2025 se encuentra actualmente en curso (*work in progress*) y requiere finalización, modelado y validación técnica antes de aplicarse a los datos de 2026.
+  3. Comprimir la implementación de un reporte formal para el Board de 4 páginas con soporte GIS, control de calidad, documentación y capacitación en 15 horas creaba un riesgo inaceptable de incumplimiento y deuda técnica.
+- **Decisión Tomada:**
+  1. **Desacoplamiento Contractual:** Aclarar explícitamente en el documento y ante la Junta de SCOG que la cifra de 15 horas corresponde al fee de elaboración del scoping document, y que la implementación de la Opción 1 se estima independientemente bottom-up contra las seis áreas de trabajo definidas en el alcance contractual.
+  2. **Estructuración Bottom-Up en Seis Tareas:** Estimar la Opción 1 en un rango objetivo de **70 – 100 horas** (Baseline: **75 horas**; Rango: **55 – 97 horas**):
+     - Tarea 1: Discovery & Planning (6 / **8** / 10 hrs)
+     - Tarea 2: Prototipo 2025 (in progress) (12 / **16** / 22 hrs)
+     - Tarea 3: Reporte de Producción 2026 (18 / **24** / 30 hrs)
+     - Tarea 4: Documentación Técnica & Runbook (6 / **8** / 10 hrs)
+     - Tarea 5: Capacitación & Handoff al Personal (5 / **7** / 9 hrs)
+     - Tarea 6: Buffer de Contingencia (8 / **12** / 16 hrs)
+  3. **Unificación de Modelo Semántico:** Definir como supuesto arquitectónico que el prototipo 2025 y la producción 2026 compartirán un único modelo de datos. Si SCOG solicita desacoplarlos en archivos `.pbix` totalmente independientes, se añadirán contractualmente entre 10 y 15 horas.
+  4. **Palancas de Negociación Honestas:** En la reunión de entrega con el cliente, si SCOG solicita reducir horas hacia el piso de 55-60 hrs, la vía contractual debe ser reducción de alcance (menos páginas visuales o documentación más sucinta), manteniendo intactas las líneas de prototipo y contingencia.
+- **Consecuencias:** 
+  - Estimación realista, robusta y defendible que protege los márgenes y la reputación de Skagit Consulting.
+  - La distancia relativa entre la Opción 1 (75 hrs baseline) y la Opción 2 MVP (90 hrs) se reduce a solo 15 horas (~20%), fortaleciendo enormemente la justificación de retorno de inversión (ROI) para la Opción 2 empresarial.
+
 

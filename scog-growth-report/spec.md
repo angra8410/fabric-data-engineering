@@ -28,17 +28,24 @@
 
 ## 3. Comparativa de Enfoques (Opciones de Arquitectura)
 
-### Opción 1: Base Scope (Power BI desde SharePoint / Excel Estandarizado + GIS) — [Presupuesto Fijo: ~15 Horas]
-- **Restricción Presupuestaria Crítica:** Opción 1 cuenta con un presupuesto asignado estricto de **15 horas**.
-- **Implicación Operativa:** Requiere que el 100% de la limpieza, consolidación y estructuración de los datos la realice el personal de SCOG antes de la entrega. El alcance de consultoría se limita estrictamente al modelado ágil en Power BI, creación de visuales clave y handoff básico.
-- **Ingesta:** Plantillas Excel pre-estructuradas depositadas en SharePoint Online / OneDrive.
-- **Transformación:** Power Query (M) ligero con reglas estándar de carga directa.
-- **Modelo:** Modelo simplificado en estrella (Star Schema) rápido (Jurisdicción, Año, Vivienda, Población, Empleo).
-- **GIS:** Mapa nativo (Shape Map o Azure Maps) utilizando capas geográficas existentes listas para consumo.
-- **Entregables:** 1 archivo PBIX con páginas esenciales (Resumen Ejecutivo, Vivienda, Población/Empleo), checklist de actualización de 1 página y sesión de traspaso de 1 hora.
+### Opción 1: Base Scope (Power BI desde SharePoint / Excel Estandarizado + GIS) — [Rango Reconciliado: 70 – 100 Horas / Baseline 75 hrs]
+- **Clarificación Presupuestaria Confirmada (Guía de Aaron):** La cifra previa de **15 horas** correspondía exclusivamente a la tarifa contractual Skagit Consulting ↔ The Flock para la elaboración de este documento técnico de scoping, y no al presupuesto de construcción e implementación de la Opción 1 para SCOG. En la Revisión 2, la Opción 1 se estima bottom-up en un rango de **70 – 100 horas** (55 hrs low / 75 hrs baseline / 97 hrs high) distribuido en seis tareas formales.
+- **Estructura de Seis Tareas:**
+  1. Discovery & Planning (6 / 8 / 10 hrs)
+  2. Prototipo 2025 en curso (12 / 16 / 22 hrs) — finalización de modelo en estrella y vistas analíticas sobre datos históricos.
+  3. Reporte de Producción 2026 (18 / 24 / 30 hrs) — ingesta de año en curso y refinamiento visual para adopción de la Junta.
+  4. Documentación Técnica y Runbook de Actualización (6 / 8 / 10 hrs).
+  5. Capacitación y Handoff al Personal (5 / 7 / 9 hrs).
+  6. Buffer de Contingencia (8 / 12 / 16 hrs) para derivas de esquema o ajustes GIS.
+- **Supuesto Arquitectónico Clave:** El prototipo 2025 y el reporte de producción 2026 comparten un modelo semántico unificado. Si SCOG requiere mantenerlos en archivos `.pbix` separados e independientes, se añaden 10–15 horas.
+- **Ingesta:** Plantillas Excel pre-estructuradas depositadas en SharePoint Online / OneDrive con verificación de integridad por fórmulas nativas (`TEXTJOIN`, `SUMIFS`).
+- **Transformación:** Power Query (M) con tipado fuerte y detención limpia ante discrepancias de esquema.
+- **Modelo:** Modelo en estrella formal (Star Schema) con dimensiones compartidas (`Dim_Jurisdiction`, `Dim_CalendarYear`, `Dim_UGA_Reference`) y hechos temáticos.
+- **GIS:** Mapa nativo GA (**Azure Maps** o **ArcGIS Maps for Power BI**) descartando el preview de Shape Map.
 
 ### Opción 2: Expanded Scope (Dataverse + Ingesta Automatizada Power Platform) — [Rango Reconciliado: 90 – 124 Horas]
 - **Enfoque:** Arquitectura empresarial completa con ingesta automatizada, validación de esquemas, staging y base de datos relacional (Dataverse) para eliminar la dependencia del trabajo manual de SCOG a largo plazo. (MVP: 90 hrs / Completo: 124 hrs).
+- **Proximidad Relativa de Esfuerzo:** Con el nuevo baseline de la Opción 1 en 75 hrs, la Opción 2 MVP (90 hrs) representa una inversión inicial de solo ~20% adicional (15 hrs más), eliminando 20–40 hrs/año de esfuerzo manual recurrente.
 
 ---
 

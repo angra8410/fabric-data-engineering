@@ -69,23 +69,23 @@ To respect the strict 15-hour budget while providing high visual and analytical 
 * **Staff Pre-Refresh Steps:** 
   1. SCOG staff collects annual data from OFM, ESD, and municipal permit offices.
   2. Staff inputs new annual rows into the pre-formatted Excel Master Tables stored in SharePoint.
-  3. **Automated Schema & Historical Integrity Validation (Hashing & Checksum):**
-     - **Header & Schema Hash Validation:** Each master workbook includes a dedicated, locked `Validation` tab and prominent header banner. A deterministic formula concatenates all table headers and generates a schema fingerprint/checksum against the master reference. If any column is renamed, deleted, reordered, or inserted, the banner immediately flags: `⚠️ SCHEMA ERROR: Headers altered. Do not trigger Power BI refresh.`
-     - **Historical Baseline Immutability Hash:** A cumulative checksum/hash calculated over prior adopted reporting years (e.g., 2010–2025) validates that historical numbers have not been accidentally modified, overwritten, or shifted when inserting the new annual row. If any historical cell changes, an immediate alert flags: `⚠️ INTEGRITY ALERT: Historical adopted baseline altered.`
-     - **In-Cell Input Constraints:** Native Excel Data Validation rules restrict jurisdiction entries to a closed dropdown matching official IDs and restrict numeric fields (permits, population, jobs) to valid non-negative numbers.
+  3. **Formula-Based Template Integrity Verification (Standard `.xlsx`, No Macros Required):**
+     - **Header String Comparison (Schema Protection):** To prevent broken Power Query refreshes caused by accidental column renames or deletions, the master Excel template (`.xlsx`) includes a prominent formula-based status cell. A standard formula (`TEXTJOIN` / array comparison) checks the table's header row against the expected schema string. If any header is modified, deleted, or reordered, the status cell immediately flags: `⚠️ SCHEMA ERROR: Column headers altered. Do not trigger Power BI refresh.` Because this uses native formulas, the files remain standard `.xlsx` (fully compatible with Excel Online, SharePoint co-authoring, and requiring zero VBA/macros).
+     - **Historical Baseline Reconciliation Total:** A formula-based control cell computes a verification sum (`SUMIFS`) across prior board-adopted years (e.g., 2010–2025). This gives staff an immediate visual check that historical baseline numbers were not inadvertently altered or shifted while typing in the new annual row.
+     - **In-Cell Dropdown Constraints:** Native Excel Data Validation enforces closed dropdown lists for official jurisdiction IDs and restricts permit, population, and employment counts to positive numbers.
+* **Scope Realism within the 15-Hour Budget:** The validation features above are delivered as **pre-configured template formulas** baked into the initial blank master workbooks provided during Task 1 (Source File Review & Template Standardization). In Power Query (Task 2), schema enforcement relies on native column-selection assertions (`Table.SelectColumns` with strict typing) that cleanly halt refresh if required columns are absent, avoiding the need for complex custom error-routing logic that would exceed the 15-hour budget.
 * **Naming Conventions:** A single, persistent file naming scheme (e.g., `SCOG_Growth_Master_Data.xlsx` or partitioned files `SCOG_Housing_Master.xlsx`, `SCOG_Population_Master.xlsx`) in a dedicated SharePoint document library.
 * **Refresh & Validation in Power BI:**
   1. Open Power BI Desktop (or trigger scheduled cloud refresh in Power BI Service).
-  2. **Power Query Schema Gatekeeper:** Power Query executes a lightweight preliminary assertion on column headers and table checksums before loading fact tables, failing gracefully with an actionable notification if Excel structure was altered.
-  3. Click **Refresh**.
-  4. Review the "Data Audit / QA Visual" (a dedicated validation visual checking row counts, total permits against raw inputs, and schema hash status).
-  5. Publish to the SCOG Power BI Workspace and export the official PDF for Board review.
+  2. **Power Query Refresh:** Power Query ingests the verified SharePoint files; native type enforcement validates schema integrity during load.
+  3. Review the "Data Audit / QA Visual" (a dedicated validation visual checking row counts and total permits against raw inputs).
+  4. Publish to the SCOG Power BI Workspace and export the official PDF for Board review.
 
 ### 2.4 Pros and Cons
 
 | Pros (Advantages) | Cons (Limitations & Risks) |
 | :--- | :--- |
-| **Fastest Delivery:** Fits directly into the active contract scope and minimal budget. | **Fragility (Excel Entropy):** Column alterations break refresh (substantially mitigated by Excel schema hashing and Power Query gatekeeper). |
+| **Fastest Delivery:** Fits directly into the active contract scope and minimal budget. | **Fragility (Excel Entropy):** Column alterations break refresh (mitigated by Excel formula header comparisons and native Power Query schema checks). |
 | **Zero Added Software Licensing:** Requires only standard M365 and existing Power BI Pro licenses. | **High Staff Burden:** All cleaning and formatting remains entirely manual on SCOG staff. |
 | **Low Learning Curve:** SCOG staff is already comfortable manipulating Excel. | **Weak Audit Trail:** No native database log of which user altered numbers prior to publication. |
 | **Simple Governance:** No complex Azure or Power Platform environments to administer. | **Limited Concurrency:** Multiple staff editing the same workbook risks sync locks and formula corruption. |
@@ -129,7 +129,7 @@ Option 2 transforms SCOG's annual growth monitoring from an ad-hoc reporting tas
                                     ▼ (Trigger / Scheduled)
       [Power Query Dataflows / Power Automate Ingestion Engine]
          ├── Schema Validation (Header & Data Type Checks)
-         ├── Business Rule Validation (Permits >= 0, Valid Jurisdiction IDs)
+         ├── Business Rule Validation (Non-Negative Permits, Valid Jurisdiction IDs)
          └── Exception Routing (Validation Errors Logged)
                                     │
                                     ▼ (Upsert / Merge)
@@ -299,4 +299,5 @@ This phased strategy protects SCOG's immediate timeline and budget while establi
 - **Dataverse Capacity & Power Apps Entitlements:** Updated Section 3.5 with verified Microsoft Power Platform entitlements (tenant base grant of **20 GB Database capacity** on qualifying licenses, confirming SCOG's annual growth data will incur **$0 in incremental storage add-on fees**). Clarified Power Apps Premium list pricing at **$20/user/month** for the 1–2 pipeline administrators.
 - **Annual Maintenance Attribution:** Explicitly attributed the 20–40 hr and 2–4 hr annual figures in Section 4 as consulting benchmarks based on peer regional planning agencies, to be calibrated post-Year 1.
 - **Scope Sensitivity Reframing:** Reframed the delivery note in Section 2.5 as a professional "Scope Sensitivity & Delivery Note" focusing on standard visual layouts to protect the 15-hour fixed budget.
-- **Excel Hashing & Checksum Integrity Validation:** Updated Section 2.3 and Section 2.4 to introduce deterministic header schema hashing and historical baseline checksum validation directly within Excel master templates and Power Query pre-load assertions, hardening Option 1 against schema drift and accidental historical overwrites.
+- **Excel Formula-Based Template Integrity Verification:** Updated Section 2.3 and Section 2.4 to specify formula-based header string matching and historical baseline reconciliation totals within standard `.xlsx` master workbooks (no macros required), coupled with native Power Query column assertions, hardening Option 1 against schema drift while strictly respecting the 15-hour budget.
+- **Option 2 Diagram Rule Clarification:** Refined Section 3.1 architecture diagram text to "Non-Negative Permits" to prevent PDF font and symbol rendering clipping.

@@ -177,9 +177,68 @@ is the programmatic equivalent of SQL DDL (`CREATE TABLE raw_members (...)`).
    - Bitwise `&` (AND) and `|` (OR) have higher precedence than comparison operators in Python.
    - **Always** wrap each sub-condition in parentheses: `(F.col("a") >= 10) & (F.col("b") <= 20)`.
 
+> [!TIP]
+> 📖 Para una consulta rápida de todas las funciones, métodos y sintaxis de producción, consulta el archivo maestro:
+> **[pyspark_fundamentals_cheatsheet.md](file:///c:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/fabric-bi-mentorship/pyspark_fundamentals_cheatsheet.md)**.
+
 ---
 
-## 4. Next Step: Completing Exercise 2.1 Full Pipeline Reference
+## 4. Final Solution: Master Production Pipeline (Verified in Fabric)
 
-*(To be finalized with numeric safe casting, boolean risk flag `is_valid_credit_profile`, and `_ingestion_timestamp`)*
+```python
+from pyspark.sql import functions as F
+from pyspark.sql.types import IntegerType, DoubleType
+
+df_silver_members = (
+    df_raw_members
+    # 1. Text Normalization & String Hygiene
+    .withColumn("full_name", F.initcap(F.trim(F.col("full_name"))))
+    .withColumn("status", F.upper(F.trim(F.col("status"))))
+    
+    # 2. Onion Principle: Missingness standardization + Fallback Governance
+    .withColumn("email", F.coalesce(
+        F.nullif(F.lower(F.trim(F.col("email"))), F.lit("")),
+        F.lit("not_provided@creditunion.org")
+    ))
+    
+    # 3. Safe Numeric Casting (fault-tolerant against corrupt strings)
+    .withColumn("credit_score", F.col("raw_credit_score").cast(IntegerType()))
+    .withColumn("debt_to_income_ratio", F.col("raw_dti").cast(DoubleType()))
+    
+    # 4. Business Policy Boolean Flag
+    .withColumn(
+        "is_valid_credit_profile",
+        (F.col("credit_score") >= 600) & (F.col("debt_to_income_ratio") <= 0.43)
+    )
+    
+    # 5. Operational Audit Metadata
+    .withColumn("_ingestion_timestamp", F.current_timestamp())
+    
+    # 6. Active Portfolio Filter
+    .filter(F.col("status") == "ACTIVE")
+    
+    # 7. Explicit Silver Projection
+    .select(
+        "member_id",
+        "full_name",
+        "ssn",
+        "email",
+        "credit_score",
+        "debt_to_income_ratio",
+        "status",
+        "joined_date",
+        "is_valid_credit_profile",
+        "_ingestion_timestamp"
+    )
+)
+```
+
+### ✅ Fabric Lakehouse Execution & Validation Log (2026-09-17)
+- **Engine:** Microsoft Fabric Spark Notebook (`lh_practice_smash_interview`).
+- **Result:** Successfully executed and verified:
+  - Input: 6 raw Bronze records (including corrupt strings `"invalid_score"` and `"corrupt_dti"`, whitespace emails `"  "`).
+  - Output: 4 sanitized Silver records (inactive/suspended rows `M104` and `M106` safely filtered out).
+  - Data Quality: Safe casting handled corrupt strings without cluster crashes; `M105` whitespace email successfully normalized to fallback `not_provided@creditunion.org`.
+
+
 

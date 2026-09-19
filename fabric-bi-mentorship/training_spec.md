@@ -30,8 +30,20 @@
 - **Fase 1.1 (Fundamentos):** Proyecciones, alias explícitos, joins relacionales (`INNER`, `LEFT`, `CROSS`, `FULL OUTER`), filtrado SARGable (`WHERE` vs `HAVING`), manejo de valores `NULL` (`COALESCE`, `NULLIF`).
 - **Fase 1.2 (Agregación & Agrupación):** `GROUP BY`, `HAVING`, funciones de agregación condicionales (`COUNT(CASE WHEN...)`), métricas clave.
 - **Fase 1.3 (Expresiones de Tabla Común & Jerarquías):** CTEs legibles vs subconsultas, Self-Joins para jerarquías organizacionales (Empleado -> Manager).
-- **Fase 1.4 (Window Functions Analíticas):** `ROW_NUMBER()`, `DENSE_RANK()`, `LEAD()`, `LAG()`, ventanas deslizantes `ROWS BETWEEN` y particionamiento analítico.
-- **Fase 1.5 (Optimización y Fabric SQL Endpoint):** SARGabilidad, tipos de datos, planes de ejecución, consultas directas sobre Delta Lake vía SQL Analytics Endpoint.
+- **Fase 1.4 (Window Functions & Analítica Estadística / Percentiles):**
+  - Ranking & Offset: `ROW_NUMBER()`, `DENSE_RANK()`, `LEAD()`, `LAG()`, ventanas deslizantes `ROWS BETWEEN`.
+  - **Distribución y Percentiles Multi-Motor:** Cálculo de medianas, cuartiles y percentiles continuos vs discretos (`PERCENTILE_CONT`, `PERCENTILE_DISC`, `NTILE`). Comparativa de implementación y limitaciones entre motores: SQL Server / T-SQL, SQLite (aproximaciones / window workarounds) vs PySpark / Fabric (`percentile_approx`, `expr('percentile_approx(...)')`).
+- **Fase 1.5 (Performance Tuning, Índices & Execution Plans en Entorno Bancario):**
+  - **Mecanismos de Almacenamiento & B-Trees:** Por qué los índices aceleran búsquedas (desmitificación: no es por el tipo de dato `INT` vs `VARCHAR`, sino por la estructura de salto del índice).
+  - **Clustered vs. Non-Clustered Indexes:** Organización física de datos vs apuntadores de búsqueda secundaria.
+  - **Lectura de Planes de Ejecución (SSMS & Spark Catalyst):** Identificación visual de cuellos de botella: *Index Seek* (salto directo) vs *Table Scan / Clustered Index Scan* (revisión exhaustiva fila por fila).
+  - **SARGabilidad:** Anti-patrones que destruyen el uso de índices (funciones envolventes en columnas dentro de `WHERE`, conversiones de tipo implícitas, `LIKE '%...'`).
+  - **Indexación en Joins & Estadísticas:** Impacto de missing indexes en columnas de unión y necesidad de mantenimiento de estadísticas (`UPDATE STATISTICS`).
+- **Fase 1.6 (Seguridad, Gobernanza y Administración en Base de Datos Bancaria):**
+  - **Jerarquía de Seguridad:** Logins (nivel instancia/servidor) vs. Users (nivel base de datos) vs. Service Principals / AAD en Fabric.
+  - **Control de Acceso Basado en Roles (RBAC):** Roles predefinidos (`db_datareader`, `db_datawriter`, `db_owner`) vs roles de negocio personalizados.
+  - **Permisos Granulares:** Sintaxis y efectos de `GRANT`, `REVOKE` y `DENY` a nivel de servidor, esquema, tabla y columna.
+  - **Seguridad a Nivel de Fila (Row-Level Security - RLS):** Implementación de funciones predicado de seguridad y Security Policies en T-SQL / SQL Analytics Endpoint para segregar carteras de clientes según la sucursal del usuario autenticado.
 
 ### Módulo 2: Fabric Lakehouse & PySpark Engineering (Desde Fundamentos hasta Avanzado)
 - **Fase 2.1 (Fundamentos PySpark):** DataFrames, proyecciones (`select`, `withColumn`), filtrado, transformaciones y esquemas (`StructType`).

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "report_practice-dp600"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "2045ee7d-eefb-9701-4d4b-5b12622ea5b1"
+  }
+}

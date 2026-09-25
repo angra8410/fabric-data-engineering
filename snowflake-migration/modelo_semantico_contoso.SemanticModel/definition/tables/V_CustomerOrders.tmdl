@@ -1,0 +1,146 @@
+table V_CustomerOrders
+	lineageTag: 37ea8c23-23bd-4838-b473-9b38a2f5d89b
+	sourceLineageTag: [dbo].[V_CustomerOrders]
+
+	column ProductCategoryName
+		dataType: string
+		lineageTag: 19a1c4a4-c039-4b5a-96d3-a5efc40816d0
+		sourceLineageTag: ProductCategoryName
+		summarizeBy: none
+		sourceColumn: ProductCategoryName
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductSubcategory
+		dataType: string
+		lineageTag: 55fa0dde-e301-4f3a-8825-399f221ba2cc
+		sourceLineageTag: ProductSubcategory
+		summarizeBy: none
+		sourceColumn: ProductSubcategory
+
+		annotation SummarizationSetBy = Automatic
+
+	column Product
+		dataType: string
+		lineageTag: 086cdeda-3bc5-48aa-8e77-8f41cc6d1c48
+		sourceLineageTag: Product
+		summarizeBy: none
+		sourceColumn: Product
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 611c4a18-756a-4f23-8b34-c64e6fe3168b
+		sourceLineageTag: CustomerKey
+		summarizeBy: count
+		sourceColumn: CustomerKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: 13ab2e0b-d915-4b43-a96c-14604fc7cf0c
+		sourceLineageTag: Region
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column Age
+		dataType: int64
+		formatString: 0
+		lineageTag: 1ab83bdd-c3ad-4838-b8ca-0b75df4e4ded
+		sourceLineageTag: Age
+		summarizeBy: sum
+		sourceColumn: Age
+
+		annotation SummarizationSetBy = Automatic
+
+	column IncomeGroup
+		dataType: string
+		lineageTag: 8e5e3f74-d715-45ef-a39a-e5bdf94b310a
+		sourceLineageTag: IncomeGroup
+		summarizeBy: none
+		sourceColumn: IncomeGroup
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarYear
+		dataType: int64
+		formatString: 0
+		lineageTag: 3c064983-ab7a-4dcb-837f-a310d080fc0d
+		sourceLineageTag: CalendarYear
+		summarizeBy: sum
+		sourceColumn: CalendarYear
+
+		annotation SummarizationSetBy = Automatic
+
+	column FiscalYear
+		dataType: int64
+		formatString: 0
+		lineageTag: 048d080c-971f-40e3-b119-b33d12b818b7
+		sourceLineageTag: FiscalYear
+		summarizeBy: sum
+		sourceColumn: FiscalYear
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month
+		dataType: int64
+		formatString: 0
+		lineageTag: 26c11b69-cd01-4441-b7ca-ea7c0544af6e
+		sourceLineageTag: Month
+		summarizeBy: sum
+		sourceColumn: Month
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderNumber
+		dataType: string
+		lineageTag: 362e6ef5-4b2c-4fd4-993b-2c7528c2b1e3
+		sourceLineageTag: OrderNumber
+		summarizeBy: none
+		sourceColumn: OrderNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column LineNumber
+		dataType: int64
+		formatString: 0
+		lineageTag: 7e63eaf6-740f-4955-883a-b3fc6a0e06fe
+		sourceLineageTag: LineNumber
+		summarizeBy: sum
+		sourceColumn: LineNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 705da0b6-856c-44e8-b888-0cba60a1ef75
+		sourceLineageTag: Quantity
+		summarizeBy: sum
+		sourceColumn: Quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column Amount
+		dataType: double
+		lineageTag: 9e104852-b3ff-4f02-9d87-713082390464
+		sourceLineageTag: Amount
+		summarizeBy: sum
+		sourceColumn: Amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition V_CustomerOrders = entity
+		mode: directLake
+		source
+			entityName: V_CustomerOrders
+			schemaName: dbo
+			expressionSource: 'DirectLake - Contoso_Lakehouse'
+

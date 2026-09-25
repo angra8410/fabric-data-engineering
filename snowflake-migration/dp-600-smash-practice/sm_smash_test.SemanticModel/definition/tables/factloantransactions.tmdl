@@ -1,0 +1,90 @@
+table factloantransactions
+	lineageTag: 6a385209-0b85-4108-8bb1-31e53c84eb65
+	sourceLineageTag: [dbo].[factloantransactions]
+
+	measure 'Total Transaction Amount' =
+			
+			SUM(FactLoanTransactions[TransactionAmount])
+		lineageTag: fa56b8c2-e058-4bae-9be7-cf1dff01400a
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TransactionKey
+		dataType: int64
+		formatString: 0
+		lineageTag: f319a3d9-9981-41f4-858d-51b787d1823d
+		sourceLineageTag: TransactionKey
+		summarizeBy: count
+		sourceColumn: TransactionKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column LoanKey
+		dataType: int64
+		formatString: 0
+		lineageTag: a0892c7d-1a12-4da0-b7b8-23c496610105
+		sourceLineageTag: LoanKey
+		summarizeBy: none
+		sourceColumn: LoanKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column MemberKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 48a4b4a3-f16c-41e5-984d-22ae4f34958d
+		sourceLineageTag: MemberKey
+		summarizeBy: count
+		sourceColumn: MemberKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column BranchID
+		dataType: int64
+		formatString: 0
+		lineageTag: 15d8c9dc-a8ea-46d1-9a59-90d7e244afef
+		sourceLineageTag: BranchID
+		summarizeBy: none
+		sourceColumn: BranchID
+
+		annotation SummarizationSetBy = Automatic
+
+	column DateKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 9baa5452-861b-4858-a268-f92c278d17b8
+		sourceLineageTag: DateKey
+		summarizeBy: none
+		sourceColumn: DateKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column TransactionType
+		dataType: string
+		lineageTag: 3558d94a-57ca-47e4-8bd5-0813f7e40aa1
+		sourceLineageTag: TransactionType
+		summarizeBy: none
+		sourceColumn: TransactionType
+
+		annotation SummarizationSetBy = Automatic
+
+	column TransactionAmount
+		dataType: double
+		lineageTag: ae332782-710a-4a59-8500-147c4917bf07
+		sourceLineageTag: TransactionAmount
+		summarizeBy: sum
+		sourceColumn: TransactionAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition factloantransactions = entity
+		mode: directLake
+		source
+			entityName: factloantransactions
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_practice_smash_interview'
+

@@ -1,0 +1,89 @@
+table dim_supplier
+	lineageTag: dadeeb77-72f7-4a6d-96ba-0c77914d32d8
+	sourceLineageTag: [dbo].[dim_supplier]
+
+	column supplier_key
+		dataType: double
+		lineageTag: 23005c75-adda-4660-98ab-41b155f751f5
+		sourceLineageTag: supplier_key
+		summarizeBy: none
+		sourceColumn: supplier_key
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column supplier_name
+		dataType: string
+		lineageTag: 146e7455-9d7b-40a7-b5dd-8b359363092f
+		sourceLineageTag: supplier_name
+		summarizeBy: none
+		sourceColumn: supplier_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column address
+		dataType: string
+		lineageTag: d56d52f2-c9c2-48e3-873a-dba43f8506df
+		sourceLineageTag: address
+		summarizeBy: none
+		sourceColumn: address
+
+		annotation SummarizationSetBy = Automatic
+
+	column nation_key
+		dataType: double
+		lineageTag: efd075a2-8ae4-4907-8e8d-d769a697a483
+		sourceLineageTag: nation_key
+		summarizeBy: sum
+		sourceColumn: nation_key
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column phone
+		dataType: string
+		lineageTag: 574bd60f-b20f-4ab1-8f0c-e8440b196f2b
+		sourceLineageTag: phone
+		summarizeBy: none
+		sourceColumn: phone
+
+		annotation SummarizationSetBy = Automatic
+
+	column account_balance
+		dataType: double
+		lineageTag: f8f3c65b-14a1-4245-9d9d-49a5dd95fbbb
+		sourceLineageTag: account_balance
+		summarizeBy: sum
+		sourceColumn: account_balance
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column nation_name
+		dataType: string
+		lineageTag: 311d1e98-2ea5-408e-a0fa-b09d8543a837
+		sourceLineageTag: nation_name
+		summarizeBy: none
+		sourceColumn: nation_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column region_name
+		dataType: string
+		lineageTag: 4602e0f2-d3ee-44b1-b33f-6a506340a345
+		sourceLineageTag: region_name
+		summarizeBy: none
+		sourceColumn: region_name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_supplier = entity
+		mode: directLake
+		source
+			entityName: dim_supplier
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_TPCH_Migration_Target'
+

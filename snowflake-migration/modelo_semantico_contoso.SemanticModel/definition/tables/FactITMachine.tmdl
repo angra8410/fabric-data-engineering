@@ -1,0 +1,91 @@
+table FactITMachine
+	lineageTag: 897e9bc9-f5f4-463b-9c30-f7c4d3884344
+	sourceLineageTag: [dbo].[FactITMachine]
+
+	column ITMachinekey
+		dataType: int64
+		formatString: 0
+		lineageTag: fd8be135-c63c-4d36-9f95-0e4a03c48c4f
+		sourceLineageTag: ITMachinekey
+		summarizeBy: sum
+		sourceColumn: ITMachinekey
+
+		annotation SummarizationSetBy = Automatic
+
+	column MachineKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 47b57925-0242-4c86-bb6c-70336e632639
+		sourceLineageTag: MachineKey
+		summarizeBy: count
+		sourceColumn: MachineKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Datekey
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: a5eb871e-7faf-443c-85fa-9f2db9824daa
+		sourceLineageTag: Datekey
+		summarizeBy: none
+		sourceColumn: Datekey
+
+		annotation SummarizationSetBy = Automatic
+
+	column CostAmount
+		dataType: double
+		lineageTag: 24b7373a-dde1-463a-8f5d-75afa5a4c8eb
+		sourceLineageTag: CostAmount
+		summarizeBy: sum
+		sourceColumn: CostAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CostType
+		dataType: string
+		lineageTag: c6ff2c2a-82c5-4a3b-84ac-b174c0d2dfb9
+		sourceLineageTag: CostType
+		summarizeBy: none
+		sourceColumn: CostType
+
+		annotation SummarizationSetBy = Automatic
+
+	column ETLLoadID
+		dataType: int64
+		formatString: 0
+		lineageTag: bea4918a-2a2f-492a-aaa8-71565514fd63
+		sourceLineageTag: ETLLoadID
+		summarizeBy: count
+		sourceColumn: ETLLoadID
+
+		annotation SummarizationSetBy = Automatic
+
+	column LoadDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 32600129-705d-4c94-8056-4e73459ebe1c
+		sourceLineageTag: LoadDate
+		summarizeBy: none
+		sourceColumn: LoadDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column UpdateDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 0d8583fa-9c6d-404a-82c2-cd9cac35e318
+		sourceLineageTag: UpdateDate
+		summarizeBy: none
+		sourceColumn: UpdateDate
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FactITMachine = entity
+		mode: directLake
+		source
+			entityName: FactITMachine
+			schemaName: dbo
+			expressionSource: 'DirectLake - Contoso_Lakehouse'
+

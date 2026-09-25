@@ -1,0 +1,1491 @@
+{
+  "properties": {
+    "jobMode": "Batch",
+    "source": {
+      "type": "SqlServerTable",
+      "connectionSettings": {
+        "type": "SqlServer",
+        "typeProperties": {
+          "database": "ContosoRetailDW"
+        },
+        "externalReferences": {
+          "connection": "b236de5f-6540-4b76-b2b1-aa519e4d1804"
+        }
+      }
+    },
+    "destination": {
+      "type": "LakehouseTable",
+      "connectionSettings": {
+        "type": "Lakehouse",
+        "typeProperties": {
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "artifactId": "fade4948-6fc4-8c96-40c7-ef768675d42e",
+          "rootFolder": "Tables"
+        }
+      }
+    },
+    "policy": {
+      "timeout": "0.12:00:00",
+      "retry": 0
+    }
+  },
+  "activities": [
+    {
+      "id": "bfb7b61d-13c4-4ea7-871d-2c367e9b5a0a",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimChannel"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimChannel"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "6b31006c-03ff-4f3f-940c-1e80912abf4c",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimCurrency"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimCurrency"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "6360c6ab-a361-40c4-900f-5b5a686db8b3",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimCustomer"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimCustomer"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "083cfd18-98b1-4104-9c08-862cdf5ec57c",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimDate"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimDate"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "25f0da81-5f9c-4bcb-a10d-91cffa4a9183",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimEmployee"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimEmployee"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "db26ee68-759f-4ce8-ae53-f63613b01e09",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimEntity"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimEntity"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "117c3bc1-5140-4ef4-bb2f-392ebf001c29",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimGeography"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimGeography"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator",
+          "mappings": [
+            {
+              "source": {
+                "name": "GeographyKey",
+                "type": "Int32",
+                "physicalType": "int"
+              },
+              "destination": {
+                "name": "GeographyKey",
+                "physicalType": "integer"
+              }
+            },
+            {
+              "source": {
+                "name": "GeographyType",
+                "type": "String",
+                "physicalType": "nvarchar",
+                "length": "50"
+              },
+              "destination": {
+                "name": "GeographyType",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "ContinentName",
+                "type": "String",
+                "physicalType": "nvarchar",
+                "length": "50"
+              },
+              "destination": {
+                "name": "ContinentName",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "CityName",
+                "type": "String",
+                "physicalType": "nvarchar",
+                "length": "100"
+              },
+              "destination": {
+                "name": "CityName",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "StateProvinceName",
+                "type": "String",
+                "physicalType": "nvarchar",
+                "length": "100"
+              },
+              "destination": {
+                "name": "StateProvinceName",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "RegionCountryName",
+                "type": "String",
+                "physicalType": "nvarchar",
+                "length": "100"
+              },
+              "destination": {
+                "name": "RegionCountryName",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "ETLLoadID",
+                "type": "Int32",
+                "physicalType": "int"
+              },
+              "destination": {
+                "name": "ETLLoadID",
+                "physicalType": "integer"
+              }
+            },
+            {
+              "source": {
+                "name": "LoadDate",
+                "type": "DateTime",
+                "physicalType": "datetime"
+              },
+              "destination": {
+                "name": "LoadDate",
+                "physicalType": "timestamp"
+              }
+            },
+            {
+              "source": {
+                "name": "UpdateDate",
+                "type": "DateTime",
+                "physicalType": "datetime"
+              },
+              "destination": {
+                "name": "UpdateDate",
+                "physicalType": "timestamp"
+              }
+            }
+          ]
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "17d65d19-5b11-419b-930e-d32093c8f17e",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimMachine"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimMachine"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "4e26a963-e11f-4e17-a138-0eb13d399ace",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimOutage"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimOutage"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "e65bac7a-388a-47f2-8a84-c98cfb9ed129",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimProduct"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimProduct"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "6ec5032c-ca68-4e28-a200-66862c730b80",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimProductCategory"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimProductCategory"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "a3c1b5b5-bc14-4da9-ad63-45476a473608",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimProductSubcategory"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimProductSubcategory"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "3a70c557-4e63-4bbb-bd3e-d464cc214dff",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimPromotion"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimPromotion"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "6c9fe4bd-2425-4636-b9db-09089d394e15",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimSalesTerritory"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimSalesTerritory"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "a1846364-33cc-48d5-9e05-b1ad463b25b9",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimScenario"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimScenario"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "7f4534ae-eb64-4bf3-b0b0-f552e9c27fe1",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimStore"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "DimStore"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator",
+          "mappings": [
+            {
+              "source": {
+                "name": "StoreKey",
+                "type": "Int32",
+                "physicalType": "int"
+              },
+              "destination": {
+                "name": "StoreKey",
+                "physicalType": "integer"
+              }
+            },
+            {
+              "source": {
+                "name": "GeographyKey",
+                "type": "Int32",
+                "physicalType": "int"
+              },
+              "destination": {
+                "name": "GeographyKey",
+                "physicalType": "integer"
+              }
+            },
+            {
+              "source": {
+                "name": "StoreManager",
+                "type": "Int32",
+                "physicalType": "int"
+              },
+              "destination": {
+                "name": "StoreManager",
+                "physicalType": "integer"
+              }
+            },
+            {
+              "source": {
+                "name": "StoreType",
+                "type": "String",
+                "physicalType": "nvarchar",
+                "length": "15"
+              },
+              "destination": {
+                "name": "StoreType",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "StoreName",
+                "type": "String",
+                "physicalType": "nvarchar",
+                "length": "100"
+              },
+              "destination": {
+                "name": "StoreName",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "StoreDescription",
+                "type": "String",
+                "physicalType": "nvarchar",
+                "length": "300"
+              },
+              "destination": {
+                "name": "StoreDescription",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "Status",
+                "type": "String",
+                "physicalType": "nvarchar",
+                "length": "20"
+              },
+              "destination": {
+                "name": "Status",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "OpenDate",
+                "type": "DateTime",
+                "physicalType": "datetime"
+              },
+              "destination": {
+                "name": "OpenDate",
+                "physicalType": "timestamp"
+              }
+            },
+            {
+              "source": {
+                "name": "CloseDate",
+                "type": "DateTime",
+                "physicalType": "datetime"
+              },
+              "destination": {
+                "name": "CloseDate",
+                "physicalType": "timestamp"
+              }
+            },
+            {
+              "source": {
+                "name": "EntityKey",
+                "type": "Int32",
+                "physicalType": "int"
+              },
+              "destination": {
+                "name": "EntityKey",
+                "physicalType": "integer"
+              }
+            },
+            {
+              "source": {
+                "name": "ZipCode",
+                "type": "String",
+                "physicalType": "nvarchar",
+                "length": "20"
+              },
+              "destination": {
+                "name": "ZipCode",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "ZipCodeExtension",
+                "type": "String",
+                "physicalType": "nvarchar",
+                "length": "10"
+              },
+              "destination": {
+                "name": "ZipCodeExtension",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "StorePhone",
+                "type": "String",
+                "physicalType": "nvarchar",
+                "length": "15"
+              },
+              "destination": {
+                "name": "StorePhone",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "StoreFax",
+                "type": "String",
+                "physicalType": "nvarchar",
+                "length": "14"
+              },
+              "destination": {
+                "name": "StoreFax",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "AddressLine1",
+                "type": "String",
+                "physicalType": "nvarchar",
+                "length": "100"
+              },
+              "destination": {
+                "name": "AddressLine1",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "AddressLine2",
+                "type": "String",
+                "physicalType": "nvarchar",
+                "length": "100"
+              },
+              "destination": {
+                "name": "AddressLine2",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "CloseReason",
+                "type": "String",
+                "physicalType": "nvarchar",
+                "length": "20"
+              },
+              "destination": {
+                "name": "CloseReason",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "EmployeeCount",
+                "type": "Int32",
+                "physicalType": "int"
+              },
+              "destination": {
+                "name": "EmployeeCount",
+                "physicalType": "integer"
+              }
+            },
+            {
+              "source": {
+                "name": "SellingAreaSize",
+                "type": "Double",
+                "physicalType": "float"
+              },
+              "destination": {
+                "name": "SellingAreaSize",
+                "physicalType": "double"
+              }
+            },
+            {
+              "source": {
+                "name": "LastRemodelDate",
+                "type": "DateTime",
+                "physicalType": "datetime"
+              },
+              "destination": {
+                "name": "LastRemodelDate",
+                "physicalType": "timestamp"
+              }
+            },
+            {
+              "source": {
+                "name": "ETLLoadID",
+                "type": "Int32",
+                "physicalType": "int"
+              },
+              "destination": {
+                "name": "ETLLoadID",
+                "physicalType": "integer"
+              }
+            },
+            {
+              "source": {
+                "name": "LoadDate",
+                "type": "DateTime",
+                "physicalType": "datetime"
+              },
+              "destination": {
+                "name": "LoadDate",
+                "physicalType": "timestamp"
+              }
+            },
+            {
+              "source": {
+                "name": "UpdateDate",
+                "type": "DateTime",
+                "physicalType": "datetime"
+              },
+              "destination": {
+                "name": "UpdateDate",
+                "physicalType": "timestamp"
+              }
+            }
+          ]
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "778b62cb-6386-47cc-a0c0-d94575f9584f",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "FactExchangeRate"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "FactExchangeRate"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "12a9049a-bfa0-4c2c-a740-ea440d58864e",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "FactInventory"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "FactInventory"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "a87e96d8-17d6-4be8-b474-e91a09c1bda5",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "FactITMachine"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "FactITMachine"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "e44060dd-ffcc-4876-a362-eb06f964f585",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "FactITSLA"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "FactITSLA"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "363e1944-86f4-4565-8e4b-bd0385364bae",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "FactOnlineSales"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "FactOnlineSales"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "f774ccc5-8dee-499c-b57e-a3d14d2d0bd8",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "FactSales"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "FactSales"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "5c7ac34c-bf3a-468e-a1ba-647a60056157",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "FactSalesQuota"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "FactSalesQuota"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "7d578ea1-c7a5-4304-a2a5-72da9b54eaf7",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "FactStrategyPlan"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "FactStrategyPlan"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "5b47e3bd-7d48-4a35-accf-a92979f90f68",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "sysdiagrams"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "sysdiagrams"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "b7466d14-0dd9-496c-a294-b592f2dfcd6b",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "V_Customer"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "V_Customer"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "61cd1d4b-9174-4e85-b4a2-2c20a19bf48a",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "V_CustomerOrders"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "V_CustomerOrders"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "86761382-2c4a-45b9-9a24-b0d9621471c0",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "V_CustomerPromotion"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "V_CustomerPromotion"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "c680aad2-e7c9-491a-8134-a47fc596b119",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "V_OnlineSalesOrder"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "V_OnlineSalesOrder"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "9b30e56c-d627-4f0f-affa-5ac8447d50d6",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "V_OnlineSalesOrderDetail"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "V_OnlineSalesOrderDetail"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "7f5c23fa-c4c2-44c7-9540-577561d1bfe8",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "V_ProductForecast"
+          },
+          "partitionSettings": {
+            "partitionOption": "None"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "dbo",
+            "table": "V_ProductForecast"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    }
+  ]
+}

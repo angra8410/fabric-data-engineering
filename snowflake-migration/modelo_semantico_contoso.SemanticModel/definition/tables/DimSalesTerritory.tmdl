@@ -1,0 +1,154 @@
+table DimSalesTerritory
+	lineageTag: 7bb315dd-11c9-47e5-aa9e-0eb467246175
+	sourceLineageTag: [dbo].[DimSalesTerritory]
+
+	column SalesTerritoryKey
+		dataType: int64
+		formatString: 0
+		lineageTag: e6b52921-ea98-446f-8790-32df576fbd2c
+		sourceLineageTag: SalesTerritoryKey
+		summarizeBy: count
+		sourceColumn: SalesTerritoryKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column GeographyKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 470334fd-7bcf-4c97-941d-343a37fb9572
+		sourceLineageTag: GeographyKey
+		summarizeBy: count
+		sourceColumn: GeographyKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesTerritoryLabel
+		dataType: string
+		lineageTag: b8554561-36d0-4924-903b-c2eab0220e9b
+		sourceLineageTag: SalesTerritoryLabel
+		summarizeBy: none
+		sourceColumn: SalesTerritoryLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesTerritoryName
+		dataType: string
+		lineageTag: 0562764b-20f7-4ff5-b402-2b0f8405be21
+		sourceLineageTag: SalesTerritoryName
+		summarizeBy: none
+		sourceColumn: SalesTerritoryName
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesTerritoryRegion
+		dataType: string
+		lineageTag: 5f535e02-7543-4501-8421-a18b3ac186fb
+		sourceLineageTag: SalesTerritoryRegion
+		summarizeBy: none
+		sourceColumn: SalesTerritoryRegion
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesTerritoryCountry
+		dataType: string
+		lineageTag: 886250c5-0bf5-481e-838f-1d22141bef1f
+		sourceLineageTag: SalesTerritoryCountry
+		summarizeBy: none
+		sourceColumn: SalesTerritoryCountry
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesTerritoryGroup
+		dataType: string
+		lineageTag: 7ba86016-6341-4f65-a2b7-9a43f6f58743
+		sourceLineageTag: SalesTerritoryGroup
+		summarizeBy: none
+		sourceColumn: SalesTerritoryGroup
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesTerritoryLevel
+		dataType: string
+		lineageTag: cd590e5c-4a81-4db0-b27e-ec5283e5c5d3
+		sourceLineageTag: SalesTerritoryLevel
+		summarizeBy: none
+		sourceColumn: SalesTerritoryLevel
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesTerritoryManager
+		dataType: int64
+		formatString: 0
+		lineageTag: 53c912ed-1f9c-434a-97a9-365a5443833f
+		sourceLineageTag: SalesTerritoryManager
+		summarizeBy: sum
+		sourceColumn: SalesTerritoryManager
+
+		annotation SummarizationSetBy = Automatic
+
+	column StartDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 7b28528e-8ff7-4ad2-95d9-126be6cd730a
+		sourceLineageTag: StartDate
+		summarizeBy: none
+		sourceColumn: StartDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column EndDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 703cac61-f143-427b-a848-de307a7825db
+		sourceLineageTag: EndDate
+		summarizeBy: none
+		sourceColumn: EndDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column Status
+		dataType: string
+		lineageTag: 86edc777-3fb7-4690-b16a-64c68d0e0f6d
+		sourceLineageTag: Status
+		summarizeBy: none
+		sourceColumn: Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column ETLLoadID
+		dataType: int64
+		formatString: 0
+		lineageTag: 825c5edb-b7ef-4c5e-b2f6-ed883c6a7f53
+		sourceLineageTag: ETLLoadID
+		summarizeBy: count
+		sourceColumn: ETLLoadID
+
+		annotation SummarizationSetBy = Automatic
+
+	column LoadDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 81e9b52e-57d3-4707-90c8-a8bb53ba466a
+		sourceLineageTag: LoadDate
+		summarizeBy: none
+		sourceColumn: LoadDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column UpdateDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 99a2b925-5732-4bd9-81ce-3355ea3dfee0
+		sourceLineageTag: UpdateDate
+		summarizeBy: none
+		sourceColumn: UpdateDate
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimSalesTerritory = entity
+		mode: directLake
+		source
+			entityName: DimSalesTerritory
+			schemaName: dbo
+			expressionSource: 'DirectLake - Contoso_Lakehouse'
+

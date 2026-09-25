@@ -1,0 +1,69 @@
+table sales
+	lineageTag: f0c3efdf-0e53-4d5e-8206-017f4c82315f
+	sourceLineageTag: [dbo].[sales]
+
+	column SalesID
+		dataType: int64
+		formatString: 0
+		lineageTag: 5391e335-4891-437a-aedc-ab4d954f8bf7
+		sourceLineageTag: SalesID
+		summarizeBy: count
+		sourceColumn: SalesID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: 48b1ef45-ece0-48e3-a40a-24994e16d336
+		sourceLineageTag: Region
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesRep
+		dataType: string
+		lineageTag: 222e97d3-8af4-4050-92c4-be681056c3dd
+		sourceLineageTag: SalesRep
+		summarizeBy: none
+		sourceColumn: SalesRep
+
+		annotation SummarizationSetBy = Automatic
+
+	column Email
+		dataType: string
+		lineageTag: 9d045130-22bb-4dea-910b-7c17a30877de
+		sourceLineageTag: Email
+		summarizeBy: none
+		sourceColumn: Email
+
+		annotation SummarizationSetBy = Automatic
+
+	column Amount
+		dataType: double
+		lineageTag: 83051529-9041-4f73-9555-d12f12ed4870
+		sourceLineageTag: Amount
+		summarizeBy: sum
+		sourceColumn: Amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CommissionPct
+		dataType: double
+		lineageTag: 4ef1f67f-17ee-43e6-b94a-3f6868260372
+		sourceLineageTag: CommissionPct
+		summarizeBy: sum
+		sourceColumn: CommissionPct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition sales = entity
+		mode: directLake
+		source
+			entityName: sales
+			expressionSource: 'DirectLake - SecurityLab_Lakehouse'
+

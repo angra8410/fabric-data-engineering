@@ -1,0 +1,35 @@
+relationship f790e1cc-dd73-68e1-eb63-24f5f51234df
+	fromColumn: factloantransactions.DateKey
+	toColumn: dimdate.DateKey
+
+relationship 1a7876f2-ca83-cc78-8b94-afa55a92f2bf
+	fromColumn: factdailyloanbalances.DateKey
+	toColumn: dimdate.DateKey
+
+relationship a10f26b3-3547-b1de-9366-7a4db8514e91
+	fromColumn: factdailyloanbalances.LoanKey
+	toColumn: dimloan.LoanKey
+
+relationship 6990abe2-dbe1-6fa2-d7dd-ad7b67242233
+	fromColumn: factloantransactions.LoanKey
+	toColumn: dimloan.LoanKey
+
+relationship e42b04ac-1d3f-883f-8ceb-14892ab442e2
+	fromColumn: factdailyloanbalances.BranchID
+	toColumn: dimbranch.BranchID
+
+relationship 9b2364b6-d648-3c32-2381-6ad6e68b2934
+	fromColumn: factloantransactions.BranchID
+	toColumn: dimbranch.BranchID
+
+relationship 7050c885-a09b-38bd-9025-3719250ab835
+	fromColumn: dimloan.MemberKey
+	toColumn: dimmember.MemberKey
+
+relationship c9e225ff-2a60-46a7-9d63-477efe323b74
+	crossFilteringBehavior: bothDirections
+	relyOnReferentialIntegrity
+	securityFilteringBehavior: bothDirections
+	fromColumn: dimsecuritymapping.AssignedBranchID
+	toColumn: dimbranch.BranchID
+

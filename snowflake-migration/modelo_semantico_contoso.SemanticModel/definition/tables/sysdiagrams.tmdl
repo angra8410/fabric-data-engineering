@@ -1,0 +1,50 @@
+table sysdiagrams
+	lineageTag: 654adee3-768d-4523-bf01-171ed8ea8ae1
+	sourceLineageTag: [dbo].[sysdiagrams]
+
+	column name
+		dataType: string
+		lineageTag: 14572073-d491-40a3-a79c-4835863a9585
+		sourceLineageTag: name
+		summarizeBy: none
+		sourceColumn: name
+
+		annotation SummarizationSetBy = Automatic
+
+	column principal_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 06c149f2-e0f8-4f0b-ab28-e1cf796d8d96
+		sourceLineageTag: principal_id
+		summarizeBy: sum
+		sourceColumn: principal_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column diagram_id
+		dataType: int64
+		formatString: 0
+		lineageTag: a295de21-a8a2-4b32-a6b9-c33ca2d4ce3b
+		sourceLineageTag: diagram_id
+		summarizeBy: sum
+		sourceColumn: diagram_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column version
+		dataType: int64
+		formatString: 0
+		lineageTag: e3e3b089-3f4d-4ba3-ab4a-4955a10c8d73
+		sourceLineageTag: version
+		summarizeBy: sum
+		sourceColumn: version
+
+		annotation SummarizationSetBy = Automatic
+
+	partition sysdiagrams = entity
+		mode: directLake
+		source
+			entityName: sysdiagrams
+			schemaName: dbo
+			expressionSource: 'DirectLake - Contoso_Lakehouse'
+

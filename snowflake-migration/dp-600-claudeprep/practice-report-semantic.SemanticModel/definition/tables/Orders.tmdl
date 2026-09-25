@@ -1,0 +1,59 @@
+table Orders
+	lineageTag: 129180c6-a958-4807-97c1-14f7cf69d571
+	sourceLineageTag: [dbo].[Orders]
+
+	column OrderID
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 650fafa0-fbf6-4889-a20f-062fe2e0f69e
+		sourceLineageTag: OrderID
+		summarizeBy: count
+		sourceColumn: OrderID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerID
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 849af589-da27-418e-851f-050fc7c2cdd5
+		sourceLineageTag: CustomerID
+		summarizeBy: count
+		sourceColumn: CustomerID
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderTotal
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		sourceProviderType: decimal(10, 2)
+		lineageTag: 93bb3d54-4871-45cb-b3c0-26280941ca30
+		sourceLineageTag: OrderTotal
+		summarizeBy: sum
+		sourceColumn: OrderTotal
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column OrderDate
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: date
+		lineageTag: 3f85035a-5096-463d-873e-ccfe2a55cc71
+		sourceLineageTag: OrderDate
+		summarizeBy: none
+		sourceColumn: OrderDate
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Orders = entity
+		mode: directLake
+		source
+			entityName: Orders
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+

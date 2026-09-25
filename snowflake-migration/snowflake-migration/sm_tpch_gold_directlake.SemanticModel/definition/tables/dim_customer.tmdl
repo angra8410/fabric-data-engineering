@@ -1,0 +1,98 @@
+table dim_customer
+	lineageTag: 82c92a32-0d71-47cf-a947-51aa2d7adec3
+	sourceLineageTag: [dbo].[dim_customer]
+
+	column customer_key
+		dataType: double
+		lineageTag: 9d5a84bc-285b-4816-a20e-2b572fa345bc
+		sourceLineageTag: customer_key
+		summarizeBy: none
+		sourceColumn: customer_key
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column customer_name
+		dataType: string
+		lineageTag: 236d1127-c339-45f0-99e3-d1d6e89b64cb
+		sourceLineageTag: customer_name
+		summarizeBy: none
+		sourceColumn: customer_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column address
+		dataType: string
+		lineageTag: 1cf55f81-7ede-4a3a-a60f-41358e231d3a
+		sourceLineageTag: address
+		summarizeBy: none
+		sourceColumn: address
+
+		annotation SummarizationSetBy = Automatic
+
+	column nation_key
+		dataType: double
+		lineageTag: 9720a4f2-5f23-4746-a454-98e833340811
+		sourceLineageTag: nation_key
+		summarizeBy: none
+		sourceColumn: nation_key
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column phone
+		dataType: string
+		lineageTag: 7bc57e5a-dac3-442f-a592-d20269de851a
+		sourceLineageTag: phone
+		summarizeBy: none
+		sourceColumn: phone
+
+		annotation SummarizationSetBy = Automatic
+
+	column account_balance
+		dataType: double
+		lineageTag: 52b9ddd3-4470-407e-b1de-4e30f390f146
+		sourceLineageTag: account_balance
+		summarizeBy: none
+		sourceColumn: account_balance
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column market_segment
+		dataType: string
+		lineageTag: 10ae0b2b-9506-4099-b3f0-2f5a27ad2c8a
+		sourceLineageTag: market_segment
+		summarizeBy: none
+		sourceColumn: market_segment
+
+		annotation SummarizationSetBy = Automatic
+
+	column nation_name
+		dataType: string
+		lineageTag: 36222f93-4e05-4952-ae0b-0aed504b967b
+		sourceLineageTag: nation_name
+		summarizeBy: none
+		sourceColumn: nation_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column region_name
+		dataType: string
+		lineageTag: 2b6bb4c8-6314-4b57-95a9-c813538b8b2b
+		sourceLineageTag: region_name
+		summarizeBy: none
+		sourceColumn: region_name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_customer = entity
+		mode: directLake
+		source
+			entityName: dim_customer
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_TPCH_Migration_Target'
+

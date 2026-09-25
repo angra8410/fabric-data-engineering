@@ -1,0 +1,69 @@
+table dimmember
+	lineageTag: 77cecc61-ba22-4901-97be-b510fe1272c0
+	sourceLineageTag: [dbo].[dimmember]
+
+	column MemberKey
+		dataType: int64
+		formatString: 0
+		lineageTag: dc2fea93-b512-48c8-b94c-a406098390c8
+		sourceLineageTag: MemberKey
+		summarizeBy: none
+		sourceColumn: MemberKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column MemberName
+		dataType: string
+		lineageTag: 4a03c857-0f1a-4b8e-b5ae-3f605abb62ab
+		sourceLineageTag: MemberName
+		summarizeBy: none
+		sourceColumn: MemberName
+
+		annotation SummarizationSetBy = Automatic
+
+	column SSN
+		dataType: string
+		lineageTag: 5b28eec8-f17c-47c5-b3b9-6fc7f62c80f1
+		sourceLineageTag: SSN
+		summarizeBy: none
+		sourceColumn: SSN
+
+		annotation SummarizationSetBy = Automatic
+
+	column Email
+		dataType: string
+		lineageTag: 26953d3a-84ab-4df8-846b-1f0f5ed66871
+		sourceLineageTag: Email
+		summarizeBy: none
+		sourceColumn: Email
+
+		annotation SummarizationSetBy = Automatic
+
+	column CreditScore
+		dataType: int64
+		formatString: 0
+		lineageTag: a1f0e5fd-9f89-4a23-98cc-642d94fb8e23
+		sourceLineageTag: CreditScore
+		summarizeBy: none
+		sourceColumn: CreditScore
+
+		annotation SummarizationSetBy = Automatic
+
+	column DebtToIncomeRatio
+		dataType: double
+		lineageTag: a9406624-f7a2-4001-88a0-24d1d4d88a3f
+		sourceLineageTag: DebtToIncomeRatio
+		summarizeBy: none
+		sourceColumn: DebtToIncomeRatio
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition dimmember = entity
+		mode: directLake
+		source
+			entityName: dimmember
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_practice_smash_interview'
+

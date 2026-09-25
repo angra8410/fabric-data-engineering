@@ -1,0 +1,9 @@
+role Restricted-Sales-Role
+	modelPermission: read
+
+	tablePermission Orders
+
+		columnPermission OrderTotal = none
+
+	annotation PBI_Id = 0688c927492245bfa1b9b6da7d3a0629
+

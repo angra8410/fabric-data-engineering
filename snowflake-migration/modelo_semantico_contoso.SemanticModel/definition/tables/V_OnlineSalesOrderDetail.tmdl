@@ -1,0 +1,39 @@
+table V_OnlineSalesOrderDetail
+	lineageTag: c4e0234b-7a2b-4abf-aad4-5fc51558d901
+	sourceLineageTag: [dbo].[V_OnlineSalesOrderDetail]
+
+	column OrderNumber
+		dataType: string
+		lineageTag: d6774ad6-c7c4-4235-a0b0-4f105b68bb85
+		sourceLineageTag: OrderNumber
+		summarizeBy: none
+		sourceColumn: OrderNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column LineNumber
+		dataType: int64
+		formatString: 0
+		lineageTag: b28ce261-f96f-4a9b-bc30-2bd10a1c2739
+		sourceLineageTag: LineNumber
+		summarizeBy: sum
+		sourceColumn: LineNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column Product
+		dataType: string
+		lineageTag: 0b477fe4-09d6-49a4-a60a-3d8c9ad17807
+		sourceLineageTag: Product
+		summarizeBy: none
+		sourceColumn: Product
+
+		annotation SummarizationSetBy = Automatic
+
+	partition V_OnlineSalesOrderDetail = entity
+		mode: directLake
+		source
+			entityName: V_OnlineSalesOrderDetail
+			schemaName: dbo
+			expressionSource: 'DirectLake - Contoso_Lakehouse'
+

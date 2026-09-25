@@ -1,0 +1,22 @@
+table 'Time Intelligence'
+	lineageTag: 21b3b426-5f7c-447b-a28a-10656d0785df
+
+	calculationGroup
+
+		calculationItem Current = ```
+				SELECTEDMEASURE()
+				
+				```
+
+		calculationItem YTD = SELECTEDMEASURE() * 1.10
+
+	column Period
+		dataType: string
+		sourceColumn: Name
+		sortByColumn: Ordinal
+
+	column Ordinal
+		dataType: int64
+		isHidden
+		sourceColumn: Ordinal
+

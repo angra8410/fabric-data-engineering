@@ -1,0 +1,39 @@
+table dimsecuritymapping
+	lineageTag: 2aba25a6-439a-4857-84a3-70c28472be06
+	sourceLineageTag: [dbo].[dimsecuritymapping]
+
+	column UserEmail
+		dataType: string
+		lineageTag: cf85db59-f167-4910-baba-e4dbaec3a91f
+		sourceLineageTag: UserEmail
+		summarizeBy: none
+		sourceColumn: UserEmail
+
+		annotation SummarizationSetBy = Automatic
+
+	column AssignedBranchID
+		dataType: int64
+		formatString: 0
+		lineageTag: 6a8d9c81-d136-4acf-9fb8-9605bf61526f
+		sourceLineageTag: AssignedBranchID
+		summarizeBy: count
+		sourceColumn: AssignedBranchID
+
+		annotation SummarizationSetBy = Automatic
+
+	column RoleDescription
+		dataType: string
+		lineageTag: 14a966e9-d0f9-4aa3-81f7-a7c1b5816134
+		sourceLineageTag: RoleDescription
+		summarizeBy: none
+		sourceColumn: RoleDescription
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dimsecuritymapping = entity
+		mode: directLake
+		source
+			entityName: dimsecuritymapping
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_practice_smash_interview'
+

@@ -1,0 +1,22 @@
+{
+  "queryset": {
+    "version": "1.0.0",
+    "dataSources": [
+      {
+        "id": "a630cc6e-2416-45f0-b057-c90876287f3b",
+        "clusterUri": "https://trd-q6xjrjmw60x930164p.z1.kusto.fabric.microsoft.com",
+        "type": "Fabric",
+        "databaseItemId": "10539d6b-ceb5-4a72-828d-f180b532e86f"
+      }
+    ],
+    "tabs": [
+      {
+        "id": "79ee2ffa-2b67-4bfe-abf4-8a224e28a4a2",
+        "content": "IoT\n| extend parsed = todynamic(rawdata)\n| mv-expand sensor = parsed.data\n| extend \n    machineId = tostring(parsed.machineId),\n    workOrderId = tostring(parsed.workOrderId),\n    sensorName = tostring(sensor.name),\n    // Convertimos el timestamp de microsegundos del JSON a un tipo Datetime real de KQL\n    EventTime = unixtime_microseconds_todatetime(tolong(sensor.timestamp)),\n    // Extraemos el primer valor numérico del array de 'values'\n    SensorValue = todouble(sensor.values[0])\n// 5. FILTRADO CRÍTICO (Nota: Tu data de ejemplo es del 13 de abril de 2022, \n// por lo que 'ago(3d)' te devolvería vacío. Filtramos por ese rango de fechas real)\n| where EventTime >= datetime(2022-04-10) and EventTime <= datetime(2022-04-15)\n// 6. PROYECCIÓN: Conservamos solo las columnas limpias y tipadas\n| project EventTime, machineId, sensorName, SensorValue\n// 7. AGRUPACIÓN: Promedio de lectura del sensor en cajones de 1 hora\n| summarize AvgValue = avg(SensorValue) by bin(EventTime, 1h), machineId, sensorName\n// 8. ORDENAMIENTO\n| sort by EventTime asc\n// 9. VISUALIZACIÓN\n| render timechart\n\n",
+        "title": "Tab",
+        "dataSourceId": "a630cc6e-2416-45f0-b057-c90876287f3b"
+      }
+    ],
+    "querysetType": "Embedded"
+  }
+}

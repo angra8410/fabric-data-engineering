@@ -1,0 +1,121 @@
+table FactITSLA
+	lineageTag: 2ec25ce8-1fe4-412b-836c-b30fa4fe7897
+	sourceLineageTag: [dbo].[FactITSLA]
+
+	column ITSLAkey
+		dataType: int64
+		formatString: 0
+		lineageTag: 5363cc97-19dc-480c-94ee-558f0e58469e
+		sourceLineageTag: ITSLAkey
+		summarizeBy: sum
+		sourceColumn: ITSLAkey
+
+		annotation SummarizationSetBy = Automatic
+
+	column DateKey
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: af8ab002-282f-4377-886a-ef6c4a7b1b89
+		sourceLineageTag: DateKey
+		summarizeBy: none
+		sourceColumn: DateKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column StoreKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 8c4ab7d0-95eb-406b-b6f0-b46b5bb1493c
+		sourceLineageTag: StoreKey
+		summarizeBy: count
+		sourceColumn: StoreKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column MachineKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 5aa24a4b-cdcb-4335-a220-3060014545ca
+		sourceLineageTag: MachineKey
+		summarizeBy: count
+		sourceColumn: MachineKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column OutageKey
+		dataType: int64
+		formatString: 0
+		lineageTag: d63d904c-652c-43ea-ae67-c957a8cbf3a2
+		sourceLineageTag: OutageKey
+		summarizeBy: count
+		sourceColumn: OutageKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column OutageStartTime
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 6f1d04b3-f5dd-495d-9a9b-5e56e81b0c90
+		sourceLineageTag: OutageStartTime
+		summarizeBy: none
+		sourceColumn: OutageStartTime
+
+		annotation SummarizationSetBy = Automatic
+
+	column OutageEndTime
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f9f12667-d33e-49d0-8136-9f72e74ff3e1
+		sourceLineageTag: OutageEndTime
+		summarizeBy: none
+		sourceColumn: OutageEndTime
+
+		annotation SummarizationSetBy = Automatic
+
+	column DownTime
+		dataType: int64
+		formatString: 0
+		lineageTag: e3364617-7dbe-433a-9915-b3c59bcb8a85
+		sourceLineageTag: DownTime
+		summarizeBy: sum
+		sourceColumn: DownTime
+
+		annotation SummarizationSetBy = Automatic
+
+	column ETLLoadID
+		dataType: int64
+		formatString: 0
+		lineageTag: d1fd4069-94af-4e41-9c3f-85d6c3a3b740
+		sourceLineageTag: ETLLoadID
+		summarizeBy: count
+		sourceColumn: ETLLoadID
+
+		annotation SummarizationSetBy = Automatic
+
+	column LoadDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f325a908-1c09-492f-b512-8aa263af860a
+		sourceLineageTag: LoadDate
+		summarizeBy: none
+		sourceColumn: LoadDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column UpdateDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 20bea7f8-55cb-4f11-bc69-149607056741
+		sourceLineageTag: UpdateDate
+		summarizeBy: none
+		sourceColumn: UpdateDate
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FactITSLA = entity
+		mode: directLake
+		source
+			entityName: FactITSLA
+			schemaName: dbo
+			expressionSource: 'DirectLake - Contoso_Lakehouse'
+

@@ -1,0 +1,51 @@
+table dim_geography
+	lineageTag: f7627710-8b4b-42b9-9ca4-8c79fac3fe19
+	sourceLineageTag: [dbo].[dim_geography]
+
+	column nation_key
+		dataType: double
+		lineageTag: 7935210d-a123-459e-ae9c-287d966a29dd
+		sourceLineageTag: nation_key
+		summarizeBy: sum
+		sourceColumn: nation_key
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column nation_name
+		dataType: string
+		lineageTag: f53f018f-e72c-4ca2-832c-4c844135d388
+		sourceLineageTag: nation_name
+		summarizeBy: none
+		sourceColumn: nation_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column region_key
+		dataType: double
+		lineageTag: 7428aa9b-c513-470c-981f-6b953cb4a237
+		sourceLineageTag: region_key
+		summarizeBy: sum
+		sourceColumn: region_key
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column region_name
+		dataType: string
+		lineageTag: ddf5d6c7-2625-4b49-b375-7937b80af37f
+		sourceLineageTag: region_name
+		summarizeBy: none
+		sourceColumn: region_name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_geography = entity
+		mode: directLake
+		source
+			entityName: dim_geography
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_TPCH_Migration_Target'
+

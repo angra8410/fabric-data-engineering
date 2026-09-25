@@ -1,0 +1,89 @@
+table dim_part
+	lineageTag: 1f49d0b2-07b8-42dd-b0f9-4e132caf8469
+	sourceLineageTag: [dbo].[dim_part]
+
+	column part_key
+		dataType: double
+		lineageTag: c28c1a5c-8cdb-4ae5-83df-172273b537e3
+		sourceLineageTag: part_key
+		summarizeBy: none
+		sourceColumn: part_key
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column part_name
+		dataType: string
+		lineageTag: 7a3b5ca8-5292-47be-bb94-841a6e926eab
+		sourceLineageTag: part_name
+		summarizeBy: none
+		sourceColumn: part_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column manufacturer
+		dataType: string
+		lineageTag: 3c638a48-49a8-4e00-8861-87cf45abfaf7
+		sourceLineageTag: manufacturer
+		summarizeBy: none
+		sourceColumn: manufacturer
+
+		annotation SummarizationSetBy = Automatic
+
+	column brand
+		dataType: string
+		lineageTag: 77aa3ed8-4915-4b1e-bb26-18109343e648
+		sourceLineageTag: brand
+		summarizeBy: none
+		sourceColumn: brand
+
+		annotation SummarizationSetBy = Automatic
+
+	column part_type
+		dataType: string
+		lineageTag: 547f8589-8b86-4d63-a954-f4fa32077f2e
+		sourceLineageTag: part_type
+		summarizeBy: none
+		sourceColumn: part_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column part_size
+		dataType: double
+		lineageTag: 1a4ac75a-e306-464f-a16c-635ce9c5219b
+		sourceLineageTag: part_size
+		summarizeBy: sum
+		sourceColumn: part_size
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column container
+		dataType: string
+		lineageTag: dc65db40-56a8-491d-8839-0e1c317cca10
+		sourceLineageTag: container
+		summarizeBy: none
+		sourceColumn: container
+
+		annotation SummarizationSetBy = Automatic
+
+	column retail_price
+		dataType: double
+		lineageTag: 60c972e6-bc44-4024-aefb-f878cdce3db5
+		sourceLineageTag: retail_price
+		summarizeBy: sum
+		sourceColumn: retail_price
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition dim_part = entity
+		mode: directLake
+		source
+			entityName: dim_part
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_TPCH_Migration_Target'
+

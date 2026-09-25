@@ -1,0 +1,82 @@
+table dimloan
+	lineageTag: 2d0df4a8-f765-49c1-97f2-ef1015e68485
+	sourceLineageTag: [dbo].[dimloan]
+
+	column LoanKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 24d5cf85-b936-4f1b-9a2b-bdeb59eae8c9
+		sourceLineageTag: LoanKey
+		summarizeBy: none
+		sourceColumn: LoanKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column MemberKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 37ab00a5-02ee-4b49-ae34-fac082cc3a8e
+		sourceLineageTag: MemberKey
+		summarizeBy: none
+		sourceColumn: MemberKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column BranchID
+		dataType: int64
+		formatString: 0
+		lineageTag: 519228f7-e6b6-409b-880a-457fa6a913ee
+		sourceLineageTag: BranchID
+		summarizeBy: count
+		sourceColumn: BranchID
+
+		annotation SummarizationSetBy = Automatic
+
+	column LoanType
+		dataType: string
+		lineageTag: 9609b8ee-b4af-4128-be85-18033753894d
+		sourceLineageTag: LoanType
+		summarizeBy: none
+		sourceColumn: LoanType
+
+		annotation SummarizationSetBy = Automatic
+
+	column OriginalAmount
+		dataType: double
+		lineageTag: 620441de-536c-4ddb-9f90-a32c9a6bc2d8
+		sourceLineageTag: OriginalAmount
+		summarizeBy: sum
+		sourceColumn: OriginalAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column InterestRate
+		dataType: double
+		lineageTag: 96da7dd2-5f7d-4453-934b-60bd99238405
+		sourceLineageTag: InterestRate
+		summarizeBy: sum
+		sourceColumn: InterestRate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column StartDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 2e977b12-2590-456d-a452-071cc08a9447
+		sourceLineageTag: StartDate
+		summarizeBy: none
+		sourceColumn: StartDate
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dimloan = entity
+		mode: directLake
+		source
+			entityName: dimloan
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_practice_smash_interview'
+

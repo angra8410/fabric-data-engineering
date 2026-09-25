@@ -1,0 +1,22 @@
+{
+  "queryset": {
+    "version": "1.0.0",
+    "dataSources": [
+      {
+        "id": "d4c46fca-ed5c-48bb-94ad-8beea268266d",
+        "clusterUri": "",
+        "type": "Fabric",
+        "databaseItemId": "b532e86f-f180-828d-4a72-ceb510539d6b"
+      }
+    ],
+    "tabs": [
+      {
+        "id": "f02ffb46-cb5a-4da4-bda9-a6e7a4eee135",
+        "content": "IoT\n| where Timestamp >= ago(3d)\n\n\n",
+        "title": "Tab",
+        "dataSourceId": "d4c46fca-ed5c-48bb-94ad-8beea268266d"
+      }
+    ],
+    "querysetType": "Standalone"
+  }
+}

@@ -1,0 +1,48 @@
+table dimbranch
+	lineageTag: b62b81a8-8b22-4853-b2cd-25871c446e82
+	sourceLineageTag: [dbo].[dimbranch]
+
+	column BranchID
+		dataType: int64
+		formatString: 0
+		lineageTag: 78995c98-bec9-4342-9b61-56a9c6f70514
+		sourceLineageTag: BranchID
+		summarizeBy: none
+		sourceColumn: BranchID
+
+		annotation SummarizationSetBy = Automatic
+
+	column BranchName
+		dataType: string
+		lineageTag: a4772d28-e2ca-486b-9113-a09eb536ed4a
+		sourceLineageTag: BranchName
+		summarizeBy: none
+		sourceColumn: BranchName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: 5902ed92-c0c5-4291-a0f9-960bc66e9bd2
+		sourceLineageTag: Region
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column State
+		dataType: string
+		lineageTag: a54c3279-57de-4539-8ba7-f89a56930b4e
+		sourceLineageTag: State
+		summarizeBy: none
+		sourceColumn: State
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dimbranch = entity
+		mode: directLake
+		source
+			entityName: dimbranch
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_practice_smash_interview'
+

@@ -1,0 +1,168 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "c8e94f36f45af5357998",
+  "position": {
+    "x": 57.591948494042775,
+    "y": 42.436172574557837,
+    "z": 0,
+    "height": 244.00799230370754,
+    "width": 728.99282172722565,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DimDate"
+                    }
+                  },
+                  "Property": "CalendarYear"
+                }
+              },
+              "queryRef": "Sum(DimDate.CalendarYear)",
+              "nativeQueryRef": "CalendarYear"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DimDate"
+                    }
+                  },
+                  "Property": "CalendarMonth"
+                }
+              },
+              "queryRef": "Sum(DimDate.CalendarMonth)",
+              "nativeQueryRef": "CalendarMonth"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactOnlineSales"
+                    }
+                  },
+                  "Property": "Ventas Totales"
+                }
+              },
+              "queryRef": "FactOnlineSales.Ventas Totales",
+              "nativeQueryRef": "Ventas Totales"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactOnlineSales"
+                    }
+                  },
+                  "Property": "Ventas YTD"
+                }
+              },
+              "queryRef": "FactOnlineSales.Ventas YTD",
+              "nativeQueryRef": "Ventas YTD"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactOnlineSales"
+                    }
+                  },
+                  "Property": "Ventas año Anterior"
+                }
+              },
+              "queryRef": "FactOnlineSales.Ventas año Anterior",
+              "nativeQueryRef": "Ventas año Anterior"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "cfebc73f46fe2ab1cde6",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "DimDate"
+              }
+            },
+            "Property": "CalendarYear"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "5c9cd00f8e56cba7230e",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "DimDate"
+              }
+            },
+            "Property": "CalendarMonth"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "cde4595da15b23742da5",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "FactOnlineSales"
+              }
+            },
+            "Property": "Ventas Totales"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "4735facda8e1011a2455",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "FactOnlineSales"
+              }
+            },
+            "Property": "Ventas YTD"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "f6b3fc45d8323c55c190",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "FactOnlineSales"
+              }
+            },
+            "Property": "Ventas año Anterior"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "c415ad44b514c15523de",
+  "position": {
+    "x": 231.8833715681196,
+    "y": 100.02812106860061,
+    "z": 0,
+    "height": 503.1717605269,
+    "width": 783.5536150373714,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dimbranch"
+                    }
+                  },
+                  "Property": "BranchName"
+                }
+              },
+              "queryRef": "dimbranch.BranchName",
+              "nativeQueryRef": "BranchName"
+            },
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "factdailyloanbalances"
+                        }
+                      },
+                      "Property": "CurrentBalance"
+                    }
+                  },
+                  "Function": 0
+                }
+              },
+              "queryRef": "Sum(factdailyloanbalances.CurrentBalance)",
+              "nativeQueryRef": "Sum of CurrentBalance"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "b66c27c36793bacacbbd",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dimbranch"
+              }
+            },
+            "Property": "BranchName"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "42469b33ced174085042",
+        "field": {
+          "Aggregation": {
+            "Expression": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "factdailyloanbalances"
+                  }
+                },
+                "Property": "CurrentBalance"
+              }
+            },
+            "Function": 0
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

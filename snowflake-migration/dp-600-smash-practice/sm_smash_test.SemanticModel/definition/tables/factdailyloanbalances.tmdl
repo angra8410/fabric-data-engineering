@@ -1,0 +1,95 @@
+table factdailyloanbalances
+	lineageTag: 96abf241-1b2e-4fd5-95a4-6384e490f915
+	sourceLineageTag: [dbo].[factdailyloanbalances]
+
+	measure 'Ending Loan Balance' =
+			
+			CALCULATE(
+			    SUM(FactDailyLoanBalances[CurrentBalance]),
+			    LASTDATE(DimDate[FullDate])
+			)
+		lineageTag: 4cba635c-b379-48ec-bea1-3d9ae5cec566
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SnapshotKey
+		dataType: int64
+		formatString: 0
+		lineageTag: fb45e53a-f124-4045-830c-ba4b40c0d668
+		sourceLineageTag: SnapshotKey
+		summarizeBy: count
+		sourceColumn: SnapshotKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column LoanKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 43f66428-660a-48f8-bbf9-6907f4ca389f
+		sourceLineageTag: LoanKey
+		summarizeBy: none
+		sourceColumn: LoanKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column MemberKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 60469681-a8b5-40af-98b7-696aec95059a
+		sourceLineageTag: MemberKey
+		summarizeBy: count
+		sourceColumn: MemberKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column BranchID
+		dataType: int64
+		formatString: 0
+		lineageTag: 38fe328a-13ac-41e5-88c7-e99dcdc6e3e2
+		sourceLineageTag: BranchID
+		summarizeBy: none
+		sourceColumn: BranchID
+
+		annotation SummarizationSetBy = Automatic
+
+	column DateKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 81992f5b-eae1-40ee-96ad-11fd3aea8c9d
+		sourceLineageTag: DateKey
+		summarizeBy: none
+		sourceColumn: DateKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column CurrentBalance
+		dataType: double
+		lineageTag: f9376dd7-00c1-48d6-a081-b3897920cb4b
+		sourceLineageTag: CurrentBalance
+		summarizeBy: sum
+		sourceColumn: CurrentBalance
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column InterestAccrued
+		dataType: double
+		lineageTag: 33c24355-4f76-4609-a34c-7ecea10cb865
+		sourceLineageTag: InterestAccrued
+		summarizeBy: sum
+		sourceColumn: InterestAccrued
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition factdailyloanbalances = entity
+		mode: directLake
+		source
+			entityName: factdailyloanbalances
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_practice_smash_interview'
+

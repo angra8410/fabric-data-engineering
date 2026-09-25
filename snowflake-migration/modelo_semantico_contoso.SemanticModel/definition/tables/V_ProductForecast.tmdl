@@ -1,0 +1,61 @@
+table V_ProductForecast
+	lineageTag: ddfbe527-aa7e-47fe-826b-e6dda6bc9b94
+	sourceLineageTag: [dbo].[V_ProductForecast]
+
+	column CalendarMonth
+		dataType: int64
+		formatString: 0
+		lineageTag: 99334860-7556-40a4-a072-f16ac105c9e5
+		sourceLineageTag: CalendarMonth
+		summarizeBy: sum
+		sourceColumn: CalendarMonth
+
+		annotation SummarizationSetBy = Automatic
+
+	column ReportDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: c28d57b1-d970-4d4f-99fb-755b18afb23f
+		sourceLineageTag: ReportDate
+		summarizeBy: none
+		sourceColumn: ReportDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductCategoryName
+		dataType: string
+		lineageTag: 745971b2-7e96-4a59-9a73-5f1365732fff
+		sourceLineageTag: ProductCategoryName
+		summarizeBy: none
+		sourceColumn: ProductCategoryName
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesQuantity
+		dataType: int64
+		formatString: 0
+		lineageTag: b49514f0-8656-4c8a-954c-df25331f9e63
+		sourceLineageTag: SalesQuantity
+		summarizeBy: sum
+		sourceColumn: SalesQuantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesAmount
+		dataType: double
+		lineageTag: 4a75c78d-afd9-4aa7-bb04-c7f52e1fa8c7
+		sourceLineageTag: SalesAmount
+		summarizeBy: sum
+		sourceColumn: SalesAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition V_ProductForecast = entity
+		mode: directLake
+		source
+			entityName: V_ProductForecast
+			schemaName: dbo
+			expressionSource: 'DirectLake - Contoso_Lakehouse'
+

@@ -1,0 +1,34 @@
+{
+  "formatVersion": "202502",
+  "computeEngineSettings": {
+    "allowModernEvaluationEngine": true
+  },
+  "name": "Dataflow 2",
+  "queryGroups": [],
+  "documentLocale": "en-US",
+  "queriesMetadata": {
+    "Customers": {
+      "queryId": "0f3be44f-51bb-4928-9235-8c42f46d8d2e",
+      "queryName": "Customers"
+    },
+    "Orders": {
+      "queryId": "9fc842cb-6d0b-4152-867d-f72a4c49b46d",
+      "queryName": "Orders"
+    },
+    "Merge_Inner_Join": {
+      "queryId": "adcd40d7-98ec-4e30-9175-88cdbc456fa6",
+      "queryName": "Merge_Inner_Join"
+    },
+    "Merge_Left_Join": {
+      "queryId": "904fe7ec-87ee-48cf-aa85-13b5f5e90dfe",
+      "queryName": "Merge_Left_Join"
+    }
+  },
+  "connections": [
+    {
+      "path": "Warehouse",
+      "kind": "Warehouse",
+      "connectionId": "{\"ClusterId\":\"1b457398-2fda-40e4-aac4-c81b712e894e\",\"DatasourceId\":\"02e82d99-0a67-41ca-9bc1-8ec2f1b224dc\"}"
+    }
+  ]
+}

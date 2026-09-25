@@ -1,0 +1,78 @@
+table DimChannel
+	lineageTag: c456c77a-f059-46ba-919e-f8d60022a76d
+	sourceLineageTag: [dbo].[DimChannel]
+
+	column ChannelKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 6692279b-ef07-452c-8c5b-f1c78832d9ca
+		sourceLineageTag: ChannelKey
+		summarizeBy: count
+		sourceColumn: ChannelKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ChannelLabel
+		dataType: string
+		lineageTag: 13e6ebdd-4a0d-42ef-ae27-a5a93b6267a5
+		sourceLineageTag: ChannelLabel
+		summarizeBy: none
+		sourceColumn: ChannelLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column ChannelName
+		dataType: string
+		lineageTag: 4908c060-ced0-4b56-9577-8a2b285f62e5
+		sourceLineageTag: ChannelName
+		summarizeBy: none
+		sourceColumn: ChannelName
+
+		annotation SummarizationSetBy = Automatic
+
+	column ChannelDescription
+		dataType: string
+		lineageTag: 6ad621e1-478f-48ad-8b98-b2a92c1c3a90
+		sourceLineageTag: ChannelDescription
+		summarizeBy: none
+		sourceColumn: ChannelDescription
+
+		annotation SummarizationSetBy = Automatic
+
+	column ETLLoadID
+		dataType: int64
+		formatString: 0
+		lineageTag: bca8e2f7-7328-4ce0-b8c2-b16a85a799bb
+		sourceLineageTag: ETLLoadID
+		summarizeBy: count
+		sourceColumn: ETLLoadID
+
+		annotation SummarizationSetBy = Automatic
+
+	column LoadDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 8843085f-8e3d-47df-a298-7ae8dfa226c1
+		sourceLineageTag: LoadDate
+		summarizeBy: none
+		sourceColumn: LoadDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column UpdateDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 61b8f373-c6fa-4d8a-886b-a7219e0ff518
+		sourceLineageTag: UpdateDate
+		summarizeBy: none
+		sourceColumn: UpdateDate
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimChannel = entity
+		mode: directLake
+		source
+			entityName: DimChannel
+			schemaName: dbo
+			expressionSource: 'DirectLake - Contoso_Lakehouse'
+

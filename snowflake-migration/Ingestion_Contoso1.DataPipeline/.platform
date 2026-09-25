@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "Ingestion_Contoso1"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "bcdddcbd-e64f-8a92-4939-bc284159a8f0"
+  }
+}

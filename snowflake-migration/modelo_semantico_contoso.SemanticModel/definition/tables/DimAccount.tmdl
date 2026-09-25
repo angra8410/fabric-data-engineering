@@ -1,0 +1,133 @@
+table DimAccount
+	lineageTag: b6150aa4-4caa-444e-98ea-f4fab48d52a3
+	sourceLineageTag: [dbo].[DimAccount]
+
+	column AccountKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 2fe03003-3102-41ff-87e9-4ca0af42e953
+		sourceLineageTag: AccountKey
+		summarizeBy: count
+		sourceColumn: AccountKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ParentAccountKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 3c57c46d-1b13-49bc-acde-79e01e902fae
+		sourceLineageTag: ParentAccountKey
+		summarizeBy: count
+		sourceColumn: ParentAccountKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column AccountLabel
+		dataType: string
+		lineageTag: 5e2e0d6a-39b3-48bd-b45d-548cf4b5a02a
+		sourceLineageTag: AccountLabel
+		summarizeBy: none
+		sourceColumn: AccountLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column AccountName
+		dataType: string
+		lineageTag: b1f0bfaf-e4d0-4eef-bb93-604a3130afd4
+		sourceLineageTag: AccountName
+		summarizeBy: none
+		sourceColumn: AccountName
+
+		annotation SummarizationSetBy = Automatic
+
+	column AccountDescription
+		dataType: string
+		lineageTag: a9eef10f-71f4-4b8f-8890-664ee349e8e5
+		sourceLineageTag: AccountDescription
+		summarizeBy: none
+		sourceColumn: AccountDescription
+
+		annotation SummarizationSetBy = Automatic
+
+	column AccountType
+		dataType: string
+		lineageTag: 350fc062-1e6b-4092-a1c5-d8777e1b8c25
+		sourceLineageTag: AccountType
+		summarizeBy: none
+		sourceColumn: AccountType
+
+		annotation SummarizationSetBy = Automatic
+
+	column Operator
+		dataType: string
+		lineageTag: d3ade203-2275-4ee7-8cd1-ac0ea5a05dd6
+		sourceLineageTag: Operator
+		summarizeBy: none
+		sourceColumn: Operator
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomMembers
+		dataType: string
+		lineageTag: 270bfef3-9be8-4e3f-a5a8-acae89fb5453
+		sourceLineageTag: CustomMembers
+		summarizeBy: none
+		sourceColumn: CustomMembers
+
+		annotation SummarizationSetBy = Automatic
+
+	column ValueType
+		dataType: string
+		lineageTag: 38dbb541-916b-494f-8000-26383dc3c484
+		sourceLineageTag: ValueType
+		summarizeBy: none
+		sourceColumn: ValueType
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomMemberOptions
+		dataType: string
+		lineageTag: 555f40fa-4c65-4cbd-bd9e-23ceb17ecd60
+		sourceLineageTag: CustomMemberOptions
+		summarizeBy: none
+		sourceColumn: CustomMemberOptions
+
+		annotation SummarizationSetBy = Automatic
+
+	column ETLLoadID
+		dataType: int64
+		formatString: 0
+		lineageTag: bb39de8a-7f45-420e-a6e0-53c9d75df6d6
+		sourceLineageTag: ETLLoadID
+		summarizeBy: count
+		sourceColumn: ETLLoadID
+
+		annotation SummarizationSetBy = Automatic
+
+	column LoadDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 3840a0f9-040c-402d-89c8-23ebd870e228
+		sourceLineageTag: LoadDate
+		summarizeBy: none
+		sourceColumn: LoadDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column UpdateDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 46319832-982b-468b-9288-44b210f371d3
+		sourceLineageTag: UpdateDate
+		summarizeBy: none
+		sourceColumn: UpdateDate
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimAccount = entity
+		mode: directLake
+		source
+			entityName: DimAccount
+			schemaName: dbo
+			expressionSource: 'DirectLake - Contoso_Lakehouse'
+

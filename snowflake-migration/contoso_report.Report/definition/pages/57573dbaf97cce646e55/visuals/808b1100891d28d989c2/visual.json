@@ -1,0 +1,84 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "808b1100891d28d989c2",
+  "position": {
+    "x": 827.50536520387777,
+    "y": 184.90046621771629,
+    "z": 1,
+    "height": 589.55968326796415,
+    "width": 977.54754680677866,
+    "tabOrder": 1
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DimProduct"
+                    }
+                  },
+                  "Property": "ProductName"
+                }
+              },
+              "queryRef": "DimProduct.ProductName",
+              "nativeQueryRef": "ProductName"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactOnlineSales"
+                    }
+                  },
+                  "Property": "% Ventas del Producto"
+                }
+              },
+              "queryRef": "FactOnlineSales.% Ventas del Producto",
+              "nativeQueryRef": "% Ventas del Producto"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "8b907c54d49b68746b37",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "DimProduct"
+              }
+            },
+            "Property": "ProductName"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "5e18bd470f0f856f1b0e",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "FactOnlineSales"
+              }
+            },
+            "Property": "% Ventas del Producto"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

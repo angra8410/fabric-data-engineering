@@ -1,0 +1,20 @@
+relationship e1d3b9e2-0206-478e-b0f2-90d6fecb234f
+	fromColumn: FactOnlineSales.DateKey
+	toColumn: DimDate.Datekey
+
+relationship 3b582349-edbe-49fe-84ba-61763dadac77
+	fromColumn: FactOnlineSales.ProductKey
+	toColumn: DimProduct.ProductKey
+
+relationship 202fc5a8-ecac-417d-bd60-d77985640925
+	fromColumn: FactOnlineSales.StoreKey
+	toColumn: DimStore.StoreKey
+
+relationship b552decb-47ab-4c1a-a6e6-a71cfcd80f50
+	fromColumn: DimStore.GeographyKey
+	toColumn: DimGeography.GeographyKey
+
+relationship ead2312a-5ab5-47b3-86e4-ddc2c5fe49fb
+	fromColumn: FactOnlineSales.CustomerKey
+	toColumn: DimCustomer.CustomerKey
+

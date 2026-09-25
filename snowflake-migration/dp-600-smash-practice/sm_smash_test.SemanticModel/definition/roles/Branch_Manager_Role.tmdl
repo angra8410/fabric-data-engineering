@@ -1,0 +1,6 @@
+role Branch_Manager_Role
+	modelPermission: read
+
+	tablePermission dimsecuritymapping = [UserEmail] = USERPRINCIPALNAME()
+		metadataPermission: read
+

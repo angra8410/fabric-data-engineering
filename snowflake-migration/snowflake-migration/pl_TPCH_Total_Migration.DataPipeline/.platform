@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "pl_TPCH_Total_Migration"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "64c8ebba-5b1f-b414-4bc1-8cf1e44f6eca"
+  }
+}

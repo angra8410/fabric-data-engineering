@@ -1,0 +1,66 @@
+table fact_inventory
+	lineageTag: 5775eb0f-7715-4313-86be-2bd36daa4308
+	sourceLineageTag: [dbo].[fact_inventory]
+
+	column part_key
+		dataType: double
+		lineageTag: b61e41cd-b65f-4b93-a3cd-d1e0a00a5548
+		sourceLineageTag: part_key
+		summarizeBy: none
+		sourceColumn: part_key
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column supplier_key
+		dataType: double
+		lineageTag: 81206152-5111-469a-a3c1-711486f17872
+		sourceLineageTag: supplier_key
+		summarizeBy: none
+		sourceColumn: supplier_key
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column available_quantity
+		dataType: double
+		lineageTag: 4dea3c27-919b-47c8-acf0-feffac82311e
+		sourceLineageTag: available_quantity
+		summarizeBy: sum
+		sourceColumn: available_quantity
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column supply_cost
+		dataType: double
+		lineageTag: c41123ba-bd0d-49ee-b5c2-494ebd253c74
+		sourceLineageTag: supply_cost
+		summarizeBy: sum
+		sourceColumn: supply_cost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_stock_value
+		dataType: double
+		lineageTag: 9fc7c316-26a5-40aa-90b9-16db09041303
+		sourceLineageTag: total_stock_value
+		summarizeBy: sum
+		sourceColumn: total_stock_value
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition fact_inventory = entity
+		mode: directLake
+		source
+			entityName: fact_inventory
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_TPCH_Migration_Target'
+

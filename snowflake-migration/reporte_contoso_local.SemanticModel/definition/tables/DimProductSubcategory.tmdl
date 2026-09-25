@@ -1,0 +1,83 @@
+table DimProductSubcategory
+	lineageTag: 480afdbd-75fb-4dc0-9506-c14d5d919d6b
+
+	column ProductSubcategoryKey
+		dataType: int64
+		formatString: 0
+		lineageTag: ed78cf85-bc73-4f88-99e7-8c5b13b09e7a
+		summarizeBy: none
+		sourceColumn: ProductSubcategoryKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductSubcategoryLabel
+		dataType: string
+		lineageTag: d8698547-d0e0-4866-8ba8-42abbfbd81bd
+		summarizeBy: none
+		sourceColumn: ProductSubcategoryLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductSubcategoryName
+		dataType: string
+		lineageTag: 3f5e7eb2-305c-49b6-b274-5eaf85775dde
+		summarizeBy: none
+		sourceColumn: ProductSubcategoryName
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductSubcategoryDescription
+		dataType: string
+		lineageTag: d7b0c502-cbe1-4b69-8587-64ac4012f1cd
+		summarizeBy: none
+		sourceColumn: ProductSubcategoryDescription
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductCategoryKey
+		dataType: int64
+		formatString: 0
+		lineageTag: b9b6da90-bb67-4103-85b1-0a0e2946c311
+		summarizeBy: none
+		sourceColumn: ProductCategoryKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ETLLoadID
+		dataType: int64
+		formatString: 0
+		lineageTag: e04ebc3c-8278-453f-a6e5-ac063ceb8adf
+		summarizeBy: count
+		sourceColumn: ETLLoadID
+
+		annotation SummarizationSetBy = Automatic
+
+	column LoadDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 4b975071-4771-4677-a820-eee6c794444c
+		summarizeBy: none
+		sourceColumn: LoadDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column UpdateDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f974814a-880f-4339-b140-04eed293fb01
+		summarizeBy: none
+		sourceColumn: UpdateDate
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimProductSubcategory = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("Antonio\SQLEXPRESS", "ContosoRetailDW"),
+				    dbo_DimProductSubcategory = Source{[Schema="dbo",Item="DimProductSubcategory"]}[Data]
+				in
+				    dbo_DimProductSubcategory
+
+	annotation PBI_ResultType = Table
+

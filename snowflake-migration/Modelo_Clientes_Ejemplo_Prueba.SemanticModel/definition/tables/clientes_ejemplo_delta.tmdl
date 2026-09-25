@@ -1,0 +1,53 @@
+table clientes_ejemplo_delta
+	lineageTag: fdf55359-039b-44ef-8fd4-51627d1d6117
+	sourceLineageTag: [dbo].[clientes_ejemplo_delta]
+
+	measure 'Total Clientes' = ```
+			COUNT(clientes_ejemplo_delta[id_cliente])
+			
+			```
+		lineageTag: 64285810-14a2-4e00-9b9a-8a1166bd6cd0
+
+	column id_cliente
+		dataType: string
+		lineageTag: ddb0bbd8-0f58-4e50-84f7-c8fa3b8d6c3d
+		sourceLineageTag: id_cliente
+		summarizeBy: none
+		sourceColumn: id_cliente
+
+		annotation SummarizationSetBy = Automatic
+
+	column nombre
+		dataType: string
+		lineageTag: e4e8121f-52ac-4939-ba95-51f32b875c92
+		sourceLineageTag: nombre
+		summarizeBy: none
+		sourceColumn: nombre
+
+		annotation SummarizationSetBy = Automatic
+
+	column correo
+		dataType: string
+		lineageTag: 057184e6-6d70-48f2-91b1-890d3370a53a
+		sourceLineageTag: correo
+		summarizeBy: none
+		sourceColumn: correo
+
+		annotation SummarizationSetBy = Automatic
+
+	column ciudad
+		dataType: string
+		lineageTag: 54014582-6c6c-4d1b-b1dd-4b6754cb108f
+		sourceLineageTag: ciudad
+		summarizeBy: none
+		sourceColumn: ciudad
+
+		annotation SummarizationSetBy = Automatic
+
+	partition clientes_ejemplo_delta = entity
+		mode: directLake
+		source
+			entityName: clientes_ejemplo_delta
+			schemaName: dbo
+			expressionSource: 'DirectLake - SCD_Practice_Lakehouse'
+

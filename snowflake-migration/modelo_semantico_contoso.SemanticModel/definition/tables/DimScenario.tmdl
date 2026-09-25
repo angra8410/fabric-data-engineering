@@ -1,0 +1,78 @@
+table DimScenario
+	lineageTag: fb5e39b4-b877-4a5a-8e40-a642867605a1
+	sourceLineageTag: [dbo].[DimScenario]
+
+	column ScenarioKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 87e908c2-5c46-4970-8fd8-b41fe26b9db2
+		sourceLineageTag: ScenarioKey
+		summarizeBy: count
+		sourceColumn: ScenarioKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ScenarioLabel
+		dataType: string
+		lineageTag: 0a49e3ba-b1be-4e58-aea7-81bbd73c56c2
+		sourceLineageTag: ScenarioLabel
+		summarizeBy: none
+		sourceColumn: ScenarioLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column ScenarioName
+		dataType: string
+		lineageTag: 6bb680a2-bfa7-409f-90bd-de0bcac2d6f8
+		sourceLineageTag: ScenarioName
+		summarizeBy: none
+		sourceColumn: ScenarioName
+
+		annotation SummarizationSetBy = Automatic
+
+	column ScenarioDescription
+		dataType: string
+		lineageTag: 83348f0f-65c5-43e2-b747-d434e8683407
+		sourceLineageTag: ScenarioDescription
+		summarizeBy: none
+		sourceColumn: ScenarioDescription
+
+		annotation SummarizationSetBy = Automatic
+
+	column ETLLoadID
+		dataType: int64
+		formatString: 0
+		lineageTag: 49a7565b-7d77-4606-b385-95341dd60e59
+		sourceLineageTag: ETLLoadID
+		summarizeBy: count
+		sourceColumn: ETLLoadID
+
+		annotation SummarizationSetBy = Automatic
+
+	column LoadDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 538d1d8e-c58d-41af-9356-57b152810099
+		sourceLineageTag: LoadDate
+		summarizeBy: none
+		sourceColumn: LoadDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column UpdateDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: d3e91a4d-1f08-4ceb-9842-1a7b5581222d
+		sourceLineageTag: UpdateDate
+		summarizeBy: none
+		sourceColumn: UpdateDate
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimScenario = entity
+		mode: directLake
+		source
+			entityName: DimScenario
+			schemaName: dbo
+			expressionSource: 'DirectLake - Contoso_Lakehouse'
+

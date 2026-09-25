@@ -1,0 +1,279 @@
+{
+  "properties": {
+    "jobMode": "Batch",
+    "source": {
+      "type": "SnowflakeTable",
+      "connectionSettings": {
+        "type": "Snowflake",
+        "typeProperties": {
+          "database": "SNOWFLAKE_SAMPLE_DATA"
+        },
+        "externalReferences": {
+          "connection": "5d9468c9-4935-4929-bb2e-a85c67f3f5a3"
+        }
+      }
+    },
+    "destination": {
+      "type": "LakehouseTable",
+      "connectionSettings": {
+        "type": "Lakehouse",
+        "typeProperties": {
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "artifactId": "8a50ce0a-465d-b797-4243-0bc648cce0aa",
+          "rootFolder": "Tables"
+        }
+      }
+    },
+    "policy": {
+      "timeout": "0.12:00:00",
+      "retry": 0
+    }
+  },
+  "activities": [
+    {
+      "id": "4ce05671-98cc-4eb7-9908-83596928fcb3",
+      "properties": {
+        "source": {
+          "exportSettings": {
+            "type": "SnowflakeExportCopyCommand"
+          },
+          "datasetSettings": {
+            "schema": "TPCH_SF1",
+            "table": "CUSTOMER"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "TPCH_SF1",
+            "table": "CUSTOMER"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": true,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "eb09c483-5b3a-4fae-86ca-7de3fb2a43a4",
+      "properties": {
+        "source": {
+          "exportSettings": {
+            "type": "SnowflakeExportCopyCommand"
+          },
+          "datasetSettings": {
+            "schema": "TPCH_SF1",
+            "table": "NATION"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "TPCH_SF1",
+            "table": "NATION"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": true,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "c4b13630-1cd4-4116-89b3-c669fef1dd22",
+      "properties": {
+        "source": {
+          "exportSettings": {
+            "type": "SnowflakeExportCopyCommand"
+          },
+          "datasetSettings": {
+            "schema": "TPCH_SF1",
+            "table": "ORDERS"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "TPCH_SF1",
+            "table": "ORDERS"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": true,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "ca2ac380-7a65-4577-849b-622f10399f98",
+      "properties": {
+        "source": {
+          "exportSettings": {
+            "type": "SnowflakeExportCopyCommand"
+          },
+          "datasetSettings": {
+            "schema": "TPCH_SF1",
+            "table": "PART"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "TPCH_SF1",
+            "table": "PART"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": true,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "70c33f56-c6e7-4df0-9344-d6a9ef3b3b9c",
+      "properties": {
+        "source": {
+          "exportSettings": {
+            "type": "SnowflakeExportCopyCommand"
+          },
+          "datasetSettings": {
+            "schema": "TPCH_SF1",
+            "table": "PARTSUPP"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "TPCH_SF1",
+            "table": "PARTSUPP"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": true,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "055d26d3-cceb-4bc2-81a6-a740e2cf46e0",
+      "properties": {
+        "source": {
+          "exportSettings": {
+            "type": "SnowflakeExportCopyCommand"
+          },
+          "datasetSettings": {
+            "schema": "TPCH_SF1",
+            "table": "REGION"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "TPCH_SF1",
+            "table": "REGION"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": true,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "05f66af8-58e6-42c2-89ac-5c0005f1da7a",
+      "properties": {
+        "source": {
+          "exportSettings": {
+            "type": "SnowflakeExportCopyCommand"
+          },
+          "datasetSettings": {
+            "schema": "TPCH_SF1",
+            "table": "SUPPLIER"
+          }
+        },
+        "destination": {
+          "partitionOption": "None",
+          "writeBehavior": "Overwrite",
+          "datasetSettings": {
+            "schema": "TPCH_SF1",
+            "table": "SUPPLIER"
+          },
+          "applyVOrder": false,
+          "enableTimestampNtz": false,
+          "enableChangeDataFeed": false
+        },
+        "enableStaging": true,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    }
+  ]
+}

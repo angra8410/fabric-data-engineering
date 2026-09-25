@@ -1,0 +1,36 @@
+relationship 33a70b01-42a9-40ba-a7fa-a324e365c1c2
+	fromColumn: DimProduct.ProductSubcategoryKey
+	toColumn: DimProductSubcategory.ProductSubcategoryKey
+
+	annotation PBI_IsFromSource = FS
+
+relationship 6dd41ff4-d5f5-401b-875d-6f3aae1179a6
+	fromColumn: DimProductSubcategory.ProductCategoryKey
+	toColumn: DimProductCategory.ProductCategoryKey
+
+	annotation PBI_IsFromSource = FS
+
+relationship 1f5f601a-5b1a-4e64-9c35-28c5830fda98
+	fromColumn: FactOnlineSales.CustomerKey
+	toColumn: DimCustomer.CustomerKey
+
+	annotation PBI_IsFromSource = FS
+
+relationship bc6124ce-9100-4ace-85f7-a3fdbfaaa6df
+	fromColumn: FactOnlineSales.DateKey
+	toColumn: DimDate.Datekey
+
+	annotation PBI_IsFromSource = FS
+
+relationship 76d21779-1620-46c7-a1f7-d90bcc36ae0e
+	fromColumn: FactOnlineSales.ProductKey
+	toColumn: DimProduct.ProductKey
+
+	annotation PBI_IsFromSource = FS
+
+relationship 3d676ff1-fe0f-468d-94c7-a7c77fe4d37d
+	fromColumn: FactOnlineSales.StoreKey
+	toColumn: DimStore.StoreKey
+
+	annotation PBI_IsFromSource = FS
+

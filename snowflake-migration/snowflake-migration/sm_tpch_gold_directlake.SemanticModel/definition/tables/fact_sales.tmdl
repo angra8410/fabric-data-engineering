@@ -1,0 +1,215 @@
+table fact_sales
+	lineageTag: 3d92f4b5-9214-445b-9d01-a0cca4d2aa88
+	sourceLineageTag: [dbo].[fact_sales]
+
+	column order_key
+		dataType: double
+		lineageTag: 0a08bb77-4bc0-4249-8e05-866ed475dabd
+		sourceLineageTag: order_key
+		summarizeBy: sum
+		sourceColumn: order_key
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column part_key
+		dataType: double
+		lineageTag: 7f23a01c-9400-4631-bcf5-0a4e9ca71060
+		sourceLineageTag: part_key
+		summarizeBy: none
+		sourceColumn: part_key
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column supplier_key
+		dataType: double
+		lineageTag: b75487ba-5af8-40a6-b8c8-5649b43da64b
+		sourceLineageTag: supplier_key
+		summarizeBy: none
+		sourceColumn: supplier_key
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column line_number
+		dataType: double
+		lineageTag: c38c6850-325f-42b7-9060-e47793171f60
+		sourceLineageTag: line_number
+		summarizeBy: sum
+		sourceColumn: line_number
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column quantity
+		dataType: double
+		lineageTag: 16a22216-40ec-4164-866a-663de73dc5d2
+		sourceLineageTag: quantity
+		summarizeBy: sum
+		sourceColumn: quantity
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column extended_price
+		dataType: double
+		lineageTag: 41e87c63-b5ae-4bf1-9efc-bb22ded45508
+		sourceLineageTag: extended_price
+		summarizeBy: sum
+		sourceColumn: extended_price
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column discount_percentage
+		dataType: double
+		lineageTag: c9eb7af8-307d-4092-8f83-b3f3c6ebdb52
+		sourceLineageTag: discount_percentage
+		summarizeBy: sum
+		sourceColumn: discount_percentage
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column tax_percentage
+		dataType: double
+		lineageTag: 98e13062-95a2-4a16-8fd1-928eb8891314
+		sourceLineageTag: tax_percentage
+		summarizeBy: sum
+		sourceColumn: tax_percentage
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column return_flag
+		dataType: string
+		lineageTag: 49b9ffac-7ea2-4499-ad46-241ed3d9a6f2
+		sourceLineageTag: return_flag
+		summarizeBy: none
+		sourceColumn: return_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column line_status
+		dataType: string
+		lineageTag: 270c6eb4-1663-485d-b20b-59c9304126c8
+		sourceLineageTag: line_status
+		summarizeBy: none
+		sourceColumn: line_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column ship_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 57f54dde-153c-43a8-bb05-f2d7be73e0ac
+		sourceLineageTag: ship_date
+		summarizeBy: none
+		sourceColumn: ship_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column commit_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: ea2b7257-87dc-4c5a-8843-0af6b010903c
+		sourceLineageTag: commit_date
+		summarizeBy: none
+		sourceColumn: commit_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column receipt_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 84811d0f-4f44-4a3c-a57a-e16e490e91fa
+		sourceLineageTag: receipt_date
+		summarizeBy: none
+		sourceColumn: receipt_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column ship_instructions
+		dataType: string
+		lineageTag: 65a13411-36be-41a7-8483-654cd1a4747a
+		sourceLineageTag: ship_instructions
+		summarizeBy: none
+		sourceColumn: ship_instructions
+
+		annotation SummarizationSetBy = Automatic
+
+	column ship_mode
+		dataType: string
+		lineageTag: 2317f493-6c8e-4c57-a03d-d96ef782bff0
+		sourceLineageTag: ship_mode
+		summarizeBy: none
+		sourceColumn: ship_mode
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_key
+		dataType: double
+		lineageTag: 4f1c1264-7a3b-44c6-97dd-63b07a5f4dec
+		sourceLineageTag: customer_key
+		summarizeBy: none
+		sourceColumn: customer_key
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column order_status
+		dataType: string
+		lineageTag: d7969e53-f47d-40c1-98a3-8529d379d9d0
+		sourceLineageTag: order_status
+		summarizeBy: none
+		sourceColumn: order_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: e6ea37cf-07c5-40aa-8d1a-0329c225868a
+		sourceLineageTag: order_date
+		summarizeBy: none
+		sourceColumn: order_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_priority
+		dataType: string
+		lineageTag: 3da10872-2013-4f25-98b3-d7dca71a2638
+		sourceLineageTag: order_priority
+		summarizeBy: none
+		sourceColumn: order_priority
+
+		annotation SummarizationSetBy = Automatic
+
+	column ship_priority
+		dataType: double
+		lineageTag: ebd3910d-618d-4a0a-b216-149900b8f46a
+		sourceLineageTag: ship_priority
+		summarizeBy: sum
+		sourceColumn: ship_priority
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition fact_sales = entity
+		mode: directLake
+		source
+			entityName: fact_sales
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_TPCH_Migration_Target'
+

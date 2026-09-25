@@ -1,0 +1,331 @@
+table DimProduct
+	lineageTag: d1b38097-17b9-4d88-a501-53582daadee6
+	sourceLineageTag: [dbo].[DimProduct]
+
+	measure 'Precio Unitario Base' = ```
+			SUM(DimProduct[UnitPrice])
+			
+			```
+		lineageTag: ee2371b4-9920-43a5-b765-80817cd89eea
+
+	measure 'Precio Iterado' =
+			SUMX(
+			    DimProduct,
+			        [Precio Unitario Base]
+			    )
+		lineageTag: 67b95552-42c7-4768-b558-bdc7155a717f
+
+	measure 'Precio sin Iterar' = ```
+			SUM(DimProduct[UnitPrice])
+			
+			```
+		lineageTag: 85c8b56a-9aa3-404d-bb4d-e0268a569c9e
+
+	column ProductKey
+		dataType: int64
+		formatString: 0
+		lineageTag: e209585d-d1c0-4e48-b29d-b1d5e9bb9dbc
+		sourceLineageTag: ProductKey
+		summarizeBy: count
+		sourceColumn: ProductKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductLabel
+		dataType: string
+		lineageTag: 420f70c9-3621-4743-894d-407a8f2ef149
+		sourceLineageTag: ProductLabel
+		summarizeBy: none
+		sourceColumn: ProductLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductName
+		dataType: string
+		lineageTag: 586fb09a-6203-4adb-bc18-08cb5e52d4ba
+		sourceLineageTag: ProductName
+		summarizeBy: none
+		sourceColumn: ProductName
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductDescription
+		dataType: string
+		lineageTag: bf00ecd0-4e86-495f-8bcb-59f961b0ecbb
+		sourceLineageTag: ProductDescription
+		summarizeBy: none
+		sourceColumn: ProductDescription
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductSubcategoryKey
+		dataType: int64
+		formatString: 0
+		lineageTag: e37beaee-7c30-485a-aac6-a77ae33f3212
+		sourceLineageTag: ProductSubcategoryKey
+		summarizeBy: count
+		sourceColumn: ProductSubcategoryKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Manufacturer
+		dataType: string
+		lineageTag: 6c7f0999-fd92-413b-a28b-88d2b35ff46a
+		sourceLineageTag: Manufacturer
+		summarizeBy: none
+		sourceColumn: Manufacturer
+
+		annotation SummarizationSetBy = Automatic
+
+	column BrandName
+		dataType: string
+		lineageTag: 65978fb4-2771-4d06-8f18-591207c7c4f6
+		sourceLineageTag: BrandName
+		summarizeBy: none
+		sourceColumn: BrandName
+
+		annotation SummarizationSetBy = Automatic
+
+	column ClassID
+		dataType: string
+		lineageTag: 15a7a929-69cd-46e0-914c-a480b6be2671
+		sourceLineageTag: ClassID
+		summarizeBy: none
+		sourceColumn: ClassID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ClassName
+		dataType: string
+		lineageTag: b0cd5d40-897a-4aa6-aa8f-de817d72561b
+		sourceLineageTag: ClassName
+		summarizeBy: none
+		sourceColumn: ClassName
+
+		annotation SummarizationSetBy = Automatic
+
+	column StyleID
+		dataType: string
+		lineageTag: eb4baeb8-a584-4d54-95e9-1834823598c4
+		sourceLineageTag: StyleID
+		summarizeBy: none
+		sourceColumn: StyleID
+
+		annotation SummarizationSetBy = Automatic
+
+	column StyleName
+		dataType: string
+		lineageTag: e7292016-cb73-489a-a3c2-5e302d50382f
+		sourceLineageTag: StyleName
+		summarizeBy: none
+		sourceColumn: StyleName
+
+		annotation SummarizationSetBy = Automatic
+
+	column ColorID
+		dataType: string
+		lineageTag: 0b5bb8ac-ca70-4599-ad4e-2a7549a24b00
+		sourceLineageTag: ColorID
+		summarizeBy: none
+		sourceColumn: ColorID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ColorName
+		dataType: string
+		lineageTag: d26facf5-c864-4246-bf5f-1327eff69983
+		sourceLineageTag: ColorName
+		summarizeBy: none
+		sourceColumn: ColorName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Size
+		dataType: string
+		lineageTag: 178426d8-70c7-4083-816d-fdf258a20b97
+		sourceLineageTag: Size
+		summarizeBy: none
+		sourceColumn: Size
+
+		annotation SummarizationSetBy = Automatic
+
+	column SizeRange
+		dataType: string
+		lineageTag: 9036d61f-7327-417f-b77b-44a3e18badfe
+		sourceLineageTag: SizeRange
+		summarizeBy: none
+		sourceColumn: SizeRange
+
+		annotation SummarizationSetBy = Automatic
+
+	column SizeUnitMeasureID
+		dataType: string
+		lineageTag: 65856b1a-11ae-452a-bd75-df9bb4a93ef5
+		sourceLineageTag: SizeUnitMeasureID
+		summarizeBy: none
+		sourceColumn: SizeUnitMeasureID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Weight
+		dataType: double
+		lineageTag: dcab7434-3d7e-4d8e-bafe-eac47aa175c1
+		sourceLineageTag: Weight
+		summarizeBy: sum
+		sourceColumn: Weight
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column WeightUnitMeasureID
+		dataType: string
+		lineageTag: 37651c21-dd68-4267-8a59-e2df90f33681
+		sourceLineageTag: WeightUnitMeasureID
+		summarizeBy: none
+		sourceColumn: WeightUnitMeasureID
+
+		annotation SummarizationSetBy = Automatic
+
+	column UnitOfMeasureID
+		dataType: string
+		lineageTag: 061b65fa-da65-4432-a117-12a92f3c3c83
+		sourceLineageTag: UnitOfMeasureID
+		summarizeBy: none
+		sourceColumn: UnitOfMeasureID
+
+		annotation SummarizationSetBy = Automatic
+
+	column UnitOfMeasureName
+		dataType: string
+		lineageTag: 57acbb02-7929-4253-bd73-c4553a446a29
+		sourceLineageTag: UnitOfMeasureName
+		summarizeBy: none
+		sourceColumn: UnitOfMeasureName
+
+		annotation SummarizationSetBy = Automatic
+
+	column StockTypeID
+		dataType: string
+		lineageTag: 553acfb1-af69-4be1-9f4a-51ab66bce032
+		sourceLineageTag: StockTypeID
+		summarizeBy: none
+		sourceColumn: StockTypeID
+
+		annotation SummarizationSetBy = Automatic
+
+	column StockTypeName
+		dataType: string
+		lineageTag: 4e94bcc6-51a6-436d-aa1d-6ee71b545280
+		sourceLineageTag: StockTypeName
+		summarizeBy: none
+		sourceColumn: StockTypeName
+
+		annotation SummarizationSetBy = Automatic
+
+	column UnitCost
+		dataType: double
+		lineageTag: b4fd11cd-40dc-4957-ae9a-4eab52140b1b
+		sourceLineageTag: UnitCost
+		summarizeBy: sum
+		sourceColumn: UnitCost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column UnitPrice
+		dataType: double
+		lineageTag: f7758a57-2c89-4abc-86f8-bd682b515fc3
+		sourceLineageTag: UnitPrice
+		summarizeBy: sum
+		sourceColumn: UnitPrice
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column AvailableForSaleDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f025f2a6-c9e4-455c-a700-b0bffa2cf1ab
+		sourceLineageTag: AvailableForSaleDate
+		summarizeBy: none
+		sourceColumn: AvailableForSaleDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column StopSaleDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 8f6f0b4e-e051-48fa-b88e-a51762a3b9f0
+		sourceLineageTag: StopSaleDate
+		summarizeBy: none
+		sourceColumn: StopSaleDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column Status
+		dataType: string
+		lineageTag: b33adac9-0d16-4c6f-b78c-1ba7c5d44cb7
+		sourceLineageTag: Status
+		summarizeBy: none
+		sourceColumn: Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column ImageURL
+		dataType: string
+		lineageTag: 35acc27a-1c88-4918-958e-f182b6f342f7
+		sourceLineageTag: ImageURL
+		summarizeBy: none
+		sourceColumn: ImageURL
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductURL
+		dataType: string
+		lineageTag: 3f792c89-78ae-4a1f-bb66-50c28c8b0f34
+		sourceLineageTag: ProductURL
+		summarizeBy: none
+		sourceColumn: ProductURL
+
+		annotation SummarizationSetBy = Automatic
+
+	column ETLLoadID
+		dataType: int64
+		formatString: 0
+		lineageTag: b3f6abf2-af1f-4690-84a8-5b426f3e675c
+		sourceLineageTag: ETLLoadID
+		summarizeBy: count
+		sourceColumn: ETLLoadID
+
+		annotation SummarizationSetBy = Automatic
+
+	column LoadDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 4735fae6-f709-4db2-8e34-4e07a9d9f1f2
+		sourceLineageTag: LoadDate
+		summarizeBy: none
+		sourceColumn: LoadDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column UpdateDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 70d28d81-0399-40d7-a2f4-e656074687d7
+		sourceLineageTag: UpdateDate
+		summarizeBy: none
+		sourceColumn: UpdateDate
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimProduct = entity
+		mode: directLake
+		source
+			entityName: DimProduct
+			schemaName: dbo
+			expressionSource: 'DirectLake - Contoso_Lakehouse'
+

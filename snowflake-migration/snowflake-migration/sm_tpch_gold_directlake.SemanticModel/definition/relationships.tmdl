@@ -1,0 +1,20 @@
+relationship 8407213f-7c17-3ae1-683f-3d1453423ff7
+	fromColumn: fact_sales.customer_key
+	toColumn: dim_customer.customer_key
+
+relationship 37b922c9-835b-050f-7eac-559b8246c7a8
+	fromColumn: fact_sales.part_key
+	toColumn: dim_part.part_key
+
+relationship 251d2581-609c-29e7-aab4-fd02c278c113
+	fromColumn: fact_sales.supplier_key
+	toColumn: dim_supplier.supplier_key
+
+relationship 399a376a-ab3e-f250-d040-1e268465c70c
+	fromColumn: fact_inventory.part_key
+	toColumn: dim_part.part_key
+
+relationship 2d3a98ad-64e1-c613-8669-f59218408360
+	fromColumn: fact_inventory.supplier_key
+	toColumn: dim_supplier.supplier_key
+

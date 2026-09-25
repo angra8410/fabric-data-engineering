@@ -1,0 +1,285 @@
+table DimProduct
+	lineageTag: cd821698-45a4-4417-9d5e-66c323027f00
+
+	column ProductKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 49817d3f-df06-42bc-b32f-dc0da4a41e16
+		summarizeBy: none
+		sourceColumn: ProductKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductLabel
+		dataType: string
+		lineageTag: 1dd48b4f-edb0-430e-843c-c39879750c26
+		summarizeBy: none
+		sourceColumn: ProductLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductName
+		dataType: string
+		lineageTag: 6adad1b4-768a-445f-aac9-c93678eb491a
+		summarizeBy: none
+		sourceColumn: ProductName
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductDescription
+		dataType: string
+		lineageTag: 2d0d9121-cc9c-4cb2-bfd3-4fa6e0e538c5
+		summarizeBy: none
+		sourceColumn: ProductDescription
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductSubcategoryKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 8a308429-35aa-49c8-be22-3977d1d8e05d
+		summarizeBy: none
+		sourceColumn: ProductSubcategoryKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Manufacturer
+		dataType: string
+		lineageTag: 748ff7bd-a594-40d6-8c1f-ba0d804fd36d
+		summarizeBy: none
+		sourceColumn: Manufacturer
+
+		annotation SummarizationSetBy = Automatic
+
+	column BrandName
+		dataType: string
+		lineageTag: 94023aa5-79dd-4947-b110-4a58e32e54f8
+		summarizeBy: none
+		sourceColumn: BrandName
+
+		annotation SummarizationSetBy = Automatic
+
+	column ClassID
+		dataType: string
+		lineageTag: a713dcbb-ee0f-4b37-8abb-2f97c7b0e8ab
+		summarizeBy: none
+		sourceColumn: ClassID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ClassName
+		dataType: string
+		lineageTag: 2a8dd949-8801-4b81-a8b4-01ee5ddd30fc
+		summarizeBy: none
+		sourceColumn: ClassName
+
+		annotation SummarizationSetBy = Automatic
+
+	column StyleID
+		dataType: string
+		lineageTag: 52a1299b-cecd-49a7-b22d-7322de792560
+		summarizeBy: none
+		sourceColumn: StyleID
+
+		annotation SummarizationSetBy = Automatic
+
+	column StyleName
+		dataType: string
+		lineageTag: a83ee325-bdca-4aa1-99a9-0d15258935e8
+		summarizeBy: none
+		sourceColumn: StyleName
+
+		annotation SummarizationSetBy = Automatic
+
+	column ColorID
+		dataType: string
+		lineageTag: b650ae4f-a9b8-4a9a-9cde-3b3cd5a866f8
+		summarizeBy: none
+		sourceColumn: ColorID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ColorName
+		dataType: string
+		lineageTag: 82ad7fa9-de56-488e-ac24-ba31aed9da22
+		summarizeBy: none
+		sourceColumn: ColorName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Size
+		dataType: string
+		lineageTag: 0baad120-de3e-42ba-8777-7632436cec5f
+		summarizeBy: none
+		sourceColumn: Size
+
+		annotation SummarizationSetBy = Automatic
+
+	column SizeRange
+		dataType: string
+		lineageTag: 3cf30394-a5ff-4236-a322-a7e049fcc7bc
+		summarizeBy: none
+		sourceColumn: SizeRange
+
+		annotation SummarizationSetBy = Automatic
+
+	column SizeUnitMeasureID
+		dataType: string
+		lineageTag: c07d8fd0-4f42-4e0f-ab51-8328c8b81d97
+		summarizeBy: none
+		sourceColumn: SizeUnitMeasureID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Weight
+		dataType: double
+		lineageTag: 0eab5f8c-fb32-47fe-8dd6-47bf83d13f0a
+		summarizeBy: sum
+		sourceColumn: Weight
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column WeightUnitMeasureID
+		dataType: string
+		lineageTag: 38da0856-8d00-429d-a0b7-5c12c190e22f
+		summarizeBy: none
+		sourceColumn: WeightUnitMeasureID
+
+		annotation SummarizationSetBy = Automatic
+
+	column UnitOfMeasureID
+		dataType: string
+		lineageTag: b0d2a485-40d4-4a2a-b08f-b0880026941d
+		summarizeBy: none
+		sourceColumn: UnitOfMeasureID
+
+		annotation SummarizationSetBy = Automatic
+
+	column UnitOfMeasureName
+		dataType: string
+		lineageTag: ec3de7c4-c446-42a8-8e6f-dcd1ff5eed08
+		summarizeBy: none
+		sourceColumn: UnitOfMeasureName
+
+		annotation SummarizationSetBy = Automatic
+
+	column StockTypeID
+		dataType: string
+		lineageTag: d5dd2f76-0333-45e7-8fcc-0b969cd87bc2
+		summarizeBy: none
+		sourceColumn: StockTypeID
+
+		annotation SummarizationSetBy = Automatic
+
+	column StockTypeName
+		dataType: string
+		lineageTag: 9bd3c455-b85e-4e8b-93fe-a9704bc0f0ad
+		summarizeBy: none
+		sourceColumn: StockTypeName
+
+		annotation SummarizationSetBy = Automatic
+
+	column UnitCost
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: b33c9ded-dd32-4dad-a82a-c6e5a03a761f
+		summarizeBy: sum
+		sourceColumn: UnitCost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"es-US"}
+
+	column UnitPrice
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 58cc2004-466f-4791-a690-4cae46c449f0
+		summarizeBy: sum
+		sourceColumn: UnitPrice
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"es-US"}
+
+	column AvailableForSaleDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 1d07eae3-0cd2-4d3d-9946-84ffd57edb51
+		summarizeBy: none
+		sourceColumn: AvailableForSaleDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column StopSaleDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: aa9d2f4f-ab63-42b2-83f3-4744608a42de
+		summarizeBy: none
+		sourceColumn: StopSaleDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column Status
+		dataType: string
+		lineageTag: 2271a2bd-ddf4-41ac-b6e4-744a497f3fbc
+		summarizeBy: none
+		sourceColumn: Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column ImageURL
+		dataType: string
+		lineageTag: 13c16988-62a7-40a7-a0db-07c5c3d25851
+		summarizeBy: none
+		sourceColumn: ImageURL
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductURL
+		dataType: string
+		lineageTag: 57b0aa8b-eadf-45e3-b611-417fea3d3f48
+		summarizeBy: none
+		sourceColumn: ProductURL
+
+		annotation SummarizationSetBy = Automatic
+
+	column ETLLoadID
+		dataType: int64
+		formatString: 0
+		lineageTag: 8928503b-2a75-4101-8783-41f5ad9b8878
+		summarizeBy: count
+		sourceColumn: ETLLoadID
+
+		annotation SummarizationSetBy = Automatic
+
+	column LoadDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 0e84167c-7bb8-4458-9a24-46b0eeacb64e
+		summarizeBy: none
+		sourceColumn: LoadDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column UpdateDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 30c8eed5-333c-48f1-8287-fae8d05705de
+		summarizeBy: none
+		sourceColumn: UpdateDate
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimProduct = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("Antonio\SQLEXPRESS", "ContosoRetailDW"),
+				    dbo_DimProduct = Source{[Schema="dbo",Item="DimProduct"]}[Data]
+				in
+				    dbo_DimProduct
+
+	annotation PBI_ResultType = Table
+

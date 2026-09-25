@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "sm_tpch_gold_directlake"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "e8f3034c-b907-913b-4b15-42d57c36241d"
+  }
+}

@@ -18,4 +18,5 @@ ref table dim_customer
 ref table dim_supplier
 ref table dim_part
 ref table fact_inventory
+ref table _Measures
 

@@ -1,0 +1,128 @@
+table _Measures
+	lineageTag: 2fca9bb5-9375-4946-8831-dd03cc5fe396
+
+	measure 'Total Quantity Sold' = ```
+			
+			    SUM(fact_sales[quantity]
+			    )
+			```
+		lineageTag: 3909354d-3f15-4ab3-9af1-186669bb0485
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Orders' = ```
+			
+			    DISTINCTCOUNT(fact_sales[order_key]
+			    )
+			```
+		formatString: 0
+		lineageTag: 73205189-e17c-49e9-8db5-705db3bf6ad5
+
+	measure 'Gross Sales' = ```
+			
+			    SUM(fact_sales[extended_price]
+			    )
+			```
+		lineageTag: 74ce4b38-06c8-4eb7-8728-934c47718458
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Net Revenue' = ```
+			
+			    SUMX(
+			        fact_sales,
+			        fact_sales[extended_price] * (1 - fact_sales[discount_percentage])
+			    )
+			```
+		lineageTag: 5a9ea094-9c0a-4673-957e-147aaa0501e3
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Discount Amount' =
+			
+			SUMX(
+			    fact_sales,
+			    fact_sales[extended_price] * fact_sales[discount_percentage]
+			)
+		lineageTag: 63681604-fc45-49eb-8f6a-c46c108c69b6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Urgent Orders Revenue' =
+			
+			CALCULATE(
+			    [Net Revenue],
+			    fact_sales[order_priority] = "1-URGENT"
+			)
+		lineageTag: 1b50cbec-ad03-45f8-92e7-fc5cc4da8654
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% of Total Revenue' = ```
+			
+			VAR _CurrentSales = [Net Revenue]
+			VAR _TotalSalesAll = 
+			    CALCULATE(
+			        [Net Revenue],
+			        REMOVEFILTERS(fact_sales)
+			    )
+			RETURN
+			    DIVIDE(_CurrentSales, _TotalSalesAll, 0)
+			```
+		lineageTag: 93ee90ce-6ab2-4f2f-9474-e60a4325a113
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Revenue PY' =
+			
+			CALCULATE(
+			    [Net Revenue],
+			    SAMEPERIODLASTYEAR(fact_sales[order_date])
+			)
+		lineageTag: 66c3f889-d56b-432d-89e1-d05b31620424
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'YoY Revenue Growth %' =
+			
+			VAR _Current = [Net Revenue]
+			VAR _Prior = [Revenue PY]
+			VAR _Difference = _Current - _Prior
+			RETURN
+			    DIVIDE(_Difference, _Prior, BLANK())
+		lineageTag: 1ca7b69d-c9a7-48d5-b8eb-b040c18e946a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Stock Value' =
+			
+			SUMX(
+			    fact_inventory,
+			    fact_inventory[available_quantity] * fact_inventory[supply_cost]
+			)
+		lineageTag: 0672e5ef-e4ef-49c0-a2c3-1c802c7ef603
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average Order Value' =
+			
+			DIVIDE([Net Revenue], [Total Orders], 0)
+		lineageTag: 0d078c7b-7922-4e72-9126-d867e6b5310c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Init
+		formatString: 0
+		lineageTag: 85062d0b-c745-457b-823d-8cdd2d4297db
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Init]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Measures = calculated
+		mode: import
+		source = ROW("Init", BLANK())
+
+	annotation PBI_Id = 004289a488704c178cb729d72e010bf4
+

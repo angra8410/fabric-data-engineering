@@ -1,0 +1,22 @@
+{
+  "formatVersion": "202502",
+  "computeEngineSettings": {
+    "allowModernEvaluationEngine": true
+  },
+  "name": "Dataflow 1",
+  "queryGroups": [],
+  "documentLocale": "en-US",
+  "queriesMetadata": {
+    "Orders": {
+      "queryId": "148b36a4-fe54-4f57-a9a5-08a5f28a2195",
+      "queryName": "Orders"
+    }
+  },
+  "connections": [
+    {
+      "path": "Warehouse",
+      "kind": "Warehouse",
+      "connectionId": "{\"ClusterId\":\"1b457398-2fda-40e4-aac4-c81b712e894e\",\"DatasourceId\":\"02e82d99-0a67-41ca-9bc1-8ec2f1b224dc\"}"
+    }
+  ]
+}

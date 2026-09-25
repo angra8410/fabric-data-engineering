@@ -1,0 +1,144 @@
+table FactSalesQuota
+	lineageTag: d4cf4f16-aa86-4482-a3fe-c346590d0552
+	sourceLineageTag: [dbo].[FactSalesQuota]
+
+	column SalesQuotaKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 433078bc-495f-4b8a-b338-11042ab09d8e
+		sourceLineageTag: SalesQuotaKey
+		summarizeBy: count
+		sourceColumn: SalesQuotaKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ChannelKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 85fe034d-1d83-4c24-a205-2723e169764a
+		sourceLineageTag: ChannelKey
+		summarizeBy: count
+		sourceColumn: ChannelKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column StoreKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 6aba5097-aa7e-4ccb-952b-fab4a901b667
+		sourceLineageTag: StoreKey
+		summarizeBy: count
+		sourceColumn: StoreKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 2a539a10-599c-4e3a-a92b-7137b08ddc2b
+		sourceLineageTag: ProductKey
+		summarizeBy: count
+		sourceColumn: ProductKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column DateKey
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 79dfd8bf-0829-4446-95d5-ad51cac7257d
+		sourceLineageTag: DateKey
+		summarizeBy: none
+		sourceColumn: DateKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column CurrencyKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 6e32ff21-b91a-4b9e-bcf9-a6652b221fd9
+		sourceLineageTag: CurrencyKey
+		summarizeBy: count
+		sourceColumn: CurrencyKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ScenarioKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 7b65bbfe-8151-4617-bda8-f094cd034239
+		sourceLineageTag: ScenarioKey
+		summarizeBy: count
+		sourceColumn: ScenarioKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesQuantityQuota
+		dataType: double
+		lineageTag: 656c5228-5097-4667-b589-bd25ecd5c100
+		sourceLineageTag: SalesQuantityQuota
+		summarizeBy: sum
+		sourceColumn: SalesQuantityQuota
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SalesAmountQuota
+		dataType: double
+		lineageTag: 945d7b0a-528e-4cd1-8095-4e099bf265b9
+		sourceLineageTag: SalesAmountQuota
+		summarizeBy: sum
+		sourceColumn: SalesAmountQuota
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column GrossMarginQuota
+		dataType: double
+		lineageTag: c8b9a504-c622-4d60-b3b7-5ecd3a6170cb
+		sourceLineageTag: GrossMarginQuota
+		summarizeBy: sum
+		sourceColumn: GrossMarginQuota
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ETLLoadID
+		dataType: int64
+		formatString: 0
+		lineageTag: fa402258-f571-448f-a556-38451a4c3d75
+		sourceLineageTag: ETLLoadID
+		summarizeBy: count
+		sourceColumn: ETLLoadID
+
+		annotation SummarizationSetBy = Automatic
+
+	column LoadDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 87da5d31-9c60-48d5-8997-b5aa8429e598
+		sourceLineageTag: LoadDate
+		summarizeBy: none
+		sourceColumn: LoadDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column UpdateDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: a035c93f-7f1c-41cb-8cfe-4c4d1d33deaf
+		sourceLineageTag: UpdateDate
+		summarizeBy: none
+		sourceColumn: UpdateDate
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FactSalesQuota = entity
+		mode: directLake
+		source
+			entityName: FactSalesQuota
+			schemaName: dbo
+			expressionSource: 'DirectLake - Contoso_Lakehouse'
+

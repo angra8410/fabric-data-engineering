@@ -1,0 +1,146 @@
+table V_CustomerPromotion
+	lineageTag: b98bf1aa-e0bc-4c52-b6ab-4cf8ab4898e7
+	sourceLineageTag: [dbo].[V_CustomerPromotion]
+
+	column CustomerKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 9bfdf545-feea-4e27-9f8f-0caf1555677a
+		sourceLineageTag: CustomerKey
+		summarizeBy: count
+		sourceColumn: CustomerKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Age
+		dataType: int64
+		formatString: 0
+		lineageTag: 76746f70-a491-4b86-9513-6b4e76e09acf
+		sourceLineageTag: Age
+		summarizeBy: sum
+		sourceColumn: Age
+
+		annotation SummarizationSetBy = Automatic
+
+	column MaritalStatus
+		dataType: string
+		lineageTag: 0125247d-13c7-4436-be91-bd4986e7c0ae
+		sourceLineageTag: MaritalStatus
+		summarizeBy: none
+		sourceColumn: MaritalStatus
+
+		annotation SummarizationSetBy = Automatic
+
+	column Gender
+		dataType: string
+		lineageTag: fc4a52ef-5ed2-4ed1-8086-9741de61667c
+		sourceLineageTag: Gender
+		summarizeBy: none
+		sourceColumn: Gender
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearlyIncome
+		dataType: double
+		lineageTag: ea1a1e78-40a6-43a6-8a56-ff51a248dc89
+		sourceLineageTag: YearlyIncome
+		summarizeBy: sum
+		sourceColumn: YearlyIncome
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TotalChildren
+		dataType: int64
+		formatString: 0
+		lineageTag: 71318adf-a18d-42ba-abba-9fc482eb6066
+		sourceLineageTag: TotalChildren
+		summarizeBy: sum
+		sourceColumn: TotalChildren
+
+		annotation SummarizationSetBy = Automatic
+
+	column NumberChildrenAtHome
+		dataType: int64
+		formatString: 0
+		lineageTag: 61985a73-222f-4140-bb38-3e089ad72545
+		sourceLineageTag: NumberChildrenAtHome
+		summarizeBy: sum
+		sourceColumn: NumberChildrenAtHome
+
+		annotation SummarizationSetBy = Automatic
+
+	column Education
+		dataType: string
+		lineageTag: ca2744d5-fa88-4e2f-b31d-615639e24b62
+		sourceLineageTag: Education
+		summarizeBy: none
+		sourceColumn: Education
+
+		annotation SummarizationSetBy = Automatic
+
+	column HouseOwnerFlag
+		dataType: string
+		lineageTag: a97a914f-a69f-492a-b9bc-b16dc8614db0
+		sourceLineageTag: HouseOwnerFlag
+		summarizeBy: none
+		sourceColumn: HouseOwnerFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column NumberCarsOwned
+		dataType: int64
+		formatString: 0
+		lineageTag: 58b23aad-f31e-4bc9-88ee-3c0ff4fa7235
+		sourceLineageTag: NumberCarsOwned
+		summarizeBy: sum
+		sourceColumn: NumberCarsOwned
+
+		annotation SummarizationSetBy = Automatic
+
+	column PromotionName
+		dataType: string
+		lineageTag: 7f0c98e4-9293-42b6-955b-5b91487b8715
+		sourceLineageTag: PromotionName
+		summarizeBy: none
+		sourceColumn: PromotionName
+
+		annotation SummarizationSetBy = Automatic
+
+	column PromotionType
+		dataType: string
+		lineageTag: ee6876f8-ad73-4baf-890c-6ac4f8e50518
+		sourceLineageTag: PromotionType
+		summarizeBy: none
+		sourceColumn: PromotionType
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductKey
+		dataType: int64
+		formatString: 0
+		lineageTag: a54230d6-7de5-44bd-a008-2b21ad13a85f
+		sourceLineageTag: ProductKey
+		summarizeBy: count
+		sourceColumn: ProductKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column PromotionKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 81704135-9449-4c2d-baf8-2916f0581325
+		sourceLineageTag: PromotionKey
+		summarizeBy: count
+		sourceColumn: PromotionKey
+
+		annotation SummarizationSetBy = Automatic
+
+	partition V_CustomerPromotion = entity
+		mode: directLake
+		source
+			entityName: V_CustomerPromotion
+			schemaName: dbo
+			expressionSource: 'DirectLake - Contoso_Lakehouse'
+

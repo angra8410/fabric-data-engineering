@@ -1,0 +1,10 @@
+role EastRegionReader
+	modelPermission: read
+
+	tablePermission sales = [Region] = "East"
+		metadataPermission: read
+
+		columnPermission Email = none
+
+		columnPermission CommissionPct = none
+

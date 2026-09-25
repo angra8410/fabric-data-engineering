@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "rp_securityLab"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "c7a901ce-8e5c-8f3a-4b33-1dc8ee940be7"
+  }
+}

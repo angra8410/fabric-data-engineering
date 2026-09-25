@@ -1,0 +1,258 @@
+table DimDate
+	lineageTag: 0ffa219d-1051-4e26-a531-4ab4de14e0ea
+
+	column Datekey
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 095f0748-a066-44df-85a0-71c94053a7be
+		summarizeBy: none
+		sourceColumn: Datekey
+
+		annotation SummarizationSetBy = Automatic
+
+	column FullDateLabel
+		dataType: string
+		lineageTag: f22a9b4a-b7a2-4311-9596-00d07817d637
+		summarizeBy: none
+		sourceColumn: FullDateLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column DateDescription
+		dataType: string
+		lineageTag: 85aeb52b-ad74-4ea2-b07c-c7b1240fa65f
+		summarizeBy: none
+		sourceColumn: DateDescription
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarYear
+		dataType: int64
+		formatString: 0
+		lineageTag: 2ec402cd-ed87-42f9-8b05-d00fb9340a96
+		summarizeBy: none
+		sourceColumn: CalendarYear
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarYearLabel
+		dataType: string
+		lineageTag: 0355a3f7-fb64-423b-ad20-71fdbee22491
+		summarizeBy: none
+		sourceColumn: CalendarYearLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarHalfYear
+		dataType: int64
+		formatString: 0
+		lineageTag: 7fbbc7d6-58cf-4544-81a2-04ee6a4ab255
+		summarizeBy: none
+		sourceColumn: CalendarHalfYear
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarHalfYearLabel
+		dataType: string
+		lineageTag: 6840164e-3502-4c7d-b9dd-1ebe283689b4
+		summarizeBy: none
+		sourceColumn: CalendarHalfYearLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarQuarter
+		dataType: int64
+		formatString: 0
+		lineageTag: 8de809fc-5fe3-4c2c-b1ac-b4c32d8d1d4b
+		summarizeBy: none
+		sourceColumn: CalendarQuarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarQuarterLabel
+		dataType: string
+		lineageTag: a0fcaff4-93b4-4e0b-b6af-afe3f357f432
+		summarizeBy: none
+		sourceColumn: CalendarQuarterLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarMonth
+		dataType: int64
+		formatString: 0
+		lineageTag: 3289a280-944d-460e-9ca1-af9a483c84f4
+		summarizeBy: none
+		sourceColumn: CalendarMonth
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarMonthLabel
+		dataType: string
+		lineageTag: 3973a40a-94ec-4674-a16d-d6295f8f9e55
+		summarizeBy: none
+		sourceColumn: CalendarMonthLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarWeek
+		dataType: int64
+		formatString: 0
+		lineageTag: 30c1e517-8ad2-4a70-acb3-8c47f27e948b
+		summarizeBy: none
+		sourceColumn: CalendarWeek
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarWeekLabel
+		dataType: string
+		lineageTag: 12f73d33-6b8e-46b7-8c96-c2541c7147c5
+		summarizeBy: none
+		sourceColumn: CalendarWeekLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarDayOfWeek
+		dataType: int64
+		formatString: 0
+		lineageTag: 51bfa377-1d31-4cd3-bb9f-c722314d9383
+		summarizeBy: none
+		sourceColumn: CalendarDayOfWeek
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarDayOfWeekLabel
+		dataType: string
+		lineageTag: 841524de-e0d1-4941-8ed2-75b2eb53a742
+		summarizeBy: none
+		sourceColumn: CalendarDayOfWeekLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column FiscalYear
+		dataType: int64
+		formatString: 0
+		lineageTag: f127751a-0bb5-4690-8644-63bdc53f0093
+		summarizeBy: none
+		sourceColumn: FiscalYear
+
+		annotation SummarizationSetBy = Automatic
+
+	column FiscalYearLabel
+		dataType: string
+		lineageTag: 7112a6ae-7078-44fa-85a7-96d7fd8dbd7a
+		summarizeBy: none
+		sourceColumn: FiscalYearLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column FiscalHalfYear
+		dataType: int64
+		formatString: 0
+		lineageTag: 6419215f-5069-45b0-b58b-e8408bb4f523
+		summarizeBy: none
+		sourceColumn: FiscalHalfYear
+
+		annotation SummarizationSetBy = Automatic
+
+	column FiscalHalfYearLabel
+		dataType: string
+		lineageTag: 47be37f8-f66e-4213-8751-86b97f3ed628
+		summarizeBy: none
+		sourceColumn: FiscalHalfYearLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column FiscalQuarter
+		dataType: int64
+		formatString: 0
+		lineageTag: 93802c15-c2fe-47cf-a214-bffb8fd409dd
+		summarizeBy: none
+		sourceColumn: FiscalQuarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column FiscalQuarterLabel
+		dataType: string
+		lineageTag: ebc6d6ce-04ce-468b-b2c9-9d706636d591
+		summarizeBy: none
+		sourceColumn: FiscalQuarterLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column FiscalMonth
+		dataType: int64
+		formatString: 0
+		lineageTag: 97103644-1b50-4938-b262-7bca6270aa19
+		summarizeBy: none
+		sourceColumn: FiscalMonth
+
+		annotation SummarizationSetBy = Automatic
+
+	column FiscalMonthLabel
+		dataType: string
+		lineageTag: e39633fc-6683-4e5e-989b-a78e86b69327
+		summarizeBy: none
+		sourceColumn: FiscalMonthLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsWorkDay
+		dataType: string
+		lineageTag: f5b646c0-4f66-482a-b064-973afc2b2a0a
+		summarizeBy: none
+		sourceColumn: IsWorkDay
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsHoliday
+		dataType: int64
+		formatString: 0
+		lineageTag: 91148dc3-2b9d-4a05-bb27-ceb4ce1517b4
+		summarizeBy: none
+		sourceColumn: IsHoliday
+
+		annotation SummarizationSetBy = Automatic
+
+	column HolidayName
+		dataType: string
+		lineageTag: 21da0185-ad3c-49db-a3b2-21bd254ea2b8
+		summarizeBy: none
+		sourceColumn: HolidayName
+
+		annotation SummarizationSetBy = Automatic
+
+	column EuropeSeason
+		dataType: string
+		lineageTag: b48d5504-ad66-4c06-abcd-6f0fe94f1151
+		summarizeBy: none
+		sourceColumn: EuropeSeason
+
+		annotation SummarizationSetBy = Automatic
+
+	column NorthAmericaSeason
+		dataType: string
+		lineageTag: 3bcbdd3c-cd56-4630-88ba-83e1dea81611
+		summarizeBy: none
+		sourceColumn: NorthAmericaSeason
+
+		annotation SummarizationSetBy = Automatic
+
+	column AsiaSeason
+		dataType: string
+		lineageTag: 10a3d472-d1c4-4c57-90f5-f2b27d1d8969
+		summarizeBy: none
+		sourceColumn: AsiaSeason
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimDate = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("Antonio\SQLEXPRESS", "ContosoRetailDW"),
+				    dbo_DimDate = Source{[Schema="dbo",Item="DimDate"]}[Data]
+				in
+				    dbo_DimDate
+
+	annotation PBI_ResultType = Table
+

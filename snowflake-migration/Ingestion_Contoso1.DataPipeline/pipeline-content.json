@@ -1,0 +1,25 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "InvokeCopyJob",
+        "typeProperties": {
+          "copyJobId": "d55c4c13-a628-a6f0-4467-1b5068e002ef",
+          "workspaceId": "00000000-0000-0000-0000-000000000000"
+        },
+        "externalReferences": {
+          "connection": "da6eb939-87a4-497e-a29b-598d7e585dee"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Copy job_7a5",
+        "dependsOn": []
+      }
+    ]
+  }
+}

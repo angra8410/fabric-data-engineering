@@ -1,0 +1,135 @@
+table DimEntity
+	lineageTag: 27d65b78-fdb5-4540-b434-c4f57e67a804
+	sourceLineageTag: [dbo].[DimEntity]
+
+	column EntityKey
+		dataType: int64
+		formatString: 0
+		lineageTag: ca66af8f-a256-460c-ac26-0d579d6b556e
+		sourceLineageTag: EntityKey
+		summarizeBy: count
+		sourceColumn: EntityKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column EntityLabel
+		dataType: string
+		lineageTag: 8c1dfdaf-1b6a-47a7-ad6b-dbd9acc7fe97
+		sourceLineageTag: EntityLabel
+		summarizeBy: none
+		sourceColumn: EntityLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column ParentEntityKey
+		dataType: int64
+		formatString: 0
+		lineageTag: deeb27d7-efcc-4e60-8cd0-4197cb5d1526
+		sourceLineageTag: ParentEntityKey
+		summarizeBy: count
+		sourceColumn: ParentEntityKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ParentEntityLabel
+		dataType: string
+		lineageTag: d675fbb4-cfc8-47e0-ae0a-d81253669be5
+		sourceLineageTag: ParentEntityLabel
+		summarizeBy: none
+		sourceColumn: ParentEntityLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column EntityName
+		dataType: string
+		lineageTag: 2caf8d85-7baa-49c3-be23-1697e418c515
+		sourceLineageTag: EntityName
+		summarizeBy: none
+		sourceColumn: EntityName
+
+		annotation SummarizationSetBy = Automatic
+
+	column EntityDescription
+		dataType: string
+		lineageTag: 17be4981-f1eb-4a35-a219-b8f94165a0c2
+		sourceLineageTag: EntityDescription
+		summarizeBy: none
+		sourceColumn: EntityDescription
+
+		annotation SummarizationSetBy = Automatic
+
+	column EntityType
+		dataType: string
+		lineageTag: d1653527-b2c2-4e2e-b7c5-61b7cb63f01d
+		sourceLineageTag: EntityType
+		summarizeBy: none
+		sourceColumn: EntityType
+
+		annotation SummarizationSetBy = Automatic
+
+	column StartDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 06c6838f-aff0-4088-9ad0-f62b5b045a22
+		sourceLineageTag: StartDate
+		summarizeBy: none
+		sourceColumn: StartDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column EndDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: e2642c22-0f11-4ffa-8dbb-494aaed50c54
+		sourceLineageTag: EndDate
+		summarizeBy: none
+		sourceColumn: EndDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column Status
+		dataType: string
+		lineageTag: 9629de97-cf69-4f37-8d66-05fc438a66f4
+		sourceLineageTag: Status
+		summarizeBy: none
+		sourceColumn: Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column ETLLoadID
+		dataType: int64
+		formatString: 0
+		lineageTag: c18e8002-92c4-4440-a7b9-880726dce033
+		sourceLineageTag: ETLLoadID
+		summarizeBy: count
+		sourceColumn: ETLLoadID
+
+		annotation SummarizationSetBy = Automatic
+
+	column LoadDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 4c476042-b690-4368-8e8a-902b2a395056
+		sourceLineageTag: LoadDate
+		summarizeBy: none
+		sourceColumn: LoadDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column UpdateDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 1efb87a2-1611-4f42-a37e-488b9fea2a1c
+		sourceLineageTag: UpdateDate
+		summarizeBy: none
+		sourceColumn: UpdateDate
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimEntity = entity
+		mode: directLake
+		source
+			entityName: DimEntity
+			schemaName: dbo
+			expressionSource: 'DirectLake - Contoso_Lakehouse'
+

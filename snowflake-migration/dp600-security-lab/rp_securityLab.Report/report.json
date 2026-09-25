@@ -1,0 +1,43 @@
+{
+  "config": "{\"version\":\"5.77\",\"themeCollection\":{\"baseTheme\":{\"name\":\"Fluent2-CY26SU09\",\"type\":2,\"version\":{\"visual\":\"2.13.0\",\"report\":\"3.4.0\",\"page\":\"2.3.1\"}}},\"activeSectionIndex\":0,\"defaultDrillFilterOtherVisuals\":true,\"linguisticSchemaSyncVersion\":0,\"settings\":{\"useNewFilterPaneExperience\":true,\"allowChangeFilterTypes\":true,\"useStylableVisualContainerHeader\":true,\"queryLimitOption\":6,\"useEnhancedTooltips\":true,\"exportDataMode\":1,\"useDefaultAggregateDisplayName\":true},\"objects\":{\"section\":[{\"properties\":{\"verticalAlignment\":{\"expr\":{\"Literal\":{\"Value\":\"'Top'\"}}}}}]}}",
+  "layoutOptimization": 0,
+  "resourcePackages": [
+    {
+      "resourcePackage": {
+        "disabled": false,
+        "items": [
+          {
+            "name": "Fluent2-CY26SU09",
+            "path": "BaseThemes/Fluent2-CY26SU09.json",
+            "type": 202
+          }
+        ],
+        "name": "SharedResources",
+        "type": 2
+      }
+    }
+  ],
+  "sections": [
+    {
+      "config": "{}",
+      "displayName": "Page 1",
+      "displayOption": 1,
+      "filters": "[]",
+      "height": 1080.00,
+      "name": "c63e2204a0cd5e7c7cc5",
+      "visualContainers": [
+        {
+          "config": "{\"name\":\"7a135d9f833a3005269d\",\"layouts\":[{\"id\":0,\"position\":{\"x\":604.7154591874491,\"y\":259.1637682231925,\"z\":0,\"width\":880.550580922075,\"height\":554.7013986531489,\"tabOrder\":0}}],\"singleVisual\":{\"visualType\":\"tableEx\",\"projections\":{\"Values\":[{\"queryRef\":\"CountNonNull(sales.SalesID)\"},{\"queryRef\":\"sales.Region\"},{\"queryRef\":\"sales.SalesRep\"},{\"queryRef\":\"Sum(sales.Amount)\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"s\",\"Entity\":\"sales\",\"Type\":0}],\"Select\":[{\"Aggregation\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"s\"}},\"Property\":\"SalesID\"}},\"Function\":5},\"Name\":\"CountNonNull(sales.SalesID)\",\"NativeReferenceName\":\"Count of SalesID\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"s\"}},\"Property\":\"Region\"},\"Name\":\"sales.Region\",\"NativeReferenceName\":\"Region\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"s\"}},\"Property\":\"SalesRep\"},\"Name\":\"sales.SalesRep\",\"NativeReferenceName\":\"SalesRep\"},{\"Aggregation\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"s\"}},\"Property\":\"Amount\"}},\"Function\":0},\"Name\":\"Sum(sales.Amount)\",\"NativeReferenceName\":\"Sum of Amount\"}]},\"drillFilterOtherVisuals\":true}}",
+          "filters": "[]",
+          "height": 554.70,
+          "queryBinary": "H4sIAAAAAAAEALVTS0/DMAz+K1NOIEWo3bRLb2MPhBDTaNE4oB1C5pWgJqnSBDZN/e/EaddNwE7ALXb8PWLHezLWUjK1rkjyvCcZ+LMV/MGB2U2YZdkrK6EtIcmehAs8LMFUQiuS9CmZGS0DfM4kkIRUhJKpp7E7DFgBmHjclf4uqlfUqxTAbUCM8txAzmyg2pPptjRQVW001oWTP+Qz7QyHFDbHIKjWNSULo0swQTlD5dtJSM+c4o3I0Eetz7F2ys61mruiuAg+r1rMJcEiK95RBQwoDqeYnt70Onb6a6Mp5Ag4Gmu8tOlzTjrU3zQqhfKbg+7inIcT5P/OciSx719GGR39Zk62E2wqzw/QV+L4DoQrz3Et1FqoHB0sjJCs+eE3RrvSp5vN8F7eIOhiHNGY9ukA/7J7sdqygiRx4MKlSWHt+KENmFji4734gJ4KPHlZ/dE0B70kwyiq8YXdbsU+mG6BOyS7B2sEr+4EbmJce7VPut3ffL0DAAA=",
+          "width": 880.55,
+          "x": 604.72,
+          "y": 259.16,
+          "z": 0.00
+        }
+      ],
+      "width": 1920.00
+    }
+  ]
+}

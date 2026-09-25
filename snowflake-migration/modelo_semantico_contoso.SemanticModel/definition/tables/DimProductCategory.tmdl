@@ -1,0 +1,78 @@
+table DimProductCategory
+	lineageTag: 27038d9a-56f6-4b97-9c27-8039f02f2a04
+	sourceLineageTag: [dbo].[DimProductCategory]
+
+	column ProductCategoryKey
+		dataType: int64
+		formatString: 0
+		lineageTag: be28c775-ba1f-43de-aeb3-cacd3caff2f1
+		sourceLineageTag: ProductCategoryKey
+		summarizeBy: count
+		sourceColumn: ProductCategoryKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductCategoryLabel
+		dataType: string
+		lineageTag: b3e9607e-b878-4dab-aee1-0919c7c31911
+		sourceLineageTag: ProductCategoryLabel
+		summarizeBy: none
+		sourceColumn: ProductCategoryLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductCategoryName
+		dataType: string
+		lineageTag: 4a9c6ef0-63ec-48f7-b6fd-4304ef569a61
+		sourceLineageTag: ProductCategoryName
+		summarizeBy: none
+		sourceColumn: ProductCategoryName
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductCategoryDescription
+		dataType: string
+		lineageTag: d702ce1f-589f-475f-af5e-8dec91aa73f1
+		sourceLineageTag: ProductCategoryDescription
+		summarizeBy: none
+		sourceColumn: ProductCategoryDescription
+
+		annotation SummarizationSetBy = Automatic
+
+	column ETLLoadID
+		dataType: int64
+		formatString: 0
+		lineageTag: 00197a3a-f0e0-4c12-88ec-bf2c32e35f3f
+		sourceLineageTag: ETLLoadID
+		summarizeBy: count
+		sourceColumn: ETLLoadID
+
+		annotation SummarizationSetBy = Automatic
+
+	column LoadDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 0a32ac1b-79d1-4676-a25b-4411f6643e34
+		sourceLineageTag: LoadDate
+		summarizeBy: none
+		sourceColumn: LoadDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column UpdateDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 00bec217-1998-4992-839b-819bab738b35
+		sourceLineageTag: UpdateDate
+		summarizeBy: none
+		sourceColumn: UpdateDate
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimProductCategory = entity
+		mode: directLake
+		source
+			entityName: DimProductCategory
+			schemaName: dbo
+			expressionSource: 'DirectLake - Contoso_Lakehouse'
+

@@ -1,0 +1,114 @@
+table DimOutage
+	lineageTag: b4d9a5d0-7922-469b-a8f5-6bd01b8cd65c
+	sourceLineageTag: [dbo].[DimOutage]
+
+	column OutageKey
+		dataType: int64
+		formatString: 0
+		lineageTag: a09c7a00-a8ef-4598-afd3-eb9ef1f1db69
+		sourceLineageTag: OutageKey
+		summarizeBy: count
+		sourceColumn: OutageKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column OutageLabel
+		dataType: string
+		lineageTag: d8188c03-1590-4a45-9de4-521eec9a8f5b
+		sourceLineageTag: OutageLabel
+		summarizeBy: none
+		sourceColumn: OutageLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column OutageName
+		dataType: string
+		lineageTag: 8993adbf-017c-44ba-9e74-8b105aace6c1
+		sourceLineageTag: OutageName
+		summarizeBy: none
+		sourceColumn: OutageName
+
+		annotation SummarizationSetBy = Automatic
+
+	column OutageDescription
+		dataType: string
+		lineageTag: 5e4dd139-4a10-4a96-8009-852631c91865
+		sourceLineageTag: OutageDescription
+		summarizeBy: none
+		sourceColumn: OutageDescription
+
+		annotation SummarizationSetBy = Automatic
+
+	column OutageType
+		dataType: string
+		lineageTag: 26392db1-f8e1-46b1-9414-2f57d4426119
+		sourceLineageTag: OutageType
+		summarizeBy: none
+		sourceColumn: OutageType
+
+		annotation SummarizationSetBy = Automatic
+
+	column OutageTypeDescription
+		dataType: string
+		lineageTag: 3f511723-42ef-48c4-a651-361251f4c420
+		sourceLineageTag: OutageTypeDescription
+		summarizeBy: none
+		sourceColumn: OutageTypeDescription
+
+		annotation SummarizationSetBy = Automatic
+
+	column OutageSubType
+		dataType: string
+		lineageTag: 8a02c357-0bb6-48ea-8ed1-75aa475a3fbb
+		sourceLineageTag: OutageSubType
+		summarizeBy: none
+		sourceColumn: OutageSubType
+
+		annotation SummarizationSetBy = Automatic
+
+	column OutageSubTypeDescription
+		dataType: string
+		lineageTag: 01458cd3-740b-4d0b-9816-7500618bd84c
+		sourceLineageTag: OutageSubTypeDescription
+		summarizeBy: none
+		sourceColumn: OutageSubTypeDescription
+
+		annotation SummarizationSetBy = Automatic
+
+	column ETLLoadID
+		dataType: int64
+		formatString: 0
+		lineageTag: bea704e5-4a73-4b2b-8c50-c107dae66553
+		sourceLineageTag: ETLLoadID
+		summarizeBy: count
+		sourceColumn: ETLLoadID
+
+		annotation SummarizationSetBy = Automatic
+
+	column LoadDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 608adaec-bbfb-4a83-896a-451dce036e13
+		sourceLineageTag: LoadDate
+		summarizeBy: none
+		sourceColumn: LoadDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column UpdateDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: c4ad60da-51f0-4b9d-ae56-d7441b3d9090
+		sourceLineageTag: UpdateDate
+		summarizeBy: none
+		sourceColumn: UpdateDate
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimOutage = entity
+		mode: directLake
+		source
+			entityName: DimOutage
+			schemaName: dbo
+			expressionSource: 'DirectLake - Contoso_Lakehouse'
+

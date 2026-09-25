@@ -1,0 +1,5 @@
+role SalesRepDynamic
+	modelPermission: read
+
+	tablePermission sales = LOWER([Email]) = LOWER(USERPRINCIPALNAME())
+

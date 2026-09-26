@@ -1,0 +1,1706 @@
+[
+  {
+    "id": "mslearn-053cfc6cae",
+    "type": "multiple_choice",
+    "text": "Your company uses Microsoft Fabric for data analytics. You must protect sensitive data from unauthorized access in the data warehouse.\nYou need to manage access to specific objects in the warehouse.\nWhat action should you take to achieve this?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Configure dynamic data masking (DDM)."
+      },
+      {
+        "id": "B",
+        "text": "Use TSQL to grant granular permissions."
+      },
+      {
+        "id": "C",
+        "text": "Implement column-level security (CLS)."
+      },
+      {
+        "id": "D",
+        "text": "Assign users the workspace Contributor role."
+      }
+    ],
+    "correctOptionId": "B",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain2",
+    "topic": "Fabric Warehouse & T-SQL",
+    "difficulty": "Medium",
+    "explanation": "Using T-SQL to grant permissions on specific objects is the correct method to ensure only authorized users can interact with certain warehouse objects. Row-level security applies per table and is not granular enough. Dynamic data masking obfuscates data, but isn't considered access control. Item-level permissions prevent certain access within the warehouse, but not granular to the objects.[Configure SQL granular permissions using T-SQL](https://learn.microsoft.com/en-us/training/modules/secure-data-warehouse-in-microsoft-fabric/5-configure-sql-granular-permissions)",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/training/modules/secure-data-warehouse-in-microsoft-fabric/5-configure-sql-granular-permissions",
+    "msLearnTitle": "Microsoft Learn - Fabric Warehouse & T-SQL",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-cb6002eee6",
+    "type": "multi_select",
+    "text": "Your company is using Microsoft Fabric to manage its data warehousing needs. The data includes sensitive customer information that must be protected according to regulatory requirements.\nYou need to protect sensitive data from unauthorized access while allowing authorized users to perform their tasks efficiently.\nEach correct answer presents part of the solution. Which three actions should you take?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Apply sensitivity labels."
+      },
+      {
+        "id": "B",
+        "text": "Use Microsoft Entra ID groups for user permissions."
+      },
+      {
+        "id": "C",
+        "text": "Configure dynamic data masking (DDM)."
+      },
+      {
+        "id": "D",
+        "text": "Implement object-level security."
+      },
+      {
+        "id": "E",
+        "text": "Implement column-level security (CLS)."
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": [
+      "A",
+      "B",
+      "D"
+    ],
+    "selectCount": 3,
+    "domain": "domain1",
+    "topic": "Git Integration & CI/CD",
+    "difficulty": "Hard",
+    "explanation": "Applying sensitivity labels, implementing object-level security, and using Microsoft Entra ID groups are effective strategies to protect sensitive data while allowing authorized users to perform their tasks efficiently. These measures ensure compliance with regulatory requirements and streamline permission management. Revoking all user permissions temporarily would disrupt legitimate access, while granting all users the Viewer role could prevent users from performing necessary tasks due to insufficient permissions.",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/training/modules/introduction-end-analytics-use-microsoft-fabric/2-explore-analytics-fabric",
+    "msLearnTitle": "Microsoft Learn - Git Integration & CI/CD",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-23503632c7",
+    "type": "multiple_choice",
+    "text": "You have a Fabric tenant that contains two lakehouses named Lakehouse1 and Lakehouse2. Lakehouse1 contains a table named FactSales that is partitioned by a column named CustomerID.\nYou need to create a shortcut to the FactSales table in Lakehouse2. The shortcut must only connect to data for CustomerID 100.\nWhat should you do?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Create an Amazon S3 shortcut in the Lakehouse Files section."
+      },
+      {
+        "id": "B",
+        "text": "As you create the shortcut, select the CustomerKey=100 folder under the FactSales folder in Tables."
+      },
+      {
+        "id": "C",
+        "text": "Create an external OneLake shortcut to Azure Data Lake Storage Gen2."
+      },
+      {
+        "id": "D",
+        "text": "Create an internal OneLake shortcut to the target table."
+      }
+    ],
+    "correctOptionId": "B",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "OneLake Shortcuts",
+    "difficulty": "Medium",
+    "explanation": "During the shortcut setup process, you can expand the FactSales folder to see each folder per CustomerID partition and select the folder for CustomerID=100. These folders are unavailable under Files, and all other options will connect to all the customer data in the shortcut.",
+    "msLearnUrl": "https://learn.microsoft.com/fabric/data-engineering/lakehouse-shortcuts",
+    "msLearnTitle": "Microsoft Learn - OneLake Shortcuts",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-ef8ab160e8",
+    "type": "multiple_choice",
+    "text": "You are designing a Microsoft Power BI semantic model that contains a measure named CompanyCosts.\nYou need to restrict access to CompanyCosts and ensure that only a user named User1 can view the measure in reports.\nWhat should you implement?",
+    "options": [
+      {
+        "id": "A",
+        "text": "static row-level security (RLS)"
+      },
+      {
+        "id": "B",
+        "text": "Implement column-level security (CLS)."
+      },
+      {
+        "id": "C",
+        "text": "object-level security (OLS)"
+      },
+      {
+        "id": "D",
+        "text": "Configure dynamic data masking (DDM)."
+      }
+    ],
+    "correctOptionId": "C",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain3",
+    "topic": "Git Integration & CI/CD",
+    "difficulty": "Medium",
+    "explanation": "OLS enables restricting access to semantic model objects, such as tables, columns, and calculations based on these columns. RLS (both static and dynamic) restricts access to specific attributes in the semantic model, such as location, category, etc.",
+    "msLearnUrl": "https://learn.microsoft.com/training/modules/enforce-power-bi-model-security/3-restrict-access-to-power-bi-model-objects",
+    "msLearnTitle": "Microsoft Learn - Git Integration & CI/CD",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-47968ff855",
+    "type": "multi_select",
+    "text": "Your company is using Microsoft Fabric to manage its data analytics solutions. The IT department needs to ensure that sensitive data is protected and only accessible to authorized personnel.\nYou need to implement security measures to safeguard sensitive data at different levels within the data warehouse.\nEach correct answer presents part of the solution. Which three actions should you perform?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Configure object-level security."
+      },
+      {
+        "id": "B",
+        "text": "Apply sensitivity labels."
+      },
+      {
+        "id": "C",
+        "text": "Configure workspace roles."
+      },
+      {
+        "id": "D",
+        "text": "Implement column-level security (CLS)."
+      },
+      {
+        "id": "E",
+        "text": "Use role-based access control."
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": [
+      "A",
+      "B",
+      "C"
+    ],
+    "selectCount": 3,
+    "domain": "domain1",
+    "topic": "Fabric Warehouse & T-SQL",
+    "difficulty": "Hard",
+    "explanation": "To safeguard sensitive data at different levels within the data warehouse, implementing object-level security, applying sensitivity labels, and configuring workspace roles are effective measures. These actions protect sensitive data and manage access efficiently. Enabling public access would compromise data security, and using role-based access control alone does not offer the necessary granularity for protecting sensitive data. Assigning all users to the Admin role provides excessive access.",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/training/modules/introduction-end-analytics-use-microsoft-fabric/2-explore-analytics-fabric",
+    "msLearnTitle": "Microsoft Learn - Fabric Warehouse & T-SQL",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-fd293b55a2",
+    "type": "multi_select",
+    "text": "Your company uses Microsoft Fabric to manage data analytics solutions. The marketing department needs to share reports with external partners.\nYou need to ensure that reports can be shared with external partners without compromising sensitive data.\nEach correct answer presents part of the solution. Which three actions should you take?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Assign external partners a Viewer role."
+      },
+      {
+        "id": "B",
+        "text": "Set data source credentials to a fixed identity."
+      },
+      {
+        "id": "C",
+        "text": "Implement row-level security."
+      },
+      {
+        "id": "D",
+        "text": "Configure a Power BI app."
+      },
+      {
+        "id": "E",
+        "text": "Restrict workspace sharing settings."
+      }
+    ],
+    "correctOptionId": "B",
+    "correctOptionIds": [
+      "B",
+      "C",
+      "D"
+    ],
+    "selectCount": 3,
+    "domain": "domain1",
+    "topic": "Git Integration & CI/CD",
+    "difficulty": "Hard",
+    "explanation": "Implementing row-level security is crucial for controlling data visibility based on user identity. Switching to a fixed identity ensures that external partners have access to the necessary data without exposing sensitive information. Using Power BI apps enables secure sharing of reports with external partners. Assigning a viewer role allows external partners to view reports without modification access, aligning with the goal of secure sharing, however sharing via Power BI App is more restrictive hence why you should not grant viewer role. Restricting workspace sharing settings might seem like a way to control data sharing, but it does not directly address the need for secure sharing with external partners. Sharing reports via email attachments can lead to data security issues, as it may result in unauthorized access or data leakage, which is contrary to the goal.",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/training/modules/introduction-end-analytics-use-microsoft-fabric/4-use-fabric",
+    "msLearnTitle": "Microsoft Learn - Git Integration & CI/CD",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-8f7a9aa8b2",
+    "type": "multi_select",
+    "text": "Your organization uses Microsoft Fabric for data analytics. The team must protect sensitive data in a Fabric data warehouse from unauthorized access.\nYou need to limit data access based on different user roles and ensure to follow the principle of least privilege.\nWhich two actions should you take to achieve this solution?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Assign workspace Viewer roles to all users."
+      },
+      {
+        "id": "B",
+        "text": "Set item-level permissions."
+      },
+      {
+        "id": "C",
+        "text": "Implement column-level security."
+      },
+      {
+        "id": "D",
+        "text": "Implement row-level security."
+      }
+    ],
+    "correctOptionId": "C",
+    "correctOptionIds": [
+      "C",
+      "D"
+    ],
+    "selectCount": 2,
+    "domain": "domain1",
+    "topic": "Fabric Warehouse & T-SQL",
+    "difficulty": "Hard",
+    "explanation": "To effectively limit data visibility based on user roles, implementing both row-level and column-level security is essential. Row-level security ensures that users can only access specific rows they are authorized to view, while column-level security restricts access to sensitive columns, thereby protecting critical information. Setting up item-level permissions provides more specific access control than workspace roles but lacks the necessary granularity for row and column-level restrictions. Assigning workspace roles does not address the need for role-based access control at the row or column level. Dynamic data masking, although useful for obscuring sensitive data, does not fulfill the requirement of restricting access based on user roles.",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/training/modules/introduction-end-analytics-use-microsoft-fabric/2-explore-analytics-fabric",
+    "msLearnTitle": "Microsoft Learn - Fabric Warehouse & T-SQL",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-a5046cb095",
+    "type": "multiple_choice",
+    "text": "Your company uses Microsoft Fabric for data analytics and needs to ensure that only specific users can access certain report data based on their roles.\nYou need to configure security settings to control access to the data within the report.\nWhat should you configure?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Assign users the workspace Contributor role."
+      },
+      {
+        "id": "B",
+        "text": "Implement column-level security (CLS)."
+      },
+      {
+        "id": "C",
+        "text": "Configure dynamic data masking (DDM)."
+      },
+      {
+        "id": "D",
+        "text": "Configure row-level security."
+      }
+    ],
+    "correctOptionId": "D",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "Git Integration & CI/CD",
+    "difficulty": "Medium",
+    "explanation": "To control dataset access based on user roles, configuring row-level security settings is crucial as it ensures that only authorized users can view specific data. Assigning workspace roles manages access at a broader level but does not provide the necessary granularity for row-level security. Configuring sensitivity labels is related to data protection and compliance, but it does not directly control dataset access based on user roles. Configuring item-level access is too broad as that would provide access the the report itself but not the report data within it.",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/training/modules/introduction-end-analytics-use-microsoft-fabric/3-data-team",
+    "msLearnTitle": "Microsoft Learn - Git Integration & CI/CD",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-5f117896fa",
+    "type": "multiple_choice",
+    "text": "You have a Fabric workspace named Workspace1 that contains a semantic model and a report.\nYou plan to connect Workspace1 to a Git repository named Repo1 and enable version control. Repo1 will be used to manage and maintain the contents of Workspace1.\nYou need to ensure that other users can collaborate on the semantic model and the report. The solution must minimize development effort.\nWhat should you do?",
+    "options": [
+      {
+        "id": "A",
+        "text": "From Workspace1, create a branch and a new workspace."
+      },
+      {
+        "id": "B",
+        "text": "Create a new workspace and connect the new workspace to a local folder."
+      },
+      {
+        "id": "C",
+        "text": "Create a personal development branch in Azure DevOps."
+      },
+      {
+        "id": "D",
+        "text": "Connect the Fabric workspace to the Azure DevOps Git repository."
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "Git Integration & CI/CD",
+    "difficulty": "Medium",
+    "explanation": "You should create a branch and a new workspace from Workspace1 because Fabric\u2019s Git integration supports collaborative development by allowing users to work in isolated branches that are mapped to their own workspaces. This approach enables multiple users to modify the semantic model and report independently while using Repo1 for version control, all with minimal development effort and configuration. Committing alone does not establish collaborative workflows, Power BI Desktop projects are not required for workspace-level version control in Fabric, and Fabric does not support connecting workspaces directly to local folders.",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/training/modules/implement-cicd-in-fabric/3-implement-version-control-and-git-integration",
+    "msLearnTitle": "Microsoft Learn - Git Integration & CI/CD",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-539462b993",
+    "type": "multi_select",
+    "text": "You use Microsoft Fabric to manage an organization's data analytics solutions and need to set up a deployment pipeline.\nThe deployment pipeline must maintain item dependencies and support efficient data refresh processes.\nEach correct answer presents part of the solution. Which three actions should you take?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Enable incremental refresh."
+      },
+      {
+        "id": "B",
+        "text": "Create a new workspace for each stage."
+      },
+      {
+        "id": "C",
+        "text": "Configure autobinding."
+      },
+      {
+        "id": "D",
+        "text": "Use a static refresh schedule for each environment."
+      },
+      {
+        "id": "E",
+        "text": "Use deployment rules for connections."
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": [
+      "A",
+      "C",
+      "E"
+    ],
+    "selectCount": 3,
+    "domain": "domain1",
+    "topic": "Deployment Pipelines",
+    "difficulty": "Hard",
+    "explanation": "Configuring autobinding is crucial for maintaining item connections across stages, which is a key requirement for the deployment pipeline. Enabling incremental refresh ensures that the refresh policy is consistently applied, supporting efficient data management. Using deployment rules allows for proper management of data source connections, ensuring semantic models function correctly in each stage. Using a static refresh schedule and creating new workspaces manually do not contribute to the goals of maintaining connections or supporting incremental refresh, making them incorrect choices.",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/training/modules/implement-cicd-in-fabric/4-implement-deployment-pipelines",
+    "msLearnTitle": "Microsoft Learn - Deployment Pipelines",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-1f2960f6fd",
+    "type": "multiple_choice",
+    "text": "You have a Fabric tenant that contains the following workspaces:\nDev: Used by data engineers to update a lakehouse and a Microsoft Power BI semantic model\nProd: Used by business users to consume reports\nPreProd: Used for validation before release\nYour organization uses Azure DevOps for code reviews and requires version control and a complete change history for workspace items.\nWhich workspace setting should you enable?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Configure dynamic data masking (DDM)."
+      },
+      {
+        "id": "B",
+        "text": "Implement column-level security (CLS)."
+      },
+      {
+        "id": "C",
+        "text": "Git integration"
+      },
+      {
+        "id": "D",
+        "text": "Assign users the workspace Contributor role."
+      }
+    ],
+    "correctOptionId": "C",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "Git Integration & CI/CD",
+    "difficulty": "Medium",
+    "explanation": "Objective: 1.2 Maintain the analytics development lifecycle What This Item Tests: Configure version control for a workspace Additional Reading: Rationale: Git integration enables version control, change tracking, and integration with Azure DevOps for code reviews and lifecycle management of Fabric workspace items; Workspace Identity is used for authentication scenarios; Outbound Networking controls connectivity settings; Spark workload settings configure compute behavior and are unrelated to version control.",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/training/modules/introduction-end-analytics-use-microsoft-fabric/4-use-fabric",
+    "msLearnTitle": "Microsoft Learn - Git Integration & CI/CD",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-7df037d184",
+    "type": "multiple_choice",
+    "text": "You have a Fabric deployment pipeline that has the following stages:\nDevelopment\nTest\nProduction\nThe Development workspace contains a lakehouse named SalesLH. SalesLH contains an internal OneLake shortcut that points to a table in another lakehouse in the same workspace.\nYou need to deploy SalesLH to Test by using the deployment pipeline.\nWhat should you do?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Enable Git integration for the workspace, so that lakehouse items are tracked in source control."
+      },
+      {
+        "id": "B",
+        "text": "Create a personal development branch in Azure DevOps."
+      },
+      {
+        "id": "C",
+        "text": "Create the tables, folders, and files referenced by the shortcut in the target workspace before the deployment."
+      },
+      {
+        "id": "D",
+        "text": "Connect the Fabric workspace to the Azure DevOps Git repository."
+      }
+    ],
+    "correctOptionId": "C",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "OneLake Shortcuts",
+    "difficulty": "Medium",
+    "explanation": "Objective: 1.2 Maintain the analytics development lifecycle What This Item Tests: Create and configure deployment pipelines Additional Reading: Rationale: Creating the tables, folders, and files referenced by the internal OneLake shortcut in the target workspace ensures that the shortcut resolves correctly after deployment because internal shortcuts require that the target object exist in the destination workspace. Git integration manages source control for workspace artifacts but does not resolve missing shortcut targets during the deployment pipeline run. Mapping the lakehouse dependency to another upstream lakehouse does not automatically create the referenced tables and folders required by the shortcut. Variable libraries are not used to remap OneLake shortcut targets during deployment.",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/fabric/data-engineering/lakehouse-git-deployment-pipelines#git-integration",
+    "msLearnTitle": "Microsoft Learn - OneLake Shortcuts",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-20c335c344",
+    "type": "multiple_choice",
+    "text": "You have a Fabric workspace named Sales-Dev in the West US Azure region that contains a lakehouse and a Microsoft Power BI semantic model.\nYou have an Azure DevOps Git repository located in the West Europe Azure region.\nYou need to connect the workspace to the repository.\nWhat should you do?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Configure deployment pipeline rules for data sources."
+      },
+      {
+        "id": "B",
+        "text": "Create a personal development branch in Azure DevOps."
+      },
+      {
+        "id": "C",
+        "text": "Connect the Fabric workspace to the Azure DevOps Git repository."
+      },
+      {
+        "id": "D",
+        "text": "Enable the tenant setting that allows exporting items to Git repositories in other geographical locations."
+      }
+    ],
+    "correctOptionId": "D",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "Git Integration & CI/CD",
+    "difficulty": "Medium",
+    "explanation": "Objective: 1.2 Maintain the analytics development lifecycle What This Item Tests: Configure version control for a workspace Additional Reading: Rationale: Connecting a Fabric workspace to a Git repository in a different Azure region requires enabling the tenant setting that allows exporting items to Git repositories in other geographical locations; Workspace regions cannot be changed after creation; Outbound protection settings do not affect Git integration across regions; Workspace identity is used for authentication scenarios and does not enable cross-region Git connectivity.",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/fabric/cicd/troubleshoot-cicd#deployment-pipelines",
+    "msLearnTitle": "Microsoft Learn - Git Integration & CI/CD",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-0ae2bf9566",
+    "type": "multiple_choice",
+    "text": "Your company plans to integrate data from multiple sources into a Microsoft Fabric warehouse for analysis.\nYou need to select a method that allows for code-free data ingestion with the ability to perform custom transformations before loading.\nWhat should you use?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Configure deployment pipeline rules for data sources."
+      },
+      {
+        "id": "B",
+        "text": "Dataflows Gen2"
+      },
+      {
+        "id": "C",
+        "text": "Create a personal development branch in Azure DevOps."
+      },
+      {
+        "id": "D",
+        "text": "Connect the Fabric workspace to the Azure DevOps Git repository."
+      }
+    ],
+    "correctOptionId": "B",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "PySpark Transformations",
+    "difficulty": "Medium",
+    "explanation": "Dataflows are the best choice for code-free data ingestion with the ability to perform custom transformations before loading into a warehouse. Microsoft Power Automate might seem plausible due to its automation features, but it is not designed for this specific requirement. Azure Data Factory might appear suitable for data ingestion and transformation, but it requires coding for custom transformations and isn't built into Fabric. Fabric notebooks require code, such as PySpark, to load data.[https://learn.microsoft.com/en-us/training/modules/load-data-into-microsoft-fabric-data-warehouse/4-load-data-using-tsql](https://learn.microsoft.com/en-us/training/modules/load-data-into-microsoft-fabric-data-warehouse/4-load-data-using-tsql)[https://learn.microsoft.com/en-us/training/modules/use-data-factory-pipelines-fabric/3-copy-data](https://learn.microsoft.com/en-us/training/modules/use-data-factory-pipelines-fabric/3-copy-data)",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/training/modules/load-data-into-microsoft-fabric-data-warehouse/4-load-data-using-tsql",
+    "msLearnTitle": "Microsoft Learn - PySpark Transformations",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-2fe9c8dcb5",
+    "type": "multiple_choice",
+    "text": "You have a Fabric tenant that contains a lakehouse named Lakehouse1.\nYou have a large 1 TB dataset in an external data source.\nYou need to recommend a method to ingest the dataset into Lakehouse1. The solution must provide the highest throughput. The solution must be suitable for developers who prefer the low-code/no-code option.\nWhat should you recommend?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Configure an eventstream in Real-Time Intelligence."
+      },
+      {
+        "id": "B",
+        "text": "Use a Fabric PySpark notebook to transform the data."
+      },
+      {
+        "id": "C",
+        "text": "Use the Copy data activity of a pipeline to copy the data."
+      },
+      {
+        "id": "D",
+        "text": "Create a Lakehouse shortcut to the source data."
+      }
+    ],
+    "correctOptionId": "C",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "Dataflows Gen2",
+    "difficulty": "Medium",
+    "explanation": "Dataflow Gen2 is a low code / no code option to ingest data but for straight bulk copy of data is not as efficient for large data size as the copy data activity.Using Lakehouse explorer allows for low code no code but is not good for high throughput and also assumes the data is in files in the first part but the external source has not been defined.Notebooks are efficient however these are not a low code/no code option.",
+    "msLearnUrl": "https://learn.microsoft.com/fabric/data-engineering/load-data-lakehouse",
+    "msLearnTitle": "Microsoft Learn - Dataflows Gen2",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-6bed138d7b",
+    "type": "multiple_choice",
+    "text": "You have a Fabric workspace that contains an eventhouse named Eventhouse1.\nEventhouse1 contains a KQL database named Database1 that stores real-time data.\nYou plan to use the Real-Time hub in Fabric to explore and use streaming data.\nYou need to ensure that other Fabric items can query the streaming data in Database1.\nWhat should you do?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Connect the Fabric workspace to the Azure DevOps Git repository."
+      },
+      {
+        "id": "B",
+        "text": "Connect Database1 to OneLake."
+      },
+      {
+        "id": "C",
+        "text": "Create a personal development branch in Azure DevOps."
+      },
+      {
+        "id": "D",
+        "text": "Create an eventstream to ingest the streaming data to Database1."
+      }
+    ],
+    "correctOptionId": "B",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "Real-Time Intelligence (KQL)",
+    "difficulty": "Medium",
+    "explanation": "You should connect Database1 to OneLake because this exposes the KQL database in Eventhouse1 as a shared, queryable data source across Microsoft Fabric. By making the database available in OneLake, other Fabric items such as data warehouses, Power BI, and pipelines can query the streaming data using supported interfaces, enabling cross-item analytics with minimal configuration. Creating pipelines or eventstreams focuses on data movement and ingestion rather than data accessibility, and alerts only monitor conditions without enabling other Fabric items to query the data.",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/fabric/real-time-intelligence/event-house-onelake-availability",
+    "msLearnTitle": "Microsoft Learn - Real-Time Intelligence (KQL)",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-a8ff026626",
+    "type": "multiple_choice",
+    "text": "You have a Fabric tenant that contains a lakehouse named Lakehouse1.\nYou need to ingest data into Lakehouse1 from a large Azure SQL Database table that contains more than 500 million records. The data must be ingested without applying any additional transformations. The solution must minimize costs and administrative effort.\nWhat should you use to ingest the data?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Connect the Fabric workspace to the Azure DevOps Git repository."
+      },
+      {
+        "id": "B",
+        "text": "a pipeline with the Copy data activity"
+      },
+      {
+        "id": "C",
+        "text": "Create a personal development branch in Azure DevOps."
+      },
+      {
+        "id": "D",
+        "text": "Configure deployment pipeline rules for data sources."
+      }
+    ],
+    "correctOptionId": "B",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "Dataflows Gen2",
+    "difficulty": "Medium",
+    "explanation": "When ingesting a large data source without applying transformations, the recommended method is to use the Copy data activity in pipelines. Notebooks are recommended for complex data transformations, whereas Dataflow Gen2 is suitable for smaller data and/or specific connectors. Stored procedures are not available in lakehouse they are a warehouse feature so no a valid option.",
+    "msLearnUrl": "https://learn.microsoft.com/fabric/data-engineering/load-data-lakehouse#considerations-when-choosing-approach-to-load-data",
+    "msLearnTitle": "Microsoft Learn - Dataflows Gen2",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-69042c4d16",
+    "type": "multiple_choice",
+    "text": "Your company has implemented a Microsoft Fabric lakehouse to store and manage very large datasets.\nRaw data is loaded into staging tables, then transformed before being loaded into the final tables for further analysis. You need to determine the most efficient way to perform this extract, transform, load (ETL) process in the lakehouse.\nWhat should you do?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Connect the Fabric workspace to the Azure DevOps Git repository."
+      },
+      {
+        "id": "B",
+        "text": "Configure deployment pipeline rules for data sources."
+      },
+      {
+        "id": "C",
+        "text": "Create a personal development branch in Azure DevOps."
+      },
+      {
+        "id": "D",
+        "text": "Use Fabric notebooks."
+      }
+    ],
+    "correctOptionId": "D",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "PySpark Transformations",
+    "difficulty": "Medium",
+    "explanation": "To efficiently perform data transformations and load processed data within the Microsoft Fabric lakehouse, notebooks are the most suitable method. Notebooks use Apache Spark, which is designed for big data processing, providing scalability and processing power necessary for handling large datasets. Using Data Factory pipelines for data transformation is not the most efficient method within the Microsoft Fabric lakehouse environment. Dataflows Gen2 with Power Query, while useful, may not handle large datasets as efficiently as Spark. Eventstreams are not designed for complex data transformations, making them an unsuitable choice for this scenario.",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/training/modules/get-started-lakehouses/3-work-lakehouse",
+    "msLearnTitle": "Microsoft Learn - PySpark Transformations",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-7e52dc8614",
+    "type": "multiple_choice",
+    "text": "You have a Fabric tenant that contains a warehouse named Warehouse1.\nYou have a large 1 TB dataset in an external data source.\nYou need to recommend a method to ingest the dataset into Warehouse1. The solution must provide the highest throughput and support a low-code/no-code development model.\nWhat should you recommend?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Create an internal OneLake shortcut to the target table."
+      },
+      {
+        "id": "B",
+        "text": "Create an external OneLake shortcut to Azure Data Lake Storage Gen2."
+      },
+      {
+        "id": "C",
+        "text": "Copy data activity"
+      },
+      {
+        "id": "D",
+        "text": "Create an Amazon S3 shortcut in the Lakehouse Files section."
+      }
+    ],
+    "correctOptionId": "C",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "OneLake Shortcuts",
+    "difficulty": "Medium",
+    "explanation": "The Copy data activity provides the highest throughput data ingestion and is considered low-code/no-code. Dataflow Gen2 is a great tool for transformations; however, for large data ingestions without any transformations, the Copy data activity performs best. Shortcuts do not move data. Spark notebooks are considered code-first. https://learn.microsoft.com/en-us/fabric/data-warehouse/ingest-data[Ingesting data into the warehouse - Microsoft Fabric | Microsoft Learn](https://learn.microsoft.com/fabric/data-warehouse/ingest-data)",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/fabric/data-warehouse/ingest-data[Ingesting",
+    "msLearnTitle": "Microsoft Learn - OneLake Shortcuts",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-f4fecbda65",
+    "type": "multiple_choice",
+    "text": "You have a Fabric tenant.\nYour company has 1 TB of legacy accounting data stored in an Azure Data Lake Storage Gen2 account. The data is queried only once a year for a few ad-hoc reports that submit very selective queries.\nYou plan to create a Fabric lakehouse or warehouse to store company sales data. Developers must be able to build reports from the lakehouse or warehouse based on the sales data. The developers must also be able to do ad-hoc analysis of the legacy data at the end of each year.\nYou need to recommend which Fabric architecture to create and the process for integrating the accounting data into Fabric. The solution must minimize administrative effort and costs.\nWhat should you recommend?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Set up a lakehouse with a shortcut to the legacy accounting data. Ingest the sales data into the Fabric warehouse and add the SQL analytics endpoint of the lakehouse to the warehouse for cross querying."
+      },
+      {
+        "id": "B",
+        "text": "Create an external OneLake shortcut to Azure Data Lake Storage Gen2."
+      },
+      {
+        "id": "C",
+        "text": "Ingest the sales data into the Fabric lakehouse and set up a shortcut to the legacy accounting data in the storage account."
+      },
+      {
+        "id": "D",
+        "text": "Create an internal OneLake shortcut to the target table."
+      }
+    ],
+    "correctOptionId": "C",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "OneLake Shortcuts",
+    "difficulty": "Medium",
+    "explanation": "Since the legacy accounting data is only accessed once a year for a few ad-hoc queries that are highly selective, there is no need to move the data into a Fabric workspace. Shortcuts enable the querying of remote data without having to move the data. Shortcuts are only supported in a Fabric lakehouse. While you can add the SQL endpoint of a lakehouse to a warehouse for cross database querying, that is not the simplest method. The simplest method is to use a shortcut.",
+    "msLearnUrl": "https://learn.microsoft.com/fabric/onelake/onelake-shortcuts",
+    "msLearnTitle": "Microsoft Learn - OneLake Shortcuts",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-5399bc6852",
+    "type": "multiple_choice",
+    "text": "You have an Azure SQL database that contains fact table named UnpostedSales. UnpostedSales contains unposted payments.\nEach day payment records from the previous day are automatically truncated from the UnpostedSales table and replaced with today's payment records.\nYou need to use a Dataflow Gen2 query to import the data into either a lakehouse or a warehouse. The solution must ensure that all current and historical records are maintained.\nWhat should you do to retain current and historical records during a refresh?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Configure the refresh to append data for the query."
+      },
+      {
+        "id": "B",
+        "text": "Create a SQL view in the data warehouse."
+      },
+      {
+        "id": "C",
+        "text": "Use T-SQL CREATE TABLE AS SELECT (CTAS) to rebuild the table."
+      },
+      {
+        "id": "D",
+        "text": "Create a stored procedure in the Fabric data warehouse."
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain2",
+    "topic": "Dataflows Gen2",
+    "difficulty": "Medium",
+    "explanation": "Appending data for the query will add new rows each time a refresh occurs, ensuring that both historical and current records are kept and combined. All other options will not keep the historical records.",
+    "msLearnUrl": "https://learn.microsoft.com/fabric/data-engineering/load-to-tables",
+    "msLearnTitle": "Microsoft Learn - Dataflows Gen2",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-e6d03ba9ba",
+    "type": "multiple_choice",
+    "text": "You have a Fabric workspace that contains a complex semantic model for a Microsoft Power BI report.\nYou need to optimize the semantic model for analytical queries and use denormalization to reduce the model complexity and the number of joins between tables.\nWhich tables should you denormalize?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Execute OPTIMIZE with V-Order enabled on the Delta table."
+      },
+      {
+        "id": "B",
+        "text": "Snowflaked dimension tables"
+      },
+      {
+        "id": "C",
+        "text": "Run VACUUM with a retention period of 168 hours."
+      },
+      {
+        "id": "D",
+        "text": "Partition the Delta table by transaction date key."
+      }
+    ],
+    "correctOptionId": "B",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "Git Integration & CI/CD",
+    "difficulty": "Medium",
+    "explanation": "A Snowflake dimension is a set of normalized tables for a single business entity. Implementing a proper star schema usually requires denormalizing the set of tables to create a single table that contains all the necessary attributes.",
+    "msLearnUrl": "https://learn.microsoft.com/power-bi/guidance/star-schema#snowflake-dimensions",
+    "msLearnTitle": "Microsoft Learn - Git Integration & CI/CD",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-9ec4fc92c9",
+    "type": "multiple_choice",
+    "text": "You have a Fabric lakehouse that contains a Fabric notebook. The notebook contains a PySpark DataFrame with order data from a source system. The DataFrame contains a column named InvoiceDate.\nYou need to add a column named InvoiceYear that will hold only the Year value of the InvoiceDate.\nWhich PySpark method should you use?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Configure an eventstream in Real-Time Intelligence."
+      },
+      {
+        "id": "B",
+        "text": "Create a Lakehouse shortcut to the source data."
+      },
+      {
+        "id": "C",
+        "text": "Use a Fabric PySpark notebook to transform the data."
+      },
+      {
+        "id": "D",
+        "text": "withColumn"
+      }
+    ],
+    "correctOptionId": "D",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain2",
+    "topic": "PySpark Transformations",
+    "difficulty": "Medium",
+    "explanation": "The method to add new columns to a DataFrame is withColumn.",
+    "msLearnUrl": "https://learn.microsoft.com/fabric/data-engineering/tutorial-lakehouse-data-preparation",
+    "msLearnTitle": "Microsoft Learn - PySpark Transformations",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-99edb16f51",
+    "type": "multiple_choice",
+    "text": "You have a complex Microsoft Power BI report that retrieves data from a Microsoft SQL Server database.\nYou plan to use Power Query Editor to apply a series of transformations to shape the data.\nYou need to make sure to use transformations that ensure that query folding is still in place.\nWhich transformation prevents query folding?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Adding index columns"
+      },
+      {
+        "id": "B",
+        "text": "Configure an eventstream in Real-Time Intelligence."
+      },
+      {
+        "id": "C",
+        "text": "Pivot"
+      },
+      {
+        "id": "D",
+        "text": "Use a Fabric PySpark notebook to transform the data."
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain2",
+    "topic": "Git Integration & CI/CD",
+    "difficulty": "Medium",
+    "explanation": "Unlike Pivot/Unpivot, as well as Keep rows transformations, adding the index column transformation in Power Query will always prevent the query from folding.",
+    "msLearnUrl": "https://learn.microsoft.com/power-query/power-query-folding#transformations-that-prevent-folding",
+    "msLearnTitle": "Microsoft Learn - Git Integration & CI/CD",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-718bedc7f5",
+    "type": "multiple_choice",
+    "text": "You have a Fabric tenant that contains a lakehouse.\nYou are creating a notebook to explore the data in the lakehouse.\nYou need to create a query to find the total number of records in the fact table for every individual product. The displayed results must be sorted in descending order.\nHow should you structure the query?",
+    "options": [
+      {
+        "id": "A",
+        "text": "df.select(\"ProductKey\").distinct().count().show()"
+      },
+      {
+        "id": "B",
+        "text": "df.count().groupBy(\"ProductKey\").orderBy(\"count\", ascending=False).show()"
+      },
+      {
+        "id": "C",
+        "text": "df.groupBy(\"ProductKey\").count().sort(\"count\", descending=True).show()"
+      },
+      {
+        "id": "D",
+        "text": "df.groupBy(\"ProductKey\").count().sort(\"count\", ascending=True).show()"
+      }
+    ],
+    "correctOptionId": "C",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "Microsoft Fabric Architecture",
+    "difficulty": "Medium",
+    "explanation": "GroupBy will group the data per ProductKey, and then count will return the total number of records for each ProductKey. Next, we sort the data per total number of records in descending order, and finally display the DataFrame results.",
+    "msLearnUrl": "https://learn.microsoft.com/training/modules/use-apache-spark-work-files-lakehouse/",
+    "msLearnTitle": "Microsoft Learn - Microsoft Fabric Architecture",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-70a00808b2",
+    "type": "multi_select",
+    "text": "You are profiling the data stored in a Fabric lakehouse.\nYou run the following statement.\ndf.describe().show()\nWhich three functions will be included in the results for the numeric data? Each correct answer presents a complete solution.",
+    "options": [
+      {
+        "id": "A",
+        "text": "DISTINCTCOUNT"
+      },
+      {
+        "id": "B",
+        "text": "TOP"
+      },
+      {
+        "id": "C",
+        "text": "COUNT"
+      },
+      {
+        "id": "D",
+        "text": "STDDEV (standard deviation)"
+      },
+      {
+        "id": "E",
+        "text": "MEAN"
+      }
+    ],
+    "correctOptionId": "C",
+    "correctOptionIds": [
+      "C",
+      "D",
+      "E"
+    ],
+    "selectCount": 3,
+    "domain": "domain2",
+    "topic": "Microsoft Fabric Architecture",
+    "difficulty": "Hard",
+    "explanation": "describe is used to generate descriptive statistics of the DataFrame. For numeric data, results include COUNT*,* MEAN*,* STD*,* MIN*,* and MAX, while for object data it will also include TOP, UNIQUE, and FREQ.",
+    "msLearnUrl": "https://learn.microsoft.com/training/modules/get-started-lakehouses/4-explore-data-lakehouse",
+    "msLearnTitle": "Microsoft Learn - Microsoft Fabric Architecture",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-31deb8b7e8",
+    "type": "multiple_choice",
+    "text": "You have a Fabric tenant that contains a lakehouse.\nYou plan to use a Fabric notebook and PySpark to read sales data and save the data as a Delta table named Sales. The table must be partitioned by Sales Year and Quarter.\nYou load the sales data to a DataFrame named df that contains a Year column and a Quarter column.\nWhich command should you run next?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Execute OPTIMIZE with V-Order enabled on the Delta table."
+      },
+      {
+        "id": "B",
+        "text": "df.write.mode(\"overwrite\").format(\"delta\").partitionBy(\"Year\",\"Quarter\").save(\"Tables/Sales\")"
+      },
+      {
+        "id": "C",
+        "text": "Partition the Delta table by transaction date key."
+      },
+      {
+        "id": "D",
+        "text": "Run VACUUM with a retention period of 168 hours."
+      }
+    ],
+    "correctOptionId": "B",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "PySpark Transformations",
+    "difficulty": "Medium",
+    "explanation": "To save a DataFrame in the Delta format, you must use format(\u201cdelta\u201d). While a DataFrame can be saved to the Files section of a lakehouse, it will not be considered a table.",
+    "msLearnUrl": "https://learn.microsoft.com/fabric/data-engineering/tutorial-lakehouse-data-preparation",
+    "msLearnTitle": "Microsoft Learn - PySpark Transformations",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-b36853a70c",
+    "type": "multiple_choice",
+    "text": "You have a Fabric workspace that contains a Microsoft Power BI report.\nYou need to modify the column names in the Power BI report without changing the original names in the underlying Delta table.\nWhich warehouse object should you create?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Run VACUUM with a retention period of 168 hours."
+      },
+      {
+        "id": "B",
+        "text": "Partition the Delta table by transaction date key."
+      },
+      {
+        "id": "C",
+        "text": "Execute OPTIMIZE with V-Order enabled on the Delta table."
+      },
+      {
+        "id": "D",
+        "text": "view"
+      }
+    ],
+    "correctOptionId": "D",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "Git Integration & CI/CD",
+    "difficulty": "Medium",
+    "explanation": "A view provides a convenient way to encapsulate additional query logic, such as renaming columns, filtering, aggregating, etc. Views contain only a query definition and do not change the underlying tables.",
+    "msLearnUrl": "https://learn.microsoft.com/sql/t-sql/statements/create-view-transact-sql?view=sql-server-ver16",
+    "msLearnTitle": "Microsoft Learn - Git Integration & CI/CD",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-a0912fb7ca",
+    "type": "multiple_choice",
+    "text": "You have a Fabric lakehouse named Lakehouse1.\nYou use a notebook in Lakehouse1 to explore customer data.\nYou need to identify the rows of a DataFrame named df_customers in which any of the columns (axis 1 of the DataFrame) are NULL.\nWhich statement should you run?",
+    "options": [
+      {
+        "id": "A",
+        "text": "df_customers[df_customers.isna().all(axis=1)]"
+      },
+      {
+        "id": "B",
+        "text": "df_customers.dropna(subset=['customer_id'], how='any')"
+      },
+      {
+        "id": "C",
+        "text": "df_customers.filter(df_customers.isnull().any())"
+      },
+      {
+        "id": "D",
+        "text": "df_customers[df_customers.isnull().any(axis=1)]"
+      }
+    ],
+    "correctOptionId": "D",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain2",
+    "topic": "Microsoft Fabric Architecture",
+    "difficulty": "Medium",
+    "explanation": "The isnull() method identifies which individual values are NULL. To see these individual values in context, you should filter the DataFrame to include only rows in which any of the columns (axis 1 of the DataFrame) are NULL.",
+    "msLearnUrl": "https://learn.microsoft.com/training/modules/explore-analyze-data-with-python/3-exercise-explore-data",
+    "msLearnTitle": "Microsoft Learn - Microsoft Fabric Architecture",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-08892d0360",
+    "type": "multiple_choice",
+    "text": "You have a Fabric data warehouse that contains two tables named dbo.FactSales and dbo.DimCustomer. The tables contain the following columns:\ndbo.FactSales:\nOrderID\nCustomerKey\nSalesAmount\ndbo.DimCustomer:\nCustomerKey\nRegion\nStakeholders require a reusable dataset that returns one row per region with:\nTotalSales = sum of SalesAmount\nOrderCount = count of OrderID\nYou create the query in the visual query editor.\nYou need the result to be referenced like a table in future queries by all workspace users, without requiring the users to write SQL.\nWhat should you do in the visual query editor?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Create an Amazon S3 shortcut in the Lakehouse Files section."
+      },
+      {
+        "id": "B",
+        "text": "Save the query as a view."
+      },
+      {
+        "id": "C",
+        "text": "Create an internal OneLake shortcut to the target table."
+      },
+      {
+        "id": "D",
+        "text": "Create an external OneLake shortcut to Azure Data Lake Storage Gen2."
+      }
+    ],
+    "correctOptionId": "B",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "Fabric Warehouse & T-SQL",
+    "difficulty": "Medium",
+    "explanation": "Objective: 2.3 Query and analyze data What This Item Tests: Select, filter, and aggregate data by using the Visual Query Editor Additional Reading: Rationale: Saving the query as a view creates a reusable database object that other users can reference like a table in future queries without needing to write or maintain SQL themselves. Saving the query as a table materializes the result and requires a managing refresh or reprocessing rather than dynamically reflecting the source data. Saving SQL in My queries stores the script for only the current user and does not create a shared dataset object. Data preview only displays results in the editor and cannot be referenced in other queries.",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/training/modules/get-started-data-warehouse/4-query-transform-data",
+    "msLearnTitle": "Microsoft Learn - Fabric Warehouse & T-SQL",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-93edd694e2",
+    "type": "multiple_choice",
+    "text": "You have a Fabric semantic model that contains a fact table named Sales. Sales contains one row per transaction line and the following columns:\nSales[OrderDate]\nSales[Quantity]\nSales[Price]\nSales[Cost]\nYou need to create a DAX measure named Total Profit that meets the following requirements:\nCalculates profit per transaction line\nAggregates correctly when used in visuals sliced by fields such as product and date\nWhich expression should you use?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Total Profit = SUMX(Sales, Sales[Quantity] * (Sales[Price] - Sales[Cost]))"
+      },
+      {
+        "id": "B",
+        "text": "Total Profit = SUM(Sales[Quantity]) * (SUM(Sales[Price]) - SUM(Sales[Cost]))"
+      },
+      {
+        "id": "C",
+        "text": "Total Profit = CALCULATE(Sales[Quantity] * (Sales[Price] - Sales[Cost]))"
+      },
+      {
+        "id": "D",
+        "text": "Total Profit = AVERAGEX(Sales, Sales[Quantity] * (Sales[Price] - Sales[Cost]))"
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain3",
+    "topic": "DAX & Modeling",
+    "difficulty": "Medium",
+    "explanation": "Objective: 2.3 Query and analyze data What This Item Tests: Select, filter, and aggregate data by using DAX Additional Reading: Rationale: SUMX iterates over each row in the Sales table, calculates the profit for each transaction line (Quantity * (Price \u2212 Cost)), and then aggregates the results. This ensures that the measure calculates correctly when filtered by dimensions such as product or date. Option A multiplies aggregated values, which produces incorrect results when quantities, prices, and costs vary across rows. Option C uses FILTER, which returns a table rather than a scalar measure result. Option D uses COUNTROWS, which counts rows instead of calculating profit.",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/training/modules/design-scalable-semantic-models/5-dax-optimizations",
+    "msLearnTitle": "Microsoft Learn - DAX & Modeling",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-66ee9ace88",
+    "type": "multiple_choice",
+    "text": "You have a Fabric warehouse that contains a table named customer_info. The table contains the following columns:\ncustomer_id\nname\nemail\njoin_date\nThe warehouse also contains a table named order_info. The table contains the following columns:\norder_id\ncustomer_id\norder_total\norder_date\nYou need to write a SQL query that returns all the customers who have not yet placed an order (purchased).\nWhich SQL query should you run?",
+    "options": [
+      {
+        "id": "A",
+        "text": "SELECT name FROM customer_info WHERE customer_id IN ( SELECT customer_id FROM order_info )"
+      },
+      {
+        "id": "B",
+        "text": "SELECT name FROM customer_info INNER JOIN order_info ON customer_info.customer_id = order_info.customer_id WHERE order_info.order_id IS NULL"
+      },
+      {
+        "id": "C",
+        "text": "SELECT name FROM customer_info LEFT JOIN order_info ON customer_info.customer_id = order_info.customer_id WHERE order_info.order_id IS NULL"
+      },
+      {
+        "id": "D",
+        "text": "SELECT customer_info.name FROM customer_info JOIN order_info ON customer_info.customer_id = order_info.customer_id WHERE order_info.order_id IS NOT NULL"
+      }
+    ],
+    "correctOptionId": "C",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain2",
+    "topic": "Fabric Warehouse & T-SQL",
+    "difficulty": "Medium",
+    "explanation": "FROM customer_info LEFT JOIN order_info ON customer_info.customer_id = order_info.customer_id WHERE order_info.order_id IS NULL The following SQL statement only returns a list of customers for whom the customer_ID was not found in the order_info table. The WHERE clause of order_info is NULL, which means that the customers have no orders found in the order_info table. SELECT name FROM customer_info LEFT JOIN order_info ON customer_info.customer_id = order_info.customer_id WHERE order_info.order_id IS NULL The two following SQL statements only return customers who made purchases. SELECT name FROM customer_info INNER JOIN order_info ON customer_info.customer_id = order_info.customer_id WHERE order_info.order_id IS NULL SELECT name FROM customer_info WHERE customer_id IN ( SELECT customer_id FROM order_info ) This following SQL statement returns the names of customers who made purchases. SELECT customer_info.name FROM customer_info JOIN order_info ON customer_info.customer_id = order_info.customer_id WHERE order_info.order_id IS NOT NULL",
+    "msLearnUrl": "https://learn.microsoft.com/sql/relational-databases/performance/joins?view=sql-server-ver16",
+    "msLearnTitle": "Microsoft Learn - Fabric Warehouse & T-SQL",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-6c2f612bdc",
+    "type": "multiple_choice",
+    "text": "You have a Fabric warehouse that contains the following tables:\nTrip (TripDateID, PassengerCount)\nDate (DateID, Day, Month, Quarter, Year)\nYou plan to use the visual Query Editor in Warehouse explorer to write a SQL statement that summarizes the number of passengers by year.\nWhich transformations should you use?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Create a stored procedure in the Fabric data warehouse."
+      },
+      {
+        "id": "B",
+        "text": "Use T-SQL CREATE TABLE AS SELECT (CTAS) to rebuild the table."
+      },
+      {
+        "id": "C",
+        "text": "Create a SQL view in the data warehouse."
+      },
+      {
+        "id": "D",
+        "text": "Choose Merge queries to join Trip and Date, and then use GroupBy."
+      }
+    ],
+    "correctOptionId": "D",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain2",
+    "topic": "Fabric Warehouse & T-SQL",
+    "difficulty": "Medium",
+    "explanation": "The Merge transformation joins two tables. The Append transformation performs an equivalent of a union in SQL. Once two tables are joined, you must select the required columns from the second table by clicking the Expand icon in front of the table in the result set. The final step can be achieved by using a GroupBy transformation.",
+    "msLearnUrl": "https://learn.microsoft.com/fabric/data-warehouse/tutorial-visual-query",
+    "msLearnTitle": "Microsoft Learn - Fabric Warehouse & T-SQL",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-0a90c711ed",
+    "type": "multiple_choice",
+    "text": "Your company uses Microsoft Fabric to manage a data warehouse. The team analyzes sales data by filtering and aggregating it based on specific criteria.\nYou need to perform the analysis without writing any code.\nWhat should you do to achieve this?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Use the visual query editor in Microsoft Fabric."
+      },
+      {
+        "id": "B",
+        "text": "Connect the Fabric workspace to the Azure DevOps Git repository."
+      },
+      {
+        "id": "C",
+        "text": "Create a personal development branch in Azure DevOps."
+      },
+      {
+        "id": "D",
+        "text": "Configure deployment pipeline rules for data sources."
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "Dataflows Gen2",
+    "difficulty": "Medium",
+    "explanation": "Using the visual query editor in Microsoft Fabric is the best approach because it enables data filtering and aggregation without the need for SQL, aligning with the requirement to avoid coding. Using Dataflow Gen2 or Power BI, while possible, is not the most efficient method for direct data manipulation within Microsoft Fabric. Pipelines are used to orchestrate data movement and processes and are not meant for data analysis.",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/training/modules/query-data-warehouse-microsoft-fabric/4-explore-visual-query-editor",
+    "msLearnTitle": "Microsoft Learn - Dataflows Gen2",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-f0ba06d450",
+    "type": "multi_select",
+    "text": "Your company wants to analyze sales data in a Microsoft Fabric data warehouse. You decide to use the visual query editor for this task.\nYou need to identify top customers by sales volume by combining data from 'Sales' and 'Customer' tables.\nWhich three actions should you take to achieve this goal? Each correct answer contributes to the solution.",
+    "options": [
+      {
+        "id": "A",
+        "text": "Create a stored procedure in the Fabric data warehouse."
+      },
+      {
+        "id": "B",
+        "text": "Add 'Sales' and 'Customer' tables to canvas."
+      },
+      {
+        "id": "C",
+        "text": "Identify common key column in both tables."
+      },
+      {
+        "id": "D",
+        "text": "Use T-SQL CREATE TABLE AS SELECT (CTAS) to rebuild the table."
+      },
+      {
+        "id": "E",
+        "text": "Merge tables using 'Merge queries as new'."
+      }
+    ],
+    "correctOptionId": "B",
+    "correctOptionIds": [
+      "B",
+      "C",
+      "E"
+    ],
+    "selectCount": 3,
+    "domain": "domain2",
+    "topic": "Fabric Warehouse & T-SQL",
+    "difficulty": "Hard",
+    "explanation": "To effectively combine data from 'Sales' and 'Customer' tables, add 'Sales' table to canvas to initiate the query process. Identify a common key column in both tables to ensure accurate data merging, allowing for correct table joining. Use 'Merge queries as new' to join tables based on this common key, facilitating comprehensive data analysis. Using 'Append queries' instead of 'Merge queries' is ineffective for merging data based on a common key, as it only adds rows. Similarly, using 'Save as view' before merging is unnecessary, as this action is typically performed after the query is complete.",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/training/modules/query-data-warehouse-microsoft-fabric/4-explore-visual-query-editor",
+    "msLearnTitle": "Microsoft Learn - Fabric Warehouse & T-SQL",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-fd40e8c00b",
+    "type": "multiple_choice",
+    "text": "You have a Fabric workspace that contains a KQL database with a table named requests. The table contains the following columns:\ntimestamp (datetime)\nsuccess (bool)\nduration (real)\ncloud_RoleName (string)\nYou need to write a KQL query that returns results from the last 24 hours. The query must meet the following requirements.:\nInclude one row per hour per cloud role.\nInclude the number of failed requests.\nInclude the average duration of failed requests.\nWhich query should you use?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Implement column-level security (CLS)."
+      },
+      {
+        "id": "B",
+        "text": "requests| where timestamp &gt; ago(24h)| where success == false| summarize failedCount = count(), avgDuration = avg(duration) by bin(timestamp, 1h), cloud_RoleName"
+      },
+      {
+        "id": "C",
+        "text": "requests| where timestamp &gt; ago(24h)| where success == false| project timestamp, cloud_RoleName, failedCount = count(), avgDuration = avg(duration)| summarize by bin(timestamp, 1h), cloud_RoleName"
+      },
+      {
+        "id": "D",
+        "text": "Configure dynamic data masking (DDM)."
+      }
+    ],
+    "correctOptionId": "B",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "Real-Time Intelligence (KQL)",
+    "difficulty": "Medium",
+    "explanation": "Objective: 2.3 Query and analyze data What This Item Tests: Select, filter, and aggregate data by using KQL Additional Reading: Rationale: The correct query filters the last 24 hours of data, filters failed requests (success == false), and uses summarize with bin(timestamp, 1h) and cloud_RoleName to return one row per hour per service, including the count of failed requests and the average duration. Filtering after aggregation (option B) is invalid because success is unavailable after summarize. Option C incorrectly attempts to compute aggregates inside the project, which does not support aggregation functions. Option D aggregates only by service and does not produce hourly results.",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/training/modules/analyze-telemetry-logs-metrics/2-write-basic-kql-queries",
+    "msLearnTitle": "Microsoft Learn - Real-Time Intelligence (KQL)",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-779e284af9",
+    "type": "multiple_choice",
+    "text": "You have a Fabric tenant that contains a workspace named Workspace1. Workspace1 is assigned to an F64 capacity and contains a lakehouse. The lakehouse contains one billion historical sales records and receives up to 10,000 new or updated sales records throughout the day at 15-minute intervals.\nYou plan to build a custom Microsoft Power BI semantic model and Power BI reports from the data. The solution must provide the best report performance while supporting near-real-time (NRT) data reporting.\nWhich Power BI semantic model storage mode should you use?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Dual (Composite)"
+      },
+      {
+        "id": "B",
+        "text": "DirectQuery"
+      },
+      {
+        "id": "C",
+        "text": "Import"
+      },
+      {
+        "id": "D",
+        "text": "Direct Lake"
+      }
+    ],
+    "correctOptionId": "D",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "Direct Lake Mode",
+    "difficulty": "Medium",
+    "explanation": "Direct Lake storage mode provides NRT access to data, while providing performance close to Import storage mode and much better performance than DirectQuery. DirectQuery provides NRT access to data, but queries can run slowly when working with large datasets. Import produces fast performance; however, it requires data to be loaded to the memory of Power BI and will not provide NRT. Direct Lake tables cannot currently be mixed with other table types, such as Import, DirectQuery, or Dual, in the same model. Composite models are not yet supported.",
+    "msLearnUrl": "https://learn.microsoft.com/power-bi/enterprise/directlake-overview",
+    "msLearnTitle": "Microsoft Learn - Direct Lake Mode",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-4801ec940b",
+    "type": "multiple_choice",
+    "text": "You have a Fabric workspace and a Microsoft Power BI semantic model that contains the following tables:\nSales (ProductKey,CustomerKey,DateKey,SalesAmont)\nProduct (ProductKey,ProductName,ProductCategory)\nDate (DateKey,Date,Month,Year)\nCustomer (CustomerKey,CustmomerName,CustomerCity)\nThe Product table has a 1-to-many relationship with the Sales table based on ProductKey.\nThe Customer table has a 1-to-many relationship with the Sales table based on CustomerKey.\nThe Date table has a 1-to-many relationship with the Sales table based on DateKey.\nYou need to create a Power BI report so that end users can use a one column chart to analyze SalesAmount by ProductCategory or Year or CustomerCity. The solution must minimize development effort.\nWhat should you do?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Create a Calculation Group in Tabular Editor that switches the chart axis dynamically."
+      },
+      {
+        "id": "B",
+        "text": "Set up a Fields parameter with ProductCategory, Year, and CustomerCity. Use the Fields parameter in the visual."
+      },
+      {
+        "id": "C",
+        "text": "Create three duplicate column chart visuals and configure buttons with bookmarks to toggle visual visibility."
+      },
+      {
+        "id": "D",
+        "text": "Create three separate calculated tables, one for each dimension attribute, and relate each to Sales."
+      }
+    ],
+    "correctOptionId": "B",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "Git Integration & CI/CD",
+    "difficulty": "Medium",
+    "explanation": "While you can use bookmarks to navigate between report pages or change the visibility of visuals, using the Fields parameter is a much easier and more efficient way of allowing an end-user to change the fields on a visual. Developing a custom visual with built-in buttons to switch the items on the axis, involves extra development effort.",
+    "msLearnUrl": "https://learn.microsoft.com/power-bi/transform-model/desktop-what-if",
+    "msLearnTitle": "Microsoft Learn - Git Integration & CI/CD",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-64b344e11c",
+    "type": "multiple_choice",
+    "text": "You are working on a Microsoft Power BI report based on a Power BI semantic model that contains the following tables:\nSales (SalesAmount,OrderDateKey,ShipDateKey)\nDate (DateKey, Date, Month, Quarter, Year)\nYou have connected the Date table to the Sales table on DateKey to OrderDateKey with a 1-to-many active relationship. You have connected the Date table to the Sales table on DateKey to ShipDateKey with a 1-to-many inactive relationship.\nYou need to create two measures that calculate Sales Amount Ordered and Sales Amount Shipped so that you can place them side-by-side in a table visual and analyze them by Year.\nHow should you create the measures?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Sales Ordered ="
+      },
+      {
+        "id": "B",
+        "text": "Assign users the workspace Contributor role."
+      },
+      {
+        "id": "C",
+        "text": ")"
+      },
+      {
+        "id": "D",
+        "text": "Create Microsoft Entra security groups for role assignment."
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain3",
+    "topic": "Git Integration & CI/CD",
+    "difficulty": "Medium",
+    "explanation": "SUM ( 'Sales'[SalesAmount] ) Sales Shipped = CALCULATE ( SUM ( 'Sales'[SalesAmount] ), USERELATIONSHIP ( 'Date'[DateKey], 'Sales'[ShipDateKey] ) ) In this example, the Date dimension is a role-playing dimension. Sales has an active relationship with Date based on OrderedDate, which means that Sales Amount based on Order Date can be calculated by a simple SUM function. Sales has an inactive relationship with Date based on ShippedDate. To create calculations based on inactive relationships, you can use the USERELATIONSHIP function and specify the two columns that are used in the existing inactive relationship. The RELATED function returns a value from \"one\" side of a relationship.",
+    "msLearnUrl": "https://learn.microsoft.com/power-bi/guidance/relationships-active-inactive",
+    "msLearnTitle": "Microsoft Learn - Git Integration & CI/CD",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-925afe6eb0",
+    "type": "multi_select",
+    "text": "You are developing a large Microsoft Power BI semantic model that will contain a fact table. The table will contain 400 million rows.\nYou plan to leverage user-defined aggregations to speed up the performance of the most frequently run queries.\nYou need to confirm that the queries are mapped to aggregated data in the tables.\nWhich two tools should you use? Each correct answer presents part of the solution.",
+    "options": [
+      {
+        "id": "A",
+        "text": "DAX Studio"
+      },
+      {
+        "id": "B",
+        "text": "Tabular Editor"
+      },
+      {
+        "id": "C",
+        "text": "SQL Profiler"
+      },
+      {
+        "id": "D",
+        "text": "Performance Analyzer in Power BI Desktop"
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": [
+      "A",
+      "C"
+    ],
+    "selectCount": 2,
+    "domain": "domain3",
+    "topic": "DAX & Modeling",
+    "difficulty": "Hard",
+    "explanation": "SQL Server Profiler and DAX Studio can detect whether queries were returned from the in-memory cache storage engine or pushed by DirectQuery to the data source.",
+    "msLearnUrl": "https://learn.microsoft.com/power-bi/transform-model/aggregations-advanced#detect-whether-queries-hit-or-miss-aggregations",
+    "msLearnTitle": "Microsoft Learn - DAX & Modeling",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-5c6237457d",
+    "type": "multiple_choice",
+    "text": "You use Tabular Editor 2 to perform advanced data processing of the largest tables in a Microsoft Power BI semantic model.\nYou need to load data to a table without rebuilding hierarchies and relationships and without recalculating calculated columns and measures.\nWhich process mode should you use?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Use Direct Lake mode with Delta Lake V-Order optimization."
+      },
+      {
+        "id": "B",
+        "text": "Process Default"
+      },
+      {
+        "id": "C",
+        "text": "Switch the semantic model to Import mode with scheduled refresh."
+      },
+      {
+        "id": "D",
+        "text": "Process Data"
+      }
+    ],
+    "correctOptionId": "D",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain3",
+    "topic": "Tabular Editor & Optimization",
+    "difficulty": "Medium",
+    "explanation": "Process Data loads data to a table without rebuilding hierarchies or relationships or recalculating calculated columns and measures. With Process Default, hierarchies, calculated columns, and relationships are built or rebuilt (recalculated). Process Defrag defragments the auxiliary table indexes, while Process Recalc recalculates hierarchies, relationships, and calculated columns on a database level.",
+    "msLearnUrl": "https://learn.microsoft.com/analysis-services/tabular-models/process-database-table-or-partition-analysis-services?view=asallproducts-allversions",
+    "msLearnTitle": "Microsoft Learn - Tabular Editor & Optimization",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-f64db84e3e",
+    "type": "multiple_choice",
+    "text": "You are designing a dimension table named dimCustomer that will be used to analyze historical sales data by customer zip code. The table will be joined to a table named FactSales on a column named CustomerKey to report historical sales data by customer zip code.\nThe sales data must be reported based on the zip codes of customers at the time of the sale, not their most recent zip code.\nYou need to design dimCustomer to contain a fixed number of columns.\nWhich type of dimension should you choose for dimCustomer?",
+    "options": [
+      {
+        "id": "A",
+        "text": "type 2 slowly changing dimension (SCD)"
+      },
+      {
+        "id": "B",
+        "text": "Use Direct Lake mode with Delta Lake V-Order optimization."
+      },
+      {
+        "id": "C",
+        "text": "Configure DirectQuery mode pointing to the SQL analytics endpoint."
+      },
+      {
+        "id": "D",
+        "text": "Switch the semantic model to Import mode with scheduled refresh."
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain3",
+    "topic": "Git Integration & CI/CD",
+    "difficulty": "Medium",
+    "explanation": "Type 0 SCD attributes never change and will not fit the requirement. Type 1 SCD overwrites the changes and historical analysis of data based on the zip code at the time of the sales will be impossible. Type 2 SCD will keep track of historical data by adding new records with new keys whenever an attribute changes. Type 3 SCD adds new columns to a table for attribute changes.",
+    "msLearnUrl": "https://learn.microsoft.com/training/modules/load-data-into-microsoft-fabric-data-warehouse/2-explore-data-load-strategies",
+    "msLearnTitle": "Microsoft Learn - Git Integration & CI/CD",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-b3d5b0053a",
+    "type": "multiple_choice",
+    "text": "You have a Fabric warehouse named Warehouse1 that contains customer status information.\nYou plan to implement a dimensional model in Warehouse1. The solution must meet the following requirements:\nBe able to perform point-in-time analysis.\nWhenever a customer\u2019s status changes, the change must be persisted in a table named DimCustomer, and a new row is added to include the timestamp of the status change.\nWhich type of dimension should you choose for dimCustomer?",
+    "options": [
+      {
+        "id": "A",
+        "text": "type 2 slowly changing dimension (SCD)"
+      },
+      {
+        "id": "B",
+        "text": "Use T-SQL CREATE TABLE AS SELECT (CTAS) to rebuild the table."
+      },
+      {
+        "id": "C",
+        "text": "type 3 slowly changing dimension (SCD)"
+      },
+      {
+        "id": "D",
+        "text": "Create a stored procedure in the Fabric data warehouse."
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain3",
+    "topic": "Fabric Warehouse & T-SQL",
+    "difficulty": "Medium",
+    "explanation": "Type 2 SCD keeps multiple versions of the same business entity, by adding a new row whenever change occurs. It\u2019s often implemented by including a timestamp to allow for point-in-time analysis. Type 1 SCD overwrites the previous value with the new one. Type 0 SCD doesn\u2019t track changes at all, whereas Type 3 SCD stores two versions of the dimension member as separate columns.",
+    "msLearnUrl": "https://learn.microsoft.com/training/modules/populate-slowly-changing-dimensions-azure-synapse-analytics-pipelines/3-choose-between-dimension-types",
+    "msLearnTitle": "Microsoft Learn - Fabric Warehouse & T-SQL",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-254cd6966d",
+    "type": "multiple_choice",
+    "text": "You have the following measure that you are reviewing as part of a model audit.\nRANKX( ALL( 'Product'[Product Name] ), [Sales],, DESC, Skip )\nYou need to identify what the measure is calculating.\nWhich statement accurately describes the DAX measure?",
+    "options": [
+      {
+        "id": "A",
+        "text": "ranks the product names by Sales in descending order, assigning consecutive dense rank values without skipping after ties"
+      },
+      {
+        "id": "B",
+        "text": "ranks the product names by Sales in ascending order, with smallest sales receiving rank 1 and skipping rank values after ties"
+      },
+      {
+        "id": "C",
+        "text": "ranks the product names by Sales in descending order, evaluated against the existing report filter context rather than ALL products"
+      },
+      {
+        "id": "D",
+        "text": "ranks the product names by Sales, with the largest values getting the smallest (e.g. 1,2,3) ranks, and when product names have tied values, then the next rank value, after a tie, is the rank value of the tie plus the count of tied values"
+      }
+    ],
+    "correctOptionId": "D",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain3",
+    "topic": "DAX & Modeling",
+    "difficulty": "Medium",
+    "explanation": "The DAX measure ranks the product names by Sales, with the largest values getting the smallest (e.g. 1,2,3) ranks, and when product names have tied values, then the next rank value, after a tie, is the rank value of the tie plus the count of tied values",
+    "msLearnUrl": "https://learn.microsoft.com/dax/rankx-function-dax",
+    "msLearnTitle": "Microsoft Learn - DAX & Modeling",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-789fbb544a",
+    "type": "multiple_choice",
+    "text": "You have a Fabric warehouse that contains the following tables:\nCustomer\nDate\nProduct\nStore\nSalesTransactions\nYou are building a Microsoft Power BI semantic model that must support filtering and grouping by product, customer, store, and date.\nYou need to implement a star schema that improves query performance and summarizes measures by related descriptive attributes.\nWhich table should you configure as the fact table?",
+    "options": [
+      {
+        "id": "A",
+        "text": "SalesTransactions"
+      },
+      {
+        "id": "B",
+        "text": "Customer"
+      },
+      {
+        "id": "C",
+        "text": "Date"
+      },
+      {
+        "id": "D",
+        "text": "Product"
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain3",
+    "topic": "Fabric Warehouse & T-SQL",
+    "difficulty": "Medium",
+    "explanation": "Objective: 3.1 Design and build semantic models What This Item Tests: Implement a star schema for a semantic model Additional Reading: Rationale: SalesTransactions should be the fact table because it contains the transactional events and additive measures, such as Quantity and SalesAmount, along with foreign keys to descriptive entities such as product, customer, store, and date. DimProduct, DimCustomer, and DimDate should be dimension tables because they store descriptive attributes used to filter and group the facts rather than the transactional measures themselves.",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/fabric/data-warehouse/dimensional-modeling-overview#star-schema-design",
+    "msLearnTitle": "Microsoft Learn - Fabric Warehouse & T-SQL",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-7b32583a7a",
+    "type": "multiple_choice",
+    "text": "You have a Fabric lakehouse.\nYou are building a semantic model for a sales dataset.\nReport users require that visuals always reflect the latest data in the lakehouse.\nYou need to configure the semantic model.\nWhich storage mode should you use?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Import"
+      },
+      {
+        "id": "B",
+        "text": "Dual (Composite)"
+      },
+      {
+        "id": "C",
+        "text": "Direct Lake"
+      },
+      {
+        "id": "D",
+        "text": "DirectQuery"
+      }
+    ],
+    "correctOptionId": "C",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain3",
+    "topic": "Direct Lake Mode",
+    "difficulty": "Medium",
+    "explanation": "Objective: 3.1 Design and build semantic models What This Item Tests: Choose a storage mode Additional Reading: Rationale: Direct Lake enables a semantic model to query Delta tables stored in OneLake directly, without importing data into the model and without relying on scheduled refresh. Queries read the latest data from the lakehouse while maintaining high performance because the engine reads the Delta files directly. Import storage mode loads data into the semantic model and requires a refresh to reflect the changes. DirectQuery sends queries to the underlying data source at runtime but is typically used for relational sources rather than directly scanning Delta tables in OneLake. Composite models combine storage modes but are not required when the goal is to query lakehouse Delta tables directly without importing data.",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/training/modules/design-scalable-semantic-models/2-storage-modes",
+    "msLearnTitle": "Microsoft Learn - Direct Lake Mode",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-2ef0eb99fa",
+    "type": "multiple_choice",
+    "text": "You have an Azure SQL database.\nYou have a Microsoft Power BI report connected to a semantic model that uses a DirectQuery connection to the database.\nYou need to reduce the number of queries sent to the database when a user is interacting with the report by using filters and/or slicers.\nWhat should you do?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Change default visual interaction from cross highlighting to cross filtering."
+      },
+      {
+        "id": "B",
+        "text": "Enable auto-aggregations on the DirectQuery tables in Power BI Desktop."
+      },
+      {
+        "id": "C",
+        "text": "Add apply buttons to all the basic filters."
+      },
+      {
+        "id": "D",
+        "text": "Switch the semantic model to Import mode with scheduled refresh."
+      }
+    ],
+    "correctOptionId": "C",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain3",
+    "topic": "Git Integration & CI/CD",
+    "difficulty": "Medium",
+    "explanation": "Adding apply buttons will pause all requests to the Azure SQL database until you finalize your filter and/or slicer selections. Then a single request can be sent once the apply button is selected. The other options will not change the number of unique query requests sent to the database.",
+    "msLearnUrl": "https://learn.microsoft.com/power-bi/create-reports/buttons-apply-all-clear-all-slicers?tabs=powerbi-desktop",
+    "msLearnTitle": "Microsoft Learn - Git Integration & CI/CD",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-ef43aa5b8a",
+    "type": "multiple_choice",
+    "text": "You have a Microsoft Power BI semantic model assigned to you for ownership and maintenance.\nYou need to perform an audit on the model to identify and resolve potential performance or design issues.\nWhich Tabular Editor tool should you use?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Best Practices Analyzer"
+      },
+      {
+        "id": "B",
+        "text": "Use T-SQL CREATE TABLE AS SELECT (CTAS) to rebuild the table."
+      },
+      {
+        "id": "C",
+        "text": "Create a stored procedure in the Fabric data warehouse."
+      },
+      {
+        "id": "D",
+        "text": "Create a SQL view in the data warehouse."
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain3",
+    "topic": "Tabular Editor & Optimization",
+    "difficulty": "Medium",
+    "explanation": "Only Best Practices Analyzer lets you specify a ruleset to review the model and multiple options for quick fixes by using C# scripts.",
+    "msLearnUrl": "https://learn.microsoft.com/power-bi/transform-model/desktop-external-tools",
+    "msLearnTitle": "Microsoft Learn - Tabular Editor & Optimization",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-7ea9fbbdb2",
+    "type": "multiple_choice",
+    "text": "You have a Fabric tenant that contains a workspace named Workspace1. Workspace1 contains a lakehouse named Lakehouse1.\nYou open a notebook in Lakehouse1 and attach it to a Spark session.\nYou plan to start a new notebook in Lakehouse1 and attach it to the same Spark session. However, you notice that the New high concurrency session option is unavailable, and the only available option is Standard session.\nYou need to ensure that the high concurrency mode for notebooks is enabled.\nWhere can you check the high concurrency mode?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Workspace settings"
+      },
+      {
+        "id": "B",
+        "text": "Create a Lakehouse shortcut to the source data."
+      },
+      {
+        "id": "C",
+        "text": "Configure an eventstream in Real-Time Intelligence."
+      },
+      {
+        "id": "D",
+        "text": "Use a Fabric PySpark notebook to transform the data."
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "PySpark Transformations",
+    "difficulty": "Medium",
+    "explanation": "The high concurrency mode for Fabric notebooks is set at the workspace level. It is on by default; however, it can be turned off in scenarios where notebooks require dedicated compute resources.",
+    "msLearnUrl": "https://learn.microsoft.com/fabric/data-engineering/configure-high-concurrency-session-notebooks",
+    "msLearnTitle": "Microsoft Learn - PySpark Transformations",
+    "isCustom": true
+  },
+  {
+    "id": "mslearn-bf02f715aa",
+    "type": "multiple_choice",
+    "text": "You have a Fabric workspace that contains a lakehouse named Lakehouse1. Lakehouse1 contains a table named FactSales that is ingested by using a Dataflow Gen2 query.\nThere are several applied steps and transformations applied to FactSales during the ingestion process.\nYou notice that due to the number of Power Query transformations, there are occasional timeout issues for the dataflow.\nYou need to recommend a solution to prevent the timeout issues.\nYou have already confirmed that the query cannot be further optimized and that changing the refresh time does not improve the timeout issues.\nWhich additional action should you recommend?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Partition the Delta table by transaction date key."
+      },
+      {
+        "id": "B",
+        "text": "Execute OPTIMIZE with V-Order enabled on the Delta table."
+      },
+      {
+        "id": "C",
+        "text": "Run VACUUM with a retention period of 168 hours."
+      },
+      {
+        "id": "D",
+        "text": "Create a second dataflow that ingests the FactSales table with no additional transformations, and then connect the original dataflow to transform the FactSales data by using this second dataflow."
+      }
+    ],
+    "correctOptionId": "D",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "Dataflows Gen2",
+    "difficulty": "Medium",
+    "explanation": "It is considered best practice to create a staging first dataflow that ingests the raw data first, and then a second dataflow to transform the data, commonly applied when there are performance or timeout issues for a query.",
+    "msLearnUrl": "https://learn.microsoft.com/power-query/dataflows/best-practices-developing-complex-dataflows",
+    "msLearnTitle": "Microsoft Learn - Dataflows Gen2",
+    "isCustom": true
+  }
+]

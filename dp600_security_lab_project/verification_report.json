@@ -1,0 +1,90 @@
+{
+  "workspace_name": "ws_dp600-prep",
+  "workspace_id": "cfeefa92-730d-43b2-b2b1-9c46826d5807",
+  "folder_name": "dp600-security-lab",
+  "folder_id": "116bb17e-860e-4023-9e3c-badb8787f71a",
+  "lakehouse_name": "SecurityLab_Lakehouse",
+  "lakehouse_id": "c7aa3259-2e37-46de-9f94-bce5b73481e9",
+  "sql_endpoint_host": "4kq2jhmt3otufjmisv75mkjoq4-sl5o5tynoozehmvrtrdie3kya4.datawarehouse.fabric.microsoft.com",
+  "table_name": "Sales",
+  "row_count": 9,
+  "semantic_model_name": "SecurityLab_Model",
+  "semantic_model_id": "f3c62cd4-8d24-4f08-be88-49cd5c8e27c7",
+  "xmla_connection_string": "powerbi://api.powerbi.com/v1.0/myorg/ws_dp600-prep",
+  "admin_user": "fabric-admin-test@velykapet.com",
+  "admin_role": "Admin",
+  "data_sample": [
+    {
+      "SalesID": 1,
+      "Region": "East",
+      "SalesRep": "Alice",
+      "Email": "alice@contoso.com",
+      "Amount": 1200.0,
+      "CommissionPct": 0.05
+    },
+    {
+      "SalesID": 2,
+      "Region": "east",
+      "SalesRep": "alice",
+      "Email": "alice@contoso.com",
+      "Amount": 950.0,
+      "CommissionPct": 0.05
+    },
+    {
+      "SalesID": 3,
+      "Region": "West",
+      "SalesRep": "Bob",
+      "Email": "bob@contoso.com",
+      "Amount": NaN,
+      "CommissionPct": 0.04
+    },
+    {
+      "SalesID": 4,
+      "Region": "WEST",
+      "SalesRep": "Bob",
+      "Email": null,
+      "Amount": 700.0,
+      "CommissionPct": 0.04
+    },
+    {
+      "SalesID": 5,
+      "Region": null,
+      "SalesRep": "Carol",
+      "Email": "carol@contoso.com",
+      "Amount": 1100.0,
+      "CommissionPct": NaN
+    },
+    {
+      "SalesID": 6,
+      "Region": "North",
+      "SalesRep": "Carol",
+      "Email": "carol@contoso.com",
+      "Amount": 640.0,
+      "CommissionPct": 0.03
+    },
+    {
+      "SalesID": 7,
+      "Region": "",
+      "SalesRep": "Dave",
+      "Email": "dave@contoso.com",
+      "Amount": 2200.0,
+      "CommissionPct": 0.06
+    },
+    {
+      "SalesID": 7,
+      "Region": "East",
+      "SalesRep": "Dave",
+      "Email": "dave@contoso.com",
+      "Amount": 2200.0,
+      "CommissionPct": 0.06
+    },
+    {
+      "SalesID": 8,
+      "Region": "West",
+      "SalesRep": "Dave",
+      "Email": "DAVE@CONTOSO.COM",
+      "Amount": 300.0,
+      "CommissionPct": 0.06
+    }
+  ]
+}

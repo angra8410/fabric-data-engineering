@@ -1,0 +1,65 @@
+table Sales
+	lineageTag: a3f1c849-0144-482a-9e73-b2b918a3d461
+	sourceLineageTag: [dbo].[sales]
+
+	column SalesID
+		dataType: int64
+		formatString: 0
+		lineageTag: cb25a911-c918-4ad0-b8e7-13da94a11f2a
+		sourceLineageTag: SalesID
+		summarizeBy: count
+		sourceColumn: SalesID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: 71cf964d-58b1-4fce-bc28-98e3b438cf41
+		sourceLineageTag: Region
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesRep
+		dataType: string
+		lineageTag: dd409f58-cb54-47be-9860-264bc86ef3f2
+		sourceLineageTag: SalesRep
+		summarizeBy: none
+		sourceColumn: SalesRep
+
+		annotation SummarizationSetBy = Automatic
+
+	column Email
+		dataType: string
+		lineageTag: 88849b20-1d88-4ff5-b91c-2c9e782d47aa
+		sourceLineageTag: Email
+		summarizeBy: none
+		sourceColumn: Email
+
+		annotation SummarizationSetBy = Automatic
+
+	column Amount
+		dataType: double
+		lineageTag: ef24aa89-5364-4e94-a1db-496e5797371d
+		sourceLineageTag: Amount
+		summarizeBy: sum
+		sourceColumn: Amount
+
+		annotation SummarizationSetBy = Automatic
+
+	column CommissionPct
+		dataType: double
+		lineageTag: f0e4b7b2-6014-419b-a316-2489c9ad6a15
+		sourceLineageTag: CommissionPct
+		summarizeBy: sum
+		sourceColumn: CommissionPct
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Sales = entity
+		mode: directLake
+		source
+			entityName: sales
+			schemaName: dbo
+			expressionSource: 'DirectLake - SecurityLab_Lakehouse'

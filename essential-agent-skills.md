@@ -107,6 +107,8 @@ Una vez integradas las skills en la rama, puedes interactuar directamente con tu
 | **Actualizar Decisiones** | `"Actualiza decisions.md usando growme con la última reunión de arquitectura"` |
 | **Implementar Nuevo Flujo** | `"Aplica map-pokeout para integrar los nuevos criterios de aceptación de spec.md"` |
 
+| **Entrevista / Prueba de Estrés** | `"Usa grill-me para someter a prueba de estrés mi diseño o consulta SQL"` |
+
 ---
 
 ## 5. Estado Actual del Repositorio
@@ -115,4 +117,5 @@ Una vez integradas las skills en la rama, puedes interactuar directamente con tu
 - **Archivos creados:**
   - [.agents/skills/growme/SKILL.md](file:///c:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/.agents/skills/growme/SKILL.md)
   - [.agents/skills/map-pokeout/SKILL.md](file:///c:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/.agents/skills/map-pokeout/SKILL.md)
+  - [.agents/skills/grill-me/SKILL.md](file:///c:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/.agents/skills/grill-me/SKILL.md)
   - [essential-agent-skills.md](file:///c:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/essential-agent-skills.md)

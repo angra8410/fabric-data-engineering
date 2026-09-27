@@ -5,8 +5,12 @@ import kotlinx.coroutines.flow.Flow
 
 interface BookRepository {
     fun getAllBooks(): Flow<List<Book>>
+    fun getActiveReadingBook(): Flow<Book?>
+    suspend fun getActiveReadingBookSync(): Book?
     suspend fun getBookById(id: Long): Book?
     suspend fun findOrCreateBook(title: String, author: String, providerId: String): Book
     suspend fun insertOrUpdateBook(book: Book): Long
     suspend fun updateBookProgress(bookId: Long, newPage: Int?, addedDurationSeconds: Long?)
+    suspend fun updateBookPosition(bookId: Long, newPosition: Int)
+    suspend fun setActiveReadingBook(bookId: Long)
 }

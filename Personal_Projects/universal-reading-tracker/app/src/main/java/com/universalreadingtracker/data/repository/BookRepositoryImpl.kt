@@ -15,6 +15,14 @@ class BookRepositoryImpl(
         return bookDao.getAllBooks().map { entities -> entities.map { it.toDomain() } }
     }
 
+    override fun getActiveReadingBook(): Flow<Book?> {
+        return bookDao.getActiveReadingBook().map { it?.toDomain() }
+    }
+
+    override suspend fun getActiveReadingBookSync(): Book? {
+        return bookDao.getActiveReadingBookSync()?.toDomain()
+    }
+
     override suspend fun getBookById(id: Long): Book? {
         return bookDao.getBookById(id)?.toDomain()
     }
@@ -39,11 +47,15 @@ class BookRepositoryImpl(
 
     override suspend fun updateBookProgress(bookId: Long, newPage: Int?, addedDurationSeconds: Long?) {
         val existing = bookDao.getBookById(bookId) ?: return
-        val updatedDuration = if (addedDurationSeconds != null) {
-            (existing.currentDurationSeconds ?: 0L) + addedDurationSeconds
-        } else {
-            existing.currentDurationSeconds
-        }
-        bookDao.updateProgress(bookId, newPage ?: existing.currentPage, updatedDuration)
+        val pos = newPage ?: existing.currentPosition
+        bookDao.updatePosition(bookId, pos)
+    }
+
+    override suspend fun updateBookPosition(bookId: Long, newPosition: Int) {
+        bookDao.updatePosition(bookId, newPosition)
+    }
+
+    override suspend fun setActiveReadingBook(bookId: Long) {
+        bookDao.setActiveBook(bookId)
     }
 }

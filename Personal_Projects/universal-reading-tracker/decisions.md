@@ -138,3 +138,22 @@
 - **Consecuencias:**
   - Máxima justicia y precisión en el conteo de tiempo diario y preservación natural de rachas.
 
+---
+
+## [ADR-011] Disparador Inteligente NFC para Kindle Físico (Tap-to-Track)
+- **Fecha:** 2026-09-27
+- **Estado:** Aprobado
+- **Contexto:**
+  El usuario lee exclusivamente en un dispositivo físico Kindle. Para eliminar la necesidad de desbloquear el teléfono o buscar botones en la pantalla, se busca un mecanismo de interacción física instantánea con el dispositivo de lectura.
+- **Decisión Tomada:**
+  Integrar soporte para **Stickers NFC (NTAG213 / NTAG215 / NTAG216)**:
+  1. Uso del URI scheme estándar `readingtracker://kindle`.
+  2. Implementación de una `NfcKindleActivity` transparente que actúa como conmutador (toggle): inicia la sesión si está inactiva y la finaliza si está activa, con respuesta háptica y notificación silenciosa.
+  3. Módulo de escritura NDEF integrado en la app para programar cualquier sticker virgen directamente desde los ajustes.
+- **Alternativas Consideradas:**
+  - *Beacons Bluetooth:* Descartados por requerir hardware activo con batería propia y mayor costo.
+  - *Integración exclusiva por botón/widget:* Válida pero requiere interactuar visualmente con la pantalla del teléfono.
+- **Consecuencias:**
+  - Interacción táctil sin fricción (apoyar el teléfono sobre el Kindle para iniciar/parar lectura) manteniendo la pantalla del teléfono apagada durante la lectura.
+
+

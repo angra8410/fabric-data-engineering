@@ -36,6 +36,12 @@
   - Diálogo rápido opcional:
     - ¿Página o % alcanzado? (ej. inició en pág 120, terminó en pág 145 -> +25 páginas en 40 minutos = 37.5 págs/hora).
     - Notas o reflexiones breves.
+- **RF-11: Disparador Inteligente NFC (Tap-to-Track)**
+  - La app responde al contacto NFC con stickers programados (`readingtracker://kindle`).
+  - Al apoyar el teléfono sobre la funda del Kindle:
+    - Si no hay sesión activa: Inicia la lectura de Kindle con vibración háptica de confirmación.
+    - Si hay sesión activa: Detiene la sesión, guarda el tiempo acumulado y emite vibración de cierre.
+  - La app incluye una herramienta interna para escribir/vincular cualquier sticker virgen (NTAG213/215/216) sin apps externas.
 
 ### C. Módulo Unificado de Consolidación y Métricas
 - **RF-05: Cómputo de Tiempo en Minutos Reales Unificados**

@@ -25,22 +25,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            val isDark = isSystemInDarkTheme()
-            val colorScheme = if (isDark) {
-                darkColorScheme(
-                    primary = Color(0xFFFF9100),
-                    secondary = Color(0xFF03A9F4),
-                    background = Color(0xFF121212),
-                    surface = Color(0xFF1E1E1E)
-                )
-            } else {
-                lightColorScheme(
-                    primary = Color(0xFFE65100),
-                    secondary = Color(0xFF0288D1),
-                    background = Color(0xFFF8F9FA),
-                    surface = Color(0xFFFFFFFF)
-                )
-            }
+            val colorScheme = darkColorScheme(
+                primary = Color(0xFFFF5E36),
+                secondary = Color(0xFF00E5FF),
+                tertiary = Color(0xFFA855F7),
+                background = Color(0xFF090A10),
+                surface = Color(0xFF131522),
+                onBackground = Color(0xFFF1F5F9),
+                onSurface = Color(0xFFF1F5F9)
+            )
 
             MaterialTheme(colorScheme = colorScheme) {
                 val state by viewModel.uiState.collectAsState()

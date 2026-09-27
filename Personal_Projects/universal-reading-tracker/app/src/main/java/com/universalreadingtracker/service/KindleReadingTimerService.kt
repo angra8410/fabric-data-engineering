@@ -56,6 +56,7 @@ class KindleReadingTimerService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
             ACTION_START -> {
+                isRunning = true
                 bookTitle = intent.getStringExtra(EXTRA_BOOK_TITLE) ?: "Libro en Kindle"
                 bookAuthor = intent.getStringExtra(EXTRA_BOOK_AUTHOR) ?: "Autor"
                 startPage = intent.getIntExtra(EXTRA_START_PAGE, -1).takeIf { it >= 0 }
@@ -66,6 +67,7 @@ class KindleReadingTimerService : Service() {
                 startTimer()
             }
             ACTION_STOP -> {
+                isRunning = false
                 val endPage = intent.getIntExtra(EXTRA_END_PAGE, -1).takeIf { it >= 0 }
                 stopTimerAndSaveSession(endPage)
             }
@@ -164,11 +166,13 @@ class KindleReadingTimerService : Service() {
     }
 
     override fun onDestroy() {
+        isRunning = false
         timerJob?.cancel()
         super.onDestroy()
     }
 
     companion object {
+        var isRunning: Boolean = false
         const val CHANNEL_KINDLE_TIMER = "kindle_reading_timer_channel"
         const val NOTIFICATION_ID = 3030
         const val ACTION_START = "com.universalreadingtracker.ACTION_START_KINDLE_TIMER"

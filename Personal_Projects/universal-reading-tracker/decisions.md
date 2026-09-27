@@ -156,4 +156,22 @@
 - **Consecuencias:**
   - Interacción táctil sin fricción (apoyar el teléfono sobre el Kindle para iniciar/parar lectura) manteniendo la pantalla del teléfono apagada durante la lectura.
 
+---
+
+## [ADR-012] Sistema de Diseño Obsidian Luxury y Micro-animaciones Fluidas
+- **Fecha:** 2026-09-27
+- **Estado:** Aprobado
+- **Contexto:**
+  La interfaz estándar basada en tarjetas planas de Material Design resultaba genérica y no reflejaba el valor emocional de una racha de más de 160 días de lectura ininterrumpida ni la experiencia premium esperada por el usuario.
+- **Decisión Tomada:**
+  Adoptar un **Sistema de Diseño Obsidian Luxury** con estética Glassmorphic y micro-animaciones fluidas:
+  1. **Tarjeta Trofeo de Racha (Hero Card):** Fondo titanio oscuro con halo radial cálido de brasa (`Brush.radialGradient`), borde de cristal con reflejo ámbar y llama 3D animada con doble anillo de respiración áurea continua (*breathing halo pulse*).
+  2. **Cuadrícula de Hardware Simétrica:** Altura unificada (172 dp) para Audible y Kindle Físico. Audible integra un ecualizador de 4 bandas armónicas animadas en tiempo real. Kindle Físico integra conmutación de estado háptica a botón carmesí con badge pulsante `EN CURSO`.
+  3. **Píldora NFC Inteligente:** Diseño de bordes neón violeta con acción de vinculación directa y modal instructivo oscuro paso a paso.
+  4. **Metas con Física Elástica (*Spring Animations*):** Barra de progreso dual con degradé suave y micro-desglose por modalidad.
+- **Consecuencias:**
+  - Experiencia visual y táctil del más alto estándar de diseño moderno (estilo Apple Fitness / Linear / Opal), potenciando la retención del hábito de lectura diaria.
+
+
+
 

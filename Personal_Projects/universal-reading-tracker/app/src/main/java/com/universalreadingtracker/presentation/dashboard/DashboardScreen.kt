@@ -31,6 +31,12 @@ fun DashboardScreen(
     state: DashboardState,
     onToggleKindleTimer: () -> Unit
 ) {
+    var showNfcDialog by remember { mutableStateOf(false) }
+
+    if (showNfcDialog) {
+        NfcSetupDialog(onDismiss = { showNfcDialog = false })
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -93,6 +99,11 @@ fun DashboardScreen(
                         onToggle = onToggleKindleTimer
                     )
                 }
+            }
+
+            // 2.1 NFC Tap-to-Track Card (RF-11 & ADR-011)
+            item {
+                NfcKindleSetupCard(onOpenSetup = { showNfcDialog = true })
             }
 
             // 3. Today's Reading Progress Breakdown
@@ -447,6 +458,104 @@ fun EmptySessionsCard() {
         }
     }
 }
+
+@Composable
+fun NfcKindleSetupCard(onOpenSetup: () -> Unit) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f))
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(14.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(CircleShape)
+                    .background(Color(0xFF673AB7).copy(alpha = 0.15f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Nfc,
+                    contentDescription = "Sticker NFC",
+                    tint = Color(0xFF673AB7),
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+            Spacer(modifier = Modifier.width(12.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = "Sticker NFC para Kindle",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp
+                )
+                Text(
+                    text = "Apoya el teléfono en la funda para leer",
+                    fontSize = 11.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            FilledTonalButton(
+                onClick = onOpenSetup,
+                shape = RoundedCornerShape(10.dp),
+                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp)
+            ) {
+                Text(text = "Vincular", fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+            }
+        }
+    }
+}
+
+@Composable
+fun NfcSetupDialog(onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        icon = {
+            Icon(
+                imageVector = Icons.Default.Nfc,
+                contentDescription = null,
+                tint = Color(0xFF673AB7),
+                modifier = Modifier.size(36.dp)
+            )
+        },
+        title = {
+            Text(
+                text = "Vincular Sticker NFC para Kindle",
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp
+            )
+        },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(
+                    text = "1. Cuando tengas tus stickers (NTAG213 / 215 / 216), pega uno en la funda de tu Kindle físico.",
+                    fontSize = 13.sp
+                )
+                Text(
+                    text = "2. Al acercar el sticker al teléfono con esta pantalla abierta, quedará grabado con la señal inteligente de tu app.",
+                    fontSize = 13.sp
+                )
+                Text(
+                    text = "✨ A partir de ese momento, apoyar el teléfono en el Kindle iniciará tu lectura al instante sin tocar ninguna pantalla.",
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+        },
+        confirmButton = {
+            Button(onClick = onDismiss) {
+                Text("Entendido")
+            }
+        }
+    )
+}
+
+
 
 @androidx.compose.ui.tooling.preview.Preview(showBackground = true, showSystemUi = true)
 @Composable

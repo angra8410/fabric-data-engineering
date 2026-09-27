@@ -4,10 +4,12 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.universalreadingtracker.domain.model.Book
 import com.universalreadingtracker.domain.model.BookFormat
+import com.universalreadingtracker.domain.model.ProgressUnit
 
 /**
  * Room Entity for local-first book storage.
  * Implements Section 3 from spec.md & ADR-006.
+ * Supports Pages and Kindle Locations (Loc).
  */
 @Entity(tableName = "books")
 data class BookEntity(
@@ -15,9 +17,13 @@ data class BookEntity(
     val id: Long = 0,
     val title: String,
     val author: String,
-    val format: String = BookFormat.AUDIOBOOK.name,
-    val primaryProviderId: String = "audible",
+    val format: String = BookFormat.EBOOK.name,
+    val primaryProviderId: String = "kindle_physical",
     val coverUri: String? = null,
+    val progressUnit: String = ProgressUnit.PAGES.name,
+    val currentPosition: Int = 0,
+    val totalUnits: Int = 0,
+    val isCurrentlyReading: Boolean = false,
     val totalPages: Int? = null,
     val totalDurationSeconds: Long? = null,
     val currentPage: Int? = null,
@@ -29,12 +35,16 @@ data class BookEntity(
         id = id,
         title = title,
         author = author,
-        format = try { BookFormat.valueOf(format) } catch (e: Exception) { BookFormat.AUDIOBOOK },
+        format = try { BookFormat.valueOf(format) } catch (e: Exception) { BookFormat.EBOOK },
         primaryProviderId = primaryProviderId,
         coverUri = coverUri,
-        totalPages = totalPages,
+        progressUnit = try { ProgressUnit.valueOf(progressUnit) } catch (e: Exception) { ProgressUnit.PAGES },
+        currentPosition = currentPosition,
+        totalUnits = totalUnits,
+        isCurrentlyReading = isCurrentlyReading,
+        totalPages = totalPages ?: totalUnits,
         totalDurationSeconds = totalDurationSeconds,
-        currentPage = currentPage,
+        currentPage = currentPage ?: currentPosition,
         currentDurationSeconds = currentDurationSeconds,
         createdAt = createdAt,
         updatedAt = updatedAt
@@ -48,9 +58,13 @@ data class BookEntity(
             format = domain.format.name,
             primaryProviderId = domain.primaryProviderId,
             coverUri = domain.coverUri,
-            totalPages = domain.totalPages,
+            progressUnit = domain.progressUnit.name,
+            currentPosition = domain.currentPosition,
+            totalUnits = domain.totalUnits,
+            isCurrentlyReading = domain.isCurrentlyReading,
+            totalPages = domain.totalPages ?: domain.totalUnits,
             totalDurationSeconds = domain.totalDurationSeconds,
-            currentPage = domain.currentPage,
+            currentPage = domain.currentPage ?: domain.currentPosition,
             currentDurationSeconds = domain.currentDurationSeconds,
             createdAt = domain.createdAt,
             updatedAt = domain.updatedAt

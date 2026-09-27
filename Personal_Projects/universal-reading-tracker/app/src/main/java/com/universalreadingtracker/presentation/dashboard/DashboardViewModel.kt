@@ -7,9 +7,13 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.universalreadingtracker.UniversalReadingApp
+import com.universalreadingtracker.data.export.JsonExportHelper
 import com.universalreadingtracker.data.repository.BookRepositoryImpl
 import com.universalreadingtracker.data.repository.ReadingSessionRepositoryImpl
 import com.universalreadingtracker.data.repository.StreakRepositoryImpl
+import com.universalreadingtracker.domain.model.Book
+import com.universalreadingtracker.domain.model.BookFormat
+import com.universalreadingtracker.domain.model.ProgressUnit
 import com.universalreadingtracker.service.KindleReadingTimerService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,12 +21,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.File
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 /**
- * ViewModel managing the consolidated dashboard state, active streaks, and Kindle timer.
- * Implements RF-05, RF-06, RF-08 and ADR-005 from spec.md & decisions.md.
+ * ViewModel managing the consolidated dashboard state, active streaks, Kindle timer,
+ * active book selection, progress tracking (Pages / Loc), and JSON export.
+ * Implements RF-05, RF-06, RF-08, ADR-005 and ADR-014.
  */
 class DashboardViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -38,12 +44,35 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
         observeStreakInfo()
         observeRecentSessions()
         observeActiveBooks()
+        observeActiveBook()
         observeTodaySummary()
+        observeAllDailySummaries()
         syncTimerState()
+        ensureInitialBookSeed()
     }
 
     fun syncTimerState() {
         _uiState.update { it.copy(isKindleTimerRunning = KindleReadingTimerService.isRunning) }
+    }
+
+    private fun ensureInitialBookSeed() {
+        viewModelScope.launch {
+            val active = bookRepo.getActiveReadingBookSync()
+            if (active == null) {
+                val seedBook = Book(
+                    title = "Hábitos Atómicos",
+                    author = "James Clear",
+                    format = BookFormat.EBOOK,
+                    primaryProviderId = "kindle_physical",
+                    progressUnit = ProgressUnit.PAGES,
+                    currentPosition = 145,
+                    totalUnits = 320,
+                    isCurrentlyReading = true
+                )
+                val id = bookRepo.insertOrUpdateBook(seedBook)
+                bookRepo.setActiveReadingBook(id)
+            }
+        }
     }
 
     private fun observeStreakInfo() {
@@ -70,10 +99,17 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
+    private fun observeActiveBook() {
+        viewModelScope.launch {
+            bookRepo.getActiveReadingBook().collectLatest { activeBook ->
+                _uiState.update { it.copy(activeBook = activeBook) }
+            }
+        }
+    }
+
     private fun observeTodaySummary() {
         viewModelScope.launch {
             val todayStr = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE)
-            // Ensure no legacy dummy backfill remains on today
             db.dailyReadingSummaryDao().deleteHistoricalBackfillForDate(todayStr)
 
             sessionRepo.observeSummaryForDate(todayStr).collectLatest { summary ->
@@ -82,15 +118,62 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    fun toggleKindleReadingTimer(bookTitle: String = "Kindle Paperwhite", bookAuthor: String = "Kindle") {
+    private fun observeAllDailySummaries() {
+        viewModelScope.launch {
+            sessionRepo.getDailySummaries(limitDays = 730).collectLatest { summaries ->
+                _uiState.update { it.copy(allDailySummaries = summaries) }
+            }
+        }
+    }
+
+    fun selectActiveBook(bookId: Long) {
+        viewModelScope.launch {
+            bookRepo.setActiveReadingBook(bookId)
+        }
+    }
+
+    fun addNewBook(
+        title: String,
+        author: String,
+        unit: ProgressUnit,
+        currentPos: Int,
+        totalUnits: Int
+    ) {
+        viewModelScope.launch {
+            val newBook = Book(
+                title = title.trim(),
+                author = author.trim().ifBlank { "Kindle Físico" },
+                format = BookFormat.EBOOK,
+                primaryProviderId = "kindle_physical",
+                progressUnit = unit,
+                currentPosition = currentPos,
+                totalUnits = totalUnits,
+                isCurrentlyReading = true
+            )
+            val id = bookRepo.insertOrUpdateBook(newBook)
+            bookRepo.setActiveReadingBook(id)
+        }
+    }
+
+    fun updateActiveBookPosition(newPosition: Int) {
+        val currentBook = _uiState.value.activeBook ?: return
+        viewModelScope.launch {
+            bookRepo.updateBookPosition(currentBook.id, newPosition)
+        }
+    }
+
+    fun toggleKindleReadingTimer() {
         val context = getApplication<Application>()
         val isStarting = !KindleReadingTimerService.isRunning
+        val currentBook = _uiState.value.activeBook
+        val title = currentBook?.title ?: "Kindle Paperwhite"
+        val author = currentBook?.author ?: "Kindle Físico"
 
         val intent = Intent(context, KindleReadingTimerService::class.java).apply {
             action = if (isStarting) KindleReadingTimerService.ACTION_START else KindleReadingTimerService.ACTION_STOP
             if (isStarting) {
-                putExtra(KindleReadingTimerService.EXTRA_BOOK_TITLE, bookTitle)
-                putExtra(KindleReadingTimerService.EXTRA_BOOK_AUTHOR, bookAuthor)
+                putExtra(KindleReadingTimerService.EXTRA_BOOK_TITLE, title)
+                putExtra(KindleReadingTimerService.EXTRA_BOOK_AUTHOR, author)
             }
         }
 
@@ -101,5 +184,16 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
         }
 
         _uiState.update { it.copy(isKindleTimerRunning = isStarting) }
+    }
+
+    fun exportDataToJson(context: Context): File {
+        val s = _uiState.value
+        return JsonExportHelper.shareJsonExport(
+            context = context,
+            streakInfo = s.streakInfo,
+            books = s.activeBooks,
+            sessions = s.recentSessions,
+            dailySummaries = s.allDailySummaries
+        )
     }
 }

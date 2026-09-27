@@ -20,7 +20,7 @@ import com.universalreadingtracker.data.local.entity.ReadingSessionEntity
         ReadingSessionEntity::class,
         DailyReadingSummaryEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -39,7 +39,7 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "universal_reading_tracker.db"
-                ).fallbackToDestructiveMigration()
+                ).fallbackToDestructiveMigration(true)
                  .build()
                 INSTANCE = instance
                 instance

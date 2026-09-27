@@ -24,3 +24,8 @@ enum class SessionStatus {
     CONFIRMED,
     DISCARDED
 }
+
+enum class ProgressUnit {
+    PAGES,      // Pág. 120 de 350
+    LOCATIONS   // Loc 2.450 de 6.800 (Kindle)
+}

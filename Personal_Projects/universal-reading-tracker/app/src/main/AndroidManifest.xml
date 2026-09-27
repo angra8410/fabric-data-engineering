@@ -73,6 +73,17 @@
             </intent-filter>
         </service>
 
+        <!-- FileProvider for Sharing Exported .JSON Data Files -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.universalreadingtracker.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
     </application>
 
 </manifest>

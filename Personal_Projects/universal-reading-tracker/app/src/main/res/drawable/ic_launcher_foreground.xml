@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Open Book Base in Electric Cyan / White Gradient -->
+    <path
+        android:pathData="M26,68 C35,64 45,63 53,67 L53,42 C45,38 35,39 26,43 Z"
+        android:strokeWidth="1.5"
+        android:strokeColor="#6600E5FF">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="26"
+                android:startY="42"
+                android:endX="53"
+                android:endY="68"
+                android:type="linear">
+                <item android:offset="0" android:color="#FF0284C7"/>
+                <item android:offset="1" android:color="#FF00E5FF"/>
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <path
+        android:pathData="M82,68 C73,64 63,63 55,67 L55,42 C63,38 73,39 82,43 Z"
+        android:strokeWidth="1.5"
+        android:strokeColor="#6600E5FF">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="82"
+                android:startY="42"
+                android:endX="55"
+                android:endY="68"
+                android:type="linear">
+                <item android:offset="0" android:color="#FF0072FF"/>
+                <item android:offset="1" android:color="#FF00E5FF"/>
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Center Spine Spine Accent Line -->
+    <path
+        android:pathData="M54,41 L54,69"
+        android:strokeWidth="2.5"
+        android:strokeColor="#FFFFFF"
+        android:strokeLineCap="round"/>
+
+    <!-- Reading Flame Ascending from Book -->
+    <!-- Outer Flame Halo (Warm Coral) -->
+    <path
+        android:pathData="M54,23 C59,30 65,37 62,45 C60,50 56,54 54,55 C52,54 48,50 46,45 C43,37 49,30 54,23 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="54"
+                android:startY="23"
+                android:endX="54"
+                android:endY="55"
+                android:type="linear">
+                <item android:offset="0" android:color="#FFFF3D00"/>
+                <item android:offset="0.6" android:color="#FFFF6D00"/>
+                <item android:offset="1" android:color="#FFFFAB00"/>
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Inner Core Flame (Luminous Gold / White) -->
+    <path
+        android:pathData="M54,32 C57,37 60,42 58,47 C57,50 55,52 54,53 C53,52 51,50 50,47 C48,42 51,37 54,32 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="54"
+                android:startY="32"
+                android:endX="54"
+                android:endY="53"
+                android:type="linear">
+                <item android:offset="0" android:color="#FFFFFFFF"/>
+                <item android:offset="0.5" android:color="#FFFFD54F"/>
+                <item android:offset="1" android:color="#FFFF9100"/>
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Small Spark Dot -->
+    <path
+        android:pathData="M54,19 A2,2 0 1,1 54,15 A2,2 0 1,1 54,19 Z"
+        android:fillColor="#FFFFD700"/>
+
+</vector>

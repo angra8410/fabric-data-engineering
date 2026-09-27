@@ -15,6 +15,12 @@ interface DailyReadingSummaryDao {
     @Query("SELECT * FROM daily_reading_summaries WHERE date = :dateString LIMIT 1")
     suspend fun getSummaryForDate(dateString: String): DailyReadingSummaryEntity?
 
+    @Query("SELECT * FROM daily_reading_summaries WHERE date = :dateString LIMIT 1")
+    fun observeSummaryForDate(dateString: String): Flow<DailyReadingSummaryEntity?>
+
+    @Query("DELETE FROM daily_reading_summaries WHERE date = :dateString AND isHistoricalBackfill = 1")
+    suspend fun deleteHistoricalBackfillForDate(dateString: String)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOrUpdateSummary(summary: DailyReadingSummaryEntity)
 

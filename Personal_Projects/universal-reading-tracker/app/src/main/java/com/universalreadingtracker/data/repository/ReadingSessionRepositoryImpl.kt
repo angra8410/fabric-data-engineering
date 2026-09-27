@@ -83,6 +83,10 @@ class ReadingSessionRepositoryImpl(
         return summaryDao.getSummaryForDate(dateString)?.toDomain()
     }
 
+    override fun observeSummaryForDate(dateString: String): Flow<DailyReadingSummary?> {
+        return summaryDao.observeSummaryForDate(dateString).map { it?.toDomain() }
+    }
+
     override suspend fun saveDailySummary(summary: DailyReadingSummary) {
         summaryDao.insertOrUpdateSummary(DailyReadingSummaryEntity.fromDomain(summary))
     }

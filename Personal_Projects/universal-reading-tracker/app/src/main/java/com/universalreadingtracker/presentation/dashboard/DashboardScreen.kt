@@ -447,3 +447,52 @@ fun EmptySessionsCard() {
         }
     }
 }
+
+@androidx.compose.ui.tooling.preview.Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun DashboardScreenPreview() {
+    MaterialTheme {
+        DashboardScreen(
+            state = DashboardState(
+                streakInfo = com.universalreadingtracker.domain.model.StreakInfo(163, 163, true, 163),
+                todaySummary = com.universalreadingtracker.domain.model.DailyReadingSummary(
+                    date = "2026-09-26",
+                    totalMinutesRead = 45,
+                    audioMinutes = 30,
+                    kindleMinutes = 15,
+                    physicalMinutes = 0,
+                    goalReached = true,
+                    isHistoricalBackfill = false
+                ),
+                recentSessions = listOf(
+                    ReadingSession(
+                        id = 1,
+                        bookId = 1,
+                        bookTitle = "Atomic Habits",
+                        bookAuthor = "James Clear",
+                        modality = ReadingModality.AUDIOBOOK,
+                        providerId = "audible",
+                        startTime = System.currentTimeMillis() - 3600000,
+                        endTime = System.currentTimeMillis() - 1800000,
+                        realDurationSeconds = 1800
+                    ),
+                    ReadingSession(
+                        id = 2,
+                        bookId = 2,
+                        bookTitle = "Klara and the Sun",
+                        bookAuthor = "Kazuo Ishiguro",
+                        modality = ReadingModality.EBOOK_KINDLE,
+                        providerId = "kindle_physical",
+                        startTime = System.currentTimeMillis() - 7200000,
+                        endTime = System.currentTimeMillis() - 6300000,
+                        realDurationSeconds = 900,
+                        startPage = 120,
+                        endPage = 138
+                    )
+                )
+            ),
+            onToggleKindleTimer = {}
+        )
+    }
+}
+

@@ -131,20 +131,30 @@ fun DashboardScreen(
                 )
             }
         ) { innerPadding ->
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(horizontal = 18.dp),
-                verticalArrangement = Arrangement.spacedBy(18.dp)
+            val screenVisibleState = remember { MutableTransitionState(false).apply { targetState = true } }
+            AnimatedVisibility(
+                visibleState = screenVisibleState,
+                enter = androidx.compose.animation.fadeIn(animationSpec = tween(400)) +
+                        androidx.compose.animation.slideInVertically(
+                            animationSpec = tween(500, easing = FastOutSlowInEasing),
+                            initialOffsetY = { 70 }
+                        )
             ) {
-                // 1. Hero Obsidian Trophy Card (Racha 163 Días)
-                item {
-                    LuxuryStreakCard(
-                        streakDays = state.streakInfo.currentStreakDays,
-                        longestStreak = state.streakInfo.longestStreakDays
-                    )
-                }
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .padding(horizontal = 18.dp),
+                    verticalArrangement = Arrangement.spacedBy(18.dp)
+                ) {
+                    // 1. Hero Obsidian Trophy Card (Racha 163 Días)
+                    item {
+                        LuxuryStreakCard(
+                            streakDays = state.streakInfo.currentStreakDays,
+                            longestStreak = state.streakInfo.longestStreakDays,
+                            isStreakActiveToday = state.streakInfo.isStreakActiveToday
+                        )
+                    }
 
                 // 2. Hardware & Providers Grid (Audible & Kindle)
                 item {
@@ -240,8 +250,9 @@ fun DashboardScreen(
                     }
                 }
 
-                item {
-                    Spacer(modifier = Modifier.height(28.dp))
+                    item {
+                        Spacer(modifier = Modifier.height(28.dp))
+                    }
                 }
             }
         }
@@ -253,7 +264,11 @@ fun DashboardScreen(
  * Deep obsidian glass surface with dynamic warm aura, pulsating 3D flame badge, and weekly dots.
  */
 @Composable
-fun LuxuryStreakCard(streakDays: Int, longestStreak: Int) {
+fun LuxuryStreakCard(
+    streakDays: Int,
+    longestStreak: Int,
+    isStreakActiveToday: Boolean = false
+) {
     val infiniteTransition = rememberInfiniteTransition(label = "flame_pulse")
     val pulseScale by infiniteTransition.animateFloat(
         initialValue = 0.95f,
@@ -416,19 +431,35 @@ fun LuxuryStreakCard(streakDays: Int, longestStreak: Int) {
 
                 Spacer(modifier = Modifier.height(12.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = "🏆 ¡Racha de $streakDays días blindada!",
-                        color = Color(0xFFFDE047),
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text(
-                        text = "Mañana alcanzará ${streakDays + 1}.",
-                        color = Color(0xFF94A3B8),
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Medium
-                    )
+                    if (isStreakActiveToday) {
+                        Text(
+                            text = "🏆 ¡Racha de $streakDays días blindada hoy!",
+                            color = Color(0xFFFDE047),
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = "Mañana alcanzará ${streakDays + 1}.",
+                            color = Color(0xFF94A3B8),
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    } else {
+                        Text(
+                            text = "⚡ Racha de $streakDays días activa.",
+                            color = Color(0xFFFF9900),
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = "Lee hoy para extenderla a ${streakDays + 1}.",
+                            color = Color(0xFF94A3B8),
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
                 }
             }
         }
@@ -853,24 +884,43 @@ fun TodayProgressGlassCard(
                     )
                 }
 
-                // Completion Pill
+                // Dynamic Completion / Progress Pill
+                val isCompleted = todayMinutes >= goalMinutes
+                val hasStarted = todayMinutes > 0
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(16.dp))
                         .background(
-                            if (todayMinutes >= goalMinutes) Color(0x2210B981)
-                            else Color(0x220284C7)
+                            when {
+                                isCompleted -> Color(0x2210B981)
+                                hasStarted -> Color(0x220284C7)
+                                else -> Color(0x1A64748B)
+                            }
                         )
                         .border(
                             1.dp,
-                            if (todayMinutes >= goalMinutes) Color(0x5510B981) else Color(0x550284C7),
+                            when {
+                                isCompleted -> Color(0x5510B981)
+                                hasStarted -> Color(0x550284C7)
+                                else -> Color(0x2264748B)
+                            },
                             RoundedCornerShape(16.dp)
                         )
                         .padding(horizontal = 10.dp, vertical = 4.dp)
                 ) {
+                    val pillText = when {
+                        isCompleted -> "¡Meta Cumplida! 🎯"
+                        hasStarted -> "${((todayMinutes.toFloat() / goalMinutes) * 100).toInt()}% en curso"
+                        else -> "Por comenzar 📖"
+                    }
+                    val pillColor = when {
+                        isCompleted -> Color(0xFF34D399)
+                        hasStarted -> Color(0xFF38BDF8)
+                        else -> Color(0xFF94A3B8)
+                    }
                     Text(
-                        text = if (todayMinutes >= goalMinutes) "¡Meta Cumplida! 🎯" else "${((todayMinutes.toFloat()/goalMinutes)*100).toInt()}%",
-                        color = if (todayMinutes >= goalMinutes) Color(0xFF34D399) else Color(0xFF38BDF8),
+                        text = pillText,
+                        color = pillColor,
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Bold
                     )

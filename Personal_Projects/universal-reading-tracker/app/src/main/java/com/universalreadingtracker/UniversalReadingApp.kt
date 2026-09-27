@@ -9,10 +9,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 /**
  * Main Application class for Universal Reading Tracker.
- * Implements ADR-009: Automatically triggers the 163-day streak backfill on startup if not already seeded.
+ * Implements ADR-009: Automatically triggers the 163-day streak backfill up to yesterday,
+ * ensuring today starts fresh with actual user reading.
  */
 class UniversalReadingApp : Application() {
 
@@ -26,9 +28,12 @@ class UniversalReadingApp : Application() {
 
     private fun ensureHistoricalStreakBackfill() {
         appScope.launch {
+            val todayStr = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE)
+            // Clear any accidental backfill dummy data on today so today reflects real reading
+            database.dailyReadingSummaryDao().deleteHistoricalBackfillForDate(todayStr)
+
             val streakRepo = StreakRepositoryImpl(database.dailyReadingSummaryDao())
             if (!streakRepo.hasCompletedBackfill()) {
-                // Implements RF-08 & ADR-009: Backfill the user's hard-earned 163-day reading streak
                 val backfillUseCase = BackfillHistoricalStreakUseCase(streakRepo)
                 backfillUseCase(streakDays = 163, referenceDate = LocalDate.now())
             }

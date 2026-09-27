@@ -172,6 +172,23 @@
 - **Consecuencias:**
   - Experiencia visual y táctil del más alto estándar de diseño moderno (estilo Apple Fitness / Linear / Opal), potenciando la retención del hábito de lectura diaria.
 
+---
+
+## [ADR-013] Meta Diaria Reactiva, Aislamiento de Backfill Histórico e Iconografía Adaptativa
+- **Fecha:** 2026-09-27
+- **Estado:** Aprobado
+- **Contexto:**
+  1. El backfill de 163 días sembraba erróneamente un resumen completado de 30 minutos para la fecha de "hoy", mostrando "¡Meta Cumplida!" de forma fija antes de leer.
+  2. La aplicación carecía de un icono distintivo nativo (usaba el recurso de sistema genérico `ic_menu_agenda`) y de transiciones suaves al iniciar.
+- **Decisión Tomada:**
+  1. **Aislamiento de Backfill:** El proceso de backfill histórico se restringe estrictamente a los 163 días previos (`ayer` hacia atrás), purgando cualquier dato simulado de hoy para que la meta diaria inicie en `0 de 30 min` (`Por comenzar 📖`).
+  2. **Observación Reactiva en Room:** Se implementa `observeSummaryForDate` como un `Flow` continuo para actualizar la barra elástica y desglose Audible/Kindle en tiempo real según transcurre la lectura.
+  3. **Icono Adaptativo Vectorial:** Se crea `ic_launcher` en formato adaptativo para Android (libro abierto en cian eléctrico y llama ascendente en degradé fuego).
+  4. **Transición de Entrada Fluida:** Animación de apertura `fadeIn + slideInVertically` con física de resorte y `overrideActivityTransition`.
+- **Consecuencias:**
+  - Precisión absoluta en el cálculo del progreso diario, preservando la racha de 163 días de forma transparente y proporcionando una identidad visual premium.
+
+
 
 
 

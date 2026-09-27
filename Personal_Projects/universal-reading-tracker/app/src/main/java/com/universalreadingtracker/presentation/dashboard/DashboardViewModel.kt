@@ -39,6 +39,11 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
         observeRecentSessions()
         observeActiveBooks()
         observeTodaySummary()
+        syncTimerState()
+    }
+
+    fun syncTimerState() {
+        _uiState.update { it.copy(isKindleTimerRunning = KindleReadingTimerService.isRunning) }
     }
 
     private fun observeStreakInfo() {
@@ -68,14 +73,18 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
     private fun observeTodaySummary() {
         viewModelScope.launch {
             val todayStr = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE)
-            val summary = sessionRepo.getSummaryForDate(todayStr)
-            _uiState.update { it.copy(todaySummary = summary) }
+            // Ensure no legacy dummy backfill remains on today
+            db.dailyReadingSummaryDao().deleteHistoricalBackfillForDate(todayStr)
+
+            sessionRepo.observeSummaryForDate(todayStr).collectLatest { summary ->
+                _uiState.update { it.copy(todaySummary = summary) }
+            }
         }
     }
 
     fun toggleKindleReadingTimer(bookTitle: String = "Kindle Paperwhite", bookAuthor: String = "Kindle") {
         val context = getApplication<Application>()
-        val isStarting = !_uiState.value.isKindleTimerRunning
+        val isStarting = !KindleReadingTimerService.isRunning
 
         val intent = Intent(context, KindleReadingTimerService::class.java).apply {
             action = if (isStarting) KindleReadingTimerService.ACTION_START else KindleReadingTimerService.ACTION_STOP

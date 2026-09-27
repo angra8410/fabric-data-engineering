@@ -10,5 +10,6 @@ interface ReadingSessionRepository {
     suspend fun insertSession(session: ReadingSession): Long
     suspend fun getDailySummaries(limitDays: Int = 365): Flow<List<DailyReadingSummary>>
     suspend fun getSummaryForDate(dateString: String): DailyReadingSummary?
+    fun observeSummaryForDate(dateString: String): Flow<DailyReadingSummary?>
     suspend fun saveDailySummary(summary: DailyReadingSummary)
 }

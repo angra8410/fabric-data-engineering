@@ -30,10 +30,14 @@ class StreakRepositoryImpl(
 
     override suspend fun backfillHistoricalStreak(streakDays: Int, referenceDate: String) {
         val targetDate = LocalDate.parse(referenceDate, dateFormatter)
+        
+        // Remove any historical backfill entry for today so today starts fresh
+        summaryDao.deleteHistoricalBackfillForDate(referenceDate)
+
         val entitiesToInsert = mutableListOf<DailyReadingSummaryEntity>()
 
-        // Generate consecutive daily summaries backwards for the required streak
-        for (i in 0 until streakDays) {
+        // Generate consecutive daily summaries backwards starting from YESTERDAY (i = 1)
+        for (i in 1..streakDays) {
             val pastDate = targetDate.minusDays(i.toLong())
             val dateStr = pastDate.format(dateFormatter)
 
@@ -42,7 +46,7 @@ class StreakRepositoryImpl(
                 entitiesToInsert.add(
                     DailyReadingSummaryEntity(
                         date = dateStr,
-                        totalMinutesRead = 30, // Seeded representative daily reading session
+                        totalMinutesRead = 30, // Seeded representative historical session
                         audioMinutes = 15,
                         kindleMinutes = 15,
                         physicalMinutes = 0,
@@ -59,6 +63,6 @@ class StreakRepositoryImpl(
     }
 
     override suspend fun hasCompletedBackfill(): Boolean {
-        return summaryDao.countHistoricalBackfillDays() >= 100
+        return summaryDao.countHistoricalBackfillDays() >= 163
     }
 }

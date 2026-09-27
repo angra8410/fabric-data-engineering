@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.filled.*
@@ -28,8 +29,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.universalreadingtracker.domain.model.Book
+import com.universalreadingtracker.domain.model.ProgressUnit
 import com.universalreadingtracker.domain.model.ReadingModality
 import com.universalreadingtracker.domain.model.ReadingSession
 
@@ -53,12 +57,57 @@ val NfcVioletGradient = listOf(Color(0xFFA855F7), Color(0xFF6366F1))
 @Composable
 fun DashboardScreen(
     state: DashboardState,
-    onToggleKindleTimer: () -> Unit
+    onToggleKindleTimer: () -> Unit,
+    onSelectBook: (Long) -> Unit = {},
+    onAddNewBook: (String, String, ProgressUnit, Int, Int) -> Unit = { _, _, _, _, _ -> },
+    onUpdatePosition: (Int) -> Unit = {},
+    onExportJson: () -> Unit = {}
 ) {
     var showNfcDialog by remember { mutableStateOf(false) }
+    var showBookSelectorDialog by remember { mutableStateOf(false) }
+    var showAddBookDialog by remember { mutableStateOf(false) }
+    var showUpdatePositionDialog by remember { mutableStateOf(false) }
 
+    // Dialogs
     if (showNfcDialog) {
         NfcSetupDialog(onDismiss = { showNfcDialog = false })
+    }
+
+    if (showBookSelectorDialog) {
+        BookSelectorDialog(
+            books = state.activeBooks,
+            activeBookId = state.activeBook?.id ?: 0,
+            onSelect = { bookId ->
+                onSelectBook(bookId)
+                showBookSelectorDialog = false
+            },
+            onOpenAddBook = {
+                showBookSelectorDialog = false
+                showAddBookDialog = true
+            },
+            onDismiss = { showBookSelectorDialog = false }
+        )
+    }
+
+    if (showAddBookDialog) {
+        AddBookDialog(
+            onSave = { title, author, unit, curPos, total ->
+                onAddNewBook(title, author, unit, curPos, total)
+                showAddBookDialog = false
+            },
+            onDismiss = { showAddBookDialog = false }
+        )
+    }
+
+    if (showUpdatePositionDialog && state.activeBook != null) {
+        UpdatePositionDialog(
+            book = state.activeBook,
+            onSave = { newPos ->
+                onUpdatePosition(newPos)
+                showUpdatePositionDialog = false
+            },
+            onDismiss = { showUpdatePositionDialog = false }
+        )
     }
 
     Box(
@@ -100,29 +149,61 @@ fun DashboardScreen(
                                     letterSpacing = 0.5.sp
                                 )
                             }
-                            // Elite consistency chip
-                            Box(
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(20.dp))
-                                    .background(Color(0x1A10B981))
-                                    .border(1.dp, Color(0x4410B981), RoundedCornerShape(20.dp))
-                                    .padding(horizontal = 10.dp, vertical = 5.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Box(
-                                        modifier = Modifier
-                                            .size(7.dp)
-                                            .clip(CircleShape)
-                                            .background(Color(0xFF10B981))
-                                    )
-                                    Spacer(modifier = Modifier.width(6.dp))
-                                    Text(
-                                        text = "Top 0.1%",
-                                        color = Color(0xFF34D399),
-                                        fontSize = 11.sp,
-                                        fontWeight = FontWeight.Bold
-                                    )
+
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                // JSON Export Action Button
+                                Box(
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(20.dp))
+                                        .background(Color(0x2238BDF8))
+                                        .border(1.dp, Color(0x5538BDF8), RoundedCornerShape(20.dp))
+                                        .clickable { onExportJson() }
+                                        .padding(horizontal = 9.dp, vertical = 5.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        Icon(
+                                            imageVector = Icons.Default.FileDownload,
+                                            contentDescription = "Exportar JSON",
+                                            tint = Color(0xFF38BDF8),
+                                            modifier = Modifier.size(13.dp)
+                                        )
+                                        Spacer(modifier = Modifier.width(4.dp))
+                                        Text(
+                                            text = "JSON",
+                                            color = Color(0xFF38BDF8),
+                                            fontSize = 11.sp,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                    }
+                                }
+
+                                Spacer(modifier = Modifier.width(8.dp))
+
+                                // Elite consistency chip
+                                Box(
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(20.dp))
+                                        .background(Color(0x1A10B981))
+                                        .border(1.dp, Color(0x4410B981), RoundedCornerShape(20.dp))
+                                        .padding(horizontal = 10.dp, vertical = 5.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        Box(
+                                            modifier = Modifier
+                                                .size(7.dp)
+                                                .clip(CircleShape)
+                                                .background(Color(0xFF10B981))
+                                        )
+                                        Spacer(modifier = Modifier.width(6.dp))
+                                        Text(
+                                            text = "Top 0.1%",
+                                            color = Color(0xFF34D399),
+                                            fontSize = 11.sp,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -145,7 +226,7 @@ fun DashboardScreen(
                         .fillMaxSize()
                         .padding(innerPadding)
                         .padding(horizontal = 18.dp),
-                    verticalArrangement = Arrangement.spacedBy(18.dp)
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     // 1. Hero Obsidian Trophy Card (Racha 163 Días)
                     item {
@@ -156,99 +237,115 @@ fun DashboardScreen(
                         )
                     }
 
-                // 2. Hardware & Providers Grid (Audible & Kindle)
-                item {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "Dispositivos & Hábitos",
-                            color = Color(0xFFE2E8F0),
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold
+                    // 2. Active Kindle Book Card with Pág / Loc Tracking
+                    item {
+                        ActiveBookGlassCard(
+                            book = state.activeBook,
+                            onOpenBookSelector = { showBookSelectorDialog = true },
+                            onOpenUpdatePosition = { showUpdatePositionDialog = true }
                         )
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Box(
-                                modifier = Modifier
-                                    .size(6.dp)
-                                    .clip(CircleShape)
-                                    .background(Color(0xFF34D399))
-                            )
-                            Spacer(modifier = Modifier.width(5.dp))
+                    }
+
+                    // 3. Hardware & Providers Grid (Audible & Kindle)
+                    item {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
                             Text(
-                                text = "En tiempo real",
-                                color = Color(0xFF94A3B8),
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.Medium
+                                text = "Dispositivos & Hábitos",
+                                color = Color(0xFFE2E8F0),
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(6.dp)
+                                        .clip(CircleShape)
+                                        .background(Color(0xFF34D399))
+                                )
+                                Spacer(modifier = Modifier.width(5.dp))
+                                Text(
+                                    text = "En tiempo real",
+                                    color = Color(0xFF94A3B8),
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Medium
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            AudibleLuxuryCard(
+                                modifier = Modifier.weight(1f),
+                                isActive = state.isAudibleTrackingActive
+                            )
+                            KindleLuxuryCard(
+                                modifier = Modifier.weight(1f),
+                                isRunning = state.isKindleTimerRunning,
+                                onToggle = {
+                                    val wasRunning = state.isKindleTimerRunning
+                                    onToggleKindleTimer()
+                                    if (wasRunning) {
+                                        // When stopping session, offer to update page/loc
+                                        showUpdatePositionDialog = true
+                                    }
+                                }
                             )
                         }
                     }
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        AudibleLuxuryCard(
-                            modifier = Modifier.weight(1f),
-                            isActive = state.isAudibleTrackingActive
-                        )
-                        KindleLuxuryCard(
-                            modifier = Modifier.weight(1f),
-                            isRunning = state.isKindleTimerRunning,
-                            onToggle = onToggleKindleTimer
-                        )
-                    }
-                }
 
-                // 3. NFC Smart Tap Pill
-                item {
-                    NfcMagicPill(onOpenSetup = { showNfcDialog = true })
-                }
-
-                // 4. Today's Dual-Progress Display
-                item {
-                    TodayProgressGlassCard(
-                        todayMinutes = state.todaySummary?.totalMinutesRead ?: 0,
-                        goalMinutes = state.dailyGoalMinutes,
-                        audioMinutes = state.todaySummary?.audioMinutes ?: 0,
-                        kindleMinutes = state.todaySummary?.kindleMinutes ?: 0
-                    )
-                }
-
-                // 5. Historial Reciente Header
-                item {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "Historial Reciente",
-                            color = Color(0xFFE2E8F0),
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = "Ver todo",
-                            color = Color(0xFF38BDF8),
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    }
-                }
-
-                // 6. Recent Sessions List
-                if (state.recentSessions.isEmpty()) {
+                    // 4. NFC Smart Tap Pill
                     item {
-                        EmptyHistoryCard()
+                        NfcMagicPill(onOpenSetup = { showNfcDialog = true })
                     }
-                } else {
-                    items(state.recentSessions) { session ->
-                        LuxurySessionRow(session = session)
+
+                    // 5. Today's Dual-Progress Display
+                    item {
+                        TodayProgressGlassCard(
+                            todayMinutes = state.todaySummary?.totalMinutesRead ?: 0,
+                            goalMinutes = state.dailyGoalMinutes,
+                            audioMinutes = state.todaySummary?.audioMinutes ?: 0,
+                            kindleMinutes = state.todaySummary?.kindleMinutes ?: 0
+                        )
                     }
-                }
+
+                    // 6. Historial Reciente Header
+                    item {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "Historial Reciente",
+                                color = Color(0xFFE2E8F0),
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = "Ver todo",
+                                color = Color(0xFF38BDF8),
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
+                    }
+
+                    // 7. Recent Sessions List
+                    if (state.recentSessions.isEmpty()) {
+                        item {
+                            EmptyHistoryCard()
+                        }
+                    } else {
+                        items(state.recentSessions) { session ->
+                            LuxurySessionRow(session = session)
+                        }
+                    }
 
                     item {
                         Spacer(modifier = Modifier.height(28.dp))
@@ -257,6 +354,549 @@ fun DashboardScreen(
             }
         }
     }
+}
+
+/**
+ * Active Book Card on Kindle: Displays current title, progress in Pág or Loc, and quick update buttons.
+ */
+@Composable
+fun ActiveBookGlassCard(
+    book: Book?,
+    onOpenBookSelector: () -> Unit,
+    onOpenUpdatePosition: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(22.dp))
+            .border(1.dp, GlowCyanBorder, RoundedCornerShape(22.dp)),
+        colors = CardDefaults.cardColors(containerColor = SurfaceGlass)
+    ) {
+        Column(modifier = Modifier.padding(18.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(
+                        modifier = Modifier
+                            .size(34.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(Brush.linearGradient(ElectricCyanGradient)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.MenuBook,
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier.size(18.dp)
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Column {
+                        Text(
+                            text = "LEYENDO EN KINDLE",
+                            color = Color(0xFF38BDF8),
+                            fontSize = 10.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            letterSpacing = 1.2.sp
+                        )
+                        Text(
+                            text = book?.title ?: "Seleccionar libro",
+                            color = Color.White,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            maxLines = 1
+                        )
+                    }
+                }
+
+                // Change Book Pill
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(Color(0x2238BDF8))
+                        .border(1.dp, Color(0x4438BDF8), RoundedCornerShape(12.dp))
+                        .clickable { onOpenBookSelector() }
+                        .padding(horizontal = 10.dp, vertical = 5.dp)
+                ) {
+                    Text(
+                        text = "Cambiar",
+                        color = Color(0xFF7DD3FC),
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            if (book != null) {
+                // Progress details row
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = book.author,
+                        color = Color(0xFF94A3B8),
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+
+                    // Unit & Position Pill
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(Color(0x1A00E5FF))
+                            .padding(horizontal = 8.dp, vertical = 2.dp)
+                    ) {
+                        Text(
+                            text = book.formattedProgress,
+                            color = Color(0xFF00E5FF),
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                // Progress Bar
+                val progressFraction = (book.progressPercentage.toFloat() / 100f).coerceIn(0f, 1f)
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(6.dp)
+                        .clip(RoundedCornerShape(3.dp))
+                        .background(Color(0xFF1E2438))
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(progressFraction)
+                            .fillMaxHeight()
+                            .clip(RoundedCornerShape(3.dp))
+                            .background(Brush.horizontalGradient(ElectricCyanGradient))
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Quick Update Button
+                Button(
+                    onClick = onOpenUpdatePosition,
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1E293B)),
+                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(34.dp)
+                        .border(1.dp, GlassBorderStroke, RoundedCornerShape(12.dp))
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = null,
+                            tint = Color(0xFF38BDF8),
+                            modifier = Modifier.size(14.dp)
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = "Actualizar ${book.unitLabel} actual",
+                            color = Color(0xFFE2E8F0),
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+            } else {
+                Button(
+                    onClick = onOpenBookSelector,
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0284C7)),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("+ Seleccionar libro en lectura", color = Color.White, fontWeight = FontWeight.Bold)
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Dialog to pick or switch books in library.
+ */
+@Composable
+fun BookSelectorDialog(
+    books: List<Book>,
+    activeBookId: Long,
+    onSelect: (Long) -> Unit,
+    onOpenAddBook: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        containerColor = Color(0xFF131522),
+        title = {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Biblioteca Kindle",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp
+                )
+                IconButton(onClick = onOpenAddBook) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Añadir libro",
+                        tint = Color(0xFF00E5FF)
+                    )
+                }
+            }
+        },
+        text = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Text(
+                    text = "Selecciona el libro que tienes abierto en tu Kindle:",
+                    color = Color(0xFF94A3B8),
+                    fontSize = 12.sp
+                )
+
+                if (books.isEmpty()) {
+                    Text(
+                        text = "No tienes libros guardados aún.",
+                        color = Color(0xFFCBD5E1),
+                        fontSize = 13.sp
+                    )
+                } else {
+                    books.forEach { book ->
+                        val isSelected = book.id == activeBookId
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(14.dp))
+                                .background(if (isSelected) Color(0x3300E5FF) else Color(0xFF1A1D2E))
+                                .border(
+                                    1.dp,
+                                    if (isSelected) Color(0xFF00E5FF) else GlassBorderStroke,
+                                    RoundedCornerShape(14.dp)
+                                )
+                                .clickable { onSelect(book.id) }
+                                .padding(12.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(
+                                        text = book.title,
+                                        color = Color.White,
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                    Text(
+                                        text = "${book.author} · ${book.formattedProgress}",
+                                        color = Color(0xFF94A3B8),
+                                        fontSize = 11.sp
+                                    )
+                                }
+                                if (isSelected) {
+                                    Icon(
+                                        imageVector = Icons.Default.CheckCircle,
+                                        contentDescription = "Activo",
+                                        tint = Color(0xFF00E5FF),
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = onOpenAddBook,
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0284C7)),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text("+ Añadir Nuevo Libro", color = Color.White, fontWeight = FontWeight.Bold)
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cerrar", color = Color(0xFF94A3B8))
+            }
+        }
+    )
+}
+
+/**
+ * Dialog to add a new book with choice of Pages or Kindle Location (Loc).
+ */
+@Composable
+fun AddBookDialog(
+    onSave: (title: String, author: String, unit: ProgressUnit, curPos: Int, totalUnits: Int) -> Unit,
+    onDismiss: () -> Unit
+) {
+    var title by remember { mutableStateOf("") }
+    var author by remember { mutableStateOf("") }
+    var unit by remember { mutableStateOf(ProgressUnit.PAGES) }
+    var currentPosStr by remember { mutableStateOf("0") }
+    var totalUnitsStr by remember { mutableStateOf("300") }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        containerColor = Color(0xFF131522),
+        title = {
+            Text(
+                text = "Añadir Libro para Kindle",
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp
+            )
+        },
+        text = {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                OutlinedTextField(
+                    value = title,
+                    onValueChange = { title = it },
+                    label = { Text("Título del libro") },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White,
+                        focusedBorderColor = Color(0xFF00E5FF)
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                OutlinedTextField(
+                    value = author,
+                    onValueChange = { author = it },
+                    label = { Text("Autor") },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White,
+                        focusedBorderColor = Color(0xFF00E5FF)
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Text(
+                    text = "¿Cómo mide el avance tu Kindle?",
+                    color = Color(0xFF94A3B8),
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+
+                // Segmented Selector: Páginas vs Loc
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(Color(0xFF1A1D2E))
+                        .padding(4.dp),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(if (unit == ProgressUnit.PAGES) Color(0xFF0284C7) else Color.Transparent)
+                            .clickable { unit = ProgressUnit.PAGES }
+                            .padding(vertical = 8.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Páginas (pág)",
+                            color = if (unit == ProgressUnit.PAGES) Color.White else Color(0xFF94A3B8),
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(if (unit == ProgressUnit.LOCATIONS) Color(0xFF7C3AED) else Color.Transparent)
+                            .clickable { unit = ProgressUnit.LOCATIONS }
+                            .padding(vertical = 8.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Posición (Loc)",
+                            color = if (unit == ProgressUnit.LOCATIONS) Color.White else Color(0xFF94A3B8),
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    OutlinedTextField(
+                        value = currentPosStr,
+                        onValueChange = { currentPosStr = it },
+                        label = { Text(if (unit == ProgressUnit.PAGES) "Pág actual" else "Loc actual") },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedTextColor = Color.White,
+                            unfocusedTextColor = Color.White,
+                            focusedBorderColor = Color(0xFF00E5FF)
+                        ),
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    OutlinedTextField(
+                        value = totalUnitsStr,
+                        onValueChange = { totalUnitsStr = it },
+                        label = { Text(if (unit == ProgressUnit.PAGES) "Total págs" else "Total Locs") },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedTextColor = Color.White,
+                            unfocusedTextColor = Color.White,
+                            focusedBorderColor = Color(0xFF00E5FF)
+                        ),
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = {
+                    if (title.isNotBlank()) {
+                        val cur = currentPosStr.toIntOrNull() ?: 0
+                        val tot = totalUnitsStr.toIntOrNull() ?: 0
+                        onSave(title, author, unit, cur, tot)
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0284C7)),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text("Guardar y Activar", color = Color.White, fontWeight = FontWeight.Bold)
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cancelar", color = Color(0xFF94A3B8))
+            }
+        }
+    )
+}
+
+/**
+ * Fast dialog to update Kindle position (Pages or Loc).
+ */
+@Composable
+fun UpdatePositionDialog(
+    book: Book,
+    onSave: (Int) -> Unit,
+    onDismiss: () -> Unit
+) {
+    var positionStr by remember { mutableStateOf(book.currentPosition.toString()) }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        containerColor = Color(0xFF131522),
+        title = {
+            Text(
+                text = "Actualizar ${book.unitLabel}",
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp
+            )
+        },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Text(
+                    text = "${book.title} (${book.author})",
+                    color = Color(0xFF38BDF8),
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+
+                OutlinedTextField(
+                    value = positionStr,
+                    onValueChange = { positionStr = it },
+                    label = { Text("Nueva posición (${book.unitLabel})") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White,
+                        focusedBorderColor = Color(0xFF00E5FF)
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                // Quick Increment Chips
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    val currentVal = positionStr.toIntOrNull() ?: book.currentPosition
+                    listOf(1, 5, 10, 25).forEach { delta ->
+                        Box(
+                            modifier = Modifier
+                                .weight(1f)
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(Color(0xFF1E293B))
+                                .border(1.dp, GlassBorderStroke, RoundedCornerShape(8.dp))
+                                .clickable {
+                                    val next = (currentVal + delta)
+                                    positionStr = next.toString()
+                                }
+                                .padding(vertical = 6.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "+$delta",
+                                color = Color(0xFFE2E8F0),
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = {
+                    val parsed = positionStr.toIntOrNull() ?: book.currentPosition
+                    onSave(parsed)
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0284C7)),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text("Guardar", color = Color.White, fontWeight = FontWeight.Bold)
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Omitir", color = Color(0xFF94A3B8))
+            }
+        }
+    )
 }
 
 /**
@@ -1148,52 +1788,4 @@ fun NfcSetupDialog(onDismiss: () -> Unit) {
             }
         }
     )
-}
-
-@androidx.compose.ui.tooling.preview.Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun DashboardScreenPreview() {
-    MaterialTheme {
-        DashboardScreen(
-            state = DashboardState(
-                streakInfo = com.universalreadingtracker.domain.model.StreakInfo(163, 163, true, 163),
-                todaySummary = com.universalreadingtracker.domain.model.DailyReadingSummary(
-                    date = "2026-09-26",
-                    totalMinutesRead = 45,
-                    audioMinutes = 30,
-                    kindleMinutes = 15,
-                    physicalMinutes = 0,
-                    goalReached = true,
-                    isHistoricalBackfill = false
-                ),
-                recentSessions = listOf(
-                    ReadingSession(
-                        id = 1,
-                        bookId = 1,
-                        bookTitle = "Atomic Habits",
-                        bookAuthor = "James Clear",
-                        modality = ReadingModality.AUDIOBOOK,
-                        providerId = "audible",
-                        startTime = System.currentTimeMillis() - 3600000,
-                        endTime = System.currentTimeMillis() - 1800000,
-                        realDurationSeconds = 1800
-                    ),
-                    ReadingSession(
-                        id = 2,
-                        bookId = 2,
-                        bookTitle = "Klara and the Sun",
-                        bookAuthor = "Kazuo Ishiguro",
-                        modality = ReadingModality.EBOOK_KINDLE,
-                        providerId = "kindle_physical",
-                        startTime = System.currentTimeMillis() - 7200000,
-                        endTime = System.currentTimeMillis() - 6300000,
-                        realDurationSeconds = 900,
-                        startPage = 120,
-                        endPage = 138
-                    )
-                )
-            ),
-            onToggleKindleTimer = {}
-        )
-    }
 }

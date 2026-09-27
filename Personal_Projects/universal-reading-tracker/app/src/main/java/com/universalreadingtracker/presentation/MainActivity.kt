@@ -74,7 +74,13 @@ class MainActivity : ComponentActivity() {
                 val state by viewModel.uiState.collectAsState()
                 DashboardScreen(
                     state = state,
-                    onToggleKindleTimer = { viewModel.toggleKindleReadingTimer() }
+                    onToggleKindleTimer = { viewModel.toggleKindleReadingTimer() },
+                    onSelectBook = { bookId -> viewModel.selectActiveBook(bookId) },
+                    onAddNewBook = { title, author, unit, curPos, total ->
+                        viewModel.addNewBook(title, author, unit, curPos, total)
+                    },
+                    onUpdatePosition = { newPos -> viewModel.updateActiveBookPosition(newPos) },
+                    onExportJson = { viewModel.exportDataToJson(this@MainActivity) }
                 )
             }
         }

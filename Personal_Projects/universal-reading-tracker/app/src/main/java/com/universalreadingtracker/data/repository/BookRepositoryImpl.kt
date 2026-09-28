@@ -58,4 +58,8 @@ class BookRepositoryImpl(
     override suspend fun setActiveReadingBook(bookId: Long) {
         bookDao.setActiveBook(bookId)
     }
+
+    override suspend fun findByTitleAndAuthor(title: String, author: String): Book? {
+        return bookDao.findByTitleAndAuthor(title, author)?.toDomain()
+    }
 }

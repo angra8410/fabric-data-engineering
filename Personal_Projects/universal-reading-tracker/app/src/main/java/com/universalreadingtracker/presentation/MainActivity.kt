@@ -80,7 +80,8 @@ class MainActivity : ComponentActivity() {
                         viewModel.addNewBook(title, author, unit, curPos, total)
                     },
                     onUpdatePosition = { newPos -> viewModel.updateActiveBookPosition(newPos) },
-                    onExportJson = { viewModel.exportDataToJson(this@MainActivity) }
+                    onExportJson = { viewModel.exportDataToJson(this@MainActivity) },
+                    onSyncCatalog = { viewModel.syncEnrichedCatalogFromAssets() }
                 )
             }
         }

@@ -53,6 +53,17 @@ val ElectricCyanGradient = listOf(Color(0xFF00E5FF), Color(0xFF0072FF))
 val AudibleAmberGradient = listOf(Color(0xFFFFC107), Color(0xFFFF6D00))
 val NfcVioletGradient = listOf(Color(0xFFA855F7), Color(0xFF6366F1))
 
+/**
+ * Strips diacritics/tildes and converts to lowercase for fast, robust fuzzy searching.
+ * Example: "Hábitos" -> "habitos", "Kahneman" -> "kahneman".
+ */
+fun normalizeForSearch(text: String): String {
+    return java.text.Normalizer.normalize(text, java.text.Normalizer.Form.NFD)
+        .replace("\\p{InCombiningDiacriticalMarks}+".toRegex(), "")
+        .lowercase()
+        .trim()
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(
@@ -61,7 +72,8 @@ fun DashboardScreen(
     onSelectBook: (Long) -> Unit = {},
     onAddNewBook: (String, String, ProgressUnit, Int, Int) -> Unit = { _, _, _, _, _ -> },
     onUpdatePosition: (Int) -> Unit = {},
-    onExportJson: () -> Unit = {}
+    onExportJson: () -> Unit = {},
+    onSyncCatalog: () -> Unit = {}
 ) {
     var showNfcDialog by remember { mutableStateOf(false) }
     var showBookSelectorDialog by remember { mutableStateOf(false) }
@@ -85,6 +97,7 @@ fun DashboardScreen(
                 showBookSelectorDialog = false
                 showAddBookDialog = true
             },
+            onSyncCatalog = onSyncCatalog,
             onDismiss = { showBookSelectorDialog = false }
         )
     }
@@ -237,12 +250,15 @@ fun DashboardScreen(
                         )
                     }
 
-                    // 2. Active Kindle Book Card with Pág / Loc Tracking
+                    // 2. Active Kindle Book Card with Dropdown Selector & Pág / Loc Tracking
                     item {
                         ActiveBookGlassCard(
+                            books = state.activeBooks,
                             book = state.activeBook,
+                            onSelectBook = onSelectBook,
                             onOpenBookSelector = { showBookSelectorDialog = true },
-                            onOpenUpdatePosition = { showUpdatePositionDialog = true }
+                            onOpenUpdatePosition = { showUpdatePositionDialog = true },
+                            onSyncCatalog = onSyncCatalog
                         )
                     }
 
@@ -359,11 +375,19 @@ fun DashboardScreen(
 /**
  * Active Book Card on Kindle: Displays current title, progress in Pág or Loc, and quick update buttons.
  */
+/**
+ * Active Book Card on Kindle: Features 1-tap access to the searchable book library
+ * with fuzzy search and full scrolling, displays current position/progress in Pág or Loc,
+ * and quick update buttons.
+ */
 @Composable
 fun ActiveBookGlassCard(
+    books: List<Book>,
     book: Book?,
+    onSelectBook: (Long) -> Unit,
     onOpenBookSelector: () -> Unit,
-    onOpenUpdatePosition: () -> Unit
+    onOpenUpdatePosition: () -> Unit,
+    onSyncCatalog: () -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -373,12 +397,19 @@ fun ActiveBookGlassCard(
         colors = CardDefaults.cardColors(containerColor = SurfaceGlass)
     ) {
         Column(modifier = Modifier.padding(18.dp)) {
+            // Header with LEYENDO EN KINDLE and Searchable List Trigger
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clip(RoundedCornerShape(8.dp))
+                        .clickable { onOpenBookSelector() },
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Box(
                         modifier = Modifier
                             .size(34.dp)
@@ -394,7 +425,11 @@ fun ActiveBookGlassCard(
                         )
                     }
                     Spacer(modifier = Modifier.width(10.dp))
-                    Column {
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(vertical = 2.dp)
+                    ) {
                         Text(
                             text = "LEYENDO EN KINDLE",
                             color = Color(0xFF38BDF8),
@@ -402,17 +437,28 @@ fun ActiveBookGlassCard(
                             fontWeight = FontWeight.ExtraBold,
                             letterSpacing = 1.2.sp
                         )
-                        Text(
-                            text = book?.title ?: "Seleccionar libro",
-                            color = Color.White,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
-                            maxLines = 1
-                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = book?.title ?: "Elegir de la lista...",
+                                color = Color.White,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
+                                maxLines = 1,
+                                modifier = Modifier.weight(1f, fill = false)
+                            )
+                            Icon(
+                                imageVector = Icons.Default.ArrowDropDown,
+                                contentDescription = "Abrir lista de libros",
+                                tint = Color(0xFF00E5FF),
+                                modifier = Modifier.size(24.dp)
+                            )
+                        }
                     }
                 }
 
-                // Change Book Pill
+                // Searchable List Pill Button
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(12.dp))
@@ -421,12 +467,27 @@ fun ActiveBookGlassCard(
                         .clickable { onOpenBookSelector() }
                         .padding(horizontal = 10.dp, vertical = 5.dp)
                 ) {
-                    Text(
-                        text = "Cambiar",
-                        color = Color(0xFF7DD3FC),
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = null,
+                            tint = Color(0xFF7DD3FC),
+                            modifier = Modifier.size(13.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = "Buscar",
+                            color = Color(0xFF7DD3FC),
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Icon(
+                            imageVector = Icons.Default.ArrowDropDown,
+                            contentDescription = null,
+                            tint = Color(0xFF7DD3FC),
+                            modifier = Modifier.size(15.dp)
+                        )
+                    }
                 }
             }
 
@@ -518,7 +579,7 @@ fun ActiveBookGlassCard(
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0284C7)),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("+ Seleccionar libro en lectura", color = Color.White, fontWeight = FontWeight.Bold)
+                    Text("Seleccionar libro de la lista", color = Color.White, fontWeight = FontWeight.Bold)
                 }
             }
         }
@@ -526,7 +587,8 @@ fun ActiveBookGlassCard(
 }
 
 /**
- * Dialog to pick or switch books in library.
+ * Searchable Book Picker Dialog with real-time fuzzy search by title or author,
+ * unlimited smooth scrolling (LazyColumn), and instant 1-tap book activation.
  */
 @Composable
 fun BookSelectorDialog(
@@ -534,29 +596,83 @@ fun BookSelectorDialog(
     activeBookId: Long,
     onSelect: (Long) -> Unit,
     onOpenAddBook: () -> Unit,
+    onSyncCatalog: () -> Unit = {},
     onDismiss: () -> Unit
 ) {
+    var searchQuery by remember { mutableStateOf("") }
+
+    val filteredBooks = remember(books, searchQuery) {
+        if (searchQuery.isBlank()) {
+            books
+        } else {
+            val normQuery = normalizeForSearch(searchQuery)
+            val tokens = normQuery.split(" ").filter { it.isNotBlank() }
+            books.filter { book ->
+                val normTitle = normalizeForSearch(book.title)
+                val normAuthor = normalizeForSearch(book.author)
+                tokens.all { token -> normTitle.contains(token) || normAuthor.contains(token) }
+            }
+        }
+    }
+
     AlertDialog(
         onDismissRequest = onDismiss,
         containerColor = Color(0xFF131522),
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(max = 680.dp),
         title = {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = "Biblioteca Kindle",
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp
-                )
-                IconButton(onClick = onOpenAddBook) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "Añadir libro",
-                        tint = Color(0xFF00E5FF)
-                    )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(Brush.linearGradient(ElectricCyanGradient)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.MenuBook,
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Column {
+                        Text(
+                            text = "Biblioteca Kindle",
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 17.sp
+                        )
+                        Text(
+                            text = "${filteredBooks.size} de ${books.size} libros",
+                            color = Color(0xFF38BDF8),
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+                }
+                Row {
+                    IconButton(onClick = onSyncCatalog) {
+                        Icon(
+                            imageVector = Icons.Default.Refresh,
+                            contentDescription = "Sincronizar catálogo",
+                            tint = Color(0xFF38BDF8)
+                        )
+                    }
+                    IconButton(onClick = onOpenAddBook) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Añadir libro",
+                            tint = Color(0xFF00E5FF)
+                        )
+                    }
                 }
             }
         },
@@ -564,62 +680,128 @@ fun BookSelectorDialog(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 4.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
+                    .padding(vertical = 2.dp)
             ) {
-                Text(
-                    text = "Selecciona el libro que tienes abierto en tu Kindle:",
-                    color = Color(0xFF94A3B8),
-                    fontSize = 12.sp
+                // Search Input with Instant Fuzzy Filter
+                OutlinedTextField(
+                    value = searchQuery,
+                    onValueChange = { searchQuery = it },
+                    placeholder = {
+                        Text(
+                            text = "Buscar por título o autor...",
+                            color = Color(0xFF64748B),
+                            fontSize = 13.sp
+                        )
+                    },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "Buscar",
+                            tint = Color(0xFF00E5FF),
+                            modifier = Modifier.size(18.dp)
+                        )
+                    },
+                    trailingIcon = {
+                        if (searchQuery.isNotBlank()) {
+                            IconButton(onClick = { searchQuery = "" }) {
+                                Icon(
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription = "Limpiar búsqueda",
+                                    tint = Color(0xFF94A3B8),
+                                    modifier = Modifier.size(16.dp)
+                                )
+                            }
+                        }
+                    },
+                    singleLine = true,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White,
+                        focusedBorderColor = Color(0xFF00E5FF),
+                        unfocusedBorderColor = Color(0x33FFFFFF),
+                        cursorColor = Color(0xFF00E5FF)
+                    ),
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier.fillMaxWidth()
                 )
 
-                if (books.isEmpty()) {
-                    Text(
-                        text = "No tienes libros guardados aún.",
-                        color = Color(0xFFCBD5E1),
-                        fontSize = 13.sp
-                    )
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Scrollable List of Books (LazyColumn)
+                if (filteredBooks.isEmpty()) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(140.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Icon(
+                                imageVector = Icons.Default.Search,
+                                contentDescription = null,
+                                tint = Color(0xFF64748B),
+                                modifier = Modifier.size(32.dp)
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = if (searchQuery.isNotBlank()) "Sin resultados para \"$searchQuery\"" else "No hay libros guardados",
+                                color = Color(0xFF94A3B8),
+                                fontSize = 13.sp,
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
+                    }
                 } else {
-                    books.forEach { book ->
-                        val isSelected = book.id == activeBookId
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(14.dp))
-                                .background(if (isSelected) Color(0x3300E5FF) else Color(0xFF1A1D2E))
-                                .border(
-                                    1.dp,
-                                    if (isSelected) Color(0xFF00E5FF) else GlassBorderStroke,
-                                    RoundedCornerShape(14.dp)
-                                )
-                                .clickable { onSelect(book.id) }
-                                .padding(12.dp)
-                        ) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(max = 380.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(filteredBooks, key = { it.id }) { book ->
+                            val isSelected = book.id == activeBookId
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clip(RoundedCornerShape(14.dp))
+                                    .background(if (isSelected) Color(0x3300E5FF) else Color(0xFF1A1D2E))
+                                    .border(
+                                        1.dp,
+                                        if (isSelected) Color(0xFF00E5FF) else GlassBorderStroke,
+                                        RoundedCornerShape(14.dp)
+                                    )
+                                    .clickable {
+                                        onSelect(book.id)
+                                    }
+                                    .padding(horizontal = 14.dp, vertical = 10.dp)
                             ) {
-                                Column(modifier = Modifier.weight(1f)) {
-                                    Text(
-                                        text = book.title,
-                                        color = Color.White,
-                                        fontSize = 14.sp,
-                                        fontWeight = FontWeight.Bold
-                                    )
-                                    Text(
-                                        text = "${book.author} · ${book.formattedProgress}",
-                                        color = Color(0xFF94A3B8),
-                                        fontSize = 11.sp
-                                    )
-                                }
-                                if (isSelected) {
-                                    Icon(
-                                        imageVector = Icons.Default.CheckCircle,
-                                        contentDescription = "Activo",
-                                        tint = Color(0xFF00E5FF),
-                                        modifier = Modifier.size(20.dp)
-                                    )
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Column(modifier = Modifier.weight(1f)) {
+                                        Text(
+                                            text = book.title,
+                                            color = if (isSelected) Color(0xFF00E5FF) else Color.White,
+                                            fontSize = 14.sp,
+                                            fontWeight = if (isSelected) FontWeight.ExtraBold else FontWeight.Bold
+                                        )
+                                        Spacer(modifier = Modifier.height(2.dp))
+                                        Text(
+                                            text = "${book.author} · ${book.formattedProgress}",
+                                            color = Color(0xFF94A3B8),
+                                            fontSize = 11.sp
+                                        )
+                                    }
+                                    if (isSelected) {
+                                        Icon(
+                                            imageVector = Icons.Default.CheckCircle,
+                                            contentDescription = "Activo",
+                                            tint = Color(0xFF00E5FF),
+                                            modifier = Modifier.size(20.dp)
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -633,7 +815,7 @@ fun BookSelectorDialog(
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0284C7)),
                 shape = RoundedCornerShape(12.dp)
             ) {
-                Text("+ Añadir Nuevo Libro", color = Color.White, fontWeight = FontWeight.Bold)
+                Text("+ Añadir Otro", color = Color.White, fontWeight = FontWeight.Bold)
             }
         },
         dismissButton = {

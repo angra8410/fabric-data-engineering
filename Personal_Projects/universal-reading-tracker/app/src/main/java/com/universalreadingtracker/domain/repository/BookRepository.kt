@@ -13,4 +13,5 @@ interface BookRepository {
     suspend fun updateBookProgress(bookId: Long, newPage: Int?, addedDurationSeconds: Long?)
     suspend fun updateBookPosition(bookId: Long, newPosition: Int)
     suspend fun setActiveReadingBook(bookId: Long)
+    suspend fun findByTitleAndAuthor(title: String, author: String): Book?
 }

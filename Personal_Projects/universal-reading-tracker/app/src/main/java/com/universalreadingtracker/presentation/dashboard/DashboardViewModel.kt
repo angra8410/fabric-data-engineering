@@ -21,6 +21,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.json.JSONArray
+import org.json.JSONObject
 import java.io.File
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -48,30 +50,98 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
         observeTodaySummary()
         observeAllDailySummaries()
         syncTimerState()
-        ensureInitialBookSeed()
+        syncEnrichedCatalogFromAssets()
     }
 
     fun syncTimerState() {
         _uiState.update { it.copy(isKindleTimerRunning = KindleReadingTimerService.isRunning) }
     }
 
-    private fun ensureInitialBookSeed() {
+    fun syncEnrichedCatalogFromAssets() {
         viewModelScope.launch {
+            try {
+                val assetManager = getApplication<Application>().assets
+                val jsonString = assetManager.open("books_catalog.json").bufferedReader().use { it.readText() }
+                importCatalogFromJson(jsonString)
+            } catch (e: Exception) {
+                ensureInitialBookSeedFallback()
+            }
+        }
+    }
+
+    fun importCatalogJson(jsonContent: String) {
+        viewModelScope.launch {
+            importCatalogFromJson(jsonContent)
+        }
+    }
+
+    private suspend fun importCatalogFromJson(jsonString: String) {
+        try {
+            val jsonArray = if (jsonString.trim().startsWith("[")) {
+                JSONArray(jsonString)
+            } else {
+                val rootObj = JSONObject(jsonString)
+                rootObj.optJSONArray("books") ?: JSONArray()
+            }
+
+            var firstInsertedId: Long? = null
+
+            for (i in 0 until jsonArray.length()) {
+                val obj = jsonArray.getJSONObject(i)
+                val title = obj.optString("title", "").trim()
+                if (title.isBlank()) continue
+                val author = obj.optString("author", "Autor Desconocido").trim()
+                val totalUnits = obj.optInt("totalUnits", obj.optInt("pageCount", 320))
+                val unitStr = obj.optString("progressUnit", "PAGES")
+                val unit = if (unitStr.equals("LOCATIONS", ignoreCase = true)) ProgressUnit.LOCATIONS else ProgressUnit.PAGES
+                val curPos = obj.optInt("currentPosition", 0)
+
+                val existing = bookRepo.findByTitleAndAuthor(title, author)
+                if (existing == null) {
+                    val newBook = Book(
+                        title = title,
+                        author = author,
+                        format = BookFormat.EBOOK,
+                        primaryProviderId = "kindle_physical",
+                        progressUnit = unit,
+                        currentPosition = curPos,
+                        totalUnits = if (totalUnits > 0) totalUnits else 320,
+                        isCurrentlyReading = false
+                    )
+                    val insertedId = bookRepo.insertOrUpdateBook(newBook)
+                    if (firstInsertedId == null) firstInsertedId = insertedId
+                }
+            }
+
             val active = bookRepo.getActiveReadingBookSync()
             if (active == null) {
-                val seedBook = Book(
-                    title = "Hábitos Atómicos",
-                    author = "James Clear",
-                    format = BookFormat.EBOOK,
-                    primaryProviderId = "kindle_physical",
-                    progressUnit = ProgressUnit.PAGES,
-                    currentPosition = 145,
-                    totalUnits = 320,
-                    isCurrentlyReading = true
-                )
-                val id = bookRepo.insertOrUpdateBook(seedBook)
-                bookRepo.setActiveReadingBook(id)
+                if (firstInsertedId != null) {
+                    bookRepo.setActiveReadingBook(firstInsertedId)
+                } else {
+                    ensureInitialBookSeedFallback()
+                }
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ensureInitialBookSeedFallback()
+        }
+    }
+
+    private suspend fun ensureInitialBookSeedFallback() {
+        val active = bookRepo.getActiveReadingBookSync()
+        if (active == null) {
+            val seedBook = Book(
+                title = "Hábitos Atómicos",
+                author = "James Clear",
+                format = BookFormat.EBOOK,
+                primaryProviderId = "kindle_physical",
+                progressUnit = ProgressUnit.PAGES,
+                currentPosition = 145,
+                totalUnits = 320,
+                isCurrentlyReading = true
+            )
+            val id = bookRepo.insertOrUpdateBook(seedBook)
+            bookRepo.setActiveReadingBook(id)
         }
     }
 

@@ -10,9 +10,11 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.filled.*
@@ -80,6 +82,7 @@ fun DashboardScreen(
     var showBookSelectorDialog by remember { mutableStateOf(false) }
     var showAddBookDialog by remember { mutableStateOf(false) }
     var showUpdatePositionDialog by remember { mutableStateOf(false) }
+    var selectedSessionForDetails by remember { mutableStateOf<ReadingSession?>(null) }
 
     // Dialogs
     if (showNfcDialog) {
@@ -121,6 +124,27 @@ fun DashboardScreen(
                 showUpdatePositionDialog = false
             },
             onDismiss = { showUpdatePositionDialog = false }
+        )
+    }
+
+    if (selectedSessionForDetails != null) {
+        val session = selectedSessionForDetails!!
+        SessionDetailDialog(
+            session = session,
+            streakDays = state.streakInfo.currentStreakDays,
+            dailyGoalMinutes = state.dailyGoalMinutes,
+            onContinueReading = {
+                val targetBookId = if (session.bookId > 0) {
+                    session.bookId
+                } else {
+                    state.activeBooks.find { it.title.equals(session.bookTitle, ignoreCase = true) }?.id
+                }
+                if (targetBookId != null && targetBookId > 0) {
+                    onSelectBook(targetBookId)
+                }
+                selectedSessionForDetails = null
+            },
+            onDismiss = { selectedSessionForDetails = null }
         )
     }
 
@@ -361,7 +385,10 @@ fun DashboardScreen(
                         }
                     } else {
                         items(state.recentSessions) { session ->
-                            LuxurySessionRow(session = session)
+                            LuxurySessionRow(
+                                session = session,
+                                onClick = { selectedSessionForDetails = session }
+                            )
                         }
                     }
 
@@ -1859,10 +1886,13 @@ fun TodayProgressGlassCard(
 }
 
 /**
- * 6. Luxury Session Row with stylized typography and format badge.
+ * 6. Luxury Session Row with stylized typography, format badge, and interactive detail trigger.
  */
 @Composable
-fun LuxurySessionRow(session: ReadingSession) {
+fun LuxurySessionRow(
+    session: ReadingSession,
+    onClick: () -> Unit = {}
+) {
     val isAudio = session.modality == ReadingModality.AUDIOBOOK
     val icon = if (isAudio) Icons.Default.Headphones else Icons.AutoMirrored.Filled.MenuBook
     val gradient = if (isAudio) AudibleAmberGradient else ElectricCyanGradient
@@ -1871,7 +1901,8 @@ fun LuxurySessionRow(session: ReadingSession) {
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(18.dp))
-            .border(1.dp, GlassBorderStroke, RoundedCornerShape(18.dp)),
+            .border(1.dp, GlassBorderStroke, RoundedCornerShape(18.dp))
+            .clickable { onClick() },
         colors = CardDefaults.cardColors(containerColor = SurfaceGlass)
     ) {
         Row(
@@ -1902,15 +1933,21 @@ fun LuxurySessionRow(session: ReadingSession) {
                     text = session.bookTitle.ifBlank { "Lectura en Kindle" },
                     color = Color.White,
                     fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = session.bookAuthor.ifBlank { session.providerId.uppercase() },
                     color = Color(0xFF94A3B8),
-                    fontSize = 12.sp
+                    fontSize = 12.sp,
+                    maxLines = 1,
+                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                 )
             }
+
+            Spacer(modifier = Modifier.width(8.dp))
 
             Column(horizontalAlignment = Alignment.End) {
                 Text(
@@ -1928,6 +1965,326 @@ fun LuxurySessionRow(session: ReadingSession) {
                     )
                 }
             }
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Icon(
+                imageVector = Icons.Default.ChevronRight,
+                contentDescription = "Ver métricas",
+                tint = Color(0xFF64748B),
+                modifier = Modifier.size(18.dp)
+            )
+        }
+    }
+}
+
+/**
+ * Interactive Session Detail Dialog: Displays comprehensive reading metrics,
+ * duration, exact time range, reading speed (pages/hr), modality badge, and quick actions.
+ */
+@Composable
+fun SessionDetailDialog(
+    session: ReadingSession,
+    streakDays: Int,
+    dailyGoalMinutes: Int,
+    onContinueReading: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    val isAudio = session.modality == ReadingModality.AUDIOBOOK
+    val icon = if (isAudio) Icons.Default.Headphones else Icons.AutoMirrored.Filled.MenuBook
+    val gradient = if (isAudio) AudibleAmberGradient else ElectricCyanGradient
+    val glowColor = if (isAudio) GlowAmberBorder else GlowCyanBorder
+
+    val zone = java.time.ZoneId.systemDefault()
+    val timeFormatter = java.time.format.DateTimeFormatter.ofPattern("hh:mm a", java.util.Locale.getDefault())
+    val dateFormatter = java.time.format.DateTimeFormatter.ofPattern("EEEE, d 'de' MMMM", java.util.Locale.forLanguageTag("es-ES"))
+
+    val effectiveStart = if (session.startTime > 0) session.startTime else (System.currentTimeMillis() - session.realDurationSeconds * 1000)
+    val effectiveEnd = if (session.endTime > 0) session.endTime else System.currentTimeMillis()
+
+    val startInstant = java.time.Instant.ofEpochMilli(effectiveStart)
+    val endInstant = java.time.Instant.ofEpochMilli(effectiveEnd)
+
+    val startTimeStr = startInstant.atZone(zone).format(timeFormatter)
+    val endTimeStr = endInstant.atZone(zone).format(timeFormatter)
+    val dateStr = startInstant.atZone(zone).toLocalDate().format(dateFormatter).replaceFirstChar { it.uppercase() }
+
+    val readingSpeedPph = if (session.pagesRead != null && session.pagesRead > 0 && session.durationMinutes > 0) {
+        String.format(java.util.Locale.US, "%.1f", (session.pagesRead.toFloat() / session.durationMinutes) * 60)
+    } else null
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        containerColor = Color(0xFF131522),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 4.dp),
+        title = {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(Brush.linearGradient(gradient)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = icon,
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier.size(18.dp)
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Column {
+                        Text(
+                            text = "FICHA DE SESIÓN",
+                            color = if (isAudio) Color(0xFFFFB300) else Color(0xFF38BDF8),
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            letterSpacing = 1.2.sp
+                        )
+                        Text(
+                            text = "Métricas de Lectura",
+                            color = Color.White,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+
+                IconButton(onClick = onDismiss) {
+                    Icon(imageVector = Icons.Default.Close, contentDescription = "Cerrar", tint = Color(0xFF94A3B8))
+                }
+            }
+        },
+        text = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(14.dp)
+            ) {
+                // 1. Hero Book Banner
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(18.dp))
+                        .background(Color(0xFF1A1D2E))
+                        .border(1.dp, glowColor, RoundedCornerShape(18.dp))
+                        .padding(16.dp)
+                ) {
+                    Column {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Box(
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(6.dp))
+                                    .background(if (isAudio) Color(0x33FFB300) else Color(0x3300E5FF))
+                                    .padding(horizontal = 8.dp, vertical = 3.dp)
+                            ) {
+                                Text(
+                                    text = if (isAudio) "🎧 AUDIOLIBRO" else "📖 KINDLE FÍSICO",
+                                    color = if (isAudio) Color(0xFFFFB300) else Color(0xFF00E5FF),
+                                    fontSize = 10.sp,
+                                    fontWeight = FontWeight.Black,
+                                    letterSpacing = 0.8.sp
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = session.bookTitle.ifBlank { "Lectura en Kindle" },
+                            color = Color.White,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            lineHeight = 22.sp
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = session.bookAuthor.ifBlank { session.providerId.uppercase() },
+                            color = Color(0xFF94A3B8),
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+                }
+
+                // 2. Grid de 4 Métricas Clave
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    MetricCard(
+                        modifier = Modifier.weight(1f),
+                        icon = Icons.Default.Timer,
+                        iconColor = Color(0xFFFF9900),
+                        label = "Tiempo Neto",
+                        value = "${session.durationMinutes} min",
+                        subtitle = "${session.realDurationSeconds}s reloj real"
+                    )
+
+                    MetricCard(
+                        modifier = Modifier.weight(1f),
+                        icon = Icons.Default.Schedule,
+                        iconColor = Color(0xFF38BDF8),
+                        label = "Horario",
+                        value = startTimeStr,
+                        subtitle = "Hasta $endTimeStr"
+                    )
+                }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    MetricCard(
+                        modifier = Modifier.weight(1f),
+                        icon = Icons.Default.Speed,
+                        iconColor = Color(0xFFA855F7),
+                        label = "Ritmo Lector",
+                        value = if (session.pagesRead != null && session.pagesRead > 0) "+${session.pagesRead} págs" else "Continuo",
+                        subtitle = if (readingSpeedPph != null) "$readingSpeedPph págs/h" else "${session.durationMinutes} min inmersión"
+                    )
+
+                    MetricCard(
+                        modifier = Modifier.weight(1f),
+                        icon = Icons.Default.EmojiEvents,
+                        iconColor = Color(0xFF10B981),
+                        label = "Aporte de Racha",
+                        value = "+${session.durationMinutes} min",
+                        subtitle = "Racha de $streakDays d 🔥"
+                    )
+                }
+
+                // 3. Tarjeta de Fecha & Páginas
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(14.dp))
+                        .background(Color(0x1A000000))
+                        .border(1.dp, GlassBorderStroke, RoundedCornerShape(14.dp))
+                        .padding(horizontal = 14.dp, vertical = 10.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(text = "📅", fontSize = 14.sp)
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = dateStr,
+                                color = Color(0xFFE2E8F0),
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
+                        if (session.startPage != null && session.endPage != null && session.endPage >= session.startPage) {
+                            Text(
+                                text = "Pág. ${session.startPage} ➔ ${session.endPage}",
+                                color = Color(0xFF38BDF8),
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = onContinueReading,
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                contentPadding = PaddingValues(),
+                shape = RoundedCornerShape(14.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Brush.linearGradient(ElectricCyanGradient), RoundedCornerShape(14.dp))
+                        .padding(vertical = 12.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.MenuBook,
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "Continuar leyendo este libro",
+                            color = Color.White,
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(text = "Cerrar", color = Color(0xFF94A3B8), fontWeight = FontWeight.SemiBold)
+            }
+        }
+    )
+}
+
+@Composable
+fun MetricCard(
+    modifier: Modifier = Modifier,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    iconColor: Color,
+    label: String,
+    value: String,
+    subtitle: String
+) {
+    Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(14.dp))
+            .background(Color(0xFF161928))
+            .border(1.dp, GlassBorderStroke, RoundedCornerShape(14.dp))
+            .padding(12.dp)
+    ) {
+        Column {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = iconColor,
+                    modifier = Modifier.size(14.dp)
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(
+                    text = label,
+                    color = Color(0xFF94A3B8),
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+            Spacer(modifier = Modifier.height(6.dp))
+            Text(
+                text = value,
+                color = Color.White,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Black
+            )
+            Spacer(modifier = Modifier.height(2.dp))
+            Text(
+                text = subtitle,
+                color = Color(0xFF64748B),
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Medium,
+                maxLines = 1,
+                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+            )
         }
     }
 }

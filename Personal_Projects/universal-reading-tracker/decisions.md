@@ -236,6 +236,28 @@
 - **Consecuencias:**
   - Fidelidad visual total en la consistencia semanal y protección activa del hábito lector sin spam innecesario.
 
+---
+
+## [ADR-017] Ficha Interactiva de Métricas de Sesión en Historial Reciente
+- **Fecha:** 2026-09-28
+- **Estado:** Aprobado
+- **Contexto:**
+  En la sección "Historial Reciente" del dashboard, cada sesión mostraba un resumen estático básico. El usuario requería que al pulsar una sesión (por ejemplo: "24 mins - *Your Past Lives* de Michael Talbot"), se abriera una vista detallada interactiva con métricas enriquecidas del libro, tiempo, ritmo de lectura e impacto en el hábito.
+- **Decisión Tomada:**
+  1. **Interactividad en `LuxurySessionRow`:** Se añade comportamiento táctil (`Modifier.clickable`), micro-feedback visual y un icono chevron indicador de navegación/expansión.
+  2. **Diálogo de Métricas de Alta Fidelidad (`SessionDetailDialog`):**
+     - **Encabezado y Metadatos:** Distintivo de modalidad (`🎧 AUDIOLIBRO` o `📖 KINDLE FÍSICO`), título completo sin truncar y autor.
+     - **Cuadrícula de Métricas de 4 Ejes:**
+       - *Tiempo Neto:* Minutos y segundos reales de inmersión.
+       - *Ventana de Horario:* Rango horario exacto de la sesión (`hh:mm a` de inicio a fin).
+       - *Ritmo de Lectura:* Páginas avanzadas y velocidad calculada en `págs/h` (o inmersión continua para audiolibros).
+       - *Impacto en Racha:* Minutos aportados al hábito diario y conteo actual de racha.
+     - **Progreso de Páginas:** Visualización clara de página inicial y final (`Pág. X ➔ Y`) para lecturas de texto.
+     - **Acción Rápida de Continuación:** Botón primario *"Continuar leyendo este libro"* que activa el libro en el repositorio si no es el libro actual seleccionado, facilitando alternar entre lecturas en progreso.
+- **Consecuencias:**
+  - Experiencia de usuario inmersiva, consulta transparente del historial y trazabilidad directa de qué libro y qué métricas se obtuvieron en cada bloque de lectura.
+
+
 
 
 

@@ -24,7 +24,7 @@ interface DailyReadingSummaryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOrUpdateSummary(summary: DailyReadingSummaryEntity)
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(summaries: List<DailyReadingSummaryEntity>)
 
     @Query("SELECT COUNT(*) FROM daily_reading_summaries WHERE isHistoricalBackfill = 1")

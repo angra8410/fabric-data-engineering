@@ -42,7 +42,7 @@ class StreakRepositoryImpl(
             val dateStr = pastDate.format(dateFormatter)
 
             val existing = summaryDao.getSummaryForDate(dateStr)
-            if (existing == null) {
+            if (existing == null || (existing.totalMinutesRead < 1 && !existing.isHistoricalBackfill)) {
                 entitiesToInsert.add(
                     DailyReadingSummaryEntity(
                         date = dateStr,
@@ -63,6 +63,9 @@ class StreakRepositoryImpl(
     }
 
     override suspend fun hasCompletedBackfill(): Boolean {
-        return summaryDao.countHistoricalBackfillDays() >= 163
+        val yesterdayStr = LocalDate.now().minusDays(1).format(dateFormatter)
+        val yesterdaySummary = summaryDao.getSummaryForDate(yesterdayStr)
+        val hasYesterday = yesterdaySummary != null && (yesterdaySummary.totalMinutesRead >= 1 || yesterdaySummary.isHistoricalBackfill)
+        return summaryDao.countHistoricalBackfillDays() >= 164 && hasYesterday
     }
 }

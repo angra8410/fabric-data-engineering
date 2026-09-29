@@ -54,15 +54,20 @@
   - Abstracción de proveedores (`ReadingProviderAdapter`) que soporta tanto proveedores de audio pasivos como perfiles de dispositivos físicos/manuales.
 
 ### D. Módulo de Rachas (Streaks) y Calibración Histórica
-- **RF-08: Calibración y Backfill de Racha Preexistente (163 Días)**
-  - La aplicación incluye un asistente de incorporación (Onboarding / Settings) que permite al usuario registrar su racha previa activa (163 días al 2026-09-26).
-  - Se genera un backfill de resúmenes diarios históricos (`DailyReadingSummary`) en Room DB para los 163 días anteriores, garantizando que el calendario de calor (heatmap) y el contador comiencen exactamente en 163 días y avancen a 164 en el próximo día con lectura.
+- **RF-08: Calibración y Backfill de Racha Preexistente (164 Días)**
+  - La aplicación garantiza la preservación de la racha previa activa acumulada (164 días hasta ayer 2026-09-27).
+  - Se genera y auto-repara el backfill de resúmenes diarios históricos (`DailyReadingSummary`) en Room DB para los 164 días anteriores (incluyendo ayer), garantizando que el contador muestre 164 días de base y avance a 165 días inmediatamente al registrar la primera lectura de hoy.
 - **RF-09: Condición de Mantenimiento de Racha**
   - La racha diaria se mantiene activa si el usuario registra **al menos 1 minuto** de lectura válida (en Audible, Kindle o cualquier formato) entre las 00:00:00 y las 23:59:59 del día local.
 - **RF-10: Manejo de Sesiones a Medianoche (División Proporcional)**
   - Si una sesión de lectura cruza el cambio de día (ej. inicia a las 23:45 y finaliza a las 00:20):
     - El tramo antes de las 00:00 (15 min) se asigna al día que finaliza (manteniendo o consolidando su racha).
     - El tramo posterior a las 00:00 (20 min) se asigna al nuevo día (contribuyendo inmediatamente a la racha del día que comienza).
+- **RF-12: Recordatorio Inteligente Preventivo de Racha (9:00 PM Hora Colombia)**
+  - A las 21:00 horas (zona horaria `America/Bogota`), el sistema evalúa automáticamente si el usuario ya registró lectura en el día.
+  - Si el usuario ya leyó (`totalMinutesRead >= 1`), la alerta se silencia para no interrumpir.
+  - Si aún no ha leído, dispara una notificación de alta prioridad invitando al usuario a leer 15 minutos en Kindle o Audible para blindar su racha.
+  - Los 7 indicadores de la cápsula de consistencia semanal (`L M M J V S D`) reflejan en tiempo real el cumplimiento de cada día (incluyendo el domingo).
 
 ---
 

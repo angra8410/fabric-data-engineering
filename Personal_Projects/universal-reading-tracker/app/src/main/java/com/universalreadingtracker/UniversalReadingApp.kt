@@ -4,6 +4,7 @@ import android.app.Application
 import com.universalreadingtracker.data.local.AppDatabase
 import com.universalreadingtracker.data.repository.StreakRepositoryImpl
 import com.universalreadingtracker.domain.usecase.BackfillHistoricalStreakUseCase
+import com.universalreadingtracker.receiver.ReadingReminderScheduler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -13,7 +14,7 @@ import java.time.format.DateTimeFormatter
 
 /**
  * Main Application class for Universal Reading Tracker.
- * Implements ADR-009: Automatically triggers the 163-day streak backfill up to yesterday,
+ * Implements ADR-009 & ADR-015: Automatically triggers the 164-day streak backfill up to yesterday,
  * ensuring today starts fresh with actual user reading.
  */
 class UniversalReadingApp : Application() {
@@ -24,6 +25,7 @@ class UniversalReadingApp : Application() {
     override fun onCreate() {
         super.onCreate()
         ensureHistoricalStreakBackfill()
+        ReadingReminderScheduler.scheduleDailyReminder(this)
     }
 
     private fun ensureHistoricalStreakBackfill() {
@@ -35,7 +37,7 @@ class UniversalReadingApp : Application() {
             val streakRepo = StreakRepositoryImpl(database.dailyReadingSummaryDao())
             if (!streakRepo.hasCompletedBackfill()) {
                 val backfillUseCase = BackfillHistoricalStreakUseCase(streakRepo)
-                backfillUseCase(streakDays = 163, referenceDate = LocalDate.now())
+                backfillUseCase(streakDays = 164, referenceDate = LocalDate.now())
             }
         }
     }

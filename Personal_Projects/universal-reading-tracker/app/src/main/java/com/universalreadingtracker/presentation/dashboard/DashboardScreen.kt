@@ -33,6 +33,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.universalreadingtracker.domain.model.Book
+import com.universalreadingtracker.domain.model.DailyReadingSummary
 import com.universalreadingtracker.domain.model.ProgressUnit
 import com.universalreadingtracker.domain.model.ReadingModality
 import com.universalreadingtracker.domain.model.ReadingSession
@@ -241,12 +242,13 @@ fun DashboardScreen(
                         .padding(horizontal = 18.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    // 1. Hero Obsidian Trophy Card (Racha 163 Días)
+                    // 1. Hero Obsidian Trophy Card (Racha Consolidada)
                     item {
                         LuxuryStreakCard(
                             streakDays = state.streakInfo.currentStreakDays,
                             longestStreak = state.streakInfo.longestStreakDays,
-                            isStreakActiveToday = state.streakInfo.isStreakActiveToday
+                            isStreakActiveToday = state.streakInfo.isStreakActiveToday,
+                            dailySummaries = state.allDailySummaries
                         )
                     }
 
@@ -1089,7 +1091,8 @@ fun UpdatePositionDialog(
 fun LuxuryStreakCard(
     streakDays: Int,
     longestStreak: Int,
-    isStreakActiveToday: Boolean = false
+    isStreakActiveToday: Boolean = false,
+    dailySummaries: List<DailyReadingSummary> = emptyList()
 ) {
     val infiniteTransition = rememberInfiniteTransition(label = "flame_pulse")
     val pulseScale by infiniteTransition.animateFloat(
@@ -1207,7 +1210,13 @@ fun LuxuryStreakCard(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Weekly consistency dots capsule (L M M J V S D)
+                // Weekly consistency dots capsule (L M M J V S D for CURRENT WEEK)
+                val today = java.time.LocalDate.now()
+                val mondayOfCurrentWeek = today.with(java.time.temporal.TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY))
+                val summaryByDate = remember(dailySummaries) {
+                    dailySummaries.associateBy { it.date }
+                }
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -1220,12 +1229,29 @@ fun LuxuryStreakCard(
                 ) {
                     val daysOfWeek = listOf("L", "M", "M", "J", "V", "S", "D")
                     daysOfWeek.forEachIndexed { index, day ->
+                        val dayDate = mondayOfCurrentWeek.plusDays(index.toLong())
+                        val isToday = dayDate.isEqual(today)
+                        val isFuture = dayDate.isAfter(today)
+
+                        val dayDateStr = dayDate.format(java.time.format.DateTimeFormatter.ISO_LOCAL_DATE)
+                        val summary = summaryByDate[dayDateStr]
+
+                        val isCompleted = when {
+                            isFuture -> false // Days ahead in the current week are deactivated
+                            isToday -> isStreakActiveToday || summary?.isValidStreakDay == true
+                            else -> summary?.isValidStreakDay == true // Past days in this week
+                        }
+
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Text(
                                 text = day,
-                                color = if (index <= 5) Color(0xFFF1F5F9) else Color(0xFF64748B),
+                                color = when {
+                                    isCompleted -> Color(0xFFF1F5F9)
+                                    isToday -> Color(0xFFFF9900)
+                                    else -> Color(0xFF475569) // Deactivated / future day color
+                                },
                                 fontSize = 10.sp,
-                                fontWeight = FontWeight.Bold
+                                fontWeight = if (isToday || isCompleted) FontWeight.ExtraBold else FontWeight.Medium
                             )
                             Spacer(modifier = Modifier.height(5.dp))
                             Box(
@@ -1233,12 +1259,22 @@ fun LuxuryStreakCard(
                                     .size(18.dp)
                                     .clip(CircleShape)
                                     .background(
-                                        if (index <= 5) Brush.linearGradient(EmberFlameGradient)
-                                        else Brush.linearGradient(listOf(Color(0x33FFFFFF), Color(0x11FFFFFF)))
+                                        when {
+                                            isCompleted -> Brush.linearGradient(EmberFlameGradient)
+                                            isToday -> Brush.linearGradient(listOf(Color(0x44FF9900), Color(0x22FF5722)))
+                                            else -> Brush.linearGradient(listOf(Color(0x18FFFFFF), Color(0x0AFFFFFF)))
+                                        }
+                                    )
+                                    .then(
+                                        when {
+                                            isToday && !isCompleted -> Modifier.border(1.2.dp, GlowAmberBorder, CircleShape)
+                                            isFuture -> Modifier.border(1.dp, Color(0x1EFFFFFF), CircleShape)
+                                            else -> Modifier
+                                        }
                                     ),
                                 contentAlignment = Alignment.Center
                             ) {
-                                if (index <= 5) {
+                                if (isCompleted) {
                                     Icon(
                                         imageVector = Icons.Default.Check,
                                         contentDescription = null,
@@ -1282,6 +1318,24 @@ fun LuxuryStreakCard(
                             fontWeight = FontWeight.Medium
                         )
                     }
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+                Row(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(Color(0x18FFFFFF))
+                        .padding(horizontal = 8.dp, vertical = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = "🔔", fontSize = 11.sp)
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Text(
+                        text = "Alerta de racha activa: 9:00 PM (Colombia) si no has leído",
+                        color = Color(0xFFCBD5E1),
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.Medium
+                    )
                 }
             }
         }
@@ -1896,7 +1950,7 @@ fun EmptyHistoryCard() {
             Text(text = "📚", fontSize = 34.sp)
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Historial de 163 días listo en memoria",
+                text = "Historial de 164+ días listo en memoria",
                 color = Color.White,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold

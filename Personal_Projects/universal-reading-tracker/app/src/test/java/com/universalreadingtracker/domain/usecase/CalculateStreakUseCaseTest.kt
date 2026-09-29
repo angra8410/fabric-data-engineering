@@ -77,4 +77,50 @@ class CalculateStreakUseCaseTest {
         assertEquals(164, streakInfo.currentStreakDays)
         assertTrue(streakInfo.isStreakActiveToday)
     }
+
+    @Test
+    fun streakWith164DaysUntilYesterday_yields165_whenReadingToday() {
+        val summaries = mutableListOf<DailyReadingSummary>()
+        val todayDate = LocalDate.of(2026, 9, 28)
+        val yesterdayDate = todayDate.minusDays(1) // 2026-09-27
+
+        // 164 historical days ending on yesterday (2026-09-27 back to 2026-04-17)
+        for (i in 0 until 164) {
+            val dateStr = yesterdayDate.minusDays(i.toLong()).toString()
+            summaries.add(
+                DailyReadingSummary(
+                    date = dateStr,
+                    totalMinutesRead = 30,
+                    audioMinutes = 15,
+                    kindleMinutes = 15,
+                    physicalMinutes = 0,
+                    goalReached = true,
+                    isHistoricalBackfill = true
+                )
+            )
+        }
+
+        // Case A: Before reading today -> streak is 164, not active today
+        val streakBeforeReadingToday = useCase(summaries, todayDate)
+        assertEquals(164, streakBeforeReadingToday.currentStreakDays)
+        org.junit.Assert.assertFalse(streakBeforeReadingToday.isStreakActiveToday)
+
+        // Case B: User reads today (2026-09-28) -> streak increments to 165
+        summaries.add(
+            DailyReadingSummary(
+                date = todayDate.toString(),
+                totalMinutesRead = 20,
+                audioMinutes = 0,
+                kindleMinutes = 20,
+                physicalMinutes = 0,
+                goalReached = false,
+                isHistoricalBackfill = false
+            )
+        )
+
+        val streakAfterReadingToday = useCase(summaries, todayDate)
+        assertEquals(165, streakAfterReadingToday.currentStreakDays)
+        assertEquals(165, streakAfterReadingToday.longestStreakDays)
+        assertTrue(streakAfterReadingToday.isStreakActiveToday)
+    }
 }

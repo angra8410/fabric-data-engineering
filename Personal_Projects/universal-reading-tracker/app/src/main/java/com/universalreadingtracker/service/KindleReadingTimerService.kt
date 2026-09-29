@@ -37,7 +37,6 @@ class KindleReadingTimerService : Service() {
     private val splitMidnightUseCase = SplitMidnightSessionUseCase()
 
     private var startEpoch: Long = 0L
-    private var elapsedSeconds: Long = 0L
     private var bookTitle: String = "Kindle Paperwhite / E-Reader"
     private var bookAuthor: String = "Lectura en Kindle"
     private var startPage: Int? = null
@@ -56,14 +55,24 @@ class KindleReadingTimerService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
             ACTION_START -> {
+                val now = System.currentTimeMillis()
+                startEpoch = now
                 isRunning = true
                 bookTitle = intent.getStringExtra(EXTRA_BOOK_TITLE) ?: "Libro en Kindle"
                 bookAuthor = intent.getStringExtra(EXTRA_BOOK_AUTHOR) ?: "Autor"
                 startPage = intent.getIntExtra(EXTRA_START_PAGE, -1).takeIf { it >= 0 }
-                startEpoch = System.currentTimeMillis()
-                elapsedSeconds = 0L
 
-                startForeground(NOTIFICATION_ID, buildOngoingNotification(0))
+                // Persist state to SharedPreferences to prevent loss during Android Doze or process restarts
+                val prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                prefs.edit()
+                    .putLong(KEY_START_EPOCH, startEpoch)
+                    .putString(KEY_BOOK_TITLE, bookTitle)
+                    .putString(KEY_BOOK_AUTHOR, bookAuthor)
+                    .putInt(KEY_START_PAGE, startPage ?: -1)
+                    .putBoolean(KEY_IS_RUNNING, true)
+                    .apply()
+
+                startForeground(NOTIFICATION_ID, buildOngoingNotification(startEpoch, bookTitle))
                 startTimer()
             }
             ACTION_STOP -> {
@@ -79,12 +88,9 @@ class KindleReadingTimerService : Service() {
         timerJob?.cancel()
         timerJob = serviceScope.launch {
             while (isActive) {
-                delay(1000)
-                elapsedSeconds++
-                if (elapsedSeconds % 60 == 0L) {
-                    val minutes = (elapsedSeconds / 60).toInt()
-                    notificationManager.notify(NOTIFICATION_ID, buildOngoingNotification(minutes))
-                }
+                delay(15000) // Update every 15 seconds to save battery; chronometer ticks natively at hardware level
+                val currentMinutes = maxOf(0L, (System.currentTimeMillis() - startEpoch) / 60000L).toInt()
+                notificationManager.notify(NOTIFICATION_ID, buildOngoingNotification(startEpoch, bookTitle, currentMinutes))
             }
         }
     }
@@ -92,25 +98,38 @@ class KindleReadingTimerService : Service() {
     private fun stopTimerAndSaveSession(endPage: Int?) {
         timerJob?.cancel()
         val endEpoch = System.currentTimeMillis()
-        val totalSeconds = elapsedSeconds
 
-        if (totalSeconds >= 60) {
+        val prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val savedStart = prefs.getLong(KEY_START_EPOCH, 0L)
+        val effectiveStartEpoch = if (startEpoch > 0L) startEpoch else if (savedStart > 0L) savedStart else (endEpoch - 60000L)
+        val finalTitle = prefs.getString(KEY_BOOK_TITLE, bookTitle) ?: bookTitle
+        val finalAuthor = prefs.getString(KEY_BOOK_AUTHOR, bookAuthor) ?: bookAuthor
+        val finalStartPage = prefs.getInt(KEY_START_PAGE, -1).takeIf { it >= 0 } ?: startPage
+
+        // Clear persisted timer state
+        prefs.edit().clear().apply()
+        isRunning = false
+
+        // Inviolable Wall-Clock Duration: immune to coroutine freezing during CPU Doze/Deep-Sleep
+        val totalSeconds = maxOf(0L, (endEpoch - effectiveStartEpoch) / 1000L)
+
+        if (totalSeconds >= 60L) {
             val db = AppDatabase.getInstance(this)
             val bookRepo = BookRepositoryImpl(db.bookDao())
             val sessionRepo = ReadingSessionRepositoryImpl(db.readingSessionDao(), db.dailyReadingSummaryDao())
 
             serviceScope.launch {
-                val book = bookRepo.findOrCreateBook(bookTitle, bookAuthor, "kindle_physical")
+                val book = bookRepo.findOrCreateBook(finalTitle, finalAuthor, "kindle_physical")
                 val rawSession = ReadingSession(
                     bookId = book.id,
                     bookTitle = book.title,
                     bookAuthor = book.author,
                     modality = ReadingModality.EBOOK_KINDLE,
                     providerId = "kindle_physical",
-                    startTime = startEpoch,
+                    startTime = effectiveStartEpoch,
                     endTime = endEpoch,
                     realDurationSeconds = totalSeconds,
-                    startPage = startPage,
+                    startPage = finalStartPage,
                     endPage = endPage,
                     status = SessionStatus.CONFIRMED
                 )
@@ -121,14 +140,20 @@ class KindleReadingTimerService : Service() {
                     sessionRepo.insertSession(s)
                     bookRepo.updateBookProgress(book.id, endPage, s.realDurationSeconds)
                 }
+                stopForeground(STOP_FOREGROUND_REMOVE)
                 stopSelf()
             }
         } else {
+            stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf()
         }
     }
 
-    private fun buildOngoingNotification(minutes: Int): android.app.Notification {
+    private fun buildOngoingNotification(
+        startMs: Long,
+        title: String,
+        accumulatedMinutes: Int = 0
+    ): android.app.Notification {
         val openAppIntent = Intent(this, MainActivity::class.java)
         val openPendingIntent = PendingIntent.getActivity(
             this, 201, openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
@@ -141,10 +166,15 @@ class KindleReadingTimerService : Service() {
             this, 202, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
+        val minutesText = if (accumulatedMinutes > 0) "$accumulatedMinutes min" else "en curso"
+
         return NotificationCompat.Builder(this, CHANNEL_KINDLE_TIMER)
             .setSmallIcon(android.R.drawable.ic_menu_agenda)
-            .setContentTitle("Leyendo en Kindle: $bookTitle")
-            .setContentText("⏱️ $minutes min acumulados · Toca para finalizar")
+            .setContentTitle("Leyendo en Kindle: $title")
+            .setContentText("⏱️ Cronómetro activo ($minutesText) · Toca para finalizar")
+            .setUsesChronometer(true)
+            .setWhen(startMs)
+            .setShowWhen(true)
             .setContentIntent(openPendingIntent)
             .setOngoing(true)
             .setPriority(NotificationCompat.PRIORITY_LOW)
@@ -173,6 +203,19 @@ class KindleReadingTimerService : Service() {
 
     companion object {
         var isRunning: Boolean = false
+        private const val PREFS_NAME = "kindle_reading_timer_prefs"
+        private const val KEY_START_EPOCH = "key_start_epoch"
+        private const val KEY_BOOK_TITLE = "key_book_title"
+        private const val KEY_BOOK_AUTHOR = "key_book_author"
+        private const val KEY_START_PAGE = "key_start_page"
+        private const val KEY_IS_RUNNING = "key_is_running"
+
+        fun isTimerActive(context: Context): Boolean {
+            if (isRunning) return true
+            val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            return prefs.getBoolean(KEY_IS_RUNNING, false)
+        }
+
         const val CHANNEL_KINDLE_TIMER = "kindle_reading_timer_channel"
         const val NOTIFICATION_ID = 3030
         const val ACTION_START = "com.universalreadingtracker.ACTION_START_KINDLE_TIMER"

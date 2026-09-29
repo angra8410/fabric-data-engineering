@@ -44,6 +44,7 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
     val uiState: StateFlow<DashboardState> = _uiState.asStateFlow()
 
     init {
+        repairThrottledSessions()
         observeStreakInfo()
         observeRecentSessions()
         observeActiveBooks()
@@ -54,8 +55,19 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
         syncEnrichedCatalogFromAssets()
     }
 
+    private fun repairThrottledSessions() {
+        viewModelScope.launch {
+            try {
+                sessionRepo.autoRepairThrottledSessions()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
     fun syncTimerState() {
-        _uiState.update { it.copy(isKindleTimerRunning = KindleReadingTimerService.isRunning) }
+        val context = getApplication<Application>()
+        _uiState.update { it.copy(isKindleTimerRunning = KindleReadingTimerService.isTimerActive(context)) }
     }
 
     fun syncEnrichedCatalogFromAssets() {
@@ -242,7 +254,7 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun toggleKindleReadingTimer() {
         val context = getApplication<Application>()
-        val isStarting = !KindleReadingTimerService.isRunning
+        val isStarting = !KindleReadingTimerService.isTimerActive(context)
         val currentBook = _uiState.value.activeBook
         val title = currentBook?.title ?: "Kindle Paperwhite"
         val author = currentBook?.author ?: "Kindle Físico"

@@ -12,4 +12,6 @@ interface ReadingSessionRepository {
     suspend fun getSummaryForDate(dateString: String): DailyReadingSummary?
     fun observeSummaryForDate(dateString: String): Flow<DailyReadingSummary?>
     suspend fun saveDailySummary(summary: DailyReadingSummary)
+    suspend fun autoRepairThrottledSessions()
+    suspend fun recalculateDailySummaryForDate(dateString: String)
 }

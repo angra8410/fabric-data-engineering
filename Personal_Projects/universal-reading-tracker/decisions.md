@@ -257,6 +257,31 @@
 - **Consecuencias:**
   - Experiencia de usuario inmersiva, consulta transparente del historial y trazabilidad directa de qué libro y qué métricas se obtuvieron en cada bloque de lectura.
 
+---
+
+## [ADR-018] Temporizador de Lectura Físico Resiliente a Doze/Deep-Sleep y Auto-Sanación de Sesiones Truncadas
+- **Fecha:** 2026-09-29
+- **Estado:** Aprobado
+- **Contexto:**
+  El usuario inició su lectura en Kindle a las 7:47 AM y finalizó a las 8:10 AM (23 minutos de tiempo real transcurrido). Sin embargo, la aplicación registró únicamente 5 minutos. 
+  La causa raíz identificada fue que `KindleReadingTimerService` computaba la duración mediante una corrutina con bucle `while(isActive) { delay(1000); elapsedSeconds++ }`. Al apagar la pantalla del teléfono para leer en el dispositivo Kindle físico, Android entra en suspensión profunda de CPU (Doze Mode / Deep Sleep). Esto congeló el bucle de la corrutina durante ~18 minutos, haciendo que al despertar solo hubiera acumulado ~300 segundos (5 minutos), descartando el tiempo de reloj real `endEpoch - startEpoch`.
+- **Decisión Tomada:**
+  1. **Cálculo Inviolable por Tiempo de Reloj Real (Wall-Clock Time):**
+     - Se elimina la dependencia del contador de corrutina para la duración de la sesión.
+     - La duración real se calcula estrictamente como `totalSeconds = maxOf(0L, (endEpoch - effectiveStartEpoch) / 1000L)`.
+  2. **Persistencia de Estado Inmune a Destrucción de Proceso:**
+     - Al invocar `ACTION_START`, `startEpoch`, título y autor se persisten de inmediato en `SharedPreferences`. Al detenerse (`ACTION_STOP`), se recupera el inicio persistido antes de limpiar el estado.
+  3. **Cronómetro Nativo a Nivel de Sistema Operativo:**
+     - La notificación en primer plano utiliza `.setUsesChronometer(true)` y `.setWhen(startEpoch)`, permitiendo a la barra de estado y pantalla de bloqueo de Android animar el cronómetro de forma fluida a nivel de hardware con 0% de consumo de batería y sin descalibración.
+  4. **Atribución Automática del Libro Activo en NFC y Quick Settings:**
+     - Al tocar la funda con el sticker NFC o usar el Tile de ajustes rápidos, la app consulta el libro en lectura actual en Room DB para asociar la sesión directamente a ese libro.
+  5. **Auto-Sanación Reactiva de Sesiones Previas Truncadas (`autoRepairThrottledSessions`):**
+     - En el arranque (`DashboardViewModel.init`), el repositorio examina las sesiones de Kindle donde `(endTime - startTime) / 1000L - realDurationSeconds >= 60`.
+     - Repara automáticamente la sesión en Room con su tiempo real de pared (la sesión de hoy pasa de 5 min a 23 min) y recalcula la agregación de `DailyReadingSummary` del día en curso.
+- **Consecuencias:**
+  - Precisión absoluta e inviolable en el registro de lectura sin importar si el teléfono está bloqueado o en reposo por horas, y reparación automática retroactiva de la sesión afectada de hoy.
+
+
 
 
 

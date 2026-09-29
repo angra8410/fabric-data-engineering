@@ -9,7 +9,7 @@ import com.universalreadingtracker.domain.model.StreakInfo
  * UI State for the Dashboard screen.
  */
 data class DashboardState(
-    val streakInfo: StreakInfo = StreakInfo(163, 163, true, 163),
+    val streakInfo: StreakInfo = StreakInfo(164, 164, false, 164),
     val todaySummary: DailyReadingSummary? = null,
     val recentSessions: List<ReadingSession> = emptyList(),
     val allDailySummaries: List<DailyReadingSummary> = emptyList(),

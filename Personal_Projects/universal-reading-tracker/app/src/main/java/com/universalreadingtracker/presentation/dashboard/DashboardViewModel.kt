@@ -14,6 +14,7 @@ import com.universalreadingtracker.data.repository.StreakRepositoryImpl
 import com.universalreadingtracker.domain.model.Book
 import com.universalreadingtracker.domain.model.BookFormat
 import com.universalreadingtracker.domain.model.ProgressUnit
+import com.universalreadingtracker.domain.usecase.BackfillHistoricalStreakUseCase
 import com.universalreadingtracker.service.KindleReadingTimerService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -180,7 +181,14 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
     private fun observeTodaySummary() {
         viewModelScope.launch {
             val todayStr = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE)
+            // Ensure no legacy dummy backfill remains on today
             db.dailyReadingSummaryDao().deleteHistoricalBackfillForDate(todayStr)
+
+            // Self-healing check (ADR-015): ensure yesterday and full 164-day streak are preserved
+            if (!streakRepo.hasCompletedBackfill()) {
+                val backfillUseCase = BackfillHistoricalStreakUseCase(streakRepo)
+                backfillUseCase(streakDays = 164, referenceDate = LocalDate.now())
+            }
 
             sessionRepo.observeSummaryForDate(todayStr).collectLatest { summary ->
                 _uiState.update { it.copy(todaySummary = summary) }

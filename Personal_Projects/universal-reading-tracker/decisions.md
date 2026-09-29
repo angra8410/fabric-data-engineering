@@ -188,6 +188,56 @@
 - **Consecuencias:**
   - Precisión absoluta en el cálculo del progreso diario, preservando la racha de 163 días de forma transparente y proporcionando una identidad visual premium.
 
+---
+
+## [ADR-014] Selector de Libros Físicos Kindle, Unidades Duales (Pág/Loc) y Exportación JSON
+- **Fecha:** 2026-09-27
+- **Estado:** Aprobado
+- **Contexto:**
+  El usuario lee en Kindle libros con diferente sistema de progreso (páginas impresas fijas vs. ubicaciones digitales "Loc") y requiere cambiar el libro activo directamente desde el tablero, además de respaldar toda su base de datos.
+- **Decisión Tomada:**
+  1. Catálogo enriquecido con búsqueda difusa (fuzzy search) insensible a acentos/tildes y carga desde assets/JSON.
+  2. Selector modal interactivo y soporte de unidades `ProgressUnit.PAGES` y `ProgressUnit.LOCATIONS`.
+  3. Utilidad de exportación completa a archivo JSON en almacenamiento externo/descargas.
+- **Consecuencias:**
+  - Control granular de lecturas activas y soberanía de datos del usuario.
+
+---
+
+## [ADR-015] Calibración de Racha a 164 Días (Hasta Ayer) y Auto-Sanación de Continuidad
+- **Fecha:** 2026-09-28
+- **Estado:** Aprobado
+- **Contexto:**
+  El usuario acumulaba 164 días continuos de lectura hasta el día de ayer (2026-09-27). Al implementar la purga de "hoy" en ADR-013, la fecha de ayer quedó desprovista de registro o excluida por el tope de 163 días previo, causando que al leer hoy (2026-09-28) la racha se reiniciara visualmente a 1 en vez de avanzar a 165 días.
+- **Decisión Tomada:**
+  1. **Actualización de Base Histórica:** Se calibra el sembrado histórico a **164 días** hacia atrás desde la fecha actual (cubriendo desde ayer `2026-09-27` hasta `2026-04-17`).
+  2. **Auto-Sanación Reactiva (`hasCompletedBackfill`):** Se valida explícitamente que la fecha de ayer exista en Room como un día de racha válido (`isValidStreakDay = true`) y que el conteo total histórico sea `>= 164`. Si ayer falta o tiene minutos vacíos, el sistema lo repara automáticamente con estrategia `REPLACE`.
+  3. **Comportamiento Esperado:** Antes de la primera lectura de hoy, la app muestra de forma estable 164 días; al registrar la lectura de hoy, asciende inmediatamente a **165 días**.
+- **Consecuencias:**
+  - Preservación íntegra e inviolable del hábito lector histórico del usuario sin reseteos accidentales ante cambios de día o limpiezas de caché.
+
+---
+
+## [ADR-016] Cápsula de Consistencia Semanal Dinámica y Recordatorio Inteligente a las 9:00 PM (Hora Colombia)
+- **Fecha:** 2026-09-28
+- **Estado:** Aprobado
+- **Contexto:**
+  1. En la tarjeta de racha (`LuxuryStreakCard`), los círculos de la semana (`L M M J V S D`) usaban una condición fija `index <= 5`, provocando que el domingo (`D`, índice 6) apareciera siempre desmarcado e incompleto a pesar de haber leído.
+  2. El usuario requería una alerta preventiva a las 9:00 PM (hora Colombia / UTC-5) si aún no ha registrado lectura durante el día, protegiendo su racha antes de medianoche.
+- **Decisión Tomada:**
+  1. **Consistencia Semanal Anclada a la Semana en Curso:** Los 7 indicadores de `L M M J V S D` ahora computan estrictamente los días de la **semana calendario actual** (iniciando el lunes actual).
+     - **Días futuros (`isFuture`):** Se muestran desactivados/pendientes (círculos oscuros translúcidos con borde sutil), sin checkmark.
+     - **Día de hoy (`isToday`):** Si ya se leyó (como hoy lunes), se marca de inmediato con degradé de fuego y checkmark; si está pendiente, muestra un borde ámbar activo esperando la lectura.
+     - **Días pasados de la semana (`isPast`):** Evalúan si hubo lectura en ese día específico de la semana en curso.
+  2. **Recordatorio Programado a las 9:00 PM:**
+     - Se implementa `ReadingReminderScheduler` y `ReadingReminderReceiver` vinculados a la zona horaria `America/Bogota` (21:00 COT).
+     - **Inteligencia Condicional:** Al dispararse la alarma a las 21:00, la app consulta Room en segundo plano. Si el usuario ya leyó hoy (`totalMinutesRead >= 1`), la notificación se omite en silencio. Si aún no ha leído, despliega una notificación de alta prioridad alertando para proteger su racha de 165 días.
+     - **Persistencia en Reinicio:** `BootReceiver` reprograma el recordatorio automáticamente tras el reinicio del teléfono.
+- **Consecuencias:**
+  - Fidelidad visual total en la consistencia semanal y protección activa del hábito lector sin spam innecesario.
+
+
+
 
 
 

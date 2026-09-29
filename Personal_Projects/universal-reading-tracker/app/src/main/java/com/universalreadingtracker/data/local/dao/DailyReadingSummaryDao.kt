@@ -12,6 +12,9 @@ interface DailyReadingSummaryDao {
     @Query("SELECT * FROM daily_reading_summaries ORDER BY date DESC LIMIT :limitDays")
     fun getDailySummaries(limitDays: Int = 365): Flow<List<DailyReadingSummaryEntity>>
 
+    @Query("SELECT * FROM daily_reading_summaries ORDER BY date DESC LIMIT :limitDays")
+    suspend fun getAllDailySummariesList(limitDays: Int = 730): List<DailyReadingSummaryEntity>
+
     @Query("SELECT * FROM daily_reading_summaries WHERE date = :dateString LIMIT 1")
     suspend fun getSummaryForDate(dateString: String): DailyReadingSummaryEntity?
 

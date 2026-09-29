@@ -104,6 +104,20 @@
             </intent-filter>
         </receiver>
 
+        <!-- RF-15 & ADR-019: Home Screen Obsidian Luxury AppWidget -->
+        <receiver
+            android:name=".presentation.widget.ReadingAppWidgetProvider"
+            android:label="Universal Reading Tracker"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.universalreadingtracker.widget.ACTION_TOGGLE_KINDLE_TIMER" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_reading_tracker_info" />
+        </receiver>
+
     </application>
 
 </manifest>

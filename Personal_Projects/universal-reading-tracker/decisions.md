@@ -281,6 +281,28 @@
 - **Consecuencias:**
   - Precisión absoluta e inviolable en el registro de lectura sin importar si el teléfono está bloqueado o en reposo por horas, y reparación automática retroactiva de la sesión afectada de hoy.
 
+---
+
+## [ADR-019] Widget de Pantalla de Inicio (AppWidget) para Lectura con 1 Toque y Racha en Vivo
+- **Fecha:** 2026-09-29
+- **Estado:** Aprobado
+- **Contexto:**
+  Para leer en el dispositivo físico Kindle o en un libro impreso, la fricción de desbloquear el teléfono, buscar la app en el cajón de aplicaciones y tocar el temporizador desincentiva el registro habitual de sesiones breves. Además, el usuario se beneficia de tener siempre visible en su escritorio la llama de su racha activa y su meta diaria.
+- **Decisión Tomada:**
+  1. **Arquitectura Nativa AppWidgetProvider:**
+     - Se implementa `ReadingAppWidgetProvider` con diseño *Obsidian Luxury* en `res/layout/widget_reading_tracker.xml` utilizando `RemoteViews`.
+     - Cero dependencias adicionales, soporte para redimensionamiento en cuadrícula (4x2 / 3x2) y compatibilidad total con cualquier launcher de Android.
+  2. **Acción Rápida de 1-Toque Directa (`ACTION_TOGGLE_KINDLE_TIMER`):**
+     - Botón táctil que envía un Broadcast a `ReadingAppWidgetProvider`, el cual consulta el libro activo y arranca o detiene `KindleReadingTimerService` en segundo plano con vibración háptica instantánea.
+     - Si el temporizador está detenido: botón con degradado dorado `▶ Iniciar Lectura en Kindle`.
+     - Si el temporizador está corriendo: botón rojo carmesí `⏹ Finalizar Lectura (Leyendo...)`.
+  3. **Visualización y Sincronización Reactiva:**
+     - Muestra la racha acumulada (`🔥 164 Días`), el progreso de hoy (`HOY: X / 30 MIN`) y el libro activo con sus páginas leídas y porcentaje.
+     - El widget se actualiza automáticamente al iniciar o detener sesiones en `KindleReadingTimerService`, al volver a la aplicación en `MainActivity.onResume()` y ante cambios de selección de libro o avance de páginas.
+- **Consecuencias:**
+  - Fricción cero para registrar hábitos diarios de lectura. El usuario puede iniciar su sesión con un solo toque desde su pantalla de inicio en menos de 1 segundo.
+
+
 
 
 

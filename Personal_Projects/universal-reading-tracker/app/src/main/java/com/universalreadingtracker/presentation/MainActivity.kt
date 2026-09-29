@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import com.universalreadingtracker.presentation.dashboard.DashboardScreen
 import com.universalreadingtracker.presentation.dashboard.DashboardViewModel
 import com.universalreadingtracker.presentation.nfc.NfcWriterHelper
+import com.universalreadingtracker.presentation.widget.ReadingAppWidgetProvider
 
 /**
  * Main Activity hosting the Jetpack Compose UI.
@@ -83,11 +84,18 @@ class MainActivity : ComponentActivity() {
                 DashboardScreen(
                     state = state,
                     onToggleKindleTimer = { viewModel.toggleKindleReadingTimer() },
-                    onSelectBook = { bookId -> viewModel.selectActiveBook(bookId) },
+                    onSelectBook = { bookId -> 
+                        viewModel.selectActiveBook(bookId)
+                        ReadingAppWidgetProvider.updateAllWidgets(this@MainActivity)
+                    },
                     onAddNewBook = { title, author, unit, curPos, total ->
                         viewModel.addNewBook(title, author, unit, curPos, total)
+                        ReadingAppWidgetProvider.updateAllWidgets(this@MainActivity)
                     },
-                    onUpdatePosition = { newPos -> viewModel.updateActiveBookPosition(newPos) },
+                    onUpdatePosition = { newPos -> 
+                        viewModel.updateActiveBookPosition(newPos)
+                        ReadingAppWidgetProvider.updateAllWidgets(this@MainActivity)
+                    },
                     onExportJson = { viewModel.exportDataToJson(this@MainActivity) },
                     onSyncCatalog = { viewModel.syncEnrichedCatalogFromAssets() }
                 )
@@ -98,6 +106,7 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         viewModel.syncTimerState()
+        ReadingAppWidgetProvider.updateAllWidgets(this)
         nfcPendingIntent?.let { pendingIntent ->
             nfcAdapter?.enableForegroundDispatch(this, pendingIntent, null, null)
         }

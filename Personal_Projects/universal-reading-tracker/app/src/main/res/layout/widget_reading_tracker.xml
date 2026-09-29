@@ -7,17 +7,18 @@
     android:background="@drawable/widget_card_background"
     android:padding="14dp">
 
-    <!-- Header: Streak & Today Reading -->
-    <LinearLayout
+    <!-- Header: Streak & Today Reading (RelativeLayout avoids unsupported View spacers) -->
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:layout_height="wrap_content">
 
-        <!-- Streak Capsule -->
+        <!-- Streak Capsule (Left) -->
         <LinearLayout
+            android:id="@+id/layout_widget_streak_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:background="@drawable/widget_badge_bg"
@@ -43,17 +44,13 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <!-- Flexible Spacer -->
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1" />
-
-        <!-- Today Summary Badge -->
+        <!-- Today Summary Badge (Right) -->
         <TextView
             android:id="@+id/tv_widget_today_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:background="@drawable/widget_badge_bg"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
@@ -63,7 +60,7 @@
             android:textColor="#00E5FF"
             android:textSize="11sp"
             android:textStyle="bold" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <!-- Book Information Row -->
     <LinearLayout
@@ -96,7 +93,7 @@
                 android:textColor="#FFFFFF"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:singleLine="true"
+                android:maxLines="1"
                 android:ellipsize="end" />
 
             <TextView
@@ -107,32 +104,25 @@
                 android:text="Pág. 145 / 320 (45%)"
                 android:textColor="#9CA3AF"
                 android:textSize="12sp"
-                android:singleLine="true"
+                android:maxLines="1"
                 android:ellipsize="end" />
         </LinearLayout>
     </LinearLayout>
 
-    <!-- 1-Tap Action Button -->
-    <LinearLayout
+    <!-- 1-Tap Action Button (TextView directly supported as clickable in RemoteViews) -->
+    <TextView
         android:id="@+id/btn_widget_toggle_timer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:gravity="center"
         android:background="@drawable/widget_btn_start_bg"
         android:paddingTop="9dp"
         android:paddingBottom="9dp"
+        android:text="▶  Iniciar Lectura en Kindle"
+        android:textColor="#FFFFFF"
+        android:textSize="13sp"
+        android:textStyle="bold"
         android:clickable="true"
-        android:focusable="true">
-
-        <TextView
-            android:id="@+id/tv_widget_btn_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="▶  Iniciar Lectura en Kindle"
-            android:textColor="#FFFFFF"
-            android:textSize="13sp"
-            android:textStyle="bold" />
-    </LinearLayout>
+        android:focusable="true" />
 
 </LinearLayout>

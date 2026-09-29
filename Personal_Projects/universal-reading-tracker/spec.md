@@ -68,6 +68,14 @@
   - Si el usuario ya leyó (`totalMinutesRead >= 1`), la alerta se silencia para no interrumpir.
   - Si aún no ha leído, dispara una notificación de alta prioridad invitando al usuario a leer 15 minutos en Kindle o Audible para blindar su racha.
   - Los 7 indicadores de la cápsula de consistencia semanal (`L M M J V S D`) reflejan en tiempo real el cumplimiento de cada día (incluyendo el domingo).
+- **RF-13: Ficha Interactiva de Métricas de Sesión en Historial Reciente**
+  - Cada fila en "Historial Reciente" es interactiva al toque (`clickable`).
+  - Al pulsar una sesión, se despliega una ficha modal con estética Obsidian Luxury (`SessionDetailDialog`) que muestra:
+    - Título y autor completo de la obra leída.
+    - Modalidad de lectura (`AUDIOLIBRO` o `KINDLE FÍSICO`) con insignias y gradientes curados.
+    - Cuadrícula de 4 métricas clave: Tiempo neto (min y seg), Ventana horaria (`hh:mm a` inicio y fin), Ritmo de lectura (`págs/h` o inmersión) e Impacto en racha.
+    - Rango de páginas alcanzadas (`Pág. X ➔ Y`).
+    - Botón de acción rápida para reanudar o seleccionar ese libro como lectura activa.
 
 ---
 
@@ -156,3 +164,5 @@
 - [x] División automática proporcional a medianoche para sesiones que crucen las 00:00:00 (`SplitMidnightSessionUseCase` y `SplitMidnightSessionUseCaseTest`).
 - [x] Almacenamiento local SQLite (Room) 100% offline con privacidad absoluta (`AppDatabase`, DAOs y Entities).
 - [x] Arquitectura modular extensible para sumar nuevos servicios (`ReadingProviderAdapter`, `AudibleProviderAdapter`, `KindlePhysicalProviderAdapter`).
+- [x] Recordatorio preventivo diario a las 9:00 PM (hora Colombia) para proteger racha con reprogramación automática en reinicio (`ReadingReminderScheduler`, `ReadingReminderReceiver`, `BootReceiver`).
+- [x] Ficha interactiva de métricas de sesión al tocar cualquier elemento del historial reciente (`LuxurySessionRow` -> `SessionDetailDialog`).

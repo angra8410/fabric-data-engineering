@@ -17,6 +17,7 @@ import com.universalreadingtracker.domain.model.ReadingSession
 import com.universalreadingtracker.domain.model.SessionStatus
 import com.universalreadingtracker.domain.usecase.SplitMidnightSessionUseCase
 import com.universalreadingtracker.presentation.MainActivity
+import com.universalreadingtracker.presentation.widget.ReadingAppWidgetProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -73,10 +74,12 @@ class KindleReadingTimerService : Service() {
                     .apply()
 
                 startForeground(NOTIFICATION_ID, buildOngoingNotification(startEpoch, bookTitle))
+                ReadingAppWidgetProvider.updateAllWidgets(this@KindleReadingTimerService)
                 startTimer()
             }
             ACTION_STOP -> {
                 isRunning = false
+                ReadingAppWidgetProvider.updateAllWidgets(this@KindleReadingTimerService)
                 val endPage = intent.getIntExtra(EXTRA_END_PAGE, -1).takeIf { it >= 0 }
                 stopTimerAndSaveSession(endPage)
             }
@@ -140,10 +143,12 @@ class KindleReadingTimerService : Service() {
                     sessionRepo.insertSession(s)
                     bookRepo.updateBookProgress(book.id, endPage, s.realDurationSeconds)
                 }
+                ReadingAppWidgetProvider.updateAllWidgets(this@KindleReadingTimerService)
                 stopForeground(STOP_FOREGROUND_REMOVE)
                 stopSelf()
             }
         } else {
+            ReadingAppWidgetProvider.updateAllWidgets(this@KindleReadingTimerService)
             stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf()
         }

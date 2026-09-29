@@ -81,6 +81,11 @@
   - El estado del temporizador se respalda en `SharedPreferences` para soportar reinicios o suspensión del sistema operativo.
   - La notificación de lectura en curso utiliza el cronómetro nativo del sistema operativo (`usesChronometer = true`).
   - Auto-sanación reactiva en segundo plano que detecta sesiones históricas o del día truncadas por reposo del procesador y las repara automáticamente, recalculando los resúmenes diarios correspondientes.
+- **RF-15: Widget de Pantalla de Inicio (AppWidget) con 1 Toque y Racha en Vivo**
+  - Widget nativo 4x2 redimensionable con sistema de diseño Obsidian Luxury (`ReadingAppWidgetProvider` + `RemoteViews`).
+  - Muestra la racha activa (`🔥 164 Días`), el progreso de hoy (`HOY: X / 30 MIN`), y el libro en curso (`Pág. X / Y`).
+  - Botón de acción táctil de 1 toque que conmuta `KindleReadingTimerService` con respuesta háptica instantánea sin tener que abrir la app.
+  - Sincronización reactiva bidireccional inmediata con Room DB y el estado del temporizador.
 
 ---
 
@@ -172,3 +177,4 @@
 - [x] Recordatorio preventivo diario a las 9:00 PM (hora Colombia) para proteger racha con reprogramación automática en reinicio (`ReadingReminderScheduler`, `ReadingReminderReceiver`, `BootReceiver`).
 - [x] Ficha interactiva de métricas de sesión al tocar cualquier elemento del historial reciente (`LuxurySessionRow` -> `SessionDetailDialog`).
 - [x] Temporizador de lectura físico basado en marcas de tiempo reales inmune a suspensión de CPU / Doze mode, con persistencia en SharedPreferences y auto-sanación reactiva de sesiones truncadas (`KindleReadingTimerService`, `autoRepairThrottledSessions`).
+- [x] Widget de pantalla de inicio nativo para Android (AppWidget) con estética Obsidian Luxury, racha en vivo y botón 1-toque para Kindle físico (`ReadingAppWidgetProvider`, `widget_reading_tracker.xml`).

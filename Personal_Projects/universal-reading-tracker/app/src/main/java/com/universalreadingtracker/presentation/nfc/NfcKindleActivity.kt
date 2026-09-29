@@ -11,6 +11,9 @@ import android.os.VibratorManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.universalreadingtracker.service.KindleReadingTimerService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * Implements RF-11 and ADR-011 from spec.md & decisions.md:
@@ -22,15 +25,22 @@ class NfcKindleActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val isCurrentlyReading = KindleReadingTimerService.isRunning
+        val isCurrentlyReading = KindleReadingTimerService.isTimerActive(this)
         val serviceIntent = Intent(this, KindleReadingTimerService::class.java)
 
         if (!isCurrentlyReading) {
-            // Start Kindle reading session
-            serviceIntent.action = KindleReadingTimerService.ACTION_START
-            serviceIntent.putExtra(KindleReadingTimerService.EXTRA_BOOK_TITLE, "Kindle Paperwhite / E-Reader")
-            serviceIntent.putExtra(KindleReadingTimerService.EXTRA_BOOK_AUTHOR, "Kindle Físico")
-            ContextCompat.startForegroundService(this, serviceIntent)
+            // Start Kindle reading session with active book attribution
+            kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.IO).launch {
+                val db = com.universalreadingtracker.data.local.AppDatabase.getInstance(applicationContext)
+                val activeBook = db.bookDao().getActiveReadingBookSync()
+                val title = activeBook?.title ?: "Kindle Paperwhite / E-Reader"
+                val author = activeBook?.author ?: "Kindle Físico"
+
+                serviceIntent.action = KindleReadingTimerService.ACTION_START
+                serviceIntent.putExtra(KindleReadingTimerService.EXTRA_BOOK_TITLE, title)
+                serviceIntent.putExtra(KindleReadingTimerService.EXTRA_BOOK_AUTHOR, author)
+                ContextCompat.startForegroundService(applicationContext, serviceIntent)
+            }
 
             vibrateSuccess(isStarting = true)
             Toast.makeText(this, "📖 Sesión en Kindle iniciada. ¡Buena lectura!", Toast.LENGTH_SHORT).show()

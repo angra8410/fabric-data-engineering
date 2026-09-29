@@ -21,6 +21,12 @@ interface ReadingSessionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSession(session: ReadingSessionEntity): Long
 
+    @Query("SELECT * FROM reading_sessions ORDER BY startTime DESC")
+    suspend fun getAllSessionsSync(): List<ReadingSessionEntity>
+
+    @Query("SELECT * FROM reading_sessions WHERE startTime >= :startOfDayEpoch AND endTime <= :endOfDayEpoch ORDER BY startTime ASC")
+    suspend fun getSessionsForEpochRangeSync(startOfDayEpoch: Long, endOfDayEpoch: Long): List<ReadingSessionEntity>
+
     @Query("DELETE FROM reading_sessions WHERE id = :id")
     suspend fun deleteSession(id: Long)
 }

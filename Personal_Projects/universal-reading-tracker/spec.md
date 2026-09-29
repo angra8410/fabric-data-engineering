@@ -76,6 +76,11 @@
     - Cuadrícula de 4 métricas clave: Tiempo neto (min y seg), Ventana horaria (`hh:mm a` inicio y fin), Ritmo de lectura (`págs/h` o inmersión) e Impacto en racha.
     - Rango de páginas alcanzadas (`Pág. X ➔ Y`).
     - Botón de acción rápida para reanudar o seleccionar ese libro como lectura activa.
+- **RF-14: Temporizador Resiliente a Doze/Deep-Sleep y Auto-Sanación de Sesiones**
+  - La duración de las sesiones en `KindleReadingTimerService` se calcula exclusivamente por diferencia de marcas temporales de reloj real (`endEpoch - startEpoch`).
+  - El estado del temporizador se respalda en `SharedPreferences` para soportar reinicios o suspensión del sistema operativo.
+  - La notificación de lectura en curso utiliza el cronómetro nativo del sistema operativo (`usesChronometer = true`).
+  - Auto-sanación reactiva en segundo plano que detecta sesiones históricas o del día truncadas por reposo del procesador y las repara automáticamente, recalculando los resúmenes diarios correspondientes.
 
 ---
 
@@ -166,3 +171,4 @@
 - [x] Arquitectura modular extensible para sumar nuevos servicios (`ReadingProviderAdapter`, `AudibleProviderAdapter`, `KindlePhysicalProviderAdapter`).
 - [x] Recordatorio preventivo diario a las 9:00 PM (hora Colombia) para proteger racha con reprogramación automática en reinicio (`ReadingReminderScheduler`, `ReadingReminderReceiver`, `BootReceiver`).
 - [x] Ficha interactiva de métricas de sesión al tocar cualquier elemento del historial reciente (`LuxurySessionRow` -> `SessionDetailDialog`).
+- [x] Temporizador de lectura físico basado en marcas de tiempo reales inmune a suspensión de CPU / Doze mode, con persistencia en SharedPreferences y auto-sanación reactiva de sesiones truncadas (`KindleReadingTimerService`, `autoRepairThrottledSessions`).

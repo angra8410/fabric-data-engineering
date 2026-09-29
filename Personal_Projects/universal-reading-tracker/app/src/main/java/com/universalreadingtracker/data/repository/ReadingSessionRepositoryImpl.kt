@@ -90,4 +90,79 @@ class ReadingSessionRepositoryImpl(
     override suspend fun saveDailySummary(summary: DailyReadingSummary) {
         summaryDao.insertOrUpdateSummary(DailyReadingSummaryEntity.fromDomain(summary))
     }
+
+    override suspend fun recalculateDailySummaryForDate(dateString: String) {
+        val localDate = java.time.LocalDate.parse(dateString, dateFormatter)
+        val startOfDayEpoch = localDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        val endOfDayEpoch = localDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli() - 1
+
+        val sessions = sessionDao.getSessionsForEpochRangeSync(startOfDayEpoch, endOfDayEpoch)
+        var audioMins = 0
+        var kindleMins = 0
+        var physicalMins = 0
+
+        for (s in sessions) {
+            val mins = (s.realDurationSeconds / 60L).toInt()
+            when (s.modality) {
+                ReadingModality.AUDIOBOOK.name -> audioMins += mins
+                ReadingModality.EBOOK_KINDLE.name -> kindleMins += mins
+                ReadingModality.PHYSICAL_BOOK.name -> physicalMins += mins
+                else -> kindleMins += mins
+            }
+        }
+
+        val totalMins = audioMins + kindleMins + physicalMins
+        val existing = summaryDao.getSummaryForDate(dateString)
+
+        val updated = if (existing != null) {
+            existing.copy(
+                totalMinutesRead = totalMins,
+                audioMinutes = audioMins,
+                kindleMinutes = kindleMins,
+                physicalMinutes = physicalMins,
+                goalReached = totalMins >= 30
+            )
+        } else {
+            DailyReadingSummaryEntity(
+                date = dateString,
+                totalMinutesRead = totalMins,
+                audioMinutes = audioMins,
+                kindleMinutes = kindleMins,
+                physicalMinutes = physicalMins,
+                goalReached = totalMins >= 30,
+                isHistoricalBackfill = false
+            )
+        }
+        summaryDao.insertOrUpdateSummary(updated)
+    }
+
+    override suspend fun autoRepairThrottledSessions() {
+        val allSessions = sessionDao.getAllSessionsSync()
+        val affectedDates = mutableSetOf<String>()
+
+        for (session in allSessions) {
+            // Check Kindle/physical sessions where screen-off CPU sleep caused timer throttling
+            val isKindleOrPhysical = session.providerId == "kindle_physical" ||
+                    session.modality == ReadingModality.EBOOK_KINDLE.name ||
+                    session.modality == ReadingModality.PHYSICAL_BOOK.name
+
+            if (isKindleOrPhysical && session.endTime > session.startTime) {
+                val wallClockSeconds = (session.endTime - session.startTime) / 1000L
+                // If at least 60 seconds (1 minute) was lost due to Android sleep throttling
+                if (wallClockSeconds - session.realDurationSeconds >= 60L) {
+                    val repaired = session.copy(realDurationSeconds = wallClockSeconds)
+                    sessionDao.insertSession(repaired)
+                    val dateStr = Instant.ofEpochMilli(session.startTime)
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDate()
+                        .format(dateFormatter)
+                    affectedDates.add(dateStr)
+                }
+            }
+        }
+
+        for (date in affectedDates) {
+            recalculateDailySummaryForDate(date)
+        }
+    }
 }

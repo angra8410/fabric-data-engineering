@@ -60,6 +60,13 @@ class ReadingAppWidgetProvider : AppWidgetProvider() {
         appWidgetManager: AppWidgetManager,
         appWidgetId: Int
     ) {
+        // Immediate synchronous baseline layout to ensure launcher never hangs
+        val baseViews = RemoteViews(context.packageName, R.layout.widget_reading_tracker)
+        setupClickIntents(context, baseViews)
+        val isTimerRunningInitially = KindleReadingTimerService.isTimerActive(context)
+        applyTimerButtonState(baseViews, isTimerRunningInitially)
+        appWidgetManager.updateAppWidget(appWidgetId, baseViews)
+
         providerScope.launch {
             try {
                 val db = AppDatabase.getInstance(context)
@@ -87,32 +94,9 @@ class ReadingAppWidgetProvider : AppWidgetProvider() {
                 // 3. Check if timer is running
                 val isTimerRunning = KindleReadingTimerService.isTimerActive(context)
 
-                // 4. Construct RemoteViews
+                // 4. Construct updated RemoteViews
                 val views = RemoteViews(context.packageName, R.layout.widget_reading_tracker)
-
-                // Open App on Card Click
-                val openAppIntent = Intent(context, MainActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-                }
-                val openAppPendingIntent = PendingIntent.getActivity(
-                    context,
-                    1001,
-                    openAppIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                )
-                views.setOnClickPendingIntent(R.id.widget_root, openAppPendingIntent)
-
-                // 1-Tap Toggle Button Action
-                val toggleIntent = Intent(context, ReadingAppWidgetProvider::class.java).apply {
-                    action = ACTION_TOGGLE_KINDLE_TIMER
-                }
-                val togglePendingIntent = PendingIntent.getBroadcast(
-                    context,
-                    1002,
-                    toggleIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                )
-                views.setOnClickPendingIntent(R.id.btn_widget_toggle_timer, togglePendingIntent)
+                setupClickIntents(context, views)
 
                 // Populate Streak & Today text
                 val streakDays = maxOf(164, streakInfo.currentStreakDays)
@@ -125,20 +109,50 @@ class ReadingAppWidgetProvider : AppWidgetProvider() {
                 views.setTextViewText(R.id.tv_widget_book_title, bookTitle)
                 views.setTextViewText(R.id.tv_widget_book_progress, bookProgressText)
 
-                // Style Toggle Button based on active timer state
-                if (isTimerRunning) {
-                    views.setTextViewText(R.id.tv_widget_btn_text, "⏹  Finalizar Lectura (Leyendo...)")
-                    views.setInt(R.id.btn_widget_toggle_timer, "setBackgroundResource", R.drawable.widget_btn_stop_bg)
-                } else {
-                    views.setTextViewText(R.id.tv_widget_btn_text, "▶  Iniciar Lectura en Kindle")
-                    views.setInt(R.id.btn_widget_toggle_timer, "setBackgroundResource", R.drawable.widget_btn_start_bg)
-                }
+                // Style Toggle Button
+                applyTimerButtonState(views, isTimerRunning)
 
                 // Push update to widget manager
                 appWidgetManager.updateAppWidget(appWidgetId, views)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+        }
+    }
+
+    private fun setupClickIntents(context: Context, views: RemoteViews) {
+        // Open App on Card Click
+        val openAppIntent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
+        val openAppPendingIntent = PendingIntent.getActivity(
+            context,
+            1001,
+            openAppIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        views.setOnClickPendingIntent(R.id.widget_root, openAppPendingIntent)
+
+        // 1-Tap Toggle Button Action
+        val toggleIntent = Intent(context, ReadingAppWidgetProvider::class.java).apply {
+            action = ACTION_TOGGLE_KINDLE_TIMER
+        }
+        val togglePendingIntent = PendingIntent.getBroadcast(
+            context,
+            1002,
+            toggleIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        views.setOnClickPendingIntent(R.id.btn_widget_toggle_timer, togglePendingIntent)
+    }
+
+    private fun applyTimerButtonState(views: RemoteViews, isTimerRunning: Boolean) {
+        if (isTimerRunning) {
+            views.setTextViewText(R.id.btn_widget_toggle_timer, "⏹  Finalizar Lectura (Leyendo...)")
+            views.setInt(R.id.btn_widget_toggle_timer, "setBackgroundResource", R.drawable.widget_btn_stop_bg)
+        } else {
+            views.setTextViewText(R.id.btn_widget_toggle_timer, "▶  Iniciar Lectura en Kindle")
+            views.setInt(R.id.btn_widget_toggle_timer, "setBackgroundResource", R.drawable.widget_btn_start_bg)
         }
     }
 

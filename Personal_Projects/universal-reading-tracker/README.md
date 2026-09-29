@@ -10,7 +10,8 @@ Aplicación Android nativa para registrar y unificar de forma integral los hábi
 
 ## 📋 Documentación de Arquitectura y Especificaciones (SDD)
 
-- 📄 **[spec.md](spec.md)**: Especificación funcional completa, requerimientos de negocio (RF-01 a RF-07), modelo de entidades de dominio (Libros, Sesiones, Modalidades, Metas) y flujos operativos (Audible y Kindle físico).
+- 📄 **[spec.md](spec.md)**: Especificación funcional completa, requerimientos de negocio (RF-01 a RF-14), modelo de entidades de dominio y flujos operativos.
+- 🤖 **[AGENTS.md](AGENTS.md)**: Guía operativa, comandos de build, reglas de scope y lineamientos para agentes de IA (conforme al estándar open source AGENTS.md).
 - 🏛️ **[decisions.md](decisions.md)**: Registro de decisiones de arquitectura (ADRs):
   - **ADR-001:** Detección híbrida vía `NotificationListenerService` / `MediaSessionManager` en Android.
   - **ADR-002:** Criterio de tiempo de reloj real dedicado (wall-clock time neto).

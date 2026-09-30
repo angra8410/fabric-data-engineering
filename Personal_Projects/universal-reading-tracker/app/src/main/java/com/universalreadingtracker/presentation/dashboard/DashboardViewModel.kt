@@ -245,6 +245,7 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
         totalUnits: Int
     ) {
         viewModelScope.launch {
+            val isCompleted = totalUnits > 0 && currentPos >= totalUnits
             val newBook = Book(
                 title = title.trim(),
                 author = author.trim().ifBlank { "Kindle Físico" },
@@ -253,10 +254,12 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
                 progressUnit = unit,
                 currentPosition = currentPos,
                 totalUnits = totalUnits,
-                isCurrentlyReading = true
+                isCurrentlyReading = !isCompleted
             )
             val id = bookRepo.insertOrUpdateBook(newBook)
-            bookRepo.setActiveReadingBook(id)
+            if (!isCompleted) {
+                bookRepo.setActiveReadingBook(id)
+            }
         }
     }
 
@@ -268,6 +271,21 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
     fun updateBookPosition(bookId: Long, newPosition: Int) {
         viewModelScope.launch {
             bookRepo.updateBookPosition(bookId, newPosition)
+        }
+    }
+
+    fun markBookAsCompleted(bookId: Long) {
+        viewModelScope.launch {
+            val book = _uiState.value.activeBooks.find { it.id == bookId } ?: return@launch
+            val targetUnits = if (book.totalUnits > 0) book.totalUnits else 100
+            bookRepo.updateBookPosition(bookId, targetUnits)
+        }
+    }
+
+    fun reopenBook(bookId: Long) {
+        viewModelScope.launch {
+            bookRepo.updateBookPosition(bookId, 0)
+            bookRepo.setActiveReadingBook(bookId)
         }
     }
 

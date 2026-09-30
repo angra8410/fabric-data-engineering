@@ -15,6 +15,7 @@ import com.universalreadingtracker.domain.model.Book
 import com.universalreadingtracker.domain.model.BookFormat
 import com.universalreadingtracker.domain.model.ProgressUnit
 import com.universalreadingtracker.domain.usecase.BackfillHistoricalStreakUseCase
+import com.universalreadingtracker.domain.usecase.CalculateReadingAnalyticsUseCase
 import com.universalreadingtracker.service.KindleReadingTimerService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -39,6 +40,7 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
     private val bookRepo = BookRepositoryImpl(db.bookDao())
     private val sessionRepo = ReadingSessionRepositoryImpl(db.readingSessionDao(), db.dailyReadingSummaryDao())
     private val streakRepo = StreakRepositoryImpl(db.dailyReadingSummaryDao())
+    private val calculateReadingAnalyticsUseCase = CalculateReadingAnalyticsUseCase()
 
     private val _uiState = MutableStateFlow(DashboardState())
     val uiState: StateFlow<DashboardState> = _uiState.asStateFlow()
@@ -170,6 +172,7 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
         viewModelScope.launch {
             sessionRepo.getAllSessions().collectLatest { sessions ->
                 _uiState.update { it.copy(recentSessions = sessions.take(15)) }
+                refreshAnalytics()
             }
         }
     }
@@ -186,6 +189,7 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
         viewModelScope.launch {
             bookRepo.getActiveReadingBook().collectLatest { activeBook ->
                 _uiState.update { it.copy(activeBook = activeBook) }
+                refreshAnalytics()
             }
         }
     }
@@ -212,8 +216,19 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
         viewModelScope.launch {
             sessionRepo.getDailySummaries(limitDays = 730).collectLatest { summaries ->
                 _uiState.update { it.copy(allDailySummaries = summaries) }
+                refreshAnalytics()
             }
         }
+    }
+
+    private fun refreshAnalytics() {
+        val s = _uiState.value
+        val analytics = calculateReadingAnalyticsUseCase(
+            summaries = s.allDailySummaries,
+            sessions = s.recentSessions,
+            activeBook = s.activeBook
+        )
+        _uiState.update { it.copy(analytics = analytics) }
     }
 
     fun selectActiveBook(bookId: Long) {

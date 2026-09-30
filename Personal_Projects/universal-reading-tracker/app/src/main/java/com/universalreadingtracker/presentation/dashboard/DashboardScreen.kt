@@ -39,6 +39,7 @@ import com.universalreadingtracker.domain.model.DailyReadingSummary
 import com.universalreadingtracker.domain.model.ProgressUnit
 import com.universalreadingtracker.domain.model.ReadingModality
 import com.universalreadingtracker.domain.model.ReadingSession
+import com.universalreadingtracker.presentation.dashboard.analytics.ReadingAnalyticsSection
 
 // ==========================================
 // PALETA DE DISEÑO: OBSIDIAN LUXURY SYSTEM
@@ -356,7 +357,16 @@ fun DashboardScreen(
                         )
                     }
 
-                    // 6. Historial Reciente Header
+                    // 6. Annual Heatmap & Visual Analytics Section
+                    item {
+                        ReadingAnalyticsSection(
+                            analytics = state.analytics,
+                            currentStreakDays = state.streakInfo.currentStreakDays,
+                            activeBook = state.activeBook
+                        )
+                    }
+
+                    // 7. Historial Reciente Header
                     item {
                         Row(
                             modifier = Modifier.fillMaxWidth(),

@@ -5,6 +5,12 @@
 
 ---
 
+## 🧠 Memoria de Sesión y Continuidad Obligatoria
+> ⚠️ **REGLA DE INICIO OBLIGATORIA:** Antes de iniciar cualquier tarea, propuesta de código o sesión, **debes leer obligatoriamente [MEMORY.md](MEMORY.md)**.
+> Contiene el estado actual de la aplicación, mapa de archivos, las 5 grandes áreas implementadas (Dock de 3 pestañas, Heatmap analítico, Marcado de libros leídos, Citas & Notas para Obsidian/Notion, y Metas con Insignias), y las reglas críticas para no romper la base de datos ni los 164+ días de racha acumulada.
+
+---
+
 ## 📌 Visión General del Proyecto
 
 **Universal Reading Tracker** es una aplicación Android nativa diseñada para registrar y unificar de forma integral los hábitos de lectura multimodales (Audiolibros en Audible/Spotify, E-Readers/Kindle físico y Libros impresos) con un diseño Obsidian Luxury de alta fidelidad, cálculo de métricas en tiempo real y persistencia local-first.

@@ -348,6 +348,32 @@
 - **Consecuencias:**
   - Arquitectura limpia, experiencia de usuario pulida y sin fricción, orden visual absoluto y mayor facilidad para gestionar libros y explorar analítica.
 
+---
+
+## [ADR-022] Historial Reciente Compacto (Capped a 3 Sesiones) y Marcado de Libros Leídos en Racha Histórica
+- **Fecha:** 2026-09-29
+- **Estado:** Aprobado
+- **Contexto:**
+  1. Conforme avanza la racha (+164 días), el listado continuo de sesiones en el Inicio crecía desmedidamente, alargando la pantalla principal y degradando la ergonomía táctil.
+  2. En su trayectoria histórica de más de 100 días continuos de lectura, el usuario ya ha concluido varios títulos físicos y en Kindle; requería una forma inmediata de marcar libros como leídos sin fricción, tanto desde la biblioteca como al añadir libros terminados anteriormente.
+- **Decisión Tomada:**
+  1. **Historial Reciente Compacto con Expansión Dinámica:**
+     - La sección "Historial Reciente" en la pestaña Inicio muestra por defecto las **3 sesiones más recientes**.
+     - Cabecera con contador contextual (`3 de X sesiones`) y botón interactivo `Ver todo (X) ▾` / `Mostrar menos ▴`.
+     - Botón inferior tipo píldora Obsidian para expandir y colapsar el historial completo con 1 toque.
+  2. **Acción Directa de Marcado "Marcar como Leído" en Biblioteca:**
+     - En `LibraryScreen`, cada tarjeta de libro en progreso (`Leyendo` o `Por Leer`) cuenta con un botón de acción rápida `[✓ Marcar Leído]`.
+     - Al pulsarlo, el progreso se actualiza a `totalUnits` (100%), moviéndose automáticamente a la pestaña `Completados`.
+     - En la pestaña `Completados`, los libros lucen su insignia esmeralda `[✓ Completado]` y una acción `[Reabrir]` para reiniciar y releer si se desea.
+  3. **Registro de Libros Ya Leídos en Racha Histórica:**
+     - En `AddBookDialog`, se añade un switch/toggle Obsidian: *"¿Libro ya leído en tu racha histórica (+100 días)?"*.
+     - Al activarlo, el libro se guarda directamente al 100% sin convertirlo en lectura activa en curso, registrándolo de inmediato en `Completados`.
+  4. **Atajo de Finalización en Diálogo de Progreso:**
+     - En `UpdatePositionDialog`, se incorpora el botón `[✓ Marcar 100% Terminado]` para culminar la obra con 1 toque.
+- **Consecuencias:**
+  - El Inicio se mantiene compacto, minimalista y libre de desorden vertical.
+  - La biblioteca refleja fidedignamente la trayectoria de lecturas culminadas del usuario a lo largo de su hábito.
+
 
 
 

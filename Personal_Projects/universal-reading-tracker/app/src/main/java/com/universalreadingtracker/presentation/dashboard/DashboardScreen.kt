@@ -94,6 +94,7 @@ fun DashboardScreen(
     var showUpdatePositionDialog by remember { mutableStateOf(false) }
     var bookToUpdatePosition by remember { mutableStateOf<Book?>(null) }
     var selectedSessionForDetails by remember { mutableStateOf<ReadingSession?>(null) }
+    var isHistoryExpanded by remember { mutableStateOf(false) }
 
     // Dialogs
     if (showNfcDialog) {
@@ -378,39 +379,102 @@ fun DashboardScreen(
                                 )
                             }
 
-                            // 6. Historial Reciente Header
+                            // 6. Historial Reciente Header (Collapsible to prevent screen clutter)
                             item {
                                 Row(
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Text(
-                                        text = "Historial Reciente",
-                                        color = Color(0xFFE2E8F0),
-                                        fontSize = 15.sp,
-                                        fontWeight = FontWeight.Bold
-                                    )
-                                    Text(
-                                        text = "Ver todo",
-                                        color = Color(0xFF38BDF8),
-                                        fontSize = 12.sp,
-                                        fontWeight = FontWeight.SemiBold
-                                    )
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        Text(
+                                            text = "Historial Reciente",
+                                            color = Color(0xFFE2E8F0),
+                                            fontSize = 15.sp,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                        if (state.recentSessions.isNotEmpty()) {
+                                            Spacer(modifier = Modifier.width(8.dp))
+                                            Box(
+                                                modifier = Modifier
+                                                    .clip(RoundedCornerShape(8.dp))
+                                                    .background(Color(0xFF1E293B))
+                                                    .padding(horizontal = 6.dp, vertical = 2.dp)
+                                            ) {
+                                                Text(
+                                                    text = if (isHistoryExpanded || state.recentSessions.size <= 3)
+                                                        "${state.recentSessions.size}"
+                                                    else
+                                                        "3 de ${state.recentSessions.size}",
+                                                    color = Color(0xFF94A3B8),
+                                                    fontSize = 11.sp,
+                                                    fontWeight = FontWeight.Medium
+                                                )
+                                            }
+                                        }
+                                    }
+
+                                    if (state.recentSessions.size > 3) {
+                                        Text(
+                                            text = if (isHistoryExpanded) "Mostrar menos ▴" else "Ver todo (${state.recentSessions.size}) ▾",
+                                            color = Color(0xFF38BDF8),
+                                            fontSize = 12.sp,
+                                            fontWeight = FontWeight.SemiBold,
+                                            modifier = Modifier
+                                                .clip(RoundedCornerShape(6.dp))
+                                                .clickable { isHistoryExpanded = !isHistoryExpanded }
+                                                .padding(horizontal = 6.dp, vertical = 4.dp)
+                                        )
+                                    }
                                 }
                             }
 
-                            // 7. Recent Sessions List
+                            // 7. Recent Sessions List (Capped at 3 with 1-tap smooth expander)
                             if (state.recentSessions.isEmpty()) {
                                 item {
                                     EmptyHistoryCard()
                                 }
                             } else {
-                                items(state.recentSessions) { session ->
+                                val displayedSessions = if (isHistoryExpanded) state.recentSessions else state.recentSessions.take(3)
+                                items(displayedSessions) { session ->
                                     LuxurySessionRow(
                                         session = session,
                                         onClick = { selectedSessionForDetails = session }
                                     )
+                                }
+
+                                if (state.recentSessions.size > 3) {
+                                    item {
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .clip(RoundedCornerShape(12.dp))
+                                                .background(Color(0xFF131726))
+                                                .border(1.dp, Color(0x33252C48), RoundedCornerShape(12.dp))
+                                                .clickable { isHistoryExpanded = !isHistoryExpanded }
+                                                .padding(vertical = 10.dp),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                                Icon(
+                                                    imageVector = if (isHistoryExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                                                    contentDescription = null,
+                                                    tint = if (isHistoryExpanded) Color(0xFF94A3B8) else Color(0xFF38BDF8),
+                                                    modifier = Modifier.size(16.dp)
+                                                )
+                                                Spacer(modifier = Modifier.width(6.dp))
+                                                Text(
+                                                    text = if (isHistoryExpanded)
+                                                        "Mostrar solo las 3 más recientes"
+                                                    else
+                                                        "Ver ${state.recentSessions.size - 3} sesiones anteriores",
+                                                    color = if (isHistoryExpanded) Color(0xFF94A3B8) else Color(0xFF38BDF8),
+                                                    fontSize = 12.sp,
+                                                    fontWeight = FontWeight.SemiBold
+                                                )
+                                            }
+                                        }
+                                    }
                                 }
                             }
 
@@ -435,6 +499,14 @@ fun DashboardScreen(
                             onOpenUpdatePosition = { book ->
                                 bookToUpdatePosition = book
                                 showUpdatePositionDialog = true
+                            },
+                            onMarkAsCompleted = { book ->
+                                val target = if (book.totalUnits > 0) book.totalUnits else 100
+                                onUpdateBookPosition(book.id, target)
+                            },
+                            onReopenBook = { book ->
+                                onUpdateBookPosition(book.id, 0)
+                                onSelectBook(book.id)
                             }
                         )
                     }
@@ -911,6 +983,7 @@ fun AddBookDialog(
     var unit by remember { mutableStateOf(ProgressUnit.PAGES) }
     var currentPosStr by remember { mutableStateOf("0") }
     var totalUnitsStr by remember { mutableStateOf("300") }
+    var isAlreadyCompleted by remember { mutableStateOf(false) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -1008,13 +1081,15 @@ fun AddBookDialog(
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     OutlinedTextField(
-                        value = currentPosStr,
+                        value = if (isAlreadyCompleted) totalUnitsStr else currentPosStr,
                         onValueChange = { currentPosStr = it },
                         label = { Text(if (unit == ProgressUnit.PAGES) "Pág actual" else "Loc actual") },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        enabled = !isAlreadyCompleted,
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedTextColor = Color.White,
                             unfocusedTextColor = Color.White,
+                            disabledTextColor = Color(0xFF34D399),
                             focusedBorderColor = Color(0xFF00E5FF)
                         ),
                         modifier = Modifier.weight(1f)
@@ -1033,21 +1108,70 @@ fun AddBookDialog(
                         modifier = Modifier.weight(1f)
                     )
                 }
+
+                // Toggle: Ya leído en racha histórica (+100 días)
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(if (isAlreadyCompleted) Color(0x2210B981) else Color(0xFF1A1D2E))
+                        .border(
+                            1.dp,
+                            if (isAlreadyCompleted) Color(0xFF10B981) else Color(0x332D323F),
+                            RoundedCornerShape(12.dp)
+                        )
+                        .clickable {
+                            isAlreadyCompleted = !isAlreadyCompleted
+                            if (isAlreadyCompleted) {
+                                currentPosStr = totalUnitsStr
+                            }
+                        }
+                        .padding(horizontal = 12.dp, vertical = 9.dp)
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = if (isAlreadyCompleted) Icons.Default.CheckCircle else Icons.Default.CheckCircleOutline,
+                            contentDescription = null,
+                            tint = if (isAlreadyCompleted) Color(0xFF34D399) else Color(0xFF94A3B8),
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Column {
+                            Text(
+                                text = "¿Libro ya leído en tu racha histórica?",
+                                color = if (isAlreadyCompleted) Color.White else Color(0xFFE2E8F0),
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = "Se agregará como 100% completado en tu biblioteca",
+                                color = if (isAlreadyCompleted) Color(0xFF34D399) else Color(0xFF94A3B8),
+                                fontSize = 10.sp
+                            )
+                        }
+                    }
+                }
             }
         },
         confirmButton = {
             Button(
                 onClick = {
                     if (title.isNotBlank()) {
-                        val cur = currentPosStr.toIntOrNull() ?: 0
                         val tot = totalUnitsStr.toIntOrNull() ?: 0
+                        val cur = if (isAlreadyCompleted && tot > 0) tot else (currentPosStr.toIntOrNull() ?: 0)
                         onSave(title, author, unit, cur, tot)
                     }
                 },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0284C7)),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (isAlreadyCompleted) Color(0xFF10B981) else Color(0xFF0284C7)
+                ),
                 shape = RoundedCornerShape(12.dp)
             ) {
-                Text("Guardar y Activar", color = Color.White, fontWeight = FontWeight.Bold)
+                Text(
+                    text = if (isAlreadyCompleted) "Guardar como Leído" else "Guardar y Activar",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold
+                )
             }
         },
         dismissButton = {
@@ -1129,6 +1253,35 @@ fun UpdatePositionDialog(
                                 fontWeight = FontWeight.Bold
                             )
                         }
+                    }
+                }
+
+                // Quick 1-Tap 100% Complete Chip
+                val maxUnits = if (book.totalUnits > 0) book.totalUnits else 100
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(Color(0x2210B981))
+                        .border(1.dp, Color(0x4410B981), RoundedCornerShape(10.dp))
+                        .clickable { positionStr = maxUnits.toString() }
+                        .padding(vertical = 7.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Default.CheckCircle,
+                            contentDescription = null,
+                            tint = Color(0xFF34D399),
+                            modifier = Modifier.size(14.dp)
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = "Marcar 100% Terminado (${book.unitLabel} $maxUnits)",
+                            color = Color(0xFF34D399),
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold
+                        )
                     }
                 }
             }

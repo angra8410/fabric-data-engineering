@@ -100,6 +100,18 @@
     - **Por Leer:** Lista de espera con contador de libros y acción de inicio directo.
     - **Completados:** Libros concluidos al 100% con insignia de estado terminada.
   - **Estética Obsidian Luxury:** Dock flotante con soporte para gestos, bordes redondeados (`RoundedCornerShape(32.dp)`), píldoras activas iluminadas y transiciones fluidas con `AnimatedContent`.
+- **RF-18: Historial Reciente Compacto con Expansión Dinámica y Gestión de Obras Concluidas**
+  - **Historial Reciente Compacto:**
+    - Muestra de forma predeterminada las **3 sesiones más recientes** en la pantalla de inicio, reduciendo drásticamente la saturación visual.
+    - Cabecera con contador contextual (`3 de X sesiones`) y botón interactivo `Ver todo (X) ▾` / `Mostrar menos ▴`.
+    - Expansor táctil inferior tipo píldora de cristal Obsidian con chevron animado que revela u oculta el historial completo.
+  - **Marcado Directo de Libros Leídos:**
+    - Botón `[✓ Marcar Leído]` en tarjetas de biblioteca para libros en lectura o lista de espera.
+    - Mueve la obra instantáneamente a `Completados` fijando su progreso en `totalUnits` (100%).
+    - En `Completados`, muestra insignia de finalización y botón `[Reabrir]` para reiniciar si el usuario desea releer.
+  - **Registro de Libros Leídos en Racha Histórica (+100 Días):**
+    - Toggle en `AddBookDialog` para ingresar libros ya terminados anteriormente sin activarlos forzosamente como lectura en curso.
+    - Botón `[Marcar 100% Terminado]` en el diálogo de avance (`UpdatePositionDialog`).
 
 ---
 
@@ -194,3 +206,4 @@
 - [x] Widget de pantalla de inicio nativo para Android (AppWidget) con estética Obsidian Luxury, racha en vivo y botón 1-toque para Kindle físico (`ReadingAppWidgetProvider`, `widget_reading_tracker.xml`).
 - [x] Mapa de calor anual de consistencia (Heatmap estilo GitHub/Obsidian), gráfica semanal comparativa Audible vs. Kindle y cálculo de ritmo lector con horario preferido (`CalculateReadingAnalyticsUseCase`, `ReadingAnalyticsSection`).
 - [x] Navegación por pestañas inferiores (Inicio, Analítica, Biblioteca) con estética Obsidian Luxury, y gestión dedicada de biblioteca particionada por estado (Leyendo, Por leer, Completados), buscador en vivo y edición directa de progreso (ADR-021).
+- [x] Historial reciente inteligente con vista compacta de 3 sesiones y expansor bajo demanda, y marcado de libros leídos tanto en biblioteca como en alta histórica (+100 días) (ADR-022).

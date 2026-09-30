@@ -90,6 +90,16 @@
   - **Matriz de Consistencia Anual (Estilo GitHub / Obsidian):** Renderizado horizontal de cuadrícula de semanas con 5 niveles de intensidad en esmeralda Obsidian. Refleja fielmente los 164+ días acumulados e interactividad al toque para inspeccionar la fecha y minutos discriminados por modalidad.
   - **Tendencia Semanal de Modalidad (Audible vs. Kindle):** Gráfica de barras apiladas de los 7 días de la semana en curso (Cian vs. Ámbar) con porcentajes de distribución y formato predominante.
   - **Ritmo de Lectura y Franja Horaria:** Cálculo en tiempo real de velocidad promedio (`págs/hora`), proyección estimada de finalización para el libro activo e identificación del patrón horario de lectura (Matutino, Vespertino, Nocturno, Madrugada).
+- **RF-17: Navegación por Pestañas Inferiores (Bottom Dock) y Gestión de Biblioteca Integral**
+  - **Arquitectura de Navegación Desacoplada (Bottom Navigation Dock):** Sustituye la sobrecarga vertical de una sola pantalla continua por 3 pestañas especializadas accesibles con 1 pulgar:
+    1. **Inicio (`HOME`):** Dashboard focalizado en el objetivo del día, cronómetro de Kindle físico, libro activo, desglose diario y sesiones recientes.
+    2. **Analítica (`ANALYTICS`):** Tablero visual dedicado para el Heatmap anual de consistencia (164+ días), gráfica semanal de tendencias (Audible vs. Kindle) y métricas de ritmo y franjas horarias.
+    3. **Biblioteca (`LIBRARY`):** Gestión integral del catálogo de libros local con buscador en tiempo real por título y autor.
+  - **Secciones de Biblioteca por Estado de Lectura:**
+    - **Leyendo:** Libros en curso con barra de progreso porcentual, botón para activar lectura instantánea ("Leer Ahora") y diálogo de avance de página.
+    - **Por Leer:** Lista de espera con contador de libros y acción de inicio directo.
+    - **Completados:** Libros concluidos al 100% con insignia de estado terminada.
+  - **Estética Obsidian Luxury:** Dock flotante con soporte para gestos, bordes redondeados (`RoundedCornerShape(32.dp)`), píldoras activas iluminadas y transiciones fluidas con `AnimatedContent`.
 
 ---
 
@@ -183,3 +193,4 @@
 - [x] Temporizador de lectura físico basado en marcas de tiempo reales inmune a suspensión de CPU / Doze mode, con persistencia en SharedPreferences y auto-sanación reactiva de sesiones truncadas (`KindleReadingTimerService`, `autoRepairThrottledSessions`).
 - [x] Widget de pantalla de inicio nativo para Android (AppWidget) con estética Obsidian Luxury, racha en vivo y botón 1-toque para Kindle físico (`ReadingAppWidgetProvider`, `widget_reading_tracker.xml`).
 - [x] Mapa de calor anual de consistencia (Heatmap estilo GitHub/Obsidian), gráfica semanal comparativa Audible vs. Kindle y cálculo de ritmo lector con horario preferido (`CalculateReadingAnalyticsUseCase`, `ReadingAnalyticsSection`).
+- [x] Navegación por pestañas inferiores (Inicio, Analítica, Biblioteca) con estética Obsidian Luxury, y gestión dedicada de biblioteca particionada por estado (Leyendo, Por leer, Completados), buscador en vivo y edición directa de progreso (ADR-021).

@@ -2,6 +2,7 @@ package com.universalreadingtracker.presentation.dashboard
 
 import com.universalreadingtracker.domain.model.Book
 import com.universalreadingtracker.domain.model.DailyReadingSummary
+import com.universalreadingtracker.domain.model.ReadingAnalytics
 import com.universalreadingtracker.domain.model.ReadingSession
 import com.universalreadingtracker.domain.model.StreakInfo
 
@@ -15,6 +16,7 @@ data class DashboardState(
     val allDailySummaries: List<DailyReadingSummary> = emptyList(),
     val activeBooks: List<Book> = emptyList(),
     val activeBook: Book? = null,
+    val analytics: ReadingAnalytics? = null,
     val isAudibleTrackingActive: Boolean = true,
     val isKindleTimerRunning: Boolean = false,
     val kindleTimerElapsedSeconds: Long = 0L,

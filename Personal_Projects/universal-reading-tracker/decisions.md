@@ -302,6 +302,30 @@
 - **Consecuencias:**
   - Fricción cero para registrar hábitos diarios de lectura. El usuario puede iniciar su sesión con un solo toque desde su pantalla de inicio en menos de 1 segundo.
 
+---
+
+## [ADR-020] Mapa de Calor Anual de Consistencia y Analítica Visual de Ritmo Lector
+- **Fecha:** 2026-09-29
+- **Estado:** Aprobado
+- **Contexto:**
+  Con 164+ días de lectura disciplinada acumulada, el usuario requería una forma visual integral y satisfactoria para contemplar su esfuerzo histórico distribuido a lo largo del año, contrastar cuánto tiempo dedicó a Audible vs. Kindle en cada día de la semana, y conocer sus métricas de velocidad (páginas/hora) y franjas horarias preferidas de lectura.
+- **Decisión Tomada:**
+  1. **Separación de Lógica y Modelo en Dominio:**
+     - Se crearon los modelos `ReadingAnalytics`, `DayContribution`, `WeeklyModalityDistribution` y `ReadingRhythmInsights` en `domain.model`.
+     - Se implementó el caso de uso `CalculateReadingAnalyticsUseCase` para procesar de forma desacoplada y eficiente los resúmenes diarios agregados y sesiones históricas.
+  2. **Mapa de Calor de Consistencia Anual (GitHub / Obsidian Luxury):**
+     - Cuadrícula matricial horizontal de semanas (`AnnualConsistencyHeatmapCard`) con 5 escalas de intensidad en verde esmeralda y acentos dorados (`#1E2230` a `#34D399`).
+     - Desplazamiento horizontal fluido con auto-scroll a la fecha actual y toque interactivo para inspeccionar fecha exacta y minutos discriminados por formato.
+  3. **Gráfica de Tendencia Semanal (Audible vs. Kindle):**
+     - Barras apiladas proporcionales para los 7 días de la semana (`WeeklyModalityChartCard`) con desglose visual en Cian Eléctrico (`#00E5FF`) y Ámbar Kindle (`#FF9800`), reportando el porcentaje relativo y total de minutos leídos en cada formato.
+  4. **Perfil de Ritmo y Franja Horaria:**
+     - `ReadingRhythmCard` reporta la velocidad promedio en `págs/hora`, proyecta el tiempo restante para terminar el libro activo (`~X horas`) e identifica automáticamente el horario de mayor concentración lectora (Matutino, Vespertino, Nocturno o Madrugada).
+  5. **Contenedor con Pestañas de Lujo:**
+     - `ReadingAnalyticsSection` agrupa estas tres perspectivas con selectores de pestaña estilizados (`[🟩 Consistencia]`, `[📊 Audible vs Kindle]`, `[⚡ Ritmo & Horario]`) y transición suave de contenido (`AnimatedContent`).
+- **Consecuencias:**
+  - Alta motivación intrínseca para el usuario, total visibilidad del hábito lector acumulado y análisis profundo de patrones de lectura sin sobrecargar visualmente el tablero principal.
+
+
 
 
 

@@ -92,7 +92,8 @@ fun DashboardScreen(
     onExportJson: () -> Unit = {},
     onSyncCatalog: () -> Unit = {},
     onSaveSessionNotes: (Long, String) -> Unit = { _, _ -> },
-    onAddHighlight: (Long, String, String, String, Int?) -> Unit = { _, _, _, _, _ -> }
+    onAddHighlight: (Long, String, String, String, Int?) -> Unit = { _, _, _, _, _ -> },
+    onUpdateGoals: (Int, Int) -> Unit = { _, _ -> }
 ) {
     var currentTab by remember { mutableStateOf(AppTab.HOME) }
     var showNfcDialog by remember { mutableStateOf(false) }
@@ -511,7 +512,10 @@ fun DashboardScreen(
                         AnalyticsScreen(
                             analytics = state.analytics,
                             currentStreakDays = state.streakInfo.currentStreakDays,
-                            activeBook = state.activeBook
+                            activeBook = state.activeBook,
+                            goals = state.goals,
+                            milestones = state.milestones,
+                            onUpdateGoals = onUpdateGoals
                         )
                     }
                     AppTab.LIBRARY -> {

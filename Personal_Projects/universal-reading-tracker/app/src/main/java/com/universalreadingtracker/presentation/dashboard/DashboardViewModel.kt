@@ -17,6 +17,7 @@ import com.universalreadingtracker.domain.model.ProgressUnit
 import com.universalreadingtracker.domain.model.ReadingModality
 import com.universalreadingtracker.domain.model.ReadingSession
 import com.universalreadingtracker.domain.usecase.BackfillHistoricalStreakUseCase
+import com.universalreadingtracker.domain.usecase.CalculateMilestonesAndGoalsUseCase
 import com.universalreadingtracker.domain.usecase.CalculateReadingAnalyticsUseCase
 import com.universalreadingtracker.service.KindleReadingTimerService
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -43,6 +44,7 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
     private val sessionRepo = ReadingSessionRepositoryImpl(db.readingSessionDao(), db.dailyReadingSummaryDao())
     private val streakRepo = StreakRepositoryImpl(db.dailyReadingSummaryDao())
     private val calculateReadingAnalyticsUseCase = CalculateReadingAnalyticsUseCase()
+    private val calculateMilestonesAndGoalsUseCase = CalculateMilestonesAndGoalsUseCase()
 
     private val _uiState = MutableStateFlow(DashboardState())
     val uiState: StateFlow<DashboardState> = _uiState.asStateFlow()
@@ -166,6 +168,7 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
         viewModelScope.launch {
             streakRepo.getStreakInfo().collectLatest { streakInfo ->
                 _uiState.update { it.copy(streakInfo = streakInfo) }
+                refreshAnalytics()
             }
         }
     }
@@ -188,6 +191,7 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
         viewModelScope.launch {
             bookRepo.getAllBooks().collectLatest { books ->
                 _uiState.update { it.copy(activeBooks = books) }
+                refreshAnalytics()
             }
         }
     }
@@ -215,6 +219,7 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
 
             sessionRepo.observeSummaryForDate(todayStr).collectLatest { summary ->
                 _uiState.update { it.copy(todaySummary = summary) }
+                refreshAnalytics()
             }
         }
     }
@@ -235,7 +240,47 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
             sessions = s.recentSessions,
             activeBook = s.activeBook
         )
-        _uiState.update { it.copy(analytics = analytics) }
+        val (goals, milestones) = calculateMilestonesAndGoalsUseCase(
+            yearlyBookGoal = getSavedYearlyBookGoal(),
+            monthlyMinuteGoal = getSavedMonthlyMinuteGoal(),
+            allBooks = s.activeBooks,
+            allDailySummaries = s.allDailySummaries,
+            todaySummary = s.todaySummary,
+            allSessions = s.recentSessions,
+            streakInfo = s.streakInfo
+        )
+        _uiState.update {
+            it.copy(
+                analytics = analytics,
+                goals = goals,
+                milestones = milestones
+            )
+        }
+    }
+
+    fun updateGoals(yearlyBooks: Int, monthlyMinutes: Int) {
+        val prefs = getApplication<Application>().getSharedPreferences(PREFS_GOALS, Context.MODE_PRIVATE)
+        prefs.edit()
+            .putInt(KEY_YEARLY_BOOK_GOAL, yearlyBooks.coerceAtLeast(1))
+            .putInt(KEY_MONTHLY_MINUTE_GOAL, monthlyMinutes.coerceAtLeast(10))
+            .apply()
+        refreshAnalytics()
+    }
+
+    private fun getSavedYearlyBookGoal(): Int {
+        val prefs = getApplication<Application>().getSharedPreferences(PREFS_GOALS, Context.MODE_PRIVATE)
+        return prefs.getInt(KEY_YEARLY_BOOK_GOAL, 12)
+    }
+
+    private fun getSavedMonthlyMinuteGoal(): Int {
+        val prefs = getApplication<Application>().getSharedPreferences(PREFS_GOALS, Context.MODE_PRIVATE)
+        return prefs.getInt(KEY_MONTHLY_MINUTE_GOAL, 1000)
+    }
+
+    companion object {
+        private const val PREFS_GOALS = "reading_tracker_goals"
+        private const val KEY_YEARLY_BOOK_GOAL = "yearly_book_goal"
+        private const val KEY_MONTHLY_MINUTE_GOAL = "monthly_minute_goal"
     }
 
     fun selectActiveBook(bookId: Long) {

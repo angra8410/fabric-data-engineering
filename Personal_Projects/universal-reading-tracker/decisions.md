@@ -401,6 +401,30 @@
   - Gráfica semanal 100% visible y armónica en todas las resoluciones de pantalla.
   - Flujo de Second Brain (Obsidian / Notion) plenamente integrado al hábito diario de lectura.
 
+---
+
+## [ADR-024] Metas Anuales / Mensuales Configurables y Sistema de Logros Obsidian (Gamificación Elegante)
+- **Fecha:** 2026-09-29
+- **Estado:** Aprobado
+- **Contexto:**
+  Para fomentar el compromiso a largo plazo sin caer en interfaces ruidosas o infantiles, se requería un sistema de gamificación discreto, lujoso y adaptado a lectores profundos (Kindle y audiolibros), combinando objetivos temporales configurables con insignias de prestigio Obsidian.
+- **Decisión Tomada:**
+  1. **Metas Configurables y Proyecciones Dinámicas (`YearlyMonthlyGoalsCard`):**
+     - **Meta Anual de Libros:** Seguimiento de libros concluidos en el año en curso vs. objetivo anual (por defecto 12 libros en 2026) con barra de progreso Obsidian Gold (`#FBBF24`).
+     - **Meta Mensual de Minutos:** Conteo de minutos leídos en el mes en curso vs. objetivo mensual (por defecto 1,000 min/mes) con barra degradada cian-esmeralda (`#38BDF8` -> `#10B981`) y conversión a horas equivalentes.
+     - **Modal de Ajuste Rápido (`ConfigureGoalsDialog`):** Diálogo minimalista para ajustar metas con selectores numéricos y botones rápidos (500m, 1000m, 1500m, 2000m), persistidos en `SharedPreferences` sin migraciones de base de datos.
+  2. **Insignias y Milestones Obsidian (`ObsidianMilestonesCard`):**
+     - Matriz 2x2 de hitos de lectura con estética de alta gama (tarjetas de cristal ahumado `#111422`, resplandor dorado y badge `DESBLOQUEADO ✨` / `EN CURSO`):
+       - 👑 **Centenario de Lectura:** 100+ días de racha continua (conquistado automáticamente con los 164+ días del usuario).
+       - ⚡ **Lector Bimodal:** Combinar Kindle y Audible en una misma jornada.
+       - 🌙 **Lector Nocturno:** Sesiones de lectura profunda concluidas después de las 21:00 horas.
+       - ☕ **Maratón de Fin de Semana:** Más de 60 minutos de lectura en una sola jornada de sábado o domingo.
+     - **Modal de Detalle (`MilestoneDetailDialog`):** Al tocar cualquier insignia, despliega una vista ampliada con el trofeo radial, nivel de prestigio (*Obsidian Gold, Amber, Blue, Emerald*), criterio técnico de desbloqueo y progreso actual.
+  3. **Cálculo Desacoplado y Cero Impacto en DB:**
+     - El caso de uso `CalculateMilestonesAndGoalsUseCase` calcula todas las métricas de forma pura sobre los resúmenes y sesiones existentes, preservando el 100% de la base de datos Room y la racha histórica.
+- **Consecuencias:**
+  - Experiencia motivacional de lujo, refinada y visualmente alineada al sistema de diseño Obsidian Luxury de la app.
+
 
 
 

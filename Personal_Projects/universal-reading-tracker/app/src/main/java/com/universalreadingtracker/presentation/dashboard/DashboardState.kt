@@ -3,6 +3,8 @@ package com.universalreadingtracker.presentation.dashboard
 import com.universalreadingtracker.domain.model.Book
 import com.universalreadingtracker.domain.model.DailyReadingSummary
 import com.universalreadingtracker.domain.model.ReadingAnalytics
+import com.universalreadingtracker.domain.model.ReadingGoals
+import com.universalreadingtracker.domain.model.ReadingMilestone
 import com.universalreadingtracker.domain.model.ReadingSession
 import com.universalreadingtracker.domain.model.StreakInfo
 
@@ -21,5 +23,7 @@ data class DashboardState(
     val isKindleTimerRunning: Boolean = false,
     val kindleTimerElapsedSeconds: Long = 0L,
     val dailyGoalMinutes: Int = 30,
-    val allSessionsWithNotes: List<ReadingSession> = emptyList()
+    val allSessionsWithNotes: List<ReadingSession> = emptyList(),
+    val goals: ReadingGoals = ReadingGoals(),
+    val milestones: List<ReadingMilestone> = emptyList()
 )

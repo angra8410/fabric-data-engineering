@@ -3,7 +3,7 @@ package com.universalreadingtracker.presentation.dashboard.analytics
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -11,17 +11,27 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.universalreadingtracker.domain.model.Book
 import com.universalreadingtracker.domain.model.ReadingAnalytics
+import com.universalreadingtracker.domain.model.ReadingGoals
+import com.universalreadingtracker.domain.model.ReadingMilestone
 
 /**
- * Dedicated Full Screen View for Annual Heatmap, Weekly Trends, and Reading Insights.
+ * Dedicated Full Screen View for Annual Heatmap, Weekly Trends, Rhythm,
+ * Configurable Goals (Yearly/Monthly), and Obsidian Milestones.
+ * Implements RF-16 and Opción 5 (Gamificación Elegante y Metas).
  */
 @Composable
 fun AnalyticsScreen(
     analytics: ReadingAnalytics?,
     currentStreakDays: Int,
     activeBook: Book?,
+    goals: ReadingGoals = ReadingGoals(),
+    milestones: List<ReadingMilestone> = emptyList(),
+    onUpdateGoals: (yearlyBooks: Int, monthlyMinutes: Int) -> Unit = { _, _ -> },
     modifier: Modifier = Modifier
 ) {
+    var showConfigureGoalsDialog by remember { mutableStateOf(false) }
+    var selectedMilestoneForDetail by remember { mutableStateOf<ReadingMilestone?>(null) }
+
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
@@ -47,7 +57,23 @@ fun AnalyticsScreen(
             }
         }
 
-        // 1. Annual Consistency Heatmap
+        // 1. Configurable Goals (Yearly Books & Monthly Minutes)
+        item {
+            YearlyMonthlyGoalsCard(
+                goals = goals,
+                onConfigureClick = { showConfigureGoalsDialog = true }
+            )
+        }
+
+        // 2. Obsidian Milestones (Gamificación Elegante)
+        item {
+            ObsidianMilestonesCard(
+                milestones = milestones,
+                onMilestoneClick = { selectedMilestoneForDetail = it }
+            )
+        }
+
+        // 3. Annual Consistency Heatmap (GitHub / Obsidian style)
         item {
             AnnualConsistencyHeatmapCard(
                 analytics = analytics,
@@ -55,19 +81,37 @@ fun AnalyticsScreen(
             )
         }
 
-        // 2. Weekly Modality Trend (Audible vs. Kindle)
+        // 4. Weekly Modality Trend (Audible vs. Kindle)
         item {
             WeeklyModalityChartCard(
                 distribution = analytics?.weeklyDistribution
             )
         }
 
-        // 3. Rhythm and Reading Habits
+        // 5. Rhythm and Reading Habits
         item {
             ReadingRhythmCard(
                 rhythm = analytics?.rhythmInsights,
                 activeBook = activeBook
             )
         }
+    }
+
+    // Modal: Configure Goals Dialog
+    if (showConfigureGoalsDialog) {
+        ConfigureGoalsDialog(
+            initialYearlyBooks = goals.yearlyBookGoal,
+            initialMonthlyMinutes = goals.monthlyMinuteGoal,
+            onDismiss = { showConfigureGoalsDialog = false },
+            onSaveGoals = onUpdateGoals
+        )
+    }
+
+    // Modal: Milestone Detail Dialog
+    selectedMilestoneForDetail?.let { milestone ->
+        MilestoneDetailDialog(
+            milestone = milestone,
+            onDismiss = { selectedMilestoneForDetail = null }
+        )
     }
 }

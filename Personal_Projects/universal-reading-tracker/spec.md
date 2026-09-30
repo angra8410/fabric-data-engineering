@@ -127,6 +127,17 @@
       ```
   - **Alineación Garantizada en Gráfica Semanal (`WeeklyModalityChart`):**
     - Ajuste de línea base y caja de minutos fija (16dp) para evitar que barras llenas (ej. S y M) desplacen o recorten las etiquetas de días de la semana.
+- **RF-20: Metas Configurables Anuales/Mensuales y Sistema de Logros Obsidian (Gamificación Elegante)**
+  - **Metas Configurables:**
+    - Meta de libros leídos al año (por defecto 12 libros en 2026).
+    - Meta de minutos de lectura al mes (por defecto 1,000 minutos/mes).
+    - Diálogo de configuración rápida (`ConfigureGoalsDialog`) persistido en `SharedPreferences`.
+  - **Insignias y Milestones Obsidian:**
+    - 👑 **Centenario de Lectura:** 100+ días de racha continua de lectura activa.
+    - ⚡ **Lector Bimodal:** Combinar Audible y Kindle en el mismo día.
+    - 🌙 **Lector Nocturno:** Completar sesiones de lectura después de las 21:00 horas.
+    - ☕ **Maratón de Fin de Semana:** Más de 60 minutos de lectura en sábado o domingo.
+    - Modal detallado de hito (`MilestoneDetailDialog`) con trofeo radial, nivel de prestigio y métricas de avance.
 
 ---
 
@@ -223,3 +234,4 @@
 - [x] Navegación por pestañas inferiores (Inicio, Analítica, Biblioteca) con estética Obsidian Luxury, y gestión dedicada de biblioteca particionada por estado (Leyendo, Por leer, Completados), buscador en vivo y edición directa de progreso (ADR-021).
 - [x] Historial reciente inteligente con vista compacta de 3 sesiones y expansor bajo demanda, y marcado de libros leídos tanto en biblioteca como en alta histórica (+100 días) (ADR-022).
 - [x] Cuaderno de Citas, Ideas y Reflexiones (Highlights & Notes) con tarjetas Obsidian, exportación instantánea en Markdown para Obsidian/Notion, edición en diálogo de sesión y corrección de recorte de etiquetas en la gráfica semanal (ADR-023).
+- [x] Metas configurables anuales (libros) y mensuales (minutos) con barras de progreso Obsidian y sistema de 4 insignias/milestones de prestigio (Centenario, Bimodal, Nocturno, Maratón Finde) con diálogos de detalle e interactividad de alta gama (ADR-024).

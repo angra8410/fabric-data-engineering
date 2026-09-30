@@ -105,6 +105,9 @@ class MainActivity : ComponentActivity() {
                     onSaveSessionNotes = { sessionId, notes -> viewModel.saveSessionNotes(sessionId, notes) },
                     onAddHighlight = { bookId, title, author, note, page ->
                         viewModel.addHighlightOrNote(bookId, title, author, note, page)
+                    },
+                    onUpdateGoals = { yearlyBooks, monthlyMinutes ->
+                        viewModel.updateGoals(yearlyBooks, monthlyMinutes)
                     }
                 )
             }

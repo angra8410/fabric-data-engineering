@@ -20,5 +20,6 @@ data class DashboardState(
     val isAudibleTrackingActive: Boolean = true,
     val isKindleTimerRunning: Boolean = false,
     val kindleTimerElapsedSeconds: Long = 0L,
-    val dailyGoalMinutes: Int = 30
+    val dailyGoalMinutes: Int = 30,
+    val allSessionsWithNotes: List<ReadingSession> = emptyList()
 )

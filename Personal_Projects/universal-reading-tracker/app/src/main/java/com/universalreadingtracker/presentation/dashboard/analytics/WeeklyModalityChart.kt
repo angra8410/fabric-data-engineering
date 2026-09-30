@@ -110,7 +110,6 @@ fun WeeklyModalityChartCard(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(110.dp)
                     .padding(horizontal = 6.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Bottom
@@ -123,19 +122,22 @@ fun WeeklyModalityChartCard(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.width(36.dp)
                     ) {
-                        // Minutes text above bar if read
-                        if (totalMins > 0) {
-                            Text(
-                                text = "${totalMins}m",
-                                color = if (item.isToday) Color(0xFFFBBF24) else Color(0xFF94A3B8),
-                                fontSize = 10.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                        } else {
-                            Spacer(modifier = Modifier.height(12.dp))
+                        // Minutes text above bar (fixed height ensures consistent baseline for all days)
+                        Box(
+                            modifier = Modifier.height(16.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            if (totalMins > 0) {
+                                Text(
+                                    text = "${totalMins}m",
+                                    color = if (item.isToday) Color(0xFFFBBF24) else Color(0xFF94A3B8),
+                                    fontSize = 10.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
                         }
 
-                        Spacer(modifier = Modifier.height(4.dp))
+                        Spacer(modifier = Modifier.height(6.dp))
 
                         // Stacked Bar Container
                         Box(
@@ -185,12 +187,12 @@ fun WeeklyModalityChartCard(
                             }
                         }
 
-                        Spacer(modifier = Modifier.height(6.dp))
+                        Spacer(modifier = Modifier.height(8.dp))
 
                         // Day Label (L, M, M, J, V, S, D)
                         Box(
                             modifier = Modifier
-                                .size(22.dp)
+                                .size(24.dp)
                                 .clip(CircleShape)
                                 .background(if (item.isToday) Color(0xFF38BDF8) else Color.Transparent),
                             contentAlignment = Alignment.Center

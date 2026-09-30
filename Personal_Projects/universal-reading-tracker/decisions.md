@@ -374,6 +374,33 @@
   - El Inicio se mantiene compacto, minimalista y libre de desorden vertical.
   - La biblioteca refleja fidedignamente la trayectoria de lecturas culminadas del usuario a lo largo de su hábito.
 
+---
+
+## [ADR-023] Cuaderno de Citas, Ideas y Reflexiones (Highlights & Notes) con Exportación Obsidian/Notion y Corrección de Alineación en Gráfica Semanal
+- **Fecha:** 2026-09-29
+- **Estado:** Aprobado
+- **Contexto:**
+  1. **Recorte de Etiquetas de Días en Gráfica Semanal:** En `WeeklyModalityChart` (pestaña Analítica), cuando las barras de domingo (S) y lunes (M) acumulaban minutos altos (ej. 24m y 93m), la fila tenía altura fija `height(110.dp)` y los textos de minutos desplazaban las etiquetas de los días fuera del marco visible inferior.
+  2. **Captura de Citas y Reflexiones (Highlights & Notes):** Los lectores de Kindle y audiolibros capturan ideas clave, citas memorables o reflexiones al cerrar una sesión o al repasar un libro. Se requería poder registrarlas, explorarlas en la biblioteca y exportarlas a Obsidian o Notion en formato Markdown limpio con 1 toque.
+- **Decisión Tomada:**
+  1. **Corrección de Alineación en `WeeklyModalityChart`:**
+     - Se eliminó el `height(110.dp)` restrictivo del contenedor horizontal y se asignó una caja de minutos fija `Box(height = 16.dp)` en la parte superior de cada columna de día.
+     - La barra vertical se acota a `height(84.dp)` con alineación inferior `Alignment.BottomCenter`.
+     - Todos los círculos de días (L, M, M, J, V, S, D) comparten ahora la misma línea base visual y no se desplazan ni se ocultan al llenarse la barra.
+  2. **Persistencia Directa de Notas sin Migración Destructiva:**
+     - La entidad `ReadingSessionEntity` en SQLite ya contenía el campo `notes: String? = null`.
+     - Se añadió `updateSessionNotes(sessionId, notes)` en `ReadingSessionDao` y repositorio, garantizando 0 migraciones y 0 riesgo de pérdida de la racha de 164+ días.
+  3. **Subpestaña "Citas & Notas" en Biblioteca:**
+     - Nueva subpestaña `LibrarySubTab.NOTES("Citas & Notas", "💡")` en `LibraryScreen`.
+     - Tarjetas Obsidian con comillas estilizadas, libro asociado, fecha, indicador de página/locación, y botón de 1 toque **"Copiar MD"** que copia la cita al portapapeles con formato Markdown estándar (`> Cita \n\n*— Libro por Autor*`) y muestra un Toast confirmatorio.
+     - Buscador en tiempo real para filtrar notas por texto, libro o autor.
+     - Botón `+ Nueva Cita` para agregar reflexiones directamente a cualquier libro del catálogo.
+  4. **Edición y Captura de Reflexiones en `SessionDetailDialog`:**
+     - Campo interactivo en el detalle de sesión para escribir o dictar por voz reflexiones al cerrar una lectura, guardarlas y exportarlas en Markdown.
+- **Consecuencias:**
+  - Gráfica semanal 100% visible y armónica en todas las resoluciones de pantalla.
+  - Flujo de Second Brain (Obsidian / Notion) plenamente integrado al hábito diario de lectura.
+
 
 
 

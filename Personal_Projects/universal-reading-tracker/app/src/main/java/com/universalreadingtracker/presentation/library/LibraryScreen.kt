@@ -47,15 +47,26 @@ fun LibraryScreen(
     onSelectBook: (Long) -> Unit,
     onOpenAddBook: () -> Unit,
     onOpenUpdatePosition: (Book) -> Unit,
+    onMarkAsCompleted: (Book) -> Unit = {},
+    onReopenBook: (Book) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     var searchQuery by remember { mutableStateOf("") }
     var selectedTab by remember { mutableStateOf(LibrarySubTab.READING) }
 
-    // Segment books into categories
-    val readingBooks = books.filter { it.isCurrentlyReading || (it.currentPosition > 0 && it.currentPosition < it.totalUnits) }
+    // Segment books into categories:
+    // Completed: Books where currentPosition reached or exceeded totalUnits
     val completedBooks = books.filter { it.totalUnits > 0 && it.currentPosition >= it.totalUnits }
-    val toReadBooks = books.filter { it.currentPosition == 0 && !it.isCurrentlyReading }
+    // Reading: Books currently active or in-progress (< totalUnits)
+    val readingBooks = books.filter {
+        (it.totalUnits <= 0 || it.currentPosition < it.totalUnits) &&
+                (it.isCurrentlyReading || it.currentPosition > 0)
+    }
+    // To Read: Books not yet started and not active
+    val toReadBooks = books.filter {
+        (it.totalUnits <= 0 || it.currentPosition < it.totalUnits) &&
+                it.currentPosition == 0 && !it.isCurrentlyReading
+    }
 
     val currentList = when (selectedTab) {
         LibrarySubTab.READING -> readingBooks
@@ -260,7 +271,9 @@ fun LibraryScreen(
                         book = book,
                         isActive = book.id == activeBookId,
                         onSelect = { onSelectBook(book.id) },
-                        onUpdatePosition = { onOpenUpdatePosition(book) }
+                        onUpdatePosition = { onOpenUpdatePosition(book) },
+                        onMarkAsCompleted = { onMarkAsCompleted(book) },
+                        onReopenBook = { onReopenBook(book) }
                     )
                 }
             }
@@ -277,6 +290,8 @@ fun LibraryBookCard(
     isActive: Boolean,
     onSelect: () -> Unit,
     onUpdatePosition: () -> Unit,
+    onMarkAsCompleted: () -> Unit,
+    onReopenBook: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -394,57 +409,132 @@ fun LibraryBookCard(
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            // Actions row: Set Active / Update Page
+            // Actions row: Set Active / Update Page / Mark Completed / Reopen
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End,
+                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Update position button
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(Color(0x1AFFFFFF))
-                        .clickable { onUpdatePosition() }
-                        .padding(horizontal = 9.dp, vertical = 5.dp)
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            imageVector = Icons.Default.Edit,
-                            contentDescription = "Editar página",
-                            tint = Color(0xFFCBD5E1),
-                            modifier = Modifier.size(12.dp)
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(
-                            text = "Avanzar",
-                            color = Color(0xFFCBD5E1),
-                            fontSize = 11.sp,
-                            fontWeight = FontWeight.Medium
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.width(8.dp))
-
-                if (!isActive) {
+                // Left action: Status / Completed Badge OR "Marcar Leído" Button
+                if (pct >= 100) {
                     Box(
                         modifier = Modifier
                             .clip(RoundedCornerShape(8.dp))
                             .background(Color(0x2210B981))
                             .border(1.dp, Color(0x4410B981), RoundedCornerShape(8.dp))
-                            .clickable { onSelect() }
-                            .padding(horizontal = 10.dp, vertical = 5.dp)
+                            .padding(horizontal = 8.dp, vertical = 5.dp)
                     ) {
-                        Text(
-                            text = "Leer Ahora",
-                            color = Color(0xFF34D399),
-                            fontSize = 11.sp,
-                            fontWeight = FontWeight.Bold
-                        )
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Default.CheckCircle,
+                                contentDescription = null,
+                                tint = Color(0xFF34D399),
+                                modifier = Modifier.size(13.dp)
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text(
+                                text = "Completado",
+                                color = Color(0xFF34D399),
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(Color(0x1A10B981))
+                            .border(1.dp, Color(0x4410B981), RoundedCornerShape(8.dp))
+                            .clickable { onMarkAsCompleted() }
+                            .padding(horizontal = 9.dp, vertical = 5.dp)
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Default.CheckCircle,
+                                contentDescription = "Marcar como leído",
+                                tint = Color(0xFF34D399),
+                                modifier = Modifier.size(13.dp)
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text(
+                                text = "Marcar Leído",
+                                color = Color(0xFF34D399),
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                }
+
+                // Right actions: Reopen, Avanzar/Páginas, Leer Ahora
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (pct >= 100) {
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(Color(0x1A38BDF8))
+                                .border(1.dp, Color(0x3338BDF8), RoundedCornerShape(8.dp))
+                            .clickable { onReopenBook() }
+                            .padding(horizontal = 9.dp, vertical = 5.dp)
+                        ) {
+                            Text(
+                                text = "Reabrir",
+                                color = Color(0xFF38BDF8),
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
+                    }
+
+                    // Update position button
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(Color(0x1AFFFFFF))
+                            .clickable { onUpdatePosition() }
+                            .padding(horizontal = 9.dp, vertical = 5.dp)
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = "Editar página",
+                                tint = Color(0xFFCBD5E1),
+                                modifier = Modifier.size(12.dp)
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text(
+                                text = if (pct >= 100) "Páginas" else "Avanzar",
+                                color = Color(0xFFCBD5E1),
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
+                    }
+
+                    if (!isActive && pct < 100) {
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(Color(0x2210B981))
+                                .border(1.dp, Color(0x4410B981), RoundedCornerShape(8.dp))
+                                .clickable { onSelect() }
+                                .padding(horizontal = 10.dp, vertical = 5.dp)
+                        ) {
+                            Text(
+                                text = "Leer Ahora",
+                                color = Color(0xFF34D399),
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                     }
                 }
             }
         }
     }
 }
+

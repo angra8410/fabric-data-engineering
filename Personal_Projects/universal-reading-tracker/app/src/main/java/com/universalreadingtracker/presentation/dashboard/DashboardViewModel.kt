@@ -14,6 +14,8 @@ import com.universalreadingtracker.data.repository.StreakRepositoryImpl
 import com.universalreadingtracker.domain.model.Book
 import com.universalreadingtracker.domain.model.BookFormat
 import com.universalreadingtracker.domain.model.ProgressUnit
+import com.universalreadingtracker.domain.model.ReadingModality
+import com.universalreadingtracker.domain.model.ReadingSession
 import com.universalreadingtracker.domain.usecase.BackfillHistoricalStreakUseCase
 import com.universalreadingtracker.domain.usecase.CalculateReadingAnalyticsUseCase
 import com.universalreadingtracker.service.KindleReadingTimerService
@@ -171,7 +173,12 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
     private fun observeRecentSessions() {
         viewModelScope.launch {
             sessionRepo.getAllSessions().collectLatest { sessions ->
-                _uiState.update { it.copy(recentSessions = sessions.take(15)) }
+                _uiState.update {
+                    it.copy(
+                        recentSessions = sessions.take(20),
+                        allSessionsWithNotes = sessions.filter { s -> !s.notes.isNullOrBlank() }
+                    )
+                }
                 refreshAnalytics()
             }
         }
@@ -286,6 +293,37 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
         viewModelScope.launch {
             bookRepo.updateBookPosition(bookId, 0)
             bookRepo.setActiveReadingBook(bookId)
+        }
+    }
+
+    fun saveSessionNotes(sessionId: Long, notes: String) {
+        viewModelScope.launch {
+            sessionRepo.updateSessionNotes(sessionId, notes)
+        }
+    }
+
+    fun addHighlightOrNote(
+        bookId: Long,
+        bookTitle: String,
+        bookAuthor: String,
+        note: String,
+        page: Int? = null
+    ) {
+        viewModelScope.launch {
+            val session = ReadingSession(
+                bookId = bookId,
+                bookTitle = bookTitle,
+                bookAuthor = bookAuthor,
+                modality = ReadingModality.EBOOK_KINDLE,
+                providerId = "kindle_physical",
+                startTime = System.currentTimeMillis(),
+                endTime = System.currentTimeMillis(),
+                realDurationSeconds = 0,
+                startPage = page,
+                endPage = page,
+                notes = note
+            )
+            sessionRepo.insertSession(session)
         }
     }
 

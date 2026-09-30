@@ -29,4 +29,7 @@ interface ReadingSessionDao {
 
     @Query("DELETE FROM reading_sessions WHERE id = :id")
     suspend fun deleteSession(id: Long)
+
+    @Query("UPDATE reading_sessions SET notes = :notes WHERE id = :sessionId")
+    suspend fun updateSessionNotes(sessionId: Long, notes: String)
 }

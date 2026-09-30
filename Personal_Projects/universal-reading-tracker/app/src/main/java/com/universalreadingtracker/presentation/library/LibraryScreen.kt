@@ -23,34 +23,48 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
 import com.universalreadingtracker.domain.model.Book
 import com.universalreadingtracker.domain.model.ProgressUnit
+import com.universalreadingtracker.domain.model.ReadingSession
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 enum class LibrarySubTab(val title: String, val emoji: String) {
     READING("Leyendo", "📖"),
     TO_READ("Por Leer", "⏳"),
-    COMPLETED("Completados", "✅")
+    COMPLETED("Completados", "✅"),
+    NOTES("Citas & Notas", "💡")
 }
 
 /**
- * Implements RF-06 & Opción 3:
+ * Implements RF-06, RF-17 & Opción 4:
  * Dedicated Library Management Screen with:
- * - Real-time search by title and author
- * - Tabbed segmentation: Leyendo (Reading), Por Leer (Want to read), Completados (Finished)
- * - 1-tap to set as active book or update current page/locations
+ * - Real-time search by title, author, or quote text
+ * - Tabbed segmentation: Leyendo (Reading), Por Leer (Want to read), Completados (Finished), Citas & Notas (Highlights & Notes)
+ * - 1-tap Markdown export to clipboard for Obsidian / Notion
  * - Visual progress indicators and Obsidian Luxury book cards
  */
 @Composable
 fun LibraryScreen(
     books: List<Book>,
     activeBookId: Long,
+    notesSessions: List<ReadingSession> = emptyList(),
     onSelectBook: (Long) -> Unit,
     onOpenAddBook: () -> Unit,
+    onOpenAddHighlight: () -> Unit = {},
     onOpenUpdatePosition: (Book) -> Unit,
     onMarkAsCompleted: (Book) -> Unit = {},
     onReopenBook: (Book) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
     var searchQuery by remember { mutableStateOf("") }
     var selectedTab by remember { mutableStateOf(LibrarySubTab.READING) }
 
@@ -67,18 +81,29 @@ fun LibraryScreen(
         (it.totalUnits <= 0 || it.currentPosition < it.totalUnits) &&
                 it.currentPosition == 0 && !it.isCurrentlyReading
     }
+    // Highlights & Notes from reading sessions
+    val highlightSessions = notesSessions.filter { !it.notes.isNullOrBlank() }
 
     val currentList = when (selectedTab) {
         LibrarySubTab.READING -> readingBooks
         LibrarySubTab.TO_READ -> toReadBooks
         LibrarySubTab.COMPLETED -> completedBooks
+        LibrarySubTab.NOTES -> emptyList()
     }
 
-    // Apply search filter
+    // Apply search filter to books
     val filteredList = currentList.filter {
         searchQuery.isBlank() ||
                 it.title.contains(searchQuery, ignoreCase = true) ||
                 it.author.contains(searchQuery, ignoreCase = true)
+    }
+
+    // Apply search filter to quotes/notes
+    val filteredHighlights = highlightSessions.filter {
+        searchQuery.isBlank() ||
+                it.bookTitle.contains(searchQuery, ignoreCase = true) ||
+                it.bookAuthor.contains(searchQuery, ignoreCase = true) ||
+                (it.notes ?: "").contains(searchQuery, ignoreCase = true)
     }
 
     Column(
@@ -113,7 +138,7 @@ fun LibraryScreen(
                     onValueChange = { searchQuery = it },
                     placeholder = {
                         Text(
-                            text = "Buscar por título o autor...",
+                            text = if (selectedTab == LibrarySubTab.NOTES) "Buscar citas, ideas o libros..." else "Buscar por título o autor...",
                             color = Color(0xFF64748B),
                             fontSize = 14.sp
                         )
@@ -148,7 +173,7 @@ fun LibraryScreen(
 
         Spacer(modifier = Modifier.height(14.dp))
 
-        // SubTab Selector (Leyendo / Por Leer / Completados)
+        // SubTab Selector (Leyendo / Por Leer / Completados / Citas & Notas)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -163,6 +188,7 @@ fun LibraryScreen(
                     LibrarySubTab.READING -> readingBooks.size
                     LibrarySubTab.TO_READ -> toReadBooks.size
                     LibrarySubTab.COMPLETED -> completedBooks.size
+                    LibrarySubTab.NOTES -> highlightSessions.size
                 }
 
                 Box(
@@ -180,11 +206,11 @@ fun LibraryScreen(
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(text = tab.emoji, fontSize = 11.sp)
-                        Spacer(modifier = Modifier.width(4.dp))
+                        Spacer(modifier = Modifier.width(3.dp))
                         Text(
-                            text = "${tab.title} ($count)",
+                            text = if (tab == LibrarySubTab.NOTES) "Citas ($count)" else "${tab.title} ($count)",
                             color = if (isSelected) Color.White else Color(0xFF94A3B8),
-                            fontSize = 11.sp,
+                            fontSize = 10.sp,
                             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
                         )
                     }
@@ -201,7 +227,7 @@ fun LibraryScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "${filteredList.size} libros encontrados",
+                text = if (selectedTab == LibrarySubTab.NOTES) "${filteredHighlights.size} citas encontradas" else "${filteredList.size} libros encontrados",
                 color = Color(0xFF94A3B8),
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Medium
@@ -210,22 +236,28 @@ fun LibraryScreen(
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(12.dp))
-                    .background(Color(0x22FF5E36))
-                    .border(1.dp, Color(0x55FF5E36), RoundedCornerShape(12.dp))
-                    .clickable { onOpenAddBook() }
+                    .background(if (selectedTab == LibrarySubTab.NOTES) Color(0x22FBBF24) else Color(0x22FF5E36))
+                    .border(
+                        1.dp,
+                        if (selectedTab == LibrarySubTab.NOTES) Color(0x55FBBF24) else Color(0x55FF5E36),
+                        RoundedCornerShape(12.dp)
+                    )
+                    .clickable {
+                        if (selectedTab == LibrarySubTab.NOTES) onOpenAddHighlight() else onOpenAddBook()
+                    }
                     .padding(horizontal = 10.dp, vertical = 6.dp)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         imageVector = Icons.Default.Add,
-                        contentDescription = "Nuevo libro",
-                        tint = Color(0xFFFF774C),
+                        contentDescription = if (selectedTab == LibrarySubTab.NOTES) "Nueva cita" else "Nuevo libro",
+                        tint = if (selectedTab == LibrarySubTab.NOTES) Color(0xFFFBBF24) else Color(0xFFFF774C),
                         modifier = Modifier.size(14.dp)
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = "Agregar Libro",
-                        color = Color(0xFFFF774C),
+                        text = if (selectedTab == LibrarySubTab.NOTES) "Nueva Cita" else "Agregar Libro",
+                        color = if (selectedTab == LibrarySubTab.NOTES) Color(0xFFFBBF24) else Color(0xFFFF774C),
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -235,46 +267,246 @@ fun LibraryScreen(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        // Books List
-        if (filteredList.isEmpty()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                contentAlignment = Alignment.Center
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.MenuBook,
-                        contentDescription = "Sin libros",
-                        tint = Color(0xFF475569),
-                        modifier = Modifier.size(44.dp)
-                    )
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Text(
-                        text = if (searchQuery.isNotEmpty()) "No se encontraron libros para \"$searchQuery\""
-                        else "No tienes libros en la categoría ${selectedTab.title.lowercase()}",
-                        color = Color(0xFF64748B),
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight.Medium
-                    )
+        // Content List (Books OR Quotes/Highlights)
+        if (selectedTab == LibrarySubTab.NOTES) {
+            if (filteredHighlights.isEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(
+                            imageVector = Icons.Default.FormatQuote,
+                            contentDescription = "Sin citas",
+                            tint = Color(0xFF475569),
+                            modifier = Modifier.size(44.dp)
+                        )
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Text(
+                            text = if (searchQuery.isNotEmpty()) "No se encontraron citas para \"$searchQuery\""
+                            else "Aún no tienes citas o reflexiones guardadas.\nToca '+ Nueva Cita' o abre una sesión para capturar una.",
+                            color = Color(0xFF64748B),
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Medium,
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                        )
+                    }
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    contentPadding = PaddingValues(bottom = 24.dp)
+                ) {
+                    items(filteredHighlights, key = { it.id }) { session ->
+                        ObsidianQuoteCard(
+                            session = session,
+                            onCopyMarkdown = {
+                                val quoteText = session.notes ?: ""
+                                val bookTitle = session.bookTitle.ifBlank { "Lectura en Kindle" }
+                                val author = session.bookAuthor.ifBlank { "Autor" }
+                                val pageInfo = if (session.endPage != null && session.endPage > 0) " (pág. ${session.endPage})" else ""
+                                val md = "> \"$quoteText\"\n— *$bookTitle*, $author$pageInfo\n*Universal Reading Tracker*"
+                                val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                                val clip = ClipData.newPlainText("Cita de Lectura", md)
+                                clipboard.setPrimaryClip(clip)
+                                Toast.makeText(context, "Cita copiada en Markdown para Obsidian / Notion", Toast.LENGTH_SHORT).show()
+                            }
+                        )
+                    }
                 }
             }
         } else {
-            LazyColumn(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-                contentPadding = PaddingValues(bottom = 24.dp)
+            // Books List
+            if (filteredList.isEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.MenuBook,
+                            contentDescription = "Sin libros",
+                            tint = Color(0xFF475569),
+                            modifier = Modifier.size(44.dp)
+                        )
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Text(
+                            text = if (searchQuery.isNotEmpty()) "No se encontraron libros para \"$searchQuery\""
+                            else "No tienes libros en la categoría ${selectedTab.title.lowercase()}",
+                            color = Color(0xFF64748B),
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    contentPadding = PaddingValues(bottom = 24.dp)
+                ) {
+                    items(filteredList, key = { it.id }) { book ->
+                        LibraryBookCard(
+                            book = book,
+                            isActive = book.id == activeBookId,
+                            onSelect = { onSelectBook(book.id) },
+                            onUpdatePosition = { onOpenUpdatePosition(book) },
+                            onMarkAsCompleted = { onMarkAsCompleted(book) },
+                            onReopenBook = { onReopenBook(book) }
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Individual Obsidian Luxury Card for a Quote/Highlight with 1-tap Markdown copy for Obsidian/Notion.
+ */
+@Composable
+fun ObsidianQuoteCard(
+    session: ReadingSession,
+    onCopyMarkdown: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val zone = ZoneId.systemDefault()
+    val dateFormatter = DateTimeFormatter.ofPattern("d 'de' MMMM, yyyy", Locale.forLanguageTag("es-ES"))
+    val dateStr = if (session.startTime > 0) {
+        Instant.ofEpochMilli(session.startTime).atZone(zone).toLocalDate().format(dateFormatter)
+    } else "Sesión de lectura"
+
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color(0xFF131522))
+            .border(1.dp, Color(0x332D323F), RoundedCornerShape(16.dp))
+            .padding(14.dp)
+    ) {
+        Column {
+            // Header: Book info & Page
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Top
             ) {
-                items(filteredList, key = { it.id }) { book ->
-                    LibraryBookCard(
-                        book = book,
-                        isActive = book.id == activeBookId,
-                        onSelect = { onSelectBook(book.id) },
-                        onUpdatePosition = { onOpenUpdatePosition(book) },
-                        onMarkAsCompleted = { onMarkAsCompleted(book) },
-                        onReopenBook = { onReopenBook(book) }
+                Row(modifier = Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
+                    Box(
+                        modifier = Modifier
+                            .size(34.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(Color(0x22FBBF24)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.FormatQuote,
+                            contentDescription = "Cita",
+                            tint = Color(0xFFFBBF24),
+                            modifier = Modifier.size(18.dp)
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Column {
+                        Text(
+                            text = session.bookTitle.ifBlank { "Lectura en Kindle" },
+                            color = Color.White,
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Bold,
+                            maxLines = 1
+                        )
+                        Text(
+                            text = session.bookAuthor.ifBlank { "Autor" },
+                            color = Color(0xFF94A3B8),
+                            fontSize = 11.sp,
+                            maxLines = 1
+                        )
+                    }
+                }
+
+                if (session.endPage != null && session.endPage > 0) {
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(6.dp))
+                            .background(Color(0xFF1E293B))
+                            .padding(horizontal = 6.dp, vertical = 3.dp)
+                    ) {
+                        Text(
+                            text = "Pág. ${session.endPage}",
+                            color = Color(0xFF38BDF8),
+                            fontSize = 10.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            // Blockquote container
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(Color(0xFF181B2B))
+                    .border(
+                        width = 2.dp,
+                        color = Color(0xFFFBBF24),
+                        shape = RoundedCornerShape(topStart = 8.dp, bottomStart = 8.dp)
                     )
+                    .padding(horizontal = 12.dp, vertical = 10.dp)
+            ) {
+                Text(
+                    text = "“${session.notes ?: ""}”",
+                    color = Color(0xFFF1F5F9),
+                    fontSize = 13.sp,
+                    fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
+                    lineHeight = 18.sp
+                )
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            // Footer: Date & 1-tap Copy Markdown Button
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "📅 $dateStr",
+                    color = Color(0xFF64748B),
+                    fontSize = 11.sp
+                )
+
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(Color(0x2238BDF8))
+                        .border(1.dp, Color(0x4438BDF8), RoundedCornerShape(8.dp))
+                        .clickable { onCopyMarkdown() }
+                        .padding(horizontal = 10.dp, vertical = 5.dp)
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Default.ContentCopy,
+                            contentDescription = "Copiar Markdown",
+                            tint = Color(0xFF38BDF8),
+                            modifier = Modifier.size(12.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = "Copiar Markdown",
+                            color = Color(0xFF38BDF8),
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
             }
         }

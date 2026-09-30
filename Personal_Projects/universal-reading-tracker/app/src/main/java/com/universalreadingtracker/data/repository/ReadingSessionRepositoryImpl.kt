@@ -165,4 +165,8 @@ class ReadingSessionRepositoryImpl(
             recalculateDailySummaryForDate(date)
         }
     }
+
+    override suspend fun updateSessionNotes(sessionId: Long, notes: String) {
+        sessionDao.updateSessionNotes(sessionId, notes)
+    }
 }

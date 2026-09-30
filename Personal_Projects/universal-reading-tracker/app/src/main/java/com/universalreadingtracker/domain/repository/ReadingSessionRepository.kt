@@ -14,4 +14,5 @@ interface ReadingSessionRepository {
     suspend fun saveDailySummary(summary: DailyReadingSummary)
     suspend fun autoRepairThrottledSessions()
     suspend fun recalculateDailySummaryForDate(dateString: String)
+    suspend fun updateSessionNotes(sessionId: Long, notes: String)
 }

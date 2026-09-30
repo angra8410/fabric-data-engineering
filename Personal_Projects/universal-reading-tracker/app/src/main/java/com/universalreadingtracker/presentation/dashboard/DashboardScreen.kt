@@ -38,6 +38,11 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
 import com.universalreadingtracker.domain.model.Book
 import com.universalreadingtracker.domain.model.DailyReadingSummary
 import com.universalreadingtracker.domain.model.ProgressUnit
@@ -85,12 +90,15 @@ fun DashboardScreen(
     onUpdatePosition: (Int) -> Unit = {},
     onUpdateBookPosition: (Long, Int) -> Unit = { _, _ -> },
     onExportJson: () -> Unit = {},
-    onSyncCatalog: () -> Unit = {}
+    onSyncCatalog: () -> Unit = {},
+    onSaveSessionNotes: (Long, String) -> Unit = { _, _ -> },
+    onAddHighlight: (Long, String, String, String, Int?) -> Unit = { _, _, _, _, _ -> }
 ) {
     var currentTab by remember { mutableStateOf(AppTab.HOME) }
     var showNfcDialog by remember { mutableStateOf(false) }
     var showBookSelectorDialog by remember { mutableStateOf(false) }
     var showAddBookDialog by remember { mutableStateOf(false) }
+    var showAddHighlightDialog by remember { mutableStateOf(false) }
     var showUpdatePositionDialog by remember { mutableStateOf(false) }
     var bookToUpdatePosition by remember { mutableStateOf<Book?>(null) }
     var selectedSessionForDetails by remember { mutableStateOf<ReadingSession?>(null) }
@@ -150,6 +158,10 @@ fun DashboardScreen(
             session = session,
             streakDays = state.streakInfo.currentStreakDays,
             dailyGoalMinutes = state.dailyGoalMinutes,
+            onSaveNotes = { noteText ->
+                onSaveSessionNotes(session.id, noteText)
+                selectedSessionForDetails = session.copy(notes = noteText)
+            },
             onContinueReading = {
                 val targetBookId = if (session.bookId > 0) {
                     session.bookId
@@ -162,6 +174,18 @@ fun DashboardScreen(
                 selectedSessionForDetails = null
             },
             onDismiss = { selectedSessionForDetails = null }
+        )
+    }
+
+    if (showAddHighlightDialog) {
+        AddHighlightDialog(
+            books = state.activeBooks,
+            activeBook = state.activeBook,
+            onSave = { bookId, title, author, note, page ->
+                onAddHighlight(bookId, title, author, note, page)
+                showAddHighlightDialog = false
+            },
+            onDismiss = { showAddHighlightDialog = false }
         )
     }
 
@@ -494,8 +518,10 @@ fun DashboardScreen(
                         LibraryScreen(
                             books = state.activeBooks,
                             activeBookId = state.activeBook?.id ?: 0,
+                            notesSessions = state.allSessionsWithNotes,
                             onSelectBook = onSelectBook,
                             onOpenAddBook = { showAddBookDialog = true },
+                            onOpenAddHighlight = { showAddHighlightDialog = true },
                             onOpenUpdatePosition = { book ->
                                 bookToUpdatePosition = book
                                 showUpdatePositionDialog = true
@@ -2183,6 +2209,7 @@ fun SessionDetailDialog(
     session: ReadingSession,
     streakDays: Int,
     dailyGoalMinutes: Int,
+    onSaveNotes: (String) -> Unit = {},
     onContinueReading: () -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -2208,6 +2235,9 @@ fun SessionDetailDialog(
     val readingSpeedPph = if (session.pagesRead != null && session.pagesRead > 0 && session.durationMinutes > 0) {
         String.format(java.util.Locale.US, "%.1f", (session.pagesRead.toFloat() / session.durationMinutes) * 60)
     } else null
+
+    var noteInput by remember { mutableStateOf(session.notes ?: "") }
+    val context = LocalContext.current
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -2391,6 +2421,118 @@ fun SessionDetailDialog(
                         }
                     }
                 }
+
+                // 4. Cuaderno de Citas & Reflexiones de la Sesión
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(Color(0xFF161928))
+                        .border(1.dp, Color(0x33FBBF24), RoundedCornerShape(16.dp))
+                        .padding(14.dp)
+                ) {
+                    Column {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    imageVector = Icons.Default.FormatQuote,
+                                    contentDescription = null,
+                                    tint = Color(0xFFFBBF24),
+                                    modifier = Modifier.size(16.dp)
+                                )
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Text(
+                                    text = "CITA O REFLEXIÓN",
+                                    color = Color(0xFFFBBF24),
+                                    fontSize = 11.sp,
+                                    fontWeight = FontWeight.ExtraBold,
+                                    letterSpacing = 1.sp
+                                )
+                            }
+
+                            if (noteInput.isNotBlank()) {
+                                Box(
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(8.dp))
+                                        .background(Color(0x2238BDF8))
+                                        .border(1.dp, Color(0x4438BDF8), RoundedCornerShape(8.dp))
+                                        .clickable {
+                                            val bookTitle = session.bookTitle.ifBlank { "Lectura en Kindle" }
+                                            val pageInfo = if (session.endPage != null && session.endPage > 0) " (pág. ${session.endPage})" else ""
+                                            val md = "> \"$noteInput\"\n— *$bookTitle*, ${session.bookAuthor}$pageInfo\n*Universal Reading Tracker | $dateStr*"
+                                            val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                                            val clip = ClipData.newPlainText("Cita de Lectura", md)
+                                            clipboard.setPrimaryClip(clip)
+                                            Toast.makeText(context, "Cita copiada en Markdown para Obsidian / Notion", Toast.LENGTH_SHORT).show()
+                                        }
+                                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                                ) {
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        Icon(
+                                            imageVector = Icons.Default.ContentCopy,
+                                            contentDescription = null,
+                                            tint = Color(0xFF38BDF8),
+                                            modifier = Modifier.size(11.dp)
+                                        )
+                                        Spacer(modifier = Modifier.width(4.dp))
+                                        Text(
+                                            text = "Copiar MD",
+                                            color = Color(0xFF38BDF8),
+                                            fontSize = 10.sp,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                    }
+                                }
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        OutlinedTextField(
+                            value = noteInput,
+                            onValueChange = { noteInput = it },
+                            placeholder = {
+                                Text(
+                                    text = "Escribe una idea clave, pensamiento o cita memorable...",
+                                    color = Color(0xFF64748B),
+                                    fontSize = 12.sp
+                                )
+                            },
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedTextColor = Color.White,
+                                unfocusedTextColor = Color.White,
+                                focusedBorderColor = Color(0xFFFBBF24),
+                                unfocusedBorderColor = Color(0x332D323F)
+                            ),
+                            modifier = Modifier.fillMaxWidth(),
+                            minLines = 2,
+                            maxLines = 4
+                        )
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.End
+                        ) {
+                            Button(
+                                onClick = {
+                                    onSaveNotes(noteInput)
+                                    Toast.makeText(context, "Reflexión guardada en el cuaderno", Toast.LENGTH_SHORT).show()
+                                },
+                                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF59E0B)),
+                                shape = RoundedCornerShape(10.dp),
+                                contentPadding = PaddingValues(horizontal = 14.dp, vertical = 6.dp)
+                            ) {
+                                Text("Guardar Reflexión", color = Color.Black, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                            }
+                        }
+                    }
+                }
             }
         },
         confirmButton = {
@@ -2428,6 +2570,125 @@ fun SessionDetailDialog(
         dismissButton = {
             TextButton(onClick = onDismiss) {
                 Text(text = "Cerrar", color = Color(0xFF94A3B8), fontWeight = FontWeight.SemiBold)
+            }
+        }
+    )
+}
+
+/**
+ * Quick dialog to add a highlight or note linked to any book.
+ */
+@Composable
+fun AddHighlightDialog(
+    books: List<Book>,
+    activeBook: Book?,
+    onSave: (bookId: Long, title: String, author: String, note: String, page: Int?) -> Unit,
+    onDismiss: () -> Unit
+) {
+    var selectedBookId by remember { mutableStateOf(activeBook?.id ?: books.firstOrNull()?.id ?: 0L) }
+    val selectedBook = books.find { it.id == selectedBookId } ?: activeBook ?: books.firstOrNull()
+    var noteText by remember { mutableStateOf("") }
+    var pageStr by remember { mutableStateOf(selectedBook?.currentPosition?.toString() ?: "") }
+    val context = LocalContext.current
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        containerColor = Color(0xFF131522),
+        title = {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Default.FormatQuote, contentDescription = null, tint = Color(0xFFFBBF24), modifier = Modifier.size(20.dp))
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Nueva Cita o Reflexión",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp
+                )
+            }
+        },
+        text = {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Text(
+                    text = "Libro asociado:",
+                    color = Color(0xFF94A3B8),
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+
+                if (books.isNotEmpty()) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(Color(0xFF1A1D2E))
+                            .padding(10.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "${selectedBook?.title ?: "Libro"} (${selectedBook?.author ?: ""})",
+                            color = Color(0xFF38BDF8),
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Bold,
+                            maxLines = 1,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                }
+
+                OutlinedTextField(
+                    value = pageStr,
+                    onValueChange = { pageStr = it },
+                    label = { Text("Página o Ubicación (opcional)") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White,
+                        focusedBorderColor = Color(0xFF00E5FF)
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                OutlinedTextField(
+                    value = noteText,
+                    onValueChange = { noteText = it },
+                    label = { Text("Cita, idea o pensamiento memorable") },
+                    placeholder = { Text("Escribe o pega aquí la cita...", color = Color(0xFF64748B)) },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White,
+                        focusedBorderColor = Color(0xFFFBBF24)
+                    ),
+                    modifier = Modifier.fillMaxWidth(),
+                    minLines = 3,
+                    maxLines = 6
+                )
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = {
+                    if (noteText.isNotBlank()) {
+                        val book = selectedBook
+                        val bookId = book?.id ?: 0L
+                        val title = book?.title ?: "Lectura en Kindle"
+                        val author = book?.author ?: "Autor"
+                        val page = pageStr.toIntOrNull()
+                        onSave(bookId, title, author, noteText.trim(), page)
+                        Toast.makeText(context, "Cita guardada en el cuaderno", Toast.LENGTH_SHORT).show()
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF59E0B)),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text("Guardar Cita", color = Color.Black, fontWeight = FontWeight.Bold)
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cancelar", color = Color(0xFF94A3B8))
             }
         }
     )

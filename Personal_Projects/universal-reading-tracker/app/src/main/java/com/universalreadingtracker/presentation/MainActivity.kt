@@ -101,7 +101,11 @@ class MainActivity : ComponentActivity() {
                         ReadingAppWidgetProvider.updateAllWidgets(this@MainActivity)
                     },
                     onExportJson = { viewModel.exportDataToJson(this@MainActivity) },
-                    onSyncCatalog = { viewModel.syncEnrichedCatalogFromAssets() }
+                    onSyncCatalog = { viewModel.syncEnrichedCatalogFromAssets() },
+                    onSaveSessionNotes = { sessionId, notes -> viewModel.saveSessionNotes(sessionId, notes) },
+                    onAddHighlight = { bookId, title, author, note, page ->
+                        viewModel.addHighlightOrNote(bookId, title, author, note, page)
+                    }
                 )
             }
         }

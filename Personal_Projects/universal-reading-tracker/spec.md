@@ -112,6 +112,21 @@
   - **Registro de Libros Leídos en Racha Histórica (+100 Días):**
     - Toggle en `AddBookDialog` para ingresar libros ya terminados anteriormente sin activarlos forzosamente como lectura en curso.
     - Botón `[Marcar 100% Terminado]` en el diálogo de avance (`UpdatePositionDialog`).
+- **RF-19: Cuaderno de Citas, Ideas y Reflexiones (Highlights & Notes) y Exportación Obsidian/Notion**
+  - **Captura de Pensamientos y Citas en Sesión:**
+    - En `SessionDetailDialog` (y al concluir una lectura), campo para escribir o dictar por voz reflexiones, ideas clave o citas memorables asociadas a la sesión y obra.
+    - Actualización reactiva persistida en Room DB sin migraciones destructivas (`updateSessionNotes`).
+  - **Subpestaña "Citas & Notas" en Biblioteca:**
+    - Nueva sección `Citas & Notas` en la pestaña de Biblioteca (`LibraryScreen`) con buscador en tiempo real por texto, título y autor.
+    - Tarjeta Obsidian para cada nota con cita destacada, libro, autor, fecha, y botón `Copiar MD` con 1 toque.
+    - Exportación al portapapeles en formato Markdown limpio compatible con Obsidian / Notion:
+      ```markdown
+      > "Cita o reflexión..."
+      
+      *— Título por Autor (Fecha, Pág. X)*
+      ```
+  - **Alineación Garantizada en Gráfica Semanal (`WeeklyModalityChart`):**
+    - Ajuste de línea base y caja de minutos fija (16dp) para evitar que barras llenas (ej. S y M) desplacen o recorten las etiquetas de días de la semana.
 
 ---
 
@@ -207,3 +222,4 @@
 - [x] Mapa de calor anual de consistencia (Heatmap estilo GitHub/Obsidian), gráfica semanal comparativa Audible vs. Kindle y cálculo de ritmo lector con horario preferido (`CalculateReadingAnalyticsUseCase`, `ReadingAnalyticsSection`).
 - [x] Navegación por pestañas inferiores (Inicio, Analítica, Biblioteca) con estética Obsidian Luxury, y gestión dedicada de biblioteca particionada por estado (Leyendo, Por leer, Completados), buscador en vivo y edición directa de progreso (ADR-021).
 - [x] Historial reciente inteligente con vista compacta de 3 sesiones y expansor bajo demanda, y marcado de libros leídos tanto en biblioteca como en alta histórica (+100 días) (ADR-022).
+- [x] Cuaderno de Citas, Ideas y Reflexiones (Highlights & Notes) con tarjetas Obsidian, exportación instantánea en Markdown para Obsidian/Notion, edición en diálogo de sesión y corrección de recorte de etiquetas en la gráfica semanal (ADR-023).

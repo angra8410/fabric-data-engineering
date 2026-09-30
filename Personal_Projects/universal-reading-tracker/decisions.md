@@ -425,6 +425,28 @@
 - **Consecuencias:**
   - Experiencia motivacional de lujo, refinada y visualmente alineada al sistema de diseño Obsidian Luxury de la app.
 
+---
+
+## [ADR-025] Exportación Enriquecida para Big Data y Pipeline Lakehouse en Microsoft Fabric (PySpark)
+- **Fecha:** 2026-09-30
+- **Estado:** Aprobado
+- **Contexto:**
+  Para habilitar reportería analítica avanzada y dashboards en Power BI (Direct Lake), se requería un mecanismo de exportación que entregara el 100% de la historia de lectura en un esquema normalizado compatible con motores de Big Data distribuidos (Apache Spark / Delta Lake) sin depender de infraestructura pesada en el móvil.
+- **Decisión Tomada:**
+  1. **Enriquecimiento del Exportador JSON (`JsonExportHelper`):**
+     - Se voltea el 100% de las sesiones históricas de Room DB (no solo las 20 recientes).
+     - Se incorporan a cada sesión: `notes` (reflexiones y citas para minería de texto/NLP), `bookId`, `pagesRead`, `status`.
+     - Se agregan las secciones de `goals` (metas anuales/mensuales) y `milestones` (insignias conquistadas).
+     - Formato jerárquico multilínea estándar compatible nativamente con `spark.read.option("multiline", "true").json(...)`.
+  2. **Pipeline PySpark para Microsoft Fabric (`fabric_reading_lakehouse.py`):**
+     - Ingesta Bronze desde OneLake Files (`Files/reading_tracker/`).
+     - Normalización a tablas Delta Silver (`silver_reading_sessions`, `silver_daily_reading_summaries`, `silver_books_catalog`, `silver_milestones`, `silver_reading_goals`) con tipado estricto y KPIs derivados (velocidad en págs/h, horas leídas, porcentajes de modalidad).
+     - Vistas Gold (`gold_reading_kpis`, `gold_book_reading_velocity`, `gold_monthly_reading_trend`) listas para Direct Lake en Power BI.
+  3. **Guía Paso a Paso (`README_FABRIC.md`):**
+     - Documentación para el flujo de carga, ejecución de notebook y conexión a Power BI.
+- **Consecuencias:**
+  - Capacidad analítica de nivel empresarial para el usuario en su stack preferido (Microsoft Fabric & PySpark).
+
 
 
 

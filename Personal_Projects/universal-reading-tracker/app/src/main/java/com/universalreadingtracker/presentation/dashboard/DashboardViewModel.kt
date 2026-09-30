@@ -173,9 +173,12 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
+    private var allHistoricalSessions: List<ReadingSession> = emptyList()
+
     private fun observeRecentSessions() {
         viewModelScope.launch {
             sessionRepo.getAllSessions().collectLatest { sessions ->
+                allHistoricalSessions = sessions
                 _uiState.update {
                     it.copy(
                         recentSessions = sessions.take(20),
@@ -398,12 +401,15 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun exportDataToJson(context: Context): File {
         val s = _uiState.value
+        val fullSessions = if (allHistoricalSessions.isNotEmpty()) allHistoricalSessions else s.recentSessions
         return JsonExportHelper.shareJsonExport(
             context = context,
             streakInfo = s.streakInfo,
             books = s.activeBooks,
-            sessions = s.recentSessions,
-            dailySummaries = s.allDailySummaries
+            sessions = fullSessions,
+            dailySummaries = s.allDailySummaries,
+            goals = s.goals,
+            milestones = s.milestones
         )
     }
 }

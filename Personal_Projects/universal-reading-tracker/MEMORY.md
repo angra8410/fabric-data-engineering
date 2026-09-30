@@ -57,8 +57,11 @@ Personal_Projects/universal-reading-tracker/
 │       │       └── ReadingRhythmCard.kt           # Ritmo págs/h y franjas horarias
 │       └── library/
 │           └── LibraryScreen.kt             # Tab 3: Leyendo, Por Leer, Completados, Citas & Notas
-├── spec.md                                  # Especificación funcional viva (RF-01 a RF-20)
-├── decisions.md                             # Bitácora de arquitectura (ADR-001 a ADR-024)
+├── fabric/
+│   ├── fabric_reading_lakehouse.py          # Pipeline PySpark (Medallion: Bronze -> Silver Delta -> Gold Views)
+│   └── README_FABRIC.md                     # Guía paso a paso para ejecutar en Microsoft Fabric y Power BI
+├── spec.md                                  # Especificación funcional viva (RF-01 a RF-21)
+├── decisions.md                             # Bitácora de arquitectura (ADR-001 a ADR-025)
 └── AGENTS.md                                # Reglas operativas para Agentes de IA
 ```
 

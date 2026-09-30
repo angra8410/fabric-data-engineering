@@ -5,6 +5,8 @@ import android.content.Intent
 import androidx.core.content.FileProvider
 import com.universalreadingtracker.domain.model.Book
 import com.universalreadingtracker.domain.model.DailyReadingSummary
+import com.universalreadingtracker.domain.model.ReadingGoals
+import com.universalreadingtracker.domain.model.ReadingMilestone
 import com.universalreadingtracker.domain.model.ReadingSession
 import com.universalreadingtracker.domain.model.StreakInfo
 import org.json.JSONArray
@@ -15,6 +17,7 @@ import java.time.format.DateTimeFormatter
 
 /**
  * Utility to export all user reading tracking data into a formatted .JSON file
+ * optimized for Big Data ingestion (e.g. PySpark on Microsoft Fabric / Databricks)
  * and trigger the native Android Share/Save sheet.
  */
 object JsonExportHelper {
@@ -23,7 +26,9 @@ object JsonExportHelper {
         streakInfo: StreakInfo,
         books: List<Book>,
         sessions: List<ReadingSession>,
-        dailySummaries: List<DailyReadingSummary>
+        dailySummaries: List<DailyReadingSummary>,
+        goals: ReadingGoals? = null,
+        milestones: List<ReadingMilestone> = emptyList()
     ): String {
         val root = JSONObject()
 
@@ -31,8 +36,9 @@ object JsonExportHelper {
         val metadata = JSONObject().apply {
             put("app", "Universal Reading Tracker")
             put("version", "1.0.0")
-            put("exportedAt", System.currentTimeMillis())
+            put("exportedAtEpoch", System.currentTimeMillis())
             put("exportDate", LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE))
+            put("targetSchema", "FabricLakehouseMedallion_v1")
         }
         root.put("metadata", metadata)
 
@@ -45,7 +51,41 @@ object JsonExportHelper {
         }
         root.put("streak", streakObj)
 
-        // 3. Books Catalog
+        // 3. Configurable Goals
+        if (goals != null) {
+            val goalsObj = JSONObject().apply {
+                put("yearlyBookGoal", goals.yearlyBookGoal)
+                put("completedBooksThisYear", goals.completedBooksThisYear)
+                put("yearlyProgressPercent", goals.yearlyProgressPercent)
+                put("monthlyMinuteGoal", goals.monthlyMinuteGoal)
+                put("minutesReadThisMonth", goals.minutesReadThisMonth)
+                put("monthlyProgressPercent", goals.monthlyProgressPercent)
+                put("currentYear", goals.currentYear)
+                put("currentMonthName", goals.currentMonthName)
+            }
+            root.put("goals", goalsObj)
+        }
+
+        // 4. Obsidian Milestones
+        if (milestones.isNotEmpty()) {
+            val milestonesArray = JSONArray()
+            milestones.forEach { m ->
+                val mObj = JSONObject().apply {
+                    put("id", m.id)
+                    put("title", m.title)
+                    put("description", m.description)
+                    put("iconEmoji", m.iconEmoji)
+                    put("isUnlocked", m.isUnlocked)
+                    put("progressLabel", m.progressLabel)
+                    put("progressPercent", m.progressPercent)
+                    put("tierName", m.tierName)
+                }
+                milestonesArray.put(mObj)
+            }
+            root.put("milestones", milestonesArray)
+        }
+
+        // 5. Books Catalog
         val booksArray = JSONArray()
         books.forEach { book ->
             val b = JSONObject().apply {
@@ -59,32 +99,37 @@ object JsonExportHelper {
                 put("totalUnits", book.totalUnits)
                 put("progressPercentage", book.progressPercentage)
                 put("isCurrentlyReading", book.isCurrentlyReading)
+                put("isCompleted", book.totalUnits > 0 && book.currentPosition >= book.totalUnits)
             }
             booksArray.put(b)
         }
         root.put("books", booksArray)
 
-        // 4. Reading Sessions History
+        // 6. Complete Reading Sessions History
         val sessionsArray = JSONArray()
         sessions.forEach { s ->
             val sess = JSONObject().apply {
                 put("id", s.id)
+                put("bookId", s.bookId)
                 put("bookTitle", s.bookTitle)
                 put("bookAuthor", s.bookAuthor)
                 put("modality", s.modality.name)
                 put("providerId", s.providerId)
-                put("startTime", s.startTime)
-                put("endTime", s.endTime)
+                put("startTimeEpoch", s.startTime)
+                put("endTimeEpoch", s.endTime)
                 put("durationMinutes", s.durationMinutes)
                 put("realDurationSeconds", s.realDurationSeconds)
                 put("startPage", s.startPage)
                 put("endPage", s.endPage)
+                put("pagesRead", s.pagesRead ?: 0)
+                put("status", s.status.name)
+                put("notes", s.notes ?: "")
             }
             sessionsArray.put(sess)
         }
         root.put("sessions", sessionsArray)
 
-        // 5. Daily Aggregated Summaries
+        // 7. Daily Aggregated Summaries
         val summariesArray = JSONArray()
         dailySummaries.forEach { sum ->
             val d = JSONObject().apply {
@@ -95,12 +140,13 @@ object JsonExportHelper {
                 put("physicalMinutes", sum.physicalMinutes)
                 put("goalReached", sum.goalReached)
                 put("isHistoricalBackfill", sum.isHistoricalBackfill)
+                put("isBimodal", sum.audioMinutes > 0 && sum.kindleMinutes > 0)
             }
             summariesArray.put(d)
         }
         root.put("dailySummaries", summariesArray)
 
-        return root.toString(2) // Indented with 2 spaces for human-readable JSON
+        return root.toString(2)
     }
 
     fun shareJsonExport(
@@ -108,9 +154,11 @@ object JsonExportHelper {
         streakInfo: StreakInfo,
         books: List<Book>,
         sessions: List<ReadingSession>,
-        dailySummaries: List<DailyReadingSummary>
+        dailySummaries: List<DailyReadingSummary>,
+        goals: ReadingGoals? = null,
+        milestones: List<ReadingMilestone> = emptyList()
     ): File {
-        val jsonContent = generateJson(streakInfo, books, sessions, dailySummaries)
+        val jsonContent = generateJson(streakInfo, books, sessions, dailySummaries, goals, milestones)
         val todayStr = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE)
         val fileName = "universal_reading_tracker_export_$todayStr.json"
 
@@ -126,12 +174,12 @@ object JsonExportHelper {
         val intent = Intent(Intent.ACTION_SEND).apply {
             type = "application/json"
             putExtra(Intent.EXTRA_STREAM, fileUri)
-            putExtra(Intent.EXTRA_SUBJECT, "Backup de Universal Reading Tracker ($todayStr)")
-            putExtra(Intent.EXTRA_TEXT, "Exportación de datos de lectura JSON generada el $todayStr.")
+            putExtra(Intent.EXTRA_SUBJECT, "Universal Reading Tracker Export ($todayStr)")
+            putExtra(Intent.EXTRA_TEXT, "Exportación completa en JSON para ingesta en PySpark / Microsoft Fabric Lakehouse ($todayStr).")
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
 
-        val chooser = Intent.createChooser(intent, "Exportar datos en JSON")
+        val chooser = Intent.createChooser(intent, "Exportar datos a Fabric / Drive")
         chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(chooser)
 

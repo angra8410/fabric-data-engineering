@@ -86,6 +86,10 @@
   - Muestra la racha activa (`🔥 164 Días`), el progreso de hoy (`HOY: X / 30 MIN`), y el libro en curso (`Pág. X / Y`).
   - Botón de acción táctil de 1 toque que conmuta `KindleReadingTimerService` con respuesta háptica instantánea sin tener que abrir la app.
   - Sincronización reactiva bidireccional inmediata con Room DB y el estado del temporizador.
+- **RF-16: Mapa de Calor Anual (Heatmap) y Analítica Visual de Hábitos**
+  - **Matriz de Consistencia Anual (Estilo GitHub / Obsidian):** Renderizado horizontal de cuadrícula de semanas con 5 niveles de intensidad en esmeralda Obsidian. Refleja fielmente los 164+ días acumulados e interactividad al toque para inspeccionar la fecha y minutos discriminados por modalidad.
+  - **Tendencia Semanal de Modalidad (Audible vs. Kindle):** Gráfica de barras apiladas de los 7 días de la semana en curso (Cian vs. Ámbar) con porcentajes de distribución y formato predominante.
+  - **Ritmo de Lectura y Franja Horaria:** Cálculo en tiempo real de velocidad promedio (`págs/hora`), proyección estimada de finalización para el libro activo e identificación del patrón horario de lectura (Matutino, Vespertino, Nocturno, Madrugada).
 
 ---
 
@@ -178,3 +182,4 @@
 - [x] Ficha interactiva de métricas de sesión al tocar cualquier elemento del historial reciente (`LuxurySessionRow` -> `SessionDetailDialog`).
 - [x] Temporizador de lectura físico basado en marcas de tiempo reales inmune a suspensión de CPU / Doze mode, con persistencia en SharedPreferences y auto-sanación reactiva de sesiones truncadas (`KindleReadingTimerService`, `autoRepairThrottledSessions`).
 - [x] Widget de pantalla de inicio nativo para Android (AppWidget) con estética Obsidian Luxury, racha en vivo y botón 1-toque para Kindle físico (`ReadingAppWidgetProvider`, `widget_reading_tracker.xml`).
+- [x] Mapa de calor anual de consistencia (Heatmap estilo GitHub/Obsidian), gráfica semanal comparativa Audible vs. Kindle y cálculo de ritmo lector con horario preferido (`CalculateReadingAnalyticsUseCase`, `ReadingAnalyticsSection`).

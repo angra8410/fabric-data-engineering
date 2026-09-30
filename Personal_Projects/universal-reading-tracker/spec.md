@@ -137,7 +137,15 @@
     - ⚡ **Lector Bimodal:** Combinar Audible y Kindle en el mismo día.
     - 🌙 **Lector Nocturno:** Completar sesiones de lectura después de las 21:00 horas.
     - ☕ **Maratón de Fin de Semana:** Más de 60 minutos de lectura en sábado o domingo.
-    - Modal detallado de hito (`MilestoneDetailDialog`) con trofeo radial, nivel de prestigio y métricas de avance.
+- **RF-21: Exportación Big Data y Pipeline de Ingesta PySpark para Microsoft Fabric**
+  - **Exportador JSON Enriquecido:**
+    - Vuelco del 100% de sesiones históricas de Room SQLite (sin truncamiento).
+    - Metadatos completos por sesión: `notes` (citas/reflexiones para NLP), `pagesRead`, `bookId`, `status`.
+    - Integración de bloques `goals` (metas anuales y mensuales) y `milestones` (insignias alcanzadas).
+  - **Pipeline PySpark Lakehouse (`fabric_reading_lakehouse.py`):**
+    - Carga multilínea desde OneLake Files (`Files/reading_tracker/`).
+    - Tablas Delta Silver: `silver_reading_sessions`, `silver_daily_reading_summaries`, `silver_books_catalog`, `silver_milestones`, `silver_reading_goals`.
+    - Vistas analíticas Gold: `gold_reading_kpis`, `gold_book_reading_velocity`, `gold_monthly_reading_trend` optimizadas para Direct Lake en Power BI.
 
 ---
 
@@ -235,3 +243,4 @@
 - [x] Historial reciente inteligente con vista compacta de 3 sesiones y expansor bajo demanda, y marcado de libros leídos tanto en biblioteca como en alta histórica (+100 días) (ADR-022).
 - [x] Cuaderno de Citas, Ideas y Reflexiones (Highlights & Notes) con tarjetas Obsidian, exportación instantánea en Markdown para Obsidian/Notion, edición en diálogo de sesión y corrección de recorte de etiquetas en la gráfica semanal (ADR-023).
 - [x] Metas configurables anuales (libros) y mensuales (minutos) con barras de progreso Obsidian y sistema de 4 insignias/milestones de prestigio (Centenario, Bimodal, Nocturno, Maratón Finde) con diálogos de detalle e interactividad de alta gama (ADR-024).
+- [x] Exportador JSON enriquecido para Big Data con 100% de sesiones históricas, citas/notas y metas, y pipeline PySpark para Microsoft Fabric Lakehouse con arquitectura Medallion y vistas analíticas para Power BI Direct Lake (ADR-025).

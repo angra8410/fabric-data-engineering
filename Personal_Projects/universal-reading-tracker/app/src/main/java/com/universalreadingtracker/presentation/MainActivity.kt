@@ -96,6 +96,10 @@ class MainActivity : ComponentActivity() {
                         viewModel.updateActiveBookPosition(newPos)
                         ReadingAppWidgetProvider.updateAllWidgets(this@MainActivity)
                     },
+                    onUpdateBookPosition = { bookId, newPos ->
+                        viewModel.updateBookPosition(bookId, newPos)
+                        ReadingAppWidgetProvider.updateAllWidgets(this@MainActivity)
+                    },
                     onExportJson = { viewModel.exportDataToJson(this@MainActivity) },
                     onSyncCatalog = { viewModel.syncEnrichedCatalogFromAssets() }
                 )

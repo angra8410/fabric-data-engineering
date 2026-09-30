@@ -262,8 +262,12 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun updateActiveBookPosition(newPosition: Int) {
         val currentBook = _uiState.value.activeBook ?: return
+        updateBookPosition(currentBook.id, newPosition)
+    }
+
+    fun updateBookPosition(bookId: Long, newPosition: Int) {
         viewModelScope.launch {
-            bookRepo.updateBookPosition(currentBook.id, newPosition)
+            bookRepo.updateBookPosition(bookId, newPosition)
         }
     }
 

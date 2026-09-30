@@ -325,6 +325,30 @@
 - **Consecuencias:**
   - Alta motivación intrínseca para el usuario, total visibilidad del hábito lector acumulado y análisis profundo de patrones de lectura sin sobrecargar visualmente el tablero principal.
 
+---
+
+## [ADR-021] Arquitectura de Navegación Inferior (Bottom Navigation) y Pestaña de Biblioteca Integral
+- **Fecha:** 2026-09-29
+- **Estado:** Aprobado
+- **Contexto:**
+  Con la incorporación del mapa de calor de consistencia anual y las métricas de hábito, una sola pantalla continua de desplazamiento saturaba la experiencia de usuario (demasiados componentes verticales compitiendo por atención). Se requería una distribución modular en pestañas dedicadas para:
+  1. Mantener la pantalla de inicio limpia, enfocada en la sesión diaria de lectura y la racha.
+  2. Otorgar un espacio de inmersión total a la analítica anual y gráficos semanales.
+  3. Proporcionar un gestor de biblioteca completo con búsqueda y segmentación (Leyendo, Por Leer, Completados).
+- **Decisión Tomada:**
+  1. **Dock de Navegación Flotante (`LuxuryBottomNavigation`):**
+     - Barra de navegación inferior flotante con estética Obsidian Luxury (`#111422` con borde `#2D323F` y radio de 26dp) que conmuta entre 3 destinos principales:
+       - 🏠 **Inicio (`AppTab.HOME`):** Racha activa, libro activo, controles Audible/Kindle, NFC, progreso dual y sesiones recientes.
+       - 📊 **Analítica (`AppTab.ANALYTICS`):** Mapa de calor anual (Heatmap 36-52 semanas), gráfica semanal apilada Audible vs. Kindle, y ritmo lector (págs/h y horario clave).
+       - 📚 **Biblioteca (`AppTab.LIBRARY`):** Vista integral de catálogo con subpestañas `Leyendo`, `Por Leer` y `Completados`, barra de búsqueda en tiempo real, botón para agregar libros y acciones de 1 toque para avanzar progreso o leer ahora.
+  2. **Transición Fluida de Contenido (`AnimatedContent`):**
+     - Conmutación suave entre pestañas con fundido de entrada y salida (`fadeIn` / `fadeOut`).
+  3. **Preservación Total de Datos y Cero Migraciones:**
+     - La clasificación en subpestañas de biblioteca se deriva dinámicamente de las entidades existentes sin requerir cambios destructivos en Room DB ni alterar los 164+ días de racha acumulada.
+- **Consecuencias:**
+  - Arquitectura limpia, experiencia de usuario pulida y sin fricción, orden visual absoluto y mayor facilidad para gestionar libros y explorar analítica.
+
+
 
 
 

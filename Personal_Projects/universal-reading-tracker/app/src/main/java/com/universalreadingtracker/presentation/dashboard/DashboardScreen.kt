@@ -32,6 +32,10 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.universalreadingtracker.domain.model.Book
@@ -39,7 +43,10 @@ import com.universalreadingtracker.domain.model.DailyReadingSummary
 import com.universalreadingtracker.domain.model.ProgressUnit
 import com.universalreadingtracker.domain.model.ReadingModality
 import com.universalreadingtracker.domain.model.ReadingSession
-import com.universalreadingtracker.presentation.dashboard.analytics.ReadingAnalyticsSection
+import com.universalreadingtracker.presentation.dashboard.analytics.AnalyticsScreen
+import com.universalreadingtracker.presentation.library.LibraryScreen
+import com.universalreadingtracker.presentation.navigation.AppTab
+import com.universalreadingtracker.presentation.navigation.LuxuryBottomNavigation
 
 // ==========================================
 // PALETA DE DISEÑO: OBSIDIAN LUXURY SYSTEM
@@ -76,13 +83,16 @@ fun DashboardScreen(
     onSelectBook: (Long) -> Unit = {},
     onAddNewBook: (String, String, ProgressUnit, Int, Int) -> Unit = { _, _, _, _, _ -> },
     onUpdatePosition: (Int) -> Unit = {},
+    onUpdateBookPosition: (Long, Int) -> Unit = { _, _ -> },
     onExportJson: () -> Unit = {},
     onSyncCatalog: () -> Unit = {}
 ) {
+    var currentTab by remember { mutableStateOf(AppTab.HOME) }
     var showNfcDialog by remember { mutableStateOf(false) }
     var showBookSelectorDialog by remember { mutableStateOf(false) }
     var showAddBookDialog by remember { mutableStateOf(false) }
     var showUpdatePositionDialog by remember { mutableStateOf(false) }
+    var bookToUpdatePosition by remember { mutableStateOf<Book?>(null) }
     var selectedSessionForDetails by remember { mutableStateOf<ReadingSession?>(null) }
 
     // Dialogs
@@ -117,14 +127,19 @@ fun DashboardScreen(
         )
     }
 
-    if (showUpdatePositionDialog && state.activeBook != null) {
+    val targetBook = bookToUpdatePosition ?: state.activeBook
+    if (showUpdatePositionDialog && targetBook != null) {
         UpdatePositionDialog(
-            book = state.activeBook,
+            book = targetBook,
             onSave = { newPos ->
-                onUpdatePosition(newPos)
+                onUpdateBookPosition(targetBook.id, newPos)
+                bookToUpdatePosition = null
                 showUpdatePositionDialog = false
             },
-            onDismiss = { showUpdatePositionDialog = false }
+            onDismiss = {
+                bookToUpdatePosition = null
+                showUpdatePositionDialog = false
+            }
         )
     }
 
@@ -249,161 +264,179 @@ fun DashboardScreen(
                     },
                     colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
                 )
+            },
+            bottomBar = {
+                LuxuryBottomNavigation(
+                    currentTab = currentTab,
+                    onTabSelected = { currentTab = it }
+                )
             }
         ) { innerPadding ->
-            val screenVisibleState = remember { MutableTransitionState(false).apply { targetState = true } }
-            AnimatedVisibility(
-                visibleState = screenVisibleState,
-                enter = androidx.compose.animation.fadeIn(animationSpec = tween(400)) +
-                        androidx.compose.animation.slideInVertically(
-                            animationSpec = tween(500, easing = FastOutSlowInEasing),
-                            initialOffsetY = { 70 }
-                        )
-            ) {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                        .padding(horizontal = 18.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    // 1. Hero Obsidian Trophy Card (Racha Consolidada)
-                    item {
-                        LuxuryStreakCard(
-                            streakDays = state.streakInfo.currentStreakDays,
-                            longestStreak = state.streakInfo.longestStreakDays,
-                            isStreakActiveToday = state.streakInfo.isStreakActiveToday,
-                            dailySummaries = state.allDailySummaries
-                        )
-                    }
-
-                    // 2. Active Kindle Book Card with Dropdown Selector & Pág / Loc Tracking
-                    item {
-                        ActiveBookGlassCard(
-                            books = state.activeBooks,
-                            book = state.activeBook,
-                            onSelectBook = onSelectBook,
-                            onOpenBookSelector = { showBookSelectorDialog = true },
-                            onOpenUpdatePosition = { showUpdatePositionDialog = true },
-                            onSyncCatalog = onSyncCatalog
-                        )
-                    }
-
-                    // 3. Hardware & Providers Grid (Audible & Kindle)
-                    item {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
+            AnimatedContent(
+                targetState = currentTab,
+                transitionSpec = { fadeIn(tween(250)) togetherWith fadeOut(tween(200)) },
+                label = "MainTabTransition",
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+            ) { tab ->
+                when (tab) {
+                    AppTab.HOME -> {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 18.dp),
+                            verticalArrangement = Arrangement.spacedBy(16.dp),
+                            contentPadding = PaddingValues(bottom = 16.dp)
                         ) {
-                            Text(
-                                text = "Dispositivos & Hábitos",
-                                color = Color(0xFFE2E8F0),
-                                fontSize = 15.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Box(
-                                    modifier = Modifier
-                                        .size(6.dp)
-                                        .clip(CircleShape)
-                                        .background(Color(0xFF34D399))
-                                )
-                                Spacer(modifier = Modifier.width(5.dp))
-                                Text(
-                                    text = "En tiempo real",
-                                    color = Color(0xFF94A3B8),
-                                    fontSize = 12.sp,
-                                    fontWeight = FontWeight.Medium
+                            // 1. Hero Obsidian Trophy Card (Racha Consolidada)
+                            item {
+                                LuxuryStreakCard(
+                                    streakDays = state.streakInfo.currentStreakDays,
+                                    longestStreak = state.streakInfo.longestStreakDays,
+                                    isStreakActiveToday = state.streakInfo.isStreakActiveToday,
+                                    dailySummaries = state.allDailySummaries
                                 )
                             }
-                        }
-                        Spacer(modifier = Modifier.height(10.dp))
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            AudibleLuxuryCard(
-                                modifier = Modifier.weight(1f),
-                                isActive = state.isAudibleTrackingActive
-                            )
-                            KindleLuxuryCard(
-                                modifier = Modifier.weight(1f),
-                                isRunning = state.isKindleTimerRunning,
-                                onToggle = {
-                                    val wasRunning = state.isKindleTimerRunning
-                                    onToggleKindleTimer()
-                                    if (wasRunning) {
-                                        // When stopping session, offer to update page/loc
-                                        showUpdatePositionDialog = true
+
+                            // 2. Active Kindle Book Card with Dropdown Selector & Pág / Loc Tracking
+                            item {
+                                ActiveBookGlassCard(
+                                    books = state.activeBooks,
+                                    book = state.activeBook,
+                                    onSelectBook = onSelectBook,
+                                    onOpenBookSelector = { showBookSelectorDialog = true },
+                                    onOpenUpdatePosition = { showUpdatePositionDialog = true },
+                                    onSyncCatalog = onSyncCatalog
+                                )
+                            }
+
+                            // 3. Hardware & Providers Grid (Audible & Kindle)
+                            item {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = "Dispositivos & Hábitos",
+                                        color = Color(0xFFE2E8F0),
+                                        fontSize = 15.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        Box(
+                                            modifier = Modifier
+                                                .size(6.dp)
+                                                .clip(CircleShape)
+                                                .background(Color(0xFF34D399))
+                                        )
+                                        Spacer(modifier = Modifier.width(5.dp))
+                                        Text(
+                                            text = "En tiempo real",
+                                            color = Color(0xFF94A3B8),
+                                            fontSize = 12.sp,
+                                            fontWeight = FontWeight.Medium
+                                        )
                                     }
                                 }
-                            )
+                                Spacer(modifier = Modifier.height(10.dp))
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                ) {
+                                    AudibleLuxuryCard(
+                                        modifier = Modifier.weight(1f),
+                                        isActive = state.isAudibleTrackingActive
+                                    )
+                                    KindleLuxuryCard(
+                                        modifier = Modifier.weight(1f),
+                                        isRunning = state.isKindleTimerRunning,
+                                        onToggle = {
+                                            val wasRunning = state.isKindleTimerRunning
+                                            onToggleKindleTimer()
+                                            if (wasRunning) {
+                                                showUpdatePositionDialog = true
+                                            }
+                                        }
+                                    )
+                                }
+                            }
+
+                            // 4. NFC Smart Tap Pill
+                            item {
+                                NfcMagicPill(onOpenSetup = { showNfcDialog = true })
+                            }
+
+                            // 5. Today's Dual-Progress Display
+                            item {
+                                TodayProgressGlassCard(
+                                    todayMinutes = state.todaySummary?.totalMinutesRead ?: 0,
+                                    goalMinutes = state.dailyGoalMinutes,
+                                    audioMinutes = state.todaySummary?.audioMinutes ?: 0,
+                                    kindleMinutes = state.todaySummary?.kindleMinutes ?: 0
+                                )
+                            }
+
+                            // 6. Historial Reciente Header
+                            item {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = "Historial Reciente",
+                                        color = Color(0xFFE2E8F0),
+                                        fontSize = 15.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                    Text(
+                                        text = "Ver todo",
+                                        color = Color(0xFF38BDF8),
+                                        fontSize = 12.sp,
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                }
+                            }
+
+                            // 7. Recent Sessions List
+                            if (state.recentSessions.isEmpty()) {
+                                item {
+                                    EmptyHistoryCard()
+                                }
+                            } else {
+                                items(state.recentSessions) { session ->
+                                    LuxurySessionRow(
+                                        session = session,
+                                        onClick = { selectedSessionForDetails = session }
+                                    )
+                                }
+                            }
+
+                            item {
+                                Spacer(modifier = Modifier.height(16.dp))
+                            }
                         }
                     }
-
-                    // 4. NFC Smart Tap Pill
-                    item {
-                        NfcMagicPill(onOpenSetup = { showNfcDialog = true })
-                    }
-
-                    // 5. Today's Dual-Progress Display
-                    item {
-                        TodayProgressGlassCard(
-                            todayMinutes = state.todaySummary?.totalMinutesRead ?: 0,
-                            goalMinutes = state.dailyGoalMinutes,
-                            audioMinutes = state.todaySummary?.audioMinutes ?: 0,
-                            kindleMinutes = state.todaySummary?.kindleMinutes ?: 0
-                        )
-                    }
-
-                    // 6. Annual Heatmap & Visual Analytics Section
-                    item {
-                        ReadingAnalyticsSection(
+                    AppTab.ANALYTICS -> {
+                        AnalyticsScreen(
                             analytics = state.analytics,
                             currentStreakDays = state.streakInfo.currentStreakDays,
                             activeBook = state.activeBook
                         )
                     }
-
-                    // 7. Historial Reciente Header
-                    item {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = "Historial Reciente",
-                                color = Color(0xFFE2E8F0),
-                                fontSize = 15.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(
-                                text = "Ver todo",
-                                color = Color(0xFF38BDF8),
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.SemiBold
-                            )
-                        }
-                    }
-
-                    // 7. Recent Sessions List
-                    if (state.recentSessions.isEmpty()) {
-                        item {
-                            EmptyHistoryCard()
-                        }
-                    } else {
-                        items(state.recentSessions) { session ->
-                            LuxurySessionRow(
-                                session = session,
-                                onClick = { selectedSessionForDetails = session }
-                            )
-                        }
-                    }
-
-                    item {
-                        Spacer(modifier = Modifier.height(28.dp))
+                    AppTab.LIBRARY -> {
+                        LibraryScreen(
+                            books = state.activeBooks,
+                            activeBookId = state.activeBook?.id ?: 0,
+                            onSelectBook = onSelectBook,
+                            onOpenAddBook = { showAddBookDialog = true },
+                            onOpenUpdatePosition = { book ->
+                                bookToUpdatePosition = book
+                                showUpdatePositionDialog = true
+                            }
+                        )
                     }
                 }
             }

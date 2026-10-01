@@ -350,5 +350,77 @@
       "relevant": false,
       "error": "Error calling model 'gemini-3.6-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.6-flash\\nPlease retry in 59.919440496s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.6-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '59s'}]}}"
     }
+  },
+  {
+    "title": "Presidente De La Espriella reveló las razones por las que escogió a Barranquilla como la sede de su gobierno - Revista Semana",
+    "link": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxOX3BSeTJ1cXhwaks1ZHdQYV9IZTNFMnVQSGExZFM5b0k0dkpsMmZLczZzZGNaWWdZc19NeFFYLUtxTmlleGZZT05FYURKOFlNRm5UbWVuRWZKZDQwMFY2NzF0eXUzaW43Y3JyTDA2LWVkbUpIcGJYOEJPYjBUaEZWVlloUUhyUmZsREE4b1MxcXBQdDNEOVFNbGZqbmpEdG0xYnBpSXlPLUxtb1V2OVJUV1NPcVhyMFFMSlRjYVJfcmp0OW8ycHpQZjI4ajBWT0ZRS1kxWjg5c191WFNNTW5ULXMwR3lsOXptTGdhVllB0gHzAUFVX3lxTE9Hc0pmT3FNbm9EUUc3ZlFVdXRWVGdJT3R0dXlUdE5YV2VIM2pQbHdBejJOVGgyYktQUnVSdGcxNS1INHdmQ2xiLWtOSXlSOTc0dU5ZVXJfOVNtamFoaGFCc3B6VXpQeWpmR195a01PN29xS1c3b0JHbzNXOXkzSDQtS3ZQSmZTM29yeTE4YjhaVGREUnFDNXViSVdNQ0NvMF9XUXBFQlFPLXlvaTBwZnNiakV4SU1SM3ppc21sNE4zWEUtQ09hQ2p5bmRvSUF6bUZXam1kMFBPdms0RUgzaEZJNllzT0FQcWxoUERpa1lPbEk2bw?oc=5",
+    "source": "Revista Semana",
+    "published_at": "2026-10-01T18:30:47+00:00",
+    "fetched_query": "presidente de Colombia",
+    "summary_raw": "<a href=\"https://news.google.com/rss/articles/CBMi7gFBVV95cUxOX3BSeTJ1cXhwaks1ZHdQYV9IZTNFMnVQSGExZFM5b0k0dkpsMmZLczZzZGNaWWdZc19NeFFYLUtxTmlleGZZT05FYURKOFlNRm5UbWVuRWZKZDQwMFY2NzF0eXUzaW43Y3JyTDA2LWVkbUpIcGJYOEJPYjBUaEZWVlloUUhyUmZsREE4b1MxcXBQdDNEOVFNbGZqbmpEdG0xYnBpSXlPLUxtb1V2OVJUV1NPcVhyMFFMSlRjYVJfcmp0OW8ycHpQZjI4ajBWT0ZRS1kxWjg5c191WFNNTW5ULXMwR3lsOXptTGdhVllB0gHzAUFVX3lxTE9Hc0pmT3FNbm9EUUc3ZlFVdXRWVGdJT3R0dXlUdE5YV2VIM2pQbHdBejJOVGgyYktQUnVSdGcxNS1INHdmQ2xiLWtOSXlSOTc0dU5ZVXJfOVNtamFoaGFCc3B6VXpQeWpmR195a01PN29xS1c3b0JHbzNXOXkzSDQtS3ZQSmZTM29yeTE4YjhaVGREUnFDNXViSVdNQ0NvMF9XUXBFQlFPLXlvaTBwZnNiakV4SU1SM3ppc21sNE4zWEUtQ09hQ2p5bmRvSUF6bUZXam1kMFBPdms0RUgzaEZJNllzT0FQcWxoUERpa1lPbEk2bw?oc=5\" target=\"_blank\">Presidente De La Espriella reveló las razones por las que escogió a Barranquilla como la sede de su gobierno</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">Revista Semana</font>",
+    "analysis": {
+      "relevant": true,
+      "summary_es": "El presidente De La Espriella explicó las razones por las cuales eligió a la ciudad de Barranquilla como sede principal de su gobierno. La decisión apunta a descentralizar la gestión pública y fortalecer la presencia del Ejecutivo en la región Caribe.",
+      "topics": [
+        "política",
+        "gobierno",
+        "descentralización"
+      ],
+      "sentiment": "neutral"
+    }
+  },
+  {
+    "title": "Presidente Abelardo de la Espriella pide reversar aumento de la gasolina para octubre - laopinion.co",
+    "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxPcnZPWmhrUmdNTExJeko1d3lCSXdfSEw4aVlLODNIamRBWTRzakRsdktHUThUMEJIV0pvUmhITHFXelVPaElISDBmT0dpazUxalZYNHNJOFNNN3BJc3hGSXBJNzVjckoyRXdXWVg5Wk5JSkZncFlHVTNpelB2RmlsNE5RUU5vLXdhTjBMcG5QVGpIUWVNM29KR1ZmVDA4NzlFY3pRRHZvQTZtV3didGc2QUI4WS1wZw?oc=5",
+    "source": "laopinion.co",
+    "published_at": "2026-10-01T16:18:17+00:00",
+    "fetched_query": "presidente de Colombia",
+    "summary_raw": "<a href=\"https://news.google.com/rss/articles/CBMitgFBVV95cUxPcnZPWmhrUmdNTExJeko1d3lCSXdfSEw4aVlLODNIamRBWTRzakRsdktHUThUMEJIV0pvUmhITHFXelVPaElISDBmT0dpazUxalZYNHNJOFNNN3BJc3hGSXBJNzVjckoyRXdXWVg5Wk5JSkZncFlHVTNpelB2RmlsNE5RUU5vLXdhTjBMcG5QVGpIUWVNM29KR1ZmVDA4NzlFY3pRRHZvQTZtV3didGc2QUI4WS1wZw?oc=5\" target=\"_blank\">Presidente Abelardo de la Espriella pide reversar aumento de la gasolina para octubre</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">laopinion.co</font>",
+    "analysis": {
+      "relevant": false,
+      "error": "Error calling model 'gemini-3.6-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.6-flash\\nPlease retry in 1.809386372s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.6-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '1s'}]}}"
+    }
+  },
+  {
+    "title": "Colombia rompe relaciones con Irán y profundiza su giro hacia Israel y Estados Unidos - France 24",
+    "link": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxQaUZmWk15NE1MbGtWamtYWUNiaGFFVlVqeVVOQWpSanFiaXJFR1p6YV9OTEh0aF9OWWtaN25oaGRGdUxzZ1pPSGstaTd1cldBYXVaMEFGMjNYeTdZSTFNVWpkZjNJSFZGdl9fUGZaOEptLVowUGdJU1JJMGhCNFEyVmNid0lMTk4yYUluR29yd2dUb0tDYmYzbnM5eHRaWVRubkFqM3lPalUzNU9jajlMRHVPbWJ2eGRScTJscVRLUEdzaWgxM3E1aVVOMU1nczNDcHNweEpicDZpM01CUlRiRg?oc=5",
+    "source": "France 24",
+    "published_at": "2026-09-25T01:55:03+00:00",
+    "fetched_query": "Colombia president",
+    "summary_raw": "<a href=\"https://news.google.com/rss/articles/CBMi4AFBVV95cUxQaUZmWk15NE1MbGtWamtYWUNiaGFFVlVqeVVOQWpSanFiaXJFR1p6YV9OTEh0aF9OWWtaN25oaGRGdUxzZ1pPSGstaTd1cldBYXVaMEFGMjNYeTdZSTFNVWpkZjNJSFZGdl9fUGZaOEptLVowUGdJU1JJMGhCNFEyVmNid0lMTk4yYUluR29yd2dUb0tDYmYzbnM5eHRaWVRubkFqM3lPalUzNU9jajlMRHVPbWJ2eGRScTJscVRLUEdzaWgxM3E1aVVOMU1nczNDcHNweEpicDZpM01CUlRiRg?oc=5\" target=\"_blank\">Colombia rompe relaciones con Irán y profundiza su giro hacia Israel y Estados Unidos</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">France 24</font>",
+    "analysis": {
+      "relevant": false,
+      "error": "503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}"
+    }
+  },
+  {
+    "title": "Gobierno De la Espriella propone nuevas reglas para la protesta en Colombia - tubarco.news",
+    "link": "https://news.google.com/rss/articles/CBMihAFBVV95cUxPUG5nUDQtYkFYdENHZWxYX3l3TFcwaWN2ZlB0UG9EV3Y2ZFd1d1BBN3QtRHFYM0JNcFNsSGdhaXo1UkNqamFoYnhZVURuYXJwckRHRnJUTWRuTkhsbnhGVWowSHdhV1NFbERoVi12WXlKNDFTeXd4b2NKRFBScFlHVVBnMnM?oc=5",
+    "source": "tubarco.news",
+    "published_at": "2026-10-01T16:26:00+00:00",
+    "fetched_query": "gobierno Colombia",
+    "summary_raw": "<a href=\"https://news.google.com/rss/articles/CBMihAFBVV95cUxPUG5nUDQtYkFYdENHZWxYX3l3TFcwaWN2ZlB0UG9EV3Y2ZFd1d1BBN3QtRHFYM0JNcFNsSGdhaXo1UkNqamFoYnhZVURuYXJwckRHRnJUTWRuTkhsbnhGVWowSHdhV1NFbERoVi12WXlKNDFTeXd4b2NKRFBScFlHVVBnMnM?oc=5\" target=\"_blank\">Gobierno De la Espriella propone nuevas reglas para la protesta en Colombia</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">tubarco.news</font>",
+    "analysis": {
+      "relevant": true,
+      "summary_es": "El Gobierno propone un nuevo marco normativo para regular las manifestaciones y la protesta social en Colombia. La iniciativa busca establecer nuevas reglas para el desarrollo de las marchas en el país.",
+      "topics": [
+        "protesta social",
+        "política",
+        "orden público"
+      ],
+      "sentiment": "neutral"
+    }
+  },
+  {
+    "title": "Colombia: revive el fantasma de los falsos positivos en el gobierno de De la Espriella - El Tiempo Latino",
+    "link": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxPdzhocFFZdzk1NWljV0pMOHItQXdNMGNtckxWaGhKaDlILWU4NXdHNTlyQVZqSW8tb0JuRmo0Yko2cVVmZTl0Z0E4Q1lrM2pNUHJocFBNQVV0X2dvWE1YOU9rMldQZ1VaVTF2Z2V4WVpqSjRSdXQyWmpVTmxFdWtTcHVkNTJTM20tUFpqU2ZhcmRpSUYtTWtpbG13a1BLeHEzZ3VoNXZQLU9KeUVkbVVhbDBuYV92SkZhRDNKSkZlNU1hSEpSeFJCcE5aVFdZNUJsQlk0LQ?oc=5",
+    "source": "El Tiempo Latino",
+    "published_at": "2026-10-01T18:33:17+00:00",
+    "fetched_query": "gobierno Colombia",
+    "summary_raw": "<a href=\"https://news.google.com/rss/articles/CBMi1AFBVV95cUxPdzhocFFZdzk1NWljV0pMOHItQXdNMGNtckxWaGhKaDlILWU4NXdHNTlyQVZqSW8tb0JuRmo0Yko2cVVmZTl0Z0E4Q1lrM2pNUHJocFBNQVV0X2dvWE1YOU9rMldQZ1VaVTF2Z2V4WVpqSjRSdXQyWmpVTmxFdWtTcHVkNTJTM20tUFpqU2ZhcmRpSUYtTWtpbG13a1BLeHEzZ3VoNXZQLU9KeUVkbVVhbDBuYV92SkZhRDNKSkZlNU1hSEpSeFJCcE5aVFdZNUJsQlk0LQ?oc=5\" target=\"_blank\">Colombia: revive el fantasma de los falsos positivos en el gobierno de De la Espriella</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">El Tiempo Latino</font>",
+    "analysis": {
+      "relevant": false,
+      "error": "Error calling model 'gemini-3.6-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.6-flash\\nPlease retry in 37.536066656s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.6-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '37s'}]}}"
+    }
   }
 ]

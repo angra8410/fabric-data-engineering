@@ -1,0 +1,1740 @@
+import { Question } from '../types';
+
+export const DP700_QUESTIONS: Question[] = [
+  {
+    "id": "dp700-01",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "Your company has implemented a lakehouse architecture using Microsoft Fabric to support large-scale data analytics.\n\nData transformation processes must be optimized for performance and reliability.\n\nYou need to oversee the data transformation processes to detect any bottlenecks or failures and enhance them accordingly.\n\nWhat should you do?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Configure alerts for transformation failures."
+      },
+      {
+        "id": "B",
+        "text": "Enable detailed logging for performance analysis."
+      },
+      {
+        "id": "C",
+        "text": "Implement automated scaling for transformation processes."
+      },
+      {
+        "id": "D",
+        "text": "Use basic monitoring tools without advanced configurations."
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain3",
+    "topic": "Monitoring & Alerts",
+    "difficulty": "Medium",
+    "explanation": "Configuring alerts in the Monitor hub is effective because it ensures the team is notified of any data transformation failures, allowing for quick resolution. Enabling detailed logging might help analyze performance but does not directly address monitoring or identifying specific issues. Implementing automated scaling might handle performance fluctuations but does not address monitoring or identifying specific issues. Using basic monitoring tools without advanced configurations is inadequate for effectively overseeing large-scale data transformation processes.\n\nPrepare data for analysis and reporting - Training | Microsoft Learn\nUse the Monitor hub - Training | Microsoft Learn\n\n\nPractice Assessment for Exam DP-700: Implementing Data Engineering Solutions Using Microsoft Fabric",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/credentials/certifications/fabric-data-engineer-associate/",
+    "msLearnTitle": "Prepare data for analysis and reporting - Training | Microsoft Learn"
+  },
+  {
+    "id": "dp700-02",
+    "examId": "dp700",
+    "type": "multi_select",
+    "text": "Your company experiences performance issues with its current ETL process, which involves loading large volumes of sales data into a fact table in a Microsoft Fabric data warehouse. The process currently uses a full reload strategy, which is time-consuming and resource-intensive.\n\nYou need to enhance the ETL process to boost performance and decrease resource usage.\n\nWhich two actions should you perform? Each correct answer presents part of the solution.",
+    "options": [
+      {
+        "id": "A",
+        "text": "Continue full reloads with increased compute resources."
+      },
+      {
+        "id": "B",
+        "text": "Implement an incremental load strategy."
+      },
+      {
+        "id": "C",
+        "text": "Manually partition the fact table."
+      },
+      {
+        "id": "D",
+        "text": "Switch to Azure Data Factory for ETL."
+      },
+      {
+        "id": "E",
+        "text": "Use Change Data Capture (CDC) for tracking changes."
+      }
+    ],
+    "correctOptionId": "B",
+    "correctOptionIds": [
+      "B",
+      "E"
+    ],
+    "selectCount": 2,
+    "domain": "domain2",
+    "topic": "Data Warehouse Ingestion & CDC",
+    "difficulty": "Medium",
+    "explanation": "Implementing an incremental load strategy is effective because it reduces the amount of data processed during each ETL run, improving performance and reducing resource usage. Using Change Data Capture (CDC) for tracking changes is also beneficial as it allows tracking of changes in the source system, enabling efficient incremental loading of only the modified data into the fact table. Continuing full reloads with increased compute resources may temporarily alleviate performance issues but does not address the inefficiencies of a full reload strategy. Manually partitioning the fact table can improve query performance but does not directly address the inefficiencies in the ETL process itself. Switching to Azure Data Factory for ETL without addressing the full reload strategy may not improve performance.\n\nExplore the Microsoft Fabric lakehouse - Training | Microsoft Learn\nPrepare data for analysis and reporting - Training | Microsoft Learn",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/credentials/certifications/fabric-data-engineer-associate/",
+    "msLearnTitle": "Explore the Microsoft Fabric lakehouse - Training | Microsoft Learn"
+  },
+  {
+    "id": "dp700-03",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "Your organization uses Microsoft Fabric to manage and monitor various data activities, including data pipelines, dataflows, and semantic models.\n\nRecently, issues with data ingestion processes failing intermittently have caused delays in data availability for reporting.\n\nYou need to determine the cause of these failures and ensure effective monitoring of data ingestion processes to prevent future disruptions.\n\nWhat should you do?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Enable alerts only for non-critical issues."
+      },
+      {
+        "id": "B",
+        "text": "Increase data ingestion frequency."
+      },
+      {
+        "id": "C",
+        "text": "Use a basic logging tool for monitoring."
+      },
+      {
+        "id": "D",
+        "text": "Use the Monitor hub to filter activities by status and start time."
+      }
+    ],
+    "correctOptionId": "D",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain3",
+    "topic": "Monitor Hub Activity Tracking",
+    "difficulty": "Easy",
+    "explanation": "Using the Monitor hub to filter activities by status and start time is effective because it helps identify patterns in failures, aiding in diagnosing the root cause. Enabling alerts only for non-critical issues can result in missing critical alerts, making it harder to monitor and address them. Increasing the frequency of data ingestion does not address the root cause and leads to more frequent disruptions. Using a basic logging tool might seem like a viable option, but it lacks the advanced features needed for effective monitoring in complex environments like Microsoft Fabric.\n\nExplore the Microsoft Fabric lakehouse - Training | Microsoft Learn\nPrepare data for analysis and reporting - Training | Microsoft Learn",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/credentials/certifications/fabric-data-engineer-associate/",
+    "msLearnTitle": "Explore the Microsoft Fabric lakehouse - Training | Microsoft Learn"
+  },
+  {
+    "id": "dp700-04",
+    "examId": "dp700",
+    "type": "multi_select",
+    "text": "Your organization uses Microsoft Fabric to manage and analyze large datasets.\n\nRecently, issues with data ingestion processes fail intermittently, causing delays in data availability for analysis.\n\nYou need to implement a strategy to detect patterns or recurring issues in data ingestion activities.\n\nWhich two actions should you perform? Each correct answer presents part of the solution.",
+    "options": [
+      {
+        "id": "A",
+        "text": "Analyze error logs for past ingestion activities."
+      },
+      {
+        "id": "B",
+        "text": "Configure alerts for future ingestion failures."
+      },
+      {
+        "id": "C",
+        "text": "Filter activities by status to identify failures."
+      },
+      {
+        "id": "D",
+        "text": "Increase the frequency of data ingestion checks."
+      },
+      {
+        "id": "E",
+        "text": "Remove all filters to view all activities."
+      }
+    ],
+    "correctOptionId": "B",
+    "correctOptionIds": [
+      "B",
+      "C"
+    ],
+    "selectCount": 2,
+    "domain": "domain3",
+    "topic": "Ingestion Monitoring & Alerts",
+    "difficulty": "Medium",
+    "explanation": "Configuring alerts for future ingestion failures ensures immediate notification and timely intervention, making it a proactive monitoring approach. Filtering activities by status in the Monitor hub allows for quick identification of failed ingestion processes, directly addressing the need to monitor and resolve issues. Analyzing error logs might seem useful for identifying patterns, but it does not address the immediate need to monitor and resolve failures effectively. Removing all filters could lead to information overload, making it difficult to focus on specific failed activities.\n\nExplore the Microsoft Fabric lakehouse - Training | Microsoft Learn\nPrepare data for analysis and reporting - Training | Microsoft Learn",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/credentials/certifications/fabric-data-engineer-associate/",
+    "msLearnTitle": "Explore the Microsoft Fabric lakehouse - Training | Microsoft Learn"
+  },
+  {
+    "id": "dp700-05",
+    "examId": "dp700",
+    "type": "multi_select",
+    "text": "Your organization uses Microsoft Fabric to manage and monitor various data activities, including data pipelines, dataflows, and semantic models. The data is stored in a lakehouse.\n\nRecently, there have been issues with delayed data ingestion and transformation processes.\n\nYou need to identify and resolve the causes of these delays to improve data processing efficiency.\n\nWhich two actions should you perform? Each correct answer presents part of the solution.",
+    "options": [
+      {
+        "id": "A",
+        "text": "Filter activities by status and start time."
+      },
+      {
+        "id": "B",
+        "text": "Increase data storage capacity."
+      },
+      {
+        "id": "C",
+        "text": "Optimize data transformation processes."
+      },
+      {
+        "id": "D",
+        "text": "Set up alerts for data process delays."
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": [
+      "A",
+      "D"
+    ],
+    "selectCount": 2,
+    "domain": "domain3",
+    "topic": "Performance Bottleneck Troubleshooting",
+    "difficulty": "Medium",
+    "explanation": "Setting up alerts for data process delays is crucial as it provides immediate notifications, allowing for proactive management and timely resolution of issues. Filtering activities by status and start time in the Monitor hub enables identification of specific delayed processes, facilitating targeted troubleshooting. Optimizing data transformation processes can improve efficiency but may not address the core issue if the delays are caused by other factors. Increasing data storage capacity without understanding the root cause of delays may not solve the problem and could lead to unnecessary costs.\n\nExplore the Microsoft Fabric lakehouse - Training | Microsoft Learn\nPrepare data for analysis and reporting - Training | Microsoft Learn",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/credentials/certifications/fabric-data-engineer-associate/",
+    "msLearnTitle": "Explore the Microsoft Fabric lakehouse - Training | Microsoft Learn"
+  },
+  {
+    "id": "dp700-06",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "You have a Fabric workspace named Workspace1.\n\nIn Workspace1, you create a lakehouse named Lakehouse1.\n\nYou plan to ingest data into Lakehouse1.\n\nYou need to monitor the data ingestion process.\n\nWhat should you use?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Monitor hub"
+      },
+      {
+        "id": "B",
+        "text": "the Fabric Capacity Metrics Power BI app"
+      },
+      {
+        "id": "C",
+        "text": "Real time monitoring hub"
+      },
+      {
+        "id": "D",
+        "text": "Azure Monitor"
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain3",
+    "topic": "Monitor Hub for Lakehouse",
+    "difficulty": "Easy",
+    "explanation": "Monitor hub tracks ingestion and transformation activities; query insights target data warehouse queries, and capacity metrics focus on capacity usage rather than ingestion details.\n\nIntroduction",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/credentials/certifications/fabric-data-engineer-associate/",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-07",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "You have a Fabric workspace named Workspace1 that contains a data pipeline named Pipeline1.\n\nPipeline1 runs every morning and loads data into a lakehouse named Lakehouse1.\n\nYou discover that Pipeline1 loads data successfully, but the load takes longer than expected.\n\nYou need to monitor the data transformation process to identify possible performance issues.\n\nWhat should you use?",
+    "options": [
+      {
+        "id": "A",
+        "text": "a dataflow"
+      },
+      {
+        "id": "B",
+        "text": "a pipeline"
+      },
+      {
+        "id": "C",
+        "text": "an activator"
+      },
+      {
+        "id": "D",
+        "text": "Monitoring hub"
+      }
+    ],
+    "correctOptionId": "D",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain3",
+    "topic": "Pipeline Transformation Metrics",
+    "difficulty": "Easy",
+    "explanation": "Monitoring hub surfaces transformation metrics and performance insights; activators automate responses to events, dataflows perform transformations, and pipelines orchestrate tasks but do not provide the dedicated monitoring views.\n\nIntroduction\n\nUnderstand monitoring",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/credentials/certifications/fabric-data-engineer-associate/",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-08",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "You have a Fabric workspace that runs a pipeline every 15 minutes. The pipeline runs a Dataflow Gen2 to ingest data, and then triggers a semantic model refresh of a Microsoft Power BI report.\n\nBusiness users access the report during business hours and require notifications when ingestion is delayed or fails.\n\nYou need to configure an alert that triggers automatically when a condition is detected in changing data.\n\nWhat should you use?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Activator"
+      },
+      {
+        "id": "B",
+        "text": "Capacity"
+      },
+      {
+        "id": "C",
+        "text": "Monitor hub"
+      },
+      {
+        "id": "D",
+        "text": "OneLake"
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain3",
+    "topic": "Fabric Activator Event Alerts",
+    "difficulty": "Medium",
+    "explanation": "Objective:\n\n3.1 Monitor Fabric items\n\nWhat This Item Tests:\n\nConfigure alerts\n\nAdditional Reading:\n\nMonitor activities in Microsoft Fabric - Summary\nUnderstand the Fabric Architecture\n5. Use the monitoring baseline\nRationale:\n\nActivator detects conditions in streaming or changing data and can trigger actions, such as alerts and workflows, when specified thresholds and events occur. This capability is designed for automated responses to data conditions. Monitor hub provides operational monitoring but does not create rule-based alerts on changing data. Capacity tools track capacity performance and utilization rather than ingestion conditions. OneLake is the unified storage layer and does not provide alerting functionality.",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/credentials/certifications/fabric-data-engineer-associate/",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-09",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "You have a Fabric workspace named Workspace1 that contains a notebook named Notebook1.\n\nEach time you attempt to run Notebook1, you receive the following error message: “Your session timed out after inactivity.”\n\nYou discover that you can successfully run Notebook1 after manually starting a session on the notebook.\n\nYou need to ensure that you can run Notebook1 without manually starting a session. The solution must minimize administrative effort.\n\nWhat should you do?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Ask a Fabric administrator to resume capacity. />"
+      },
+      {
+        "id": "B",
+        "text": "Extend the workspace session timeout."
+      },
+      {
+        "id": "C",
+        "text": "From the Edit menu, turn on AutoSave."
+      },
+      {
+        "id": "D",
+        "text": "From the Session ready indicator, update the session timeout duration."
+      }
+    ],
+    "correctOptionId": "B",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain3",
+    "topic": "Spark Notebook Session Timeouts",
+    "difficulty": "Medium",
+    "explanation": "Increasing the workspace session timeout prevents frequent timeouts; the session indicator cannot change timeout; AutoSave doesn’t affect runtime; capacity is already active and unrelated to per-session timeouts.\n\nFabric notebooks troubleshooting guide",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/credentials/certifications/fabric-data-engineer-associate/",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-10",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "You have a Fabric pipeline that uses an Execute Pipeline activity to call a child pipeline named pl_LoadTables. The parent pipeline passes a parameter named tables. The parameter is defined as array in both pipelines.\n\nIn the child pipeline, a ForEach activity uses the following items expression.\n\n@pipeline().parameters.tables\n\nThe pipeline run fails and generates the following error.\n\nthe result of the evaluation of 'foreach' expression '@pipeline().parameters.tables'\nis of type 'String'. The result must be a valid array.\n\nYou need to ensure that tables is passed to the child pipeline as an array so that the ForEach activity can run.\n\nWhat should you do in the parent pipeline?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Change the tables parameter type in the child pipeline from Array to String."
+      },
+      {
+        "id": "B",
+        "text": "Change the ForEach items expression to @string(pipeline().parameters.tables)."
+      },
+      {
+        "id": "C",
+        "text": "Wrap the parameter value by using the createArray() function in the Execute Pipeline activity."
+      },
+      {
+        "id": "D",
+        "text": "Add a pipeline parameter for the ForEach activity run ID and use the parameter as the items expression."
+      }
+    ],
+    "correctOptionId": "C",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "Pipeline Expression & Parameter Typing",
+    "difficulty": "Hard",
+    "explanation": "Objective:\n\n3.2 Identify and resolve errors\n\nWhat This Item Tests:\n\nIdentify and resolve pipeline errors\n\nAdditional Reading:\n\nTroubleshoot pipelines for Data Factory in Microsoft Fabric - General\n\nKey pipeline components\n\nUnderstand pipelines\n\nOrchestrate processes and data movement with Microsoft Fabric - Summary\n\nRationale:\n\nWrapping the value by using createArray() in the Execute Pipeline activity ensures that the parameter is passed as an array, which enables the ForEach activity to iterate over the items successfully. Converting the parameter into a string does not meet the requirements, because the ForEach activity requires an array. Changing the parameter type in the child pipeline to String prevents the ForEach activity from iterating over multiple values. Adding a run ID parameter does not address the type mismatch that caused the failure.",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/credentials/certifications/fabric-data-engineer-associate/",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-11",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "You have a Fabric workspace that uses a Data Factory pipeline. The pipeline calls a child pipeline by using an Execute Pipeline activity.\n\nIn the child pipeline, a ForEach activity uses the following items expression.\n\n@pipeline().parameters.TableList\n\nThe pipeline run fails and generates the following error.\n\nthe result of the evaluation of 'foreach' expression '@pipeline().parameters.TableList'\nis of type 'String'. The result must be a valid array.\n\nIn the parent pipeline, the Execute Pipeline activity passes the TableList parameter as a string that contains JSON.\n\nYou need to ensure that the ForEach activity can iterate over the values.\n\nWhat should you change?",
+    "options": [
+      {
+        "id": "A",
+        "text": "the TableList parameter type in the child pipeline to String"
+      },
+      {
+        "id": "B",
+        "text": "the ForEach items expression to @json(pipeline().parameters.TableList)"
+      },
+      {
+        "id": "C",
+        "text": "the parameter value in the Execute Pipeline activity by using @createArray(...)"
+      },
+      {
+        "id": "D",
+        "text": "a Set Variable activity that concatenates the values into a comma-separated string"
+      }
+    ],
+    "correctOptionId": "B",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "Pipeline JSON Parsing & Dynamic Arrays",
+    "difficulty": "Hard",
+    "explanation": "Objective:\n\n3.2 Identify and resolve errors\n\nWhat This Item Tests:\n\nIdentify and resolve dataflow errors\n\nAdditional Reading:\n\nTroubleshoot pipelines for Data Factory in Microsoft Fabric - General\n\nOrchestrate processes and data movement with Microsoft Fabric - Summary\n\nRationale:\n\nUsing json() converts the JSON string into an array that the ForEach activity can iterate over. Wrapping the value by using createArray() creates an array that contains a single string instead of converting the JSON string into an array. Changing the parameter type to String prevents iteration. Concatenating the values into a comma-separated string still produces a string rather than an array.",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/credentials/certifications/fabric-data-engineer-associate/",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-12",
+    "examId": "dp700",
+    "type": "multi_select",
+    "text": "Your company uses Microsoft Fabric to manage data pipelines for a large-scale analytics solution.\n\nYou notice that several pipeline executions failed due to errors in the Lookup activity, which returned no matching data.\n\nYou need to configure the pipeline to terminate with specific error details when the Lookup activity returns no matching data.\n\nWhich two actions should you perform? Each correct answer presents part of the solution.",
+    "options": [
+      {
+        "id": "A",
+        "text": "Add a Fail activity after the Lookup activity."
+      },
+      {
+        "id": "B",
+        "text": "Add a Retry activity after the Lookup activity."
+      },
+      {
+        "id": "C",
+        "text": "Add a Wait activity after the Lookup activity."
+      },
+      {
+        "id": "D",
+        "text": "Configure the Fail activity with specific error details."
+      },
+      {
+        "id": "E",
+        "text": "Use a Retry activity to handle the error."
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": [
+      "A",
+      "D"
+    ],
+    "selectCount": 2,
+    "domain": "domain3",
+    "topic": "Pipeline Error Handling & Fail Activity",
+    "difficulty": "Medium",
+    "explanation": "Adding a Fail activity after the Lookup activity is essential because it allows the pipeline to terminate with a specific error message and code, directly addressing the requirement. Configuring this Fail activity with detailed error information ensures that the pipeline provides clear feedback when it fails. Adding a Wait activity does not address the need for customized error termination. Using a Retry activity might seem like a way to handle errors but does not fulfill the requirement to fail the pipeline with specific error details.\n\nUse the Fail activity to cause pipeline execution to fail with a customized error message and error code - Training | Microsoft Learn",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/credentials/certifications/fabric-data-engineer-associate/",
+    "msLearnTitle": "Use the Fail activity to cause pipeline execution to fail with a customized error message and error code - Training | Microsoft Learn"
+  },
+  {
+    "id": "dp700-13",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "Your company uses Microsoft Fabric's lakehouse architecture to store and process large volumes of data.\n\nYou notice that some queries are not performing as expected, particularly those involving user-defined functions (UDFs).\n\nYou need to ensure optimal query performance while maintaining use of UDFs.\n\nWhat should you do?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Enable high concurrency mode."
+      },
+      {
+        "id": "B",
+        "text": "Enable query caching."
+      },
+      {
+        "id": "C",
+        "text": "Switch to a different execution engine."
+      },
+      {
+        "id": "D",
+        "text": "Adjust spark configuration."
+      }
+    ],
+    "correctOptionId": "D",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain3",
+    "topic": "Spark Optimization & Native Engine UDFs",
+    "difficulty": "Hard",
+    "explanation": "Using traditional Spark engine for queries involving UDFs ensures compatibility and maintains performance due to the native execution engine's lack of support for UDFs. Enabling high concurrency mode might improve overall throughput but does not address the specific performance issues with UDFs. Enabling query caching does not address the compatibility issue with UDFs in the native execution engine. Switching to a different execution engine might seem like a solution, but it does not resolve the compatibility issues with UDFs.\n\nLoad data using T-SQL - Training | Microsoft Learn",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/credentials/certifications/fabric-data-engineer-associate/",
+    "msLearnTitle": "Load data using T-SQL - Training | Microsoft Learn"
+  },
+  {
+    "id": "dp700-14",
+    "examId": "dp700",
+    "type": "multi_select",
+    "text": "Your company uses Microsoft Fabric Lakehouse to manage large datasets for analytics.\n\nRecently, query performance on a Delta table has degraded due to an increase in small Parquet files.\n\nYou need to optimize the Delta table to improve query efficiency.\n\nWhich two actions should you perform? Each correct answer presents part of the solution.",
+    "options": [
+      {
+        "id": "A",
+        "text": "Apply V-Order for better data sorting and compression."
+      },
+      {
+        "id": "B",
+        "text": "Convert to Hive table format."
+      },
+      {
+        "id": "C",
+        "text": "Increase the number of partitions in the Delta table."
+      },
+      {
+        "id": "D",
+        "text": "Use the OPTIMIZE command to consolidate files."
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": [
+      "A",
+      "D"
+    ],
+    "selectCount": 2,
+    "domain": "domain3",
+    "topic": "Delta Lake Optimization (V-Order & OPTIMIZE)",
+    "difficulty": "Medium",
+    "explanation": "Applying V-Order optimizes sorting, encoding, and compression, enhancing read operations and overall query performance. The Optimize command consolidates multiple small Parquet files into larger ones, improving query performance by reducing the number of files that need to be scanned. Converting to a Hive table format is not supported for Delta tables in Lakehouse and would not improve performance. Increasing the number of partitions might seem beneficial but can lead to increased overhead and slower query times if not managed properly.\n\nUse table maintenance feature to manage delta tables in Fabric - Training | Microsoft Learn",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/credentials/certifications/fabric-data-engineer-associate/",
+    "msLearnTitle": "Use table maintenance feature to manage delta tables in Fabric - Training | Microsoft Learn"
+  },
+  {
+    "id": "dp700-15",
+    "examId": "dp700",
+    "type": "multi_select",
+    "text": "Your company has implemented a Microsoft Fabric data warehouse to handle large-scale data ingestion and processing.\n\nThe current setup involves frequent data loads throughout the day, which sometimes lead to performance bottlenecks.\n\nYou need to optimize the data ingestion process to handle large volumes efficiently without causing performance issues.\n\nWhich two actions should you perform? Each correct answer presents part of the solution.",
+    "options": [
+      {
+        "id": "A",
+        "text": "Divide large INSERT operations into smaller parts."
+      },
+      {
+        "id": "B",
+        "text": "Group INSERT statements into batches."
+      },
+      {
+        "id": "C",
+        "text": "Use larger data types for columns."
+      },
+      {
+        "id": "D",
+        "text": "Use smaller data types for columns."
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": [
+      "A",
+      "B"
+    ],
+    "selectCount": 2,
+    "domain": "domain3",
+    "topic": "Data Warehouse Ingestion Batching",
+    "difficulty": "Medium",
+    "explanation": "Grouping INSERT statements into batches reduces transaction overhead, thereby improving performance during data ingestion. Dividing large INSERT operations into smaller parts minimizes rollback time and enhances system responsiveness, making it an effective strategy for handling large data volumes. Using smaller data types for columns can lead to data truncation or loss if not carefully considered, which is counterproductive to the goal of optimizing data ingestion.\n\nhttps://learn.microsoft.com/en-us/fabric/data-warehouse/guidelines-warehouse-performance",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/fabric/data-warehouse/guidelines-warehouse-performance",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-16",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "You have a Fabric lakehouse that contains a Delta table named SalesSilver.\n\nAn Apache Spark structured streaming job writes to SalesSilver every minute and creates many small Parquet files.\n\nUsers query SalesSilver through the SQL analytics endpoint. Query latency is increasing because of the number of files.\n\nYou need to reduce small-file overhead by using persistent settings to ensure that future writes create fewer, larger files and the remaining fragmentation is compacted automatically. The solution must NOT change the streaming frequency or use a different engine.\n\nWhat should you so?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Set delta.parquet.vorder.enabled to true."
+      },
+      {
+        "id": "B",
+        "text": "Use RDDs instead of DataFrames in the Spark pipeline."
+      },
+      {
+        "id": "C",
+        "text": "Run VACUUM SalesSilver RETAIN 0 HOURS after each micro-batch."
+      },
+      {
+        "id": "D",
+        "text": "Set delta.autoOptimize.optimizeWrite and delta.autoOptimize.autoCompact to true."
+      }
+    ],
+    "correctOptionId": "D",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain3",
+    "topic": "Delta Lake Auto-Optimize & Compaction",
+    "difficulty": "Hard",
+    "explanation": "Objective:\n\n3.3 Optimize performance\n\nWhat This Item Tests:\n\nOptimize query performance\n\nAdditional Reading:\n\nhttps://learn.microsoft.com/en-us/fabric/fundamentals/table-maintenance-optimization#auto-compaction\n\nhttps://learn.microsoft.com/fabric/fundamentals/table-maintenance-optimization#optimize-write\nQuery performance\n\nhttps://learn.microsoft.com/fabric/data-warehouse/guidelines-warehouse-performance#query-performance\n\nhttps://learn.microsoft.com/en-us/training/modules/monitor-manage-data-engineering-workloads-apache-spark-azure-synapse-analytics/4-optimize-apache-spark-jobs-analytics\n\nRationale:\n\nSetting delta.autoOptimize.optimizeWrite and delta.autoOptimize.autoCompact to true reduces the number of small files created by future writes and automatically compacts the remaining fragmentation. Enabling V-Order can improve read performance but does not address small-file creation. VACUUM removes obsolete files and does not combine active small files. Rewriting the pipeline to use RDDs does not address the Delta table optimization requirements and violates the constraint.",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/fabric/fundamentals/table-maintenance-optimization#auto-compaction",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-17",
+    "examId": "dp700",
+    "type": "multi_select",
+    "text": "Your organization uses Microsoft Fabric to manage real-time data from IoT devices sent to Azure Event Hub.\n\nYou need to recommend a solution to process events for storage in a Fabric lakehouse.\n\nWhich two actions should you recommend? Each correct answer presents part of the solution.",
+    "options": [
+      {
+        "id": "A",
+        "text": "Set up an eventstream with Azure Event Hub as a source."
+      },
+      {
+        "id": "B",
+        "text": "Use Azure Data Factory for real-time data ingestion."
+      },
+      {
+        "id": "C",
+        "text": "Use Azure Stream Analytics to process data from Azure Event Hub."
+      },
+      {
+        "id": "D",
+        "text": "Use Data Factory pipelines to ingest data into the lakehouse."
+      },
+      {
+        "id": "E",
+        "text": "Use the event processor to filter and transform data."
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": [
+      "A",
+      "E"
+    ],
+    "selectCount": 2,
+    "domain": "domain2",
+    "topic": "Eventstreams & Event Processor",
+    "difficulty": "Medium",
+    "explanation": "Setting up an eventstream with Azure Event Hub as a source is essential for ingesting real-time data into Microsoft Fabric, allowing for the initial data flow setup. Using the event processor to filter and transform data ensures that only necessary data is stored, optimizing storage and processing efficiency. Using Data Factory pipelines is not suitable for real-time event processing, as they are designed for batch processing. Using Azure Stream Analytics to process data from Azure Event Hub is not appropriate for the specific goal of storing processed data in a Fabric lakehouse. Using Azure Data Factory for real-time data ingestion is not appropriate, as it is more suited for batch processing.\n\nhttps://learn.microsoft.com/en-us/training/modules/get-started-lakehouses",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/training/modules/get-started-lakehouses",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-18",
+    "examId": "dp700",
+    "type": "multi_select",
+    "text": "You are implementing a data warehouse using Microsoft Fabric.\n\nYou plan to integrate data from multiple sources, including Microsoft Azure Data Lake Storage Gen2 and Microsoft SQL Server databases.\n\nYou need to design a process to efficiently load data into tables while ensuring data quality and consistency, and to ensure that all compute resources used for processing are managed through Fabric capacity.\n\nWhich two tasks should you recommend? Each correct answer presents part of the solution.",
+    "options": [
+      {
+        "id": "A",
+        "text": "Use Azure Synapse Analytics for data integration."
+      },
+      {
+        "id": "B",
+        "text": "Use Data Factory pipelines for ETL orchestration and T-SQL execution."
+      },
+      {
+        "id": "C",
+        "text": "Use dataflows to ingest and transform data from Azure Data Lake Storage Gen2."
+      },
+      {
+        "id": "D",
+        "text": "Use SSIS packages for data integration."
+      }
+    ],
+    "correctOptionId": "B",
+    "correctOptionIds": [
+      "B",
+      "C"
+    ],
+    "selectCount": 2,
+    "domain": "domain2",
+    "topic": "Data Factory Pipelines & Dataflows Gen2",
+    "difficulty": "Medium",
+    "explanation": "Using Microsoft Data Factory pipelines and dataflows are both effective methods for orchestrating ETL processes and transforming data from various sources into a dimensional model. Microsoft Data Factory pipelines allow for complex orchestration and execution of T-SQL scripts, ensuring efficient data transformation and loading. Dataflows offer a low-code solution for data ingestion and transformation using Power Query, making them suitable for integrating data from Microsoft Azure Data Lake Storage Gen2. Using SSIS packages for data integration is less efficient compared to modern tools like Data Factory and dataflows, especially in a Microsoft Fabric environment. While Azure Synapse Analytics is a powerful tool for data analytics and integration, it is not specifically designed for the ETL processes required to transform and load data into a dimensional model.\n\nhttps://learn.microsoft.com/en-us/training/modules/get-started-lakehouses/2-fabric-lakehouse\nhttps://learn.microsoft.com/en-us/training/modules/get-started-data-warehouse/5-model-data",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/training/modules/get-started-lakehouses/2-fabric-lakehouse",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-19",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "Your company uses a Microsoft Fabric data warehouse to store frequently updated customer transaction data.\n\nYou need to design an ETL process that minimizes load on source systems while ensuring only new or changed data is loaded.\n\nWhat should you include in your design?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Implement a trigger-based change detection."
+      },
+      {
+        "id": "B",
+        "text": "Perform nightly full data loads."
+      },
+      {
+        "id": "C",
+        "text": "Use a timestamp column for incremental data loading."
+      },
+      {
+        "id": "D",
+        "text": "Use Change Data Capture (CDC) for tracking source data changes."
+      }
+    ],
+    "correctOptionId": "D",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain2",
+    "topic": "Change Data Capture (CDC)",
+    "difficulty": "Easy",
+    "explanation": "Using Change Data Capture (CDC) is the most efficient method for tracking changes in the source data, allowing only new or changed data to be loaded into the warehouse, thus minimizing the load on the source systems. Performing a full data load every night is inefficient and places unnecessary load on the source systems, making it unsuitable for frequent updates. Using a timestamp column for incremental data loading may not capture all changes as effectively as CDC, particularly in complex scenarios. Implementing a trigger-based change detection can introduce complexity and may not efficiently handle large volumes of data changes, making it less effective for this scenario.\n\nhttps://learn.microsoft.com/en-us/fabric/data-warehouse/dimensional-modeling-load-tables",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/fabric/data-warehouse/dimensional-modeling-load-tables",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-20",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "You have a Fabric lakehouse named Lakehouse1 that contains a table named Sales. Sales contains the following columns:\n\nOrderID (INT)\nOrderDate (DATE)\nProductID (INT)\nQuantity (INT)\nYou plan to implement incremental loads of new sales records from a CSV file located in the /files/sales/ folder of Lakehouse1.\n\nYou need to identify a querying solution for the incremental loads. The solution must minimize maintenance effort.\n\nWhat should you use?",
+    "options": [
+      {
+        "id": "A",
+        "text": "a notebook"
+      },
+      {
+        "id": "B",
+        "text": "a pipeline"
+      },
+      {
+        "id": "C",
+        "text": "a stored procedure"
+      },
+      {
+        "id": "D",
+        "text": "Auto Loader"
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain2",
+    "topic": "Lakehouse Incremental Loading",
+    "difficulty": "Medium",
+    "explanation": "Notebooks provide flexible, code-based incremental load patterns for Fabric lakehouses; Auto Loader is not available in Fabric, stored procedures aren’t a lakehouse querying solution, and pipelines are orchestration—not querying.\n\nhttps://learn.microsoft.com/en-us/fabric/data-engineering/load-data-lakehouse",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/fabric/data-engineering/load-data-lakehouse",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-21",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "Your organization uses Microsoft Fabric to manage data across cloud platforms.\n\nYou plan to integrate data from a cloud storage service into a lakehouse.\n\nYou need to ensure data from the cloud storage service is accessible within the lakehouse without duplication.\n\nWhat should you do?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Create a shortcut pointing to the cloud storage service."
+      },
+      {
+        "id": "B",
+        "text": "Use a Data Factory pipeline to copy data into the lakehouse."
+      },
+      {
+        "id": "C",
+        "text": "Use a Data Factory pipeline to export data to Azure Blob Storage and then import it into the lakehouse."
+      },
+      {
+        "id": "D",
+        "text": "Use a Data Factory pipeline to transform data before loading it into the lakehouse."
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain2",
+    "topic": "OneLake Shortcuts",
+    "difficulty": "Easy",
+    "explanation": "Creating a shortcut in the lakehouse pointing to the cloud storage service allows direct access to the data without creating redundant copies, leveraging Microsoft OneLake's capability to unify data across different storage systems. Using a Data Factory pipeline to transform and load data would result in redundant copies and increased storage costs, which is unnecessary when using Microsoft OneLake shortcuts.\n\nhttps://learn.microsoft.com/en-us/fabric/onelake/onelake-shortcuts",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/fabric/onelake/onelake-shortcuts",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-22",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "Your organization uses Microsoft Fabric to manage data from various sources, including Azure SQL Database.\n\nYou must continuously replicate Azure SQL Database data into OneLake in an analytics-ready, queryable format. The replication must occur in near real time and must not require complex ETL pipelines.\n\nWhat should you do?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Create a dataflow for continuous data import."
+      },
+      {
+        "id": "B",
+        "text": "Create a dataflow for periodic data import."
+      },
+      {
+        "id": "C",
+        "text": "Implement database mirroring."
+      },
+      {
+        "id": "D",
+        "text": "Use pipelines for continuous data import."
+      }
+    ],
+    "correctOptionId": "C",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain2",
+    "topic": "Mirrored Databases",
+    "difficulty": "Medium",
+    "explanation": "Implementing database mirroring in Microsoft Fabric is the most suitable solution as it ensures continuous data synchronization into OneLake without the need for complex ETL processes. Creating a dataflow for continuous data import might seem plausible but does not offer the seamless integration and automatic mirroring capabilities of Microsoft Fabric. Using Azure Data Factory for continuous data replication is inappropriate in this context as it is designed for batch processing and ETL tasks rather than real-time continuous replication.\nhttps://learn.microsoft.com/en-us/fabric/database/mirrored-database/overview",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/fabric/database/mirrored-database/overview",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-23",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "You are implementing a new data warehouse solution using Microsoft Fabric.\n\nYou need to implement a solution that captures changes in dimension tables over time while preserving historical data.\n\nWhich type of Slowly Changing Dimension (SCD) maintains historical data by creating new rows?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Type 1 Slowly Changing Dimension (SCD)"
+      },
+      {
+        "id": "B",
+        "text": "Type 2 Slowly Changing Dimension (SCD)"
+      },
+      {
+        "id": "C",
+        "text": "Type 3 Slowly Changing Dimension (SCD)"
+      },
+      {
+        "id": "D",
+        "text": "Type 4 Slowly Changing Dimension (SCD)"
+      }
+    ],
+    "correctOptionId": "B",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain2",
+    "topic": "Slowly Changing Dimensions (SCD Type 2)",
+    "difficulty": "Easy",
+    "explanation": "Type 2 SCD is the most suitable choice for capturing changes in dimension tables over time while preserving historical data. It adds new records for changes, maintaining a full history for a given natural key. Type 4 SCD involves creating a new dimension for changes, which is not suitable for tracking historical changes within the same dimension table. Type 1 SCD overwrites existing data and does not keep history, failing to meet the requirement. Type 3 SCD adds history as a new column, but its scope is limited and not suitable for comprehensive historical tracking.\nhttps://learn.microsoft.com/en-us/fabric/data-warehouse/dimensional-modeling-dimension-tables",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/fabric/data-warehouse/dimensional-modeling-dimension-tables",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-24",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "You use Microsoft Fabric to manage data across warehouses and lakehouses.\n\nYou need to integrate data from a warehouse and a lakehouse into a single table for analysis. The solution must minimize development effort.\n\nWhat should you use?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Azure Data Factory"
+      },
+      {
+        "id": "B",
+        "text": "The CREATE TABLE AS SELECT (CTAS) statement."
+      },
+      {
+        "id": "C",
+        "text": "Dataflow Gen2"
+      },
+      {
+        "id": "D",
+        "text": "The SELECT INTO statement."
+      }
+    ],
+    "correctOptionId": "B",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain2",
+    "topic": "Cross-Database CTAS Queries",
+    "difficulty": "Medium",
+    "explanation": "The CREATE TABLE AS SELECT (CTAS) statement is the best choice for integrating data from a warehouse and a lakehouse into a single table, as it allows the creation of a new table based on combined data. Dataflow Gen2, while useful for data preparation and transformation, does not directly support creating new tables from combined data sources. The SELECT INTO statement can create a new table but is not suitable for integrating data from multiple sources. Azure Data Factory is a data integration service that might seem suitable for integrating data from multiple sources, but it does not directly support creating tables from combined data sources in a warehouse or lakehouse.\n\nhttps://learn.microsoft.com/en-us/training/modules/load-data-into-microsoft-fabric-data-warehouse/4-load-data-using-tsql\nhttps://learn.microsoft.com/en-us/fabric/data-warehouse/create-table",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/training/modules/load-data-into-microsoft-fabric-data-warehouse/4-load-data-using-tsql",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-25",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "You use Microsoft Fabric to manage data across cloud platforms.\n\nYou plan to ingest batch data from Azure Blob Storage into a warehouse.\n\nYou need to determine the most efficient method to import this data using Microsoft Fabric tools.\n\nWhat should you use?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Azure Synapse Analytics."
+      },
+      {
+        "id": "B",
+        "text": "COPY statement with Shared Access Signature."
+      },
+      {
+        "id": "C",
+        "text": "Pipeline."
+      },
+      {
+        "id": "D",
+        "text": "Dataflows Gen2."
+      }
+    ],
+    "correctOptionId": "B",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain2",
+    "topic": "T-SQL COPY Ingestion",
+    "difficulty": "Medium",
+    "explanation": "The COPY statement with Shared Access Signature efficiently ingests batch data from Azure Blob Storage into a warehouse due to its direct and secure data transfer capabilities. In contrast, a Data Factory pipeline requires manual configuration, making it less efficient. Dataflows Gen2 focus on data preparation and transformation, which does not align with the task of batch data ingestion. Azure Synapse Analytics is not designed for efficient batch data ingestion using Microsoft Fabric tools.\n\nhttps://learn.microsoft.com/en-us/training/modules/load-data-into-microsoft-fabric-data-warehouse/4-load-data-using-tsql",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/training/modules/load-data-into-microsoft-fabric-data-warehouse/4-load-data-using-tsql",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-26",
+    "examId": "dp700",
+    "type": "multi_select",
+    "text": "You are implementing a new data analytics solution using Microsoft Fabric.\n\nThe data to be ingested includes structured, semi-structured, and unstructured formats from various sources.\n\nYou need to select a data store that accommodates diverse data formats and supports both PySpark and SQL operations for data transformation and analysis.\n\nWhich two data stores should you select? Each correct answer presents a complete solution.",
+    "options": [
+      {
+        "id": "A",
+        "text": "Azure Data Lake Storage Gen2"
+      },
+      {
+        "id": "B",
+        "text": "Azure Synapse Analytics"
+      },
+      {
+        "id": "C",
+        "text": "Microsoft Fabric Eventhouse"
+      },
+      {
+        "id": "D",
+        "text": "Microsoft Lakehouse"
+      }
+    ],
+    "correctOptionId": "B",
+    "correctOptionIds": [
+      "B",
+      "D"
+    ],
+    "selectCount": 2,
+    "domain": "domain2",
+    "topic": "Fabric Storage Architecture Selection",
+    "difficulty": "Medium",
+    "explanation": "Azure Synapse Analytics is suitable because it supports all data formats and allows operations using T-SQL and Spark, accommodating the team's diverse skill set and data needs. Microsoft Lakehouse is also appropriate as it supports structured, semi-structured, and unstructured data formats and allows operations using both PySpark and SQL, aligning with the team's skills and data requirements. In contrast, Microsoft Fabric Eventhouse is designed for real-time analytics and supports diverse data formats but is not optimized for batch processing or large-scale data transformation using PySpark and SQL, which are required in this scenario. Azure Data Lake Storage Gen2, while capable of storing diverse data formats, does not natively support PySpark and SQL operations, making it unsuitable for this scenario.\nhttps://learn.microsoft.com/en-us/fabric/fundamentals/decision-guide-data-store",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/fabric/fundamentals/decision-guide-data-store",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-27",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "Your organization uses Microsoft Fabric to process real-time data from IoT devices.\n\nYou need to implement a solution for ingesting and transforming streaming data without writing code.\n\nWhat should you do?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Use Azure Event Hubs to ingest and transform the data."
+      },
+      {
+        "id": "B",
+        "text": "Use Azure Stream Analytics to process the data."
+      },
+      {
+        "id": "C",
+        "text": "Use Microsoft Spark Structured Streaming with PySpark scripts."
+      },
+      {
+        "id": "D",
+        "text": "Use the eventstreams feature in Microsoft Fabric with enhanced capabilities."
+      }
+    ],
+    "correctOptionId": "D",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain2",
+    "topic": "No-Code Eventstreams",
+    "difficulty": "Easy",
+    "explanation": "Using the eventstreams feature in Microsoft Fabric with enhanced capabilities enabled is the correct choice because it provides a no-code solution for ingesting and transforming streaming data, meeting the requirements of the scenario. Using Azure Stream Analytics requires setting up queries, which does not satisfy the no-code requirement. Using Azure Event Hubs requires coding for data transformation, making it unsuitable for the no-code requirement. Using Microsoft Spark Structured Streaming with PySpark scripts also involves coding, making it unsuitable for the no-code requirement.\nhttps://learn.microsoft.com/en-us/fabric/real-time-intelligence/event-streams/overview",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/fabric/real-time-intelligence/event-streams/overview",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-28",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "Your organization uses Microsoft Fabric to process real-time IoT data monitoring environmental conditions. The data includes temperature and humidity readings streamed into a Fabric KQL database.\n\nYou need to ensure efficient data ingestion and near real-time querying for reporting.\n\nWhat should you do?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Implement Spark Structured Streaming to write data to Delta table."
+      },
+      {
+        "id": "B",
+        "text": "Store data in Azure Blob Storage and load periodically into KQL database."
+      },
+      {
+        "id": "C",
+        "text": "Use Azure Data Explorer for data storage and direct querying."
+      },
+      {
+        "id": "D",
+        "text": "Use Azure Stream Analytics for real-time data processing and querying."
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain2",
+    "topic": "Spark Structured Streaming",
+    "difficulty": "Hard",
+    "explanation": "Implementing Spark Structured Streaming to write data to a Delta table is effective because it supports efficient ingestion and near real-time querying of streaming data, aligning with the scenario's requirements. Using Azure Stream Analytics for real-time data processing and querying is not suitable as it does not integrate with Microsoft Fabric's KQL database. Storing data in Azure Blob Storage and loading it periodically fails to meet the real-time processing needs. Using Azure Data Explorer for data storage and direct querying is unsuitable as it is not directly integrated with Microsoft Fabric's KQL database.\nhttps://learn.microsoft.com/en-us/training/modules/work-delta-lake-tables-fabric",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/training/modules/work-delta-lake-tables-fabric",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-29",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "You have a Fabric eventhouse that contains a KQL database. The database stores telemetry in a table named RawTelemetry. The table contains the following columns:\n\nTimeGenerated (datetime)\nMessage (string)\nAdditionalContext (dynamic), which contains JSON values of Level (int) and DeviceId (string)\nYou need to return rows from the last five minutes for DeviceID = \"device1\". The result must include only TimeGenerated, Message, Level, and DeviceId.\n\nWhich KQL query should you run?",
+    "options": [
+      {
+        "id": "A",
+        "text": "RawTelemetry\n| summarize count() by DeviceId\n| where TimeGenerated > ago(5m) and DeviceId == \"device1\"\n| project TimeGenerated, Message, Level, DeviceId"
+      },
+      {
+        "id": "B",
+        "text": "RawTelemetry\n| where TimeGenerated > ago(5m)\n| extend Level = toint(AdditionalContext.Level),\nDeviceId = tostring(AdditionalContext.DeviceID)\n| where DeviceId == \"device1\"\n| project TimeGenerated, Message, Level, DeviceId"
+      },
+      {
+        "id": "C",
+        "text": "RawTelemetry\n| where TimeGenerated > ago(5m)\n| project TimeGenerated, Message\n| extend Level = toint(AdditionalContext.Level),\nDeviceId = tostring(AdditionalContext.DeviceID)\n| where DeviceId == \"device1\""
+      },
+      {
+        "id": "D",
+        "text": "RawTelemetry\n| where TimeGenerated between (ago(5m) .. now())\n| extend Level = toint(AdditionalContext.Level),\nDeviceId = tostring(AdditionalContext.DeviceID)\n| project TimeGenerated, Message, Level, DeviceId\n| where DeviceId == \"device1\"\n| count"
+      }
+    ],
+    "correctOptionId": "B",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain2",
+    "topic": "Kusto Query Language (KQL)",
+    "difficulty": "Hard",
+    "explanation": "Objective:\n\n2.3 Ingest and transform streaming data\n\nWhat This Item Tests:\n\nProcess data by using KQL\n\nAdditional Reading:\n\nhttps://learn.microsoft.com/en-us/training/modules/get-started-kusto-fabric/4-write-queries-kusto-query-language\nhttps://learn.microsoft.com/azure/azure-monitor/data-collection/data-collection-transformations-kql#special-considerations\nhttps://learn.microsoft.com/en-us/training/modules/write-first-query-kusto-query-language/2-understand-basic-structure-kusto-query-language\nhttps://learn.microsoft.com/fabric/real-time-intelligence/tutorial-5-query-data\n\nRationale:\n\nThe correct query filters rows from the last five minutes, extracts the Level and DeviceId values from the dynamic AdditionalContext column, filters for the specified device, and returns only the required columns. The summarize query aggregates results and does not return the required fields. Projecting before extracting values removes the AdditionalContext column needed to compute Level and DeviceId. The final query returns an aggregate count instead of the required rows.",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/training/modules/get-started-kusto-fabric/4-write-queries-kusto-query-language",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-30",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "You have a Fabric eventstream named TollEvents that ingests events containing fields named TollId and EntryTime. The query uses TIMESTAMP BY EntryTime.\n\nYou need to aggregate counts by TollId by using the following windows in the same query:\n\n1 minute\n15 minutes (hop 1 minute)\n30 minutes (hop 1 minute)\n60 minutes (hop 1 minute)\nEach output row must include a non-null label that identifies which window produced the result.\n\nWhat should you add to the query?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Windows(\nTumblingWindow(minute,1),\nHoppingWindow(minute,15,1),\nHoppingWindow(minute,30,1),\nHoppingWindow(minute,60,1)\n),\nSystem.Window().Id"
+      },
+      {
+        "id": "B",
+        "text": "Windows(\nTumblingWindow(minute,1),\nTumblingWindow(minute,15,1),\nTumblingWindow(minute,30,1),\nTumblingWindow(minute,60,1)\n),\nSystem.Window().Id"
+      },
+      {
+        "id": "C",
+        "text": "Windows(\nWindow('1 min', TumblingWindow(minute,1)),\nWindow('15 min', HoppingWindow(minute,15,1)),\nWindow('30 min', HoppingWindow(minute,30,1)),\nWindow('60 min', HoppingWindow(minute,60,1))\n),\nSystem.Window().Id"
+      },
+      {
+        "id": "D",
+        "text": "Windows(\nWindow('1 min', TumblingWindow(minute,1)),\nWindow('15 min', TumblingWindow(minute,15,1)),\nWindow('30 min', TumblingWindow(minute,30,1)),\nWindow('60 min', TumblingWindow(minute,60,1))\n),\nSystem.Window().Id"
+      }
+    ],
+    "correctOptionId": "C",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain2",
+    "topic": "Stream Windowing & System.Window().Id",
+    "difficulty": "Hard",
+    "explanation": "Objective:\n\n2.3 Ingest and transform streaming data\n\nWhat This Item Tests:\n\nCreate windowing functions\n\nAdditional Reading:\n\nhttps://learn.microsoft.com/en-us/stream-analytics-query/windows-azure-stream-analytics\nhttps://learn.microsoft.com/azure/stream-analytics/stream-analytics-stream-analytics-query-patterns#data-aggregation-over-time\n\nRationale:\n\nNaming each window with the Window() wrapper enables System.Window().Id to return a non-null label for each window result. Unnamed windows do not produce a window identifier. Partitioning with TIMESTAMP BY ... OVER does not create window labels. System.Timestamp() returns the event timestamp rather than the window identifier.",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/stream-analytics-query/windows-azure-stream-analytics",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-31",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "Your company is transitioning to a data mesh architecture using Microsoft Fabric.\n\nYou are responsible for organizing data into domains.\n\nYou need to configure settings for independent management of rules and restrictions by each business unit.\n\nWhat should you do?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Assign workspaces to multiple domains."
+      },
+      {
+        "id": "B",
+        "text": "Configure domain-specific sensitivity labels."
+      },
+      {
+        "id": "C",
+        "text": "Create workspaces with shared governance settings."
+      },
+      {
+        "id": "D",
+        "text": "Delegate tenant-level settings to domains."
+      }
+    ],
+    "correctOptionId": "D",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "Data Mesh & Domain Governance",
+    "difficulty": "Medium",
+    "explanation": "Delegating tenant-level settings to the domain level allows each business unit to manage its own governance settings, which is essential for implementing a data mesh architecture. Assigning workspaces to multiple domains complicates governance and does not support independent management. Creating workspaces with shared governance settings centralizes control and does not facilitate domain-specific governance. Configuring domain-specific sensitivity labels is related to governance but does not address the need for independent management of rules and restrictions by each business unit.\nhttps://learn.microsoft.com/en-us/fabric/governance/domains",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/fabric/governance/domains",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-32",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "Your organization uses Microsoft Fabric for data engineering.\n\nYou notice delays with Apache Spark jobs due to high demand on shared resources.\n\nYou need to optimize the Spark job execution time by configuring a custom Spark pool.\n\nWhat should you do?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Create a custom Spark pool with autoscaling enabled and set the maximum nodes based on peak load."
+      },
+      {
+        "id": "B",
+        "text": "Create a custom Spark pool with static node allocation."
+      },
+      {
+        "id": "C",
+        "text": "Enable static allocation of executors."
+      },
+      {
+        "id": "D",
+        "text": "Use a custom Spark pool with a fixed number of nodes."
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain3",
+    "topic": "Custom Spark Pools & Autoscaling",
+    "difficulty": "Medium",
+    "explanation": "Creating a custom Spark pool with autoscaling enabled and setting the maximum number of nodes based on expected peak load is effective because it allows the system to dynamically adjust resources according to demand, ensuring efficient job execution. Enabling static allocation of executors or nodes would lead to inefficient resource usage, as it fails to adapt to varying workloads. Increasing the node size of the existing starter pool is not feasible since the node size is predefined and cannot be modified. Using a custom Spark pool with a fixed number of nodes does not address the core issue of resource contention and may result in inefficient resource usage.\nhttps://learn.microsoft.com/en-us/training/modules/use-apache-spark-work-files-lakehouse/2-spark\nhttps://learn.microsoft.com/en-us/training/modules/get-started-lakehouses/2-fabric-lakehouse",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/training/modules/use-apache-spark-work-files-lakehouse/2-spark",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-33",
+    "examId": "dp700",
+    "type": "multi_select",
+    "text": "Your organization is implementing a data mesh architecture using Microsoft Fabric.\n\nThe IT department plans to delegate governance controls to business units.\n\nYou need to configure settings for independent data management by business units.\n\nWhich three actions should you perform? Each correct answer presents part of the solution.",
+    "options": [
+      {
+        "id": "A",
+        "text": "Assign domain-specific sensitivity labels."
+      },
+      {
+        "id": "B",
+        "text": "Assign workspaces to domains."
+      },
+      {
+        "id": "C",
+        "text": "Delegate tenant settings to domains."
+      },
+      {
+        "id": "D",
+        "text": "Enable domain-level sensitivity labels."
+      },
+      {
+        "id": "E",
+        "text": "Implement row-level security."
+      },
+      {
+        "id": "F",
+        "text": "Specify domain administrators."
+      }
+    ],
+    "correctOptionId": "B",
+    "correctOptionIds": [
+      "B",
+      "C",
+      "F"
+    ],
+    "selectCount": 3,
+    "domain": "domain1",
+    "topic": "Data Mesh Administration",
+    "difficulty": "Medium",
+    "explanation": "Assigning workspaces to specific domains ensures that all data within those workspaces is governed by the domain's rules and restrictions. Delegating tenant-level settings to the domain level allows each business unit to define its own rules and restrictions, enabling domain-specific governance. Specifying domain admins allows for effective management of domain settings and ensures that domain-specific governance is enforced. Implementing row-level security is a common data governance practice, but it does not directly enable domain-level governance in a data mesh architecture. Assigning domain-specific sensitivity labels is related to data protection but does not directly enable independent data management by business units.\nhttps://learn.microsoft.com/en-us/fabric/governance/domains",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/fabric/governance/domains",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-34",
+    "examId": "dp700",
+    "type": "multi_select",
+    "text": "Your organization uses Microsoft Fabric to manage data engineering tasks. The current setup includes a starter pool for Apache Spark jobs.\n\nYou notice that some jobs require more compute resources than the starter pool can provide.\n\nYou need to optimize the workspace configuration to efficiently handle larger Spark jobs without significantly increasing session start times.\n\nWhich two actions should you perform? Each correct answer presents part of the solution.",
+    "options": [
+      {
+        "id": "A",
+        "text": "Create a custom Spark pool with autoscaling."
+      },
+      {
+        "id": "B",
+        "text": "Disable the starter pool."
+      },
+      {
+        "id": "C",
+        "text": "Enable dynamic allocation of executors."
+      },
+      {
+        "id": "D",
+        "text": "Increase executor memory in the starter pool."
+      },
+      {
+        "id": "E",
+        "text": "Increase the number of partitions in the Spark job."
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": [
+      "A",
+      "C"
+    ],
+    "selectCount": 2,
+    "domain": "domain3",
+    "topic": "Dynamic Executor Allocation",
+    "difficulty": "Medium",
+    "explanation": "Creating a custom Spark pool with autoscaling allows for specifying node sizes and enabling dynamic resource allocation, which is essential for handling larger Spark jobs. Enabling dynamic allocation of executors further optimizes resource usage by adjusting the number of executors based on workload demands. Disabling the starter pool without a custom pool reduces available resources, while increasing executor memory in the starter pool lacks the dynamic aspect needed for efficient resource management. Increasing the number of partitions does not address the core issue of managing larger Spark jobs.\nhttps://learn.microsoft.com/en-us/training/modules/use-apache-spark-work-files-lakehouse/2-spark",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/training/modules/use-apache-spark-work-files-lakehouse/2-spark",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-35",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "You have a Fabric workspace named Workspace1 that contains an Apache Spark pool.\n\nYou plan to create a notebook named Notebook1 in Workspace1.\n\nYou need to ensure that Notebook1 uses high concurrency mode so that Spark sessions can be shared across multiple concurrent users or processes.\n\nWhich Workspace settings should you configure?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Data Engineering/Science > Spark Settings"
+      },
+      {
+        "id": "B",
+        "text": "Data Factory"
+      },
+      {
+        "id": "C",
+        "text": "Data Warehouse"
+      },
+      {
+        "id": "D",
+        "text": "Delegated Settings"
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain3",
+    "topic": "Spark High Concurrency Settings",
+    "difficulty": "Easy",
+    "explanation": "High concurrency for Spark is controlled via Data Engineering/Science Settings; other settings are unrelated.\nhttps://learn.microsoft.com/en-us/training/modules/use-apache-spark-work-files-lakehouse/2-spark",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/training/modules/use-apache-spark-work-files-lakehouse/2-spark",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-36",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "You are implementing an analytics solution using Microsoft Fabric with a deployment pipeline: Development, Test, and Production.\n\nYou need to configure the deployment pipeline to deploy only specific content from Test to Production.\n\nWhat should you do?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Deploy all content"
+      },
+      {
+        "id": "B",
+        "text": "Modify deployment rules for the Test stage."
+      },
+      {
+        "id": "C",
+        "text": "Modify the existing pipeline by removing unnecessary content."
+      },
+      {
+        "id": "D",
+        "text": "Use selective deployment."
+      }
+    ],
+    "correctOptionId": "D",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "Deployment Pipelines Selective Promotion",
+    "difficulty": "Easy",
+    "explanation": "Using selective deployment is the correct approach to choose specific content for deployment from the Test stage to the Production stage. Modifying deployment rules affects how content is deployed but does not allow for selective deployment of specific content. Modifying the existing pipeline by removing unnecessary content does not utilize the selective deployment feature, which allows for specific content deployment without altering the pipeline structure. Deploying all content updates everything in the target stage, which does not meet the requirement of deploying only specific content.\nhttps://learn.microsoft.com/en-us/fabric/cicd/deployment-pipelines/get-started-with-deployment-pipelines",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/fabric/cicd/deployment-pipelines/get-started-with-deployment-pipelines",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-37",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "Your organization uses Microsoft Fabric deployment pipelines to manage analytics solutions across Development, Test, and Production stages.\n\nYou need to restrict editing of pipeline settings to authorized users only.\n\nWhat should you do?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Assign pipeline admin roles."
+      },
+      {
+        "id": "B",
+        "text": "Configure workspace permissions."
+      },
+      {
+        "id": "C",
+        "text": "Configure item permissions on Environment."
+      },
+      {
+        "id": "D",
+        "text": "Implement role-based access control."
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "Deployment Pipeline Admin Roles",
+    "difficulty": "Medium",
+    "explanation": "To ensure that only authorized users can edit pipeline settings, assigning pipeline admin roles is essential. This approach maintains security and control over the deployment process. Configuring workspace permissions involves setting access levels for users within a workspace, but it does not specifically restrict editing of pipeline settings. Implementing role-based access control manages user permissions but does not specifically influence who can edit pipeline settings.\n\nhttps://learn.microsoft.com/en-us/fabric/cicd/deployment-pipelines/understand-the-deployment-process\nhttps://learn.microsoft.com/en-us/fabric/cicd/deployment-pipelines/get-started-with-deployment-pipelines",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/fabric/cicd/deployment-pipelines/understand-the-deployment-process",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-38",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "Your organization uses Microsoft Fabric for analytics solutions.\n\nYou plan to set up deployment pipelines for transitions between development, testing, and production environments.\n\nYou need to ensure only verified changes are promoted to production.\n\nWhat should you do?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Assign one workspace to all stages."
+      },
+      {
+        "id": "B",
+        "text": "Create unique deployment rules for each stage."
+      },
+      {
+        "id": "C",
+        "text": "Deploy content across all stages simultaneously."
+      },
+      {
+        "id": "D",
+        "text": "Use selective deployment for content control."
+      }
+    ],
+    "correctOptionId": "D",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "Deployment Pipeline Quality Control",
+    "difficulty": "Easy",
+    "explanation": "Assigning one workspace to all stages undermines the separation of environments, which is vital for effective deployment management. Deploying content across all stages simultaneously bypasses necessary testing and control measures, risking untested changes reaching production. Using selective deployment allows specific content movement, ensuring only tested changes reach production, providing control over the deployment process.\nhttps://learn.microsoft.com/en-us/fabric/cicd/deployment-pipelines/deploy-content\nhttps://learn.microsoft.com/en-us/fabric/cicd/deployment-pipelines/create-rules",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/fabric/cicd/deployment-pipelines/deploy-content",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-39",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "You have a Fabric workspace named Workspace1 that contains a notebook named Notebook1.\n\nYou need to implement version control for Notebook1. The solution must ensure that you can revert Notebook1 to any previous state.\n\nWhat should you do?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Add Notebook1 to an Azure Data Factory pipeline."
+      },
+      {
+        "id": "B",
+        "text": "Connect Workspace1 to a Git repository."
+      },
+      {
+        "id": "C",
+        "text": "Create a deployment pipeline."
+      },
+      {
+        "id": "D",
+        "text": "Create a branch and switch branches in Workspace1."
+      }
+    ],
+    "correctOptionId": "B",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "Git Integration & Version Control",
+    "difficulty": "Easy",
+    "explanation": "Connecting the workspace to Git enables commits and versioning; deployment pipelines move content between stages, branching requires a Git repo first, and Data Factory pipelines do not provide source control.\nhttps://learn.microsoft.com/en-us/fabric/data-engineering/notebook-source-control-deployment",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/fabric/data-engineering/notebook-source-control-deployment",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-40",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "You have a Fabric workspace named Workspace1 that contains two datasets named datasetA and datasetB.\n\nYou plan to use a deployment pipeline in Workspace1.\n\nYou create a pipeline named pipeline1 and add a development stage and a test stage. You assign Workspace1 to the Development stage of pipeline1. You create another workspace Workspace2.\n\nWhat will occur when you assign Workspace2 to the test stage of pipeline1?",
+    "options": [
+      {
+        "id": "A",
+        "text": "datasetA and datasetB will be copied to Workspace2."
+      },
+      {
+        "id": "B",
+        "text": "No changes will occur."
+      },
+      {
+        "id": "C",
+        "text": "The development stage will be renamed as test."
+      },
+      {
+        "id": "D",
+        "text": "Workspace2 will be empty."
+      }
+    ],
+    "correctOptionId": "B",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "Deployment Pipeline Stage Linking",
+    "difficulty": "Medium",
+    "explanation": "In Microsoft Fabric deployment pipelines, assigning a workspace to a stage (such as Test) does not automatically copy or deploy artifacts from the previous stage. The assignment simply links the target workspace to that stage in the pipeline. Content such as datasetA and datasetB is only copied when you explicitly run a deployment from the Development stage to the Test stage. Therefore, when Workspace2 is assigned to the Test stage, no datasets are transferred and no structural changes occur until a deployment action is performed.\nhttps://learn.microsoft.com/en-us/fabric/cicd/deployment-pipelines/understand-the-deployment-process?tabs=new-ui\nhttps://learn.microsoft.com/en-us/training/modules/implement-cicd-in-fabric/4-implement-deployment-pipelines",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/fabric/cicd/deployment-pipelines/understand-the-deployment-process?tabs=new-ui",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-41",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "You have a Fabric workspace named Sales-Dev that is connected to an Azure DevOps Git repository. The workspace contains a notebook and a lakehouse.\n\nA recent notebook change breaks an orchestration process. A previous working version exists in the Git commit history.\n\nYou need to restore the workspace items to a previous committed version from the Git repository.\n\nWhat should you do?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Use undo in the notebook in the Fabric workspace, and then commit the changes to Git."
+      },
+      {
+        "id": "B",
+        "text": "Create a deployment pipeline and redeploy the items from the Development stage to the Test stage."
+      },
+      {
+        "id": "C",
+        "text": "Copy the item directory in the Git repository, change the logicalId and display name, and then sync the workspace."
+      },
+      {
+        "id": "D",
+        "text": "Use git revert or git reset in the Git repository to restore the repository to a previous commit, and then sync the workspace from source control."
+      }
+    ],
+    "correctOptionId": "D",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "Git Revert / Sync Recovery",
+    "difficulty": "Hard",
+    "explanation": "Objective:\n\n1.2 Implement lifecycle management in Fabric\n\nWhat This Item Tests:\n\nConfigure version control\n\nAdditional Reading:\n\nhttps://learn.microsoft.com/fabric/cicd/best-practices-cicd#best-practices-for-deployment-pipelines-development-stage\nhttps://learn.microsoft.com/training/modules/implement-cicd-in-fabric/2-understand-cicd\nhttps://learn.microsoft.com/fabric/data-science/data-agent-source-control\n\nRationale:\n\nRestoring a previous version requires reverting or resetting the Git repository to an earlier commit and then syncing the workspace from source control; Using undo in the workspace does not restore version-controlled history; Deployment pipelines are used for promotion across environments, not rollback; Manually modifying repository files and identifiers is not a supported or reliable recovery method.",
+    "msLearnUrl": "https://learn.microsoft.com/fabric/cicd/best-practices-cicd#best-practices-for-deployment-pipelines-development-stage",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-42",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "Your organization is using Microsoft Fabric to manage a data warehouse containing sensitive financial data, including columns such as AccountNumber, Balance, and TransactionHistory.\n\nYou need to ensure that only authorized finance team members can view the TransactionHistory column.\n\nWhat should you use?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Column-Level Security"
+      },
+      {
+        "id": "B",
+        "text": "Sensitivity Label"
+      },
+      {
+        "id": "C",
+        "text": "Dynamic Data Masking"
+      },
+      {
+        "id": "D",
+        "text": "Row-Level Security"
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "Column-Level Security (CLS)",
+    "difficulty": "Easy",
+    "explanation": "Column-Level Security is essential for controlling access to specific columns, such as TransactionHistory, ensuring that only authorized users can view sensitive financial data. Dynamic Data Masking obscures sensitive data but does not provide access control to specific columns. Row-Level Security manages permissions at a row level, lacking the necessary granularity for protecting individual columns.\nhttps://learn.microsoft.com/en-us/fabric/data-warehouse/security",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/fabric/data-warehouse/security",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-43",
+    "examId": "dp700",
+    "type": "multi_select",
+    "text": "Your company is using Microsoft Fabric to manage a data warehouse that contains a table with sensitive employee information.\n\nThe table contains columns such as EmployeeID, Name, Salary, and SocialSecurityNumber.\n\nYou need to restrict access to the Salary and SocialSecurityNumber columns to HR personnel only.\n\nWhich three actions should you perform? Each correct answer presents part of the solution.",
+    "options": [
+      {
+        "id": "A",
+        "text": "Create a view to restrict access to the Salary and SocialSecurityNumber columns."
+      },
+      {
+        "id": "B",
+        "text": "Create an HR role and assign it to HR personnel."
+      },
+      {
+        "id": "C",
+        "text": "Deny SELECT permission on the sensitive columns to other roles."
+      },
+      {
+        "id": "D",
+        "text": "Grant SELECT permission on the sensitive columns to the HR role."
+      },
+      {
+        "id": "E",
+        "text": "Use dynamic data masking on the sensitive columns."
+      }
+    ],
+    "correctOptionId": "B",
+    "correctOptionIds": [
+      "B",
+      "C",
+      "D"
+    ],
+    "selectCount": 3,
+    "domain": "domain1",
+    "topic": "Column-Level SQL Grant/Deny Roles",
+    "difficulty": "Medium",
+    "explanation": "Creating an HR role and granting it SELECT permission on the sensitive columns ensures that only HR personnel can access the Salary and SocialSecurityNumber data. Denying SELECT permission to all other roles further secures the data by preventing unauthorized access. Creating a view is not appropriate for this scenario, as it does not provide the required column-level access control.\n\nhttps://learn.microsoft.com/en-us/fabric/data-warehouse/security\nhttps://learn.microsoft.com/en-us/fabric/data-warehouse/sql-granular-permissions",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/fabric/data-warehouse/security",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-44",
+    "examId": "dp700",
+    "type": "multi_select",
+    "text": "Your company has a data warehouse in Microsoft Fabric to store sales data.\n\nDifferent departments need access to the data, but each department should only see data relevant to their operations.\n\nYou need to configure the data warehouse so that each department can only view its own sales data.\n\nWhich two actions should you perform? Each correct answer presents part of the solution.",
+    "options": [
+      {
+        "id": "A",
+        "text": "Create a security policy with a filter predicate for departments."
+      },
+      {
+        "id": "B",
+        "text": "Create a view that filters data based on department column values."
+      },
+      {
+        "id": "C",
+        "text": "Implement column-level security for sensitive sales data."
+      },
+      {
+        "id": "D",
+        "text": "Create a function to return department values based on USER_NAME()"
+      }
+    ],
+    "correctOptionId": "A",
+    "correctOptionIds": [
+      "A",
+      "D"
+    ],
+    "selectCount": 2,
+    "domain": "domain1",
+    "topic": "Row-Level Security (RLS) Predicates",
+    "difficulty": "Hard",
+    "explanation": "The correct answers are to create a security policy with a filter predicate for departments and create a function to return department values based on USER_NAME() because implementing Row-Level Security (RLS) in Microsoft Fabric data warehouses requires a predicate function that determines which rows a user can access and a security policy that applies that function as a filter predicate to the table. The function evaluates the current user’s identity (for example, using USER_NAME()) and returns only the department rows they are authorized to see, while the security policy enforces this logic automatically for all queries. Creating a view does not enforce security, and column-level security does not restrict rows, so both are insufficient for ensuring each department only sees its own sales data.\nhttps://learn.microsoft.com/en-us/fabric/data-warehouse/row-level-security",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/fabric/data-warehouse/row-level-security",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-45",
+    "examId": "dp700",
+    "type": "multi_select",
+    "text": "Your organization uses Microsoft Fabric to manage a data warehouse that contains sensitive customer information.\n\nYou need to prevent nonprivileged users from viewing full email addresses and credit card numbers.\n\nWhich two actions should you perform? Each correct answer presents part of the solution.",
+    "options": [
+      {
+        "id": "A",
+        "text": "Apply column-level security to restrict access to sensitive columns."
+      },
+      {
+        "id": "B",
+        "text": "Implement row-level security to restrict access to sensitive data."
+      },
+      {
+        "id": "C",
+        "text": "Use dynamic data masking on CreditCardNumber with partial() function."
+      },
+      {
+        "id": "D",
+        "text": "Use dynamic data masking on Email with email() function."
+      }
+    ],
+    "correctOptionId": "C",
+    "correctOptionIds": [
+      "C",
+      "D"
+    ],
+    "selectCount": 2,
+    "domain": "domain1",
+    "topic": "Dynamic Data Masking (DDM)",
+    "difficulty": "Medium",
+    "explanation": "Implementing dynamic data masking on the Email and CreditCardNumber columns ensures that nonprivileged users can access the data without seeing sensitive information. Row-level security controls access to specific rows, which might seem like a way to protect sensitive data but does not mask it.\nhttps://learn.microsoft.com/en-us/sql/relational-databases/security/dynamic-data-masking",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/sql/relational-databases/security/dynamic-data-masking",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-46",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "You have a Fabric workspace named Sales-Prod that contains a data warehouse named SalesDW.\n\nYou have a Microsoft Entra group named Sales Analysts that is not assigned a workspace role.\n\nYou grant Sales Analysts the Read permission on SalesDW, but users in the group cannot run SELECT queries.\n\nYou need to ensure that the group can query only a table named dbo.FactSales and prevent access to all other tables. The solution must NOT grant access to all the items in the workspace.\n\nWhat should you do?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Assign the Sales Analysts group the Viewer workspace role in Sales-Prod."
+      },
+      {
+        "id": "B",
+        "text": "Create a row-level security (RLS) predicate on dbo.FactSales for the Sales Analysts group."
+      },
+      {
+        "id": "C",
+        "text": "Grant the SELECT permission on dbo.FactSales to the Sales Analysts group by using T-SQL in SalesDW."
+      },
+      {
+        "id": "D",
+        "text": "Apply a sensitivity label to SalesDW and configure Microsoft Purview to allow only the Sales Analysts group."
+      }
+    ],
+    "correctOptionId": "C",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "Granular SQL Permissions & Compute Access",
+    "difficulty": "Hard",
+    "explanation": "Objective:\n\n1.3 Configure security and governance\n\nWhat This Item Tests:\n\nImplement row-level, column-level, object-level, and folder/file-level access controls\n\nAdditional Reading:\nhttps://learn.microsoft.com/en-us/fabric/security/permission-model#compute-permissions\nhttps://learn.microsoft.com/en-us/training/modules/secure-data-access-in-fabric/2-understand-fabric-security-model\nhttps://learn.microsoft.com/en-us/fabric/governance/governance-compliance-overview#secure,-protect,-and-comply\nRationale:\n\nIn a Fabric data warehouse, users must have compute-level permissions to query tables. Granting SELECT on dbo.FactSales by using T-SQL provides object-level access to that specific table without granting broader workspace permissions. Adding the group to the Viewer role grants access to all the items in the workspace, violating the requirement. RLS filters rows but does not restrict which tables can be queried. Sensitivity labels classify and protect data but do not enforce table-level query permissions.",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/fabric/security/permission-model#compute-permissions",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-47",
+    "examId": "dp700",
+    "type": "multi_select",
+    "text": "Your organization uses Microsoft Fabric for managing data pipelines in a large-scale ETL process. The current setup involves multiple pipelines triggered by specific events and schedules, facing challenges with hard-coded values.\n\nYou need to implement dynamic parameterization to enhance flexibility and reduce maintenance.\n\nWhich two settings should you configure? Each correct answer presents part of the solution.",
+    "options": [
+      {
+        "id": "A",
+        "text": "Hard-code values in the configuration."
+      },
+      {
+        "id": "B",
+        "text": "Pass external values using pipeline parameters."
+      },
+      {
+        "id": "C",
+        "text": "Use dynamic expressions for runtime evaluation."
+      },
+      {
+        "id": "D",
+        "text": "Use static triggers for pipeline execution."
+      },
+      {
+        "id": "E",
+        "text": "Use static values in expressions."
+      }
+    ],
+    "correctOptionId": "B",
+    "correctOptionIds": [
+      "B",
+      "C"
+    ],
+    "selectCount": 2,
+    "domain": "domain1",
+    "topic": "Pipeline Dynamic Expressions",
+    "difficulty": "Medium",
+    "explanation": "Hard-coding values in the configuration contradicts the goal of reducing maintenance overhead and increasing flexibility. Using dynamic expressions for runtime evaluation allows parameter values to be evaluated at runtime, providing the flexibility needed to adapt to different scenarios without changing the pipeline code. Using static values in expressions does not provide the flexibility needed for dynamic parameterization. Using static triggers for pipeline execution does not provide the flexibility required for dynamic parameterization. Passing external values using pipeline parameters allows you to pass external values into the pipelines, making them more flexible and reducing the need for hard-coded values.\n\nLoad data using T-SQL - Training | Microsoft Learn\nhttps://learn.microsoft.com/en-us/fabric/data-factory/parameters",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/fabric/data-factory/parameters",
+    "msLearnTitle": "Load data using T-SQL - Training | Microsoft Learn"
+  },
+  {
+    "id": "dp700-48",
+    "examId": "dp700",
+    "type": "multi_select",
+    "text": "Your organization uses Microsoft Fabric for managing data pipelines in a large-scale ETL process. The setup involves multiple pipelines that must handle different datasets dynamically, reducing hardcoding and improving maintainability.\n\nYou need to reuse pipeline components with varying inputs during execution.\n\nWhich two settings should you configure? Each correct answer presents part of the solution.",
+    "options": [
+      {
+        "id": "A",
+        "text": "Hardcode dataset paths."
+      },
+      {
+        "id": "B",
+        "text": "Pass external values as parameters."
+      },
+      {
+        "id": "C",
+        "text": "Use fixed dataset configurations."
+      },
+      {
+        "id": "D",
+        "text": "Use string interpolation."
+      }
+    ],
+    "correctOptionId": "B",
+    "correctOptionIds": [
+      "B",
+      "D"
+    ],
+    "selectCount": 2,
+    "domain": "domain1",
+    "topic": "Pipeline Parameters & String Interpolation",
+    "difficulty": "Medium",
+    "explanation": "Hardcoding dataset paths does not support dynamic execution and requires manual changes for each dataset, which is inefficient. Using string interpolation is effective as it allows the construction of dynamic expressions by incorporating parameter values, facilitating the handling of various datasets. Passing external values as parameters is crucial for dynamic execution, as it enables the pipeline to adapt to different datasets without hardcoding. Fixed dataset configurations are unsuitable because they lack the flexibility needed for runtime changes, failing to meet the dynamic requirements of the scenario.\n\nLoad data using T-SQL - Training | Microsoft Learn\nhttps://learn.microsoft.com/en-us/fabric/data-factory/parameters\nhttps://learn.microsoft.com/en-us/fabric/data-factory/expression-language",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/fabric/data-factory/parameters",
+    "msLearnTitle": "Load data using T-SQL - Training | Microsoft Learn"
+  },
+  {
+    "id": "dp700-49",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "You have a pipeline in a Fabric workspace.\n\nYou need to configure the pipeline to run automatically once per day.\n\nWhich type of trigger should you use?",
+    "options": [
+      {
+        "id": "A",
+        "text": "custom events"
+      },
+      {
+        "id": "B",
+        "text": "schedule"
+      },
+      {
+        "id": "C",
+        "text": "storage events"
+      },
+      {
+        "id": "D",
+        "text": "tumbling window"
+      }
+    ],
+    "correctOptionId": "B",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "Pipeline Triggers (Schedule)",
+    "difficulty": "Easy",
+    "explanation": "Schedule triggers run pipelines on a defined cadence (daily/hourly); custom events trigger on specific events, tumbling windows are interval-based but not simply “once per day”, and storage events react to storage changes.\nhttps://learn.microsoft.com/en-us/fabric/data-factory/pipeline-runs",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/fabric/data-factory/pipeline-runs",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  },
+  {
+    "id": "dp700-50",
+    "examId": "dp700",
+    "type": "multiple_choice",
+    "text": "You have a Data Factory pipeline in Fabric that runs the following three notebook activities in sequence: ingest_bronze, transform_silver, and load_gold. Each notebook uses a widget named process_date. The pipeline is triggered on demand.\n\nOperators must be able to run the pipeline for different dates without modifying the notebook code.\n\nYou need to pass the same process_date value to all three notebook activities at runtime.\n\nWhat should you do?",
+    "options": [
+      {
+        "id": "A",
+        "text": "In transform_silver, use %run to run ingest_bronze, and in load_gold, use %run to run transform_silver."
+      },
+      {
+        "id": "B",
+        "text": "Create a pipeline variable named process_date, and set each notebook activity notebookPath value to @{variables('process_date')}."
+      },
+      {
+        "id": "C",
+        "text": "In ingest_bronze, use dbutils.notebook.exit(process_date), and in the other notebook activities use @{activity('ingest_bronze').output.runOutput}."
+      },
+      {
+        "id": "D",
+        "text": "Add a pipeline parameter named process_date, and set each notebook activity baseParameters value for process_date to @{pipeline().parameters.process_date}."
+      }
+    ],
+    "correctOptionId": "D",
+    "correctOptionIds": null,
+    "selectCount": null,
+    "domain": "domain1",
+    "topic": "Notebook Activity baseParameters Orchestration",
+    "difficulty": "Hard",
+    "explanation": "Objective:\n\n1.4 Orchestrate processes\n\nWhat This Item Tests:\n\nImplement orchestration patterns with notebooks and pipelines, including parameters and dynamic expressions\n\nAdditional Reading:\nhttps://learn.microsoft.com/en-us/fabric/data-factory/pipeline-overview#key-pipeline-components\nhttps://learn.microsoft.com/azure/data-factory/transform-data-databricks-notebook#passing-parameters-between-notebooks-and-pipelines\nhttps://learn.microsoft.com/azure/databricks/notebooks/notebook-workflows\nRationale:\n\nA pipeline parameter is the correct way to pass a runtime value into multiple notebook activities. Setting the notebook activity base parameters to the pipeline parameter ensures that each notebook receives the same process_date value for that run. A pipeline variable cannot be used as a notebook path to pass widget values. Returning a value from one notebook by using dbutils.notebook.exit does not replace passing the input parameter to each notebook. Using %run combines notebook execution logic inside notebooks and does not configure the pipeline to pass a runtime parameter to all activities.",
+    "msLearnUrl": "https://learn.microsoft.com/en-us/fabric/data-factory/pipeline-overview#key-pipeline-components",
+    "msLearnTitle": "Implement Data Engineering Solutions Using Microsoft Fabric"
+  }
+];

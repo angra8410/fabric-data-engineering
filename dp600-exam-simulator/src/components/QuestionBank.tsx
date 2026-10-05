@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Question, DomainId, DOMAINS, UserStats } from '../types';
+import { Question, DomainId, UserStats, ExamId, getDomainsForExam } from '../types';
 import { storageService } from '../services/storageService';
 import { 
   Search, 
@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 
 interface QuestionBankProps {
+  activeExam?: ExamId;
   questions: Question[];
   stats: UserStats;
   onPracticeQuestion: (questionId: string) => void;
@@ -32,8 +33,10 @@ export const QuestionBank: React.FC<QuestionBankProps> = ({
   stats,
   onPracticeQuestion,
   onPracticeAll,
-  onStatsChange
+  onStatsChange,
+  activeExam = 'dp700'
 }) => {
+  const examDomains = getDomainsForExam(activeExam);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDomain, setSelectedDomain] = useState<DomainId | 'all'>('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all');
@@ -82,7 +85,7 @@ export const QuestionBank: React.FC<QuestionBankProps> = ({
         const inId = q.id.toLowerCase().includes(query);
         const inText = q.text.toLowerCase().includes(query);
         const inTopic = q.topic.toLowerCase().includes(query);
-        const inDomain = DOMAINS[q.domain].name.toLowerCase().includes(query);
+        const inDomain = examDomains[q.domain].name.toLowerCase().includes(query);
         const inExplanation = q.explanation.toLowerCase().includes(query);
         const inOptions = q.options.some(opt => opt.text.toLowerCase().includes(query));
         const inCode = q.codeSnippet?.code.toLowerCase().includes(query);
@@ -271,7 +274,7 @@ export const QuestionBank: React.FC<QuestionBankProps> = ({
 
                     {/* Domain Pill */}
                     <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-teal-500/10 text-teal-300 border border-teal-500/20">
-                      {DOMAINS[q.domain].code}
+                      {examDomains[q.domain].code}
                     </span>
 
                     {/* Difficulty */}
@@ -352,7 +355,7 @@ export const QuestionBank: React.FC<QuestionBankProps> = ({
 
                   <div className="flex items-center justify-between text-xs text-slate-400 pt-1">
                     <span className="text-[11px] text-slate-400">
-                      Topic: <span className="text-slate-300 font-semibold">{q.topic}</span> • {DOMAINS[q.domain].name}
+                      Topic: <span className="text-slate-300 font-semibold">{q.topic}</span> • {examDomains[q.domain].name}
                     </span>
 
                     <button

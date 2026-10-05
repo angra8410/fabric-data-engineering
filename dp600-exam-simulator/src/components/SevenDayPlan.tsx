@@ -1,5 +1,5 @@
 import React from 'react';
-import { UserStats, Question, DomainId } from '../types';
+import { UserStats, Question, DomainId, ExamId, EXAMS } from '../types';
 import { 
   Calendar, 
   CheckCircle2, 
@@ -15,12 +15,14 @@ import {
   Code2,
   Cpu,
   BarChart3,
-  Award
+  Award,
+  Zap
 } from 'lucide-react';
 
 interface SevenDayPlanProps {
   stats: UserStats;
   questions: Question[];
+  activeExam?: ExamId;
   onStartDay: (dayNumber: number, domainFilter?: DomainId, topicKeyword?: string) => void;
   onStartExam: () => void;
   onViewStudyGuide: (domainFilter?: DomainId) => void;
@@ -41,11 +43,79 @@ interface DayPlan {
 export const SevenDayPlan: React.FC<SevenDayPlanProps> = ({
   stats,
   questions,
+  activeExam = 'dp700',
   onStartDay,
   onStartExam,
   onViewStudyGuide
 }) => {
-  const days: DayPlan[] = [
+  const dp700Days: DayPlan[] = [
+    {
+      day: 1,
+      tag: 'Security & Governance',
+      domain: 'domain1',
+      title: 'Domain 1: Security, RLS, CLS, DDM & Data Mesh',
+      description: 'Master Row-Level Security predicates, Column-Level Security roles, Dynamic Data Masking, T-SQL compute permissions, and Data Mesh domain settings.',
+      topics: ['Row-Level Security (RLS)', 'Column-Level Security (CLS)', 'Dynamic Data Masking (DDM)', 'Granular T-SQL Grants', 'Domain Tenant Delegation'],
+      icon: <ShieldCheck className="w-5 h-5 text-amber-400" />
+    },
+    {
+      day: 2,
+      tag: 'CI/CD & Git ALM',
+      domain: 'domain1',
+      title: 'Domain 1: Git Integration, Rollback & Deployment Pipelines',
+      description: 'Master Azure DevOps Git syncing, git revert/reset recovery, selective stage deployments, stage workspace linking, and pipeline admin roles.',
+      topics: ['Git Integration & Version Control', 'Git Revert & Sync Recovery', 'Selective Deployment Promotion', 'Stage Linking Behaviors', 'Pipeline Admin Security'],
+      icon: <Layers className="w-5 h-5 text-sky-400" />
+    },
+    {
+      day: 3,
+      tag: 'Pipelines & Orchestration',
+      domain: 'domain1',
+      title: 'Domain 1: Data Factory Orchestration, Parameters & Triggers',
+      description: 'Master pipeline parameters, string interpolation, runtime dynamic expressions, notebook baseParameters, ForEach arrays, and schedule triggers.',
+      topics: ['Pipeline Parameters & Dynamic Expressions', 'Notebook baseParameters Passing', 'ForEach Array Types & @json()', 'Schedule Triggers', 'Fail Activity Termination'],
+      icon: <Code2 className="w-5 h-5 text-purple-400" />
+    },
+    {
+      day: 4,
+      tag: 'OneLake & Batch Loading',
+      domain: 'domain2',
+      title: 'Domain 2: Shortcuts, Mirrored DBs, COPY & CTAS',
+      description: 'Master OneLake shortcuts without data duplication, near real-time Database Mirroring, high-throughput COPY with SAS, cross-database CTAS, and SCD Type 2.',
+      topics: ['OneLake Shortcuts (Zero-Copy)', 'Mirrored Databases (Azure SQL)', 'T-SQL COPY with SAS Token', 'CTAS Cross-Database Tables', 'SCD Type 2 Dimension Tables'],
+      icon: <Database className="w-5 h-5 text-emerald-400" />
+    },
+    {
+      day: 5,
+      tag: 'Eventstreams & KQL',
+      domain: 'domain2',
+      title: 'Domain 2: Real-Time Intelligence, Eventstreams & KQL',
+      description: 'Master Eventstreams with Azure Event Hub, no-code Event Processors, KQL database queries on dynamic JSON, and Stream Analytics windowing functions.',
+      topics: ['Eventstreams & Event Processor', 'KQL Dynamic JSON & extend/project', 'Stream Windowing (Tumbling & Hopping)', 'Spark Streaming to Delta', 'Diverse Storage Architecture'],
+      icon: <Zap className="w-5 h-5 text-amber-400" />
+    },
+    {
+      day: 6,
+      tag: 'Monitoring & Optimization',
+      domain: 'domain3',
+      title: 'Domain 3: Monitor Hub, Activator & Delta Maintenance',
+      description: 'Master Monitor hub activity filtering, Fabric Activator automated alerts, Delta table V-Order, OPTIMIZE, autoCompact/optimizeWrite, and custom Spark pool autoscaling.',
+      topics: ['Monitor Hub Filtering & Alerts', 'Fabric Activator Event Thresholds', 'Delta Auto-Compaction & Optimize Write', 'Custom Spark Pools & Autoscaling', 'Spark Session Timeout & Concurrency'],
+      icon: <Cpu className="w-5 h-5 text-rose-400" />
+    },
+    {
+      day: 7,
+      tag: 'Full DP-700 Mock Exam',
+      domain: 'domain1',
+      title: 'Comprehensive DP-700 Mock Exam (100 mins)',
+      description: 'Full 50-question timed exam under Pearson VUE conditions covering all official Microsoft Data Engineering objectives.',
+      topics: ['50 Timed Questions', '100 Minutes', 'Passing Score: 700 / 1000', 'Full Explanations & Study Drill'],
+      icon: <Award className="w-5 h-5 text-amber-400" />,
+      isExamDay: true
+    }
+  ];
+
+  const dp600Days: DayPlan[] = [
     {
       day: 1,
       tag: 'Workspaces & CU Admin',
@@ -114,6 +184,8 @@ export const SevenDayPlan: React.FC<SevenDayPlanProps> = ({
       isExamDay: true
     }
   ];
+
+  const days = activeExam === 'dp700' ? dp700Days : dp600Days;
 
   // Calculate day completion and accuracy metrics
   const getDayStatus = (day: DayPlan) => {

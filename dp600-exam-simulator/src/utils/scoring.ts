@@ -1,11 +1,13 @@
-import { Question, ExamAttempt, DomainId, DOMAINS } from '../types';
+import { Question, ExamAttempt, DomainId, DomainInfo, DOMAINS } from '../types';
 
 export function calculateExamScore(
   questions: Question[],
   userAnswers: Record<string, string>,
   timeSpentSeconds: number,
-  flaggedQuestionIds: string[]
+  flaggedQuestionIds: string[],
+  domains?: Record<DomainId, DomainInfo>
 ): ExamAttempt {
+  const targetDomains = domains || DOMAINS;
   let correctCount = 0;
   const domainTotals: Record<DomainId, { total: number; correct: number; percentage: number }> = {
     domain1: { total: 0, correct: 0, percentage: 0 },
@@ -68,10 +70,10 @@ export function calculateExamScore(
     .map(([topic]) => topic);
 
   // Scaled Score (200 - 1000, pass threshold 700)
-  // Weighted by official DP-600 domain distribution
-  const w1 = DOMAINS.domain1.minWeight + (DOMAINS.domain1.maxWeight - DOMAINS.domain1.minWeight) / 2; // ~0.125
-  const w2 = DOMAINS.domain2.minWeight + (DOMAINS.domain2.maxWeight - DOMAINS.domain2.minWeight) / 2; // ~0.425
-  const w3 = DOMAINS.domain3.minWeight + (DOMAINS.domain3.maxWeight - DOMAINS.domain3.minWeight) / 2; // ~0.425
+  // Weighted by official exam domain distribution
+  const w1 = targetDomains.domain1.minWeight + (targetDomains.domain1.maxWeight - targetDomains.domain1.minWeight) / 2;
+  const w2 = targetDomains.domain2.minWeight + (targetDomains.domain2.maxWeight - targetDomains.domain2.minWeight) / 2;
+  const w3 = targetDomains.domain3.minWeight + (targetDomains.domain3.maxWeight - targetDomains.domain3.minWeight) / 2;
 
   let weightedAccuracy = 0;
   if (questions.length > 0) {

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { UserStats, Question, DOMAINS, DomainId } from '../types';
+import { UserStats, Question, DomainId, ExamId, getDomainsForExam } from '../types';
 import { 
   TrendingUp, 
   Flame, 
@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 
 interface PerformanceAnalyticsProps {
+  activeExam?: ExamId;
   stats: UserStats;
   questions: Question[];
   onStartPractice: (domain?: DomainId) => void;
@@ -27,8 +28,10 @@ export const PerformanceAnalytics: React.FC<PerformanceAnalyticsProps> = ({
   stats,
   questions,
   onStartPractice,
-  onStartExam
+  onStartExam,
+  activeExam = 'dp700'
 }) => {
+  const examDomains = getDomainsForExam(activeExam);
   const overallAccuracy = stats.totalAnswered > 0
     ? Math.round((stats.correctAnswers / stats.totalAnswered) * 100)
     : 0;
@@ -70,7 +73,7 @@ export const PerformanceAnalytics: React.FC<PerformanceAnalyticsProps> = ({
       const acc = d.total > 0 ? Math.round((d.correct / d.total) * 100) : 0;
       return {
         id: dId,
-        info: DOMAINS[dId],
+        info: examDomains[dId],
         total: d.total,
         correct: d.correct,
         accuracy: acc

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { UserStats, DOMAINS, DomainId, Question, ExamAttempt } from '../types';
+import { UserStats, DomainId, Question, ExamAttempt, ExamId, EXAMS } from '../types';
 import { 
   Award, 
   Flame, 
@@ -26,6 +26,8 @@ interface DashboardProps {
   stats: UserStats;
   questions: Question[];
   totalQuestions: number;
+  activeExam: ExamId;
+  onSwitchExam: (examId: ExamId) => void;
   setActiveTab: (tab: ActiveTab) => void;
   onFilterDomain: (domain: DomainId) => void;
   onSelectAttempt?: (attempt: ExamAttempt) => void;
@@ -35,10 +37,14 @@ export const Dashboard: React.FC<DashboardProps> = ({
   stats,
   questions,
   totalQuestions,
+  activeExam,
+  onSwitchExam,
   setActiveTab,
   onFilterDomain,
   onSelectAttempt
 }) => {
+  const examInfo = EXAMS[activeExam];
+  const examDomains = examInfo.domains;
   const accuracy = stats.totalAnswered > 0 
     ? Math.round((stats.correctAnswers / stats.totalAnswered) * 100) 
     : 0;
@@ -86,7 +92,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
     return worstDomain;
   }, [domainCounts]);
 
-  const recommendedInfo = DOMAINS[recommendedDomainId];
+  const recommendedInfo = examDomains[recommendedDomainId];
   const recommendedAcc = domainCounts[recommendedDomainId].answered > 0 
     ? Math.round((domainCounts[recommendedDomainId].correct / domainCounts[recommendedDomainId].answered) * 100)
     : 0;
@@ -94,6 +100,59 @@ export const Dashboard: React.FC<DashboardProps> = ({
   return (
     <div className="space-y-8 animate-fade-in pb-12">
       
+      {/* Certification Quick Selector Banner */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-3 sm:px-5 rounded-2xl bg-gradient-to-r from-slate-900/90 via-slate-850 to-slate-900 border border-slate-800 shadow-lg">
+        <div className="flex items-center gap-3">
+          <div className={`p-2 rounded-xl border ${
+            activeExam === 'dp700' 
+              ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' 
+              : 'bg-teal-500/10 text-teal-400 border-teal-500/20'
+          }`}>
+            {activeExam === 'dp700' ? <Zap className="w-5 h-5" /> : <Database className="w-5 h-5" />}
+          </div>
+          <div>
+            <div className="text-xs font-bold text-white flex items-center gap-2">
+              <span>Active Certification:</span>
+              <span className={`px-2 py-0.5 rounded text-xs font-extrabold ${
+                activeExam === 'dp700' 
+                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' 
+                  : 'bg-teal-500/20 text-teal-300 border border-teal-500/40'
+              }`}>
+                {examInfo.code} • {examInfo.shortTitle}
+              </span>
+            </div>
+            <div className="text-[11px] text-slate-400">
+              {examInfo.title}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 self-stretch sm:self-auto justify-end">
+          <button
+            onClick={() => onSwitchExam('dp700')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+              activeExam === 'dp700'
+                ? 'bg-amber-400 text-slate-950 shadow-md font-extrabold'
+                : 'bg-slate-800/80 text-slate-400 hover:text-white border border-slate-700/60'
+            }`}
+          >
+            <Zap className="w-3.5 h-3.5 fill-current" />
+            <span>Switch to DP-700</span>
+          </button>
+          <button
+            onClick={() => onSwitchExam('dp600')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+              activeExam === 'dp600'
+                ? 'bg-teal-400 text-slate-950 shadow-md font-extrabold'
+                : 'bg-slate-800/80 text-slate-400 hover:text-white border border-slate-700/60'
+            }`}
+          >
+            <Database className="w-3.5 h-3.5 fill-current" />
+            <span>Switch to DP-600</span>
+          </button>
+        </div>
+      </div>
+
       {/* Hero Banner (Matches Reference Screenshot) */}
       <div className="relative overflow-hidden rounded-3xl bg-[#0F172A]/70 border border-slate-800 p-6 sm:p-8 shadow-2xl">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
@@ -102,19 +161,25 @@ export const Dashboard: React.FC<DashboardProps> = ({
           <div className="lg:col-span-7 space-y-4">
             
             {/* Pill Badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30 text-xs font-bold tracking-wide uppercase">
+            <div className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold tracking-wide uppercase border ${
+              activeExam === 'dp700'
+                ? 'bg-amber-500/10 text-amber-300 border-amber-500/30'
+                : 'bg-teal-500/10 text-teal-300 border-teal-500/30'
+            }`}>
               <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-              <span>Fabric Analytics Engineer Associate Certification</span>
+              <span>{examInfo.badge}</span>
             </div>
 
             {/* Main Headline */}
             <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight">
-              Master the <span className="text-amber-400">DP-600 Exam</span> with Realistic Simulation
+              Master the <span className={activeExam === 'dp700' ? "text-amber-400" : "text-teal-400"}>{examInfo.code} Exam</span> with Realistic Simulation
             </h1>
 
             {/* Subtitle */}
             <p className="text-sm sm:text-base text-slate-300 max-w-2xl leading-relaxed">
-              Train across all 3 Microsoft assessment domains with {totalQuestions} original scenario questions, live Direct Lake mode diagnostics, Delta Lake V-Order optimizations, and an adaptive 7-day study plan.
+              {activeExam === 'dp700'
+                ? `Train across all 3 Microsoft data engineering assessment domains with ${totalQuestions} scenario questions, real-time eventstreams, Delta Lake auto-compaction, custom Spark pools, and granular security.`
+                : `Train across all 3 Microsoft analytics engineering assessment domains with ${totalQuestions} verified questions, live Direct Lake mode diagnostics, Delta Lake V-Order optimizations, and adaptive study plans.`}
             </p>
 
             {/* 3 Feature Verification Badges */}
@@ -125,22 +190,28 @@ export const Dashboard: React.FC<DashboardProps> = ({
               </div>
               <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/90 border border-slate-800 text-xs font-semibold text-slate-300">
                 <CheckCircle2 className="w-3.5 h-3.5 text-teal-400" />
-                <span>Deep Fabric & DAX Explanations</span>
+                <span>Deep Fabric & Official References</span>
               </div>
               <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/90 border border-slate-800 text-xs font-semibold text-slate-300">
                 <CheckCircle2 className="w-3.5 h-3.5 text-teal-400" />
-                <span>Local Storage Saved</span>
+                <span>Isolated Multi-Cert Progress Saved</span>
               </div>
             </div>
 
             {/* Recommended Next Step Box */}
             <div className="mt-4 p-4 rounded-2xl bg-slate-900/90 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-lg">
               <div className="flex items-center gap-3.5">
-                <div className="w-11 h-11 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
+                <div className={`w-11 h-11 rounded-xl border flex items-center justify-center shrink-0 ${
+                  activeExam === 'dp700'
+                    ? 'bg-amber-500/10 border-amber-500/20 text-amber-400'
+                    : 'bg-teal-500/10 border-teal-500/20 text-teal-400'
+                }`}>
                   <BookOpen className="w-5 h-5" />
                 </div>
                 <div>
-                  <div className="text-[10px] font-bold text-amber-400 uppercase tracking-wider mb-0.5">
+                  <div className={`text-[10px] font-bold uppercase tracking-wider mb-0.5 ${
+                    activeExam === 'dp700' ? 'text-amber-400' : 'text-teal-400'
+                  }`}>
                     RECOMMENDED NEXT STEP:
                   </div>
                   <div className="text-xs text-slate-200 leading-snug">
@@ -151,7 +222,11 @@ export const Dashboard: React.FC<DashboardProps> = ({
 
               <button
                 onClick={() => onFilterDomain(recommendedDomainId)}
-                className="px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 shrink-0 transition-colors shadow-sm"
+                className={`px-4 py-2.5 rounded-xl text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 shrink-0 transition-colors shadow-sm ${
+                  activeExam === 'dp700'
+                    ? 'bg-amber-400 hover:bg-amber-300'
+                    : 'bg-teal-400 hover:bg-teal-300'
+                }`}
               >
                 <Play className="w-3.5 h-3.5 fill-slate-950" />
                 <span>Continue Training</span>
@@ -166,14 +241,22 @@ export const Dashboard: React.FC<DashboardProps> = ({
             {/* Card Header */}
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
+                <div className={`w-11 h-11 rounded-xl border flex items-center justify-center shrink-0 ${
+                  activeExam === 'dp700'
+                    ? 'bg-amber-500/10 border-amber-500/20 text-amber-400'
+                    : 'bg-teal-500/10 border-teal-500/20 text-teal-400'
+                }`}>
                   <ShieldCheck className="w-5 h-5" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="text-base font-bold text-white">Certification Goal</span>
-                    <span className="bg-amber-400/20 text-amber-300 text-[10px] font-extrabold px-1.5 py-0.5 rounded border border-amber-500/30">
-                      DP-600
+                    <span className={`text-[10px] font-extrabold px-1.5 py-0.5 rounded border ${
+                      activeExam === 'dp700'
+                        ? 'bg-amber-400/20 text-amber-300 border-amber-500/30'
+                        : 'bg-teal-400/20 text-teal-300 border-teal-500/30'
+                    }`}>
+                      {examInfo.code}
                     </span>
                   </div>
                   <div className="text-xs text-slate-400 mt-0.5">
@@ -304,11 +387,11 @@ export const Dashboard: React.FC<DashboardProps> = ({
 
       </div>
 
-      {/* Official Skills Measured (DP-600 Breakdown - Matches Reference Screenshot) */}
+      {/* Official Skills Measured (Breakdown based on active exam) */}
       <div className="space-y-4">
         <div>
           <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-            DP-600 Skills Measured
+            {examInfo.code} Skills Measured
           </h2>
           <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
             Exam domain breakdown based on official Microsoft specifications.
@@ -316,10 +399,10 @@ export const Dashboard: React.FC<DashboardProps> = ({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {/* Domain 1: Plan, implement, and manage */}
+          {/* Domain 1 */}
           {(() => {
             const d = 'domain1' as DomainId;
-            const info = DOMAINS[d];
+            const info = examDomains[d];
             const data = domainCounts[d];
             const acc = data.answered > 0 ? Math.round((data.correct / data.answered) * 100) : 0;
             return (
@@ -370,10 +453,10 @@ export const Dashboard: React.FC<DashboardProps> = ({
             );
           })()}
 
-          {/* Domain 2: Prepare and connect to data */}
+          {/* Domain 2 */}
           {(() => {
             const d = 'domain2' as DomainId;
-            const info = DOMAINS[d];
+            const info = examDomains[d];
             const data = domainCounts[d];
             const acc = data.answered > 0 ? Math.round((data.correct / data.answered) * 100) : 0;
             return (
@@ -424,10 +507,10 @@ export const Dashboard: React.FC<DashboardProps> = ({
             );
           })()}
 
-          {/* Domain 3: Model and explore data */}
+          {/* Domain 3 */}
           {(() => {
             const d = 'domain3' as DomainId;
-            const info = DOMAINS[d];
+            const info = examDomains[d];
             const data = domainCounts[d];
             const acc = data.answered > 0 ? Math.round((data.correct / data.answered) * 100) : 0;
             return (

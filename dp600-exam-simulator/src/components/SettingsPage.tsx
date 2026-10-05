@@ -14,15 +14,18 @@ import {
   ShieldAlert
 } from 'lucide-react';
 import { storageService } from '../services/storageService';
+import { ExamId, EXAMS } from '../types';
 
 interface SettingsPageProps {
   totalQuestions: number;
+  activeExam?: ExamId;
   onResetAllData: () => void;
   onOpenImporter: () => void;
 }
 
 export const SettingsPage: React.FC<SettingsPageProps> = ({
   totalQuestions,
+  activeExam = 'dp700',
   onResetAllData,
   onOpenImporter
 }) => {
@@ -133,7 +136,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
               {totalQuestions} Practice Questions Loaded
             </div>
             <div className="text-xs text-slate-400">
-              Includes Microsoft Learn feedback, curated DP-600 scenarios, and user imported files.
+              Includes Microsoft Learn feedback, curated DP-700 & DP-600 exam scenarios, and imported files.
             </div>
           </div>
           <button

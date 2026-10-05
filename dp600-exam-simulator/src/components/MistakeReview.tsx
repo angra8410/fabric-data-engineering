@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Question, UserStats, DOMAINS } from '../types';
+import { Question, UserStats, ExamId, getDomainsForExam } from '../types';
 import { storageService } from '../services/storageService';
 import { StepOrderingQuestion } from './StepOrderingQuestion';
 import { 
@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 
 interface MistakeReviewProps {
+  activeExam?: ExamId;
   questions: Question[];
   stats: UserStats;
   onDrillMistakes: (questionIds: string[]) => void;
@@ -32,8 +33,10 @@ export const MistakeReview: React.FC<MistakeReviewProps> = ({
   stats,
   onDrillMistakes,
   onStatsChange,
-  onStartPractice
+  onStartPractice,
+  activeExam = 'dp700'
 }) => {
+  const examDomains = getDomainsForExam(activeExam);
   const [expandedExplanations, setExpandedExplanations] = useState<Record<string, boolean>>({});
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({});
   const [activeLang, setActiveLang] = useState<'EN' | 'FR'>('EN');
@@ -154,7 +157,7 @@ export const MistakeReview: React.FC<MistakeReviewProps> = ({
             const attemptCount = attemptInfo?.attemptCount || 1;
             const correctCount = attemptInfo?.correctCount || 0;
 
-            const domainLabel = DOMAINS[q.domain]?.name || q.domain;
+            const domainLabel = examDomains[q.domain]?.name || q.domain;
 
             return (
               <div key={q.id} className="space-y-1.5">

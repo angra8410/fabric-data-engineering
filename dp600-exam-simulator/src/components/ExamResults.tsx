@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ExamAttempt, Question, DOMAINS, DomainId } from '../types';
+import { ExamAttempt, Question, DomainId, ExamId, getDomainsForExam } from '../types';
 import confetti from 'canvas-confetti';
 import { 
   Award, 
@@ -19,6 +19,7 @@ import { ActiveTab } from './Navbar';
 interface ExamResultsProps {
   attempt: ExamAttempt;
   questions: Question[];
+  activeExam?: ExamId;
   setActiveTab: (tab: ActiveTab) => void;
   onRetakeExam: () => void;
   onDrillWeakTopic: (topic: string) => void;
@@ -27,10 +28,12 @@ interface ExamResultsProps {
 export const ExamResults: React.FC<ExamResultsProps> = ({
   attempt,
   questions,
+  activeExam = 'dp700',
   setActiveTab,
   onRetakeExam,
   onDrillWeakTopic
 }) => {
+  const examDomains = getDomainsForExam(attempt.examId || activeExam);
   const [reviewFilter, setReviewFilter] = useState<'all' | 'correct' | 'incorrect' | 'flagged'>('all');
 
   // Trigger confetti on pass
@@ -181,7 +184,7 @@ export const ExamResults: React.FC<ExamResultsProps> = ({
           <div className="space-y-4 pt-1">
             {(Object.keys(attempt.domainScores) as DomainId[]).map((domId) => {
               const score = attempt.domainScores[domId];
-              const info = DOMAINS[domId];
+              const info = examDomains[domId];
               const isPassing = score.percentage >= 70;
 
               return (
@@ -317,7 +320,7 @@ export const ExamResults: React.FC<ExamResultsProps> = ({
                 <div className="flex items-center justify-between mb-3 text-xs">
                   <div className="flex items-center gap-2">
                     <span className="font-bold text-slate-400">Q{idx + 1}</span>
-                    <span className="text-teal-400 font-semibold">{DOMAINS[q.domain].code}</span>
+                    <span className="text-teal-400 font-semibold">{examDomains[q.domain]?.code || q.domain}</span>
                     <span className="text-slate-400">• {q.topic}</span>
                   </div>
 

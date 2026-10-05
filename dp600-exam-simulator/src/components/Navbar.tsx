@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { UserStats } from '../types';
+import { UserStats, ExamId, EXAMS } from '../types';
 import { 
   Flame, 
   Award, 
@@ -18,7 +18,8 @@ import {
   Bookmark,
   TrendingUp,
   Star,
-  Settings
+  Settings,
+  Zap
 } from 'lucide-react';
 
 export type ActiveTab = 
@@ -40,13 +41,17 @@ interface NavbarProps {
   setActiveTab: (tab: ActiveTab) => void;
   stats: UserStats;
   totalQuestions: number;
+  activeExam: ExamId;
+  onSwitchExam: (examId: ExamId) => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   activeTab,
   setActiveTab,
   stats,
-  totalQuestions
+  totalQuestions,
+  activeExam,
+  onSwitchExam
 }) => {
   const [studyMenuOpen, setStudyMenuOpen] = useState(false);
   const [practiceMenuOpen, setPracticeMenuOpen] = useState(false);
@@ -87,31 +92,84 @@ export const Navbar: React.FC<NavbarProps> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           
-          {/* Logo & Certification Title */}
-          <div 
-            onClick={() => {
-              setActiveTab('dashboard');
-              setStudyMenuOpen(false);
-              setPracticeMenuOpen(false);
-              setToolsMenuOpen(false);
-            }}
-            className="flex items-center gap-3 cursor-pointer group shrink-0"
-          >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#0078D4] to-[#00A389] p-0.5 shadow-lg shadow-teal-500/10 group-hover:scale-105 transition-transform">
-              <div className="w-full h-full bg-[#0B101D] rounded-[10px] flex items-center justify-center">
-                <Database className="w-5 h-5 text-teal-400" />
+          {/* Logo & Exam Switcher */}
+          <div className="flex items-center gap-2.5 shrink-0">
+            <div 
+              onClick={() => {
+                setActiveTab('dashboard');
+                setStudyMenuOpen(false);
+                setPracticeMenuOpen(false);
+                setToolsMenuOpen(false);
+              }}
+              className="flex items-center gap-2.5 cursor-pointer group"
+            >
+              <div className={`w-9 h-9 rounded-xl p-0.5 shadow-lg group-hover:scale-105 transition-transform ${
+                activeExam === 'dp700'
+                  ? 'bg-gradient-to-tr from-amber-500 to-orange-500 shadow-amber-500/20'
+                  : 'bg-gradient-to-tr from-[#0078D4] to-[#00A389] shadow-teal-500/20'
+              }`}>
+                <div className="w-full h-full bg-[#0B101D] rounded-[10px] flex items-center justify-center">
+                  {activeExam === 'dp700' ? (
+                    <Zap className="w-4 h-4 text-amber-400" />
+                  ) : (
+                    <Database className="w-4 h-4 text-teal-400" />
+                  )}
+                </div>
+              </div>
+              <div className="hidden xl:block">
+                <div className="flex items-center gap-1.5">
+                  <span className="font-extrabold text-sm tracking-tight text-white">
+                    Fabric Cert Studio
+                  </span>
+                  <span className={`text-[10px] font-extrabold tracking-wider uppercase px-1 py-0.5 rounded border ${
+                    activeExam === 'dp700'
+                      ? 'bg-amber-500/20 text-amber-300 border-amber-500/30'
+                      : 'bg-teal-500/20 text-teal-300 border-teal-500/30'
+                  }`}>
+                    {EXAMS[activeExam].code}
+                  </span>
+                </div>
+                <p className="text-[10px] text-slate-400">{EXAMS[activeExam].shortTitle}</p>
               </div>
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold text-base tracking-tight bg-gradient-to-r from-teal-400 via-sky-400 to-blue-400 bg-clip-text text-transparent">
-                  DP-600
-                </span>
-                <span className="text-[10px] font-bold tracking-wider uppercase px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                  PRO
-                </span>
-              </div>
-              <p className="text-[11px] text-slate-400 hidden sm:block">Fabric Analytics Engineer Exam Simulator</p>
+
+            {/* Exam Switcher Pills */}
+            <div className="flex items-center bg-slate-900/90 border border-slate-700/80 p-0.5 rounded-xl shadow-inner">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onSwitchExam('dp700');
+                }}
+                className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
+                  activeExam === 'dp700'
+                    ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 shadow-md font-extrabold'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                }`}
+                title="DP-700: Data Engineering Solutions Using Microsoft Fabric"
+              >
+                <Zap className="w-3 h-3 fill-current" />
+                <span>DP-700</span>
+                <span className="hidden sm:inline text-[10px] font-medium opacity-90">Data Eng</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onSwitchExam('dp600');
+                }}
+                className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
+                  activeExam === 'dp600'
+                    ? 'bg-gradient-to-r from-teal-500 to-sky-500 text-slate-950 shadow-md font-extrabold'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                }`}
+                title="DP-600: Analytics Solutions Using Microsoft Fabric"
+              >
+                <Database className="w-3 h-3 fill-current" />
+                <span>DP-600</span>
+                <span className="hidden sm:inline text-[10px] font-medium opacity-90">Analytics</span>
+              </button>
             </div>
           </div>
 

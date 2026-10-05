@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Question, ExamAttempt } from '../types';
+import { Question, ExamAttempt, ExamId, getDomainsForExam, EXAMS } from '../types';
 import { calculateExamScore } from '../utils/scoring';
 import { storageService } from '../services/storageService';
 import { CASE_STUDIES } from '../data/caseStudies';
@@ -22,15 +22,18 @@ import {
 
 interface MockExamProps {
   questions: Question[];
+  activeExam?: ExamId;
   onFinishExam: (attempt: ExamAttempt) => void;
   onExitExam: () => void;
 }
 
 export const MockExam: React.FC<MockExamProps> = ({
   questions,
+  activeExam = 'dp700',
   onFinishExam,
   onExitExam
 }) => {
+  const examInfo = EXAMS[activeExam];
   const [isExamStarted, setIsExamStarted] = useState<boolean>(false);
   const [selectedQuestionCount, setSelectedQuestionCount] = useState<number>(() => Math.min(50, questions.length));
   const [selectedDuration, setSelectedDuration] = useState<number>(100);
@@ -134,8 +137,9 @@ export const MockExam: React.FC<MockExamProps> = ({
 
   const handleSubmitExam = () => {
     const timeSpent = (selectedDuration * 60) - timeLeftSeconds;
-    const attempt = calculateExamScore(examQuestions, userAnswers, timeSpent, flaggedIds);
-    storageService.saveExamAttempt(attempt);
+    const attempt = calculateExamScore(examQuestions, userAnswers, timeSpent, flaggedIds, getDomainsForExam(activeExam));
+    attempt.examId = activeExam;
+    storageService.saveExamAttempt(attempt, activeExam);
     onFinishExam(attempt);
   };
 

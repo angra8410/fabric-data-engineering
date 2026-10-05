@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { storageService } from './services/storageService';
-import { Question, UserStats, ExamAttempt, DomainId } from './types';
+import { Question, UserStats, ExamAttempt, DomainId, ExamId, EXAMS } from './types';
 import { Navbar, ActiveTab } from './components/Navbar';
 import { Dashboard } from './components/Dashboard';
 import { PracticeMode } from './components/PracticeMode';
@@ -16,21 +16,32 @@ import { SettingsPage } from './components/SettingsPage';
 import { QuestionImporter } from './components/QuestionImporter';
 
 export const App: React.FC = () => {
+  const [activeExam, setActiveExam] = useState<ExamId>(() => storageService.getActiveExam());
   const [activeTab, setActiveTab] = useState<ActiveTab>('dashboard');
-  const [stats, setStats] = useState<UserStats>(() => storageService.getStats());
-  const [questions, setQuestions] = useState<Question[]>(() => storageService.getAllQuestions());
-  const [currentAttempt, setCurrentAttempt] = useState<ExamAttempt | null>(() => storageService.getLatestExamAttempt());
+  const [stats, setStats] = useState<UserStats>(() => storageService.getStats(storageService.getActiveExam()));
+  const [questions, setQuestions] = useState<Question[]>(() => storageService.getAllQuestions(storageService.getActiveExam()));
+  const [currentAttempt, setCurrentAttempt] = useState<ExamAttempt | null>(() => storageService.getLatestExamAttempt(storageService.getActiveExam()));
   const [practiceDomainFilter, setPracticeDomainFilter] = useState<DomainId | 'all'>('all');
   const [practiceTargetQuestionId, setPracticeTargetQuestionId] = useState<string | undefined>(undefined);
 
-  const refreshState = () => {
-    setStats(storageService.getStats());
-    setQuestions(storageService.getAllQuestions());
+  const refreshState = (exam: ExamId = activeExam) => {
+    setStats(storageService.getStats(exam));
+    setQuestions(storageService.getAllQuestions(exam));
+  };
+
+  const handleSwitchExam = (newExam: ExamId) => {
+    storageService.setActiveExam(newExam);
+    setActiveExam(newExam);
+    setStats(storageService.getStats(newExam));
+    setQuestions(storageService.getAllQuestions(newExam));
+    setCurrentAttempt(storageService.getLatestExamAttempt(newExam));
+    setPracticeDomainFilter('all');
+    setPracticeTargetQuestionId(undefined);
   };
 
   const handleFinishExam = (attempt: ExamAttempt) => {
     setCurrentAttempt(attempt);
-    refreshState();
+    refreshState(activeExam);
     setActiveTab('results');
   };
 
@@ -71,12 +82,14 @@ export const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#0B101D] text-slate-100 flex flex-col font-sans selection:bg-teal-400 selection:text-slate-950">
       
-      {/* Top Navbar */}
+      {/* Top Navbar with Multi-Exam Switcher */}
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         stats={stats}
         totalQuestions={questions.length}
+        activeExam={activeExam}
+        onSwitchExam={handleSwitchExam}
       />
 
       {/* Main Content Area */}
@@ -88,6 +101,8 @@ export const App: React.FC = () => {
             stats={stats}
             questions={questions}
             totalQuestions={questions.length}
+            activeExam={activeExam}
+            onSwitchExam={handleSwitchExam}
             setActiveTab={setActiveTab}
             onFilterDomain={handleFilterDomainFromDashboard}
             onSelectAttempt={(attempt) => {
@@ -102,6 +117,7 @@ export const App: React.FC = () => {
           <SevenDayPlan
             stats={stats}
             questions={questions}
+            activeExam={activeExam}
             onStartDay={handleStartDayFromPlan}
             onStartExam={() => setActiveTab('mock-exam')}
             onViewStudyGuide={handleViewStudyGuide}
@@ -113,9 +129,10 @@ export const App: React.FC = () => {
           <QuestionBank
             questions={questions}
             stats={stats}
+            activeExam={activeExam}
             onPracticeQuestion={handlePracticeSpecificQuestion}
             onPracticeAll={handlePracticeAll}
-            onStatsChange={refreshState}
+            onStatsChange={() => refreshState(activeExam)}
           />
         )}
 
@@ -124,7 +141,8 @@ export const App: React.FC = () => {
           <PracticeMode
             questions={questions}
             stats={stats}
-            onStatsChange={refreshState}
+            activeExam={activeExam}
+            onStatsChange={() => refreshState(activeExam)}
             initialDomainFilter={practiceDomainFilter}
             initialQuestionId={practiceTargetQuestionId}
           />
@@ -134,22 +152,24 @@ export const App: React.FC = () => {
         {activeTab === 'mock-exam' && (
           <MockExam
             questions={questions}
+            activeExam={activeExam}
             onFinishExam={handleFinishExam}
             onExitExam={() => setActiveTab('dashboard')}
           />
         )}
 
-        {/* 6. Mistake Review & Weak Point Analysis (Screenshot 3) */}
+        {/* 6. Mistake Review & Weak Point Analysis */}
         {activeTab === 'mistake-review' && (
           <MistakeReview
             questions={questions}
             stats={stats}
+            activeExam={activeExam}
             onDrillMistakes={(mistakeIds) => {
               setPracticeDomainFilter('all');
               setPracticeTargetQuestionId(mistakeIds[0]);
               setActiveTab('practice');
             }}
-            onStatsChange={refreshState}
+            onStatsChange={() => refreshState(activeExam)}
             onStartPractice={() => {
               setPracticeDomainFilter('all');
               setPracticeTargetQuestionId(undefined);
@@ -163,58 +183,63 @@ export const App: React.FC = () => {
           <ExamResults
             attempt={currentAttempt}
             questions={questions}
+            activeExam={activeExam}
             setActiveTab={setActiveTab}
             onRetakeExam={() => setActiveTab('mock-exam')}
             onDrillWeakTopic={handleDrillWeakTopic}
           />
         )}
 
-        {/* 7. Study Guides & Cheat Sheets */}
+        {/* 8. Study Guides & Cheat Sheets */}
         {activeTab === 'study-guides' && (
           <StudyGuides
             onPracticeDomain={handleFilterDomainFromDashboard}
             initialDomainFilter={practiceDomainFilter}
+            activeExam={activeExam}
           />
         )}
 
-        {/* 8. Importer */}
+        {/* 9. Importer */}
         {activeTab === 'importer' && (
           <QuestionImporter
             stats={stats}
-            onQuestionsUpdated={refreshState}
+            onQuestionsUpdated={() => refreshState(activeExam)}
           />
         )}
 
-        {/* 9. Performance Telemetry & Analytics (Screenshot 1 & 2) */}
+        {/* 10. Performance Telemetry & Analytics */}
         {activeTab === 'analytics' && (
           <PerformanceAnalytics
             stats={stats}
             questions={questions}
+            activeExam={activeExam}
             onStartPractice={handleFilterDomainFromDashboard}
             onStartExam={() => setActiveTab('mock-exam')}
           />
         )}
 
-        {/* 10. Starred & Saved Questions */}
+        {/* 11. Starred & Saved Questions */}
         {activeTab === 'starred' && (
           <StarredQuestions
             questions={questions}
             stats={stats}
+            activeExam={activeExam}
             onPracticeQuestion={handlePracticeSpecificQuestion}
             onPracticeAllStarred={(starredIds) => {
               if (starredIds.length > 0) {
                 handlePracticeSpecificQuestion(starredIds[0]);
               }
             }}
-            onStatsChange={refreshState}
+            onStatsChange={() => refreshState(activeExam)}
           />
         )}
 
-        {/* 11. Application Settings (Screenshot 3) */}
+        {/* 12. Application Settings */}
         {activeTab === 'settings' && (
           <SettingsPage
             totalQuestions={questions.length}
-            onResetAllData={refreshState}
+            activeExam={activeExam}
+            onResetAllData={() => refreshState(activeExam)}
             onOpenImporter={() => setActiveTab('importer')}
           />
         )}
@@ -224,8 +249,8 @@ export const App: React.FC = () => {
       {/* Clean Global Footer */}
       <footer className="border-t border-slate-800/80 bg-[#090D17] py-6 text-center text-xs text-slate-500 mt-12">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <span>Microsoft Certified: Fabric Analytics Engineer Associate (DP-600) Simulator</span>
-          <span>100% Client-Side · LocalStorage Saved · No backend required</span>
+          <span>Microsoft Fabric Certification Studio &middot; {EXAMS[activeExam].code}: {EXAMS[activeExam].title}</span>
+          <span>100% Client-Side &middot; Multi-Exam LocalStorage Saved &middot; No backend required</span>
         </div>
       </footer>
 

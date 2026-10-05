@@ -1,5 +1,5 @@
 import React from 'react';
-import { Question, UserStats, DOMAINS } from '../types';
+import { Question, UserStats, ExamId, getDomainsForExam } from '../types';
 import { storageService } from '../services/storageService';
 import { 
   Star, 
@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 
 interface StarredQuestionsProps {
+  activeExam?: ExamId;
   questions: Question[];
   stats: UserStats;
   onPracticeQuestion: (questionId: string) => void;
@@ -24,8 +25,10 @@ export const StarredQuestions: React.FC<StarredQuestionsProps> = ({
   stats,
   onPracticeQuestion,
   onPracticeAllStarred,
-  onStatsChange
+  onStatsChange,
+  activeExam = 'dp700'
 }) => {
+  const examDomains = getDomainsForExam(activeExam);
   const starredList = questions.filter(q => stats.bookmarkedQuestionIds.includes(q.id));
 
   const handleUnstar = (qId: string, e: React.MouseEvent) => {
@@ -78,7 +81,7 @@ export const StarredQuestions: React.FC<StarredQuestionsProps> = ({
       ) : (
         <div className="space-y-3">
           {starredList.map((q) => {
-            const domainName = DOMAINS[q.domain]?.name || q.domain;
+            const domainName = examDomains[q.domain]?.name || q.domain;
 
             return (
               <div

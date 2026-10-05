@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Question, DomainId, DOMAINS, UserStats } from '../types';
+import { Question, DomainId, UserStats, ExamId, getDomainsForExam } from '../types';
 import { storageService } from '../services/storageService';
 import { CASE_STUDIES } from '../data/caseStudies';
 import { CaseStudyModal } from './CaseStudyModal';
@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 
 interface PracticeModeProps {
+  activeExam?: ExamId;
   questions: Question[];
   stats: UserStats;
   onStatsChange: () => void;
@@ -38,8 +39,10 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
   stats,
   onStatsChange,
   initialDomainFilter = 'all',
-  initialQuestionId
+  initialQuestionId,
+  activeExam = 'dp700'
 }) => {
+  const examDomains = getDomainsForExam(activeExam);
   const [selectedDomain, setSelectedDomain] = useState<DomainId | 'all'>(
     initialQuestionId ? 'all' : initialDomainFilter
   );
@@ -196,7 +199,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
     : undefined;
 
   const isBookmarked = currentQuestion ? stats.bookmarkedQuestionIds.includes(currentQuestion.id) : false;
-  const domainLabel = currentQuestion ? DOMAINS[currentQuestion.domain]?.name || currentQuestion.domain : '';
+  const domainLabel = currentQuestion ? examDomains[currentQuestion.domain]?.name || currentQuestion.domain : '';
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 pb-20 animate-fade-in text-white">

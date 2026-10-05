@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { FABRIC_CHEAT_SHEETS, ExtendedCheatSheet } from '../data/cheatSheets';
-import { DOMAINS, DomainId } from '../types';
+import { DomainId, ExamId, EXAMS, getDomainsForExam } from '../types';
 import { 
   FileText, 
   AlertTriangle, 
@@ -22,12 +22,16 @@ import {
 interface StudyGuidesProps {
   onPracticeDomain: (domain: DomainId) => void;
   initialDomainFilter?: DomainId | 'all';
+  activeExam?: ExamId;
 }
 
 export const StudyGuides: React.FC<StudyGuidesProps> = ({ 
   onPracticeDomain,
-  initialDomainFilter = 'all'
+  initialDomainFilter = 'all',
+  activeExam = 'dp700'
 }) => {
+  const examInfo = EXAMS[activeExam];
+  const examDomains = examInfo.domains;
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDomain, setSelectedDomain] = useState<DomainId | 'all'>(initialDomainFilter);
   const [expandedIds, setExpandedIds] = useState<string[]>(() => 
@@ -48,19 +52,24 @@ export const StudyGuides: React.FC<StudyGuidesProps> = ({
     }
   };
 
+  // Base sheets for current exam
+  const relevantSheets = useMemo(() => {
+    return FABRIC_CHEAT_SHEETS.filter(s => !s.examId || s.examId === 'all' || s.examId === activeExam);
+  }, [activeExam]);
+
   // Domain counts
   const domainCounts = useMemo(() => {
     return {
-      all: FABRIC_CHEAT_SHEETS.length,
-      domain1: FABRIC_CHEAT_SHEETS.filter(s => s.domain === 'domain1').length,
-      domain2: FABRIC_CHEAT_SHEETS.filter(s => s.domain === 'domain2').length,
-      domain3: FABRIC_CHEAT_SHEETS.filter(s => s.domain === 'domain3').length,
+      all: relevantSheets.length,
+      domain1: relevantSheets.filter(s => s.domain === 'domain1').length,
+      domain2: relevantSheets.filter(s => s.domain === 'domain2').length,
+      domain3: relevantSheets.filter(s => s.domain === 'domain3').length,
     };
-  }, []);
+  }, [relevantSheets]);
 
   // Filtered sheets
   const filteredSheets = useMemo(() => {
-    return FABRIC_CHEAT_SHEETS.filter(sheet => {
+    return relevantSheets.filter(sheet => {
       if (selectedDomain !== 'all' && sheet.domain !== selectedDomain) return false;
       if (!searchQuery.trim()) return true;
 

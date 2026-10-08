@@ -1,21 +1,21 @@
 Fact_AMI_Key,Jurisdiction_ID,Year,Jurisdiction_Name,Structure_Type,AMI_0_to_30_Pct_Units,AMI_31_to_50_Pct_Units,AMI_51_to_80_Pct_Units,AMI_81_to_100_Pct_Units,AMI_101_to_120_Pct_Units,AMI_Greater_120_Pct_Units,Total_AMI_Units,Reconciliation_Status
-AMI-2025-001,JUR-01,2025,Anacortes,1-unit (Single Family),0,0,2,6,12,18,0,Reconciled
-AMI-2025-002,JUR-01,2025,Anacortes,2-units (Duplex),0,0,1,1,0,0,0,Reconciled
-AMI-2025-003,JUR-01,2025,Anacortes,3-4 units (Multi-Family),0,2,3,2,1,0,0,Reconciled
-AMI-2025-004,JUR-01,2025,Anacortes,5+ units (Multi-Family),8,12,14,4,2,0,0,Reconciled
-AMI-2025-005,JUR-01,2025,Anacortes,ADU (Accessory Dwelling),1,3,4,2,0,0,0,Reconciled
-AMI-2025-006,JUR-02,2025,Burlington,1-unit (Single Family),0,0,1,4,6,4,0,Reconciled
-AMI-2025-007,JUR-02,2025,Burlington,2-units (Duplex),0,0,0,0,0,0,0,Reconciled
-AMI-2025-008,JUR-02,2025,Burlington,3-4 units (Multi-Family),1,1,2,2,0,0,0,Reconciled
-AMI-2025-009,JUR-02,2025,Burlington,5+ units (Multi-Family),12,16,18,4,2,0,0,Reconciled
-AMI-2025-010,JUR-02,2025,Burlington,ADU (Accessory Dwelling),1,1,2,1,0,0,0,Reconciled
-AMI-2025-011,JUR-07,2025,Mount Vernon,1-unit (Single Family),0,0,5,15,25,25,0,Reconciled
-AMI-2025-012,JUR-07,2025,Mount Vernon,2-units (Duplex),0,1,2,2,1,0,0,Reconciled
-AMI-2025-013,JUR-07,2025,Mount Vernon,3-4 units (Multi-Family),2,4,6,3,1,0,0,Reconciled
-AMI-2025-014,JUR-07,2025,Mount Vernon,5+ units (Multi-Family),18,28,35,10,4,0,0,Reconciled
-AMI-2025-015,JUR-07,2025,Mount Vernon,ADU (Accessory Dwelling),2,5,7,3,1,0,0,Reconciled
-AMI-2025-016,JUR-08,2025,Sedro-Woolley,1-unit (Single Family),0,0,4,10,16,10,0,Reconciled
-AMI-2025-017,JUR-08,2025,Sedro-Woolley,2-units (Duplex),0,1,1,1,1,0,0,Reconciled
-AMI-2025-018,JUR-08,2025,Sedro-Woolley,3-4 units (Multi-Family),1,3,4,3,1,0,0,Reconciled
-AMI-2025-019,JUR-08,2025,Sedro-Woolley,5+ units (Multi-Family),6,10,10,3,1,0,0,Reconciled
-AMI-2025-020,JUR-08,2025,Sedro-Woolley,ADU (Accessory Dwelling),1,2,3,2,0,0,0,Reconciled
+AMI-2025-001,JUR-01,2025,Anacortes,1-unit (Single Family),0,0,0,0,0,19,19,Default Allocation (WA Commerce Exhibit 12) — Local 2025 AMI datasheets not yet due (10/20); not a jurisdiction-verified split
+AMI-2025-002,JUR-01,2025,Anacortes,2-units (Duplex),0,0,0,0,2,0,2,Default Allocation (WA Commerce Exhibit 12) — Local 2025 AMI datasheets not yet due (10/20); not a jurisdiction-verified split
+AMI-2025-003,JUR-01,2025,Anacortes,3-4 units (Multi-Family),0,0,0,0,0,0,0,Default Allocation (WA Commerce Exhibit 12) — Local 2025 AMI datasheets not yet due (10/20); not a jurisdiction-verified split
+AMI-2025-004,JUR-01,2025,Anacortes,5+ units (Multi-Family),0,0,0,0,0,0,0,Default Allocation (WA Commerce Exhibit 12) — Local 2025 AMI datasheets not yet due (10/20); not a jurisdiction-verified split
+AMI-2025-005,JUR-01,2025,Anacortes,ADU (Accessory Dwelling),0,0,0,10,0,0,10,Default Allocation (WA Commerce Exhibit 12) — Local 2025 AMI datasheets not yet due (10/20); not a jurisdiction-verified split
+AMI-2025-006,JUR-02,2025,Burlington,1-unit (Single Family),0,0,0,0,0,4,4,Default Allocation (WA Commerce Exhibit 12) — Local 2025 AMI datasheets not yet due (10/20); not a jurisdiction-verified split
+AMI-2025-007,JUR-02,2025,Burlington,2-units (Duplex),0,0,0,0,0,0,0,Default Allocation (WA Commerce Exhibit 12) — Local 2025 AMI datasheets not yet due (10/20); not a jurisdiction-verified split
+AMI-2025-008,JUR-02,2025,Burlington,3-4 units (Multi-Family),0,0,0,0,0,0,0,Default Allocation (WA Commerce Exhibit 12) — Local 2025 AMI datasheets not yet due (10/20); not a jurisdiction-verified split
+AMI-2025-009,JUR-02,2025,Burlington,5+ units (Multi-Family),0,0,0,211,0,0,211,Default Allocation (WA Commerce Exhibit 12) — Local 2025 AMI datasheets not yet due (10/20); not a jurisdiction-verified split
+AMI-2025-010,JUR-02,2025,Burlington,ADU (Accessory Dwelling),0,0,0,2,0,0,2,Default Allocation (WA Commerce Exhibit 12) — Local 2025 AMI datasheets not yet due (10/20); not a jurisdiction-verified split
+AMI-2025-011,JUR-07,2025,Mount Vernon,1-unit (Single Family),0,0,0,0,0,17,17,Default Allocation (WA Commerce Exhibit 12) — Local 2025 AMI datasheets not yet due (10/20); not a jurisdiction-verified split
+AMI-2025-012,JUR-07,2025,Mount Vernon,2-units (Duplex),0,0,0,0,3,0,3,Default Allocation (WA Commerce Exhibit 12) — Local 2025 AMI datasheets not yet due (10/20); not a jurisdiction-verified split
+AMI-2025-013,JUR-07,2025,Mount Vernon,3-4 units (Multi-Family),0,0,0,0,0,0,0,Default Allocation (WA Commerce Exhibit 12) — Local 2025 AMI datasheets not yet due (10/20); not a jurisdiction-verified split
+AMI-2025-014,JUR-07,2025,Mount Vernon,5+ units (Multi-Family),0,0,0,0,0,0,0,Default Allocation (WA Commerce Exhibit 12) — Local 2025 AMI datasheets not yet due (10/20); not a jurisdiction-verified split
+AMI-2025-015,JUR-07,2025,Mount Vernon,ADU (Accessory Dwelling),0,0,0,3,0,0,3,Default Allocation (WA Commerce Exhibit 12) — Local 2025 AMI datasheets not yet due (10/20); not a jurisdiction-verified split
+AMI-2025-016,JUR-08,2025,Sedro-Woolley,1-unit (Single Family),0,0,0,0,0,35,35,Default Allocation (WA Commerce Exhibit 12) — Local 2025 AMI datasheets not yet due (10/20); not a jurisdiction-verified split
+AMI-2025-017,JUR-08,2025,Sedro-Woolley,2-units (Duplex),0,0,0,0,0,0,0,Default Allocation (WA Commerce Exhibit 12) — Local 2025 AMI datasheets not yet due (10/20); not a jurisdiction-verified split
+AMI-2025-018,JUR-08,2025,Sedro-Woolley,3-4 units (Multi-Family),0,0,0,0,3,0,3,Default Allocation (WA Commerce Exhibit 12) — Local 2025 AMI datasheets not yet due (10/20); not a jurisdiction-verified split
+AMI-2025-019,JUR-08,2025,Sedro-Woolley,5+ units (Multi-Family),0,0,0,15,0,0,15,Default Allocation (WA Commerce Exhibit 12) — Local 2025 AMI datasheets not yet due (10/20); not a jurisdiction-verified split
+AMI-2025-020,JUR-08,2025,Sedro-Woolley,ADU (Accessory Dwelling),0,0,0,3,0,0,3,Default Allocation (WA Commerce Exhibit 12) — Local 2025 AMI datasheets not yet due (10/20); not a jurisdiction-verified split

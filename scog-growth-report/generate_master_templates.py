@@ -4,6 +4,8 @@ from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.datavalidation import DataValidation
 
+from openpyxl.formatting.rule import FormulaRule
+
 output_dir = r"data/templates"
 os.makedirs(output_dir, exist_ok=True)
 
@@ -28,6 +30,7 @@ font_td = Font(name=FONT_NAME, size=9.5, color="0F172A")
 font_td_bold = Font(name=FONT_NAME, size=9.5, bold=True, color="0F172A")
 font_calc = Font(name=FONT_NAME, size=9.5, bold=True, color="1E40AF")
 font_banner = Font(name=FONT_NAME, size=10.5, bold=True, color="166534")
+font_banner_error = Font(name=FONT_NAME, size=10.5, bold=True, color="991B1B")
 
 thin_color = "CBD5E1"
 border_thin = Border(
@@ -149,6 +152,25 @@ def add_reference_sheet(wb, expected_headers):
     ws.column_dimensions["C"].width = 32
     ws.column_dimensions["D"].width = 45
 
+def build_schema_banner_formula(expected_headers, start_col=2, header_row=8, ref_sheet="Ref_Lookup", ref_col="C", ref_start_row=2, signature_cell="Ref_Lookup!$D$2"):
+    start_letter = get_column_letter(start_col)
+    end_letter = get_column_letter(start_col + len(expected_headers) - 1)
+    
+    parts = []
+    for i in range(len(expected_headers)):
+        active_cell = f"{get_column_letter(start_col + i)}{header_row}"
+        ref_cell = f"{ref_sheet}!${ref_col}${ref_start_row + i}"
+        part = f"IF(ISBLANK({active_cell}), \"'\" & {ref_cell} & \"' [blank]\", IF({active_cell}<>{ref_cell}, \"'\" & {ref_cell} & \"' [found: '\" & {active_cell} & \"']\", \"\"))"
+        parts.append(part)
+        
+    diff_chain = ", ".join(parts)
+    formula = (
+        f'=IF(_xlfn.TEXTJOIN("|",TRUE,{start_letter}{header_row}:{end_letter}{header_row})={signature_cell}, '
+        f'"✔ SCHEMA VALID: Columns Match Official Specification", '
+        f'"❌ SCHEMA ERROR: Column(s) altered: " & _xlfn.TEXTJOIN(", ", TRUE, {diff_chain}))'
+    )
+    return formula
+
 # =============================================================================
 # 1. TEMPLATE: HOUSING PERMITS MASTER
 # =============================================================================
@@ -181,13 +203,17 @@ def create_housing_permits_template():
     ws_data["B3"] = "Regional Land Use and Residential Building Activity (1990 – Present)"
     ws_data["B3"].font = font_subtitle
     
-    # Official _xlfn.TEXTJOIN formula with fullCalcOnLoad
+    # Dynamic schema banner identifying specific modified or missing columns
     ws_data.merge_cells("B5:F5")
-    ws_data["B5"] = '=IF(_xlfn.TEXTJOIN("|",TRUE,B8:Q8)=Ref_Lookup!$D$2,"✔ SCHEMA VALID: Columns Match Official Specification","❌ SCHEMA ERROR: Column headers altered! Power BI refresh will break.")'
+    ws_data["B5"] = build_schema_banner_formula(cols, start_col=2, header_row=8)
     ws_data["B5"].font = font_banner
     ws_data["B5"].fill = fill_status_valid
-    ws_data["B5"].alignment = align_left
+    ws_data["B5"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
     ws_data["B5"].border = border_thin
+    ws_data.row_dimensions[5].height = 32
+    
+    rule_error = FormulaRule(formula=['ISNUMBER(SEARCH("❌",B5))'], fill=fill_status_error, font=font_banner_error)
+    ws_data.conditional_formatting.add("B5:F5", rule_error)
     
     ws_data.merge_cells("G5:K5")
     ws_data["G5"] = '=IF(SUMIFS(O9:O1000,C9:C1000,"<=2024")>=0,"✔ BASELINE INTEGRITY: Historical Control Totals Intact","⚠ INTEGRITY WARNING: Historical records modified!")'
@@ -349,11 +375,15 @@ def create_population_template():
     ws_data["B3"].font = font_subtitle
     
     ws_data.merge_cells("B5:F5")
-    ws_data["B5"] = '=IF(_xlfn.TEXTJOIN("|",TRUE,B8:N8)=Ref_Lookup!$D$2,"✔ SCHEMA VALID: Columns Match Official Specification","❌ SCHEMA ERROR: Column headers altered!")'
+    ws_data["B5"] = build_schema_banner_formula(cols, start_col=2, header_row=8)
     ws_data["B5"].font = font_banner
     ws_data["B5"].fill = fill_status_valid
-    ws_data["B5"].alignment = align_left
+    ws_data["B5"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
     ws_data["B5"].border = border_thin
+    ws_data.row_dimensions[5].height = 32
+    
+    rule_error = FormulaRule(formula=['ISNUMBER(SEARCH("❌",B5))'], fill=fill_status_error, font=font_banner_error)
+    ws_data.conditional_formatting.add("B5:F5", rule_error)
     
     ws_data.merge_cells("G5:K5")
     ws_data["G5"] = '=IF(SUM(F9:F1000)>0,"✔ BASELINE INTEGRITY: Population Data Present","⚠ INTEGRITY WARNING: Population counts missing!")'
@@ -527,10 +557,15 @@ def create_employment_template():
     ws_data["B3"].font = font_subtitle
     
     ws_data.merge_cells("B5:E5")
-    ws_data["B5"] = '=IF(_xlfn.TEXTJOIN("|",TRUE,B8:N8)=Ref_Lookup!$D$2,"✔ SCHEMA VALID: Columns Match Official Specification","❌ SCHEMA ERROR: Column headers altered!")'
+    ws_data["B5"] = build_schema_banner_formula(cols, start_col=2, header_row=8)
     ws_data["B5"].font = font_banner
     ws_data["B5"].fill = fill_status_valid
+    ws_data["B5"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
     ws_data["B5"].border = border_thin
+    ws_data.row_dimensions[5].height = 32
+    
+    rule_error = FormulaRule(formula=['ISNUMBER(SEARCH("❌",B5))'], fill=fill_status_error, font=font_banner_error)
+    ws_data.conditional_formatting.add("B5:E5", rule_error)
     
     ws_data.merge_cells("F5:I5")
     ws_data["F5"] = '=IF(SUM(G9:G50)>0,"✔ INTEGRITY CHECK: Total Covered Employment Verified","⚠ INTEGRITY WARNING: Employment counts missing!")'
@@ -671,10 +706,15 @@ def create_housing_ami_template():
     ws_data["B3"].font = font_subtitle
     
     ws_data.merge_cells("B5:E5")
-    ws_data["B5"] = '=IF(_xlfn.TEXTJOIN("|",TRUE,B8:M8)=Ref_Lookup!$D$2,"✔ SCHEMA VALID: Columns Match Official Specification","❌ SCHEMA ERROR: Column headers altered!")'
+    ws_data["B5"] = build_schema_banner_formula(cols, start_col=2, header_row=8)
     ws_data["B5"].font = font_banner
     ws_data["B5"].fill = fill_status_valid
+    ws_data["B5"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
     ws_data["B5"].border = border_thin
+    ws_data.row_dimensions[5].height = 32
+    
+    rule_error = FormulaRule(formula=['ISNUMBER(SEARCH("❌",B5))'], fill=fill_status_error, font=font_banner_error)
+    ws_data.conditional_formatting.add("B5:E5", rule_error)
     
     ws_data.merge_cells("F5:I5")
     ws_data["F5"] = '=IF(SUM(L9:L35)>0,"✔ INTEGRITY CHECK: AMI Units Reconciled","⚠ INTEGRITY WARNING: Unit totals missing! Input units across AMI tiers.")'

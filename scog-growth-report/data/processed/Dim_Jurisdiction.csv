@@ -1,0 +1,12 @@
+Jurisdiction_ID,Jurisdiction_Name,Jurisdiction_Type,Is_Incorporated,Is_UGA,County_Name,State
+JUR-01,Anacortes,Incorporated City/Town,1,1,Skagit,WA
+JUR-02,Burlington,Incorporated City/Town,1,1,Skagit,WA
+JUR-03,Concrete,Incorporated City/Town,1,1,Skagit,WA
+JUR-04,Hamilton,Incorporated City/Town,1,1,Skagit,WA
+JUR-05,La Conner,Incorporated City/Town,1,1,Skagit,WA
+JUR-06,Lyman,Incorporated City/Town,1,1,Skagit,WA
+JUR-07,Mount Vernon,Incorporated City/Town,1,1,Skagit,WA
+JUR-08,Sedro-Woolley,Incorporated City/Town,1,1,Skagit,WA
+JUR-09,Bay View Ridge UGA,Urban Growth Area (UGA),0,1,Skagit,WA
+JUR-10,Swinomish UGA,Urban Growth Area (UGA),0,1,Skagit,WA
+JUR-11,Unincorporated Skagit County,Unincorporated Rural Area,0,0,Skagit,WA

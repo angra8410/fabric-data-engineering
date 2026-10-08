@@ -123,3 +123,74 @@
   - Documentación perfectamente sincronizada entre Markdown, HTML y PDF en Revision 3.
   - Protección de márgenes ante la complejidad de la ingesta y migración en Power Platform si SCOG opta por la Opción 2.
   - Claridad absoluta para la reunión de entrega del miércoles.
+
+---
+
+## [ADR-009] Aprobación Formal de SCOG: Adopción de Opción 1 (Bolsa de 100 Horas: 15 hrs Ejecutadas, 85 hrs Restantes)
+- **Fecha:** 2026-10-08
+- **Estado:** Aprobado / En Ejecución
+- **Contexto:** SCOG revisó y aceptó formalmente la propuesta técnica (Revisión 3), seleccionando la **Opción 1** (Power BI alimentado por Excel estandarizado en SharePoint + GIS) bajo un contrato global de **100 horas**. De este paquete, **15 horas ya fueron devengadas y ejecutadas** en la fase de scoping técnico y delivery review (ADR-007), restando un presupuesto neto de ejecución de **85 horas**.
+- **Decisión Tomada:**
+  1. **Estructura Presupuestaria y Control de Horas:**
+     - Horas ejecutadas (Scoping Document & Delivery Review): **15 hrs**.
+     - Horas disponibles para implementación: **85 hrs**.
+     - Techo contractual global: **100 hrs**.
+  2. **Asignación de las 85 Horas Restantes contra Tareas del Alcance Base:**
+     - **Tarea 1: Discovery & Planning:** 8 hrs (rango 6–10 hrs).
+     - **Tarea 2: Prototipo 2025 (in progress):** 16 hrs (rango 12–22 hrs).
+     - **Tarea 3: Reporte de Producción 2026:** 24 hrs (rango 18–30 hrs).
+     - **Tarea 4: Documentación Técnica & Runbook:** 8 hrs (rango 6–10 hrs).
+     - **Tarea 5: Capacitación & Handoff al Personal:** 7 hrs (rango 5–9 hrs).
+     - **Tarea 6: Contingencia & Buffer de Desviación:** 12–22 hrs (Baseline 12 hrs; hasta 22 hrs absorbiendo el colchón total de 100 hrs).
+     - *Total asignado: 75 hrs baseline + 10 hrs buffer adicional = 85 hrs.*
+  3. **Plan de Ejecución Inmediato (Inicio de Tarea 1):**
+     - Recibir y auditar el archivo .pbix del prototipo 2025 existente y los datos preliminares entregados por SCOG.
+     - Auditar las capas espaciales GIS (GeoJSON / Shapefiles de ciudades y UGAs de Skagit County) para Azure Maps / ArcGIS Maps.
+     - Diseñar y estandarizar las plantillas maestras Excel (.xlsx) con validación por fórmulas (TEXTJOIN, SUMIFS, dropdowns) para blindar el refresh contra roturas de esquema.
+- **Consecuencias:**
+  - El proyecto transiciona formalmente de fase de preventa/scoping a fase de **Construcción y Entrega**.
+  - Excelente posición de margen y seguridad técnica: el baseline de 75 hrs deja 10 hrs completas de contingencia neta dentro del contrato de 100 hrs.
+
+---
+
+## [ADR-010] Estandarización de Plantillas Maestras Excel (.xlsx) en Inglés con Validación por Fórmulas Nativas (Tarea 1)
+- **Fecha:** 2026-10-08
+- **Estado:** Aprobado / Implementado
+- **Contexto:** En el marco de la Tarea 1 (Discovery & Planning) de la Opción 1, se requiere blindar el proceso anual de ingesta de datos frente a la alteración involuntaria de encabezados, borrado de columnas y modificación de históricos adoptados, manteniendo compatibilidad plena con Excel Online / SharePoint sin macros (.xlsm) y en idioma inglés para el cliente (SCOG).
+- **Decisión Tomada:**
+  1. Diseñar y generar 4 plantillas maestras estandarizadas en `data/templates/`:
+     - `Template_Housing_Permits_Master.xlsx`: Ingesta anual de permisos residenciales por tipo, demoliciones y unidades netas por jurisdicción/UGA.
+     - `Template_Population_Master.xlsx`: Monitoreo de población OFM April 1 y SAEP UGA frente a las asignaciones de crecimiento del GMA a 2045.
+     - `Template_Employment_Master.xlsx`: Empleo cubierto anual QCEW y firmas por subsector NAICS (2 y 3 dígitos).
+     - `Template_Housing_AMI_Master.xlsx`: Producción de vivienda según tramos de ingreso medio de área (AMI: 0-30%, 31-50%, 51-80%, etc.).
+  2. Cada plantilla incluye:
+     - Hoja `Instructions` con Procedimiento Operativo Estándar (SOP) en inglés.
+     - Banner dinámico de validación de esquema mediante `TEXTJOIN` comparado contra la firma canónica.
+     - Verificación de sumas de control (`SUMIFS` / `SUM`) para detectar alteraciones en datos históricos adoptados.
+     - Listas desplegables de validación de datos para jurisdicciones oficiales de Skagit County.
+     - Columnas de cálculo automático protegidas y coloreadas sutilmente en azul suave.
+- **Consecuencias:**
+  - Se cumple el compromiso contractual de gobernanza ligera para la Opción 1.
+  - El personal de SCOG y las jurisdicciones cuentan con herramientas visuales e intuitivas que previenen roturas en el modelo semántico de Power BI.
+
+---
+
+## [ADR-011] Arquitectura del Star Schema y Pipeline ETL Automatizado para Ingesta Anual
+- **Fecha:** 2026-10-08
+- **Estado:** Aprobado / Implementado
+- **Contexto:** Se requiere estructurar los datos históricos (1990–2026) y de 2025 de `data/raw/` en un modelo dimensional relacional en estrella (*Star Schema*) con integridad referencial completa, asegurando que las actualizaciones anuales futuras (2026 en adelante) sean puramente un proceso de ingesta y refresco determinista sin requerir carpintería manual en Excel por parte del cliente.
+- **Decisión Tomada:**
+  1. **Tablas de Dimensiones Conformes:**
+     - `Dim_Jurisdiction` (11 entidades: 8 ciudades incorporadas, 2 UGAs no incorporadas, 1 remanente rural). Clave primaria: `Jurisdiction_ID`.
+     - `Dim_CalendarYear` (56 años: 1990 a 2045 con ciclos de planificación GMA). Clave primaria: `Year`.
+     - `Dim_GMA_2045_Target` (Línea base 2022 y metas de crecimiento adoptadas a 2045 de Población y Vivienda).
+  2. **Tablas de Hechos Numéricas:**
+     - `Fact_Population`: 97 observaciones anuales de población con cálculo de variación interanual y tasa YoY.
+     - `Fact_HousingPermits`: 314 registros históricos (1990–2026) con desglose por tipología (Single-family, Duplex, Multi-family 3-4, 5+, Mobile homes), unidades terminadas, demoliciones y unidades netas.
+     - `Fact_Employment`: 131 registros de subsectores industriales NAICS con promedio anual, masa salarial y series mensuales.
+     - `Fact_Housing_AMI`: 20 registros con la distribución de unidades por tramos de ingreso (0-30%, 31-50%, 51-80%, etc.).
+  3. **Integridad Referencial:** 0 registros huérfanos; todas las claves foráneas conectan estrictamente con `Dim_Jurisdiction` y `Dim_CalendarYear`.
+  4. **Entregables de Salida:** Generación dual en `data/processed/`: archivos CSV individuales y el libro unificado `SCOG_Star_Schema_Data_Model.xlsx`.
+- **Consecuencias:**
+  - El modelo analítico queda listo para ser consumido inmediatamente en Power BI Desktop.
+  - Para 2026, el personal de SCOG solo necesitará actualizar los archivos raw o la plantilla y ejecutar el refresh.

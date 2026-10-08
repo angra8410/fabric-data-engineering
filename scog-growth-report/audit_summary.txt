@@ -1,0 +1,177 @@
+
+===========================================================================
+FILE: 2025-QCEW-annual-averages-revised(Skagit County) (1).csv (23.0 KB)
+===========================================================================
+Type: CSV | Approximate rows: 141
+Columns (28): ['Covered employment classified by three-digit NAICS industry subsectors', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
+  ... and 13 more columns
+Sample Row 1: ['Skagit County', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
+
+===========================================================================
+FILE: 2026Q1-QCEW-preliminary(Skagit County).csv (11.0 KB)
+===========================================================================
+Type: CSV | Approximate rows: 141
+Columns (11): ['Covered employment classified by three-digit NAICS industry subsectors', '', '', '', '', '', '', '', '', '', 'Back to index']
+Sample Row 1: ['Skagit County', '', '', '', '', '', '', '', '', '', '']
+
+===========================================================================
+FILE: 2045-Adopted-SkagitCounty-GrowthProjectionsAndAllocationsTables.xlsx (13.2 KB)
+===========================================================================
+Type: Excel (.xlsx) | Sheet count: 1
+Sheets: ['Table 1']
+  --- Sheet: 'Table 1' ---
+    R1: ['Appendix A.      Growth Alloca', '', '', '', '', '', '', '', '', '', '', '']
+    R2: ['Table 1 Final 2045 Population ', '', '', '', '', '', '', '', '', '', '', '']
+    R3: ['Urban Growth Areas', '', '', '', '', '2022\nPopulation Estimates', '', '2045 Final Population Allocati', '', '', '2022-2045 Projected Population', '']
+    R4: ['', '', '', '', '', '', '', '', '', '', 'Amount', '']
+    R5: ['Anacortes', '', '', '', '', '17983', '', '22971', '', '', '4988', '']
+
+===========================================================================
+FILE: DataforSkagitConsultingOctober2026.docx (16.4 KB)
+===========================================================================
+
+===========================================================================
+FILE: HousingMethodologyTest.xlsx (48.7 KB)
+===========================================================================
+Type: Excel (.xlsx) | Sheet count: 12
+Sheets: ['ReadMe', 'Form', 'Total', 'Anacortes', 'Burlington', 'Mount Vernon', 'Sedro-Woolley', 'Concrete', 'Hamilton', 'Lyman', 'La Conner', 'Skagit County']
+  --- Sheet: 'ReadMe' ---
+    R1: ['Initial Housing Unit Allocatio', '', '', '', '', '', '', '']
+    R3: ['OFM', 'Percent Allocation by AMI Cate', '', '', '', '', '', '']
+    R4: ['Housing Unit Structure Type', '0% to 30%', '31% to 50%', '51% to 80%', '81% to 100%', '101% to 120%', '120% +', '']
+    R5: ['1-unit', '', '', '', '', '', '1', '']
+  --- Sheet: 'Form' ---
+    R2: ['Adjusted Housing ', '', '', '', '', '', '', '', '', '', '', '']
+    R3: ['2022', '', '', '', '', '', '', '', '', '', '', '']
+    R4: ['', 'Percent Allocation by AMI Cate', '', '', '', '', '', '', '', '', '', '']
+    R5: ['Housing Unit Structure Type', '0% to 30%', '0% to 30% Adjusted', '31% to 50%', '31% to 50% Adjusted', '51% to 80%', '51% to 80% Adjusted', '81% to 100%', '81% to 100% Adjusted', '101% to 120%', '101% to 120% Adjusted', '120% +']
+  --- Sheet: 'Total' ---
+    R3: ['2022', '', '', '', '', '', '']
+    R4: ['', 'Percent Allocation by AMI Cate', '', '', '', '', '']
+    R5: ['Housing Unit Structure Type', '0% to 30%', '31% to 50%', '51% to 80%', '81% to 100%', '101% to 120%', '120% +']
+  --- Sheet: 'Anacortes' ---
+    R3: ['2022', '', '', '', '', '', '', '', '', '', '', '']
+    R4: ['', 'Percent Allocation by AMI Cate', '', '', '', '', '', '', '', '', '', '']
+    R5: ['Housing Unit Structure Type', '0% to 30%', '31% to 50%', '51% to 80%', '81% to 100%', '101% to 120%', '120% +', '', '', '', '', '']
+  --- Sheet: 'Burlington' ---
+    R3: ['2022', '', '', '', '', '', '', '', '', '', '', '']
+    R4: ['', 'Percent Allocation by AMI Cate', '', '', '', '', '', '', '', '', '', '']
+    R5: ['Housing Unit Structure Type', '0% to 30%', '31% to 50%', '51% to 80%', '81% to 100%', '101% to 120%', '120% +', '', '', '', '', '']
+  --- Sheet: 'Mount Vernon' ---
+    R3: ['2022', '', '', '', '', '', '', '', '', '', '', '']
+    R4: ['', 'Percent Allocation by AMI Cate', '', '', '', '', '', '', '', '', '', '']
+    R5: ['Housing Unit Structure Type', '0% to 30%', '31% to 50%', '51% to 80%', '81% to 100%', '101% to 120%', '120% +', '', '', '', '', '']
+  --- Sheet: 'Sedro-Woolley' ---
+    R3: ['2022', '', '', '', '', '', '', '', '', '', '', '']
+    R4: ['', 'Percent Allocation by AMI Cate', '', '', '', '', '', '', '', '', '', '']
+    R5: ['Housing Unit Structure Type', '0% to 30%', '31% to 50%', '51% to 80%', '81% to 100%', '101% to 120%', '120% +', '', '', '', '', '']
+  --- Sheet: 'Concrete' ---
+    R3: ['2022', '', '', '', '', '', '', '', '', '', '', '']
+    R4: ['', 'Percent Allocation by AMI Cate', '', '', '', '', '', '', '', '', '', '']
+    R5: ['Housing Unit Structure Type', '0% to 30%', '31% to 50%', '51% to 80%', '81% to 100%', '101% to 120%', '120% +', '', '', '', '', '']
+  --- Sheet: 'Hamilton' ---
+    R3: ['2022', '', '', '', '', '', '', '', '', '', '', '']
+    R4: ['', 'Percent Allocation by AMI Cate', '', '', '', '', '', '', '', '', '', '']
+    R5: ['Housing Unit Structure Type', '0% to 30%', '31% to 50%', '51% to 80%', '81% to 100%', '101% to 120%', '120% +', '', '', '', '', '']
+  --- Sheet: 'Lyman' ---
+    R3: ['2022', '', '', '', '', '', '', '', '', '', '', '']
+    R4: ['', 'Percent Allocation by AMI Cate', '', '', '', '', '', '', '', '', '', '']
+    R5: ['Housing Unit Structure Type', '0% to 30%', '31% to 50%', '51% to 80%', '81% to 100%', '101% to 120%', '120% +', '', '', '', '', '']
+  --- Sheet: 'La Conner' ---
+    R3: ['2022', '', '', '', '', '', '', '', '', '', '', '']
+    R4: ['', 'Percent Allocation by AMI Cate', '', '', '', '', '', '', '', '', '', '']
+    R5: ['Housing Unit Structure Type', '0% to 30%', '31% to 50%', '51% to 80%', '81% to 100%', '101% to 120%', '120% +', '', '', '', '', '']
+  --- Sheet: 'Skagit County' ---
+    R3: ['2022', '', '', '', '', '', '', '', '', '', '', '']
+    R4: ['', 'Percent Allocation by AMI Cate', '', '', '', '', '', '', '', '', '', '']
+    R5: ['Housing Unit Structure Type', '0% to 30%', '31% to 50%', '51% to 80%', '81% to 100%', '101% to 120%', '120% +', '', '', '', '', '']
+
+===========================================================================
+FILE: UGA_Dev_Permits_2025.csv (7.0 KB)
+===========================================================================
+Type: CSV | Approximate rows: 75
+Columns (12): ['Permit Number', 'Permit Type', 'Permit Work Class', 'Permit Issue Date', 'Permit Status', 'Select the Urban Growth Area of the parcel', 'Address', 'Permit Square Feet', 'Permit Description', 'Permit Application Date', 'Permit Finaled Date', 'Permit Valuation']
+Sample Row 1: ['BP24-0319', 'Building (Residential)', 'Single Family Residence', '1/2/2025', 'Issued', 'Mount Vernon', '19820 ANDERSON ROAD\nMOUNT VERNON, WA', '4270', 'New Single Family Residence', '3/19/2024', '', '$555,990.88 ']
+
+===========================================================================
+FILE: UGA_Dev_Permits_2025_1.csv (7.0 KB)
+===========================================================================
+Type: CSV | Approximate rows: 75
+Columns (12): ['Permit Number', 'Permit Type', 'Permit Work Class', 'Permit Issue Date', 'Permit Status', 'Select the Urban Growth Area of the parcel', 'Address', 'Permit Square Feet', 'Permit Description', 'Permit Application Date', 'Permit Finaled Date', 'Permit Valuation']
+Sample Row 1: ['BP24-0319', 'Building (Residential)', 'Single Family Residence', '1/2/2025', 'Issued', 'Mount Vernon', '19820 ANDERSON ROAD\nMOUNT VERNON, WA', '4270', 'New Single Family Residence', '3/19/2024', '', '$555,990.88 ']
+
+===========================================================================
+FILE: ofm_april1_population_final(Population).csv (34.7 KB)
+===========================================================================
+Type: CSV | Approximate rows: 455
+Columns (11): ['April 1, 2026 Population of Cities, Towns and Counties', '', '', '', '', '', '', '', '', '', '']
+Sample Row 1: ['Used for Allocation of Selected State Revenues', '', '', '', '', '', '', '', '', '', '']
+
+===========================================================================
+FILE: ofm_april1_postcensal_estimates_housing_1980_1990-present(Housing Units).csv (378.0 KB)
+===========================================================================
+Type: CSV | Approximate rows: 452
+Columns (156): ['Postcensal Estimates of April 1 Housing Units, 1980, 1990  to Present', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
+  ... and 141 more columns
+Sample Row 1: ['Office of Financial Management, Forecasting and Research Division', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
+
+===========================================================================
+FILE: ofm_april1_postcensal_permits_1990-present.xlsx (796.1 KB)
+===========================================================================
+Type: Excel (.xlsx) | Sheet count: 2
+Sheets: ['Readme', 'PermitCompletionDemolition']
+  --- Sheet: 'Readme' ---
+    R1: ['Reported Permits, Completions,']
+    R2: ['Office of Financial Management']
+    R4: ['This data is collected to supp']
+    R5: ['This data is subject to revisi']
+  --- Sheet: 'PermitCompletionDemolition' ---
+    R1: ['County Name', 'City Name', 'Estimate Year', 'Permitted Single Family units', 'Completed Single Family units', 'Demolished Single Family units', 'Permitted Duplexs', 'Completed Duplexs', 'Demolished Duplexs', 'Permitted 3/4 units', 'Completed 3/4 units', 'Demolished 3/4 units']
+    R2: ['Adams', 'Hatton', '1990', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+    R3: ['Adams', 'Hatton', '1991', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+    R4: ['Adams', 'Hatton', '1992', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+    R5: ['Adams', 'Hatton', '1993', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+
+===========================================================================
+FILE: saep_county20 (1).xlsx (53.1 KB)
+===========================================================================
+Type: Excel (.xlsx) | Sheet count: 5
+Sheets: ['Total Population', 'Household Population', 'Group Quarter Population', 'Total Housing Units', 'Occupied Housing Units']
+  --- Sheet: 'Total Population' ---
+    R1: ['Estimates of Total Population ', '', '', '', '', '', '', '', '', '', '', '']
+    R2: ['Washington State Office of Fin', '', '', '', '', '', '', '', '', '', '', '']
+    R3: ['.', '', '', '', '', '', '', '', '', '', '', '']
+    R4: ['By using these data the user a', '', '', '', '', '', '', '', '', '', '', '']
+    R5: ['or savings or any other conseq', '', '', '', '', '', '', '', '', '', '', '']
+  --- Sheet: 'Household Population' ---
+    R1: ['Estimates of Household Populat', '', '', '', '', '', '', '', '', '', '', '']
+    R2: ['Washington State Office of Fin', '', '', '', '', '', '', '', '', '', '', '']
+    R3: ['.', '', '', '', '', '', '', '', '', '', '', '']
+    R4: ['By using these data the user a', '', '', '', '', '', '', '', '', '', '', '']
+    R5: ['or savings or any other conseq', '', '', '', '', '', '', '', '', '', '', '']
+  --- Sheet: 'Group Quarter Population' ---
+    R1: ['Estimates of Group Quarter Pop', '', '', '', '', '', '', '', '', '', '', '']
+    R2: ['Washington State Office of Fin', '', '', '', '', '', '', '', '', '', '', '']
+    R3: ['.', '', '', '', '', '', '', '', '', '', '', '']
+    R4: ['By using these data the user a', '', '', '', '', '', '', '', '', '', '', '']
+    R5: ['or savings or any other conseq', '', '', '', '', '', '', '', '', '', '', '']
+  --- Sheet: 'Total Housing Units' ---
+    R1: ['Estimates of Total Housing Uni', '', '', '', '', '', '', '', '', '', '', '']
+    R2: ['Washington State Office of Fin', '', '', '', '', '', '', '', '', '', '', '']
+    R3: ['.', '', '', '', '', '', '', '', '', '', '', '']
+    R4: ['By using these data the user a', '', '', '', '', '', '', '', '', '', '', '']
+    R5: ['or savings or any other conseq', '', '', '', '', '', '', '', '', '', '', '']
+  --- Sheet: 'Occupied Housing Units' ---
+    R1: ['Estimates of Occupied Housing ', '', '', '', '', '', '', '', '', '', '', '']
+    R2: ['Washington State Office of Fin', '', '', '', '', '', '', '', '', '', '', '']
+    R3: ['.', '', '', '', '', '', '', '', '', '', '', '']
+    R4: ['By using these data the user a', '', '', '', '', '', '', '', '', '', '', '']
+    R5: ['or savings or any other conseq', '', '', '', '', '', '', '', '', '', '', '']
+
+===========================================================================
+FILE: saep_uga20p(Total Population).csv (64.9 KB)
+===========================================================================
+Type: CSV | Approximate rows: 400
+Columns (25): ['Estimates of Total Population for Census 2020 Urban Growth Areas by County Part', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
+  ... and 10 more columns
+Sample Row 1: ['Washington State Office of Financial Management, Small Area Estimate Program (SAEP)', '', '', '', '', '', '', '', '', '', '', '', '', '', '']

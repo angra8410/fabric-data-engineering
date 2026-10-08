@@ -1,6 +1,6 @@
 import os
 import openpyxl
-from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+from openpyxl.styles import Font, PatternFill, Alignment, Border, Side, Protection
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.datavalidation import DataValidation
 
@@ -31,6 +31,10 @@ font_td_bold = Font(name=FONT_NAME, size=9.5, bold=True, color="0F172A")
 font_calc = Font(name=FONT_NAME, size=9.5, bold=True, color="1E40AF")
 font_banner = Font(name=FONT_NAME, size=10.5, bold=True, color="166534")
 font_banner_error = Font(name=FONT_NAME, size=10.5, bold=True, color="991B1B")
+
+prot_locked_hidden = Protection(locked=True, hidden=True)
+prot_locked_visible = Protection(locked=True, hidden=False)
+prot_unlocked = Protection(locked=False, hidden=False)
 
 thin_color = "CBD5E1"
 border_thin = Border(
@@ -152,6 +156,10 @@ def add_reference_sheet(wb, expected_headers):
     ws.column_dimensions["C"].width = 32
     ws.column_dimensions["D"].width = 45
 
+    ws.sheet_state = "hidden"
+    ws.protection.sheet = True
+    ws.protection.enable()
+
 def build_schema_banner_formula(expected_headers, start_col=2, header_row=8, ref_sheet="Ref_Lookup", ref_col="C", ref_start_row=2, signature_cell="Ref_Lookup!$D$2"):
     start_letter = get_column_letter(start_col)
     end_letter = get_column_letter(start_col + len(expected_headers) - 1)
@@ -170,6 +178,17 @@ def build_schema_banner_formula(expected_headers, start_col=2, header_row=8, ref
         f'"❌ SCHEMA ERROR: Column(s) altered: " & _xlfn.TEXTJOIN(", ", TRUE, {diff_chain}))'
     )
     return formula
+
+def safe_save(wb, filepath):
+    try:
+        wb.save(filepath)
+        print(f"Regenerated {os.path.basename(filepath)} with fullCalcOnLoad, full-width banner, and Protection")
+        return True
+    except PermissionError:
+        temp_path = filepath.replace(".xlsx", "_new.xlsx")
+        wb.save(temp_path)
+        print(f"NOTE: {os.path.basename(filepath)} is open in Excel! Saved to {os.path.basename(temp_path)}.")
+        return False
 
 # =============================================================================
 # 1. TEMPLATE: HOUSING PERMITS MASTER
@@ -203,24 +222,29 @@ def create_housing_permits_template():
     ws_data["B3"] = "Regional Land Use and Residential Building Activity (1990 – Present)"
     ws_data["B3"].font = font_subtitle
     
-    # Dynamic schema banner identifying specific modified or missing columns
-    ws_data.merge_cells("B5:F5")
+    # Dynamic schema banner identifying specific modified or missing columns (Full Table Width)
+    ws_data.merge_cells("B5:Q5")
     ws_data["B5"] = build_schema_banner_formula(cols, start_col=2, header_row=8)
     ws_data["B5"].font = font_banner
     ws_data["B5"].fill = fill_status_valid
     ws_data["B5"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
     ws_data["B5"].border = border_thin
-    ws_data.row_dimensions[5].height = 32
+    ws_data["B5"].protection = prot_locked_hidden
+    ws_data.row_dimensions[5].height = 38
     
     rule_error = FormulaRule(formula=['ISNUMBER(SEARCH("❌",B5))'], fill=fill_status_error, font=font_banner_error)
-    ws_data.conditional_formatting.add("B5:F5", rule_error)
+    ws_data.conditional_formatting.add("B5:Q5", rule_error)
     
-    ws_data.merge_cells("G5:K5")
-    ws_data["G5"] = '=IF(SUMIFS(O9:O1000,C9:C1000,"<=2024")>=0,"✔ BASELINE INTEGRITY: Historical Control Totals Intact","⚠ INTEGRITY WARNING: Historical records modified!")'
-    ws_data["G5"].font = font_banner
-    ws_data["G5"].fill = fill_status_valid
-    ws_data["G5"].alignment = align_left
-    ws_data["G5"].border = border_thin
+    ws_data.merge_cells("B6:Q6")
+    ws_data["B6"] = '=IF(SUMIFS(O9:O1000,C9:C1000,"<=2024")>=0,"✔ BASELINE INTEGRITY: Historical Control Totals Intact","⚠ INTEGRITY WARNING: Historical records modified!")'
+    ws_data["B6"].font = font_banner
+    ws_data["B6"].fill = fill_status_valid
+    ws_data["B6"].alignment = Alignment(horizontal="left", vertical="center")
+    ws_data["B6"].border = border_thin
+    ws_data["B6"].protection = prot_locked_hidden
+    ws_data.row_dimensions[6].height = 24
+
+    ws_data.row_dimensions[7].height = 10
 
     ws_data.row_dimensions[8].height = 28
     for col_idx, col_name in enumerate(cols, start=2):
@@ -231,6 +255,7 @@ def create_housing_permits_template():
         cell.fill = fill_navy_header
         cell.alignment = align_th
         cell.border = border_thin
+        cell.protection = prot_unlocked
 
     sample_records = [
         ("HP-2024-001", 2024, "Anacortes", "Incorporated City/Town", 42, 4, 12, 35, 8, 0, 95, 2, 38450000, "OFM April 1 / City Permit Office"),
@@ -312,6 +337,19 @@ def create_housing_permits_template():
             cell.border = border_thin
             if curr_fill and c_let not in ["L", "O"]:
                 cell.fill = curr_fill
+            if c_let in ["L", "O"]:
+                cell.protection = prot_locked_hidden
+            else:
+                cell.protection = prot_unlocked
+
+    # Unlock future input rows (rows 21 to 250)
+    for r in range(21, 251):
+        for c_offset in range(2, 18):
+            c_let = get_column_letter(c_offset)
+            if c_let in ["L", "O"]:
+                ws_data[f"{c_let}{r}"].protection = prot_locked_hidden
+            else:
+                ws_data[f"{c_let}{r}"].protection = prot_unlocked
 
     dv_jur = DataValidation(type="list", formula1="Ref_Lookup!$A$2:$A$12", allow_blank=True)
     ws_data.add_data_validation(dv_jur)
@@ -339,8 +377,13 @@ def create_housing_permits_template():
     ws_data.column_dimensions["P"].width = 22
     ws_data.column_dimensions["Q"].width = 35
 
-    wb.save(os.path.join(output_dir, "Template_Housing_Permits_Master.xlsx"))
-    print("Regenerated Template_Housing_Permits_Master.xlsx with _xlfn and fullCalcOnLoad")
+    ws_data.protection.sheet = True
+    ws_data.protection.selectLockedCells = True
+    ws_data.protection.selectUnlockedCells = True
+    ws_data.protection.formatCells = True
+    ws_data.protection.enable()
+
+    safe_save(wb, os.path.join(output_dir, "Template_Housing_Permits_Master.xlsx"))
 
 # =============================================================================
 # 2. TEMPLATE: POPULATION MASTER
@@ -374,23 +417,29 @@ def create_population_template():
     ws_data["B3"] = "Regional Population Estimates and 2045 GMA Growth Allocation Tracking"
     ws_data["B3"].font = font_subtitle
     
-    ws_data.merge_cells("B5:F5")
+    # Dynamic schema banner identifying specific modified or missing columns (Full Table Width)
+    ws_data.merge_cells("B5:N5")
     ws_data["B5"] = build_schema_banner_formula(cols, start_col=2, header_row=8)
     ws_data["B5"].font = font_banner
     ws_data["B5"].fill = fill_status_valid
     ws_data["B5"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
     ws_data["B5"].border = border_thin
-    ws_data.row_dimensions[5].height = 32
+    ws_data["B5"].protection = prot_locked_hidden
+    ws_data.row_dimensions[5].height = 38
     
     rule_error = FormulaRule(formula=['ISNUMBER(SEARCH("❌",B5))'], fill=fill_status_error, font=font_banner_error)
-    ws_data.conditional_formatting.add("B5:F5", rule_error)
+    ws_data.conditional_formatting.add("B5:N5", rule_error)
     
-    ws_data.merge_cells("G5:K5")
-    ws_data["G5"] = '=IF(SUM(F9:F1000)>0,"✔ BASELINE INTEGRITY: Population Data Present","⚠ INTEGRITY WARNING: Population counts missing!")'
-    ws_data["G5"].font = font_banner
-    ws_data["G5"].fill = fill_status_valid
-    ws_data["G5"].alignment = align_left
-    ws_data["G5"].border = border_thin
+    ws_data.merge_cells("B6:N6")
+    ws_data["B6"] = '=IF(SUM(F9:F1000)>0,"✔ BASELINE INTEGRITY: Population Data Present","⚠ INTEGRITY WARNING: Population counts missing!")'
+    ws_data["B6"].font = font_banner
+    ws_data["B6"].fill = fill_status_valid
+    ws_data["B6"].alignment = Alignment(horizontal="left", vertical="center")
+    ws_data["B6"].border = border_thin
+    ws_data["B6"].protection = prot_locked_hidden
+    ws_data.row_dimensions[6].height = 24
+
+    ws_data.row_dimensions[7].height = 10
 
     ws_data.row_dimensions[8].height = 28
     for col_idx, col_name in enumerate(cols, start=2):
@@ -401,6 +450,7 @@ def create_population_template():
         cell.fill = fill_navy_header
         cell.alignment = align_th
         cell.border = border_thin
+        cell.protection = prot_unlocked
 
     pop_records = [
         ("POP-2025-001", 2025, "Anacortes", "Incorporated City/Town", 18350, 18270, 17983, 22971, "OFM April 1 2025 Determination"),
@@ -502,6 +552,19 @@ def create_population_template():
             cell.border = border_thin
             if curr_fill and c_let not in ["H", "I", "M"]:
                 cell.fill = curr_fill
+            if c_let in ["H", "I", "L", "M"]:
+                cell.protection = prot_locked_hidden
+            else:
+                cell.protection = prot_unlocked
+
+    # Unlock future input rows (rows 31 to 250)
+    for r in range(31, 251):
+        for c_offset in range(2, 15):
+            c_let = get_column_letter(c_offset)
+            if c_let in ["H", "I", "L", "M"]:
+                ws_data[f"{c_let}{r}"].protection = prot_locked_hidden
+            else:
+                ws_data[f"{c_let}{r}"].protection = prot_unlocked
 
     dv_jur = DataValidation(type="list", formula1="Ref_Lookup!$A$2:$A$12", allow_blank=True)
     ws_data.add_data_validation(dv_jur)
@@ -522,8 +585,13 @@ def create_population_template():
     ws_data.column_dimensions["M"].width = 26
     ws_data.column_dimensions["N"].width = 35
 
-    wb.save(os.path.join(output_dir, "Template_Population_Master.xlsx"))
-    print("Regenerated Template_Population_Master.xlsx with _xlfn and fullCalcOnLoad")
+    ws_data.protection.sheet = True
+    ws_data.protection.selectLockedCells = True
+    ws_data.protection.selectUnlockedCells = True
+    ws_data.protection.formatCells = True
+    ws_data.protection.enable()
+
+    safe_save(wb, os.path.join(output_dir, "Template_Population_Master.xlsx"))
 
 # =============================================================================
 # 3. TEMPLATE: EMPLOYMENT & INDUSTRY MASTER
@@ -556,22 +624,29 @@ def create_employment_template():
     ws_data["B3"] = "Skagit County Covered Employment and Business Establishment Trends (ESD / QCEW)"
     ws_data["B3"].font = font_subtitle
     
-    ws_data.merge_cells("B5:E5")
+    # Dynamic schema banner identifying specific modified or missing columns (Full Table Width)
+    ws_data.merge_cells("B5:N5")
     ws_data["B5"] = build_schema_banner_formula(cols, start_col=2, header_row=8)
     ws_data["B5"].font = font_banner
     ws_data["B5"].fill = fill_status_valid
     ws_data["B5"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
     ws_data["B5"].border = border_thin
-    ws_data.row_dimensions[5].height = 32
+    ws_data["B5"].protection = prot_locked_hidden
+    ws_data.row_dimensions[5].height = 38
     
     rule_error = FormulaRule(formula=['ISNUMBER(SEARCH("❌",B5))'], fill=fill_status_error, font=font_banner_error)
-    ws_data.conditional_formatting.add("B5:E5", rule_error)
+    ws_data.conditional_formatting.add("B5:N5", rule_error)
     
-    ws_data.merge_cells("F5:I5")
-    ws_data["F5"] = '=IF(SUM(G9:G50)>0,"✔ INTEGRITY CHECK: Total Covered Employment Verified","⚠ INTEGRITY WARNING: Employment counts missing!")'
-    ws_data["F5"].font = font_banner
-    ws_data["F5"].fill = fill_status_valid
-    ws_data["F5"].border = border_thin
+    ws_data.merge_cells("B6:N6")
+    ws_data["B6"] = '=IF(SUM(G9:G50)>0,"✔ INTEGRITY CHECK: Total Covered Employment Verified","⚠ INTEGRITY WARNING: Employment counts missing!")'
+    ws_data["B6"].font = font_banner
+    ws_data["B6"].fill = fill_status_valid
+    ws_data["B6"].alignment = Alignment(horizontal="left", vertical="center")
+    ws_data["B6"].border = border_thin
+    ws_data["B6"].protection = prot_locked_hidden
+    ws_data.row_dimensions[6].height = 24
+
+    ws_data.row_dimensions[7].height = 10
 
     ws_data.row_dimensions[8].height = 28
     for col_idx, col_name in enumerate(cols, start=2):
@@ -582,6 +657,7 @@ def create_employment_template():
         cell.fill = fill_navy_header
         cell.alignment = align_th
         cell.border = border_thin
+        cell.protection = prot_unlocked
 
     emp_samples = [
         ("EMP-2025-001", 2025, "TOTAL", "", "Total Covered Employment (All Industries)", 3663, 53850, 52930, 54510, 54220, 53740, "Official Revised"),
@@ -654,6 +730,19 @@ def create_employment_template():
             cell.border = border_thin
             if curr_fill and c_let != "M":
                 cell.fill = curr_fill
+            if c_let == "M":
+                cell.protection = prot_locked_hidden
+            else:
+                cell.protection = prot_unlocked
+
+    # Unlock future input rows (rows 19 to 250)
+    for r in range(19, 251):
+        for c_offset in range(2, 15):
+            c_let = get_column_letter(c_offset)
+            if c_let == "M":
+                ws_data[f"{c_let}{r}"].protection = prot_locked_hidden
+            else:
+                ws_data[f"{c_let}{r}"].protection = prot_unlocked
 
     ws_data.column_dimensions["A"].width = 3
     ws_data.column_dimensions["B"].width = 16
@@ -670,8 +759,13 @@ def create_employment_template():
     ws_data.column_dimensions["M"].width = 22
     ws_data.column_dimensions["N"].width = 22
 
-    wb.save(os.path.join(output_dir, "Template_Employment_Master.xlsx"))
-    print("Regenerated Template_Employment_Master.xlsx with _xlfn and fullCalcOnLoad")
+    ws_data.protection.sheet = True
+    ws_data.protection.selectLockedCells = True
+    ws_data.protection.selectUnlockedCells = True
+    ws_data.protection.formatCells = True
+    ws_data.protection.enable()
+
+    safe_save(wb, os.path.join(output_dir, "Template_Employment_Master.xlsx"))
 
 # =============================================================================
 # 4. TEMPLATE: HOUSING AFFORDABILITY BY AMI MASTER
@@ -705,22 +799,29 @@ def create_housing_ami_template():
     ws_data["B3"] = "Housing Unit Distribution Across Area Median Income (AMI) Brackets by Jurisdiction"
     ws_data["B3"].font = font_subtitle
     
-    ws_data.merge_cells("B5:E5")
+    # Dynamic schema banner identifying specific modified or missing columns (Full Table Width)
+    ws_data.merge_cells("B5:M5")
     ws_data["B5"] = build_schema_banner_formula(cols, start_col=2, header_row=8)
     ws_data["B5"].font = font_banner
     ws_data["B5"].fill = fill_status_valid
     ws_data["B5"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
     ws_data["B5"].border = border_thin
-    ws_data.row_dimensions[5].height = 32
+    ws_data["B5"].protection = prot_locked_hidden
+    ws_data.row_dimensions[5].height = 38
     
     rule_error = FormulaRule(formula=['ISNUMBER(SEARCH("❌",B5))'], fill=fill_status_error, font=font_banner_error)
-    ws_data.conditional_formatting.add("B5:E5", rule_error)
+    ws_data.conditional_formatting.add("B5:M5", rule_error)
     
-    ws_data.merge_cells("F5:I5")
-    ws_data["F5"] = '=IF(SUM(L9:L35)>0,"✔ INTEGRITY CHECK: AMI Units Reconciled","⚠ INTEGRITY WARNING: Unit totals missing! Input units across AMI tiers.")'
-    ws_data["F5"].font = font_banner
-    ws_data["F5"].fill = fill_status_valid
-    ws_data["F5"].border = border_thin
+    ws_data.merge_cells("B6:M6")
+    ws_data["B6"] = '=IF(SUM(L9:L35)>0,"✔ INTEGRITY CHECK: AMI Units Reconciled","⚠ INTEGRITY WARNING: Unit totals missing! Input units across AMI tiers.")'
+    ws_data["B6"].font = font_banner
+    ws_data["B6"].fill = fill_status_valid
+    ws_data["B6"].alignment = Alignment(horizontal="left", vertical="center")
+    ws_data["B6"].border = border_thin
+    ws_data["B6"].protection = prot_locked_hidden
+    ws_data.row_dimensions[6].height = 24
+
+    ws_data.row_dimensions[7].height = 10
 
     ws_data.row_dimensions[8].height = 28
     for col_idx, col_name in enumerate(cols, start=2):
@@ -731,6 +832,7 @@ def create_housing_ami_template():
         cell.fill = fill_navy_header
         cell.alignment = align_th
         cell.border = border_thin
+        cell.protection = prot_unlocked
 
     ami_seed_data = [
         ("AMI-2025-001", 2025, "Anacortes", "1-unit (Single Family)", 0, 0, 2, 6, 12, 18),
@@ -799,6 +901,19 @@ def create_housing_ami_template():
             cell.border = border_thin
             if curr_fill and c_let != "L":
                 cell.fill = curr_fill
+            if c_let == "L":
+                cell.protection = prot_locked_hidden
+            else:
+                cell.protection = prot_unlocked
+
+    # Unlock future input rows (rows 29 to 200)
+    for r in range(29, 201):
+        for c_offset in range(2, 14):
+            c_let = get_column_letter(c_offset)
+            if c_let == "L":
+                ws_data[f"{c_let}{r}"].protection = prot_locked_hidden
+            else:
+                ws_data[f"{c_let}{r}"].protection = prot_unlocked
 
     dv_jur = DataValidation(type="list", formula1="Ref_Lookup!$A$2:$A$12", allow_blank=True)
     ws_data.add_data_validation(dv_jur)
@@ -818,8 +933,13 @@ def create_housing_ami_template():
     ws_data.column_dimensions["L"].width = 22
     ws_data.column_dimensions["M"].width = 22
 
-    wb.save(os.path.join(output_dir, "Template_Housing_AMI_Master.xlsx"))
-    print("Regenerated Template_Housing_AMI_Master.xlsx with _xlfn and fullCalcOnLoad")
+    ws_data.protection.sheet = True
+    ws_data.protection.selectLockedCells = True
+    ws_data.protection.selectUnlockedCells = True
+    ws_data.protection.formatCells = True
+    ws_data.protection.enable()
+
+    safe_save(wb, os.path.join(output_dir, "Template_Housing_AMI_Master.xlsx"))
 
 if __name__ == "__main__":
     create_housing_permits_template()

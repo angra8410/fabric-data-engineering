@@ -266,13 +266,17 @@ def build_fact_housing_permits(dim_jur):
             mf5_comp = clean_num(r[13])
             mf5_demo = clean_num(r[14])
             
-            mob_perm = clean_num(r[15])
-            mob_comp = clean_num(r[16])
-            mob_demo = clean_num(r[17])
+            adu_perm = clean_num(r[15])
+            adu_comp = clean_num(r[16])
+            adu_demo = clean_num(r[17])
             
-            tot_perm = sf_perm + dup_perm + mf34_perm + mf5_perm + mob_perm
-            tot_comp = sf_comp + dup_comp + mf34_comp + mf5_comp + mob_comp
-            tot_demo = sf_demo + dup_demo + mf34_demo + mf5_demo + mob_demo
+            mob_perm = 0
+            mob_comp = 0
+            mob_demo = 0
+            
+            tot_perm = sf_perm + dup_perm + mf34_perm + mf5_perm + adu_perm
+            tot_comp = sf_comp + dup_comp + mf34_comp + mf5_comp + adu_comp
+            tot_demo = sf_demo + dup_demo + mf34_demo + mf5_demo + adu_demo
             net_new = tot_perm - tot_demo
             
             records.append({
@@ -282,13 +286,13 @@ def build_fact_housing_permits(dim_jur):
                 "Duplex_Units": dup_perm,
                 "MultiFamily_3_4_Units": mf34_perm,
                 "MultiFamily_5_Plus_Units": mf5_perm,
-                "ADU_Units": 0, # not separately broken out in historical OFM
+                "ADU_Units": adu_perm,
                 "Mobile_Home_Units": mob_perm,
                 "Total_Permitted_Units": tot_perm,
                 "Completed_Units": tot_comp,
                 "Demolished_Units": tot_demo,
                 "Net_New_Units": net_new,
-                "Total_Valuation_USD": 0,
+                "Total_Valuation_USD": 0.0,
                 "Data_Source": "OFM Postcensal Housing Permits (1990-present)"
             })
     wb.close()
@@ -307,7 +311,7 @@ def build_fact_housing_permits(dim_jur):
             val = clean_num(row.get("Permit Valuation", 0))
             
             if norm_uga not in uga_agg:
-                uga_agg[norm_uga] = {"sf": 0, "adu": 0, "add": 0, "tot": 0, "val": 0}
+                uga_agg[norm_uga] = {"sf": 0, "adu": 0, "add": 0, "tot": 0, "val": 0.0}
             
             if "single family" in wclass:
                 uga_agg[norm_uga]["sf"] += 1
@@ -334,7 +338,7 @@ def build_fact_housing_permits(dim_jur):
                     "Completed_Units": data["tot"],
                     "Demolished_Units": 0,
                     "Net_New_Units": data["tot"],
-                    "Total_Valuation_USD": int(data["val"]),
+                    "Total_Valuation_USD": round(float(data["val"]), 2),
                     "Data_Source": "Skagit County UGA Building Permits Log (2025)"
                 })
 

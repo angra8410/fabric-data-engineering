@@ -19,7 +19,7 @@ pie title Budget Allocation (100h Contract Cap)
     "Pre-billed Scoping (15h)" : 15
     "Today: Task 1 - Templates & Audit (4h)" : 4
     "Today: Task 2 - ETL & Star Schema (3h)" : 3
-    "Remaining Execution Buffer (78h)" : 78
+    "Remaining Budget (78h)" : 78
 ```
 
 ### Timesheet Log for Today (Extracted from [`SCOG_Control_Presupuestario_Horas.xlsx`](file:///C:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/scog-growth-report/SCOG_Control_Presupuestario_Horas.xlsx))
@@ -107,9 +107,36 @@ pie title Budget Allocation (100h Contract Cap)
 - **Phase 1 (Discovery & Planning):** 4.0 Hours consumed / 8.0h allocated (4.0h remaining)
 - **Phase 2 (2025 Prototype):** 3.0 Hours consumed / 16.0h allocated (13.0h remaining)
 - **Total Burn:** **22.0 Hours (22.0%)**
-- **Available Buffer / Remaining:** **78.0 Hours (78.0%)**
+- **Remaining Budget:** **78.0 Hours (78.0%)** (with 22.0 Hours Contingency Buffer intact)
+
+---
+
+## 5. Technical Audit Findings & Remediation Plan
+
+A detailed quality audit of the deliverables produced during today's session identified 5 key areas requiring immediate correction before client presentation:
+
+1. **Integrity Validation Checks:**
+   - *Current issue:* Formulas only evaluated if sums were `>= 0`, failing to detect altered historical values (e.g., changing 42 to 9999). Employment checked establishments instead of covered employment; AMI reconciliation status was a hard-coded string.
+   - *Fix:* Store official adopted control totals in `Ref_Lookup` and test exact match (`ABS(SUM(...) - Ref_Lookup!Val) < 0.01`). Dynamically reconcile AMI tier totals against permit unit totals.
+2. **GMA 2045 Allocation Progress:**
+   - *Current issue:* The population template compared incorporated city counts against UGA baselines, generating negative progress percentages (e.g., Burlington −18.9%, Concrete −74.0%).
+   - *Fix:* Use the disaggregated UGA population series from SAEP against the adopted 2022 UGA baselines and 2045 targets (yielding Burlington 29.0%, Concrete 5.0%, Mount Vernon 6.7%, Sedro-Woolley 20.7%, Anacortes 10.6%, Rural ~10.1%).
+3. **Sample Rows vs. Raw Data Truth:**
+   - *Current issue:* Mock sample rows were labeled "Official"; `Fact_Housing_AMI` was contaminated by being loaded from mock template rows instead of official sources (since 2025/2026 data is due Oct 20).
+   - *Fix:* Pre-populate templates only with true historical raw data or keep them empty as pure intake forms, and exclude mock AMI records from the production star schema.
+4. **Contractual Excel Table Deliverables:**
+   - *Current issue:* Data ranges were plain styled ranges, not formal OpenXML `Table` (`ListObject`) objects with protected formula columns.
+   - *Fix:* Wrap all intake ranges into named Excel Tables with column auto-expansion and locked formula headers.
+5. **Hours & Summary Tracking Precision:**
+   - *Current issue:* Pie chart labeled 78h as buffer instead of budget; range math excluded scoping while baseline included it; Task 2 ETL was completed prior to auditing the existing 2025 `.pbix`.
+   - *Fix:* Updated terminology, unified baseline calculations, and aligned sequence of prototype audit.
+
+---
 
 ### Immediate Next Steps (Task 2 Continuation)
-1. **Power BI Model Ingestion:** Load [`SCOG_Star_Schema_Data_Model.xlsx`](file:///C:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/scog-growth-report/data/processed/SCOG_Star_Schema_Data_Model.xlsx) into Power BI Desktop and establish active 1:N dimensional relationships.
-2. **Core DAX Library Formulation:** Implement business measures for housing production, population YoY growth, rolling 5-year averages, and GMA 2045 allocation completion percentages.
-3. **Report Canvas Assembly:** Construct the 4-page widescreen report layout (Executive Summary, Housing Deep-Dive, Population & Employment Mix, Jurisdictional Spatial Map) formatted for Board PDF distribution.
+1. **Apply Corrections to Master Templates:** Rebuild templates via `generate_master_templates.py` with true `ListObject` tables, locked formulas, and stored control totals.
+2. **Re-run ETL Pipeline:** Update `etl_star_schema.py` to ensure clean fact tables with no mock data contamination.
+3. **Power BI Model Ingestion:** Load [`SCOG_Star_Schema_Data_Model.xlsx`](file:///C:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/scog-growth-report/data/processed/SCOG_Star_Schema_Data_Model.xlsx) into Power BI Desktop and establish active 1:N dimensional relationships.
+4. **Core DAX Library Formulation:** Implement business measures for housing production, population YoY growth, rolling 5-year averages, and GMA 2045 allocation completion percentages.
+5. **Report Canvas Assembly:** Construct the 4-page widescreen report layout (Executive Summary, Housing Deep-Dive, Population & Employment Mix, Jurisdictional Spatial Map) formatted for Board PDF distribution.
+

@@ -7,3 +7,6 @@ generate_tracker_excel.py
 # Confidential client & consultant draft templates
 *CAI.Total Employment Calc Template*.xlsx
 
+# Power BI local desktop machine settings
+.pbi/
+*.localSettings.json

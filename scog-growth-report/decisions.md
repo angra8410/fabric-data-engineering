@@ -194,3 +194,21 @@
 - **Consecuencias:**
   - El modelo analítico queda listo para ser consumido inmediatamente en Power BI Desktop.
   - Para 2026, el personal de SCOG solo necesitará actualizar los archivos raw o la plantilla y ejecutar el refresh.
+
+---
+
+## [ADR-012] Integración de Metodología de Empleo Total CAI (QCEW + NES) y Metas Tripartitas GMA 2045
+- **Fecha:** 2026-10-09
+- **Estado:** Aprobado / Implementado
+- **Contexto:** El cliente (SCOG) proporcionó el modelo metodológico oficial de Community Attributes Inc. (`CAI.Total Employment Calc Template DRAFT.2024 0206.xlsx`), revelando que las proyecciones adoptadas por el condado a 2045 (Ordenanza O20250002) miden **Empleo Total** (incluyendo trabajadores independientes y propietarios no empleadores de las Estadísticas de No Empleadores del Censo de EE. UU. / NES), mientras que la fuente primaria ESD QCEW solo reporta **Empleo Cubierto** por seguro de desempleo.
+- **Decisión Tomada:**
+  1. **Integración Tripartita de Metas en `Dim_GMA_2045_Target`:** Extender la dimensión de metas para incluir las tres tablas oficiales de Appendix A:
+     - Tabla 1: Población (Línea base 2022 y Meta 2045).
+     - Tabla 2: Vivienda neta requerida 2020-2045 (17,450 unidades en el condado).
+     - Tabla 3: Empleo Total (Línea base 2022 = 59,571; Meta 2045 = 80,100).
+  2. **Factor Multiplicador de Empleo Total CAI (1.15458):** Incorporar en el pipeline ETL el factor empírico promedio de autoempleo (`Average Self-Employment Ratio = 1.15458`) derivado por CAI en la serie histórica (1999–2020).
+  3. **Extensión de `Fact_Employment`:** Añadir las columnas `Estimated_Total_Employment` (`Annual_Average_Employment * 1.15458`) y `CAI_Self_Employment_Multiplier` (1.15458), e integrar las observaciones preliminares del primer trimestre de 2026 (`2026 Q1 Preliminary`).
+  4. **Nueva Tabla Dimensional `Dim_CAI_Employment_Benchmark`:** Exponer la serie histórica (1999–2022) de empleo cubierto, autoempleo NES, empleo combinado y ratios de autoempleo para trazabilidad metodológica completa en Power BI.
+- **Consecuencias:**
+  - Se cierra la brecha analítica entre el empleo cubierto por ESD (~54,148 en 2025) y las metas de empleo total del GMA (80,100 a 2045).
+  - Los tableros de Power BI pueden ahora presentar métricas directas de avance hacia el cumplimiento del GMA 2045 en los tres ejes fundamentales: Población, Vivienda y Empleo.

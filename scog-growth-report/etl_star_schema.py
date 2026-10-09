@@ -40,6 +40,8 @@ NAME_NORM_MAP = {
     "sedro-woolley": "Sedro-Woolley",
     "sedro woolley": "Sedro-Woolley",
     "sedrowoolley": "Sedro-Woolley",
+    "sedro-\nwoolley": "Sedro-Woolley",
+    "sedro- woolley": "Sedro-Woolley",
     "bay view ridge": "Bay View Ridge UGA",
     "bayview ridge": "Bay View Ridge UGA",
     "bayview\nridge": "Bay View Ridge UGA",
@@ -50,13 +52,22 @@ NAME_NORM_MAP = {
     "unincorporated": "Unincorporated Skagit County",
     "unincorporated skagit county": "Unincorporated Skagit County",
     "rural (outside ugas)": "Unincorporated Skagit County",
+    "rural (outside of ugas)": "Unincorporated Skagit County",
+    "rural (outside of uga's)": "Unincorporated Skagit County",
+    "rural (outside of\nuga's)": "Unincorporated Skagit County",
+    "rural (outside of\nugas)": "Unincorporated Skagit County",
+    "rural (outside of uga’s)": "Unincorporated Skagit County",
+    "rural (outside of\nuga’s)": "Unincorporated Skagit County",
 }
 
 def normalize_name(raw_name):
     if not raw_name:
         return None
-    cleaned = str(raw_name).strip().lower().replace("  ", " ")
-    return NAME_NORM_MAP.get(cleaned, str(raw_name).strip())
+    cleaned = str(raw_name).strip().lower().replace("  ", " ").replace("’", "'")
+    if cleaned in NAME_NORM_MAP:
+        return NAME_NORM_MAP[cleaned]
+    cleaned_flat = cleaned.replace("\n", " ").replace("- ", "-").replace("  ", " ")
+    return NAME_NORM_MAP.get(cleaned_flat, str(raw_name).strip())
 
 def clean_num(val):
     if val is None or val == "" or str(val).strip() in ["*", "-", "N/A", "None"]:
@@ -113,32 +124,59 @@ def build_dim_gma_2045_target(dim_jur):
     wb = openpyxl.load_workbook(path, data_only=True)
     ws = wb['Table 1']
     
-    rows = []
-    for r in ws.iter_rows(min_row=5, max_row=18, values_only=True):
-        raw_name = r[0]
-        if not raw_name or str(raw_name).strip() in ["UGA Subtotal", "Grand Total"]:
-            continue
-        norm_name = normalize_name(raw_name)
-        p2022 = clean_num(r[5])
-        p2045 = clean_num(r[7])
-        proj_growth = clean_num(r[10])
-        rows.append({
-            "Jurisdiction_Name": norm_name,
-            "Baseline_2022_Population": p2022,
-            "Target_2045_Population": p2045,
-            "Projected_2045_Growth": proj_growth
-        })
+    # Table 1: Population Allocations (rows 5 to 14, 16)
+    pop_dict = {}
+    for r in [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16]:
+        name = normalize_name(ws.cell(r, 1).value)
+        p22 = clean_num(ws.cell(r, 6).value)
+        p45 = clean_num(ws.cell(r, 8).value)
+        pgrowth = clean_num(ws.cell(r, 11).value)
+        pshare = clean_num(ws.cell(r, 13).value)
+        pop_dict[name] = (p22, p45, pgrowth, pshare)
+
+    # Table 2: Housing Allocations - Net New Housing Needed 2020-2045 (rows 22 to 31, 33)
+    hsg_dict = {}
+    for r in [22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 33]:
+        name = normalize_name(ws.cell(r, 1).value)
+        tot_hsg = clean_num(ws.cell(r, 16).value)
+        hsg_dict[name] = tot_hsg
+
+    # Table 3: Employment Allocations (rows 40 to 49, 51)
+    emp_dict = {}
+    for r in [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 51]:
+        name = normalize_name(ws.cell(r, 1).value)
+        e22 = clean_num(ws.cell(r, 6).value)
+        e45 = clean_num(ws.cell(r, 9).value)
+        egrowth = clean_num(ws.cell(r, 11).value)
+        eshare = clean_num(ws.cell(r, 13).value)
+        emp_dict[name] = (e22, e45, egrowth, eshare)
+
     wb.close()
     
-    df = pd.DataFrame(rows)
-    # Merge with Dim_Jurisdiction to get Jurisdiction_ID
-    df = pd.merge(dim_jur[["Jurisdiction_ID", "Jurisdiction_Name", "Jurisdiction_Type"]], df, on="Jurisdiction_Name", how="left")
-    
-    # County Total Growth for calculating target shares
-    tot_growth = df["Projected_2045_Growth"].sum()
-    df["Projected_Growth_Share_Pct"] = (df["Projected_2045_Growth"] / tot_growth).round(4) if tot_growth > 0 else 0
-    df["Data_Source"] = "Appendix A. Skagit County 2045 Growth Projections & Allocations"
-    return df
+    records = []
+    for _, j in dim_jur.iterrows():
+        jname = j["Jurisdiction_Name"]
+        p22, p45, pgrowth, pshare = pop_dict.get(jname, (0, 0, 0, 0))
+        h45 = hsg_dict.get(jname, 0)
+        e22, e45, egrowth, eshare = emp_dict.get(jname, (0, 0, 0, 0))
+        records.append({
+            "Jurisdiction_ID": j["Jurisdiction_ID"],
+            "Jurisdiction_Name": jname,
+            "Jurisdiction_Type": j["Jurisdiction_Type"],
+            "Baseline_2022_Population": p22,
+            "Target_2045_Population": p45,
+            "Projected_2045_Population_Growth": pgrowth,
+            "Population_Growth_Share_Pct": round(float(pshare), 4) if pshare else 0.0,
+            "Target_2045_Housing_Units": h45,
+            "Baseline_2022_Employment": e22,
+            "Target_2045_Employment": e45,
+            "Projected_2045_Employment_Growth": egrowth,
+            "Employment_Growth_Share_Pct": round(float(eshare), 4) if eshare else 0.0,
+            "CAI_Self_Employment_Multiplier": 1.15458,
+            "Data_Source": "Appendix A. Skagit County 2045 Growth Projections & Allocations (O20250002)"
+        })
+        
+    return pd.DataFrame(records)
 
 # -----------------------------------------------------------------------------
 # 4. BUILD FACT_POPULATION
@@ -356,13 +394,64 @@ def build_fact_housing_permits(dim_jur):
     return df[cols_order]
 
 # -----------------------------------------------------------------------------
-# 6. BUILD FACT_EMPLOYMENT
+# 6. BUILD DIM_CAI_EMPLOYMENT_BENCHMARK
+# -----------------------------------------------------------------------------
+def build_dim_cai_employment_benchmark():
+    print("-> Building Dim_CAI_Employment_Benchmark...")
+    cai_path = os.path.join(RAW_DIR, "CAI.Total Employment Calc Template DRAFT.2024 0206.xlsx")
+    wb = openpyxl.load_workbook(cai_path, data_only=True)
+    ws = wb['Total Employment Calculation']
+    
+    records = []
+    # Historical columns D to X (cols 4 to 24) covering 1999 to 2019
+    for c in range(4, 25):
+        yr = ws.cell(20, c).value
+        if yr is not None and isinstance(yr, (int, float)):
+            yr = int(yr)
+            self_emp = clean_num(ws.cell(21, c).value)
+            tot_emp = clean_num(ws.cell(26, c).value)
+            cov_emp = (tot_emp - self_emp) if (tot_emp and self_emp) else 0
+            ratio = float(ws.cell(31, c).value) if ws.cell(31, c).value else 0.0
+            
+            records.append({
+                "Year": yr,
+                "Covered_Employment_QCEW": int(cov_emp),
+                "Self_Employment_NES": int(self_emp),
+                "Total_Employment_Combined": int(tot_emp),
+                "Self_Employment_Ratio": round(ratio, 5),
+                "Benchmark_10Yr_Average_Ratio": 1.15458,
+                "Data_Source": "CAI Total Employment Calc Template / BLS QCEW & Census NES"
+            })
+    wb.close()
+    
+    # Add 2022 baseline row from CAI cells D15, D16, D41
+    records.append({
+        "Year": 2022,
+        "Covered_Employment_QCEW": 51597,
+        "Self_Employment_NES": 7976, # 59,573 total - 51,597 covered
+        "Total_Employment_Combined": 59573,
+        "Self_Employment_Ratio": 1.15458,
+        "Benchmark_10Yr_Average_Ratio": 1.15458,
+        "Data_Source": "CAI Total Employment Calc Template / 2022 Adopted Baseline"
+    })
+    
+    df = pd.DataFrame(records).sort_values("Year").reset_index(drop=True)
+    df["Benchmark_Key"] = [f"CAI-EMP-{r['Year']}" for _, r in df.iterrows()]
+    cols_order = [
+        "Benchmark_Key", "Year", "Covered_Employment_QCEW", "Self_Employment_NES",
+        "Total_Employment_Combined", "Self_Employment_Ratio", "Benchmark_10Yr_Average_Ratio",
+        "Data_Source"
+    ]
+    return df[cols_order]
+
+# -----------------------------------------------------------------------------
+# 7. BUILD FACT_EMPLOYMENT
 # -----------------------------------------------------------------------------
 def build_fact_employment():
     print("-> Building Fact_Employment...")
     records = []
     
-    # 6.1 2025 QCEW Revised
+    # 7.1 2025 QCEW Revised
     qcew_path = os.path.join(RAW_DIR, "2025-QCEW-annual-averages-revised(Skagit County) (1).csv")
     with open(qcew_path, "r", encoding="utf-8", errors="ignore") as f:
         reader = csv.reader(f)
@@ -389,6 +478,7 @@ def build_fact_employment():
             # Annual Average
             avg_emp = clean_num(row[17]) if len(row) > 17 else (sum(monthly)/12 if monthly else 0)
             avg_wage = clean_num(row[18]) if len(row) > 18 else 0
+            est_tot_emp = int(round(avg_emp * 1.15458)) if avg_emp > 0 else 0
             
             records.append({
                 "Year": 2025,
@@ -397,6 +487,8 @@ def build_fact_employment():
                 "Industry_Subsector_Title": title,
                 "Average_Establishments": firms,
                 "Annual_Average_Employment": int(avg_emp),
+                "Estimated_Total_Employment": est_tot_emp,
+                "CAI_Self_Employment_Multiplier": 1.15458,
                 "Average_Annual_Wage_USD": int(avg_wage),
                 "Jan_Employment": int(monthly[0]),
                 "Feb_Employment": int(monthly[1]),
@@ -413,11 +505,61 @@ def build_fact_employment():
                 "Data_Status": "2025 Official Revised Averages"
             })
             
+    # 7.2 2026 Q1 QCEW Preliminary
+    q1_path = os.path.join(RAW_DIR, "2026Q1-QCEW-preliminary(Skagit County).csv")
+    if os.path.exists(q1_path):
+        with open(q1_path, "r", encoding="utf-8", errors="ignore") as f:
+            reader = csv.reader(f)
+            for _ in range(5):
+                next(reader, None)
+            for row in reader:
+                if not row or len(row) < 3:
+                    continue
+                n2 = row[0].strip()
+                n3 = row[1].strip()
+                title = row[2].strip()
+                if not title or title.lower().startswith("source"):
+                    continue
+                firms = clean_num(row[3]) if len(row) > 3 else 0
+                jan = clean_num(row[4]) if len(row) > 4 else 0
+                feb = clean_num(row[5]) if len(row) > 5 else 0
+                mar = clean_num(row[6]) if len(row) > 6 else 0
+                avg_emp = clean_num(row[8]) if len(row) > 8 else 0
+                avg_qtr_wage = clean_num(row[9]) if len(row) > 9 else 0
+                annualized_wage = int(avg_qtr_wage * 4)
+                est_tot_emp = int(round(avg_emp * 1.15458)) if avg_emp > 0 else 0
+                
+                records.append({
+                    "Year": 2026,
+                    "NAICS_2Digit_Code": n2,
+                    "NAICS_3Digit_Code": n3,
+                    "Industry_Subsector_Title": title,
+                    "Average_Establishments": firms,
+                    "Annual_Average_Employment": int(avg_emp),
+                    "Estimated_Total_Employment": est_tot_emp,
+                    "CAI_Self_Employment_Multiplier": 1.15458,
+                    "Average_Annual_Wage_USD": annualized_wage,
+                    "Jan_Employment": int(jan),
+                    "Feb_Employment": int(feb),
+                    "Mar_Employment": int(mar),
+                    "Apr_Employment": 0,
+                    "May_Employment": 0,
+                    "Jun_Employment": 0,
+                    "Jul_Employment": 0,
+                    "Aug_Employment": 0,
+                    "Sep_Employment": 0,
+                    "Oct_Employment": 0,
+                    "Nov_Employment": 0,
+                    "Dec_Employment": 0,
+                    "Data_Status": "2026 Q1 Preliminary"
+                })
+
     df = pd.DataFrame(records)
     df["Fact_Employment_Key"] = [f"FEMP-{i+1:04d}" for i in range(len(df))]
     cols_order = [
         "Fact_Employment_Key", "Year", "NAICS_2Digit_Code", "NAICS_3Digit_Code", "Industry_Subsector_Title",
-        "Average_Establishments", "Annual_Average_Employment", "Average_Annual_Wage_USD",
+        "Average_Establishments", "Annual_Average_Employment", "Estimated_Total_Employment",
+        "CAI_Self_Employment_Multiplier", "Average_Annual_Wage_USD",
         "Jan_Employment", "Feb_Employment", "Mar_Employment", "Apr_Employment",
         "May_Employment", "Jun_Employment", "Jul_Employment", "Aug_Employment",
         "Sep_Employment", "Oct_Employment", "Nov_Employment", "Dec_Employment",
@@ -426,7 +568,7 @@ def build_fact_employment():
     return df[cols_order]
 
 # -----------------------------------------------------------------------------
-# 7. BUILD FACT_HOUSING_AMI
+# 8. BUILD FACT_HOUSING_AMI
 # -----------------------------------------------------------------------------
 def build_fact_housing_ami(dim_jur):
     print("-> Building Fact_Housing_AMI...")
@@ -489,6 +631,7 @@ def run_etl():
     dim_jur = build_dim_jurisdiction()
     dim_cal = build_dim_calendaryear()
     dim_gma = build_dim_gma_2045_target(dim_jur)
+    dim_cai = build_dim_cai_employment_benchmark()
     
     # 2. Facts
     fact_pop = build_fact_population(dim_jur)
@@ -501,6 +644,7 @@ def run_etl():
         "Dim_Jurisdiction": dim_jur,
         "Dim_CalendarYear": dim_cal,
         "Dim_GMA_2045_Target": dim_gma,
+        "Dim_CAI_Employment_Benchmark": dim_cai,
         "Fact_Population": fact_pop,
         "Fact_HousingPermits": fact_hsg,
         "Fact_Employment": fact_emp,
@@ -511,7 +655,7 @@ def run_etl():
     for name, df in tables.items():
         csv_path = os.path.join(PROCESSED_DIR, f"{name}.csv")
         df.to_csv(csv_path, index=False, encoding="utf-8")
-        print(f"   [CSV] {name:25} | Rows: {len(df):6d} | Cols: {len(df.columns):2d} -> {csv_path}")
+        print(f"   [CSV] {name:30} | Rows: {len(df):6d} | Cols: {len(df.columns):2d} -> {csv_path}")
 
     # Save to Multi-tab Master Excel Model for Power BI
     excel_path = os.path.join(PROCESSED_DIR, "SCOG_Star_Schema_Data_Model.xlsx")

@@ -1,0 +1,223 @@
+/*
+========================================================================================
+SCOG ANNUAL GROWTH MONITORING REPORT — COMPLETE DAX MEASURES LIBRARY
+Project: Skagit Council of Governments (SCOG) Growth Monitoring Report
+Version: 2025 Prototype Baseline
+Model Architecture: Star Schema (Conformed Dimensions: Jurisdiction, CalendarYear, GMA Target)
+========================================================================================
+*/
+
+// =====================================================================================
+// 01. EXECUTIVE & GOVERNANCE MEASURES
+// =====================================================================================
+
+[Selected Reporting Year] = 
+COALESCE(SELECTEDVALUE(Dim_CalendarYear[Year]), 2025)
+/* Description: Returns the actively filtered year in slicers, defaulting to 2025 prototype baseline. */
+
+[Selected Jurisdiction] = 
+SELECTEDVALUE(Dim_Jurisdiction[Jurisdiction_Name], "All Skagit County Jurisdictions")
+/* Description: Returns the actively selected jurisdiction or an explicit countywide indicator. */
+
+[Report Adoption Status Banner] = 
+VAR CurrentYr = [Selected Reporting Year]
+RETURN
+IF(
+    CurrentYr <= 2024,
+    "BOARD ADOPTED (Official Legal Record)",
+    IF(
+        CurrentYr = 2025,
+        "PROTOTYPE 2025 (Prior-Year Historical Calibration)",
+        "PRELIMINARY 2026 (Under Review / Draft)"
+    )
+)
+/* Description: Dynamic audit indicator for board review and PDF exports. */
+
+[Metadata Footer Notice] = 
+"Data Sources: WA Office of Financial Management (OFM) | Employment Security Department (ESD QCEW) | Skagit County GMA Allocations (Ordinance O20250002) | SCOG Annual Growth Monitoring Report"
+/* Description: Mandatory data governance citation footer on all 16:9 canvas pages. */
+
+
+// =====================================================================================
+// 02. POPULATION GROWTH & TARGETS
+// =====================================================================================
+
+[Total Population] = 
+SUM(Fact_Population[Population_Count])
+// Format: #,##0
+/* Description: Official April 1 population determination by OFM. */
+
+[Prior Year Population] = 
+CALCULATE(
+    [Total Population],
+    SAMEPERIODLASTYEAR(Dim_CalendarYear[Year])
+)
+// Format: #,##0
+
+[YoY Population Change] = 
+SUM(Fact_Population[YoY_Population_Change])
+// Format: +#,##0;-#,##0;0
+
+[YoY Population Growth %] = 
+DIVIDE([YoY Population Change], [Prior Year Population], 0)
+// Format: 0.00%
+
+[2022 Population Baseline] = 
+SUM(Dim_GMA_2045_Target[Baseline_2022_Population])
+// Format: #,##0
+
+[2045 Population Target] = 
+SUM(Dim_GMA_2045_Target[Target_2045_Population])
+// Format: #,##0
+
+[Projected 2045 Population Growth] = 
+SUM(Dim_GMA_2045_Target[Projected_2045_Population_Growth])
+// Format: #,##0
+
+[Population Growth Toward 2045 Target %] = 
+VAR CurrentPop = [Total Population]
+VAR BasePop = [2022 Population Baseline]
+VAR TargetGain = [Projected 2045 Population Growth]
+RETURN
+IF(TargetGain > 0, DIVIDE(CurrentPop - BasePop, TargetGain, 0), BLANK())
+// Format: 0.0%
+
+[Remaining Population Capacity to 2045] = 
+[2045 Population Target] - [Total Population]
+// Format: #,##0
+
+
+// =====================================================================================
+// 03. HOUSING PRODUCTION & AMI
+// =====================================================================================
+
+[Total Housing Permits] = 
+SUM(Fact_HousingPermits[Total_Permitted_Units])
+// Format: #,##0
+
+[Single-Family Permits] = 
+SUM(Fact_HousingPermits[Single_Family_Units])
+// Format: #,##0
+
+[Multi-Family Permits] = 
+SUM(Fact_HousingPermits[Duplex_Units]) + 
+SUM(Fact_HousingPermits[MultiFamily_3_4_Units]) + 
+SUM(Fact_HousingPermits[MultiFamily_5_Plus_Units])
+// Format: #,##0
+
+[ADU Permits] = 
+SUM(Fact_HousingPermits[ADU_Units])
+// Format: #,##0
+
+[Demolished Units] = 
+SUM(Fact_HousingPermits[Demolished_Units])
+// Format: #,##0
+
+[Net New Housing Units] = 
+SUM(Fact_HousingPermits[Net_New_Units])
+// Format: #,##0
+
+[Total Permit Valuation] = 
+SUM(Fact_HousingPermits[Total_Valuation_USD])
+// Format: $#,##0
+
+[2045 Housing Target Units] = 
+SUM(Dim_GMA_2045_Target[Target_2045_Housing_Units])
+// Format: #,##0
+
+[Cumulative Net Housing Units (2020-Present)] = 
+CALCULATE(
+    [Net New Housing Units],
+    FILTER(
+        ALL(Dim_CalendarYear),
+        Dim_CalendarYear[Year] >= 2020 && Dim_CalendarYear[Year] <= MAX(Dim_CalendarYear[Year])
+    )
+)
+// Format: #,##0
+
+[Housing Target Progress %] = 
+DIVIDE([Cumulative Net Housing Units (2020-Present)], [2045 Housing Target Units], 0)
+// Format: 0.0%
+
+[Low Income AMI Units (<80% AMI)] = 
+SUM(Fact_Housing_AMI[AMI_0_to_30_Pct_Units]) + 
+SUM(Fact_Housing_AMI[AMI_31_to_50_Pct_Units]) + 
+SUM(Fact_Housing_AMI[AMI_51_to_80_Pct_Units])
+// Format: #,##0
+/* Description: PRELIMINARY — Based on statewide default distribution (WA Commerce Exhibit 12). Official certified local jurisdiction datasheets are due October 20. */
+
+[Moderate to High Income AMI Units (>80% AMI)] = 
+SUM(Fact_Housing_AMI[AMI_81_to_100_Pct_Units]) + 
+SUM(Fact_Housing_AMI[AMI_101_to_120_Pct_Units]) + 
+SUM(Fact_Housing_AMI[AMI_Greater_120_Pct_Units])
+// Format: #,##0
+/* Description: PRELIMINARY — Based on statewide default distribution (WA Commerce Exhibit 12). Official certified local jurisdiction datasheets are due October 20. */
+
+
+// =====================================================================================
+// 04. EMPLOYMENT & CAI METHODOLOGY
+// =====================================================================================
+
+[Covered Employment QCEW] = 
+CALCULATE(
+    SUM(Fact_Employment[Annual_Average_Employment]),
+    Fact_Employment[Is_County_Total] = 1
+)
+// Format: #,##0
+/* Description: Official Employment Security Department (ESD QCEW) covered jobs for Skagit County Total. */
+
+[Estimated Total Employment (CAI Multiplier)] = 
+CALCULATE(
+    SUM(Fact_Employment[Estimated_Total_Employment]),
+    Fact_Employment[Is_County_Total] = 1
+)
+// Format: #,##0
+/* Description: PRELIMINARY & WITHHELD FROM OFFICIAL REPORTING — Pending confirmation with SCOG staff on whether GMA 2045 employment targets are benchmarked against covered or total employment. Applies empirical CAI self-employment ratio (1.15458) to County Total row only. */
+
+[2022 Employment Baseline] = 
+SUM(Dim_GMA_2045_Target[Baseline_2022_Employment])
+// Format: #,##0
+
+[2045 Employment Target] = 
+SUM(Dim_GMA_2045_Target[Target_2045_Employment])
+// Format: #,##0
+
+[Employment Growth Toward 2045 Target %] = 
+VAR CurrentEmp = [Covered Employment QCEW]
+VAR BaseEmp = [2022 Employment Baseline]
+VAR TargetGain = [2045 Employment Target] - BaseEmp
+RETURN
+IF(TargetGain > 0, DIVIDE(CurrentEmp - BaseEmp, TargetGain, 0), BLANK())
+// Format: 0.0%
+/* Description: Progress toward the 2045 GMA regional employment target (Countywide level only; not tracked at municipal level). */
+
+[Total Establishments] = 
+CALCULATE(
+    SUM(Fact_Employment[Average_Establishments]),
+    Fact_Employment[Is_County_Total] = 1
+)
+// Format: #,##0
+
+[Average Annual Wage USD] = 
+CALCULATE(
+    AVERAGE(Fact_Employment[Average_Annual_Wage_USD]),
+    Fact_Employment[Is_County_Total] = 1
+)
+// Format: $#,##0
+
+
+// =====================================================================================
+// 05. REGIONAL & SPATIAL ANALYSIS
+// =====================================================================================
+
+[Jurisdiction Share of Regional Population %] = 
+VAR RegionalPop = CALCULATE([Total Population], ALL(Dim_Jurisdiction))
+RETURN
+DIVIDE([Total Population], RegionalPop, 0)
+// Format: 0.0%
+
+[Jurisdiction Share of Regional Housing %] = 
+VAR RegionalHousing = CALCULATE([Net New Housing Units], ALL(Dim_Jurisdiction))
+RETURN
+DIVIDE([Net New Housing Units], RegionalHousing, 0)
+// Format: 0.0%

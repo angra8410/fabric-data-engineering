@@ -13,17 +13,17 @@ os.makedirs(PROCESSED_DIR, exist_ok=True)
 # JURISDICTION NORMALIZATION MAP
 # -----------------------------------------------------------------------------
 JURISDICTION_MASTER = [
-    {"Jurisdiction_ID": "JUR-01", "Jurisdiction_Name": "Anacortes", "Jurisdiction_Type": "Incorporated City/Town", "Is_Incorporated": 1, "Is_UGA": 1},
-    {"Jurisdiction_ID": "JUR-02", "Jurisdiction_Name": "Burlington", "Jurisdiction_Type": "Incorporated City/Town", "Is_Incorporated": 1, "Is_UGA": 1},
-    {"Jurisdiction_ID": "JUR-03", "Jurisdiction_Name": "Concrete", "Jurisdiction_Type": "Incorporated City/Town", "Is_Incorporated": 1, "Is_UGA": 1},
-    {"Jurisdiction_ID": "JUR-04", "Jurisdiction_Name": "Hamilton", "Jurisdiction_Type": "Incorporated City/Town", "Is_Incorporated": 1, "Is_UGA": 1},
-    {"Jurisdiction_ID": "JUR-05", "Jurisdiction_Name": "La Conner", "Jurisdiction_Type": "Incorporated City/Town", "Is_Incorporated": 1, "Is_UGA": 1},
-    {"Jurisdiction_ID": "JUR-06", "Jurisdiction_Name": "Lyman", "Jurisdiction_Type": "Incorporated City/Town", "Is_Incorporated": 1, "Is_UGA": 1},
-    {"Jurisdiction_ID": "JUR-07", "Jurisdiction_Name": "Mount Vernon", "Jurisdiction_Type": "Incorporated City/Town", "Is_Incorporated": 1, "Is_UGA": 1},
-    {"Jurisdiction_ID": "JUR-08", "Jurisdiction_Name": "Sedro-Woolley", "Jurisdiction_Type": "Incorporated City/Town", "Is_Incorporated": 1, "Is_UGA": 1},
-    {"Jurisdiction_ID": "JUR-09", "Jurisdiction_Name": "Bay View Ridge UGA", "Jurisdiction_Type": "Urban Growth Area (UGA)", "Is_Incorporated": 0, "Is_UGA": 1},
-    {"Jurisdiction_ID": "JUR-10", "Jurisdiction_Name": "Swinomish UGA", "Jurisdiction_Type": "Urban Growth Area (UGA)", "Is_Incorporated": 0, "Is_UGA": 1},
-    {"Jurisdiction_ID": "JUR-11", "Jurisdiction_Name": "Unincorporated Skagit County", "Jurisdiction_Type": "Unincorporated Rural Area", "Is_Incorporated": 0, "Is_UGA": 0},
+    {"Jurisdiction_ID": "JUR-01", "Jurisdiction_Name": "Anacortes", "Jurisdiction_Type": "Incorporated City/Town", "Is_Incorporated": 1, "Is_UGA": 1, "Latitude": 48.5126, "Longitude": -122.6127},
+    {"Jurisdiction_ID": "JUR-02", "Jurisdiction_Name": "Burlington", "Jurisdiction_Type": "Incorporated City/Town", "Is_Incorporated": 1, "Is_UGA": 1, "Latitude": 48.4757, "Longitude": -122.3254},
+    {"Jurisdiction_ID": "JUR-03", "Jurisdiction_Name": "Concrete", "Jurisdiction_Type": "Incorporated City/Town", "Is_Incorporated": 1, "Is_UGA": 1, "Latitude": 48.5393, "Longitude": -121.7471},
+    {"Jurisdiction_ID": "JUR-04", "Jurisdiction_Name": "Hamilton", "Jurisdiction_Type": "Incorporated City/Town", "Is_Incorporated": 1, "Is_UGA": 1, "Latitude": 48.5246, "Longitude": -121.9868},
+    {"Jurisdiction_ID": "JUR-05", "Jurisdiction_Name": "La Conner", "Jurisdiction_Type": "Incorporated City/Town", "Is_Incorporated": 1, "Is_UGA": 1, "Latitude": 48.3943, "Longitude": -122.4957},
+    {"Jurisdiction_ID": "JUR-06", "Jurisdiction_Name": "Lyman", "Jurisdiction_Type": "Incorporated City/Town", "Is_Incorporated": 1, "Is_UGA": 1, "Latitude": 48.5251, "Longitude": -122.0621},
+    {"Jurisdiction_ID": "JUR-07", "Jurisdiction_Name": "Mount Vernon", "Jurisdiction_Type": "Incorporated City/Town", "Is_Incorporated": 1, "Is_UGA": 1, "Latitude": 48.4212, "Longitude": -122.3340},
+    {"Jurisdiction_ID": "JUR-08", "Jurisdiction_Name": "Sedro-Woolley", "Jurisdiction_Type": "Incorporated City/Town", "Is_Incorporated": 1, "Is_UGA": 1, "Latitude": 48.5039, "Longitude": -122.2363},
+    {"Jurisdiction_ID": "JUR-09", "Jurisdiction_Name": "Bay View Ridge UGA", "Jurisdiction_Type": "Urban Growth Area (UGA)", "Is_Incorporated": 0, "Is_UGA": 1, "Latitude": 48.4717, "Longitude": -122.4239},
+    {"Jurisdiction_ID": "JUR-10", "Jurisdiction_Name": "Swinomish UGA", "Jurisdiction_Type": "Urban Growth Area (UGA)", "Is_Incorporated": 0, "Is_UGA": 1, "Latitude": 48.4069, "Longitude": -122.5186},
+    {"Jurisdiction_ID": "JUR-11", "Jurisdiction_Name": "Unincorporated Skagit County", "Jurisdiction_Type": "Unincorporated Rural Area", "Is_Incorporated": 0, "Is_UGA": 0, "Latitude": 48.4800, "Longitude": -121.8000},
 ]
 
 NAME_NORM_MAP = {

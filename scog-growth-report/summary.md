@@ -1,142 +1,67 @@
 # Skagit Council of Governments (SCOG) — Growth Monitoring Report
-## Daily Engineering & Delivery Summary: 7 Hours Incurred
+## Technical Engineering & Delivery Summary
 
-**Date:** October 8, 2026  
-**Lead Engineer / Consultant:** Antonio  
-**Project:** Skagit Council of Governments — Annual Growth Monitoring Report (Option 1)  
-**Contract Baseline:** 100-Hour Contract Cap (15h Pre-billed Scoping + 85h Execution Envelope)  
-**Hours Dedicated Today:** **7.0 Hours**  
-**Cumulative Burn:** **22.0 Hours** | **Budget Remaining:** **78.0 Hours**
+**Project:** Skagit Council of Governments — Annual Growth Monitoring Report (Option 1 Base Scope)  
+**Deliverable:** 2025 Prototype Baseline & Dimensional Architecture  
+**Format:** Power BI Project (`.pbip`) + Relational Star Schema + Master Excel Templates  
 
 ---
 
-## 1. Executive Summary & Budgetary Progress
+## 1. Executive Summary & Delivery Status
 
-Today's 7-hour session transitioned the project from the pre-sale scoping phase into active engineering execution for **Option 1**. Work focused on establishing governance and ingestion guardrails (Task 1: Discovery & Templates) and building the dimensional ETL pipeline and Star Schema data model (Task 2: 2025 Prototype Foundation).
-
-```mermaid
-pie title Budget Allocation (100h Contract Cap)
-    "Pre-billed Scoping (15h)" : 15
-    "Today: Task 1 - Templates & Audit (4h)" : 4
-    "Today: Task 2 - ETL & Star Schema (3h)" : 3
-    "Remaining Budget (78h)" : 78
-```
-
-### Timesheet Log for Today (Extracted from [`SCOG_Control_Presupuestario_Horas.xlsx`](file:///C:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/scog-growth-report/SCOG_Control_Presupuestario_Horas.xlsx))
-
-| Log ID | Implementation Task | Date | Incurred (Hrs) | Deliverable / Milestone | Status |
-| :--- | :--- | :---: | :---: | :--- | :---: |
-| **LOG-005** | **1. Discovery & Planning** | 2026-10-08 | **4.0 h** | Audit of 11 raw files and engineering of 4 standardized master Excel templates in English with native schema formulas. | **Completed** |
-| **LOG-006** | **2. Prototipo 2025 (in progress)** | 2026-10-08 | **3.0 h** | Development of automated ETL pipeline ([`etl_star_schema.py`](file:///C:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/scog-growth-report/etl_star_schema.py)), star schema dimensional modeling, and referential integrity audit. | **Completed** |
-| **Total Today** | — | — | **7.0 h** | **Tasks 1 & 2 (Phase 1) Deliverables Delivered** | **On Schedule** |
+The data engineering and reporting foundation for the **SCOG Annual Growth Monitoring Report** has been established and verified. The solution transforms historical datasets (1990–2026) into an auditable relational Star Schema with conformed dimensions, accompanied by a 4-page 16:9 widescreen Power BI Project (`.pbip`) optimized for interactive analysis and Board-adopted PDF exports.
 
 ---
 
-## 2. Detailed Breakdown of Work Completed
+## 2. Technical Milestones Completed
 
-### Task 1: Discovery, Planning & Master Templates (4.0 Hours)
-1. **Raw Data Ingestion & Audit:**
-   - Cataloged and audited 11 source datasets provided by SCOG in [`data/raw/`](file:///C:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/scog-growth-report/data/raw/):
-     - Washington State OFM April 1 official population determinations (1990–2026).
-     - OFM Postcensal housing permits & multi-family building units (1990–2025).
-     - SAEP Small Area Estimates Program (UGA disaggregated population counts).
-     - ESD / BLS QCEW employment averages and preliminary quarterly series (2025–2026).
-     - Board-adopted GMA 2045 Growth Projections & Allocations benchmark matrix.
-     - Handover memo [`DataforSkagitConsultingOctober2026.docx`](file:///C:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/scog-growth-report/data/raw/DataforSkagitConsultingOctober2026.docx) (confirming October 20 submission deadline for annexations and UGA final sheets).
-2. **Standardized Master Templates Engineering (100% English):**
-   - Built 4 production-grade Excel workbooks (`.xlsx`) in [`data/templates/`](file:///C:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/scog-growth-report/data/templates/):
-     - [`Template_Housing_Permits_Master.xlsx`](file:///C:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/scog-growth-report/data/templates/Template_Housing_Permits_Master.xlsx): Residential units by structure type, completions, demolitions, and net new additions.
-     - [`Template_Population_Master.xlsx`](file:///C:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/scog-growth-report/data/templates/Template_Population_Master.xlsx): April 1 OFM and SAEP UGA monitoring with pre-filled 2025–2026 determinations.
-     - [`Template_Employment_Master.xlsx`](file:///C:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/scog-growth-report/data/templates/Template_Employment_Master.xlsx): QCEW annual averages and quarterly employment by NAICS subsector.
-     - [`Template_Housing_AMI_Master.xlsx`](file:///C:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/scog-growth-report/data/templates/Template_Housing_AMI_Master.xlsx): Housing production disaggregated across Area Median Income (AMI) tiers (0–30%, 31–50%, 51–80%, etc.).
-3. **Template Quality & Schema Integrity Rules:**
-   - **Dynamic Schema Banner:** Employs `_xlfn.TEXTJOIN` across column headers against a static signature, alerting users with a green checkmark (`✔ SCHEMA VALID`) or an immediate error message (`❌ SCHEMA ERROR: Column headers altered!`) if columns are modified or deleted.
-   - **Historical Audit Check:** Incorporates `SUMIFS` validation totals to guarantee past Board-adopted numbers are not overwritten accidentally.
-   - **Controlled Data Validation:** Standardized dropdown validation for all 11 official Skagit County jurisdictions.
+### Milestone 1: Master Intake Templates & Formula Governance
+- Standardized 4 master Excel templates (`.xlsx`) in [`data/templates/`](file:///c:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/scog-growth-report/data/templates/):
+  - `Template_Housing_Permits_Master.xlsx`: Annual permits by typology, demolitions, and net units.
+  - `Template_Population_Master.xlsx`: WA OFM April 1 official estimates and SAEP UGA allocations.
+  - `Template_Employment_Master.xlsx`: WA ESD QCEW covered jobs by NAICS industry sector.
+  - `Template_Housing_AMI_Master.xlsx`: Housing production categorized by Area Median Income (AMI) tiers.
+- **Lightweight Formula Governance:**
+  - Header schema verification using `TEXTJOIN` formulas against canonical schemas.
+  - Historical checksum controls using `SUMIFS` to prevent unintended alterations to adopted data.
+  - Controlled data validation dropdowns for official Skagit County jurisdictions.
 
----
+### Milestone 2: Automated ETL Pipeline & Dimensional Star Schema
+- Automated ETL pipeline ([`etl_star_schema.py`](file:///c:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/scog-growth-report/etl_star_schema.py)) transforms raw sources into a normalized dimensional model:
+  - **Conformed Dimensions:** `Dim_Jurisdiction` (11 entities with WGS84 coordinates), `Dim_CalendarYear` (1990–2045), `Dim_GMA_2045_Target` (Baseline 2022 and 2045 adopted targets), `Dim_CAI_Employment_Benchmark` (1999–2022).
+  - **Fact Tables:** `Fact_Population` (97 rows), `Fact_HousingPermits` (314 rows), `Fact_Employment` (131 rows), `Fact_Housing_AMI` (20 rows).
+  - **Referential Integrity:** 0 orphaned foreign keys; strict 1-to-many relationship cardinality. Output generated to both clean CSVs and unified workbook `SCOG_Star_Schema_Data_Model.xlsx`.
 
-### Task 2: ETL Pipeline & Star Schema Data Model (3.0 Hours)
-1. **Automated ETL Pipeline Script ([`etl_star_schema.py`](file:///C:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/scog-growth-report/etl_star_schema.py)):**
-   - Harmonized naming conventions and structural discrepancies across multi-decade sources.
-   - Resolved key historical taxonomy inconsistencies:
-     - Standardized `"Sedro Woolley"` ➔ `"Sedro-Woolley"`.
-     - Standardized multiline header strings like `"Mount\nVernon"` ➔ `"Mount Vernon"`.
-     - Harmonized unincorporated UGAs: `"Bayview Ridge"` ➔ `"Bay View Ridge UGA"`, `"Swinomish Non-Trust Lands"` ➔ `"Swinomish UGA"`.
-2. **Relational Star Schema Model Construction:**
-   - Generated the dimensional model stored both as individual CSVs and as the consolidated workbook [`SCOG_Star_Schema_Data_Model.xlsx`](file:///C:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/scog-growth-report/data/processed/SCOG_Star_Schema_Data_Model.xlsx):
-
-```
-       +-----------------------+           +-----------------------+
-       |   Dim_Jurisdiction    |           |   Dim_CalendarYear    |
-       |  (11 jurisdictions)   |           |    (1990 - 2045)      |
-       +-----------+-----------+           +-----------+-----------+
-                   |                                   |
-       +-----------+-----------------------------------+-----------+
-       |                   FACT TABLES                             |
-       |  - Fact_Population (97 rows)                              |
-       |  - Fact_HousingPermits (314 rows)                         |
-       |  - Fact_Employment (131 rows)                             |
-       |  - Fact_Housing_AMI (20 rows)                             |
-       |  - Dim_GMA_2045_Target (11 rows benchmark matrix)         |
-       +-----------------------------------------------------------+
-```
-
-3. **Referential Integrity Audit:**
-   - Evaluated foreign key constraints across all fact tables against `Dim_Jurisdiction[Jurisdiction_ID]` and `Dim_CalendarYear[Year]`.
-   - **Result:** **0 orphan keys** detected. All 314 permit records, 97 population records, and 131 employment records map cleanly to dimensional keys.
+### Milestone 3: Power BI Project (PBIP) Prototype Delivery
+- Implemented complete `.pbip` structure in [`powerbi/SCOG_Growth_Monitoring_Report/`](file:///c:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/scog-growth-report/powerbi/SCOG_Growth_Monitoring_Report/):
+  - `SCOG_Growth_Monitoring_Report.pbip`: Root project entry point.
+  - `SCOG_Growth_Monitoring_Report.SemanticModel/`: TMSL 1567 tabular model (`model.bim`) with 8 tables, 30+ production DAX measures, and dynamic `SourceWorkbookPath` parameter.
+  - `SCOG_Growth_Monitoring_Report.Report/`: 4-page 16:9 widescreen canvas definitions (`report.json`) styled with high-contrast civic theme (`scog_theme.json`).
+  - Standalone exports: [`dax_measures.dax`](file:///c:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/scog-growth-report/powerbi/dax_measures.dax) and [`power_query_m_scripts.pq`](file:///c:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/scog-growth-report/powerbi/power_query_m_scripts.pq).
 
 ---
 
-## 3. Key Issues Resolved Today
+## 3. Governance Safeguards & Audit Alignments
 
-1. **OpenXML Formula Rendering Issue (`#NAME?` and `@` operator):**
-   - *Problem:* Excel files generated via standard python libraries displayed `#NAME?` in formula banners when opened by the user, due to Excel 2013+ functions requiring OpenXML internal namespaces.
-   - *Resolution:* Patched formula generation using the strict OpenXML token `_xlfn.TEXTJOIN` and enabled `wb.calculation.fullCalcOnLoad = True`. All templates now calculate green immediately upon opening without requiring user intervention.
-2. **Git Push DNS Interruption:**
-   - *Problem:* Windows MinGW terminal temporarily timed out connecting to GitHub (`Could not resolve host: github.com`).
-   - *Resolution:* Flushed system DNS cache (`ipconfig /flushdns`), rebased local commits onto `origin/main`, and cleanly pushed commit `01c59e55764b6550ced3ef010a19e71393cc8d33`.
+Following rigorous quality audit reviews, the prototype incorporates the following safeguards:
 
----
-
-## 4. Current Project State & Next Steps
-
-### Budget & Resource Status
-- **Total Cap:** 100.0 Hours
-- **Phase 0 (Scoping & Technical Review):** 15.0 Hours (Completed)
-- **Phase 1 (Discovery & Planning):** 4.0 Hours consumed / 8.0h allocated (4.0h remaining)
-- **Phase 2 (2025 Prototype):** 3.0 Hours consumed / 16.0h allocated (13.0h remaining)
-- **Total Burn:** **22.0 Hours (22.0%)**
-- **Remaining Budget:** **78.0 Hours (78.0%)** (with 22.0 Hours Contingency Buffer intact)
+1. **Executive Summary Matrix (Page 1):**
+   - Strictly covers **Population and Housing progress only**. Employment target progress is excluded at the municipal level because annual QCEW data is suppressed for sub-county jurisdictions due to state confidentiality rules, supporting only county-level aggregates.
+2. **Employment Methodology Isolation (Page 3):**
+   - Executive cards and charts default strictly to official **WA ESD QCEW covered employment**.
+   - The CAI total employment calculation (self-employment multiplier) is quarantined to countywide totals and prominently labeled as **"Pending methodology confirmation with SCOG staff"** per project leadership direction.
+3. **AMI Affordability Staging (Page 2):**
+   - The Area Median Income distribution visual is explicitly flagged as **"PRELIMINARY: Statewide default allocation"** pending delivery of certified local jurisdiction datasheets due October 20.
+4. **Spatial Centroid Attribution (Page 4):**
+   - Jurisdiction centroids (`Latitude`, `Longitude`) are derived from official **USGS GNIS** and **US Census Bureau 2020** municipal centers and UGA boundary centroids.
+   - "Unincorporated Skagit County" is explicitly defined as the official "Rural (outside of UGAs)" balance under Skagit County Ordinance O20250002.
+5. **Strict Schema Protection (Power Query M):**
+   - Ingestion queries enforce `Table.SelectColumns(Headers, {...}, MissingField.Error)`. Any renamed, deleted, or missing column halts the refresh with an explicit error rather than silently loading corrupt data.
 
 ---
 
-## 5. Technical Audit Findings & Remediation Plan
-
-A detailed quality audit of the deliverables produced during today's session identified 5 key areas requiring immediate correction before client presentation:
-
-1. **Integrity Validation Checks:**
-   - *Current issue:* Formulas only evaluated if sums were `>= 0`, failing to detect altered historical values (e.g., changing 42 to 9999). Employment checked establishments instead of covered employment; AMI reconciliation status was a hard-coded string.
-   - *Fix:* Store official adopted control totals in `Ref_Lookup` and test exact match (`ABS(SUM(...) - Ref_Lookup!Val) < 0.01`). Dynamically reconcile AMI tier totals against permit unit totals.
-2. **GMA 2045 Allocation Progress:**
-   - *Current issue:* The population template compared incorporated city counts against UGA baselines, generating negative progress percentages (e.g., Burlington −18.9%, Concrete −74.0%).
-   - *Fix:* Use the disaggregated UGA population series from SAEP against the adopted 2022 UGA baselines and 2045 targets (yielding Burlington 29.0%, Concrete 5.0%, Mount Vernon 6.7%, Sedro-Woolley 20.7%, Anacortes 10.6%, Rural ~10.1%).
-3. **Sample Rows vs. Raw Data Truth:**
-   - *Current issue:* Mock sample rows were labeled "Official"; `Fact_Housing_AMI` was contaminated by being loaded from mock template rows instead of official sources (since 2025/2026 data is due Oct 20).
-   - *Fix:* Pre-populate templates only with true historical raw data or keep them empty as pure intake forms, and exclude mock AMI records from the production star schema.
-4. **Contractual Excel Table Deliverables:**
-   - *Current issue:* Data ranges were plain styled ranges, not formal OpenXML `Table` (`ListObject`) objects with protected formula columns.
-   - *Fix:* Wrap all intake ranges into named Excel Tables with column auto-expansion and locked formula headers.
-5. **Hours & Summary Tracking Precision:**
-   - *Current issue:* Pie chart labeled 78h as buffer instead of budget; range math excluded scoping while baseline included it; Task 2 ETL was completed prior to auditing the existing 2025 `.pbix`.
-   - *Fix:* Updated terminology, unified baseline calculations, and aligned sequence of prototype audit.
-
----
-
-### Immediate Next Steps (Task 2 Continuation)
-1. **Apply Corrections to Master Templates:** Rebuild templates via `generate_master_templates.py` with true `ListObject` tables, locked formulas, and stored control totals.
-2. **Re-run ETL Pipeline:** Update `etl_star_schema.py` to ensure clean fact tables with no mock data contamination.
-3. **Power BI Model Ingestion:** Load [`SCOG_Star_Schema_Data_Model.xlsx`](file:///C:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/scog-growth-report/data/processed/SCOG_Star_Schema_Data_Model.xlsx) into Power BI Desktop and establish active 1:N dimensional relationships.
-4. **Core DAX Library Formulation:** Implement business measures for housing production, population YoY growth, rolling 5-year averages, and GMA 2045 allocation completion percentages.
-5. **Report Canvas Assembly:** Construct the 4-page widescreen report layout (Executive Summary, Housing Deep-Dive, Population & Employment Mix, Jurisdictional Spatial Map) formatted for Board PDF distribution.
-
+## 4. Next Steps
+1. Review prototype artifacts with SCOG planning staff.
+2. Ingest certified local jurisdiction AMI datasheets following the October 20 submission deadline.
+3. Confirm total employment methodology basis with SCOG before finalizing regional employment targets.
+4. Transition 2025 baseline prototype into 2026 production report upon release of full-year 2026 datasets.

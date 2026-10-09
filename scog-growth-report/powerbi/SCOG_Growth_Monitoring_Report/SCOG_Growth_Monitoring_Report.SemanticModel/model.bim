@@ -1,0 +1,977 @@
+{
+  "name": "SCOG_Growth_Monitoring_Report",
+  "compatibilityLevel": 1567,
+  "model": {
+    "culture": "en-US",
+    "dataAccessOptions": {
+      "legacyRedirects": true,
+      "returnErrorValuesAsNull": true
+    },
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "sourceQueryCulture": "en-US",
+    "expressions": [
+      {
+        "name": "SourceWorkbookPath",
+        "kind": "m",
+        "expression": "\"C:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/scog-growth-report/data/processed/SCOG_Star_Schema_Data_Model.xlsx\" meta [IsParameterQuery=true, Type=\"Text\", IsParameterQueryRequired=true]",
+        "description": "File path to the master processed star schema Excel workbook."
+      }
+    ],
+    "tables": [
+      {
+        "name": "_Measures",
+        "description": "Central repository for calculated DAX business logic and KPI metrics.",
+        "columns": [
+          {
+            "name": "Measure_Group",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "Measure_Group"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "_Measures",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": "let\n    Source = #table({\"Measure_Group\"}, {{\"SCOG Growth Metrics\"}})\nin\n    Source"
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Selected Reporting Year",
+            "expression": "COALESCE(SELECTEDVALUE(Dim_CalendarYear[Year]), 2025)",
+            "formatString": "0",
+            "displayFolder": "01. Executive & Governance",
+            "description": "Currently filtered calendar year, defaulting to prototype baseline 2025."
+          },
+          {
+            "name": "Selected Jurisdiction",
+            "expression": "SELECTEDVALUE(Dim_Jurisdiction[Jurisdiction_Name], \"All Skagit County Jurisdictions\")",
+            "displayFolder": "01. Executive & Governance",
+            "description": "Selected jurisdiction name or countywide indicator."
+          },
+          {
+            "name": "Report Adoption Status Banner",
+            "expression": "VAR CurrentYr = [Selected Reporting Year]\nRETURN\nIF(CurrentYr <= 2024, \"BOARD ADOPTED (Official Legal Record)\", IF(CurrentYr = 2025, \"PROTOTYPE 2025 (Prior-Year Historical Calibration)\", \"PRELIMINARY 2026 (Under Review / Draft)\"))",
+            "displayFolder": "01. Executive & Governance",
+            "description": "Dynamic governance status indicator for Board adoption review."
+          },
+          {
+            "name": "Metadata Footer Notice",
+            "expression": "\"Data Sources: WA Office of Financial Management (OFM) | Employment Security Department (ESD QCEW) | Skagit County GMA Allocations (Ordinance O20250002) | SCOG Annual Growth Monitoring Report\"",
+            "displayFolder": "01. Executive & Governance",
+            "description": "Standardized audit attribution footer text required for Board PDF exports."
+          },
+          {
+            "name": "Total Population",
+            "expression": "SUM(Fact_Population[Population_Count])",
+            "formatString": "#,##0",
+            "displayFolder": "02. Population Growth & Targets",
+            "description": "Total official population estimate from OFM April 1."
+          },
+          {
+            "name": "Prior Year Population",
+            "expression": "CALCULATE([Total Population], SAMEPERIODLASTYEAR(Dim_CalendarYear[Year]))",
+            "formatString": "#,##0",
+            "displayFolder": "02. Population Growth & Targets",
+            "description": "Population count in the prior calendar year."
+          },
+          {
+            "name": "YoY Population Change",
+            "expression": "SUM(Fact_Population[YoY_Population_Change])",
+            "formatString": "+#,##0;-#,##0;0",
+            "displayFolder": "02. Population Growth & Targets",
+            "description": "Net annual population change relative to prior year."
+          },
+          {
+            "name": "YoY Population Growth %",
+            "expression": "DIVIDE([YoY Population Change], [Prior Year Population], 0)",
+            "formatString": "0.00%",
+            "displayFolder": "02. Population Growth & Targets",
+            "description": "Annual percentage growth rate of population."
+          },
+          {
+            "name": "2022 Population Baseline",
+            "expression": "SUM(Dim_GMA_2045_Target[Baseline_2022_Population])",
+            "formatString": "#,##0",
+            "displayFolder": "02. Population Growth & Targets",
+            "description": "GMA adopted 2022 baseline population from Ordinance O20250002."
+          },
+          {
+            "name": "2045 Population Target",
+            "expression": "SUM(Dim_GMA_2045_Target[Target_2045_Population])",
+            "formatString": "#,##0",
+            "displayFolder": "02. Population Growth & Targets",
+            "description": "GMA 2045 adopted population growth target allocation."
+          },
+          {
+            "name": "Projected 2045 Population Growth",
+            "expression": "SUM(Dim_GMA_2045_Target[Projected_2045_Population_Growth])",
+            "formatString": "#,##0",
+            "displayFolder": "02. Population Growth & Targets",
+            "description": "Total growth allocation from 2022 to 2045."
+          },
+          {
+            "name": "Population Growth Toward 2045 Target %",
+            "expression": "VAR CurrentPop = [Total Population]\nVAR BasePop = [2022 Population Baseline]\nVAR TargetGain = [Projected 2045 Population Growth]\nRETURN\nIF(TargetGain > 0, DIVIDE(CurrentPop - BasePop, TargetGain, 0), BLANK())",
+            "formatString": "0.0%",
+            "displayFolder": "02. Population Growth & Targets",
+            "description": "Percentage progress toward achieving the 2045 GMA population allocation."
+          },
+          {
+            "name": "Remaining Population Capacity to 2045",
+            "expression": "[2045 Population Target] - [Total Population]",
+            "formatString": "#,##0",
+            "displayFolder": "02. Population Growth & Targets",
+            "description": "Remaining population growth allocation until 2045 target."
+          },
+          {
+            "name": "Total Housing Permits",
+            "expression": "SUM(Fact_HousingPermits[Total_Permitted_Units])",
+            "formatString": "#,##0",
+            "displayFolder": "03. Housing Production & AMI",
+            "description": "Total residential units permitted in reporting period."
+          },
+          {
+            "name": "Single-Family Permits",
+            "expression": "SUM(Fact_HousingPermits[Single_Family_Units])",
+            "formatString": "#,##0",
+            "displayFolder": "03. Housing Production & AMI",
+            "description": "Detached single-family residential permitted units."
+          },
+          {
+            "name": "Multi-Family Permits",
+            "expression": "SUM(Fact_HousingPermits[Duplex_Units]) + SUM(Fact_HousingPermits[MultiFamily_3_4_Units]) + SUM(Fact_HousingPermits[MultiFamily_5_Plus_Units])",
+            "formatString": "#,##0",
+            "displayFolder": "03. Housing Production & AMI",
+            "description": "Total multi-family permitted units (Duplex + 3-4 units + 5+ units)."
+          },
+          {
+            "name": "ADU Permits",
+            "expression": "SUM(Fact_HousingPermits[ADU_Units])",
+            "formatString": "#,##0",
+            "displayFolder": "03. Housing Production & AMI",
+            "description": "Permitted Accessory Dwelling Units."
+          },
+          {
+            "name": "Demolished Units",
+            "expression": "SUM(Fact_HousingPermits[Demolished_Units])",
+            "formatString": "#,##0",
+            "displayFolder": "03. Housing Production & AMI",
+            "description": "Residential units demolished during reporting period."
+          },
+          {
+            "name": "Net New Housing Units",
+            "expression": "SUM(Fact_HousingPermits[Net_New_Units])",
+            "formatString": "#,##0",
+            "displayFolder": "03. Housing Production & AMI",
+            "description": "Net new residential units (Total Permitted minus Demolitions)."
+          },
+          {
+            "name": "Total Permit Valuation",
+            "expression": "SUM(Fact_HousingPermits[Total_Valuation_USD])",
+            "formatString": "$#,##0",
+            "displayFolder": "03. Housing Production & AMI",
+            "description": "Permit construction valuation in US Dollars."
+          },
+          {
+            "name": "2045 Housing Target Units",
+            "expression": "SUM(Dim_GMA_2045_Target[Target_2045_Housing_Units])",
+            "formatString": "#,##0",
+            "displayFolder": "03. Housing Production & AMI",
+            "description": "GMA adopted net housing unit allocation 2020-2045 (17,450 countywide)."
+          },
+          {
+            "name": "Cumulative Net Housing Units (2020-Present)",
+            "expression": "CALCULATE([Net New Housing Units], FILTER(ALL(Dim_CalendarYear), Dim_CalendarYear[Year] >= 2020 && Dim_CalendarYear[Year] <= MAX(Dim_CalendarYear[Year])))",
+            "formatString": "#,##0",
+            "displayFolder": "03. Housing Production & AMI",
+            "description": "Cumulative net new housing units added since GMA planning baseline 2020."
+          },
+          {
+            "name": "Housing Target Progress %",
+            "expression": "DIVIDE([Cumulative Net Housing Units (2020-Present)], [2045 Housing Target Units], 0)",
+            "formatString": "0.0%",
+            "displayFolder": "03. Housing Production & AMI",
+            "description": "Percentage progress of cumulative housing production against 2045 GMA target."
+          },
+          {
+            "name": "Low Income AMI Units (<80% AMI)",
+            "expression": "SUM(Fact_Housing_AMI[AMI_0_to_30_Pct_Units]) + SUM(Fact_Housing_AMI[AMI_31_to_50_Pct_Units]) + SUM(Fact_Housing_AMI[AMI_51_to_80_Pct_Units])",
+            "formatString": "#,##0",
+            "displayFolder": "03. Housing Production & AMI",
+            "description": "Housing units serving households below 80% of Area Median Income."
+          },
+          {
+            "name": "Moderate to High Income AMI Units (>80% AMI)",
+            "expression": "SUM(Fact_Housing_AMI[AMI_81_to_100_Pct_Units]) + SUM(Fact_Housing_AMI[AMI_101_to_120_Pct_Units]) + SUM(Fact_Housing_AMI[AMI_Greater_120_Pct_Units])",
+            "formatString": "#,##0",
+            "displayFolder": "03. Housing Production & AMI",
+            "description": "Housing units serving households at or above 80% Area Median Income."
+          },
+          {
+            "name": "Covered Employment QCEW",
+            "expression": "CALCULATE(SUM(Fact_Employment[Annual_Average_Employment]), Fact_Employment[Is_County_Total] = 1)",
+            "formatString": "#,##0",
+            "displayFolder": "04. Employment & CAI Methodology",
+            "description": "Annual average covered employment from ESD QCEW (County Total)."
+          },
+          {
+            "name": "Estimated Total Employment (CAI Multiplier)",
+            "expression": "CALCULATE(SUM(Fact_Employment[Estimated_Total_Employment]), Fact_Employment[Is_County_Total] = 1)",
+            "formatString": "#,##0",
+            "displayFolder": "04. Employment & CAI Methodology",
+            "description": "Estimated total employment including non-employer proprietors (CAI multiplier 1.15458)."
+          },
+          {
+            "name": "2022 Employment Baseline",
+            "expression": "SUM(Dim_GMA_2045_Target[Baseline_2022_Employment])",
+            "formatString": "#,##0",
+            "displayFolder": "04. Employment & CAI Methodology",
+            "description": "GMA adopted 2022 employment baseline (59,571 jobs countywide)."
+          },
+          {
+            "name": "2045 Employment Target",
+            "expression": "SUM(Dim_GMA_2045_Target[Target_2045_Employment])",
+            "formatString": "#,##0",
+            "displayFolder": "04. Employment & CAI Methodology",
+            "description": "GMA adopted 2045 total employment target (80,100 jobs countywide)."
+          },
+          {
+            "name": "Employment Growth Toward 2045 Target %",
+            "expression": "VAR CurrentEmp = [Estimated Total Employment (CAI Multiplier)]\nVAR BaseEmp = [2022 Employment Baseline]\nVAR TargetGain = [2045 Employment Target] - BaseEmp\nRETURN\nIF(TargetGain > 0, DIVIDE(CurrentEmp - BaseEmp, TargetGain, 0), BLANK())",
+            "formatString": "0.0%",
+            "displayFolder": "04. Employment & CAI Methodology",
+            "description": "Progress toward the 2045 GMA regional employment target."
+          },
+          {
+            "name": "Total Establishments",
+            "expression": "CALCULATE(SUM(Fact_Employment[Average_Establishments]), Fact_Employment[Is_County_Total] = 1)",
+            "formatString": "#,##0",
+            "displayFolder": "04. Employment & CAI Methodology",
+            "description": "Total employer establishments active in Skagit County."
+          },
+          {
+            "name": "Average Annual Wage USD",
+            "expression": "CALCULATE(AVERAGE(Fact_Employment[Average_Annual_Wage_USD]), Fact_Employment[Is_County_Total] = 1)",
+            "formatString": "$#,##0",
+            "displayFolder": "04. Employment & CAI Methodology",
+            "description": "Average annual covered wage per worker in US Dollars."
+          },
+          {
+            "name": "Jurisdiction Share of Regional Population %",
+            "expression": "VAR RegionalPop = CALCULATE([Total Population], ALL(Dim_Jurisdiction))\nRETURN\nDIVIDE([Total Population], RegionalPop, 0)",
+            "formatString": "0.0%",
+            "displayFolder": "05. Regional & Spatial Analysis",
+            "description": "Jurisdiction percentage share of total Skagit County population."
+          },
+          {
+            "name": "Jurisdiction Share of Regional Housing %",
+            "expression": "VAR RegionalHousing = CALCULATE([Net New Housing Units], ALL(Dim_Jurisdiction))\nRETURN\nDIVIDE([Net New Housing Units], RegionalHousing, 0)",
+            "formatString": "0.0%",
+            "displayFolder": "05. Regional & Spatial Analysis",
+            "description": "Jurisdiction percentage share of total net residential units built."
+          }
+        ]
+      },
+      {
+        "name": "Dim_Jurisdiction",
+        "description": "Official municipal, UGA, and rural entities within Skagit County.",
+        "columns": [
+          {
+            "name": "Jurisdiction_ID",
+            "dataType": "string",
+            "sourceColumn": "Jurisdiction_ID",
+            "isKey": true
+          },
+          {
+            "name": "Jurisdiction_Name",
+            "dataType": "string",
+            "sourceColumn": "Jurisdiction_Name",
+            "dataCategory": "City"
+          },
+          {
+            "name": "Jurisdiction_Type",
+            "dataType": "string",
+            "sourceColumn": "Jurisdiction_Type"
+          },
+          {
+            "name": "Is_Incorporated",
+            "dataType": "int64",
+            "sourceColumn": "Is_Incorporated"
+          },
+          {
+            "name": "Is_UGA",
+            "dataType": "int64",
+            "sourceColumn": "Is_UGA"
+          },
+          {
+            "name": "Latitude",
+            "dataType": "double",
+            "sourceColumn": "Latitude",
+            "dataCategory": "Latitude"
+          },
+          {
+            "name": "Longitude",
+            "dataType": "double",
+            "sourceColumn": "Longitude",
+            "dataCategory": "Longitude"
+          },
+          {
+            "name": "County_Name",
+            "dataType": "string",
+            "sourceColumn": "County_Name",
+            "dataCategory": "County"
+          },
+          {
+            "name": "State",
+            "dataType": "string",
+            "sourceColumn": "State",
+            "dataCategory": "StateOrProvince"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Dim_Jurisdiction",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": "let\n    Source = Excel.Workbook(File.Contents(SourceWorkbookPath), null, true),\n    Sheet = Source{[Item=\"Dim_Jurisdiction\",Kind=\"Sheet\"]}[Data],\n    Headers = Table.PromoteHeaders(Sheet, [PromoteAllScalars=true]),\n    Selected = Table.SelectColumns(Headers, {\"Jurisdiction_ID\", \"Jurisdiction_Name\", \"Jurisdiction_Type\", \"Is_Incorporated\", \"Is_UGA\", \"Latitude\", \"Longitude\", \"County_Name\", \"State\"}, MissingField.Error),\n    Typed = Table.TransformColumnTypes(Selected,{\n        {\"Jurisdiction_ID\", type text}, {\"Jurisdiction_Name\", type text}, {\"Jurisdiction_Type\", type text},\n        {\"Is_Incorporated\", Int64.Type}, {\"Is_UGA\", Int64.Type},\n        {\"Latitude\", type number}, {\"Longitude\", type number},\n        {\"County_Name\", type text}, {\"State\", type text}\n    })\nin\n    Typed"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Dim_CalendarYear",
+        "description": "Standardized calendar dimension spanning 1990 to 2045 GMA planning horizon.",
+        "columns": [
+          {
+            "name": "Year",
+            "dataType": "int64",
+            "sourceColumn": "Year",
+            "isKey": true
+          },
+          {
+            "name": "Decade",
+            "dataType": "string",
+            "sourceColumn": "Decade"
+          },
+          {
+            "name": "GMA_Planning_Cycle",
+            "dataType": "string",
+            "sourceColumn": "GMA_Planning_Cycle"
+          },
+          {
+            "name": "Is_Historical",
+            "dataType": "int64",
+            "sourceColumn": "Is_Historical"
+          },
+          {
+            "name": "Is_Prototype_Year_2025",
+            "dataType": "int64",
+            "sourceColumn": "Is_Prototype_Year_2025"
+          },
+          {
+            "name": "Is_Production_Year_2026",
+            "dataType": "int64",
+            "sourceColumn": "Is_Production_Year_2026"
+          },
+          {
+            "name": "Is_Target_Year_2045",
+            "dataType": "int64",
+            "sourceColumn": "Is_Target_Year_2045"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Dim_CalendarYear",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": "let\n    Source = Excel.Workbook(File.Contents(SourceWorkbookPath), null, true),\n    Sheet = Source{[Item=\"Dim_CalendarYear\",Kind=\"Sheet\"]}[Data],\n    Headers = Table.PromoteHeaders(Sheet, [PromoteAllScalars=true]),\n    Selected = Table.SelectColumns(Headers, {\"Year\", \"Decade\", \"GMA_Planning_Cycle\", \"Is_Historical\", \"Is_Prototype_Year_2025\", \"Is_Production_Year_2026\", \"Is_Target_Year_2045\"}, MissingField.Error),\n    Typed = Table.TransformColumnTypes(Selected,{\n        {\"Year\", Int64.Type}, {\"Decade\", type text}, {\"GMA_Planning_Cycle\", type text},\n        {\"Is_Historical\", Int64.Type}, {\"Is_Prototype_Year_2025\", Int64.Type},\n        {\"Is_Production_Year_2026\", Int64.Type}, {\"Is_Target_Year_2045\", Int64.Type}\n    })\nin\n    Typed"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Dim_GMA_2045_Target",
+        "description": "Formally adopted Countywide Planning Policies growth targets (Ordinance O20250002).",
+        "columns": [
+          {
+            "name": "Jurisdiction_ID",
+            "dataType": "string",
+            "sourceColumn": "Jurisdiction_ID"
+          },
+          {
+            "name": "Jurisdiction_Name",
+            "dataType": "string",
+            "sourceColumn": "Jurisdiction_Name"
+          },
+          {
+            "name": "Jurisdiction_Type",
+            "dataType": "string",
+            "sourceColumn": "Jurisdiction_Type"
+          },
+          {
+            "name": "Baseline_2022_Population",
+            "dataType": "int64",
+            "sourceColumn": "Baseline_2022_Population"
+          },
+          {
+            "name": "Target_2045_Population",
+            "dataType": "int64",
+            "sourceColumn": "Target_2045_Population"
+          },
+          {
+            "name": "Projected_2045_Population_Growth",
+            "dataType": "int64",
+            "sourceColumn": "Projected_2045_Population_Growth"
+          },
+          {
+            "name": "Population_Growth_Share_Pct",
+            "dataType": "double",
+            "sourceColumn": "Population_Growth_Share_Pct"
+          },
+          {
+            "name": "Target_2045_Housing_Units",
+            "dataType": "int64",
+            "sourceColumn": "Target_2045_Housing_Units"
+          },
+          {
+            "name": "Baseline_2022_Employment",
+            "dataType": "int64",
+            "sourceColumn": "Baseline_2022_Employment"
+          },
+          {
+            "name": "Target_2045_Employment",
+            "dataType": "int64",
+            "sourceColumn": "Target_2045_Employment"
+          },
+          {
+            "name": "Projected_2045_Employment_Growth",
+            "dataType": "int64",
+            "sourceColumn": "Projected_2045_Employment_Growth"
+          },
+          {
+            "name": "Employment_Growth_Share_Pct",
+            "dataType": "double",
+            "sourceColumn": "Employment_Growth_Share_Pct"
+          },
+          {
+            "name": "CAI_Self_Employment_Multiplier",
+            "dataType": "double",
+            "sourceColumn": "CAI_Self_Employment_Multiplier"
+          },
+          {
+            "name": "Data_Source",
+            "dataType": "string",
+            "sourceColumn": "Data_Source"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Dim_GMA_2045_Target",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": "let\n    Source = Excel.Workbook(File.Contents(SourceWorkbookPath), null, true),\n    Sheet = Source{[Item=\"Dim_GMA_2045_Target\",Kind=\"Sheet\"]}[Data],\n    Headers = Table.PromoteHeaders(Sheet, [PromoteAllScalars=true]),\n    Selected = Table.SelectColumns(Headers, {\"Jurisdiction_ID\", \"Jurisdiction_Name\", \"Jurisdiction_Type\", \"Baseline_2022_Population\", \"Target_2045_Population\", \"Projected_2045_Population_Growth\", \"Population_Growth_Share_Pct\", \"Target_2045_Housing_Units\", \"Baseline_2022_Employment\", \"Target_2045_Employment\", \"Projected_2045_Employment_Growth\", \"Employment_Growth_Share_Pct\", \"CAI_Self_Employment_Multiplier\", \"Data_Source\"}, MissingField.Error),\n    Typed = Table.TransformColumnTypes(Selected,{\n        {\"Jurisdiction_ID\", type text}, {\"Jurisdiction_Name\", type text}, {\"Jurisdiction_Type\", type text},\n        {\"Baseline_2022_Population\", Int64.Type}, {\"Target_2045_Population\", Int64.Type},\n        {\"Projected_2045_Population_Growth\", Int64.Type}, {\"Population_Growth_Share_Pct\", type number},\n        {\"Target_2045_Housing_Units\", Int64.Type}, {\"Baseline_2022_Employment\", Int64.Type},\n        {\"Target_2045_Employment\", Int64.Type}, {\"Projected_2045_Employment_Growth\", Int64.Type},\n        {\"Employment_Growth_Share_Pct\", type number}, {\"CAI_Self_Employment_Multiplier\", type number},\n        {\"Data_Source\", type text}\n    })\nin\n    Typed"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Dim_CAI_Employment_Benchmark",
+        "description": "CAI Total Employment Calculation historical series (1999-2022) with QCEW and NES.",
+        "columns": [
+          {
+            "name": "Benchmark_Key",
+            "dataType": "string",
+            "sourceColumn": "Benchmark_Key",
+            "isKey": true
+          },
+          {
+            "name": "Year",
+            "dataType": "int64",
+            "sourceColumn": "Year"
+          },
+          {
+            "name": "Covered_Employment_QCEW",
+            "dataType": "int64",
+            "sourceColumn": "Covered_Employment_QCEW"
+          },
+          {
+            "name": "Self_Employment_NES",
+            "dataType": "int64",
+            "sourceColumn": "Self_Employment_NES"
+          },
+          {
+            "name": "Total_Employment_Combined",
+            "dataType": "int64",
+            "sourceColumn": "Total_Employment_Combined"
+          },
+          {
+            "name": "Self_Employment_Ratio",
+            "dataType": "double",
+            "sourceColumn": "Self_Employment_Ratio"
+          },
+          {
+            "name": "Ratio_Average_All_Years",
+            "dataType": "double",
+            "sourceColumn": "Ratio_Average_All_Years"
+          },
+          {
+            "name": "Ratio_Average_Last_10_Obs",
+            "dataType": "double",
+            "sourceColumn": "Ratio_Average_Last_10_Obs"
+          },
+          {
+            "name": "Is_Observed",
+            "dataType": "int64",
+            "sourceColumn": "Is_Observed"
+          },
+          {
+            "name": "Data_Source",
+            "dataType": "string",
+            "sourceColumn": "Data_Source"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Dim_CAI_Employment_Benchmark",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": "let\n    Source = Excel.Workbook(File.Contents(SourceWorkbookPath), null, true),\n    Sheet = Source{[Item=\"Dim_CAI_Employment_Benchmark\",Kind=\"Sheet\"]}[Data],\n    Headers = Table.PromoteHeaders(Sheet, [PromoteAllScalars=true]),\n    Selected = Table.SelectColumns(Headers, {\"Benchmark_Key\", \"Year\", \"Covered_Employment_QCEW\", \"Self_Employment_NES\", \"Total_Employment_Combined\", \"Self_Employment_Ratio\", \"Ratio_Average_All_Years\", \"Ratio_Average_Last_10_Obs\", \"Is_Observed\", \"Data_Source\"}, MissingField.Error),\n    Typed = Table.TransformColumnTypes(Selected,{\n        {\"Benchmark_Key\", type text}, {\"Year\", Int64.Type},\n        {\"Covered_Employment_QCEW\", Int64.Type}, {\"Self_Employment_NES\", Int64.Type},\n        {\"Total_Employment_Combined\", Int64.Type}, {\"Self_Employment_Ratio\", type number},\n        {\"Ratio_Average_All_Years\", type number}, {\"Ratio_Average_Last_10_Obs\", type number},\n        {\"Is_Observed\", Int64.Type}, {\"Data_Source\", type text}\n    })\nin\n    Typed"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Fact_Population",
+        "description": "Annual population determinations by jurisdiction from OFM April 1.",
+        "columns": [
+          {
+            "name": "Fact_Population_Key",
+            "dataType": "string",
+            "sourceColumn": "Fact_Population_Key",
+            "isKey": true
+          },
+          {
+            "name": "Jurisdiction_ID",
+            "dataType": "string",
+            "sourceColumn": "Jurisdiction_ID"
+          },
+          {
+            "name": "Year",
+            "dataType": "int64",
+            "sourceColumn": "Year"
+          },
+          {
+            "name": "Jurisdiction_Name",
+            "dataType": "string",
+            "sourceColumn": "Jurisdiction_Name"
+          },
+          {
+            "name": "Population_Count",
+            "dataType": "int64",
+            "sourceColumn": "Population_Count"
+          },
+          {
+            "name": "Prior_Year_Population",
+            "dataType": "int64",
+            "sourceColumn": "Prior_Year_Population"
+          },
+          {
+            "name": "YoY_Population_Change",
+            "dataType": "int64",
+            "sourceColumn": "YoY_Population_Change"
+          },
+          {
+            "name": "YoY_Growth_Rate_Pct",
+            "dataType": "double",
+            "sourceColumn": "YoY_Growth_Rate_Pct"
+          },
+          {
+            "name": "Data_Source_Type",
+            "dataType": "string",
+            "sourceColumn": "Data_Source_Type"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Fact_Population",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": "let\n    Source = Excel.Workbook(File.Contents(SourceWorkbookPath), null, true),\n    Sheet = Source{[Item=\"Fact_Population\",Kind=\"Sheet\"]}[Data],\n    Headers = Table.PromoteHeaders(Sheet, [PromoteAllScalars=true]),\n    Selected = Table.SelectColumns(Headers, {\"Fact_Population_Key\", \"Jurisdiction_ID\", \"Year\", \"Jurisdiction_Name\", \"Population_Count\", \"Prior_Year_Population\", \"YoY_Population_Change\", \"YoY_Growth_Rate_Pct\", \"Data_Source_Type\"}, MissingField.Error),\n    Typed = Table.TransformColumnTypes(Selected,{\n        {\"Fact_Population_Key\", type text}, {\"Jurisdiction_ID\", type text}, {\"Year\", Int64.Type},\n        {\"Jurisdiction_Name\", type text}, {\"Population_Count\", Int64.Type},\n        {\"Prior_Year_Population\", Int64.Type}, {\"YoY_Population_Change\", Int64.Type},\n        {\"YoY_Growth_Rate_Pct\", type number}, {\"Data_Source_Type\", type text}\n    })\nin\n    Typed"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Fact_HousingPermits",
+        "description": "Annual residential building permit issuance by typology and valuation.",
+        "columns": [
+          {
+            "name": "Fact_Housing_Key",
+            "dataType": "string",
+            "sourceColumn": "Fact_Housing_Key",
+            "isKey": true
+          },
+          {
+            "name": "Jurisdiction_ID",
+            "dataType": "string",
+            "sourceColumn": "Jurisdiction_ID"
+          },
+          {
+            "name": "Year",
+            "dataType": "int64",
+            "sourceColumn": "Year"
+          },
+          {
+            "name": "Jurisdiction_Name",
+            "dataType": "string",
+            "sourceColumn": "Jurisdiction_Name"
+          },
+          {
+            "name": "Single_Family_Units",
+            "dataType": "int64",
+            "sourceColumn": "Single_Family_Units"
+          },
+          {
+            "name": "Duplex_Units",
+            "dataType": "int64",
+            "sourceColumn": "Duplex_Units"
+          },
+          {
+            "name": "MultiFamily_3_4_Units",
+            "dataType": "int64",
+            "sourceColumn": "MultiFamily_3_4_Units"
+          },
+          {
+            "name": "MultiFamily_5_Plus_Units",
+            "dataType": "int64",
+            "sourceColumn": "MultiFamily_5_Plus_Units"
+          },
+          {
+            "name": "ADU_Units",
+            "dataType": "int64",
+            "sourceColumn": "ADU_Units"
+          },
+          {
+            "name": "Mobile_Home_Units",
+            "dataType": "int64",
+            "sourceColumn": "Mobile_Home_Units"
+          },
+          {
+            "name": "Total_Permitted_Units",
+            "dataType": "int64",
+            "sourceColumn": "Total_Permitted_Units"
+          },
+          {
+            "name": "Completed_Units",
+            "dataType": "int64",
+            "sourceColumn": "Completed_Units"
+          },
+          {
+            "name": "Demolished_Units",
+            "dataType": "int64",
+            "sourceColumn": "Demolished_Units"
+          },
+          {
+            "name": "Net_New_Units",
+            "dataType": "int64",
+            "sourceColumn": "Net_New_Units"
+          },
+          {
+            "name": "Total_Valuation_USD",
+            "dataType": "int64",
+            "sourceColumn": "Total_Valuation_USD"
+          },
+          {
+            "name": "Data_Source",
+            "dataType": "string",
+            "sourceColumn": "Data_Source"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Fact_HousingPermits",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": "let\n    Source = Excel.Workbook(File.Contents(SourceWorkbookPath), null, true),\n    Sheet = Source{[Item=\"Fact_HousingPermits\",Kind=\"Sheet\"]}[Data],\n    Headers = Table.PromoteHeaders(Sheet, [PromoteAllScalars=true]),\n    Selected = Table.SelectColumns(Headers, {\"Fact_Housing_Key\", \"Jurisdiction_ID\", \"Year\", \"Jurisdiction_Name\", \"Single_Family_Units\", \"Duplex_Units\", \"MultiFamily_3_4_Units\", \"MultiFamily_5_Plus_Units\", \"ADU_Units\", \"Mobile_Home_Units\", \"Total_Permitted_Units\", \"Completed_Units\", \"Demolished_Units\", \"Net_New_Units\", \"Total_Valuation_USD\", \"Data_Source\"}, MissingField.Error),\n    Typed = Table.TransformColumnTypes(Selected,{\n        {\"Fact_Housing_Key\", type text}, {\"Jurisdiction_ID\", type text}, {\"Year\", Int64.Type},\n        {\"Jurisdiction_Name\", type text}, {\"Single_Family_Units\", Int64.Type},\n        {\"Duplex_Units\", Int64.Type}, {\"MultiFamily_3_4_Units\", Int64.Type},\n        {\"MultiFamily_5_Plus_Units\", Int64.Type}, {\"ADU_Units\", Int64.Type},\n        {\"Mobile_Home_Units\", Int64.Type}, {\"Total_Permitted_Units\", Int64.Type},\n        {\"Completed_Units\", Int64.Type}, {\"Demolished_Units\", Int64.Type},\n        {\"Net_New_Units\", Int64.Type}, {\"Total_Valuation_USD\", Int64.Type},\n        {\"Data_Source\", type text}\n    })\nin\n    Typed"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Fact_Employment",
+        "description": "Employment Security Department (ESD QCEW) covered jobs by NAICS industry sector.",
+        "columns": [
+          {
+            "name": "Fact_Employment_Key",
+            "dataType": "string",
+            "sourceColumn": "Fact_Employment_Key",
+            "isKey": true
+          },
+          {
+            "name": "Year",
+            "dataType": "int64",
+            "sourceColumn": "Year"
+          },
+          {
+            "name": "Period_Type",
+            "dataType": "string",
+            "sourceColumn": "Period_Type"
+          },
+          {
+            "name": "Industry_Key",
+            "dataType": "string",
+            "sourceColumn": "Industry_Key"
+          },
+          {
+            "name": "Row_Level",
+            "dataType": "string",
+            "sourceColumn": "Row_Level"
+          },
+          {
+            "name": "Parent_2Digit_Code",
+            "dataType": "string",
+            "sourceColumn": "Parent_2Digit_Code"
+          },
+          {
+            "name": "NAICS_2Digit_Code",
+            "dataType": "string",
+            "sourceColumn": "NAICS_2Digit_Code"
+          },
+          {
+            "name": "NAICS_3Digit_Code",
+            "dataType": "string",
+            "sourceColumn": "NAICS_3Digit_Code"
+          },
+          {
+            "name": "Industry_Subsector_Title",
+            "dataType": "string",
+            "sourceColumn": "Industry_Subsector_Title"
+          },
+          {
+            "name": "Title_As_Reported",
+            "dataType": "string",
+            "sourceColumn": "Title_As_Reported"
+          },
+          {
+            "name": "Is_County_Total",
+            "dataType": "int64",
+            "sourceColumn": "Is_County_Total"
+          },
+          {
+            "name": "Is_Suppressed",
+            "dataType": "int64",
+            "sourceColumn": "Is_Suppressed"
+          },
+          {
+            "name": "Average_Establishments",
+            "dataType": "int64",
+            "sourceColumn": "Average_Establishments"
+          },
+          {
+            "name": "Annual_Average_Employment",
+            "dataType": "int64",
+            "sourceColumn": "Annual_Average_Employment"
+          },
+          {
+            "name": "Q1_Average_Employment",
+            "dataType": "int64",
+            "sourceColumn": "Q1_Average_Employment"
+          },
+          {
+            "name": "Estimated_Total_Employment",
+            "dataType": "int64",
+            "sourceColumn": "Estimated_Total_Employment"
+          },
+          {
+            "name": "Estimated_Total_Employment_Q1",
+            "dataType": "int64",
+            "sourceColumn": "Estimated_Total_Employment_Q1"
+          },
+          {
+            "name": "CAI_Self_Employment_Multiplier",
+            "dataType": "double",
+            "sourceColumn": "CAI_Self_Employment_Multiplier"
+          },
+          {
+            "name": "Average_Annual_Wage_USD",
+            "dataType": "int64",
+            "sourceColumn": "Average_Annual_Wage_USD"
+          },
+          {
+            "name": "Data_Status",
+            "dataType": "string",
+            "sourceColumn": "Data_Status"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Fact_Employment",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": "let\n    Source = Excel.Workbook(File.Contents(SourceWorkbookPath), null, true),\n    Sheet = Source{[Item=\"Fact_Employment\",Kind=\"Sheet\"]}[Data],\n    Headers = Table.PromoteHeaders(Sheet, [PromoteAllScalars=true]),\n    Selected = Table.SelectColumns(Headers, {\"Fact_Employment_Key\", \"Year\", \"Period_Type\", \"Industry_Key\", \"Row_Level\", \"Parent_2Digit_Code\", \"NAICS_2Digit_Code\", \"NAICS_3Digit_Code\", \"Industry_Subsector_Title\", \"Title_As_Reported\", \"Is_County_Total\", \"Is_Suppressed\", \"Average_Establishments\", \"Annual_Average_Employment\", \"Q1_Average_Employment\", \"Estimated_Total_Employment\", \"Estimated_Total_Employment_Q1\", \"CAI_Self_Employment_Multiplier\", \"Average_Annual_Wage_USD\", \"Data_Status\"}, MissingField.Error),\n    Typed = Table.TransformColumnTypes(Selected,{\n        {\"Fact_Employment_Key\", type text}, {\"Year\", Int64.Type}, {\"Period_Type\", type text},\n        {\"Industry_Key\", type text}, {\"Row_Level\", type text}, {\"Parent_2Digit_Code\", type text},\n        {\"NAICS_2Digit_Code\", type text}, {\"NAICS_3Digit_Code\", type text},\n        {\"Industry_Subsector_Title\", type text}, {\"Title_As_Reported\", type text},\n        {\"Is_County_Total\", Int64.Type}, {\"Is_Suppressed\", Int64.Type},\n        {\"Average_Establishments\", Int64.Type}, {\"Annual_Average_Employment\", Int64.Type},\n        {\"Q1_Average_Employment\", Int64.Type}, {\"Estimated_Total_Employment\", Int64.Type},\n        {\"Estimated_Total_Employment_Q1\", Int64.Type}, {\"CAI_Self_Employment_Multiplier\", type number},\n        {\"Average_Annual_Wage_USD\", Int64.Type}, {\"Data_Status\", type text}\n    })\nin\n    Typed"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Fact_Housing_AMI",
+        "description": "Affordable housing unit production classified by Area Median Income (AMI) tiers.",
+        "columns": [
+          {
+            "name": "Fact_AMI_Key",
+            "dataType": "string",
+            "sourceColumn": "Fact_AMI_Key",
+            "isKey": true
+          },
+          {
+            "name": "Jurisdiction_ID",
+            "dataType": "string",
+            "sourceColumn": "Jurisdiction_ID"
+          },
+          {
+            "name": "Year",
+            "dataType": "int64",
+            "sourceColumn": "Year"
+          },
+          {
+            "name": "Jurisdiction_Name",
+            "dataType": "string",
+            "sourceColumn": "Jurisdiction_Name"
+          },
+          {
+            "name": "Structure_Type",
+            "dataType": "string",
+            "sourceColumn": "Structure_Type"
+          },
+          {
+            "name": "AMI_0_to_30_Pct_Units",
+            "dataType": "int64",
+            "sourceColumn": "AMI_0_to_30_Pct_Units"
+          },
+          {
+            "name": "AMI_31_to_50_Pct_Units",
+            "dataType": "int64",
+            "sourceColumn": "AMI_31_to_50_Pct_Units"
+          },
+          {
+            "name": "AMI_51_to_80_Pct_Units",
+            "dataType": "int64",
+            "sourceColumn": "AMI_51_to_80_Pct_Units"
+          },
+          {
+            "name": "AMI_81_to_100_Pct_Units",
+            "dataType": "int64",
+            "sourceColumn": "AMI_81_to_100_Pct_Units"
+          },
+          {
+            "name": "AMI_101_to_120_Pct_Units",
+            "dataType": "int64",
+            "sourceColumn": "AMI_101_to_120_Pct_Units"
+          },
+          {
+            "name": "AMI_Greater_120_Pct_Units",
+            "dataType": "int64",
+            "sourceColumn": "AMI_Greater_120_Pct_Units"
+          },
+          {
+            "name": "Total_AMI_Units",
+            "dataType": "int64",
+            "sourceColumn": "Total_AMI_Units"
+          },
+          {
+            "name": "Reconciliation_Status",
+            "dataType": "string",
+            "sourceColumn": "Reconciliation_Status"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Fact_Housing_AMI",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": "let\n    Source = Excel.Workbook(File.Contents(SourceWorkbookPath), null, true),\n    Sheet = Source{[Item=\"Fact_Housing_AMI\",Kind=\"Sheet\"]}[Data],\n    Headers = Table.PromoteHeaders(Sheet, [PromoteAllScalars=true]),\n    Selected = Table.SelectColumns(Headers, {\"Fact_AMI_Key\", \"Jurisdiction_ID\", \"Year\", \"Jurisdiction_Name\", \"Structure_Type\", \"AMI_0_to_30_Pct_Units\", \"AMI_31_to_50_Pct_Units\", \"AMI_51_to_80_Pct_Units\", \"AMI_81_to_100_Pct_Units\", \"AMI_101_to_120_Pct_Units\", \"AMI_Greater_120_Pct_Units\", \"Total_AMI_Units\", \"Reconciliation_Status\"}, MissingField.Error),\n    Typed = Table.TransformColumnTypes(Selected,{\n        {\"Fact_AMI_Key\", type text}, {\"Jurisdiction_ID\", type text}, {\"Year\", Int64.Type},\n        {\"Jurisdiction_Name\", type text}, {\"Structure_Type\", type text},\n        {\"AMI_0_to_30_Pct_Units\", Int64.Type}, {\"AMI_31_to_50_Pct_Units\", Int64.Type},\n        {\"AMI_51_to_80_Pct_Units\", Int64.Type}, {\"AMI_81_to_100_Pct_Units\", Int64.Type},\n        {\"AMI_101_to_120_Pct_Units\", Int64.Type}, {\"AMI_Greater_120_Pct_Units\", Int64.Type},\n        {\"Total_AMI_Units\", Int64.Type}, {\"Reconciliation_Status\", type text}\n    })\nin\n    Typed"
+            }
+          }
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "name": "Rel_Jurisdiction_FactPopulation",
+        "fromTable": "Fact_Population",
+        "fromColumn": "Jurisdiction_ID",
+        "toTable": "Dim_Jurisdiction",
+        "toColumn": "Jurisdiction_ID"
+      },
+      {
+        "name": "Rel_CalendarYear_FactPopulation",
+        "fromTable": "Fact_Population",
+        "fromColumn": "Year",
+        "toTable": "Dim_CalendarYear",
+        "toColumn": "Year"
+      },
+      {
+        "name": "Rel_Jurisdiction_FactHousingPermits",
+        "fromTable": "Fact_HousingPermits",
+        "fromColumn": "Jurisdiction_ID",
+        "toTable": "Dim_Jurisdiction",
+        "toColumn": "Jurisdiction_ID"
+      },
+      {
+        "name": "Rel_CalendarYear_FactHousingPermits",
+        "fromTable": "Fact_HousingPermits",
+        "fromColumn": "Year",
+        "toTable": "Dim_CalendarYear",
+        "toColumn": "Year"
+      },
+      {
+        "name": "Rel_CalendarYear_FactEmployment",
+        "fromTable": "Fact_Employment",
+        "fromColumn": "Year",
+        "toTable": "Dim_CalendarYear",
+        "toColumn": "Year"
+      },
+      {
+        "name": "Rel_Jurisdiction_FactHousingAMI",
+        "fromTable": "Fact_Housing_AMI",
+        "fromColumn": "Jurisdiction_ID",
+        "toTable": "Dim_Jurisdiction",
+        "toColumn": "Jurisdiction_ID"
+      },
+      {
+        "name": "Rel_CalendarYear_FactHousingAMI",
+        "fromTable": "Fact_Housing_AMI",
+        "fromColumn": "Year",
+        "toTable": "Dim_CalendarYear",
+        "toColumn": "Year"
+      },
+      {
+        "name": "Rel_Jurisdiction_DimGMATarget",
+        "fromTable": "Dim_GMA_2045_Target",
+        "fromColumn": "Jurisdiction_ID",
+        "toTable": "Dim_Jurisdiction",
+        "toColumn": "Jurisdiction_ID"
+      },
+      {
+        "name": "Rel_CalendarYear_DimCAIBenchmark",
+        "fromTable": "Dim_CAI_Employment_Benchmark",
+        "fromColumn": "Year",
+        "toTable": "Dim_CalendarYear",
+        "toColumn": "Year"
+      }
+    ]
+  }
+}

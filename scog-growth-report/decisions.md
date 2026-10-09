@@ -1,222 +1,96 @@
-# Bitácora de Decisiones (Decisions Log): SCOG Growth Monitoring Report
+# Architecture Decision Records (ADRs): SCOG Growth Monitoring Report
 
-## [ADR-001] Adopción de Estrategia Progresiva ("The Simplest Road First")
-- **Fecha:** 2026-09-14
-- **Estado:** Propuesto / En Evaluación
-- **Contexto:** SCOG necesita un scoping técnico para decidir entre Opción 1 (Power BI con Excel/GIS preparados) y Opción 2 (Dataverse + Ingesta automatizada). La frecuencia de actualización es puramente anual y el volumen de datos regional es pequeño/moderado (~decenas de miles de filas acumuladas a lo largo de décadas).
-- **Decisión Tomada:** Priorizar en la propuesta técnica una ruta base pragmática (Opción 1 robustecida con plantillas SharePoint) y posicionar la Opción 2 como una fase evolutiva modular (Add-on) en caso de que SCOG cuente con licencias M365 Business/Enterprise con Dataverse y desee gobernanza centralizada a largo plazo.
-- **Alternativas Consideradas:**
-  1. Forzar Opción 2 como requerimiento obligatorio inicial (Descartado: Riesgo de rechazo por costos de licencias Power Platform Premium y complejidad administrativa para un equipo de planificación pequeño).
-  2. Opción 1 tradicional sin estandarización (Descartado: Riesgo alto de rotura de queries por cambio de nombres de columnas en Excel).
-- **Consecuencias:** Se requiere diseñar la Opción 1 con modelos en estrella limpios y plantillas tabulares en Excel que puedan migrarse transparentemente a Dataverse en el futuro si SCOG lo aprueba.
-
----
-
-## [ADR-002] Calibración de Alcance para Opción 1 con Presupuesto Fijo de 15 Horas (SUPERADO)
-- **Fecha:** 2026-09-14
-- **Estado:** Superado por ADR-007 (Revisión 2)
-- **Contexto:** El cliente / gerencia había fijado preliminarmente un presupuesto de **15 horas** para la Opción 1. Posteriormente se identificó que dicha cifra correspondía al alcance de elaboración del documento de scoping y no a la implementación técnica del reporte.
-- **Decisión Tomada:** 
-  1. Diseñar el desglose de tareas de la Opción 1 con una suma exacta de 15 horas (con un rango de contingencia de 14-17 horas).
-  2. Establecer como **supuesto contractual no negociable** que SCOG entrega archivos Excel 100% limpios, tabulares y normalizados según una plantilla predefinida. Cualquier necesidad de limpieza profunda de datos por parte del consultor consumirá horas fuera del presupuesto de 15 horas.
-  3. Desglose estricto de las 15 horas:
-     - Revisión de fuentes y alineación de esquema: **2 hrs**
-     - Modelado de datos en Power BI & Power Query ligero: **3 hrs**
-     - Desarrollo de Reporte & Visuales Clave (Housing, Population, Employment, Map): **6 hrs**
-     - Pruebas de refresh, validación cruzada y ajuste de exportación PDF/impresión: **2 hrs**
-     - Documentación de proceso de refresh anual (1-pager) y sesión de handoff: **2 hrs**
-     - **Total: 15 horas**.
-- **Consecuencias:** 
-  - La propuesta para SCOG debe resaltar con total claridad qué incluye y qué NO incluye este paquete de 15 horas para evitar fricciones futuras de soporte y expectativas irreales.
-  - La Opción 2 se presenta como el contraste natural donde la consultoría asume el trabajo pesado de ingeniería de datos y automatización (90-124 hrs).
+## [ADR-001] Adoption of Progressive Technical Strategy (Option 1 vs Option 2)
+- **Date:** 2026-09-14
+- **Status:** Approved
+- **Context:** SCOG required technical evaluation between Option 1 (Power BI fueled by structured SharePoint/Excel templates + GIS layers) and Option 2 (Power Apps/Dataverse with automated cloud intake). Ingestion frequency is strictly annual and regional data volume is moderate (~tens of thousands of rows spanning decades).
+- **Decision Taken:** Prioritize a robust, low-friction base implementation (Option 1 with standardized SharePoint Excel workbooks and Power Query M ingestion) while structuring the semantic model and data schema so that an automated Dataverse platform (Option 2) can be introduced modularly in future phases if SCOG establishes tenant capacity and administrative consensus.
+- **Alternatives Considered:**
+  1. Mandate Option 2 (Dataverse) as the sole initial architecture: Rejected due to recurring premium licensing requirements and administrative overhead for a small regional planning team.
+  2. Option 1 without standardized intake templates: Rejected due to severe vulnerability to Excel schema drift and broken annual refreshes.
+- **Consequences:** Requires designing strict dimensional Star Schemas, fortified Excel templates with formula-based validation, and resilient Power Query M ingestion assertions (`MissingField.Error`).
 
 ---
 
-## [ADR-003] Reconciliación de Rangos Horarios y Banderas de Riesgo de QA
-- **Fecha:** 2026-09-14
-- **Estado:** Aprobado
-- **Contexto:** Revisión crítica del documento de scoping para entrega a la Junta Directiva de SCOG. Se detectaron discrepancias menores en los rangos citados para la Opción 2 (85-115 vs 90-124 hrs) y riesgos técnicos latentes en componentes de Power BI y licenciamiento.
-- **Decisión Tomada:**
-  1. **Reconciliación Unificada:** Fijar el rango de la Opción 2 en **90 – 124 horas** de forma consistente en todo el documento (MVP: 90 hrs, Completo: 124 hrs), respaldado por la sumatoria exacta de tareas.
-  2. **Bandera de Riesgo en Visual de Mapas:** No dar por sentado el *Shape Map* (estado preview en Power BI) frente a *ArcGIS Maps for Power BI*. Exigir validación técnica previa antes de comprometer horas de desarrollo de mapas.
-  3. **Bandera de Riesgo de Entrega (Opción 1):** Registrar explícitamente que la tarea de 6 horas para un reporte de 4 páginas (incluyendo mapa y deep-dive de vivienda) es la más vulnerable a sobrecostos si los datos de SCOG no están perfectamente limpios.
-  4. **Costos de Licenciamiento:** Señalar los precios de Power Apps / Dataverse como aproximados y sujetos a confirmación con el administrador M365 de SCOG antes de presentar cifras firmes al Board.
-- **Consecuencias:** Mayor solidez técnica y credibilidad comercial ante la gerencia y el cliente, eliminando inconsistencias numéricas y protegiendo el margen del proyecto.
+## [ADR-002] Spatial Mapping Visuals: Standardization on GA Native Maps and WGS84 Coordinates
+- **Date:** 2026-09-14
+- **Status:** Approved
+- **Context:** Spatial representation of Skagit County jurisdictions and Urban Growth Areas (UGAs) is required on executive canvases. Power BI Shape Map remains in perpetual preview without General Availability (GA) enterprise SLA, risking rendering failures during automated Power BI Service PDF exports.
+- **Decision Taken:** 
+  1. Standardize on native GA Power BI Map and Azure Maps visuals using official WGS84 geographic coordinates (`Latitude`, `Longitude`).
+  2. Jurisdiction centroids are derived from official USGS Geographic Names Information System (GNIS) and US Census Bureau 2020 municipal centers and UGA geographic centroids.
+  3. "Unincorporated Skagit County" is explicitly represented as the official "Rural (outside of UGAs)" balance defined under Skagit County Ordinance O20250002.
+- **Consequences:** Guarantees stable rendering in Power BI Desktop, Power BI Service, and board-adopted PDF exports without preview feature dependencies.
 
 ---
 
-## [ADR-004] Estandarización en Visuales de Mapas GA (Azure Maps / ArcGIS Maps) y Precios Power BI ($14/mo)
-- **Fecha:** 2026-09-14
-- **Estado:** Aprobado
-- **Contexto:** 
-  1. *Shape Map:* Shape Map es un visual experimental en "preview" perpetuo sin soporte de disponibilidad general (GA) ni SLA de soporte empresarial. En reportes adoptados por el Board donde se exporta a PDF desde el Service, depender de visuales en preview genera riesgos inaceptables de soporte e inconsistencias visuales.
-  2. *Precios de Power BI Pro:* Las listas de precios de Microsoft sufrieron un incremento efectivo en abril de 2025, elevando Power BI Pro de $10 a $14/usuario/mes y Premium Per User (PPU) de $20 a $24/usuario/mes.
-- **Decisión Tomada:**
-  1. Estandarizar estrictamente en **Azure Maps o ArcGIS Maps for Power BI** como visuales nativos soportados en GA con soporte empresarial completo de Microsoft.
-  2. Actualizar las referencias de precios en la Sección 3.5 a **$14/usuario/mes (Pro)** y **$24/usuario/mes (PPU)**, instruyendo validar descuentos gubernamentales (GCC/State agreement) con el administrador M365 de SCOG.
-- **Consecuencias:** Se elimina el riesgo de depender de características en preview y se asegura la máxima estabilidad en exportaciones PDF para el Board.
+## [ADR-003] Formula-Based Schema Integrity Validation in Master Excel Templates
+- **Date:** 2026-09-15
+- **Status:** Approved
+- **Context:** The primary vulnerability of spreadsheet-driven reporting is user error: unintentional column renaming, deleted headers, or accidental overwrites of historical rows previously adopted by the SCOG Board. The solution must protect data integrity without requiring VBA/macro-enabled workbooks (`.xlsm`), maintaining full compatibility with Excel Online and SharePoint.
+- **Decision Taken:** Implement native Excel formula validation within `.xlsx` templates:
+  1. Dynamic header assertion using `TEXTJOIN` compared against the canonical schema string, rendering a clear visual error banner if headers are altered.
+  2. Historical checksum controls using `SUMIFS` / `SUM` formulas to detect unintended edits to adopted prior-year rows.
+  3. Data validation dropdowns restricting jurisdiction entry to official Skagit entities.
+- **Consequences:** Establishes lightweight, auditable data governance directly inside SharePoint Online without macro security warnings.
 
 ---
 
-## [ADR-005] Verificación de Almacenamiento Mancomunado en Dataverse y Rangos de Mantenimiento Anual
-- **Fecha:** 2026-09-14
-- **Estado:** Aprobado
-- **Contexto:** Validación previa a la entrega al Board sobre las capacidades reales de almacenamiento de Dataverse, costos de Power Apps Premium y redacción de estimaciones de mantenimiento anual.
-- **Decisión Tomada:**
-  1. **Capacidad Mancomunada de Dataverse:** Documentar que los tenants de Power Platform reciben una asignación base de almacenamiento mancomunado (*tenant pooled capacity*) que crece con las licencias adquiridas. Para el volumen anual de SCOG (pocos MBs), el costo incremental por almacenamiento adicional de Dataverse ($40/GB/mes) es prácticamente **$0**, pero debe validarse el saldo real en el Power Platform Admin Center con el admin M365 de SCOG.
-  2. **Licenciamiento Power Apps Premium ($20/mo):** Clarificar que solo los 1 o 2 administradores encargados de ejecutar y supervisar los flujos de ingesta en SharePoint/Dataverse requieren licencias de Power Apps Premium ($20/usuario/mes lista). Los consumidores y directores de SCOG que solo consultan el reporte en Power BI no requieren licencias de Power Apps.
-  3. **Refactorización de Nota de Riesgo a Sensibilidad de Alcance:** En lugar de una advertencia informal interna que sugiera dudas de estimación, refactorizar la nota en la Sección 2.5 a una cláusula formal de "Sensibilidad de Alcance y Entrega", estableciendo que el reporte de 4 páginas se ceñirá estrictamente a plantillas visuales estándar para garantizar el cumplimiento dentro de las 15 horas presupuestadas.
-  4. **Rangos de Planificación Operativa:** En lugar de atribuir los rangos de 20-40 hrs vs 2-4 hrs a "organismos pares no identificados", presentarlos como escenarios de planificación operativa interna (trabajo manual fragmentado vs ingesta automatizada con excepción), sujetos a calibración directa con el equipo de SCOG post-Año 1.
-- **Consecuencias:** Presentación rigurosa, defendible ante la Junta Directiva de SCOG y libre de supuestos sin fuente demostrable.
+## [ADR-004] Master Excel Intake Templates Design
+- **Date:** 2026-10-08
+- **Status:** Approved / Implemented
+- **Context:** Annual intake across four planning domains requires uniform structure for municipal reporting and state agency feeds.
+- **Decision Taken:** Deploy four master intake workbooks in `data/templates/`:
+  1. `Template_Housing_Permits_Master.xlsx`: Annual residential permits by structure type, demolitions, and net unit changes.
+  2. `Template_Population_Master.xlsx`: OFM April 1 official estimates and SAEP UGA allocations vs GMA 2045 targets.
+  3. `Template_Employment_Master.xlsx`: Annual covered employment and establishments by 2-digit and 3-digit NAICS sectors.
+  4. `Template_Housing_AMI_Master.xlsx`: Housing production categorized by Area Median Income (AMI) tiers.
+- **Consequences:** Eliminates ad-hoc data formatting and provides documented SOPs for regional staff.
 
 ---
 
-## [ADR-006] Validación de Integridad Basada en Fórmulas en Plantillas Excel (.xlsx) para Opción 1
-- **Fecha:** 2026-09-15
-- **Estado:** Aprobado
-- **Contexto:** En la Opción 1, la vulnerabilidad crítica es la "entropía de Excel": cambios accidentales en nombres de columnas, alteración de tipos de datos o sobreescritura accidental de filas históricas previamente adoptadas por la Junta. Se requiere proteger el proceso sin introducir macros (.xlsm) ni exceder el presupuesto de la solución.
-- **Decisión Tomada:**
-  1. Utilizar **fórmulas nativas de Excel estándar (.xlsx)** preconfiguradas en las plantillas maestras entregadas en la Tarea 1:
-     - **Comparación de Encabezados:** Concatenación (`TEXTJOIN`) de encabezados comparada contra la cadena del esquema oficial. Dispara un banner visual de error si se altera o borra una columna. Compatible 100% con Excel Online y SharePoint sin requerir macros/VBA.
-     - **Total de Control Histórico:** Fórmula `SUMIFS` que valida la suma de control de las filas históricas adoptadas para evitar alteraciones inadvertidas al ingresar el nuevo año.
-  2. En Power Query (Tarea 2), apoyarse en aserciones nativas de selección estricta de columnas (`Table.SelectColumns` con tipado fuerte), deteniendo la carga si faltan columnas requeridas sin incurrir en desarrollo complejo de motores de error.
-- **Consecuencias:** Se blinda técnicamente la Opción 1 frente a los revisores de SCOG manteniendo la viabilidad contractual y operativa de la solución.
+## [ADR-005] Relational Star Schema Architecture and Deterministic ETL Pipeline
+- **Date:** 2026-10-08
+- **Status:** Approved / Implemented
+- **Context:** Raw multi-year datasets (1990–2026) must be transformed into a high-performance dimensional model suitable for Power BI Desktop and Power BI Service.
+- **Decision Taken:** Implement an automated, deterministic Python ETL pipeline generating conformed dimensions and typed fact tables:
+  1. **Conformed Dimensions:** `Dim_Jurisdiction` (11 entities with WGS84 coordinates), `Dim_CalendarYear` (56 years, 1990–2045), `Dim_GMA_2045_Target` (Baseline 2022 and 2045 targets).
+  2. **Fact Tables:** `Fact_Population` (97 observations), `Fact_HousingPermits` (314 observations), `Fact_Employment` (131 observations), `Fact_Housing_AMI` (20 observations).
+  3. **Integrity Assertions:** 0 orphaned foreign keys; strict 1-to-many relationship cardinality. Output generated to both clean CSVs and unified `SCOG_Star_Schema_Data_Model.xlsx`.
+- **Consequences:** Decouples reporting presentation from raw file structures and enables one-click annual data refresh.
 
 ---
 
-## [ADR-007] Recalibración de Alcance para Opción 1 (70–100 hrs) y Desacoplamiento del Presupuesto de Scoping
-- **Fecha:** 2026-09-16
-- **Estado:** Aprobado / Vigente (Revisión 2)
-- **Contexto:** 
-  1. Conforme a la guía y clarificación de Aaron, la cifra de **15 horas** previamente referenciada correspondía a la tarifa de consultoría Skagit Consulting ↔ The Flock para la *producción de este documento técnico de opciones*, no al presupuesto de implementación de la Opción 1 de SCOG.
-  2. El prototipo del reporte para datos de 2025 se encuentra actualmente en curso (*work in progress*) y requiere finalización, modelado y validación técnica antes de aplicarse a los datos de 2026.
-  3. Comprimir la implementación de un reporte formal para el Board de 4 páginas con soporte GIS, control de calidad, documentación y capacitación en 15 horas creaba un riesgo inaceptable de incumplimiento y deuda técnica.
-- **Decisión Tomada:**
-  1. **Desacoplamiento Contractual:** Aclarar explícitamente en el documento y ante la Junta de SCOG que la cifra de 15 horas corresponde al fee de elaboración del scoping document, y que la implementación de la Opción 1 se estima independientemente bottom-up contra las seis áreas de trabajo definidas en el alcance contractual.
-  2. **Estructuración Bottom-Up en Seis Tareas:** Estimar la Opción 1 en un rango objetivo de **70 – 100 horas** (Baseline: **75 horas**; Rango: **55 – 97 horas**):
-     - Tarea 1: Discovery & Planning (6 / **8** / 10 hrs)
-     - Tarea 2: Prototipo 2025 (in progress) (12 / **16** / 22 hrs)
-     - Tarea 3: Reporte de Producción 2026 (18 / **24** / 30 hrs)
-     - Tarea 4: Documentación Técnica & Runbook (6 / **8** / 10 hrs)
-     - Tarea 5: Capacitación & Handoff al Personal (5 / **7** / 9 hrs)
-     - Tarea 6: Buffer de Contingencia (8 / **12** / 16 hrs)
-  3. **Unificación de Modelo Semántico:** Definir como supuesto arquitectónico que el prototipo 2025 y la producción 2026 compartirán un único modelo de datos. Si SCOG solicita desacoplarlos en archivos `.pbix` totalmente independientes, se añadirán contractualmente entre 10 y 15 horas.
-  4. **Palancas de Negociación Honestas:** En la reunión de entrega con el cliente, si SCOG solicita reducir horas hacia el piso de 55-60 hrs, la vía contractual debe ser reducción de alcance (menos páginas visuales o documentación más sucinta), manteniendo intactas las líneas de prototipo y contingencia.
-- **Consecuencias:** 
-  - Estimación realista, robusta y defendible que protege los márgenes y la reputación de Skagit Consulting.
-  - La distancia relativa entre la Opción 1 (75 hrs baseline) y la Opción 2 MVP (90 hrs) se reduce a solo 15 horas (~20%), fortaleciendo enormemente la justificación de retorno de inversión (ROI) para la Opción 2 empresarial.
+## [ADR-006] Employment Domain Methodology: QCEW Covered Employment vs CAI Total Employment Benchmark
+- **Date:** 2026-10-09
+- **Status:** Approved (With Methodology Caveats)
+- **Context:** SCOG provided a draft calculation template from Community Attributes Inc. (CAI) that estimates total employment (including sole proprietors and non-employers) by applying a 1.15458 multiplier to QCEW covered employment. Direction from project leadership instructed not to present or finalize total employment figures on municipal progress comparisons until the methodology basis is officially confirmed with SCOG.
+- **Decision Taken:**
+  1. **Official State Series:** All primary executive cards and visual charts default strictly to Washington State Employment Security Department (ESD) QCEW covered employment.
+  2. **Quarantine of Total Multiplier:** The CAI total employment calculation is isolated strictly to the countywide aggregate level and tagged with prominent disclaimer text ("Pending methodology confirmation with SCOG").
+  3. **Exclusion from Municipal Matrix:** The Page 1 11-jurisdiction GMA 2045 progress matrix strictly displays Population and Housing progress only. Employment target progress is omitted by jurisdiction because sub-county annual employment data is suppressed by state confidentiality rules.
+- **Consequences:** Adheres strictly to management guidance, prevents premature publication of unratified metrics, and maintains statistical defensibility.
 
 ---
 
-## [ADR-008] Calibración de Opción 2 a 110–150 hrs y Consolidación de Opción 1 en 55–97 hrs (Baseline 75 hrs) para Revisión 3
-- **Fecha:** 2026-09-16
-- **Estado:** Aprobado / Vigente (Revisión 3)
-- **Contexto:**
-  1. Para la **Revisión 3**, se formaliza la Opción 1 como el alcance contractual base (*base contracted approach*), consolidada en un rango bottom-up de **55 – 97 horas** con un **baseline de 75 horas** a lo largo de seis tareas bien delimitadas.
-  2. La estimación técnica de la Opción 2 (Dataverse + Ingesta automatizada) fue revisada en profundidad para capturar con rigor la envergadura real de la ingeniería de datos: modelado de entidades en Dataverse, arquitectura de biblioteca y carpetas de intake en SharePoint, flujos ETL en Power Query Dataflows y Power Automate con lógica de upsert, reglas de validación/excepciones, migración histórica de 10–15 años de datos y capacitación técnica. Esto elevó el rango de la Opción 2 a **110 – 150 horas** (MVP: 110 hrs, Completo: 150 hrs).
-  3. El posicionamiento estratégico evoluciona hacia un soporte objetivo a la toma de decisiones: se articulan transparentemente los méritos de ambas opciones para que SCOG elija en función de sus prioridades inmediatas de entrega vs. su visión de modernización y capacidad administrativa.
-- **Decisión Tomada:**
-  1. **Consolidar Opción 1:** Rango 55–97 horas (75 hrs baseline). Mantener la validación del estado del prototipo 2025 como el principal factor de ajuste durante la Tarea 1 (Discovery).
-  2. **Recalibrar Opción 2 a 110–150 horas:** Desglose formal de 8 tareas (10/16, 16/20, 18/22, 22/28, 12/18, 18/22, 8/14, 6/10 hrs).
-  3. **Enfoque de Recomendación Neutral y Equilibrada:** Respaldar la decisión de SCOG sin forzar la adopción de Dataverse. La Opción 1 es suficiente, autosuficiente y de entrega directa; la Opción 2 es una inversión de plataforma para eliminar trabajo manual recurrente.
-- **Consecuencias:**
-  - Documentación perfectamente sincronizada entre Markdown, HTML y PDF en Revision 3.
-  - Protección de márgenes ante la complejidad de la ingesta y migración en Power Platform si SCOG opta por la Opción 2.
-  - Claridad absoluta para la reunión de entrega del miércoles.
+## [ADR-007] Power BI Project (PBIP) Architecture and TMSL 1567 Semantic Model
+- **Date:** 2026-10-09
+- **Status:** Approved / Implemented
+- **Context:** To ensure long-term auditability, team collaboration, and CI/CD integration, the reporting artifact must be version-controllable in Git rather than stored as an opaque binary `.pbix` file.
+- **Decision Taken:** Deliver the 2025 prototype using the Microsoft Power BI Project (`.pbip`) format:
+  1. `SCOG_Growth_Monitoring_Report.pbip`: Project entry point.
+  2. `SCOG_Growth_Monitoring_Report.SemanticModel/`: TMSL 1567 tabular model (`model.bim`) with 8 tables, 30+ production DAX measures, typed schema partitions, and dynamic `SourceWorkbookPath` parameter.
+  3. `SCOG_Growth_Monitoring_Report.Report/`: 4-page 16:9 widescreen canvas (1280 × 720 px) in `report.json` with high-contrast civic theme (`scog_theme.json`).
+- **Consequences:** Enables granular Git tracking of visual changes, DAX measures, and data model modifications without binary merge conflicts.
 
 ---
 
-## [ADR-009] Aprobación Formal de SCOG: Adopción de Opción 1 (Bolsa de 100 Horas: 15 hrs Ejecutadas, 85 hrs Restantes)
-- **Fecha:** 2026-10-08
-- **Estado:** Aprobado / En Ejecución
-- **Contexto:** SCOG revisó y aceptó formalmente la propuesta técnica (Revisión 3), seleccionando la **Opción 1** (Power BI alimentado por Excel estandarizado en SharePoint + GIS) bajo un contrato global de **100 horas**. De este paquete, **15 horas ya fueron devengadas y ejecutadas** en la fase de scoping técnico y delivery review (ADR-007), restando un presupuesto neto de ejecución de **85 horas**.
-- **Decisión Tomada:**
-  1. **Estructura Presupuestaria y Control de Horas:**
-     - Horas ejecutadas (Scoping Document & Delivery Review): **15 hrs**.
-     - Horas disponibles para implementación: **85 hrs**.
-     - Techo contractual global: **100 hrs**.
-  2. **Asignación de las 85 Horas Restantes contra Tareas del Alcance Base:**
-     - **Tarea 1: Discovery & Planning:** 8 hrs (rango 6–10 hrs).
-     - **Tarea 2: Prototipo 2025 (in progress):** 16 hrs (rango 12–22 hrs).
-     - **Tarea 3: Reporte de Producción 2026:** 24 hrs (rango 18–30 hrs).
-     - **Tarea 4: Documentación Técnica & Runbook:** 8 hrs (rango 6–10 hrs).
-     - **Tarea 5: Capacitación & Handoff al Personal:** 7 hrs (rango 5–9 hrs).
-     - **Tarea 6: Contingencia & Buffer de Desviación:** 12–22 hrs (Baseline 12 hrs; hasta 22 hrs absorbiendo el colchón total de 100 hrs).
-     - *Total asignado: 75 hrs baseline + 10 hrs buffer adicional = 85 hrs.*
-  3. **Plan de Ejecución Inmediato (Inicio de Tarea 1):**
-     - Recibir y auditar el archivo .pbix del prototipo 2025 existente y los datos preliminares entregados por SCOG.
-     - Auditar las capas espaciales GIS (GeoJSON / Shapefiles de ciudades y UGAs de Skagit County) para Azure Maps / ArcGIS Maps.
-     - Diseñar y estandarizar las plantillas maestras Excel (.xlsx) con validación por fórmulas (TEXTJOIN, SUMIFS, dropdowns) para blindar el refresh contra roturas de esquema.
-- **Consecuencias:**
-  - El proyecto transiciona formalmente de fase de preventa/scoping a fase de **Construcción y Entrega**.
-  - Excelente posición de margen y seguridad técnica: el baseline de 75 hrs deja 10 hrs completas de contingencia neta dentro del contrato de 100 hrs.
-
----
-
-## [ADR-010] Estandarización de Plantillas Maestras Excel (.xlsx) en Inglés con Validación por Fórmulas Nativas (Tarea 1)
-- **Fecha:** 2026-10-08
-- **Estado:** Aprobado / Implementado
-- **Contexto:** En el marco de la Tarea 1 (Discovery & Planning) de la Opción 1, se requiere blindar el proceso anual de ingesta de datos frente a la alteración involuntaria de encabezados, borrado de columnas y modificación de históricos adoptados, manteniendo compatibilidad plena con Excel Online / SharePoint sin macros (.xlsm) y en idioma inglés para el cliente (SCOG).
-- **Decisión Tomada:**
-  1. Diseñar y generar 4 plantillas maestras estandarizadas en `data/templates/`:
-     - `Template_Housing_Permits_Master.xlsx`: Ingesta anual de permisos residenciales por tipo, demoliciones y unidades netas por jurisdicción/UGA.
-     - `Template_Population_Master.xlsx`: Monitoreo de población OFM April 1 y SAEP UGA frente a las asignaciones de crecimiento del GMA a 2045.
-     - `Template_Employment_Master.xlsx`: Empleo cubierto anual QCEW y firmas por subsector NAICS (2 y 3 dígitos).
-     - `Template_Housing_AMI_Master.xlsx`: Producción de vivienda según tramos de ingreso medio de área (AMI: 0-30%, 31-50%, 51-80%, etc.).
-  2. Cada plantilla incluye:
-     - Hoja `Instructions` con Procedimiento Operativo Estándar (SOP) en inglés.
-     - Banner dinámico de validación de esquema mediante `TEXTJOIN` comparado contra la firma canónica.
-     - Verificación de sumas de control (`SUMIFS` / `SUM`) para detectar alteraciones en datos históricos adoptados.
-     - Listas desplegables de validación de datos para jurisdicciones oficiales de Skagit County.
-     - Columnas de cálculo automático protegidas y coloreadas sutilmente en azul suave.
-- **Consecuencias:**
-  - Se cumple el compromiso contractual de gobernanza ligera para la Opción 1.
-  - El personal de SCOG y las jurisdicciones cuentan con herramientas visuales e intuitivas que previenen roturas en el modelo semántico de Power BI.
-
----
-
-## [ADR-011] Arquitectura del Star Schema y Pipeline ETL Automatizado para Ingesta Anual
-- **Fecha:** 2026-10-08
-- **Estado:** Aprobado / Implementado
-- **Contexto:** Se requiere estructurar los datos históricos (1990–2026) y de 2025 de `data/raw/` en un modelo dimensional relacional en estrella (*Star Schema*) con integridad referencial completa, asegurando que las actualizaciones anuales futuras (2026 en adelante) sean puramente un proceso de ingesta y refresco determinista sin requerir carpintería manual en Excel por parte del cliente.
-- **Decisión Tomada:**
-  1. **Tablas de Dimensiones Conformes:**
-     - `Dim_Jurisdiction` (11 entidades: 8 ciudades incorporadas, 2 UGAs no incorporadas, 1 remanente rural). Clave primaria: `Jurisdiction_ID`.
-     - `Dim_CalendarYear` (56 años: 1990 a 2045 con ciclos de planificación GMA). Clave primaria: `Year`.
-     - `Dim_GMA_2045_Target` (Línea base 2022 y metas de crecimiento adoptadas a 2045 de Población y Vivienda).
-  2. **Tablas de Hechos Numéricas:**
-     - `Fact_Population`: 97 observaciones anuales de población con cálculo de variación interanual y tasa YoY.
-     - `Fact_HousingPermits`: 314 registros históricos (1990–2026) con desglose por tipología (Single-family, Duplex, Multi-family 3-4, 5+, Mobile homes), unidades terminadas, demoliciones y unidades netas.
-     - `Fact_Employment`: 131 registros de subsectores industriales NAICS con promedio anual, masa salarial y series mensuales.
-     - `Fact_Housing_AMI`: 20 registros con la distribución de unidades por tramos de ingreso (0-30%, 31-50%, 51-80%, etc.).
-  3. **Integridad Referencial:** 0 registros huérfanos; todas las claves foráneas conectan estrictamente con `Dim_Jurisdiction` y `Dim_CalendarYear`.
-  4. **Entregables de Salida:** Generación dual en `data/processed/`: archivos CSV individuales y el libro unificado `SCOG_Star_Schema_Data_Model.xlsx`.
-- **Consecuencias:**
-  - El modelo analítico queda listo para ser consumido inmediatamente en Power BI Desktop.
-  - Para 2026, el personal de SCOG solo necesitará actualizar los archivos raw o la plantilla y ejecutar el refresh.
-
----
-
-## [ADR-012] Integración de Metodología de Empleo Total CAI (QCEW + NES) y Metas Tripartitas GMA 2045
-- **Fecha:** 2026-10-09
-- **Estado:** Propuesto (Pendiente de confirmación con Aaron / SCOG sobre la base de medición de metas)
-- **Contexto:** El cliente (SCOG) proporcionó el archivo preliminar de cálculo de Community Attributes Inc. (`CAI.Total Employment Calc Template DRAFT.2024 0206.xlsx`). La línea base de empleo para 2022 adoptada formalmente por el condado (59,571 en la Ordenanza O20250002) coincide cercanamente con el total estimado en la plantilla de CAI para 2022 (59,573, frente a los 51,597 de empleo cubierto QCEW). A partir de esta correspondencia numérica, inferimos que las metas del GMA a 2045 se miden sobre una base de Empleo Total (incluyendo independientes y no empleadores / NES). Sin embargo, Aaron nunca afirmó esto explícitamente y está pendiente confirmar con él si las metas adoptadas se miden sobre empleo total o cubierto. La redacción se mantiene honesta como una inferencia analítica preliminar sujeta a ratificación.
-- **Decisión Tomada:**
-  1. **Integración Tripartita de Metas en `Dim_GMA_2045_Target`:** Extender la dimensión de metas para incluir las tres tablas oficiales de Appendix A:
-     - Tabla 1: Población (Línea base 2022 y Meta 2045).
-     - Tabla 2: Vivienda neta requerida 2020-2045 (17,450 unidades en el condado).
-     - Tabla 3: Empleo Total (Línea base 2022 = 59,571; Meta 2045 = 80,100).
-  2. **Factor Multiplicador de Empleo Total CAI (1.15458) Aplicado Únicamente a Fila TOTAL:**
-     - Incorporar como constante en el pipeline ETL el factor empírico promedio de autoempleo (`SELF_EMP_MULTIPLIER = 1.15458`) derivado por CAI en la serie observada de 21 años (1999–2019). El ETL incluye una aserción estricta que detiene la ejecución si el promedio de la plantilla difiere de esta constante.
-     - Este ratio es un agregado macro a nivel de todo el condado; por tanto, `Estimated_Total_Employment` y el multiplicador se aplican **exclusivamente a la fila del TOTAL del condado**. Todas las filas de subsectores industriales individuales permanecen nulas en estas columnas para evitar distorsiones sectoriales.
-  3. **Extensión de `Fact_Employment` (2025 Anual y 2026 Q1 Preliminar):**
-     - Detección robusta de encabezados por contenido de celda para garantizar que la fila de TOTAL de 2025 no sea omitida.
-     - Claves normalizadas y estables por industria (`Industry_Key`) para consistencia interanual, estandarizando los subsectores gubernamentales (`GOV`, `GOV-FED`, `GOV-STATE`, `GOV-LOCAL`).
-     - Tratamiento explícito de supresión estadística: las celdas suprimidas (`*`) se convierten a nulo con bandera `Is_Suppressed = 1`.
-     - 2026 se marca como período `Q1`: `Annual_Average_Employment` permanece nulo (así como los meses de abril a diciembre), incorporando `Q1_Average_Employment` para habilitar comparaciones homologadas primer trimestre 2025 (52,930 cubiertos / 61,112 total est.) vs. primer trimestre 2026 (53,034 cubiertos / 61,232 total est., +104 empleos netos).
-  4. **Nueva Tabla Dimensional `Dim_CAI_Employment_Benchmark`:**
-     - 22 registros: 21 años observados (1999–2019, `Is_Observed = 1`) y 1 año de línea base derivada (2022, `Is_Observed = 0`, con NES y ratio nulos, y total derivado de 59,573).
-     - Desglose explícito de promedios: `Ratio_Average_All_Years` (1.15458) y `Ratio_Average_Last_10_Obs` (1.15812).
-- **Consecuencias:**
-  - Se modela la metodología de CAI con máxima precisión técnica y rigor estadístico.
-  - Se mantiene en estado propuesto hasta recibir la ratificación formal de Aaron, reteniendo la rama en `feature/cai-total-employment` sin fusionar a `main`.
+## [ADR-008] Governance Safeguards: Strict Power Query Schema Assertions and AMI Preliminary Labeling
+- **Date:** 2026-10-09
+- **Status:** Approved / Implemented
+- **Context:** Auditor review required verification that schema assertions fail safely against unexpected changes and that unverified preliminary data is properly tagged.
+- **Decision Taken:**
+  1. **Strict Power Query Assertions:** Power Query M queries enforce `Table.SelectColumns(Headers, {...}, MissingField.Error)`. If any required column is renamed or absent, the refresh halts immediately with an explicit error rather than silently loading corrupt data.
+  2. **AMI Data Staging:** The Area Median Income (AMI) visual on Page 2 is prominently labeled as preliminary ("PRELIMINARY: Statewide default allocation — certified local jurisdiction datasheets due October 20").
+  3. **GIS Centroid Footnote:** Page 4 explicitly documents the USGS GNIS / US Census Bureau 2020 coordinate sources and defines the "Unincorporated Skagit County" rural balance outside UGAs.
+- **Consequences:** Ensures full compliance with audit guidelines and prevents misleading representation of unratified regional datasets.

@@ -1,0 +1,298 @@
+{
+  "config": "{\"version\": \"5.50\", \"themeCollection\": {\"baseTheme\": {\"name\": \"CY24SU08\", \"version\": \"5.50\", \"type\": 2}}, \"activeSectionIndex\": 0, \"defaultDrillFilterOtherVisuals\": true}",
+  "layoutOptimization": 0,
+  "sections": [
+    {
+      "name": "Section_ExecutiveSummary",
+      "displayName": "1. Executive Summary & Regional Dashboard",
+      "width": 1280,
+      "height": 720,
+      "displayOption": 1,
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 15,
+          "z": 1000,
+          "width": 1240,
+          "height": 60,
+          "config": "{\"name\": \"HeaderBanner_P1\", \"singleVisual\": {\"visualType\": \"textbox\", \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"SKAGIT COUNCIL OF GOVERNMENTS \\u2014 ANNUAL GROWTH MONITORING REPORT\\n\", \"textStyle\": {\"fontSize\": \"15pt\", \"fontFamily\": \"Segoe UI Bold\", \"color\": \"#004B87\"}}, {\"value\": \"Regional Executive Summary & GMA 2045 Target Trajectory | Baseline Calibration Year: 2025\", \"textStyle\": {\"fontSize\": \"9pt\", \"fontFamily\": \"Segoe UI\", \"color\": \"#475569\"}}]}]}}]}}}"
+        },
+        {
+          "x": 20,
+          "y": 80,
+          "z": 2000,
+          "width": 180,
+          "height": 75,
+          "config": "{\"name\": \"Slicer_Year_P1\", \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Dim_CalendarYear.Year\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"Dim_CalendarYear\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"Year\"}, \"Name\": \"Dim_CalendarYear.Year\"}]}}}"
+        },
+        {
+          "x": 210,
+          "y": 80,
+          "z": 3000,
+          "width": 240,
+          "height": 95,
+          "config": "{\"name\": \"Card_TotalPopulation\", \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Measures.Total Population\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"m\", \"Entity\": \"_Measures\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"m\"}}, \"Property\": \"Total Population\"}, \"Name\": \"_Measures.Total Population\"}]}}}"
+        },
+        {
+          "x": 460,
+          "y": 80,
+          "z": 3000,
+          "width": 240,
+          "height": 95,
+          "config": "{\"name\": \"Card_NetHousingUnits\", \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Measures.Net New Housing Units\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"m\", \"Entity\": \"_Measures\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"m\"}}, \"Property\": \"Net New Housing Units\"}, \"Name\": \"_Measures.Net New Housing Units\"}]}}}"
+        },
+        {
+          "x": 710,
+          "y": 80,
+          "z": 3000,
+          "width": 260,
+          "height": 95,
+          "config": "{\"name\": \"Card_CoveredEmployment\", \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Measures.Covered Employment QCEW\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"m\", \"Entity\": \"_Measures\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"m\"}}, \"Property\": \"Covered Employment QCEW\"}, \"Name\": \"_Measures.Covered Employment QCEW\"}]}}}"
+        },
+        {
+          "x": 980,
+          "y": 80,
+          "z": 3000,
+          "width": 280,
+          "height": 95,
+          "config": "{\"name\": \"Card_HousingProgress\", \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Measures.Housing Target Progress %\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"m\", \"Entity\": \"_Measures\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"m\"}}, \"Property\": \"Housing Target Progress %\"}, \"Name\": \"_Measures.Housing Target Progress %\"}]}}}"
+        },
+        {
+          "x": 20,
+          "y": 185,
+          "z": 4000,
+          "width": 615,
+          "height": 260,
+          "config": "{\"name\": \"LineChart_PopulationTrend\", \"singleVisual\": {\"visualType\": \"lineChart\", \"projections\": {\"Category\": [{\"queryRef\": \"Dim_CalendarYear.Year\"}], \"Y\": [{\"queryRef\": \"_Measures.Total Population\"}]}}}"
+        },
+        {
+          "x": 645,
+          "y": 185,
+          "z": 4001,
+          "width": 615,
+          "height": 260,
+          "config": "{\"name\": \"ColumnChart_HousingUnits\", \"singleVisual\": {\"visualType\": \"clusteredColumnChart\", \"projections\": {\"Category\": [{\"queryRef\": \"Dim_CalendarYear.Year\"}], \"Y\": [{\"queryRef\": \"_Measures.Single-Family Permits\"}, {\"queryRef\": \"_Measures.Multi-Family Permits\"}, {\"queryRef\": \"_Measures.ADU Permits\"}]}}}"
+        },
+        {
+          "x": 20,
+          "y": 455,
+          "z": 5000,
+          "width": 1240,
+          "height": 210,
+          "config": "{\"name\": \"Table_ExecutiveSummaryJurisdictions\", \"singleVisual\": {\"visualType\": \"tableEx\", \"projections\": {\"Values\": [{\"queryRef\": \"Dim_Jurisdiction.Jurisdiction_Name\"}, {\"queryRef\": \"Dim_Jurisdiction.Jurisdiction_Type\"}, {\"queryRef\": \"_Measures.Total Population\"}, {\"queryRef\": \"_Measures.2045 Population Target\"}, {\"queryRef\": \"_Measures.Net New Housing Units\"}, {\"queryRef\": \"_Measures.2045 Housing Target Units\"}, {\"queryRef\": \"_Measures.Housing Target Progress %\"}]}, \"objects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'11-Jurisdiction GMA 2045 Progress Matrix (Population & Housing Only)'\"}}}}}]}}}"
+        },
+        {
+          "x": 20,
+          "y": 675,
+          "z": 9000,
+          "width": 1240,
+          "height": 35,
+          "config": "{\"name\": \"FooterNotice_P1\", \"singleVisual\": {\"visualType\": \"textbox\", \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"Source: Skagit Council of Governments (SCOG) | WA OFM April 1 Population | ESD Covered Employment | Skagit County Ordinance O20250002. Note: Jurisdiction matrix displays Population & Housing only; Employment allocations are tracked at County aggregate.\", \"textStyle\": {\"fontSize\": \"8pt\", \"fontFamily\": \"Segoe UI\", \"color\": \"#64748B\"}}]}]}}]}}}"
+        }
+      ]
+    },
+    {
+      "name": "Section_HousingDeepDive",
+      "displayName": "2. Housing Deep-Dive",
+      "width": 1280,
+      "height": 720,
+      "displayOption": 1,
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 15,
+          "z": 1000,
+          "width": 1240,
+          "height": 55,
+          "config": "{\"name\": \"HeaderBanner_P2\", \"singleVisual\": {\"visualType\": \"textbox\", \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"HOUSING PRODUCTION DEEP-DIVE & AFFORDABILITY (AMI) ANALYSIS\\n\", \"textStyle\": {\"fontSize\": \"15pt\", \"fontFamily\": \"Segoe UI Bold\", \"color\": \"#004B87\"}}, {\"value\": \"Permits by Typology, Net Production vs. GMA 2045 Allocations, and AMI Affordability (PRELIMINARY: local AMI datasheets due Oct 20)\", \"textStyle\": {\"fontSize\": \"9pt\", \"fontFamily\": \"Segoe UI\", \"color\": \"#475569\"}}]}]}}]}}}"
+        },
+        {
+          "x": 20,
+          "y": 75,
+          "z": 2000,
+          "width": 260,
+          "height": 85,
+          "config": "{\"name\": \"Slicer_Jurisdiction_P2\", \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Dim_Jurisdiction.Jurisdiction_Name\"}]}}}"
+        },
+        {
+          "x": 290,
+          "y": 75,
+          "z": 3000,
+          "width": 220,
+          "height": 85,
+          "config": "{\"name\": \"Card_NetUnits_P2\", \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Measures.Net New Housing Units\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"m\", \"Entity\": \"_Measures\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"m\"}}, \"Property\": \"Net New Housing Units\"}, \"Name\": \"_Measures.Net New Housing Units\"}]}}}"
+        },
+        {
+          "x": 520,
+          "y": 75,
+          "z": 3000,
+          "width": 220,
+          "height": 85,
+          "config": "{\"name\": \"Card_SingleFamily_P2\", \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Measures.Single-Family Permits\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"m\", \"Entity\": \"_Measures\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"m\"}}, \"Property\": \"Single-Family Permits\"}, \"Name\": \"_Measures.Single-Family Permits\"}]}}}"
+        },
+        {
+          "x": 750,
+          "y": 75,
+          "z": 3000,
+          "width": 220,
+          "height": 85,
+          "config": "{\"name\": \"Card_MultiFamily_P2\", \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Measures.Multi-Family Permits\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"m\", \"Entity\": \"_Measures\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"m\"}}, \"Property\": \"Multi-Family Permits\"}, \"Name\": \"_Measures.Multi-Family Permits\"}]}}}"
+        },
+        {
+          "x": 980,
+          "y": 75,
+          "z": 3000,
+          "width": 280,
+          "height": 85,
+          "config": "{\"name\": \"Card_ADUs_P2\", \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Measures.ADU Permits\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"m\", \"Entity\": \"_Measures\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"m\"}}, \"Property\": \"ADU Permits\"}, \"Name\": \"_Measures.ADU Permits\"}]}}}"
+        },
+        {
+          "x": 20,
+          "y": 170,
+          "z": 3000,
+          "width": 780,
+          "height": 240,
+          "config": "{\"name\": \"AreaChart_HousingHistory\", \"singleVisual\": {\"visualType\": \"stackedAreaChart\", \"projections\": {\"Category\": [{\"queryRef\": \"Dim_CalendarYear.Year\"}], \"Y\": [{\"queryRef\": \"_Measures.Single-Family Permits\"}, {\"queryRef\": \"_Measures.Multi-Family Permits\"}, {\"queryRef\": \"_Measures.ADU Permits\"}]}}}"
+        },
+        {
+          "x": 810,
+          "y": 170,
+          "z": 3001,
+          "width": 450,
+          "height": 240,
+          "config": "{\"name\": \"Donut_HousingMix\", \"singleVisual\": {\"visualType\": \"donutChart\", \"projections\": {\"Y\": [{\"queryRef\": \"_Measures.Single-Family Permits\"}, {\"queryRef\": \"_Measures.Multi-Family Permits\"}, {\"queryRef\": \"_Measures.ADU Permits\"}]}}}"
+        },
+        {
+          "x": 20,
+          "y": 420,
+          "z": 4000,
+          "width": 620,
+          "height": 245,
+          "config": "{\"name\": \"Bar_AMI_Distribution\", \"singleVisual\": {\"visualType\": \"clusteredBarChart\", \"projections\": {\"Category\": [{\"queryRef\": \"Fact_Housing_AMI.Structure_Type\"}], \"Y\": [{\"queryRef\": \"_Measures.Low Income AMI Units (<80% AMI)\"}, {\"queryRef\": \"_Measures.Moderate to High Income AMI Units (>80% AMI)\"}]}, \"objects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Housing by AMI Tier (PRELIMINARY: Statewide Default Allocation \\u2014 Local Datasheets Due Oct 20)'\"}}}}}]}}}"
+        },
+        {
+          "x": 650,
+          "y": 420,
+          "z": 4001,
+          "width": 610,
+          "height": 245,
+          "config": "{\"name\": \"Matrix_HousingTargets\", \"singleVisual\": {\"visualType\": \"pivotTable\", \"projections\": {\"Rows\": [{\"queryRef\": \"Dim_Jurisdiction.Jurisdiction_Name\"}], \"Values\": [{\"queryRef\": \"_Measures.Cumulative Net Housing Units (2020-Present)\"}, {\"queryRef\": \"_Measures.2045 Housing Target Units\"}, {\"queryRef\": \"_Measures.Housing Target Progress %\"}]}}}"
+        },
+        {
+          "x": 20,
+          "y": 675,
+          "z": 9000,
+          "width": 1240,
+          "height": 35,
+          "config": "{\"name\": \"FooterNotice_P2\", \"singleVisual\": {\"visualType\": \"textbox\", \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"Sources: OFM Postcensal Housing Permits (1990-2026) | WA Commerce AMI Allocation Guidance (PRELIMINARY: Local Certified Datasheets Due Oct 20) | Ordinance O20250002\", \"textStyle\": {\"fontSize\": \"8pt\", \"fontFamily\": \"Segoe UI\", \"color\": \"#64748B\"}}]}]}}]}}}"
+        }
+      ]
+    },
+    {
+      "name": "Section_PopulationEmployment",
+      "displayName": "3. Population & Employment Overview",
+      "width": 1280,
+      "height": 720,
+      "displayOption": 1,
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 15,
+          "z": 1000,
+          "width": 1240,
+          "height": 55,
+          "config": "{\"name\": \"HeaderBanner_P3\", \"singleVisual\": {\"visualType\": \"textbox\", \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"REGIONAL POPULATION & EMPLOYMENT DYNAMICS\\n\", \"textStyle\": {\"fontSize\": \"15pt\", \"fontFamily\": \"Segoe UI Bold\", \"color\": \"#004B87\"}}, {\"value\": \"OFM April 1 Population Trends and Official ESD Covered Employment by Sector (Official State Series)\", \"textStyle\": {\"fontSize\": \"9pt\", \"fontFamily\": \"Segoe UI\", \"color\": \"#475569\"}}]}]}}]}}}"
+        },
+        {
+          "x": 20,
+          "y": 80,
+          "z": 2000,
+          "width": 615,
+          "height": 280,
+          "config": "{\"name\": \"Bar_PopByJurisdiction\", \"singleVisual\": {\"visualType\": \"clusteredBarChart\", \"projections\": {\"Category\": [{\"queryRef\": \"Dim_Jurisdiction.Jurisdiction_Name\"}], \"Y\": [{\"queryRef\": \"_Measures.Total Population\"}]}}}"
+        },
+        {
+          "x": 645,
+          "y": 80,
+          "z": 2001,
+          "width": 615,
+          "height": 280,
+          "config": "{\"name\": \"Bar_EmploymentByIndustry\", \"singleVisual\": {\"visualType\": \"clusteredBarChart\", \"projections\": {\"Category\": [{\"queryRef\": \"Fact_Employment.Industry_Subsector_Title\"}], \"Y\": [{\"queryRef\": \"_Measures.Covered Employment QCEW\"}]}}}"
+        },
+        {
+          "x": 20,
+          "y": 370,
+          "z": 3000,
+          "width": 780,
+          "height": 295,
+          "config": "{\"name\": \"Line_CoveredEmploymentOfficialSeries\", \"singleVisual\": {\"visualType\": \"lineChart\", \"projections\": {\"Category\": [{\"queryRef\": \"Dim_CAI_Employment_Benchmark.Year\"}], \"Y\": [{\"queryRef\": \"Dim_CAI_Employment_Benchmark.Covered_Employment_QCEW\"}]}, \"objects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Official ESD Covered Employment (1999-2025) [Total Multiplier Pending SCOG Confirmation]'\"}}}}}]}}}"
+        },
+        {
+          "x": 810,
+          "y": 370,
+          "z": 3001,
+          "width": 450,
+          "height": 295,
+          "config": "{\"name\": \"Table_EmploymentOverviewDetails\", \"singleVisual\": {\"visualType\": \"tableEx\", \"projections\": {\"Values\": [{\"queryRef\": \"Dim_Jurisdiction.Jurisdiction_Name\"}, {\"queryRef\": \"_Measures.2022 Employment Baseline\"}, {\"queryRef\": \"_Measures.2045 Employment Target\"}]}}}"
+        },
+        {
+          "x": 20,
+          "y": 675,
+          "z": 9000,
+          "width": 1240,
+          "height": 35,
+          "config": "{\"name\": \"FooterNotice_P3\", \"singleVisual\": {\"visualType\": \"textbox\", \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"Sources: WA OFM April 1 Population | ESD QCEW Covered Employment | Ordinance O20250002. Note: Total Employment multiplier is preliminary and withheld pending formal confirmation with SCOG staff.\", \"textStyle\": {\"fontSize\": \"8pt\", \"fontFamily\": \"Segoe UI\", \"color\": \"#64748B\"}}]}]}}]}}}"
+        }
+      ]
+    },
+    {
+      "name": "Section_JurisdictionSpatialMapping",
+      "displayName": "4. Jurisdictional Comparison & Spatial Mapping",
+      "width": 1280,
+      "height": 720,
+      "displayOption": 1,
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 15,
+          "z": 1000,
+          "width": 1240,
+          "height": 55,
+          "config": "{\"name\": \"HeaderBanner_P4\", \"singleVisual\": {\"visualType\": \"textbox\", \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"JURISDICTIONAL COMPARISON & SPATIAL DISTRIBUTION\\n\", \"textStyle\": {\"fontSize\": \"15pt\", \"fontFamily\": \"Segoe UI Bold\", \"color\": \"#004B87\"}}, {\"value\": \"Incorporated Cities vs. UGAs vs. Rural Areas \\u2014 Countywide Spatial Map and Planning Shares\", \"textStyle\": {\"fontSize\": \"9pt\", \"fontFamily\": \"Segoe UI\", \"color\": \"#475569\"}}]}]}}]}}}"
+        },
+        {
+          "x": 20,
+          "y": 80,
+          "z": 2000,
+          "width": 640,
+          "height": 585,
+          "config": "{\"name\": \"Map_SkagitCountyJurisdictions\", \"singleVisual\": {\"visualType\": \"map\", \"projections\": {\"Category\": [{\"queryRef\": \"Dim_Jurisdiction.Jurisdiction_Name\"}], \"Latitude\": [{\"queryRef\": \"Dim_Jurisdiction.Latitude\"}], \"Longitude\": [{\"queryRef\": \"Dim_Jurisdiction.Longitude\"}], \"Size\": [{\"queryRef\": \"_Measures.Total Population\"}]}, \"objects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Regional Jurisdictions & UGAs (Official USGS/Census 2020 Centroids)'\"}}}}}]}}}"
+        },
+        {
+          "x": 670,
+          "y": 80,
+          "z": 3000,
+          "width": 590,
+          "height": 330,
+          "config": "{\"name\": \"Matrix_JurisdictionTypeComparison\", \"singleVisual\": {\"visualType\": \"pivotTable\", \"projections\": {\"Rows\": [{\"queryRef\": \"Dim_Jurisdiction.Jurisdiction_Type\"}, {\"queryRef\": \"Dim_Jurisdiction.Jurisdiction_Name\"}], \"Values\": [{\"queryRef\": \"_Measures.Total Population\"}, {\"queryRef\": \"_Measures.Jurisdiction Share of Regional Population %\"}, {\"queryRef\": \"_Measures.Net New Housing Units\"}, {\"queryRef\": \"_Measures.Housing Target Progress %\"}]}}}"
+        },
+        {
+          "x": 670,
+          "y": 420,
+          "z": 4000,
+          "width": 590,
+          "height": 245,
+          "config": "{\"name\": \"Bar_GrowthShares\", \"singleVisual\": {\"visualType\": \"clusteredBarChart\", \"projections\": {\"Category\": [{\"queryRef\": \"Dim_Jurisdiction.Jurisdiction_Name\"}], \"Y\": [{\"queryRef\": \"_Measures.Jurisdiction Share of Regional Population %\"}, {\"queryRef\": \"_Measures.Jurisdiction Share of Regional Housing %\"}]}}}"
+        },
+        {
+          "x": 20,
+          "y": 675,
+          "z": 9000,
+          "width": 1240,
+          "height": 35,
+          "config": "{\"name\": \"FooterNotice_P4\", \"singleVisual\": {\"visualType\": \"textbox\", \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"Centroid Coordinates: Official USGS GNIS / US Census Bureau 2020 Municipal Centers & UGA Centroids. 'Unincorporated Skagit County' represents rural balance outside designated UGAs per Ordinance O20250002.\", \"textStyle\": {\"fontSize\": \"8pt\", \"fontFamily\": \"Segoe UI\", \"color\": \"#64748B\"}}]}]}}]}}}"
+        }
+      ]
+    }
+  ]
+}

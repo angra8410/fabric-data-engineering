@@ -78,6 +78,10 @@ def clean_num(val):
     except:
         return 0
 
+# CAI total-employment method: average of the template's yearly (covered + self-employed) / covered
+# ratios, 1999-2019 (21 observations). County-wide, all-industry figure: apply to the TOTAL row only.
+SELF_EMP_MULTIPLIER = 1.15458
+
 # -----------------------------------------------------------------------------
 # 1. BUILD DIM_JURISDICTION
 # -----------------------------------------------------------------------------
@@ -172,7 +176,7 @@ def build_dim_gma_2045_target(dim_jur):
             "Target_2045_Employment": e45,
             "Projected_2045_Employment_Growth": egrowth,
             "Employment_Growth_Share_Pct": round(float(eshare), 4) if eshare else 0.0,
-            "CAI_Self_Employment_Multiplier": 1.15458,
+            "CAI_Self_Employment_Multiplier": SELF_EMP_MULTIPLIER,
             "Data_Source": "Appendix A. Skagit County 2045 Growth Projections & Allocations (O20250002)"
         })
         
@@ -397,174 +401,226 @@ def build_fact_housing_permits(dim_jur):
 # 6. BUILD DIM_CAI_EMPLOYMENT_BENCHMARK
 # -----------------------------------------------------------------------------
 def build_dim_cai_employment_benchmark():
+    """Historical CAI series (observed years) + the derived 2022 baseline row.
+
+    Observed rows (1999-2019) are read from the CAI template. The 2022 row is NOT an
+    observation: Census NES data in the template stops at 2019, so 2022 total employment is
+    covered employment x the average ratio. NES and ratio are left blank for that row.
+    """
     print("-> Building Dim_CAI_Employment_Benchmark...")
     cai_path = os.path.join(RAW_DIR, "CAI.Total Employment Calc Template DRAFT.2024 0206.xlsx")
     wb = openpyxl.load_workbook(cai_path, data_only=True)
     ws = wb['Total Employment Calculation']
-    
-    records = []
-    # Historical columns D to X (cols 4 to 24) covering 1999 to 2019
+
+    # Fail loudly if the template's average ratio no longer matches the constant used in the fact table.
+    template_avg = float(ws["D36"].value)
+    if round(template_avg, 5) != SELF_EMP_MULTIPLIER:
+        raise ValueError(
+            f"CAI template average ratio is {template_avg:.5f} but SELF_EMP_MULTIPLIER is "
+            f"{SELF_EMP_MULTIPLIER}. Update the constant (and ADR-012) before running the ETL."
+        )
+
+    observed = []
+    # Template columns D..X (4..24) hold the observed years (1999-2019).
     for c in range(4, 25):
         yr = ws.cell(20, c).value
-        if yr is not None and isinstance(yr, (int, float)):
-            yr = int(yr)
-            self_emp = clean_num(ws.cell(21, c).value)
-            tot_emp = clean_num(ws.cell(26, c).value)
-            cov_emp = (tot_emp - self_emp) if (tot_emp and self_emp) else 0
-            ratio = float(ws.cell(31, c).value) if ws.cell(31, c).value else 0.0
-            
-            records.append({
-                "Year": yr,
-                "Covered_Employment_QCEW": int(cov_emp),
-                "Self_Employment_NES": int(self_emp),
-                "Total_Employment_Combined": int(tot_emp),
-                "Self_Employment_Ratio": round(ratio, 5),
-                "Benchmark_10Yr_Average_Ratio": 1.15458,
-                "Data_Source": "CAI Total Employment Calc Template / BLS QCEW & Census NES"
-            })
+        if not isinstance(yr, (int, float)):
+            continue
+        self_emp = ws.cell(21, c).value
+        total_emp = ws.cell(26, c).value
+        ratio = ws.cell(31, c).value
+        if not all(isinstance(v, (int, float)) for v in (self_emp, total_emp, ratio)):
+            continue
+        observed.append({
+            "Year": int(yr),
+            "Covered_Employment_QCEW": int(round(total_emp - self_emp)),
+            "Self_Employment_NES": int(round(self_emp)),
+            "Total_Employment_Combined": int(round(total_emp)),
+            "Self_Employment_Ratio": round(float(ratio), 5),
+            "Is_Observed": 1,
+            "Data_Source": "CAI Total Employment Calc Template / BLS QCEW & Census NES (observed)",
+        })
+
+    ratios = [r["Self_Employment_Ratio"] for r in observed]
+    all_years_avg = round(sum(ratios) / len(ratios), 5)
+    last10 = ratios[-10:]
+    last10_avg = round(sum(last10) / len(last10), 5)
+
+    # Derived baseline year (template cells D15 = year, D16 = covered, D41 = total estimate).
+    baseline_year = int(ws["D15"].value)
+    baseline = {
+        "Year": baseline_year,
+        "Covered_Employment_QCEW": int(ws["D16"].value),
+        "Self_Employment_NES": None,          # not observed: NES stops at 2019 in the template
+        "Total_Employment_Combined": int(round(ws["D41"].value)),
+        "Self_Employment_Ratio": None,        # derived with the average ratio, not observed
+        "Is_Observed": 0,
+        "Data_Source": (f"Derived: {baseline_year} covered employment x average ratio "
+                        f"(CAI template D41). Adopted Appendix A baseline is 59,571."),
+    }
     wb.close()
-    
-    # Add 2022 baseline row from CAI cells D15, D16, D41
-    records.append({
-        "Year": 2022,
-        "Covered_Employment_QCEW": 51597,
-        "Self_Employment_NES": 7976, # 59,573 total - 51,597 covered
-        "Total_Employment_Combined": 59573,
-        "Self_Employment_Ratio": 1.15458,
-        "Benchmark_10Yr_Average_Ratio": 1.15458,
-        "Data_Source": "CAI Total Employment Calc Template / 2022 Adopted Baseline"
-    })
-    
-    df = pd.DataFrame(records).sort_values("Year").reset_index(drop=True)
-    df["Benchmark_Key"] = [f"CAI-EMP-{r['Year']}" for _, r in df.iterrows()]
+
+    df = pd.DataFrame(observed + [baseline]).sort_values("Year").reset_index(drop=True)
+    df["Ratio_Average_All_Years"] = all_years_avg     # 21 observations, 1999-2019 (= the multiplier)
+    df["Ratio_Average_Last_10_Obs"] = last10_avg      # 2010-2019, shown for comparison only
+    df["Benchmark_Key"] = [f"CAI-EMP-{y}" for y in df["Year"]]
+    for col in ("Covered_Employment_QCEW", "Self_Employment_NES", "Total_Employment_Combined", "Is_Observed"):
+        df[col] = df[col].astype("Int64")
     cols_order = [
         "Benchmark_Key", "Year", "Covered_Employment_QCEW", "Self_Employment_NES",
-        "Total_Employment_Combined", "Self_Employment_Ratio", "Benchmark_10Yr_Average_Ratio",
-        "Data_Source"
+        "Total_Employment_Combined", "Self_Employment_Ratio", "Ratio_Average_All_Years",
+        "Ratio_Average_Last_10_Obs", "Is_Observed", "Data_Source",
     ]
     return df[cols_order]
 
 # -----------------------------------------------------------------------------
 # 7. BUILD FACT_EMPLOYMENT
 # -----------------------------------------------------------------------------
+_ROLLUP_TITLES = {"total": "TOTAL", "government": "GOV", "not elsewhere classified": "NEC"}
+_GOV_SUBROWS = {"federal government": "GOV-FED", "state government": "GOV-STATE", "local government": "GOV-LOCAL"}
+
+
+def parse_qcew_value(val):
+    """Parse an ESD QCEW cell. Blank or suppressed ('*') cells return None, never 0,
+    so suppression is not confused with a true zero."""
+    if val is None:
+        return None
+    s = str(val).strip()
+    if s in ("", "*", "-", "N/A", "None"):
+        return None
+    s = s.replace(",", "").replace("$", "").strip()
+    try:
+        return float(s) if "." in s else int(s)
+    except ValueError:
+        return None
+
+
+def read_qcew_rows(path):
+    """Read an ESD QCEW file into normalized rows with a stable Industry_Key.
+
+    The header row is located by content (not by a fixed line count), so the TOTAL row
+    directly below it is always kept. Rollup rows are normalized so both years use the same
+    codes: Total -> 'TOTAL', Government -> 'GOV', Not Elsewhere Classified -> 'NEC'.
+    """
+    with open(path, "r", encoding="utf-8", errors="ignore") as f:
+        rows = list(csv.reader(f))
+    hdr = next(i for i, r in enumerate(rows) if r and r[0].strip().lower().startswith("2-digit naics"))
+
+    out, parent_2d = [], None
+    for r in rows[hdr + 1:]:
+        if len(r) < 4:
+            continue
+        n2, n3, title = r[0].strip(), r[1].strip(), r[2].strip()
+        if not title:
+            continue                                   # blank spacer and footnote rows
+        tkey = title.lower()
+        if not n2 and not n3 and tkey in _ROLLUP_TITLES:
+            n2 = _ROLLUP_TITLES[tkey]                  # 2026 file leaves these codes blank
+
+        if n2:
+            parent_2d = n2
+            level, key = ("County Total", "TOTAL") if n2 == "TOTAL" else ("2-digit", n2)
+        elif n3:
+            level, key = "3-digit", n3
+        elif tkey in _GOV_SUBROWS:
+            level, key = "Government sub-sector", _GOV_SUBROWS[tkey]
+        else:
+            level, key = "Residual", f"{parent_2d}-OTHER"   # the 'Other industries' lines
+        out.append({"n2": n2, "n3": n3, "title": title, "key": key, "level": level,
+                    "parent_2d": parent_2d if key != "TOTAL" else "TOTAL", "cells": r})
+    return out
+
+
 def build_fact_employment():
+    """Fact_Employment: ESD QCEW covered employment by industry.
+
+    - Industry_Key is stable across years, so year-over-year joins do not depend on titles.
+    - Suppressed ('*') cells are blank (null) and flagged, not 0.
+    - Estimated_Total_Employment (covered x CAI ratio) exists ONLY on the county TOTAL row. The
+      ratio is a county-wide, all-industry figure and is not valid for individual sectors.
+    - 2026 is Q1-only: Annual_Average_Employment is blank, months Apr-Dec are blank, and
+      Q1_Average_Employment is populated for both years so Q1 can be compared with Q1.
+    """
     print("-> Building Fact_Employment...")
-    records = []
-    
-    # 7.1 2025 QCEW Revised
-    qcew_path = os.path.join(RAW_DIR, "2025-QCEW-annual-averages-revised(Skagit County) (1).csv")
-    with open(qcew_path, "r", encoding="utf-8", errors="ignore") as f:
-        reader = csv.reader(f)
-        for _ in range(4):
-            next(reader, None)
-        h1 = next(reader) # line 5
-        h2 = next(reader) # line 6
-        
-        for row in reader:
-            if not row or len(row) < 3:
-                continue
-            n2 = row[0].strip()
-            n3 = row[1].strip()
-            title = row[2].strip()
-            if not title or title.lower().startswith("source"):
-                continue
-            firms = clean_num(row[3]) if len(row) > 3 else 0
-            
-            # Jan to Dec
-            monthly = []
-            for m_idx in range(4, 16):
-                monthly.append(clean_num(row[m_idx]) if m_idx < len(row) else 0)
-                
-            # Annual Average
-            avg_emp = clean_num(row[17]) if len(row) > 17 else (sum(monthly)/12 if monthly else 0)
-            avg_wage = clean_num(row[18]) if len(row) > 18 else 0
-            est_tot_emp = int(round(avg_emp * 1.15458)) if avg_emp > 0 else 0
-            
-            records.append({
-                "Year": 2025,
-                "NAICS_2Digit_Code": n2,
-                "NAICS_3Digit_Code": n3,
-                "Industry_Subsector_Title": title,
-                "Average_Establishments": firms,
-                "Annual_Average_Employment": int(avg_emp),
-                "Estimated_Total_Employment": est_tot_emp,
-                "CAI_Self_Employment_Multiplier": 1.15458,
-                "Average_Annual_Wage_USD": int(avg_wage),
-                "Jan_Employment": int(monthly[0]),
-                "Feb_Employment": int(monthly[1]),
-                "Mar_Employment": int(monthly[2]),
-                "Apr_Employment": int(monthly[3]),
-                "May_Employment": int(monthly[4]),
-                "Jun_Employment": int(monthly[5]),
-                "Jul_Employment": int(monthly[6]),
-                "Aug_Employment": int(monthly[7]),
-                "Sep_Employment": int(monthly[8]),
-                "Oct_Employment": int(monthly[9]),
-                "Nov_Employment": int(monthly[10]),
-                "Dec_Employment": int(monthly[11]),
-                "Data_Status": "2025 Official Revised Averages"
-            })
-            
-    # 7.2 2026 Q1 QCEW Preliminary
+    annual_path = os.path.join(RAW_DIR, "2025-QCEW-annual-averages-revised(Skagit County) (1).csv")
     q1_path = os.path.join(RAW_DIR, "2026Q1-QCEW-preliminary(Skagit County).csv")
-    if os.path.exists(q1_path):
-        with open(q1_path, "r", encoding="utf-8", errors="ignore") as f:
-            reader = csv.reader(f)
-            for _ in range(5):
-                next(reader, None)
-            for row in reader:
-                if not row or len(row) < 3:
-                    continue
-                n2 = row[0].strip()
-                n3 = row[1].strip()
-                title = row[2].strip()
-                if not title or title.lower().startswith("source"):
-                    continue
-                firms = clean_num(row[3]) if len(row) > 3 else 0
-                jan = clean_num(row[4]) if len(row) > 4 else 0
-                feb = clean_num(row[5]) if len(row) > 5 else 0
-                mar = clean_num(row[6]) if len(row) > 6 else 0
-                avg_emp = clean_num(row[8]) if len(row) > 8 else 0
-                avg_qtr_wage = clean_num(row[9]) if len(row) > 9 else 0
-                annualized_wage = int(avg_qtr_wage * 4)
-                est_tot_emp = int(round(avg_emp * 1.15458)) if avg_emp > 0 else 0
-                
-                records.append({
-                    "Year": 2026,
-                    "NAICS_2Digit_Code": n2,
-                    "NAICS_3Digit_Code": n3,
-                    "Industry_Subsector_Title": title,
-                    "Average_Establishments": firms,
-                    "Annual_Average_Employment": int(avg_emp),
-                    "Estimated_Total_Employment": est_tot_emp,
-                    "CAI_Self_Employment_Multiplier": 1.15458,
-                    "Average_Annual_Wage_USD": annualized_wage,
-                    "Jan_Employment": int(jan),
-                    "Feb_Employment": int(feb),
-                    "Mar_Employment": int(mar),
-                    "Apr_Employment": 0,
-                    "May_Employment": 0,
-                    "Jun_Employment": 0,
-                    "Jul_Employment": 0,
-                    "Aug_Employment": 0,
-                    "Sep_Employment": 0,
-                    "Oct_Employment": 0,
-                    "Nov_Employment": 0,
-                    "Dec_Employment": 0,
-                    "Data_Status": "2026 Q1 Preliminary"
-                })
+    month_cols = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+    annual_rows = read_qcew_rows(annual_path)
+    canonical_title = {r["key"]: r["title"] for r in annual_rows}   # 2025 titles are the reference
+
+    def base_record(r, year, status, period):
+        return {
+            "Year": year, "Period_Type": period, "Industry_Key": r["key"], "Row_Level": r["level"],
+            "Parent_2Digit_Code": r["parent_2d"], "NAICS_2Digit_Code": r["n2"], "NAICS_3Digit_Code": r["n3"],
+            "Industry_Subsector_Title": canonical_title.get(r["key"], r["title"]),
+            "Title_As_Reported": r["title"], "Data_Status": status,
+            "Is_County_Total": 1 if r["key"] == "TOTAL" else 0,
+        }
+
+    records = []
+    for r in annual_rows:                                            # 2025 annual
+        c = r["cells"]
+        months = [parse_qcew_value(c[i]) if len(c) > i else None for i in range(4, 16)]
+        avg = parse_qcew_value(c[17]) if len(c) > 17 else None
+        q1 = round(sum(months[:3]) / 3) if all(m is not None for m in months[:3]) else None
+        rec = base_record(r, 2025, "2025 Official Revised Averages", "Annual")
+        rec.update({
+            "Average_Establishments": parse_qcew_value(c[3]),
+            "Annual_Average_Employment": avg,
+            "Q1_Average_Employment": q1,
+            "Is_Suppressed": 1 if avg is None else 0,
+            "Average_Annual_Wage_USD": parse_qcew_value(c[18]) if len(c) > 18 else None,
+        })
+        rec.update({f"{m}_Employment": v for m, v in zip(month_cols, months)})
+        records.append(rec)
+
+    if os.path.exists(q1_path):                                      # 2026 Q1 preliminary
+        for r in read_qcew_rows(q1_path):
+            c = r["cells"]
+            months = [parse_qcew_value(c[i]) if len(c) > i else None for i in range(4, 7)]
+            q1 = parse_qcew_value(c[8]) if len(c) > 8 else None
+            qwage = parse_qcew_value(c[9]) if len(c) > 9 else None
+            rec = base_record(r, 2026, "2026 Q1 Preliminary", "Q1")
+            rec.update({
+                "Average_Establishments": parse_qcew_value(c[3]),
+                "Annual_Average_Employment": None,                   # no annual figure exists yet
+                "Q1_Average_Employment": q1,
+                "Is_Suppressed": 1 if q1 is None else 0,
+                "Average_Annual_Wage_USD": int(qwage * 4) if qwage is not None else None,  # Q1 wage x 4 (approximation)
+            })
+            rec.update({f"{m}_Employment": (months[i] if i < 3 else None) for i, m in enumerate(month_cols)})
+            records.append(rec)
 
     df = pd.DataFrame(records)
+
+    # CAI total-employment estimate: county total row only.
+    is_total = df["Is_County_Total"] == 1
+    df["Estimated_Total_Employment"] = (df["Annual_Average_Employment"] * SELF_EMP_MULTIPLIER).round()
+    df["Estimated_Total_Employment_Q1"] = (df["Q1_Average_Employment"] * SELF_EMP_MULTIPLIER).round()
+    df.loc[~is_total, ["Estimated_Total_Employment", "Estimated_Total_Employment_Q1"]] = None
+    df["CAI_Self_Employment_Multiplier"] = None
+    df.loc[is_total, "CAI_Self_Employment_Multiplier"] = SELF_EMP_MULTIPLIER
+
+    dup = df.duplicated(subset=["Year", "Industry_Key"], keep=False)
+    if dup.any():
+        raise ValueError(f"Industry_Key is not unique within a year: {df.loc[dup, ['Year','Industry_Key']].values.tolist()}")
+
+    int_cols = (["Average_Establishments", "Annual_Average_Employment", "Q1_Average_Employment",
+                 "Estimated_Total_Employment", "Estimated_Total_Employment_Q1", "Average_Annual_Wage_USD",
+                 "Is_Suppressed"] + [f"{m}_Employment" for m in month_cols])
+    for col in int_cols:
+        df[col] = df[col].round().astype("Int64")
+
     df["Fact_Employment_Key"] = [f"FEMP-{i+1:04d}" for i in range(len(df))]
     cols_order = [
-        "Fact_Employment_Key", "Year", "NAICS_2Digit_Code", "NAICS_3Digit_Code", "Industry_Subsector_Title",
-        "Average_Establishments", "Annual_Average_Employment", "Estimated_Total_Employment",
-        "CAI_Self_Employment_Multiplier", "Average_Annual_Wage_USD",
-        "Jan_Employment", "Feb_Employment", "Mar_Employment", "Apr_Employment",
-        "May_Employment", "Jun_Employment", "Jul_Employment", "Aug_Employment",
-        "Sep_Employment", "Oct_Employment", "Nov_Employment", "Dec_Employment",
-        "Data_Status"
-    ]
+        "Fact_Employment_Key", "Year", "Period_Type", "Industry_Key", "Row_Level", "Parent_2Digit_Code",
+        "NAICS_2Digit_Code", "NAICS_3Digit_Code", "Industry_Subsector_Title", "Title_As_Reported",
+        "Is_County_Total", "Is_Suppressed", "Average_Establishments",
+        "Annual_Average_Employment", "Q1_Average_Employment",
+        "Estimated_Total_Employment", "Estimated_Total_Employment_Q1", "CAI_Self_Employment_Multiplier",
+        "Average_Annual_Wage_USD",
+    ] + [f"{m}_Employment" for m in month_cols] + ["Data_Status"]
     return df[cols_order]
 
 # -----------------------------------------------------------------------------

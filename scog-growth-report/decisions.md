@@ -199,16 +199,24 @@
 
 ## [ADR-012] Integración de Metodología de Empleo Total CAI (QCEW + NES) y Metas Tripartitas GMA 2045
 - **Fecha:** 2026-10-09
-- **Estado:** Aprobado / Implementado
-- **Contexto:** El cliente (SCOG) proporcionó el modelo metodológico oficial de Community Attributes Inc. (`CAI.Total Employment Calc Template DRAFT.2024 0206.xlsx`), revelando que las proyecciones adoptadas por el condado a 2045 (Ordenanza O20250002) miden **Empleo Total** (incluyendo trabajadores independientes y propietarios no empleadores de las Estadísticas de No Empleadores del Censo de EE. UU. / NES), mientras que la fuente primaria ESD QCEW solo reporta **Empleo Cubierto** por seguro de desempleo.
+- **Estado:** Propuesto (Pendiente de confirmación con Aaron / SCOG sobre la base de medición de metas)
+- **Contexto:** El cliente (SCOG) proporcionó el modelo metodológico oficial de Community Attributes Inc. (`CAI.Total Employment Calc Template DRAFT.2024 0206.xlsx`), indicando que las proyecciones adoptadas por el condado a 2045 (Ordenanza O20250002) miden **Empleo Total** (incluyendo trabajadores independientes y propietarios no empleadores de las Estadísticas de No Empleadores del Censo de EE. UU. / NES), mientras que la fuente primaria ESD QCEW solo reporta **Empleo Cubierto** por seguro de desempleo. Sin embargo, aún está pendiente confirmar formalmente con Aaron si las metas adoptadas por SCOG están estrictamente medidas sobre empleo total o empleo cubierto.
 - **Decisión Tomada:**
   1. **Integración Tripartita de Metas en `Dim_GMA_2045_Target`:** Extender la dimensión de metas para incluir las tres tablas oficiales de Appendix A:
      - Tabla 1: Población (Línea base 2022 y Meta 2045).
      - Tabla 2: Vivienda neta requerida 2020-2045 (17,450 unidades en el condado).
      - Tabla 3: Empleo Total (Línea base 2022 = 59,571; Meta 2045 = 80,100).
-  2. **Factor Multiplicador de Empleo Total CAI (1.15458):** Incorporar en el pipeline ETL el factor empírico promedio de autoempleo (`Average Self-Employment Ratio = 1.15458`) derivado por CAI en la serie histórica (1999–2020).
-  3. **Extensión de `Fact_Employment`:** Añadir las columnas `Estimated_Total_Employment` (`Annual_Average_Employment * 1.15458`) y `CAI_Self_Employment_Multiplier` (1.15458), e integrar las observaciones preliminares del primer trimestre de 2026 (`2026 Q1 Preliminary`).
-  4. **Nueva Tabla Dimensional `Dim_CAI_Employment_Benchmark`:** Exponer la serie histórica (1999–2022) de empleo cubierto, autoempleo NES, empleo combinado y ratios de autoempleo para trazabilidad metodológica completa en Power BI.
+  2. **Factor Multiplicador de Empleo Total CAI (1.15458) Aplicado Únicamente a Fila TOTAL:**
+     - Incorporar como constante en el pipeline ETL el factor empírico promedio de autoempleo (`SELF_EMP_MULTIPLIER = 1.15458`) derivado por CAI en la serie observada de 21 años (1999–2019). El ETL incluye una aserción estricta que detiene la ejecución si el promedio de la plantilla difiere de esta constante.
+     - Este ratio es un agregado macro a nivel de todo el condado; por tanto, `Estimated_Total_Employment` y el multiplicador se aplican **exclusivamente a la fila del TOTAL del condado**. Todas las filas de subsectores industriales individuales permanecen nulas en estas columnas para evitar distorsiones sectoriales.
+  3. **Extensión de `Fact_Employment` (2025 Anual y 2026 Q1 Preliminar):**
+     - Detección robusta de encabezados por contenido de celda para garantizar que la fila de TOTAL de 2025 no sea omitida.
+     - Claves normalizadas y estables por industria (`Industry_Key`) para consistencia interanual, estandarizando los subsectores gubernamentales (`GOV`, `GOV-FED`, `GOV-STATE`, `GOV-LOCAL`).
+     - Tratamiento explícito de supresión estadística: las celdas suprimidas (`*`) se convierten a nulo con bandera `Is_Suppressed = 1`.
+     - 2026 se marca como período `Q1`: `Annual_Average_Employment` permanece nulo (así como los meses de abril a diciembre), incorporando `Q1_Average_Employment` para habilitar comparaciones homologadas primer trimestre 2025 (52,930 cubiertos / 61,112 total est.) vs. primer trimestre 2026 (53,034 cubiertos / 61,232 total est., +104 empleos netos).
+  4. **Nueva Tabla Dimensional `Dim_CAI_Employment_Benchmark`:**
+     - 22 registros: 21 años observados (1999–2019, `Is_Observed = 1`) y 1 año de línea base derivada (2022, `Is_Observed = 0`, con NES y ratio nulos, y total derivado de 59,573).
+     - Desglose explícito de promedios: `Ratio_Average_All_Years` (1.15458) y `Ratio_Average_Last_10_Obs` (1.15812).
 - **Consecuencias:**
-  - Se cierra la brecha analítica entre el empleo cubierto por ESD (~54,148 en 2025) y las metas de empleo total del GMA (80,100 a 2045).
-  - Los tableros de Power BI pueden ahora presentar métricas directas de avance hacia el cumplimiento del GMA 2045 en los tres ejes fundamentales: Población, Vivienda y Empleo.
+  - Se modela la metodología de CAI con máxima precisión técnica y rigor estadístico.
+  - Se mantiene en estado propuesto hasta recibir la ratificación formal de Aaron, reteniendo la rama en `feature/cai-total-employment` sin fusionar a `main`.

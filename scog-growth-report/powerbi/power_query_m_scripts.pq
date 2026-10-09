@@ -1,13 +1,13 @@
 /*
 ========================================================================================
 SCOG ANNUAL GROWTH MONITORING REPORT — POWER QUERY (M) INGESTION SCRIPTS
-Source Workbook: C:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/scog-growth-report/data/processed/SCOG_Star_Schema_Data_Model.xlsx
+Source Workbook: C:/SCOG_Data/SCOG_Star_Schema_Data_Model.xlsx
 Schema: Star Schema (4 Dimensions, 4 Facts, 1 Parameter)
 ========================================================================================
 */
 
 // PARAMETER: SourceWorkbookPath
-let SourceWorkbookPath = "C:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/scog-growth-report/data/processed/SCOG_Star_Schema_Data_Model.xlsx" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true] in SourceWorkbookPath
+let SourceWorkbookPath = "C:/SCOG_Data/SCOG_Star_Schema_Data_Model.xlsx" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true] in SourceWorkbookPath
 
 // DIMENSION: Dim_Jurisdiction
 let

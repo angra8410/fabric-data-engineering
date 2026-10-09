@@ -15,7 +15,7 @@ SEMANTIC_DIR = os.path.join(PBIP_ROOT, f"{REPORT_NAME}.SemanticModel")
 REPORT_DIR = os.path.join(PBIP_ROOT, f"{REPORT_NAME}.Report")
 STATIC_RES_DIR = os.path.join(REPORT_DIR, "StaticResources", "SharedResources", "BaseThemes")
 
-DATA_WORKBOOK_PATH = os.path.abspath(os.path.join(BASE_DIR, "data", "processed", "SCOG_Star_Schema_Data_Model.xlsx")).replace("\\", "/")
+DATA_WORKBOOK_PATH = "C:/SCOG_Data/SCOG_Star_Schema_Data_Model.xlsx"
 
 
 def build_pbip():
@@ -354,13 +354,6 @@ def build_model_bim(workbook_path):
             "formatString": "#,##0",
             "displayFolder": "04. Employment & CAI Methodology",
             "description": "GMA adopted 2045 total employment target (80,100 jobs countywide)."
-        },
-        {
-            "name": "Employment Growth Toward 2045 Target %",
-            "expression": "VAR CurrentEmp = [Estimated Total Employment (CAI Multiplier)]\nVAR BaseEmp = [2022 Employment Baseline]\nVAR TargetGain = [2045 Employment Target] - BaseEmp\nRETURN\nIF(TargetGain > 0, DIVIDE(CurrentEmp - BaseEmp, TargetGain, 0), BLANK())",
-            "formatString": "0.0%",
-            "displayFolder": "04. Employment & CAI Methodology",
-            "description": "Progress toward the 2045 GMA regional employment target."
         },
         {
             "name": "Total Establishments",
@@ -1130,7 +1123,7 @@ def build_report_json():
                                     "title": [{
                                         "properties": {
                                             "show": {"expr": {"Literal": {"Value": "true"}}},
-                                            "text": {"expr": {"Literal": {"Value": "'Official ESD Covered Employment (1999-2025) [Total Multiplier Pending SCOG Confirmation]'"}}}
+                                            "text": {"expr": {"Literal": {"Value": "'Official ESD Covered Employment Benchmark Series (1999-2022) [Total Multiplier Pending SCOG Confirmation]'"}}}
                                         }
                                     }]
                                 }
@@ -1150,6 +1143,14 @@ def build_report_json():
                                         {"queryRef": "_Measures.2022 Employment Baseline"},
                                         {"queryRef": "_Measures.2045 Employment Target"}
                                     ]
+                                },
+                                "objects": {
+                                    "title": [{
+                                        "properties": {
+                                            "show": {"expr": {"Literal": {"Value": "true"}}},
+                                            "text": {"expr": {"Literal": {"Value": "'Adopted GMA 2045 Employment Targets by Jurisdiction (Planning Allocations Only - No Annual Actuals)'"}}}
+                                        }
+                                    }]
                                 }
                             }
                         })
@@ -1432,15 +1433,6 @@ SUM(Dim_GMA_2045_Target[Baseline_2022_Employment])
 [2045 Employment Target] = 
 SUM(Dim_GMA_2045_Target[Target_2045_Employment])
 // Format: #,##0
-
-[Employment Growth Toward 2045 Target %] = 
-VAR CurrentEmp = [Covered Employment QCEW]
-VAR BaseEmp = [2022 Employment Baseline]
-VAR TargetGain = [2045 Employment Target] - BaseEmp
-RETURN
-IF(TargetGain > 0, DIVIDE(CurrentEmp - BaseEmp, TargetGain, 0), BLANK())
-// Format: 0.0%
-/* Description: Progress toward the 2045 GMA regional employment target (Countywide level only; not tracked at municipal level). */
 
 [Total Establishments] = 
 CALCULATE(

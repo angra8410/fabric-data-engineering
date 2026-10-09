@@ -3,9 +3,10 @@ import html
 from pathlib import Path
 import subprocess
 
-md_path = Path(r"C:\Users\antoi\Downloads\All_Files\projects\proyectos-data-engineering\scog-growth-report\technical_options_scoping_document.md")
-html_path = Path(r"C:\Users\antoi\Downloads\All_Files\projects\proyectos-data-engineering\scog-growth-report\technical_options_scoping_document.html")
-pdf_path = Path(r"C:\Users\antoi\Downloads\All_Files\projects\proyectos-data-engineering\scog-growth-report\Technical_Options_Scoping_Document_SCOG.pdf")
+BASE_DIR = Path(__file__).resolve().parent
+md_path = BASE_DIR / "technical_options_scoping_document.md"
+html_path = BASE_DIR / "technical_options_scoping_document.html"
+pdf_path = BASE_DIR / "Technical_Options_Scoping_Document_SCOG.pdf"
 
 content = md_path.read_text(encoding="utf-8")
 

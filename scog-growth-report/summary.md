@@ -16,7 +16,7 @@ The data engineering and reporting foundation for the **SCOG Annual Growth Monit
 ## 2. Technical Milestones Completed
 
 ### Milestone 1: Master Intake Templates & Formula Governance
-- Standardized 4 master Excel templates (`.xlsx`) in [`data/templates/`](file:///c:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/scog-growth-report/data/templates/):
+- Standardized 4 master Excel templates (`.xlsx`) in [`data/templates/`](data/templates/):
   - `Template_Housing_Permits_Master.xlsx`: Annual permits by typology, demolitions, and net units.
   - `Template_Population_Master.xlsx`: WA OFM April 1 official estimates and SAEP UGA allocations.
   - `Template_Employment_Master.xlsx`: WA ESD QCEW covered jobs by NAICS industry sector.
@@ -27,17 +27,17 @@ The data engineering and reporting foundation for the **SCOG Annual Growth Monit
   - Controlled data validation dropdowns for official Skagit County jurisdictions.
 
 ### Milestone 2: Automated ETL Pipeline & Dimensional Star Schema
-- Automated ETL pipeline ([`etl_star_schema.py`](file:///c:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/scog-growth-report/etl_star_schema.py)) transforms raw sources into a normalized dimensional model:
+- Automated ETL pipeline ([`etl_star_schema.py`](etl_star_schema.py)) transforms raw sources into a normalized dimensional model:
   - **Conformed Dimensions:** `Dim_Jurisdiction` (11 entities with WGS84 coordinates), `Dim_CalendarYear` (1990–2045), `Dim_GMA_2045_Target` (Baseline 2022 and 2045 adopted targets), `Dim_CAI_Employment_Benchmark` (1999–2022).
   - **Fact Tables:** `Fact_Population` (97 rows), `Fact_HousingPermits` (314 rows), `Fact_Employment` (131 rows), `Fact_Housing_AMI` (20 rows).
   - **Referential Integrity:** 0 orphaned foreign keys; strict 1-to-many relationship cardinality. Output generated to both clean CSVs and unified workbook `SCOG_Star_Schema_Data_Model.xlsx`.
 
 ### Milestone 3: Power BI Project (PBIP) Prototype Delivery
-- Implemented complete `.pbip` structure in [`powerbi/SCOG_Growth_Monitoring_Report/`](file:///c:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/scog-growth-report/powerbi/SCOG_Growth_Monitoring_Report/):
+- Implemented complete `.pbip` structure in [`powerbi/SCOG_Growth_Monitoring_Report/`](powerbi/SCOG_Growth_Monitoring_Report/):
   - `SCOG_Growth_Monitoring_Report.pbip`: Root project entry point.
   - `SCOG_Growth_Monitoring_Report.SemanticModel/`: TMSL 1567 tabular model (`model.bim`) with 8 tables, 30+ production DAX measures, and dynamic `SourceWorkbookPath` parameter.
   - `SCOG_Growth_Monitoring_Report.Report/`: 4-page 16:9 widescreen canvas definitions (`report.json`) styled with high-contrast civic theme (`scog_theme.json`).
-  - Standalone exports: [`dax_measures.dax`](file:///c:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/scog-growth-report/powerbi/dax_measures.dax) and [`power_query_m_scripts.pq`](file:///c:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/scog-growth-report/powerbi/power_query_m_scripts.pq).
+  - Standalone exports: [`dax_measures.dax`](powerbi/dax_measures.dax) and [`power_query_m_scripts.pq`](powerbi/power_query_m_scripts.pq).
 
 ---
 

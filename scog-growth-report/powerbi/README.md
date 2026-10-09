@@ -44,7 +44,7 @@ powerbi/SCOG_Growth_Monitoring_Report/SCOG_Growth_Monitoring_Report.pbip
 ### Step 2: Validate Data Source Parameter
 The semantic model includes a centralized parameter:
 * **Parameter Name:** `SourceWorkbookPath`
-* **Default Value:** `.../data/processed/SCOG_Star_Schema_Data_Model.xlsx`
+* **Default Value:** `C:/SCOG_Data/SCOG_Star_Schema_Data_Model.xlsx` (Placeholder; update via Edit Parameters)
 
 To re-point to another location (e.g., SharePoint Online / OneDrive document library):
 1. In Power BI Desktop, click **Home** > **Transform Data** > **Edit Parameters**.
@@ -136,4 +136,4 @@ Measures are isolated in the dedicated `_Measures` table across five display fol
 * `04. Employment & CAI Methodology`: Covered employment, preliminary total jobs via CAI multiplier (quarantined to county total with disclaimers), wage averages.
 * `05. Regional & Spatial Analysis`: Regional percentage shares for population and housing.
 
-See [dax_measures.dax](file:///c:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering\scog-growth-report\powerbi\dax_measures.dax) for full DAX expressions.
+See [dax_measures.dax](dax_measures.dax) for full DAX expressions.

@@ -13,7 +13,7 @@
       {
         "name": "SourceWorkbookPath",
         "kind": "m",
-        "expression": "\"C:/Users/antoi/Downloads/All_Files/projects/proyectos-data-engineering/scog-growth-report/data/processed/SCOG_Star_Schema_Data_Model.xlsx\" meta [IsParameterQuery=true, Type=\"Text\", IsParameterQueryRequired=true]",
+        "expression": "\"C:/SCOG_Data/SCOG_Star_Schema_Data_Model.xlsx\" meta [IsParameterQuery=true, Type=\"Text\", IsParameterQueryRequired=true]",
         "description": "File path to the master processed star schema Excel workbook."
       }
     ],
@@ -239,13 +239,6 @@
             "formatString": "#,##0",
             "displayFolder": "04. Employment & CAI Methodology",
             "description": "GMA adopted 2045 total employment target (80,100 jobs countywide)."
-          },
-          {
-            "name": "Employment Growth Toward 2045 Target %",
-            "expression": "VAR CurrentEmp = [Estimated Total Employment (CAI Multiplier)]\nVAR BaseEmp = [2022 Employment Baseline]\nVAR TargetGain = [2045 Employment Target] - BaseEmp\nRETURN\nIF(TargetGain > 0, DIVIDE(CurrentEmp - BaseEmp, TargetGain, 0), BLANK())",
-            "formatString": "0.0%",
-            "displayFolder": "04. Employment & CAI Methodology",
-            "description": "Progress toward the 2045 GMA regional employment target."
           },
           {
             "name": "Total Establishments",

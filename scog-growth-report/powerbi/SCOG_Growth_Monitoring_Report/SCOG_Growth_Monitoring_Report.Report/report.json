@@ -225,7 +225,7 @@
           "z": 3000,
           "width": 780,
           "height": 295,
-          "config": "{\"name\": \"Line_CoveredEmploymentOfficialSeries\", \"singleVisual\": {\"visualType\": \"lineChart\", \"projections\": {\"Category\": [{\"queryRef\": \"Dim_CAI_Employment_Benchmark.Year\"}], \"Y\": [{\"queryRef\": \"Dim_CAI_Employment_Benchmark.Covered_Employment_QCEW\"}]}, \"objects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Official ESD Covered Employment (1999-2025) [Total Multiplier Pending SCOG Confirmation]'\"}}}}}]}}}"
+          "config": "{\"name\": \"Line_CoveredEmploymentOfficialSeries\", \"singleVisual\": {\"visualType\": \"lineChart\", \"projections\": {\"Category\": [{\"queryRef\": \"Dim_CAI_Employment_Benchmark.Year\"}], \"Y\": [{\"queryRef\": \"Dim_CAI_Employment_Benchmark.Covered_Employment_QCEW\"}]}, \"objects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Official ESD Covered Employment Benchmark Series (1999-2022) [Total Multiplier Pending SCOG Confirmation]'\"}}}}}]}}}"
         },
         {
           "x": 810,
@@ -233,7 +233,7 @@
           "z": 3001,
           "width": 450,
           "height": 295,
-          "config": "{\"name\": \"Table_EmploymentOverviewDetails\", \"singleVisual\": {\"visualType\": \"tableEx\", \"projections\": {\"Values\": [{\"queryRef\": \"Dim_Jurisdiction.Jurisdiction_Name\"}, {\"queryRef\": \"_Measures.2022 Employment Baseline\"}, {\"queryRef\": \"_Measures.2045 Employment Target\"}]}}}"
+          "config": "{\"name\": \"Table_EmploymentOverviewDetails\", \"singleVisual\": {\"visualType\": \"tableEx\", \"projections\": {\"Values\": [{\"queryRef\": \"Dim_Jurisdiction.Jurisdiction_Name\"}, {\"queryRef\": \"_Measures.2022 Employment Baseline\"}, {\"queryRef\": \"_Measures.2045 Employment Target\"}]}, \"objects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Adopted GMA 2045 Employment Targets by Jurisdiction (Planning Allocations Only - No Annual Actuals)'\"}}}}}]}}}"
         },
         {
           "x": 20,

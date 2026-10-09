@@ -182,15 +182,6 @@ SUM(Dim_GMA_2045_Target[Baseline_2022_Employment])
 SUM(Dim_GMA_2045_Target[Target_2045_Employment])
 // Format: #,##0
 
-[Employment Growth Toward 2045 Target %] = 
-VAR CurrentEmp = [Covered Employment QCEW]
-VAR BaseEmp = [2022 Employment Baseline]
-VAR TargetGain = [2045 Employment Target] - BaseEmp
-RETURN
-IF(TargetGain > 0, DIVIDE(CurrentEmp - BaseEmp, TargetGain, 0), BLANK())
-// Format: 0.0%
-/* Description: Progress toward the 2045 GMA regional employment target (Countywide level only; not tracked at municipal level). */
-
 [Total Establishments] = 
 CALCULATE(
     SUM(Fact_Employment[Average_Establishments]),

@@ -13,7 +13,6 @@ REPORT_NAME = "SCOG_Growth_Monitoring_Report"
 PBIP_ROOT = os.path.join(POWERBI_DIR, REPORT_NAME)
 SEMANTIC_DIR = os.path.join(PBIP_ROOT, f"{REPORT_NAME}.SemanticModel")
 REPORT_DIR = os.path.join(PBIP_ROOT, f"{REPORT_NAME}.Report")
-STATIC_RES_DIR = os.path.join(REPORT_DIR, "StaticResources", "SharedResources", "BaseThemes")
 
 DATA_WORKBOOK_PATH = "C:/SCOG_Data/SCOG_Star_Schema_Data_Model.xlsx"
 
@@ -23,7 +22,6 @@ def build_pbip():
     os.makedirs(PBIP_ROOT, exist_ok=True)
     os.makedirs(SEMANTIC_DIR, exist_ok=True)
     os.makedirs(REPORT_DIR, exist_ok=True)
-    os.makedirs(STATIC_RES_DIR, exist_ok=True)
 
     # 1. Root .pbip file
     pbip_def = {
@@ -35,9 +33,7 @@ def build_pbip():
                 }
             }
         ],
-        "settings": {
-            "enableAutoAuth": True
-        }
+        "settings": {}
     }
     with open(os.path.join(PBIP_ROOT, f"{REPORT_NAME}.pbip"), "w", encoding="utf-8") as f:
         json.dump(pbip_def, f, indent=2)
@@ -56,8 +52,7 @@ def build_pbip():
         "datasetReference": {
             "byPath": {
                 "path": f"../{REPORT_NAME}.SemanticModel"
-            },
-            "byConnection": None
+            }
         }
     }
     with open(os.path.join(REPORT_DIR, "definition.pbir"), "w", encoding="utf-8") as f:
@@ -120,9 +115,6 @@ def build_pbip():
         }
     }
     with open(os.path.join(POWERBI_DIR, "scog_theme.json"), "w", encoding="utf-8") as f:
-        json.dump(scog_theme, f, indent=2)
-
-    with open(os.path.join(STATIC_RES_DIR, "CY24SU08.json"), "w", encoding="utf-8") as f:
         json.dump(scog_theme, f, indent=2)
 
     # 5. Semantic Model (model.bim)

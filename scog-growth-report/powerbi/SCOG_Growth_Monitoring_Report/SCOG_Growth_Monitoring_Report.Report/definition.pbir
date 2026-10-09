@@ -3,7 +3,6 @@
   "datasetReference": {
     "byPath": {
       "path": "../SCOG_Growth_Monitoring_Report.SemanticModel"
-    },
-    "byConnection": null
+    }
   }
 }

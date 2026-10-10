@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "v02",
   "position": {
     "x": 20,
     "y": 85,
     "z": 20,
-    "height": 580,
-    "width": 640,
+    "width": 580,
+    "height": 760,
     "tabOrder": 20
   },
   "visual": {
@@ -27,26 +27,30 @@
                 }
               },
               "queryRef": "Dim_Jurisdiction.Jurisdiction_Name",
-              "nativeQueryRef": "Jurisdiction_Name",
-              "active": true
+              "nativeQueryRef": "Jurisdiction_Name"
             }
           ]
         },
-        "Size": {
+        "Y": {
           "projections": [
             {
               "field": {
-                "Measure": {
+                "Aggregation": {
                   "Expression": {
-                    "SourceRef": {
-                      "Entity": "_Measures"
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dim_Jurisdiction"
+                        }
+                      },
+                      "Property": "Latitude"
                     }
                   },
-                  "Property": "Total Population"
+                  "Function": 1
                 }
               },
-              "queryRef": "_Measures.Total Population",
-              "nativeQueryRef": "Total Population"
+              "queryRef": "Avg(Dim_Jurisdiction.Latitude)",
+              "nativeQueryRef": "Avg of Latitude"
             }
           ]
         },
@@ -73,59 +77,25 @@
             }
           ]
         },
-        "Y": {
+        "Size": {
           "projections": [
             {
               "field": {
-                "Aggregation": {
+                "Measure": {
                   "Expression": {
-                    "Column": {
-                      "Expression": {
-                        "SourceRef": {
-                          "Entity": "Dim_Jurisdiction"
-                        }
-                      },
-                      "Property": "Latitude"
+                    "SourceRef": {
+                      "Entity": "_Measures"
                     }
                   },
-                  "Function": 1
+                  "Property": "Total Population"
                 }
               },
-              "queryRef": "Avg(Dim_Jurisdiction.Latitude)",
-              "nativeQueryRef": "Avg of Latitude"
+              "queryRef": "_Measures.Total Population",
+              "nativeQueryRef": "Total Population"
             }
           ]
         }
       }
-    },
-    "objects": {
-      "mapControls": [
-        {
-          "properties": {
-            "zoom": {
-              "expr": {
-                "Literal": {
-                  "Value": "8.79D"
-                }
-              }
-            },
-            "centerLatitude": {
-              "expr": {
-                "Literal": {
-                  "Value": "48.46685178552937D"
-                }
-              }
-            },
-            "centerLongitude": {
-              "expr": {
-                "Literal": {
-                  "Value": "-122.17989999999998D"
-                }
-              }
-            }
-          }
-        }
-      ]
     },
     "visualContainerObjects": {
       "title": [
@@ -149,75 +119,5 @@
         }
       ]
     }
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "b97b317c369cc21daeb8",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Dim_Jurisdiction"
-              }
-            },
-            "Property": "Jurisdiction_Name"
-          }
-        },
-        "type": "Categorical"
-      },
-      {
-        "name": "4052f14a4bb837a61828",
-        "field": {
-          "Aggregation": {
-            "Expression": {
-              "Column": {
-                "Expression": {
-                  "SourceRef": {
-                    "Entity": "Dim_Jurisdiction"
-                  }
-                },
-                "Property": "Latitude"
-              }
-            },
-            "Function": 1
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "4c9861b36db6805696c7",
-        "field": {
-          "Aggregation": {
-            "Expression": {
-              "Column": {
-                "Expression": {
-                  "SourceRef": {
-                    "Entity": "Dim_Jurisdiction"
-                  }
-                },
-                "Property": "Longitude"
-              }
-            },
-            "Function": 1
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "634302f7b416581c0adc",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "_Measures"
-              }
-            },
-            "Property": "Total Population"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }

@@ -66,7 +66,11 @@ def normalize_name(raw_name):
     cleaned = str(raw_name).strip().lower().replace("  ", " ").replace("’", "'")
     if cleaned in NAME_NORM_MAP:
         return NAME_NORM_MAP[cleaned]
-    cleaned_flat = cleaned.replace("\n", " ").replace("- ", "-").replace("  ", " ")
+    cleaned_flat = cleaned.replace("\n", " ").replace("- ", "-").replace("  ", " ").strip()
+    if cleaned_flat in NAME_NORM_MAP:
+        return NAME_NORM_MAP[cleaned_flat]
+    if cleaned_flat.startswith("rural"):
+        return "Unincorporated Skagit County"
     return NAME_NORM_MAP.get(cleaned_flat, str(raw_name).strip())
 
 def clean_num(val):
@@ -144,6 +148,10 @@ def build_dim_gma_2045_target(dim_jur):
         name = normalize_name(ws.cell(r, 1).value)
         tot_hsg = clean_num(ws.cell(r, 16).value)
         hsg_dict[name] = tot_hsg
+
+    tot_hsg_table2 = sum(hsg_dict.values())
+    assert tot_hsg_table2 == 17450, f"Table 2 total housing must equal 17,450, got {tot_hsg_table2}"
+    assert hsg_dict.get("Unincorporated Skagit County") == 3490, f"Rural housing target must equal 3,490, got {hsg_dict.get('Unincorporated Skagit County')}"
 
     # Table 3: Employment Allocations (rows 40 to 49, 51)
     emp_dict = {}

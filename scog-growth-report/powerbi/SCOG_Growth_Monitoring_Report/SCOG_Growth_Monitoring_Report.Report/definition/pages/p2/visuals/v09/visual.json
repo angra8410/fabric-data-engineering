@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "v09",
   "position": {
     "x": 20,
-    "y": 420,
+    "y": 515,
     "z": 20,
-    "height": 245,
-    "width": 620,
+    "width": 610,
+    "height": 330,
     "tabOrder": 20
   },
   "visual": {
@@ -27,8 +27,7 @@
                 }
               },
               "queryRef": "Dim_Jurisdiction.Jurisdiction_Name",
-              "nativeQueryRef": "Jurisdiction_Name",
-              "active": true
+              "nativeQueryRef": "Jurisdiction_Name"
             }
           ]
         },
@@ -88,51 +87,5 @@
         }
       ]
     }
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "220de848b7572b932cc8",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Dim_Jurisdiction"
-              }
-            },
-            "Property": "Jurisdiction_Name"
-          }
-        },
-        "type": "Categorical"
-      },
-      {
-        "name": "08508444290540a3b8b5",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "_Measures"
-              }
-            },
-            "Property": "Low Income AMI Units (<80% AMI)"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "a0200dfe0872f444b124",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "_Measures"
-              }
-            },
-            "Property": "Moderate to High Income AMI Units (>80% AMI)"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }

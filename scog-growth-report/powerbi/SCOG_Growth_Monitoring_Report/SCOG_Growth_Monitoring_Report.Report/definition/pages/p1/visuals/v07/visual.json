@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "v07",
   "position": {
     "x": 20,
-    "y": 175,
+    "y": 180,
     "z": 20,
-    "height": 265,
-    "width": 615,
+    "width": 620,
+    "height": 320,
     "tabOrder": 20
   },
   "visual": {
@@ -27,8 +27,7 @@
                 }
               },
               "queryRef": "Dim_CalendarYear.Year",
-              "nativeQueryRef": "Year",
-              "active": true
+              "nativeQueryRef": "Year"
             }
           ]
         },
@@ -78,7 +77,7 @@
   "filterConfig": {
     "filters": [
       {
-        "name": "F_9919f2b710294da1",
+        "name": "F_80bbdaa43c0943c2",
         "field": {
           "Column": {
             "Expression": {

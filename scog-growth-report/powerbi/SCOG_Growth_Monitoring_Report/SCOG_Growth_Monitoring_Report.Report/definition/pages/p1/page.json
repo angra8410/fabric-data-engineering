@@ -3,6 +3,18 @@
   "name": "p1",
   "displayName": "1. Executive Summary & Regional Dashboard",
   "displayOption": "FitToPage",
-  "height": 720,
-  "width": 1280
+  "height": 900,
+  "width": 1300,
+  "visualInteractions": [
+    {
+      "source": "v02",
+      "target": "v07",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v02",
+      "target": "v08",
+      "type": "NoFilter"
+    }
+  ]
 }

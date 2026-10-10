@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "v02",
   "position": {
     "x": 20,
     "y": 85,
     "z": 20,
-    "height": 80,
     "width": 180,
+    "height": 80,
     "tabOrder": 20
   },
   "visual": {
@@ -27,8 +27,7 @@
                 }
               },
               "queryRef": "Dim_CalendarYear.Year",
-              "nativeQueryRef": "Year",
-              "active": true
+              "nativeQueryRef": "Year"
             }
           ]
         }

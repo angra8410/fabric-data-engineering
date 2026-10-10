@@ -3,9 +3,9 @@
   "name": "v10",
   "position": {
     "x": 20,
-    "y": 675,
+    "y": 855,
     "z": 10,
-    "width": 1240,
+    "width": 1260,
     "height": 35,
     "tabOrder": 10
   },
@@ -19,7 +19,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Data Sources: WA OFM April 1 Population (2020-2025) | ESD QCEW Covered Employment | Ordinance O20250002 | SCOG Annual Growth Monitoring Report",
+                    "value": "Data Sources: WA OFM April 1 Population (2020-2025 official determination: 134,600 county total) | ESD QCEW Covered Employment | Ordinance O20250002",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "8pt",

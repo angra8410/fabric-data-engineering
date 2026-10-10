@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "v04",
   "position": {
     "x": 20,
-    "y": 370,
+    "y": 450,
     "z": 20,
-    "height": 295,
-    "width": 700,
+    "width": 660,
+    "height": 395,
     "tabOrder": 20
   },
   "visual": {
@@ -27,8 +27,7 @@
                 }
               },
               "queryRef": "Dim_CAI_Employment_Benchmark.Year",
-              "nativeQueryRef": "Year",
-              "active": true
+              "nativeQueryRef": "Year"
             }
           ]
         },
@@ -72,6 +71,35 @@
               "expr": {
                 "Literal": {
                   "Value": "'Official ESD Covered Employment Benchmark Series (1999-2022) [Total Multiplier Pending SCOG Confirmation]'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "objects": {
+      "lineStyles": [
+        {
+          "properties": {
+            "showMarker": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "markerShape": {
+              "expr": {
+                "Literal": {
+                  "Value": "'circle'"
+                }
+              }
+            },
+            "markerSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
                 }
               }
             }

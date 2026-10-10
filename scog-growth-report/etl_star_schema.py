@@ -23,7 +23,7 @@ JURISDICTION_MASTER = [
     {"Jurisdiction_ID": "JUR-08", "Jurisdiction_Name": "Sedro-Woolley", "Jurisdiction_Type": "Incorporated City/Town", "Is_Incorporated": 1, "Is_UGA": 1, "Latitude": 48.5039, "Longitude": -122.2363},
     {"Jurisdiction_ID": "JUR-09", "Jurisdiction_Name": "Bay View Ridge UGA", "Jurisdiction_Type": "Urban Growth Area (UGA)", "Is_Incorporated": 0, "Is_UGA": 1, "Latitude": 48.4717, "Longitude": -122.4239},
     {"Jurisdiction_ID": "JUR-10", "Jurisdiction_Name": "Swinomish UGA", "Jurisdiction_Type": "Urban Growth Area (UGA)", "Is_Incorporated": 0, "Is_UGA": 1, "Latitude": 48.4069, "Longitude": -122.5186},
-    {"Jurisdiction_ID": "JUR-11", "Jurisdiction_Name": "Unincorporated Skagit County", "Jurisdiction_Type": "Unincorporated Rural Area", "Is_Incorporated": 0, "Is_UGA": 0, "Latitude": 48.4800, "Longitude": -121.8000},
+    {"Jurisdiction_ID": "JUR-11", "Jurisdiction_Name": "Unincorporated Rural (outside UGAs)", "Jurisdiction_Type": "Unincorporated Rural Area", "Is_Incorporated": 0, "Is_UGA": 0, "Latitude": 48.4800, "Longitude": -121.8000},
 ]
 
 NAME_NORM_MAP = {
@@ -49,15 +49,17 @@ NAME_NORM_MAP = {
     "swinomish": "Swinomish UGA",
     "swinomish non-trust lands": "Swinomish UGA",
     "swinomish uga": "Swinomish UGA",
-    "unincorporated": "Unincorporated Skagit County",
-    "unincorporated skagit county": "Unincorporated Skagit County",
-    "rural (outside ugas)": "Unincorporated Skagit County",
-    "rural (outside of ugas)": "Unincorporated Skagit County",
-    "rural (outside of uga's)": "Unincorporated Skagit County",
-    "rural (outside of\nuga's)": "Unincorporated Skagit County",
-    "rural (outside of\nugas)": "Unincorporated Skagit County",
-    "rural (outside of uga’s)": "Unincorporated Skagit County",
-    "rural (outside of\nuga’s)": "Unincorporated Skagit County",
+    "unincorporated": "Unincorporated Rural (outside UGAs)",
+    "unincorporated skagit county": "Unincorporated Rural (outside UGAs)",
+    "unincorporated rural (outside ugas)": "Unincorporated Rural (outside UGAs)",
+    "unincorporated rural (outside of ugas)": "Unincorporated Rural (outside UGAs)",
+    "rural (outside ugas)": "Unincorporated Rural (outside UGAs)",
+    "rural (outside of ugas)": "Unincorporated Rural (outside UGAs)",
+    "rural (outside of uga's)": "Unincorporated Rural (outside UGAs)",
+    "rural (outside of\nuga's)": "Unincorporated Rural (outside UGAs)",
+    "rural (outside of\nugas)": "Unincorporated Rural (outside UGAs)",
+    "rural (outside of uga’s)": "Unincorporated Rural (outside UGAs)",
+    "rural (outside of\nuga’s)": "Unincorporated Rural (outside UGAs)",
 }
 
 def normalize_name(raw_name):
@@ -69,8 +71,8 @@ def normalize_name(raw_name):
     cleaned_flat = cleaned.replace("\n", " ").replace("- ", "-").replace("  ", " ").strip()
     if cleaned_flat in NAME_NORM_MAP:
         return NAME_NORM_MAP[cleaned_flat]
-    if cleaned_flat.startswith("rural"):
-        return "Unincorporated Skagit County"
+    if cleaned_flat.startswith("rural") or cleaned_flat.startswith("unincorporated"):
+        return "Unincorporated Rural (outside UGAs)"
     return NAME_NORM_MAP.get(cleaned_flat, str(raw_name).strip())
 
 def clean_num(val):
@@ -151,7 +153,7 @@ def build_dim_gma_2045_target(dim_jur):
 
     tot_hsg_table2 = sum(hsg_dict.values())
     assert tot_hsg_table2 == 17450, f"Table 2 total housing must equal 17,450, got {tot_hsg_table2}"
-    assert hsg_dict.get("Unincorporated Skagit County") == 3490, f"Rural housing target must equal 3,490, got {hsg_dict.get('Unincorporated Skagit County')}"
+    assert hsg_dict.get("Unincorporated Rural (outside UGAs)") == 3490, f"Rural housing target must equal 3,490, got {hsg_dict.get('Unincorporated Rural (outside UGAs)')}"
 
     # Table 3: Employment Allocations (rows 40 to 49, 51)
     emp_dict = {}
@@ -195,42 +197,12 @@ def build_dim_gma_2045_target(dim_jur):
 # -----------------------------------------------------------------------------
 def build_fact_population(dim_jur):
     print("-> Building Fact_Population...")
-    records = []
     
-    # 4.1 OFM April 1 Population Final (Cities & County)
-    ofm_path = os.path.join(RAW_DIR, "ofm_april1_population_final(Population).csv")
-    with open(ofm_path, "r", encoding="utf-8", errors="ignore") as f:
-        reader = csv.reader(f)
-        for _ in range(4): # skip first 4 lines
-            next(reader, None)
-        header = next(reader)
-        # Year columns in line 5
-        year_cols = []
-        for idx, col in enumerate(header):
-            m = re.search(r'(20\d\d)', col)
-            if m:
-                year_cols.append((idx, int(m.group(1))))
-                
-        for row in reader:
-            if len(row) > 3 and row[2].strip() == "Skagit":
-                raw_jur = row[3].strip()
-                if raw_jur in ["Skagit County", "Incorporated Skagit County"]:
-                    continue # keep granular jurisdictions; rollups happen in Power BI
-                norm_jur = normalize_name(raw_jur)
-                
-                for col_idx, yr in year_cols:
-                    if col_idx < len(row):
-                        pop_val = clean_num(row[col_idx])
-                        if pop_val > 0:
-                            records.append({
-                                "Jurisdiction_Name": norm_jur,
-                                "Year": yr,
-                                "Population_Count": pop_val,
-                                "Data_Source_Type": "OFM_April1_Official_Determination"
-                            })
-
-    # 4.2 SAEP UGA Population (UGAs historical 2010 to 2026)
+    # 4.1 SAEP UGA Population (UGAs historical 2010 to 2026)
+    # Read first so we can subtract UGAs from Unincorporated for each year
     saep_path = os.path.join(RAW_DIR, "saep_uga20p(Total Population).csv")
+    uga_records = []
+    uga_by_year = {}
     with open(saep_path, "r", encoding="utf-8", errors="ignore") as f:
         reader = csv.reader(f)
         for _ in range(11):
@@ -238,7 +210,10 @@ def build_fact_population(dim_jur):
         header = next(reader)
         uga_year_cols = []
         for idx, col in enumerate(header):
-            m = re.search(r'(20\d\d)', col)
+            col_clean = col.strip()
+            if "change" in col_clean.lower():
+                continue
+            m = re.search(r'\b(20\d\d)\b', col_clean)
             if m:
                 uga_year_cols.append((idx, int(m.group(1))))
                 
@@ -252,13 +227,67 @@ def build_fact_population(dim_jur):
                         if col_idx < len(row):
                             pop_val = clean_num(row[col_idx])
                             if pop_val > 0:
-                                records.append({
+                                uga_records.append({
                                     "Jurisdiction_Name": norm_uga,
                                     "Year": yr,
                                     "Population_Count": pop_val,
                                     "Data_Source_Type": "OFM_SAEP_UGA_Estimate"
                                 })
+                                uga_by_year[yr] = uga_by_year.get(yr, 0) + pop_val
 
+    # 4.2 OFM April 1 Population Final (Cities & Unincorporated County)
+    ofm_path = os.path.join(RAW_DIR, "ofm_april1_population_final(Population).csv")
+    city_records = []
+    uninc_by_year = {}
+    with open(ofm_path, "r", encoding="utf-8", errors="ignore") as f:
+        reader = csv.reader(f)
+        for _ in range(4): # skip first 4 lines
+            next(reader, None)
+        header = next(reader)
+        year_cols = []
+        for idx, col in enumerate(header):
+            m = re.search(r'(20\d\d)', col)
+            if m:
+                year_cols.append((idx, int(m.group(1))))
+                
+        for row in reader:
+            if len(row) > 3 and row[2].strip() == "Skagit":
+                raw_jur = row[3].strip()
+                if raw_jur in ["Skagit County", "Incorporated Skagit County"]:
+                    continue # County rollups happen via measure aggregation in Power BI
+                if raw_jur in ["Unincorporated", "Unincorporated Skagit County"]:
+                    for col_idx, yr in year_cols:
+                        if col_idx < len(row):
+                            pop_val = clean_num(row[col_idx])
+                            if pop_val > 0:
+                                uninc_by_year[yr] = pop_val
+                else:
+                    norm_jur = normalize_name(raw_jur)
+                    for col_idx, yr in year_cols:
+                        if col_idx < len(row):
+                            pop_val = clean_num(row[col_idx])
+                            if pop_val > 0:
+                                city_records.append({
+                                    "Jurisdiction_Name": norm_jur,
+                                    "Year": yr,
+                                    "Population_Count": pop_val,
+                                    "Data_Source_Type": "OFM_April1_Official_Determination"
+                                })
+
+    # 4.3 Derive Unincorporated Rural (outside UGAs) = OFM Unincorporated - UGAs for each year
+    rural_records = []
+    for yr, uninc_pop in sorted(uninc_by_year.items()):
+        uga_pop = uga_by_year.get(yr, 0)
+        rural_pop = uninc_pop - uga_pop
+        rural_records.append({
+            "Jurisdiction_Name": "Unincorporated Rural (outside UGAs)",
+            "Year": yr,
+            "Population_Count": rural_pop,
+            "Data_Source_Type": "Derived (OFM Unincorporated minus UGAs)"
+        })
+
+    # Combine all granular non-overlapping entities
+    records = city_records + uga_records + rural_records
     df = pd.DataFrame(records)
     # Deduplicate if any overlap
     df = df.drop_duplicates(subset=["Jurisdiction_Name", "Year"])
@@ -274,6 +303,18 @@ def build_fact_population(dim_jur):
     
     df["Fact_Population_Key"] = [f"FPOP-{i+1:05d}" for i in range(len(df))]
     
+    # Verification check: For 2025, verify 81,220 (8 cities) + 4,278 (2 UGAs) + 49,102 (rural) == 134,600
+    df_2025 = df[df["Year"] == 2025]
+    cities_2025 = int(df_2025[df_2025["Data_Source_Type"] == "OFM_April1_Official_Determination"]["Population_Count"].sum())
+    ugas_2025 = int(df_2025[df_2025["Data_Source_Type"] == "OFM_SAEP_UGA_Estimate"]["Population_Count"].sum())
+    rural_2025 = int(df_2025[df_2025["Jurisdiction_Name"] == "Unincorporated Rural (outside UGAs)"]["Population_Count"].sum())
+    total_2025 = int(df_2025["Population_Count"].sum())
+    print(f"   [ETL Population Verification 2025] Cities: {cities_2025:,} | UGAs: {ugas_2025:,} | Rural: {rural_2025:,} | Total: {total_2025:,}")
+    assert cities_2025 == 81220, f"Expected cities 81,220, got {cities_2025}"
+    assert ugas_2025 == 4278, f"Expected UGAs 4,278, got {ugas_2025}"
+    assert rural_2025 == 49102, f"Expected rural 49,102, got {rural_2025}"
+    assert total_2025 == 134600, f"Expected total 134,600, got {total_2025}"
+
     cols_order = [
         "Fact_Population_Key", "Jurisdiction_ID", "Year", "Jurisdiction_Name",
         "Population_Count", "Prior_Year_Population", "YoY_Population_Change", "YoY_Growth_Rate_Pct",

@@ -1,98 +1,98 @@
 Fact_Population_Key,Jurisdiction_ID,Year,Jurisdiction_Name,Population_Count,Prior_Year_Population,YoY_Population_Change,YoY_Growth_Rate_Pct,Data_Source_Type
-FPOP-00001,JUR-01,2020,Anacortes,17637.0,,,,OFM_April1_Official_Determination
-FPOP-00002,JUR-01,2021,Anacortes,17750.0,17637.0,113.0,0.0064,OFM_April1_Official_Determination
-FPOP-00003,JUR-01,2022,Anacortes,17880.0,17750.0,130.0,0.0073,OFM_April1_Official_Determination
-FPOP-00004,JUR-01,2023,Anacortes,18020.0,17880.0,140.0,0.0078,OFM_April1_Official_Determination
-FPOP-00005,JUR-01,2024,Anacortes,18270.0,18020.0,250.0,0.0139,OFM_April1_Official_Determination
-FPOP-00006,JUR-01,2025,Anacortes,18350.0,18270.0,80.0,0.0044,OFM_April1_Official_Determination
-FPOP-00007,JUR-01,2026,Anacortes,18410.0,18350.0,60.0,0.0033,OFM_April1_Official_Determination
-FPOP-00008,JUR-02,2020,Burlington,9152.0,,,,OFM_April1_Official_Determination
-FPOP-00009,JUR-02,2021,Burlington,9290.0,9152.0,138.0,0.0151,OFM_April1_Official_Determination
-FPOP-00010,JUR-02,2022,Burlington,9800.0,9290.0,510.0,0.0549,OFM_April1_Official_Determination
-FPOP-00011,JUR-02,2023,Burlington,9905.0,9800.0,105.0,0.0107,OFM_April1_Official_Determination
-FPOP-00012,JUR-02,2024,Burlington,10410.0,9905.0,505.0,0.051,OFM_April1_Official_Determination
-FPOP-00013,JUR-02,2025,Burlington,10910.0,10410.0,500.0,0.048,OFM_April1_Official_Determination
-FPOP-00014,JUR-02,2026,Burlington,11200.0,10910.0,290.0,0.0266,OFM_April1_Official_Determination
-FPOP-00015,JUR-03,2020,Concrete,801.0,,,,OFM_April1_Official_Determination
-FPOP-00016,JUR-03,2021,Concrete,805.0,801.0,4.0,0.005,OFM_April1_Official_Determination
-FPOP-00017,JUR-03,2022,Concrete,810.0,805.0,5.0,0.0062,OFM_April1_Official_Determination
-FPOP-00018,JUR-03,2023,Concrete,810.0,810.0,0.0,0.0,OFM_April1_Official_Determination
-FPOP-00019,JUR-03,2024,Concrete,810.0,810.0,0.0,0.0,OFM_April1_Official_Determination
-FPOP-00020,JUR-03,2025,Concrete,815.0,810.0,5.0,0.0062,OFM_April1_Official_Determination
-FPOP-00021,JUR-03,2026,Concrete,815.0,815.0,0.0,0.0,OFM_April1_Official_Determination
-FPOP-00022,JUR-04,2020,Hamilton,299.0,,,,OFM_April1_Official_Determination
-FPOP-00023,JUR-04,2021,Hamilton,295.0,299.0,-4.0,-0.0134,OFM_April1_Official_Determination
-FPOP-00024,JUR-04,2022,Hamilton,295.0,295.0,0.0,0.0,OFM_April1_Official_Determination
-FPOP-00025,JUR-04,2023,Hamilton,295.0,295.0,0.0,0.0,OFM_April1_Official_Determination
-FPOP-00026,JUR-04,2024,Hamilton,295.0,295.0,0.0,0.0,OFM_April1_Official_Determination
-FPOP-00027,JUR-04,2025,Hamilton,295.0,295.0,0.0,0.0,OFM_April1_Official_Determination
-FPOP-00028,JUR-04,2026,Hamilton,290.0,295.0,-5.0,-0.0169,OFM_April1_Official_Determination
-FPOP-00029,JUR-05,2020,La Conner,965.0,,,,OFM_April1_Official_Determination
-FPOP-00030,JUR-05,2021,La Conner,970.0,965.0,5.0,0.0052,OFM_April1_Official_Determination
-FPOP-00031,JUR-05,2022,La Conner,980.0,970.0,10.0,0.0103,OFM_April1_Official_Determination
-FPOP-00032,JUR-05,2023,La Conner,990.0,980.0,10.0,0.0102,OFM_April1_Official_Determination
-FPOP-00033,JUR-05,2024,La Conner,995.0,990.0,5.0,0.0051,OFM_April1_Official_Determination
-FPOP-00034,JUR-05,2025,La Conner,1000.0,995.0,5.0,0.005,OFM_April1_Official_Determination
-FPOP-00035,JUR-05,2026,La Conner,1000.0,1000.0,0.0,0.0,OFM_April1_Official_Determination
-FPOP-00036,JUR-06,2020,Lyman,423.0,,,,OFM_April1_Official_Determination
-FPOP-00037,JUR-06,2021,Lyman,420.0,423.0,-3.0,-0.0071,OFM_April1_Official_Determination
-FPOP-00038,JUR-06,2022,Lyman,425.0,420.0,5.0,0.0119,OFM_April1_Official_Determination
-FPOP-00039,JUR-06,2023,Lyman,425.0,425.0,0.0,0.0,OFM_April1_Official_Determination
-FPOP-00040,JUR-06,2024,Lyman,430.0,425.0,5.0,0.0118,OFM_April1_Official_Determination
-FPOP-00041,JUR-06,2025,Lyman,440.0,430.0,10.0,0.0233,OFM_April1_Official_Determination
-FPOP-00042,JUR-06,2026,Lyman,445.0,440.0,5.0,0.0114,OFM_April1_Official_Determination
-FPOP-00043,JUR-07,2020,Mount Vernon,35219.0,,,,OFM_April1_Official_Determination
-FPOP-00044,JUR-07,2021,Mount Vernon,35390.0,35219.0,171.0,0.0049,OFM_April1_Official_Determination
-FPOP-00045,JUR-07,2022,Mount Vernon,35500.0,35390.0,110.0,0.0031,OFM_April1_Official_Determination
-FPOP-00046,JUR-07,2023,Mount Vernon,35590.0,35500.0,90.0,0.0025,OFM_April1_Official_Determination
-FPOP-00047,JUR-07,2024,Mount Vernon,35800.0,35590.0,210.0,0.0059,OFM_April1_Official_Determination
-FPOP-00048,JUR-07,2025,Mount Vernon,36050.0,35800.0,250.0,0.007,OFM_April1_Official_Determination
-FPOP-00049,JUR-07,2026,Mount Vernon,36090.0,36050.0,40.0,0.0011,OFM_April1_Official_Determination
-FPOP-00050,JUR-08,2020,Sedro-Woolley,12421.0,,,,OFM_April1_Official_Determination
-FPOP-00051,JUR-08,2021,Sedro-Woolley,12330.0,12421.0,-91.0,-0.0073,OFM_April1_Official_Determination
-FPOP-00052,JUR-08,2022,Sedro-Woolley,12590.0,12330.0,260.0,0.0211,OFM_April1_Official_Determination
-FPOP-00053,JUR-08,2023,Sedro-Woolley,12900.0,12590.0,310.0,0.0246,OFM_April1_Official_Determination
-FPOP-00054,JUR-08,2024,Sedro-Woolley,13080.0,12900.0,180.0,0.014,OFM_April1_Official_Determination
-FPOP-00055,JUR-08,2025,Sedro-Woolley,13360.0,13080.0,280.0,0.0214,OFM_April1_Official_Determination
-FPOP-00056,JUR-08,2026,Sedro-Woolley,13520.0,13360.0,160.0,0.012,OFM_April1_Official_Determination
-FPOP-00057,JUR-09,2010,Bay View Ridge UGA,1657.0,,,,OFM_SAEP_UGA_Estimate
-FPOP-00058,JUR-09,2011,Bay View Ridge UGA,1644.0,1657.0,-13.0,-0.0078,OFM_SAEP_UGA_Estimate
-FPOP-00059,JUR-09,2012,Bay View Ridge UGA,1634.0,1644.0,-10.0,-0.0061,OFM_SAEP_UGA_Estimate
-FPOP-00060,JUR-09,2013,Bay View Ridge UGA,1618.0,1634.0,-16.0,-0.0098,OFM_SAEP_UGA_Estimate
-FPOP-00061,JUR-09,2014,Bay View Ridge UGA,1607.0,1618.0,-11.0,-0.0068,OFM_SAEP_UGA_Estimate
-FPOP-00062,JUR-09,2015,Bay View Ridge UGA,1606.0,1607.0,-1.0,-0.0006,OFM_SAEP_UGA_Estimate
-FPOP-00063,JUR-09,2016,Bay View Ridge UGA,1624.0,1606.0,18.0,0.0112,OFM_SAEP_UGA_Estimate
-FPOP-00064,JUR-09,2017,Bay View Ridge UGA,1629.0,1624.0,5.0,0.0031,OFM_SAEP_UGA_Estimate
-FPOP-00065,JUR-09,2018,Bay View Ridge UGA,1655.0,1629.0,26.0,0.016,OFM_SAEP_UGA_Estimate
-FPOP-00066,JUR-09,2019,Bay View Ridge UGA,1686.0,1655.0,31.0,0.0187,OFM_SAEP_UGA_Estimate
-FPOP-00067,JUR-09,2020,Bay View Ridge UGA,1692.0,1686.0,6.0,0.0036,OFM_SAEP_UGA_Estimate
-FPOP-00068,JUR-09,2021,Bay View Ridge UGA,1694.0,1692.0,2.0,0.0012,OFM_SAEP_UGA_Estimate
-FPOP-00069,JUR-09,2022,Bay View Ridge UGA,1695.0,1694.0,1.0,0.0006,OFM_SAEP_UGA_Estimate
-FPOP-00070,JUR-09,2023,Bay View Ridge UGA,1696.0,1695.0,1.0,0.0006,OFM_SAEP_UGA_Estimate
-FPOP-00071,JUR-09,2024,Bay View Ridge UGA,1694.0,1696.0,-2.0,-0.0012,OFM_SAEP_UGA_Estimate
-FPOP-00072,JUR-09,2025,Bay View Ridge UGA,1711.0,1694.0,17.0,0.01,OFM_SAEP_UGA_Estimate
-FPOP-00073,JUR-09,2026,Bay View Ridge UGA,1712.0,1711.0,1.0,0.0006,OFM_SAEP_UGA_Estimate
-FPOP-00074,JUR-10,2010,Swinomish UGA,2470.0,,,,OFM_SAEP_UGA_Estimate
-FPOP-00075,JUR-10,2011,Swinomish UGA,2464.0,2470.0,-6.0,-0.0024,OFM_SAEP_UGA_Estimate
-FPOP-00076,JUR-10,2012,Swinomish UGA,2460.0,2464.0,-4.0,-0.0016,OFM_SAEP_UGA_Estimate
-FPOP-00077,JUR-10,2013,Swinomish UGA,2455.0,2460.0,-5.0,-0.002,OFM_SAEP_UGA_Estimate
-FPOP-00078,JUR-10,2014,Swinomish UGA,2453.0,2455.0,-2.0,-0.0008,OFM_SAEP_UGA_Estimate
-FPOP-00079,JUR-10,2015,Swinomish UGA,2460.0,2453.0,7.0,0.0029,OFM_SAEP_UGA_Estimate
-FPOP-00080,JUR-10,2016,Swinomish UGA,2494.0,2460.0,34.0,0.0138,OFM_SAEP_UGA_Estimate
-FPOP-00081,JUR-10,2017,Swinomish UGA,2516.0,2494.0,22.0,0.0088,OFM_SAEP_UGA_Estimate
-FPOP-00082,JUR-10,2018,Swinomish UGA,2546.0,2516.0,30.0,0.0119,OFM_SAEP_UGA_Estimate
-FPOP-00083,JUR-10,2019,Swinomish UGA,2569.0,2546.0,23.0,0.009,OFM_SAEP_UGA_Estimate
-FPOP-00084,JUR-10,2020,Swinomish UGA,2563.0,2569.0,-6.0,-0.0023,OFM_SAEP_UGA_Estimate
-FPOP-00085,JUR-10,2021,Swinomish UGA,2565.0,2563.0,2.0,0.0008,OFM_SAEP_UGA_Estimate
-FPOP-00086,JUR-10,2022,Swinomish UGA,2565.0,2565.0,0.0,0.0,OFM_SAEP_UGA_Estimate
-FPOP-00087,JUR-10,2023,Swinomish UGA,2570.0,2565.0,5.0,0.0019,OFM_SAEP_UGA_Estimate
-FPOP-00088,JUR-10,2024,Swinomish UGA,2570.0,2570.0,0.0,0.0,OFM_SAEP_UGA_Estimate
-FPOP-00089,JUR-10,2025,Swinomish UGA,2567.0,2570.0,-3.0,-0.0012,OFM_SAEP_UGA_Estimate
-FPOP-00090,JUR-10,2026,Swinomish UGA,2569.0,2567.0,2.0,0.0008,OFM_SAEP_UGA_Estimate
-FPOP-00091,JUR-11,2020,Unincorporated Skagit County,52606.0,,,,OFM_April1_Official_Determination
-FPOP-00092,JUR-11,2021,Unincorporated Skagit County,52750.0,52606.0,144.0,0.0027,OFM_April1_Official_Determination
-FPOP-00093,JUR-11,2022,Unincorporated Skagit County,52970.0,52750.0,220.0,0.0042,OFM_April1_Official_Determination
-FPOP-00094,JUR-11,2023,Unincorporated Skagit County,53065.0,52970.0,95.0,0.0018,OFM_April1_Official_Determination
-FPOP-00095,JUR-11,2024,Unincorporated Skagit County,53210.0,53065.0,145.0,0.0027,OFM_April1_Official_Determination
-FPOP-00096,JUR-11,2025,Unincorporated Skagit County,53380.0,53210.0,170.0,0.0032,OFM_April1_Official_Determination
-FPOP-00097,JUR-11,2026,Unincorporated Skagit County,53580.0,53380.0,200.0,0.0037,OFM_April1_Official_Determination
+FPOP-00001,JUR-01,2020,Anacortes,17637,,,,OFM_April1_Official_Determination
+FPOP-00002,JUR-01,2021,Anacortes,17750,17637.0,113.0,0.0064,OFM_April1_Official_Determination
+FPOP-00003,JUR-01,2022,Anacortes,17880,17750.0,130.0,0.0073,OFM_April1_Official_Determination
+FPOP-00004,JUR-01,2023,Anacortes,18020,17880.0,140.0,0.0078,OFM_April1_Official_Determination
+FPOP-00005,JUR-01,2024,Anacortes,18270,18020.0,250.0,0.0139,OFM_April1_Official_Determination
+FPOP-00006,JUR-01,2025,Anacortes,18350,18270.0,80.0,0.0044,OFM_April1_Official_Determination
+FPOP-00007,JUR-01,2026,Anacortes,18410,18350.0,60.0,0.0033,OFM_April1_Official_Determination
+FPOP-00008,JUR-02,2020,Burlington,9152,,,,OFM_April1_Official_Determination
+FPOP-00009,JUR-02,2021,Burlington,9290,9152.0,138.0,0.0151,OFM_April1_Official_Determination
+FPOP-00010,JUR-02,2022,Burlington,9800,9290.0,510.0,0.0549,OFM_April1_Official_Determination
+FPOP-00011,JUR-02,2023,Burlington,9905,9800.0,105.0,0.0107,OFM_April1_Official_Determination
+FPOP-00012,JUR-02,2024,Burlington,10410,9905.0,505.0,0.051,OFM_April1_Official_Determination
+FPOP-00013,JUR-02,2025,Burlington,10910,10410.0,500.0,0.048,OFM_April1_Official_Determination
+FPOP-00014,JUR-02,2026,Burlington,11200,10910.0,290.0,0.0266,OFM_April1_Official_Determination
+FPOP-00015,JUR-03,2020,Concrete,801,,,,OFM_April1_Official_Determination
+FPOP-00016,JUR-03,2021,Concrete,805,801.0,4.0,0.005,OFM_April1_Official_Determination
+FPOP-00017,JUR-03,2022,Concrete,810,805.0,5.0,0.0062,OFM_April1_Official_Determination
+FPOP-00018,JUR-03,2023,Concrete,810,810.0,0.0,0.0,OFM_April1_Official_Determination
+FPOP-00019,JUR-03,2024,Concrete,810,810.0,0.0,0.0,OFM_April1_Official_Determination
+FPOP-00020,JUR-03,2025,Concrete,815,810.0,5.0,0.0062,OFM_April1_Official_Determination
+FPOP-00021,JUR-03,2026,Concrete,815,815.0,0.0,0.0,OFM_April1_Official_Determination
+FPOP-00022,JUR-04,2020,Hamilton,299,,,,OFM_April1_Official_Determination
+FPOP-00023,JUR-04,2021,Hamilton,295,299.0,-4.0,-0.0134,OFM_April1_Official_Determination
+FPOP-00024,JUR-04,2022,Hamilton,295,295.0,0.0,0.0,OFM_April1_Official_Determination
+FPOP-00025,JUR-04,2023,Hamilton,295,295.0,0.0,0.0,OFM_April1_Official_Determination
+FPOP-00026,JUR-04,2024,Hamilton,295,295.0,0.0,0.0,OFM_April1_Official_Determination
+FPOP-00027,JUR-04,2025,Hamilton,295,295.0,0.0,0.0,OFM_April1_Official_Determination
+FPOP-00028,JUR-04,2026,Hamilton,290,295.0,-5.0,-0.0169,OFM_April1_Official_Determination
+FPOP-00029,JUR-05,2020,La Conner,965,,,,OFM_April1_Official_Determination
+FPOP-00030,JUR-05,2021,La Conner,970,965.0,5.0,0.0052,OFM_April1_Official_Determination
+FPOP-00031,JUR-05,2022,La Conner,980,970.0,10.0,0.0103,OFM_April1_Official_Determination
+FPOP-00032,JUR-05,2023,La Conner,990,980.0,10.0,0.0102,OFM_April1_Official_Determination
+FPOP-00033,JUR-05,2024,La Conner,995,990.0,5.0,0.0051,OFM_April1_Official_Determination
+FPOP-00034,JUR-05,2025,La Conner,1000,995.0,5.0,0.005,OFM_April1_Official_Determination
+FPOP-00035,JUR-05,2026,La Conner,1000,1000.0,0.0,0.0,OFM_April1_Official_Determination
+FPOP-00036,JUR-06,2020,Lyman,423,,,,OFM_April1_Official_Determination
+FPOP-00037,JUR-06,2021,Lyman,420,423.0,-3.0,-0.0071,OFM_April1_Official_Determination
+FPOP-00038,JUR-06,2022,Lyman,425,420.0,5.0,0.0119,OFM_April1_Official_Determination
+FPOP-00039,JUR-06,2023,Lyman,425,425.0,0.0,0.0,OFM_April1_Official_Determination
+FPOP-00040,JUR-06,2024,Lyman,430,425.0,5.0,0.0118,OFM_April1_Official_Determination
+FPOP-00041,JUR-06,2025,Lyman,440,430.0,10.0,0.0233,OFM_April1_Official_Determination
+FPOP-00042,JUR-06,2026,Lyman,445,440.0,5.0,0.0114,OFM_April1_Official_Determination
+FPOP-00043,JUR-07,2020,Mount Vernon,35219,,,,OFM_April1_Official_Determination
+FPOP-00044,JUR-07,2021,Mount Vernon,35390,35219.0,171.0,0.0049,OFM_April1_Official_Determination
+FPOP-00045,JUR-07,2022,Mount Vernon,35500,35390.0,110.0,0.0031,OFM_April1_Official_Determination
+FPOP-00046,JUR-07,2023,Mount Vernon,35590,35500.0,90.0,0.0025,OFM_April1_Official_Determination
+FPOP-00047,JUR-07,2024,Mount Vernon,35800,35590.0,210.0,0.0059,OFM_April1_Official_Determination
+FPOP-00048,JUR-07,2025,Mount Vernon,36050,35800.0,250.0,0.007,OFM_April1_Official_Determination
+FPOP-00049,JUR-07,2026,Mount Vernon,36090,36050.0,40.0,0.0011,OFM_April1_Official_Determination
+FPOP-00050,JUR-08,2020,Sedro-Woolley,12421,,,,OFM_April1_Official_Determination
+FPOP-00051,JUR-08,2021,Sedro-Woolley,12330,12421.0,-91.0,-0.0073,OFM_April1_Official_Determination
+FPOP-00052,JUR-08,2022,Sedro-Woolley,12590,12330.0,260.0,0.0211,OFM_April1_Official_Determination
+FPOP-00053,JUR-08,2023,Sedro-Woolley,12900,12590.0,310.0,0.0246,OFM_April1_Official_Determination
+FPOP-00054,JUR-08,2024,Sedro-Woolley,13080,12900.0,180.0,0.014,OFM_April1_Official_Determination
+FPOP-00055,JUR-08,2025,Sedro-Woolley,13360,13080.0,280.0,0.0214,OFM_April1_Official_Determination
+FPOP-00056,JUR-08,2026,Sedro-Woolley,13520,13360.0,160.0,0.012,OFM_April1_Official_Determination
+FPOP-00057,JUR-09,2010,Bay View Ridge UGA,1657,,,,OFM_SAEP_UGA_Estimate
+FPOP-00058,JUR-09,2011,Bay View Ridge UGA,1644,1657.0,-13.0,-0.0078,OFM_SAEP_UGA_Estimate
+FPOP-00059,JUR-09,2012,Bay View Ridge UGA,1634,1644.0,-10.0,-0.0061,OFM_SAEP_UGA_Estimate
+FPOP-00060,JUR-09,2013,Bay View Ridge UGA,1618,1634.0,-16.0,-0.0098,OFM_SAEP_UGA_Estimate
+FPOP-00061,JUR-09,2014,Bay View Ridge UGA,1607,1618.0,-11.0,-0.0068,OFM_SAEP_UGA_Estimate
+FPOP-00062,JUR-09,2015,Bay View Ridge UGA,1606,1607.0,-1.0,-0.0006,OFM_SAEP_UGA_Estimate
+FPOP-00063,JUR-09,2016,Bay View Ridge UGA,1624,1606.0,18.0,0.0112,OFM_SAEP_UGA_Estimate
+FPOP-00064,JUR-09,2017,Bay View Ridge UGA,1629,1624.0,5.0,0.0031,OFM_SAEP_UGA_Estimate
+FPOP-00065,JUR-09,2018,Bay View Ridge UGA,1655,1629.0,26.0,0.016,OFM_SAEP_UGA_Estimate
+FPOP-00066,JUR-09,2019,Bay View Ridge UGA,1686,1655.0,31.0,0.0187,OFM_SAEP_UGA_Estimate
+FPOP-00067,JUR-09,2020,Bay View Ridge UGA,1692,1686.0,6.0,0.0036,OFM_SAEP_UGA_Estimate
+FPOP-00068,JUR-09,2021,Bay View Ridge UGA,1694,1692.0,2.0,0.0012,OFM_SAEP_UGA_Estimate
+FPOP-00069,JUR-09,2022,Bay View Ridge UGA,1695,1694.0,1.0,0.0006,OFM_SAEP_UGA_Estimate
+FPOP-00070,JUR-09,2023,Bay View Ridge UGA,1696,1695.0,1.0,0.0006,OFM_SAEP_UGA_Estimate
+FPOP-00071,JUR-09,2024,Bay View Ridge UGA,1694,1696.0,-2.0,-0.0012,OFM_SAEP_UGA_Estimate
+FPOP-00072,JUR-09,2025,Bay View Ridge UGA,1711,1694.0,17.0,0.01,OFM_SAEP_UGA_Estimate
+FPOP-00073,JUR-09,2026,Bay View Ridge UGA,1712,1711.0,1.0,0.0006,OFM_SAEP_UGA_Estimate
+FPOP-00074,JUR-10,2010,Swinomish UGA,2470,,,,OFM_SAEP_UGA_Estimate
+FPOP-00075,JUR-10,2011,Swinomish UGA,2464,2470.0,-6.0,-0.0024,OFM_SAEP_UGA_Estimate
+FPOP-00076,JUR-10,2012,Swinomish UGA,2460,2464.0,-4.0,-0.0016,OFM_SAEP_UGA_Estimate
+FPOP-00077,JUR-10,2013,Swinomish UGA,2455,2460.0,-5.0,-0.002,OFM_SAEP_UGA_Estimate
+FPOP-00078,JUR-10,2014,Swinomish UGA,2453,2455.0,-2.0,-0.0008,OFM_SAEP_UGA_Estimate
+FPOP-00079,JUR-10,2015,Swinomish UGA,2460,2453.0,7.0,0.0029,OFM_SAEP_UGA_Estimate
+FPOP-00080,JUR-10,2016,Swinomish UGA,2494,2460.0,34.0,0.0138,OFM_SAEP_UGA_Estimate
+FPOP-00081,JUR-10,2017,Swinomish UGA,2516,2494.0,22.0,0.0088,OFM_SAEP_UGA_Estimate
+FPOP-00082,JUR-10,2018,Swinomish UGA,2546,2516.0,30.0,0.0119,OFM_SAEP_UGA_Estimate
+FPOP-00083,JUR-10,2019,Swinomish UGA,2569,2546.0,23.0,0.009,OFM_SAEP_UGA_Estimate
+FPOP-00084,JUR-10,2020,Swinomish UGA,2563,2569.0,-6.0,-0.0023,OFM_SAEP_UGA_Estimate
+FPOP-00085,JUR-10,2021,Swinomish UGA,2565,2563.0,2.0,0.0008,OFM_SAEP_UGA_Estimate
+FPOP-00086,JUR-10,2022,Swinomish UGA,2565,2565.0,0.0,0.0,OFM_SAEP_UGA_Estimate
+FPOP-00087,JUR-10,2023,Swinomish UGA,2570,2565.0,5.0,0.0019,OFM_SAEP_UGA_Estimate
+FPOP-00088,JUR-10,2024,Swinomish UGA,2570,2570.0,0.0,0.0,OFM_SAEP_UGA_Estimate
+FPOP-00089,JUR-10,2025,Swinomish UGA,2567,2570.0,-3.0,-0.0012,OFM_SAEP_UGA_Estimate
+FPOP-00090,JUR-10,2026,Swinomish UGA,2569,2567.0,2.0,0.0008,OFM_SAEP_UGA_Estimate
+FPOP-00091,JUR-11,2020,Unincorporated Rural (outside UGAs),44096,,,,Derived (OFM Unincorporated minus UGAs)
+FPOP-00092,JUR-11,2021,Unincorporated Rural (outside UGAs),48491,44096.0,4395.0,0.0997,Derived (OFM Unincorporated minus UGAs)
+FPOP-00093,JUR-11,2022,Unincorporated Rural (outside UGAs),48710,48491.0,219.0,0.0045,Derived (OFM Unincorporated minus UGAs)
+FPOP-00094,JUR-11,2023,Unincorporated Rural (outside UGAs),48799,48710.0,89.0,0.0018,Derived (OFM Unincorporated minus UGAs)
+FPOP-00095,JUR-11,2024,Unincorporated Rural (outside UGAs),48946,48799.0,147.0,0.003,Derived (OFM Unincorporated minus UGAs)
+FPOP-00096,JUR-11,2025,Unincorporated Rural (outside UGAs),49102,48946.0,156.0,0.0032,Derived (OFM Unincorporated minus UGAs)
+FPOP-00097,JUR-11,2026,Unincorporated Rural (outside UGAs),49299,49102.0,197.0,0.004,Derived (OFM Unincorporated minus UGAs)

@@ -647,7 +647,7 @@ pages_data = [
             ),
             make_footer(
                 "v05", 20, 855, 1260, 35, 10,
-                "Centroid Coordinates: Official USGS GNIS / US Census Bureau 2020 Municipal Centers & UGA Centroids. 'Unincorporated Skagit County' (53,380) includes the Bay View Ridge and Swinomish UGAs; the county's Rural allocation excludes them. Basis pending SCOG confirmation. Official countywide population is 134,600 (OFM April 1, 2025 determination)."
+                "Centroid Coordinates: Official USGS GNIS / US Census Bureau 2020 Municipal Centers & UGA Centroids. 'Unincorporated Rural (outside UGAs)' (49,102 in 2025) excludes the UGAs and is derived (53,380 − 1,711 − 2,567 = 49,102), with the basis pending SCOG confirmation. Official countywide population is 134,600 (OFM April 1, 2025 determination)."
             )
         ]
     }

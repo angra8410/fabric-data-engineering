@@ -209,13 +209,18 @@ def build_fact_population(dim_jur):
             next(reader, None)
         header = next(reader)
         uga_year_cols = []
+        seen_uga_years = set()
         for idx, col in enumerate(header):
             col_clean = col.strip()
-            if "change" in col_clean.lower():
+            # Ignore percentage/numeric change columns and raw census count to keep official OFM adjusted series
+            if "change" in col_clean.lower() or "census" in col_clean.lower():
                 continue
             m = re.search(r'\b(20\d\d)\b', col_clean)
             if m:
-                uga_year_cols.append((idx, int(m.group(1))))
+                yr = int(m.group(1))
+                if yr not in seen_uga_years:
+                    seen_uga_years.add(yr)
+                    uga_year_cols.append((idx, yr))
                 
         for row in reader:
             if len(row) > 2 and row[0].strip().lower() == "skagit":
@@ -239,6 +244,7 @@ def build_fact_population(dim_jur):
     ofm_path = os.path.join(RAW_DIR, "ofm_april1_population_final(Population).csv")
     city_records = []
     uninc_by_year = {}
+    ofm_county_totals = {}
     with open(ofm_path, "r", encoding="utf-8", errors="ignore") as f:
         reader = csv.reader(f)
         for _ in range(4): # skip first 4 lines
@@ -253,7 +259,12 @@ def build_fact_population(dim_jur):
         for row in reader:
             if len(row) > 3 and row[2].strip() == "Skagit":
                 raw_jur = row[3].strip()
-                if raw_jur in ["Skagit County", "Incorporated Skagit County"]:
+                if raw_jur == "Skagit County":
+                    for col_idx, yr in year_cols:
+                        if col_idx < len(row):
+                            ofm_county_totals[yr] = clean_num(row[col_idx])
+                    continue
+                if raw_jur == "Incorporated Skagit County":
                     continue # County rollups happen via measure aggregation in Power BI
                 if raw_jur in ["Unincorporated", "Unincorporated Skagit County"]:
                     for col_idx, yr in year_cols:
@@ -303,17 +314,18 @@ def build_fact_population(dim_jur):
     
     df["Fact_Population_Key"] = [f"FPOP-{i+1:05d}" for i in range(len(df))]
     
-    # Verification check: For 2025, verify 81,220 (8 cities) + 4,278 (2 UGAs) + 49,102 (rural) == 134,600
-    df_2025 = df[df["Year"] == 2025]
-    cities_2025 = int(df_2025[df_2025["Data_Source_Type"] == "OFM_April1_Official_Determination"]["Population_Count"].sum())
-    ugas_2025 = int(df_2025[df_2025["Data_Source_Type"] == "OFM_SAEP_UGA_Estimate"]["Population_Count"].sum())
-    rural_2025 = int(df_2025[df_2025["Jurisdiction_Name"] == "Unincorporated Rural (outside UGAs)"]["Population_Count"].sum())
-    total_2025 = int(df_2025["Population_Count"].sum())
-    print(f"   [ETL Population Verification 2025] Cities: {cities_2025:,} | UGAs: {ugas_2025:,} | Rural: {rural_2025:,} | Total: {total_2025:,}")
-    assert cities_2025 == 81220, f"Expected cities 81,220, got {cities_2025}"
-    assert ugas_2025 == 4278, f"Expected UGAs 4,278, got {ugas_2025}"
-    assert rural_2025 == 49102, f"Expected rural 49,102, got {rural_2025}"
-    assert total_2025 == 134600, f"Expected total 134,600, got {total_2025}"
+    # Verification check: For every year 2020-2026, verify cities + UGAs + rural == OFM county total
+    print("   [ETL Annual Population Verification 2020-2026]:")
+    for yr in range(2020, 2027):
+        df_yr = df[df["Year"] == yr]
+        cities_yr = int(df_yr[df_yr["Data_Source_Type"] == "OFM_April1_Official_Determination"]["Population_Count"].sum())
+        ugas_yr = int(df_yr[df_yr["Data_Source_Type"] == "OFM_SAEP_UGA_Estimate"]["Population_Count"].sum())
+        rural_yr = int(df_yr[df_yr["Jurisdiction_Name"] == "Unincorporated Rural (outside UGAs)"]["Population_Count"].sum())
+        total_yr = int(df_yr["Population_Count"].sum())
+        expected_cty = ofm_county_totals.get(yr)
+        print(f"      {yr}: Cities: {cities_yr:,} | UGAs: {ugas_yr:,} | Rural: {rural_yr:,} | Sum: {total_yr:,} | OFM Total: {expected_cty:,}")
+        assert total_yr == expected_cty, f"Year {yr} population mismatch: calculated sum {total_yr} != OFM total {expected_cty}"
+        assert cities_yr + ugas_yr + rural_yr == expected_cty, f"Year {yr} additivity mismatch: {cities_yr} + {ugas_yr} + {rural_yr} != {expected_cty}"
 
     cols_order = [
         "Fact_Population_Key", "Jurisdiction_ID", "Year", "Jurisdiction_Name",

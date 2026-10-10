@@ -89,8 +89,8 @@ FPOP-00087,JUR-10,2023,Swinomish UGA,2570,2565.0,5.0,0.0019,OFM_SAEP_UGA_Estimat
 FPOP-00088,JUR-10,2024,Swinomish UGA,2570,2570.0,0.0,0.0,OFM_SAEP_UGA_Estimate
 FPOP-00089,JUR-10,2025,Swinomish UGA,2567,2570.0,-3.0,-0.0012,OFM_SAEP_UGA_Estimate
 FPOP-00090,JUR-10,2026,Swinomish UGA,2569,2567.0,2.0,0.0008,OFM_SAEP_UGA_Estimate
-FPOP-00091,JUR-11,2020,Unincorporated Rural (outside UGAs),44096,,,,Derived (OFM Unincorporated minus UGAs)
-FPOP-00092,JUR-11,2021,Unincorporated Rural (outside UGAs),48491,44096.0,4395.0,0.0997,Derived (OFM Unincorporated minus UGAs)
+FPOP-00091,JUR-11,2020,Unincorporated Rural (outside UGAs),48351,,,,Derived (OFM Unincorporated minus UGAs)
+FPOP-00092,JUR-11,2021,Unincorporated Rural (outside UGAs),48491,48351.0,140.0,0.0029,Derived (OFM Unincorporated minus UGAs)
 FPOP-00093,JUR-11,2022,Unincorporated Rural (outside UGAs),48710,48491.0,219.0,0.0045,Derived (OFM Unincorporated minus UGAs)
 FPOP-00094,JUR-11,2023,Unincorporated Rural (outside UGAs),48799,48710.0,89.0,0.0018,Derived (OFM Unincorporated minus UGAs)
 FPOP-00095,JUR-11,2024,Unincorporated Rural (outside UGAs),48946,48799.0,147.0,0.003,Derived (OFM Unincorporated minus UGAs)

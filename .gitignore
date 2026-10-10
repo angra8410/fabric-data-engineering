@@ -3,5 +3,4 @@ __pycache__/
 .venv/
 *.pyc
 ~$*
-excluded-workbook.xlsx
 *CAI.Total Employment Calc Template*.xlsx

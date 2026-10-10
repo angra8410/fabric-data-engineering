@@ -273,24 +273,37 @@ area_data_elements = "\n".join(area_pts_svg)
 # Extended to 2025 using Fact_Employment (County Total Annual Average = 54,148)
 emp_2025_row = df_emp[(df_emp["Year"] == 2025) & (df_emp["Is_County_Total"] == 1)].iloc[0]
 emp_2025_qcew = int(emp_2025_row["Annual_Average_Employment"]) # 54,148
+emp_2025_est_total = int(emp_2025_row["Estimated_Total_Employment"]) # 62,518
+emp_2022_qcew = int(df_cai[df_cai["Year"] == 2022]["Covered_Employment_QCEW"].iloc[0]) # 51,597
 
 cai_series = df_cai[df_cai["Year"].between(1999, 2022)].sort_values("Year").to_dict("records")
 qcew_full_series = [{"Year": int(r["Year"]), "Covered_Employment_QCEW": int(r["Covered_Employment_QCEW"])} for r in cai_series]
 qcew_full_series.append({"Year": 2025, "Covered_Employment_QCEW": emp_2025_qcew})
 
-# Y-range 35,000 to 55,000 over 190px (y: 230 down to 40)
-# X-range 1999 to 2025 over 480px (x: 60 to 540)
-qcew_pts = []
+# Segment 1: Continuous polyline 1999 to 2019 (21 points)
+# Break line across gaps (2020-21 and 2023-24 have no data in source files)
+qcew_seg1_series = [r for r in qcew_full_series if r["Year"] <= 2019]
+qcew_seg1_pts = []
+for r in qcew_seg1_series:
+    yr = r["Year"]
+    val = r["Covered_Employment_QCEW"]
+    x = 60 + ((yr - 1999) / (2025 - 1999)) * 480
+    y = 230 - ((val - 35000) / 20000) * 190
+    qcew_seg1_pts.append(f"{x:.1f},{y:.1f}")
+
+qcew_seg1_polyline = " ".join(qcew_seg1_pts)
+
+# Markers for all 23 nodes
 qcew_dots = []
 for r in qcew_full_series:
     yr = r["Year"]
     val = r["Covered_Employment_QCEW"]
     x = 60 + ((yr - 1999) / (2025 - 1999)) * 480
     y = 230 - ((val - 35000) / 20000) * 190
-    qcew_pts.append(f"{x:.1f},{y:.1f}")
-    qcew_dots.append(f'<circle class="qcew-node" cx="{x:.1f}" cy="{y:.1f}" r="3" fill="#004B87" data-year="{yr}" data-qcew="{val}"><title>{yr}: {val:,} Covered Jobs</title></circle>')
+    r_rad = "4.5" if yr in [2022, 2025] else "3"
+    f_col = "#2563eb" if yr in [2022, 2025] else "#004B87"
+    qcew_dots.append(f'<circle class="qcew-node" cx="{x:.1f}" cy="{y:.1f}" r="{r_rad}" fill="{f_col}" data-year="{yr}" data-qcew="{val}"><title>{yr}: {val:,} Covered Jobs</title></circle>')
 
-qcew_polyline = " ".join(qcew_pts)
 qcew_last = qcew_full_series[-1]
 qcew_last_x = 60 + ((qcew_last["Year"] - 1999) / (2025 - 1999)) * 480
 qcew_last_y = 230 - ((qcew_last["Covered_Employment_QCEW"] - 35000) / 20000) * 190
@@ -1069,10 +1082,10 @@ html_content = f"""<!DOCTYPE html>
           </div>
 
           <div class="card">
-            <div class="card-title">Covered jobs, 2025 (QCEW)</div>
+            <div class="card-title">Covered jobs, QCEW</div>
             <div class="card-value">{emp_2025_qcew:,}</div>
-            <div class="card-comparison">
-              <span>2022 Total Baseline: <strong>{emp_baseline_2022:,}</strong> · 2045 Target: <strong>{emp_target_2045:,}</strong> (Total Employment)</span>
+            <div class="card-comparison" style="font-size: 8.8px; line-height: 1.25;">
+              <span>2022 Covered: <strong>{emp_2022_qcew:,}</strong> · Total Employment: 2022 Base <strong>{emp_baseline_2022:,}</strong>, 2025 Est. <strong>{emp_2025_est_total:,}</strong> (estimated) · 2045 Target: <strong>{emp_target_2045:,}</strong> (Total Employment)</span>
             </div>
           </div>
         </div>
@@ -1429,7 +1442,7 @@ html_content += f"""            </div>
         <div class="grid-2col-split" style="height: 385px;">
           <div class="visual-container">
             <div class="visual-title">Covered Wage & Salary Employment (ESD QCEW Benchmark, 1999–2025)</div>
-            <div class="visual-subtitle">Historical Covered Wage & Salary Employment (Dim_CAI_Employment_Benchmark & Fact_Employment). Axis starts at 35,000 for visibility.</div>
+            <div class="visual-subtitle">Historical Covered Wage & Salary Employment (Dim_CAI_Employment_Benchmark & Fact_Employment). Axis starts at 35,000 for visibility. Note: No data for 2020-21 and 2023-24 in the source files.</div>
             <div class="visual-body">
               <svg class="chart-svg" viewBox="0 0 580 260">
                 <line x1="50" y1="230" x2="560" y2="230" class="axis-line" />
@@ -1444,7 +1457,7 @@ html_content += f"""            </div>
                 <text x="337" y="248" class="axis-label" text-anchor="middle">2014</text>
                 <text x="485" y="248" class="axis-label" text-anchor="middle">2022</text>
                 <text x="540" y="248" class="axis-label" text-anchor="middle" font-weight="700">2025</text>
-                <polyline fill="none" stroke="#004B87" stroke-width="3" points="{qcew_polyline}" />
+                <polyline fill="none" stroke="#004B87" stroke-width="3" points="{qcew_seg1_polyline}" />
                 {"".join(qcew_dots)}
                 <circle cx="{qcew_last_x:.1f}" cy="{qcew_last_y:.1f}" r="5.5" fill="#2563eb" stroke="#ffffff" stroke-width="2" />
                 <text x="{qcew_last_x-10:.1f}" y="{qcew_last_y-12:.1f}" class="axis-label" font-weight="700" fill="#0f172a" text-anchor="end">2025 QCEW: {qcew_last['Covered_Employment_QCEW']:,} (Covered Jobs)</text>

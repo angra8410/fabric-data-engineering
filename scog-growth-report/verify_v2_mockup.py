@@ -79,6 +79,8 @@ gross_2025 = sf_2025 + mf_2025 + adu_2025
 emp_base = int(df_tgt["Baseline_2022_Employment"].sum())
 emp_tgt = int(df_tgt["Target_2045_Employment"].sum())
 emp_2025_qcew = int(df_emp[(df_emp["Year"] == 2025) & (df_emp["Is_County_Total"] == 1)]["Annual_Average_Employment"].iloc[0])
+emp_2025_est_total = int(df_emp[(df_emp["Year"] == 2025) & (df_emp["Is_County_Total"] == 1)]["Estimated_Total_Employment"].iloc[0])
+emp_2022_qcew = int(df_cai[df_cai["Year"] == 2022]["Covered_Employment_QCEW"].iloc[0])
 
 p1_cards = p1.find_all("div", class_="card")
 # Card 1: Population
@@ -103,12 +105,19 @@ check("Page 1 KPI", "2025 Net Permitted Units", c3_val, f"{net_2025:,}")
 check("Page 1 KPI", "2025 Gross Units", re.search(r"Gross:\s*([\d,]+)", c3_comp).group(1), f"{gross_2025:,}")
 check("Page 1 KPI", "2025 Demolished Units", re.search(r"Demolished:\s*([\d,]+)", c3_comp).group(1), f"{dem_2025:,}")
 
-# Card 4: Employment (Covered Jobs 2025 QCEW)
-c4_val = p1_cards[3].find("div", class_="card-value").text
-c4_comp = p1_cards[3].find("div", class_="card-comparison").text
+# Card 4: Employment (Covered Jobs 2025 QCEW & Option A values)
+c4_title = p1_cards[3].find("div", class_="card-title").text.strip()
+c4_val = p1_cards[3].find("div", class_="card-value").text.strip()
+c4_comp = p1_cards[3].find("div", class_="card-comparison").text.strip()
+check("Page 1 KPI", "Employment Card Title", c4_title, "Covered jobs, QCEW")
 check("Page 1 KPI", "Covered Jobs 2025 (QCEW)", c4_val, f"{emp_2025_qcew:,}")
-check("Page 1 KPI", "Employment 2022 Total Baseline", re.search(r"2022 Total Baseline:\s*([\d,]+)", c4_comp).group(1), f"{emp_base:,}")
-check("Page 1 KPI", "Employment 2045 Total Target", re.search(r"Target:\s*([\d,]+)", c4_comp).group(1), f"{emp_tgt:,}")
+check("Page 1 KPI", "Covered Jobs 2022 (QCEW)", re.search(r"2022 Covered:\s*([\d,]+)", c4_comp).group(1), f"{emp_2022_qcew:,}")
+check("Page 1 KPI", "Employment 2022 Total Baseline", re.search(r"2022 Base\s*([\d,]+)", c4_comp).group(1), f"{emp_base:,}")
+check("Page 1 KPI", "Employment 2025 Estimated Total", re.search(r"2025 Est\.\s*([\d,]+)", c4_comp).group(1), f"{emp_2025_est_total:,}")
+check("Page 1 KPI", "Employment 2025 Estimated Label", "estimated" in c4_comp, True)
+check("Page 1 KPI", "Employment 2045 Total Target", re.search(r"2045 Target:\s*([\d,]+)", c4_comp).group(1), f"{emp_tgt:,}")
+check("Page 1 KPI", "Employment 2045 Target Label", "Total Employment" in c4_comp, True)
+check("Page 1 KPI Hard Rule", "No Ratios or Percentages in Card 4", ("%" not in c4_comp and "/" not in c4_comp), True)
 
 # 2. Page 1 Population Trajectory Chart
 pop_traj = df_pop[df_pop["Year"].between(2020, 2025)].groupby("Year")["Population_Count"].sum().to_dict()
@@ -345,8 +354,22 @@ p3_total_tds = p3_rows[11].find_all("td")
 check("Page 3 Employment Total", "Countywide 2022 Baseline", p3_total_tds[1].text, f"{emp_base:,}")
 check("Page 3 Employment Total", "Countywide 2045 Target", p3_total_tds[2].text, f"{emp_tgt:,}")
 
-# 4. Page 3 Historical QCEW Benchmark Series (every point 1999-2025)
+# 4. Page 3 Historical QCEW Benchmark Series & Segmentation
+# Check segment 1 polyline: exactly 21 points for 1999-2019
+qcew_svg = p3.find_all("svg", class_="chart-svg")[0]
+qcew_poly = qcew_svg.find("polyline")
+poly_pts = qcew_poly["points"].strip().split()
+check("Page 3 QCEW Segmenting", "Segment 1 Polyline Point Count", len(poly_pts), 21)
+
+# Verify polyline breaks across gaps (does not connect 2019 to 2022 or 2022 to 2025)
+# Year 2019 is x ~429.2, Year 2022 is x ~484.6. Polyline points must end at x < 450
+has_pts_past_2019 = any(float(pt.split(",")[0]) > 450 for pt in poly_pts)
+check("Page 3 QCEW Segmenting", "Polyline Breaks at Gaps (No points past 2019)", has_pts_past_2019, False)
+
+# Check all 23 nodes with data attributes (21 in seg 1 + 2022 + 2025)
 qcew_nodes = p3.find_all("circle", class_="qcew-node")
+check("Page 3 QCEW Segmenting", "Total QCEW Data Nodes Count", len(qcew_nodes), 23)
+
 cai_dict = df_cai.set_index("Year")["Covered_Employment_QCEW"].to_dict()
 for node in qcew_nodes:
     nyr = int(node["data-year"])
@@ -357,8 +380,18 @@ for node in qcew_nodes:
         exp_q = int(cai_dict[nyr])
     check("Page 3 QCEW Series", f"{nyr} Covered Employment", str(nqcew), str(exp_q))
 
+# Check 2022 standalone marker label
+m_qcew_2022 = re.search(r"2022:\s*([\d,]+)", p3.text)
+check("Page 3 QCEW", "2022 QCEW Marker Label", m_qcew_2022.group(1), f"{emp_2022_qcew:,}")
+
+# Check 2025 endpoint label
 m_qcew_endpoint = re.search(r"2025 QCEW:\s*([\d,]+)", p3.text)
 check("Page 3 QCEW", "2025 QCEW Endpoint Label", m_qcew_endpoint.group(1), f"{emp_2025_qcew:,}")
+
+# Check Gap Disclosure Note in Page 3 subtitle
+p3_subtitles = [st.text for st in p3.find_all("div", class_="visual-subtitle")]
+qcew_sub = next(s for s in p3_subtitles if "35,000" in s)
+check("Page 3 QCEW Disclosure", "Gap Disclosure Note Present", "No data for 2020-21 and 2023-24 in the source files" in qcew_sub, True)
 
 # -------------------------------------------------------------------------
 # PAGE 4 CHECKS

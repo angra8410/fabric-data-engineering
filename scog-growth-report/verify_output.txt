@@ -1,0 +1,465 @@
+===============================================================================================
+SCOG REPORT DESIGN V2 MOCK-UP: COMPREHENSIVE AUTOMATED VERIFICATION AUDIT
+===============================================================================================
+Category                 | Metric / Cell                       | Rendered     | Expected     | Status
+-----------------------------------------------------------------------------------------------
+Page 1 KPI               | Total Population (2025)             | 134,600      | 134,600      | PASS
+Page 1 KPI               | Pop Adopted 2045 Target             | 160,830      | 160,830      | PASS
+Page 1 KPI               | Pop Baseline 2022                   | 131,249      | 131,249      | PASS
+Page 1 KPI               | Pop Growth from 2022                | 3,351        | 3,351        | PASS
+Page 1 KPI               | Net Housing Built (2020-Pres)       | 3,465        | 3,465        | PASS
+Page 1 KPI               | Housing Target Progress %           | 19.9         | 19.9         | PASS
+Page 1 KPI               | Housing Target in Comp              | 17,450       | 17,450       | PASS
+Page 1 KPI               | 2025 Net Permitted Units            | 490          | 490          | PASS
+Page 1 KPI               | 2025 Gross Units                    | 517          | 517          | PASS
+Page 1 KPI               | 2025 Demolished Units               | 27           | 27           | PASS
+Page 1 KPI               | Employment Card Title               | Covered jobs, QCEW | Covered jobs, QCEW | PASS
+Page 1 KPI               | Covered Jobs 2025 (QCEW)            | 54,148       | 54,148       | PASS
+Page 1 KPI               | Covered Jobs 2022 (QCEW)            | 51,597       | 51,597       | PASS
+Page 1 KPI               | Employment 2022 Total Baseline      | 59,571,      | 59,571       | PASS
+Page 1 KPI               | Employment 2025 Estimated Total     | 62,518       | 62,518       | PASS
+Page 1 KPI               | Employment 2025 Estimated Label     | True         | True         | PASS
+Page 1 KPI               | Employment 2045 Total Target        | 80,100       | 80,100       | PASS
+Page 1 KPI               | Employment 2045 Target Label        | True         | True         | PASS
+Page 1 KPI Hard Rule     | No Ratios or Percentages in Card 4  | True         | True         | PASS
+Page 1 Chart             | Pop Trajectory 2020-2025 Growth     | 5,077        | 5,077        | PASS
+Page 1 Chart             | Pop Trajectory Year 2020            | 129,523      | 129,523      | PASS
+Page 1 Chart             | Pop Trajectory Year 2021            | 130,000      | 130,000      | PASS
+Page 1 Chart             | Pop Trajectory Year 2022            | 131,250      | 131,250      | PASS
+Page 1 Chart             | Pop Trajectory Year 2023            | 132,000      | 132,000      | PASS
+Page 1 Chart             | Pop Trajectory Year 2024            | 133,300      | 133,300      | PASS
+Page 1 Chart             | Pop Trajectory Year 2025            | 134,600      | 134,600      | PASS
+Page 1 Benchmark Bars    | 2010 SF Permits                     | 140          | 140          | PASS
+Page 1 Benchmark Bars    | 2010 MF Permits                     | 94           | 94           | PASS
+Page 1 Benchmark Bars    | 2010 ADU Permits                    | 0            | 0            | PASS
+Page 1 Benchmark Bars    | 2015 SF Permits                     | 249          | 249          | PASS
+Page 1 Benchmark Bars    | 2015 MF Permits                     | 37           | 37           | PASS
+Page 1 Benchmark Bars    | 2015 ADU Permits                    | 1            | 1            | PASS
+Page 1 Benchmark Bars    | 2020 SF Permits                     | 397          | 397          | PASS
+Page 1 Benchmark Bars    | 2020 MF Permits                     | 109          | 109          | PASS
+Page 1 Benchmark Bars    | 2020 ADU Permits                    | 8            | 8            | PASS
+Page 1 Benchmark Bars    | 2025 SF Permits                     | 202          | 202          | PASS
+Page 1 Benchmark Bars    | 2025 MF Permits                     | 259          | 259          | PASS
+Page 1 Benchmark Bars    | 2025 ADU Permits                    | 56           | 56           | PASS
+Page 1 Table             | Anacortes 2025 Pop                  | 18,350       | 18,350       | PASS
+Page 1 Table             | Anacortes 2045 Pop Target           | 22,971       | 22,971       | PASS
+Page 1 Table             | Anacortes Net Housing               | 486          | 486          | PASS
+Page 1 Table             | Anacortes 2045 Housing Target       | 2,942        | 2,942        | PASS
+Page 1 Table             | Anacortes Target %                  | 16.5%        | 16.5%        | PASS
+Page 1 Table             | Burlington 2025 Pop                 | 10,910       | 10,910       | PASS
+Page 1 Table             | Burlington 2045 Pop Target          | 16,930       | 16,930       | PASS
+Page 1 Table             | Burlington Net Housing              | 1,187        | 1,187        | PASS
+Page 1 Table             | Burlington 2045 Housing Target      | 2,843        | 2,843        | PASS
+Page 1 Table             | Burlington Target %                 | 41.8%        | 41.8%        | PASS
+Page 1 Table             | Concrete 2025 Pop                   | 815          | 815          | PASS
+Page 1 Table             | Concrete 2045 Pop Target            | 1,130        | 1,130        | PASS
+Page 1 Table             | Concrete Net Housing                | 30           | 30           | PASS
+Page 1 Table             | Concrete 2045 Housing Target        | 107          | 107          | PASS
+Page 1 Table             | Concrete Target %                   | 28.0%        | 28.0%        | PASS
+Page 1 Table             | Hamilton 2025 Pop                   | 295          | 295          | PASS
+Page 1 Table             | Hamilton 2045 Pop Target            | 302          | 302          | PASS
+Page 1 Table             | Hamilton Net Housing                | -1           | -1           | PASS
+Page 1 Table             | Hamilton 2045 Housing Target        | 0            | 0            | PASS
+Page 1 Table             | Hamilton Target %                   | —            | —            | PASS
+Page 1 Table             | La Conner 2025 Pop                  | 1,000        | 1,000        | PASS
+Page 1 Table             | La Conner 2045 Pop Target           | 1,191        | 1,191        | PASS
+Page 1 Table             | La Conner Net Housing               | 39           | 39           | PASS
+Page 1 Table             | La Conner 2045 Housing Target       | 124          | 124          | PASS
+Page 1 Table             | La Conner Target %                  | 31.5%        | 31.5%        | PASS
+Page 1 Table             | Lyman 2025 Pop                      | 440          | 440          | PASS
+Page 1 Table             | Lyman 2045 Pop Target               | 425          | 425          | PASS
+Page 1 Table             | Lyman Net Housing                   | 7            | 7            | PASS
+Page 1 Table             | Lyman 2045 Housing Target           | 0            | 0            | PASS
+Page 1 Table             | Lyman Target %                      | —            | —            | PASS
+Page 1 Table             | Mount Vernon 2025 Pop               | 36,050       | 36,050       | PASS
+Page 1 Table             | Mount Vernon 2045 Pop Target        | 46,460       | 46,460       | PASS
+Page 1 Table             | Mount Vernon Net Housing            | 465          | 465          | PASS
+Page 1 Table             | Mount Vernon 2045 Housing Target    | 5,180        | 5,180        | PASS
+Page 1 Table             | Mount Vernon Target %               | 9.0%         | 9.0%         | PASS
+Page 1 Table             | Sedro-Woolley 2025 Pop              | 13,360       | 13,360       | PASS
+Page 1 Table             | Sedro-Woolley 2045 Pop Target       | 18,582       | 18,582       | PASS
+Page 1 Table             | Sedro-Woolley Net Housing           | 517          | 517          | PASS
+Page 1 Table             | Sedro-Woolley 2045 Housing Target   | 2,646        | 2,646        | PASS
+Page 1 Table             | Sedro-Woolley Target %              | 19.5%        | 19.5%        | PASS
+Page 1 Table             | Bay View Ridge UGA 2025 Pop         | 1,711        | 1,711        | PASS
+Page 1 Table             | Bay View Ridge UGA 2045 Pop Target  | 1,694        | 1,694        | PASS
+Page 1 Table             | Bay View Ridge UGA Net Housing      | 12           | 12           | PASS
+Page 1 Table             | Bay View Ridge UGA 2045 Housing Target | 0            | 0            | PASS
+Page 1 Table             | Bay View Ridge UGA Target %         | —            | —            | PASS
+Page 1 Table             | Swinomish UGA 2025 Pop              | 2,567        | 2,567        | PASS
+Page 1 Table             | Swinomish UGA 2045 Pop Target       | 2,764        | 2,764        | PASS
+Page 1 Table             | Swinomish UGA Net Housing           | 0            | 0            | PASS
+Page 1 Table             | Swinomish UGA 2045 Housing Target   | 118          | 118          | PASS
+Page 1 Table             | Swinomish UGA Target %              | 0.0%         | 0.0%         | PASS
+Page 1 Table             | Unincorporated Rural (outside UGAs) 2025 Pop | 49,102       | 49,102       | PASS
+Page 1 Table             | Unincorporated Rural (outside UGAs) 2045 Pop Target | 48,381       | 48,381       | PASS
+Page 1 Table             | Unincorporated Rural (outside UGAs) Net Housing | 723          | 723          | PASS
+Page 1 Table             | Unincorporated Rural (outside UGAs) 2045 Housing Target | 3,490        | 3,490        | PASS
+Page 1 Table             | Unincorporated Rural (outside UGAs) Target % | 20.7%        | 20.7%        | PASS
+Page 1 Total             | Total Pop 2025                      | 134,600      | 134,600      | PASS
+Page 1 Total             | Total Pop Target 2045               | 160,830      | 160,830      | PASS
+Page 1 Total             | Total Net Housing Cum               | 3,465        | 3,465        | PASS
+Page 1 Total             | Total Housing Target                | 17,450       | 17,450       | PASS
+Page 1 Total             | Total Progress %                    | 19.9%        | 19.9%        | PASS
+Page 2 KPI               | 2025 Net New Units                  | 490          | 490          | PASS
+Page 2 KPI               | 2025 Single-Family Units            | 202          | 202          | PASS
+Page 2 KPI               | 2025 Multi-Family Units             | 259          | 259          | PASS
+Page 2 KPI               | 2025 ADU Units                      | 56           | 56           | PASS
+Page 2 KPI               | SF Share %                          | 39.1         | 39.1         | PASS
+Page 2 KPI               | MF Share %                          | 50.1         | 50.1         | PASS
+Page 2 KPI               | ADU Share %                         | 10.8         | 10.8         | PASS
+Page 2 Matrix            | Anacortes SF                        | 19           | 19           | PASS
+Page 2 Matrix            | Anacortes MF                        | 2            | 2            | PASS
+Page 2 Matrix            | Anacortes ADU                       | 10           | 10           | PASS
+Page 2 Matrix            | Anacortes Demolished                | 7            | 7            | PASS
+Page 2 Matrix            | Anacortes Net New                   | 24           | 24           | PASS
+Page 2 Matrix            | Burlington SF                       | 4            | 4            | PASS
+Page 2 Matrix            | Burlington MF                       | 211          | 211          | PASS
+Page 2 Matrix            | Burlington ADU                      | 2            | 2            | PASS
+Page 2 Matrix            | Burlington Demolished               | 9            | 9            | PASS
+Page 2 Matrix            | Burlington Net New                  | 208          | 208          | PASS
+Page 2 Matrix            | Concrete SF                         | 1            | 1            | PASS
+Page 2 Matrix            | Concrete MF                         | 21           | 21           | PASS
+Page 2 Matrix            | Concrete ADU                        | 0            | 0            | PASS
+Page 2 Matrix            | Concrete Demolished                 | 0            | 0            | PASS
+Page 2 Matrix            | Concrete Net New                    | 22           | 22           | PASS
+Page 2 Matrix            | Hamilton SF                         | 0            | 0            | PASS
+Page 2 Matrix            | Hamilton MF                         | 0            | 0            | PASS
+Page 2 Matrix            | Hamilton ADU                        | 0            | 0            | PASS
+Page 2 Matrix            | Hamilton Demolished                 | 0            | 0            | PASS
+Page 2 Matrix            | Hamilton Net New                    | 0            | 0            | PASS
+Page 2 Matrix            | La Conner SF                        | 2            | 2            | PASS
+Page 2 Matrix            | La Conner MF                        | 0            | 0            | PASS
+Page 2 Matrix            | La Conner ADU                       | 1            | 1            | PASS
+Page 2 Matrix            | La Conner Demolished                | 0            | 0            | PASS
+Page 2 Matrix            | La Conner Net New                   | 3            | 3            | PASS
+Page 2 Matrix            | Lyman SF                            | 3            | 3            | PASS
+Page 2 Matrix            | Lyman MF                            | 0            | 0            | PASS
+Page 2 Matrix            | Lyman ADU                           | 0            | 0            | PASS
+Page 2 Matrix            | Lyman Demolished                    | 0            | 0            | PASS
+Page 2 Matrix            | Lyman Net New                       | 3            | 3            | PASS
+Page 2 Matrix            | Mount Vernon SF                     | 17           | 17           | PASS
+Page 2 Matrix            | Mount Vernon MF                     | 3            | 3            | PASS
+Page 2 Matrix            | Mount Vernon ADU                    | 3            | 3            | PASS
+Page 2 Matrix            | Mount Vernon Demolished             | 6            | 6            | PASS
+Page 2 Matrix            | Mount Vernon Net New                | 17           | 17           | PASS
+Page 2 Matrix            | Sedro-Woolley SF                    | 35           | 35           | PASS
+Page 2 Matrix            | Sedro-Woolley MF                    | 18           | 18           | PASS
+Page 2 Matrix            | Sedro-Woolley ADU                   | 3            | 3            | PASS
+Page 2 Matrix            | Sedro-Woolley Demolished            | 2            | 2            | PASS
+Page 2 Matrix            | Sedro-Woolley Net New               | 54           | 54           | PASS
+Page 2 Matrix            | Bay View Ridge UGA SF               | 12           | 12           | PASS
+Page 2 Matrix            | Bay View Ridge UGA MF               | 0            | 0            | PASS
+Page 2 Matrix            | Bay View Ridge UGA ADU              | 0            | 0            | PASS
+Page 2 Matrix            | Bay View Ridge UGA Demolished       | 0            | 0            | PASS
+Page 2 Matrix            | Bay View Ridge UGA Net New          | 12           | 12           | PASS
+Page 2 Matrix            | Swinomish UGA SF                    | 0            | 0            | PASS
+Page 2 Matrix            | Swinomish UGA MF                    | 0            | 0            | PASS
+Page 2 Matrix            | Swinomish UGA ADU                   | 0            | 0            | PASS
+Page 2 Matrix            | Swinomish UGA Demolished            | 0            | 0            | PASS
+Page 2 Matrix            | Swinomish UGA Net New               | 0            | 0            | PASS
+Page 2 Matrix            | Unincorporated Rural (outside UGAs) SF | 109          | 109          | PASS
+Page 2 Matrix            | Unincorporated Rural (outside UGAs) MF | 4            | 4            | PASS
+Page 2 Matrix            | Unincorporated Rural (outside UGAs) ADU | 37           | 37           | PASS
+Page 2 Matrix            | Unincorporated Rural (outside UGAs) Demolished | 3            | 3            | PASS
+Page 2 Matrix            | Unincorporated Rural (outside UGAs) Net New | 147          | 147          | PASS
+Page 2 Matrix Total      | Total SF                            | 202          | 202          | PASS
+Page 2 Matrix Total      | Total MF                            | 259          | 259          | PASS
+Page 2 Matrix Total      | Total ADU                           | 56           | 56           | PASS
+Page 2 Matrix Total      | Total Demolished                    | 27           | 27           | PASS
+Page 2 Matrix Total      | Total Net New                       | 490          | 490          | PASS
+Page 2 Stacked Area      | 1990 SF Units                       | 363          | 363          | PASS
+Page 2 Stacked Area      | 1990 MF Units                       | 397          | 397          | PASS
+Page 2 Stacked Area      | 1990 ADU Units                      | 0            | 0            | PASS
+Page 2 Stacked Area      | 1990 Gross Units                    | 760          | 760          | PASS
+Page 2 Stacked Area      | 1991 SF Units                       | 298          | 298          | PASS
+Page 2 Stacked Area      | 1991 MF Units                       | 380          | 380          | PASS
+Page 2 Stacked Area      | 1991 ADU Units                      | 0            | 0            | PASS
+Page 2 Stacked Area      | 1991 Gross Units                    | 678          | 678          | PASS
+Page 2 Stacked Area      | 1992 SF Units                       | 338          | 338          | PASS
+Page 2 Stacked Area      | 1992 MF Units                       | 246          | 246          | PASS
+Page 2 Stacked Area      | 1992 ADU Units                      | 0            | 0            | PASS
+Page 2 Stacked Area      | 1992 Gross Units                    | 584          | 584          | PASS
+Page 2 Stacked Area      | 1993 SF Units                       | 323          | 323          | PASS
+Page 2 Stacked Area      | 1993 MF Units                       | 75           | 75           | PASS
+Page 2 Stacked Area      | 1993 ADU Units                      | 0            | 0            | PASS
+Page 2 Stacked Area      | 1993 Gross Units                    | 398          | 398          | PASS
+Page 2 Stacked Area      | 1994 SF Units                       | 408          | 408          | PASS
+Page 2 Stacked Area      | 1994 MF Units                       | 183          | 183          | PASS
+Page 2 Stacked Area      | 1994 ADU Units                      | 0            | 0            | PASS
+Page 2 Stacked Area      | 1994 Gross Units                    | 591          | 591          | PASS
+Page 2 Stacked Area      | 1995 SF Units                       | 262          | 262          | PASS
+Page 2 Stacked Area      | 1995 MF Units                       | 145          | 145          | PASS
+Page 2 Stacked Area      | 1995 ADU Units                      | 0            | 0            | PASS
+Page 2 Stacked Area      | 1995 Gross Units                    | 407          | 407          | PASS
+Page 2 Stacked Area      | 1996 SF Units                       | 256          | 256          | PASS
+Page 2 Stacked Area      | 1996 MF Units                       | 329          | 329          | PASS
+Page 2 Stacked Area      | 1996 ADU Units                      | 0            | 0            | PASS
+Page 2 Stacked Area      | 1996 Gross Units                    | 585          | 585          | PASS
+Page 2 Stacked Area      | 1997 SF Units                       | 273          | 273          | PASS
+Page 2 Stacked Area      | 1997 MF Units                       | 91           | 91           | PASS
+Page 2 Stacked Area      | 1997 ADU Units                      | 0            | 0            | PASS
+Page 2 Stacked Area      | 1997 Gross Units                    | 364          | 364          | PASS
+Page 2 Stacked Area      | 1998 SF Units                       | 250          | 250          | PASS
+Page 2 Stacked Area      | 1998 MF Units                       | 108          | 108          | PASS
+Page 2 Stacked Area      | 1998 ADU Units                      | 0            | 0            | PASS
+Page 2 Stacked Area      | 1998 Gross Units                    | 358          | 358          | PASS
+Page 2 Stacked Area      | 1999 SF Units                       | 296          | 296          | PASS
+Page 2 Stacked Area      | 1999 MF Units                       | 247          | 247          | PASS
+Page 2 Stacked Area      | 1999 ADU Units                      | 0            | 0            | PASS
+Page 2 Stacked Area      | 1999 Gross Units                    | 543          | 543          | PASS
+Page 2 Stacked Area      | 2000 SF Units                       | 328          | 328          | PASS
+Page 2 Stacked Area      | 2000 MF Units                       | 176          | 176          | PASS
+Page 2 Stacked Area      | 2000 ADU Units                      | 0            | 0            | PASS
+Page 2 Stacked Area      | 2000 Gross Units                    | 504          | 504          | PASS
+Page 2 Stacked Area      | 2001 SF Units                       | 329          | 329          | PASS
+Page 2 Stacked Area      | 2001 MF Units                       | 252          | 252          | PASS
+Page 2 Stacked Area      | 2001 ADU Units                      | 0            | 0            | PASS
+Page 2 Stacked Area      | 2001 Gross Units                    | 581          | 581          | PASS
+Page 2 Stacked Area      | 2002 SF Units                       | 296          | 296          | PASS
+Page 2 Stacked Area      | 2002 MF Units                       | 307          | 307          | PASS
+Page 2 Stacked Area      | 2002 ADU Units                      | 0            | 0            | PASS
+Page 2 Stacked Area      | 2002 Gross Units                    | 603          | 603          | PASS
+Page 2 Stacked Area      | 2003 SF Units                       | 413          | 413          | PASS
+Page 2 Stacked Area      | 2003 MF Units                       | 245          | 245          | PASS
+Page 2 Stacked Area      | 2003 ADU Units                      | 0            | 0            | PASS
+Page 2 Stacked Area      | 2003 Gross Units                    | 658          | 658          | PASS
+Page 2 Stacked Area      | 2004 SF Units                       | 499          | 499          | PASS
+Page 2 Stacked Area      | 2004 MF Units                       | 181          | 181          | PASS
+Page 2 Stacked Area      | 2004 ADU Units                      | 0            | 0            | PASS
+Page 2 Stacked Area      | 2004 Gross Units                    | 680          | 680          | PASS
+Page 2 Stacked Area      | 2005 SF Units                       | 466          | 466          | PASS
+Page 2 Stacked Area      | 2005 MF Units                       | 125          | 125          | PASS
+Page 2 Stacked Area      | 2005 ADU Units                      | 0            | 0            | PASS
+Page 2 Stacked Area      | 2005 Gross Units                    | 591          | 591          | PASS
+Page 2 Stacked Area      | 2006 SF Units                       | 619          | 619          | PASS
+Page 2 Stacked Area      | 2006 MF Units                       | 206          | 206          | PASS
+Page 2 Stacked Area      | 2006 ADU Units                      | 0            | 0            | PASS
+Page 2 Stacked Area      | 2006 Gross Units                    | 825          | 825          | PASS
+Page 2 Stacked Area      | 2007 SF Units                       | 502          | 502          | PASS
+Page 2 Stacked Area      | 2007 MF Units                       | 105          | 105          | PASS
+Page 2 Stacked Area      | 2007 ADU Units                      | 0            | 0            | PASS
+Page 2 Stacked Area      | 2007 Gross Units                    | 607          | 607          | PASS
+Page 2 Stacked Area      | 2008 SF Units                       | 485          | 485          | PASS
+Page 2 Stacked Area      | 2008 MF Units                       | 71           | 71           | PASS
+Page 2 Stacked Area      | 2008 ADU Units                      | 0            | 0            | PASS
+Page 2 Stacked Area      | 2008 Gross Units                    | 556          | 556          | PASS
+Page 2 Stacked Area      | 2009 SF Units                       | 248          | 248          | PASS
+Page 2 Stacked Area      | 2009 MF Units                       | 47           | 47           | PASS
+Page 2 Stacked Area      | 2009 ADU Units                      | 0            | 0            | PASS
+Page 2 Stacked Area      | 2009 Gross Units                    | 295          | 295          | PASS
+Page 2 Stacked Area      | 2010 SF Units                       | 140          | 140          | PASS
+Page 2 Stacked Area      | 2010 MF Units                       | 94           | 94           | PASS
+Page 2 Stacked Area      | 2010 ADU Units                      | 0            | 0            | PASS
+Page 2 Stacked Area      | 2010 Gross Units                    | 234          | 234          | PASS
+Page 2 Stacked Area      | 2011 SF Units                       | 222          | 222          | PASS
+Page 2 Stacked Area      | 2011 MF Units                       | 16           | 16           | PASS
+Page 2 Stacked Area      | 2011 ADU Units                      | 2            | 2            | PASS
+Page 2 Stacked Area      | 2011 Gross Units                    | 240          | 240          | PASS
+Page 2 Stacked Area      | 2012 SF Units                       | 212          | 212          | PASS
+Page 2 Stacked Area      | 2012 MF Units                       | 2            | 2            | PASS
+Page 2 Stacked Area      | 2012 ADU Units                      | 5            | 5            | PASS
+Page 2 Stacked Area      | 2012 Gross Units                    | 219          | 219          | PASS
+Page 2 Stacked Area      | 2013 SF Units                       | 339          | 339          | PASS
+Page 2 Stacked Area      | 2013 MF Units                       | 0            | 0            | PASS
+Page 2 Stacked Area      | 2013 ADU Units                      | 1            | 1            | PASS
+Page 2 Stacked Area      | 2013 Gross Units                    | 340          | 340          | PASS
+Page 2 Stacked Area      | 2014 SF Units                       | 272          | 272          | PASS
+Page 2 Stacked Area      | 2014 MF Units                       | 30           | 30           | PASS
+Page 2 Stacked Area      | 2014 ADU Units                      | 4            | 4            | PASS
+Page 2 Stacked Area      | 2014 Gross Units                    | 306          | 306          | PASS
+Page 2 Stacked Area      | 2015 SF Units                       | 249          | 249          | PASS
+Page 2 Stacked Area      | 2015 MF Units                       | 37           | 37           | PASS
+Page 2 Stacked Area      | 2015 ADU Units                      | 1            | 1            | PASS
+Page 2 Stacked Area      | 2015 Gross Units                    | 287          | 287          | PASS
+Page 2 Stacked Area      | 2016 SF Units                       | 316          | 316          | PASS
+Page 2 Stacked Area      | 2016 MF Units                       | 77           | 77           | PASS
+Page 2 Stacked Area      | 2016 ADU Units                      | 5            | 5            | PASS
+Page 2 Stacked Area      | 2016 Gross Units                    | 398          | 398          | PASS
+Page 2 Stacked Area      | 2017 SF Units                       | 386          | 386          | PASS
+Page 2 Stacked Area      | 2017 MF Units                       | 110          | 110          | PASS
+Page 2 Stacked Area      | 2017 ADU Units                      | 9            | 9            | PASS
+Page 2 Stacked Area      | 2017 Gross Units                    | 505          | 505          | PASS
+Page 2 Stacked Area      | 2018 SF Units                       | 399          | 399          | PASS
+Page 2 Stacked Area      | 2018 MF Units                       | 128          | 128          | PASS
+Page 2 Stacked Area      | 2018 ADU Units                      | 15           | 15           | PASS
+Page 2 Stacked Area      | 2018 Gross Units                    | 542          | 542          | PASS
+Page 2 Stacked Area      | 2019 SF Units                       | 334          | 334          | PASS
+Page 2 Stacked Area      | 2019 MF Units                       | 116          | 116          | PASS
+Page 2 Stacked Area      | 2019 ADU Units                      | 4            | 4            | PASS
+Page 2 Stacked Area      | 2019 Gross Units                    | 454          | 454          | PASS
+Page 2 Stacked Area      | 2020 SF Units                       | 397          | 397          | PASS
+Page 2 Stacked Area      | 2020 MF Units                       | 109          | 109          | PASS
+Page 2 Stacked Area      | 2020 ADU Units                      | 8            | 8            | PASS
+Page 2 Stacked Area      | 2020 Gross Units                    | 514          | 514          | PASS
+Page 2 Stacked Area      | 2021 SF Units                       | 241          | 241          | PASS
+Page 2 Stacked Area      | 2021 MF Units                       | 301          | 301          | PASS
+Page 2 Stacked Area      | 2021 ADU Units                      | 36           | 36           | PASS
+Page 2 Stacked Area      | 2021 Gross Units                    | 578          | 578          | PASS
+Page 2 Stacked Area      | 2022 SF Units                       | 332          | 332          | PASS
+Page 2 Stacked Area      | 2022 MF Units                       | 338          | 338          | PASS
+Page 2 Stacked Area      | 2022 ADU Units                      | 35           | 35           | PASS
+Page 2 Stacked Area      | 2022 Gross Units                    | 705          | 705          | PASS
+Page 2 Stacked Area      | 2023 SF Units                       | 158          | 158          | PASS
+Page 2 Stacked Area      | 2023 MF Units                       | 462          | 462          | PASS
+Page 2 Stacked Area      | 2023 ADU Units                      | 51           | 51           | PASS
+Page 2 Stacked Area      | 2023 Gross Units                    | 671          | 671          | PASS
+Page 2 Stacked Area      | 2024 SF Units                       | 154          | 154          | PASS
+Page 2 Stacked Area      | 2024 MF Units                       | 425          | 425          | PASS
+Page 2 Stacked Area      | 2024 ADU Units                      | 54           | 54           | PASS
+Page 2 Stacked Area      | 2024 Gross Units                    | 633          | 633          | PASS
+Page 2 Stacked Area      | 2025 SF Units                       | 202          | 202          | PASS
+Page 2 Stacked Area      | 2025 MF Units                       | 259          | 259          | PASS
+Page 2 Stacked Area      | 2025 ADU Units                      | 56           | 56           | PASS
+Page 2 Stacked Area      | 2025 Gross Units                    | 517          | 517          | PASS
+Page 2 Stacked Area      | 2026 SF Units                       | 145          | 145          | PASS
+Page 2 Stacked Area      | 2026 MF Units                       | 64           | 64           | PASS
+Page 2 Stacked Area      | 2026 ADU Units                      | 31           | 31           | PASS
+Page 2 Stacked Area      | 2026 Gross Units                    | 240          | 240          | PASS
+Page 2 AMI               | Anacortes AMI Units                 | 31           | 31           | PASS
+Page 2 AMI               | Burlington AMI Units                | 217          | 217          | PASS
+Page 2 AMI               | Mount Vernon AMI Units              | 23           | 23           | PASS
+Page 2 AMI               | Sedro-Woolley AMI Units             | 56           | 56           | PASS
+Page 2 AMI               | Total Preliminary AMI Units         | 327          | 327          | PASS
+Page 2 AMI Bar Width     | Anacortes Bar Width %               | 14.3         | 14.3         | PASS
+Page 2 AMI Bar Width     | Burlington Bar Width %              | 100.0        | 100.0        | PASS
+Page 2 AMI Bar Width     | Mount Vernon Bar Width %            | 10.6         | 10.6         | PASS
+Page 2 AMI Bar Width     | Sedro-Woolley Bar Width %           | 25.8         | 25.8         | PASS
+Page 2 AMI Wording       | No reporting jurisdictions wording  | False        | False        | PASS
+Page 2 AMI Wording       | Preliminary Commerce Notice         | True         | True         | PASS
+Page 3 Pop Progress      | Unincorporated Rural (outside UGAs) Pop Level | 49,102       | 49,102       | PASS
+Page 3 Pop Progress      | Unincorporated Rural (outside UGAs) Target Level | 48,381       | 48,381       | PASS
+Page 3 Pop Progress      | Mount Vernon Pop Level              | 36,050       | 36,050       | PASS
+Page 3 Pop Progress      | Mount Vernon Target Level           | 46,460       | 46,460       | PASS
+Page 3 Pop Progress      | Anacortes Pop Level                 | 18,350       | 18,350       | PASS
+Page 3 Pop Progress      | Anacortes Target Level              | 22,971       | 22,971       | PASS
+Page 3 Pop Progress      | Sedro-Woolley Pop Level             | 13,360       | 13,360       | PASS
+Page 3 Pop Progress      | Sedro-Woolley Target Level          | 18,582       | 18,582       | PASS
+Page 3 Pop Progress      | Burlington Pop Level                | 10,910       | 10,910       | PASS
+Page 3 Pop Progress      | Burlington Target Level             | 16,930       | 16,930       | PASS
+Page 3 Pop Progress      | Swinomish UGA Pop Level             | 2,567        | 2,567        | PASS
+Page 3 Pop Progress      | Swinomish UGA Target Level          | 2,764        | 2,764        | PASS
+Page 3 Pop Progress      | Bay View Ridge UGA Pop Level        | 1,711        | 1,711        | PASS
+Page 3 Pop Progress      | Bay View Ridge UGA Target Level     | 1,694        | 1,694        | PASS
+Page 3 Pop Progress      | La Conner Pop Level                 | 1,000        | 1,000        | PASS
+Page 3 Pop Progress      | La Conner Target Level              | 1,191        | 1,191        | PASS
+Page 3 Pop Progress      | Concrete Pop Level                  | 815          | 815          | PASS
+Page 3 Pop Progress      | Concrete Target Level               | 1,130        | 1,130        | PASS
+Page 3 Pop Progress      | Lyman Pop Level                     | 440          | 440          | PASS
+Page 3 Pop Progress      | Lyman Target Level                  | 425          | 425          | PASS
+Page 3 Pop Progress      | Hamilton Pop Level                  | 295          | 295          | PASS
+Page 3 Pop Progress      | Hamilton Target Level               | 302          | 302          | PASS
+Page 3 Chart             | YoY Countywide Pop Change           | 1,300        | 1,300        | PASS
+Page 3 YoY               | Burlington YoY Pop Change           | +500         | +500         | PASS
+Page 3 YoY               | Sedro-Woolley YoY Pop Change        | +280         | +280         | PASS
+Page 3 YoY               | Mount Vernon YoY Pop Change         | +250         | +250         | PASS
+Page 3 YoY               | Unincorporated Rural (outside UGAs) YoY Pop Change | +156         | +156         | PASS
+Page 3 YoY               | Anacortes YoY Pop Change            | +80          | +80          | PASS
+Page 3 YoY               | Bay View Ridge UGA YoY Pop Change   | +17          | +17          | PASS
+Page 3 YoY               | Lyman YoY Pop Change                | +10          | +10          | PASS
+Page 3 YoY               | Concrete YoY Pop Change             | +5           | +5           | PASS
+Page 3 YoY               | La Conner YoY Pop Change            | +5           | +5           | PASS
+Page 3 YoY               | Hamilton YoY Pop Change             | 0            | 0            | PASS
+Page 3 YoY               | Swinomish UGA YoY Pop Change        | -3           | -3           | PASS
+Page 3 Employment Table  | Anacortes 2022 Base                 | 9,503        | 9,503        | PASS
+Page 3 Employment Table  | Anacortes 2045 Target               | 12,648       | 12,648       | PASS
+Page 3 Employment Table  | Burlington 2022 Base                | 11,640       | 11,640       | PASS
+Page 3 Employment Table  | Burlington 2045 Target              | 17,410       | 17,410       | PASS
+Page 3 Employment Table  | Concrete 2022 Base                  | 391          | 391          | PASS
+Page 3 Employment Table  | Concrete 2045 Target                | 506          | 506          | PASS
+Page 3 Employment Table  | Hamilton 2022 Base                  | 466          | 466          | PASS
+Page 3 Employment Table  | Hamilton 2045 Target                | 489          | 489          | PASS
+Page 3 Employment Table  | La Conner 2022 Base                 | 1,020        | 1,020        | PASS
+Page 3 Employment Table  | La Conner 2045 Target               | 1,905        | 1,905        | PASS
+Page 3 Employment Table  | Lyman 2022 Base                     | 56           | 56           | PASS
+Page 3 Employment Table  | Lyman 2045 Target                   | 76           | 76           | PASS
+Page 3 Employment Table  | Mount Vernon 2022 Base              | 18,781       | 18,781       | PASS
+Page 3 Employment Table  | Mount Vernon 2045 Target            | 23,559       | 23,559       | PASS
+Page 3 Employment Table  | Sedro-Woolley 2022 Base             | 4,640        | 4,640        | PASS
+Page 3 Employment Table  | Sedro-Woolley 2045 Target           | 7,040        | 7,040        | PASS
+Page 3 Employment Table  | Bay View Ridge UGA 2022 Base        | 2,962        | 2,962        | PASS
+Page 3 Employment Table  | Bay View Ridge UGA 2045 Target      | 4,901        | 4,901        | PASS
+Page 3 Employment Table  | Swinomish UGA 2022 Base             | 1,140        | 1,140        | PASS
+Page 3 Employment Table  | Swinomish UGA 2045 Target           | 1,579        | 1,579        | PASS
+Page 3 Employment Table  | Unincorporated Rural (outside UGAs) 2022 Base | 8,972        | 8,972        | PASS
+Page 3 Employment Table  | Unincorporated Rural (outside UGAs) 2045 Target | 9,987        | 9,987        | PASS
+Page 3 Employment Total  | Countywide 2022 Baseline            | 59,571       | 59,571       | PASS
+Page 3 Employment Total  | Countywide 2045 Target              | 80,100       | 80,100       | PASS
+Page 3 QCEW Segmenting   | Segment 1 Polyline Point Count      | 21           | 21           | PASS
+Page 3 QCEW Segmenting   | Polyline Breaks at Gaps (No points past 2019) | False        | False        | PASS
+Page 3 QCEW Segmenting   | Total QCEW Data Nodes Count         | 23           | 23           | PASS
+Page 3 QCEW Series       | 1999 Covered Employment             | 41700        | 41700        | PASS
+Page 3 QCEW Series       | 2000 Covered Employment             | 43881        | 43881        | PASS
+Page 3 QCEW Series       | 2001 Covered Employment             | 43964        | 43964        | PASS
+Page 3 QCEW Series       | 2002 Covered Employment             | 43662        | 43662        | PASS
+Page 3 QCEW Series       | 2003 Covered Employment             | 44505        | 44505        | PASS
+Page 3 QCEW Series       | 2004 Covered Employment             | 45353        | 45353        | PASS
+Page 3 QCEW Series       | 2005 Covered Employment             | 46751        | 46751        | PASS
+Page 3 QCEW Series       | 2006 Covered Employment             | 47851        | 47851        | PASS
+Page 3 QCEW Series       | 2007 Covered Employment             | 48964        | 48964        | PASS
+Page 3 QCEW Series       | 2008 Covered Employment             | 48695        | 48695        | PASS
+Page 3 QCEW Series       | 2009 Covered Employment             | 45908        | 45908        | PASS
+Page 3 QCEW Series       | 2010 Covered Employment             | 45502        | 45502        | PASS
+Page 3 QCEW Series       | 2011 Covered Employment             | 45395        | 45395        | PASS
+Page 3 QCEW Series       | 2012 Covered Employment             | 45803        | 45803        | PASS
+Page 3 QCEW Series       | 2013 Covered Employment             | 47272        | 47272        | PASS
+Page 3 QCEW Series       | 2014 Covered Employment             | 48300        | 48300        | PASS
+Page 3 QCEW Series       | 2015 Covered Employment             | 48582        | 48582        | PASS
+Page 3 QCEW Series       | 2016 Covered Employment             | 49585        | 49585        | PASS
+Page 3 QCEW Series       | 2017 Covered Employment             | 50695        | 50695        | PASS
+Page 3 QCEW Series       | 2018 Covered Employment             | 52042        | 52042        | PASS
+Page 3 QCEW Series       | 2019 Covered Employment             | 52709        | 52709        | PASS
+Page 3 QCEW Series       | 2022 Covered Employment             | 51597        | 51597        | PASS
+Page 3 QCEW Series       | 2025 Covered Employment             | 54148        | 54148        | PASS
+Page 3 QCEW              | 2022 QCEW Marker Label              | 51,597       | 51,597       | PASS
+Page 3 QCEW              | 2025 QCEW Endpoint Label            | 54,148       | 54,148       | PASS
+Page 3 QCEW Disclosure   | Gap Disclosure Note Present         | True         | True         | PASS
+Page 4 Table             | Cities Subtotal Population          | 81,220       | 81,220       | PASS
+Page 4 Table             | Cities Subtotal Share %             | 60.3%        | 60.3%        | PASS
+Page 4 Table             | Anacortes Population                | 18,350       | 18,350       | PASS
+Page 4 Table             | Anacortes Share %                   | 13.6%        | 13.6%        | PASS
+Page 4 Table             | Burlington Population               | 10,910       | 10,910       | PASS
+Page 4 Table             | Burlington Share %                  | 8.1%         | 8.1%         | PASS
+Page 4 Table             | Concrete Population                 | 815          | 815          | PASS
+Page 4 Table             | Concrete Share %                    | 0.6%         | 0.6%         | PASS
+Page 4 Table             | Hamilton Population                 | 295          | 295          | PASS
+Page 4 Table             | Hamilton Share %                    | 0.2%         | 0.2%         | PASS
+Page 4 Table             | La Conner Population                | 1,000        | 1,000        | PASS
+Page 4 Table             | La Conner Share %                   | 0.7%         | 0.7%         | PASS
+Page 4 Table             | Lyman Population                    | 440          | 440          | PASS
+Page 4 Table             | Lyman Share %                       | 0.3%         | 0.3%         | PASS
+Page 4 Table             | Mount Vernon Population             | 36,050       | 36,050       | PASS
+Page 4 Table             | Mount Vernon Share %                | 26.8%        | 26.8%        | PASS
+Page 4 Table             | Sedro-Woolley Population            | 13,360       | 13,360       | PASS
+Page 4 Table             | Sedro-Woolley Share %               | 9.9%         | 9.9%         | PASS
+Page 4 Table             | UGAs Subtotal Population            | 4,278        | 4,278        | PASS
+Page 4 Table             | UGAs Subtotal Share %               | 3.2%         | 3.2%         | PASS
+Page 4 Table             | Bay View Ridge UGA Population       | 1,711        | 1,711        | PASS
+Page 4 Table             | Bay View Ridge UGA Share %          | 1.3%         | 1.3%         | PASS
+Page 4 Table             | Swinomish UGA Population            | 2,567        | 2,567        | PASS
+Page 4 Table             | Swinomish UGA Share %               | 1.9%         | 1.9%         | PASS
+Page 4 Table             | Rural Subtotal Population           | 49,102       | 49,102       | PASS
+Page 4 Table             | Rural Subtotal Share %              | 36.5%        | 36.5%        | PASS
+Page 4 Table             | Rural Entity Population             | 49,102       | 49,102       | PASS
+Page 4 Table             | Rural Entity Share %                | 36.5%        | 36.5%        | PASS
+Page 4 Table             | Total County Population             | 134,600      | 134,600      | PASS
+Page 4 Table             | Total County Share %                | 100.0%       | 100.0%       | PASS
+Page 4 Map               | Map Title Placeholder               | Approximate Centroids (Leaflet placeholder) | Approximate Centroids (Leaflet placeholder) | PASS
+Page 4 Share Comparison  | Unincorporated Rural (outside UGAs) Pop Share % | 36.5         | 36.5         | PASS
+Page 4 Share Comparison  | Unincorporated Rural (outside UGAs) Housing Share % | 20.0         | 20.0         | PASS
+Page 4 Share Comparison  | Mount Vernon Pop Share %            | 26.8         | 26.8         | PASS
+Page 4 Share Comparison  | Mount Vernon Housing Share %        | 29.7         | 29.7         | PASS
+Page 4 Share Comparison  | Anacortes Pop Share %               | 13.6         | 13.6         | PASS
+Page 4 Share Comparison  | Anacortes Housing Share %           | 16.9         | 16.9         | PASS
+Page 4 Share Comparison  | Sedro-Woolley Pop Share %           | 9.9          | 9.9          | PASS
+Page 4 Share Comparison  | Sedro-Woolley Housing Share %       | 15.2         | 15.2         | PASS
+Page 4 Share Comparison  | Burlington Pop Share %              | 8.1          | 8.1          | PASS
+Page 4 Share Comparison  | Burlington Housing Share %          | 16.3         | 16.3         | PASS
+Page 4 Footer            | Cities in Footer                    | True         | True         | PASS
+Page 4 Footer            | UGAs in Footer                      | True         | True         | PASS
+Page 4 Footer            | Rural in Footer                     | True         | True         | PASS
+Page 4 Footer            | Total in Footer                     | True         | True         | PASS
+===============================================================================================
+TOTAL CHECKS: 456 | PASSED: 456 | FAILED: 0
+===============================================================================================
+ALL CELLS, METRICS AND FIGURES SUCCESSFULLY MATCH THE PROCESSED CSVS 100%!

@@ -618,6 +618,23 @@
       border: 1.5px solid #ffffff;
       display: inline-block;
     }
+
+    .leaflet-permanent-label {
+      pointer-events: none;
+    }
+    .leaflet-permanent-label span {
+      font-family: var(--font-family);
+      font-size: 9.5px;
+      font-weight: 700;
+      color: #0f172a;
+      background: rgba(255, 255, 255, 0.92);
+      padding: 1px 5px;
+      border-radius: 3px;
+      border: 1px solid #cbd5e1;
+      white-space: nowrap;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+      display: inline-block;
+    }
   </style>
 </head>
 <body>
@@ -1005,30 +1022,10 @@
             </div>
             <div class="visual-body">
               <svg class="chart-svg" viewBox="0 0 580 200">
-                <path d="M 55 170 L -618.3 37.0 L -584.7 51.3 L -551.0 67.8 L -517.3 100.3 L -483.7 66.6 L -450.0 98.8 L -416.3 67.6 L -382.7 106.3 L -349.0 107.3 L -315.3 75.0 L -281.7 81.8 L -248.0 68.3 L -214.3 64.5 L -180.7 54.8 L -147.0 51.0 L -113.3 66.6 L -79.7 25.6 L -46.0 63.8 L -12.3 72.7 L 21.3 118.4 L 55.0 129.1 L 88.7 128.0 L 122.3 131.7 L 156.0 110.5 L 189.7 116.4 L 223.3 119.8 L 257.0 100.3 L 290.7 81.6 L 324.3 75.2 L 358.0 90.5 L 391.7 80.1 L 425.3 68.8 L 459.0 46.6 L 492.7 52.6 L 526.3 59.2 L 560.0 79.5 L 593.7 128.0 L 560 170 Z" fill="#94a3b8" opacity="0.6" />
-                <path d="M 55 170 L -618.3 37.0 L -584.7 51.3 L -551.0 67.8 L -517.3 100.3 L -483.7 66.6 L -450.0 98.8 L -416.3 67.6 L -382.7 106.3 L -349.0 107.3 L -315.3 75.0 L -281.7 81.8 L -248.0 68.3 L -214.3 64.5 L -180.7 54.8 L -147.0 51.0 L -113.3 66.6 L -79.7 25.6 L -46.0 63.8 L -12.3 72.7 L 21.3 118.4 L 55.0 129.1 L 88.7 128.3 L 122.3 132.6 L 156.0 110.7 L 189.7 117.2 L 223.3 120.0 L 257.0 101.2 L 290.7 83.2 L 324.3 77.8 L 358.0 91.2 L 391.7 81.5 L 425.3 75.2 L 459.0 52.8 L 492.7 61.5 L 526.3 68.7 L 560.0 89.3 L 593.7 133.4 L 560 170 Z" fill="#2563eb" opacity="0.85" />
-                <path d="M 55 170 L -618.3 106.5 L -584.7 117.8 L -551.0 110.8 L -517.3 113.5 L -483.7 98.6 L -450.0 124.2 L -416.3 125.2 L -382.7 122.2 L -349.0 126.2 L -315.3 118.2 L -281.7 112.6 L -248.0 112.4 L -214.3 118.2 L -180.7 97.7 L -147.0 82.7 L -113.3 88.5 L -79.7 61.7 L -46.0 82.2 L -12.3 85.1 L 21.3 126.6 L 55.0 145.5 L 88.7 131.2 L 122.3 132.9 L 156.0 110.7 L 189.7 122.4 L 223.3 126.4 L 257.0 114.7 L 290.7 102.5 L 324.3 100.2 L 358.0 111.6 L 391.7 100.5 L 425.3 127.8 L 459.0 111.9 L 492.7 142.3 L 526.3 143.1 L 560.0 134.7 L 593.7 144.6 L 560 170 Z" fill="#004B87" opacity="0.95" />
-                <g class="area-data-point" data-year="1990" data-sf="363" data-mf="397" data-adu="0" data-gross="760"></g>
-<g class="area-data-point" data-year="1991" data-sf="298" data-mf="380" data-adu="0" data-gross="678"></g>
-<g class="area-data-point" data-year="1992" data-sf="338" data-mf="246" data-adu="0" data-gross="584"></g>
-<g class="area-data-point" data-year="1993" data-sf="323" data-mf="75" data-adu="0" data-gross="398"></g>
-<g class="area-data-point" data-year="1994" data-sf="408" data-mf="183" data-adu="0" data-gross="591"></g>
-<g class="area-data-point" data-year="1995" data-sf="262" data-mf="145" data-adu="0" data-gross="407"></g>
-<g class="area-data-point" data-year="1996" data-sf="256" data-mf="329" data-adu="0" data-gross="585"></g>
-<g class="area-data-point" data-year="1997" data-sf="273" data-mf="91" data-adu="0" data-gross="364"></g>
-<g class="area-data-point" data-year="1998" data-sf="250" data-mf="108" data-adu="0" data-gross="358"></g>
-<g class="area-data-point" data-year="1999" data-sf="296" data-mf="247" data-adu="0" data-gross="543"></g>
-<g class="area-data-point" data-year="2000" data-sf="328" data-mf="176" data-adu="0" data-gross="504"></g>
-<g class="area-data-point" data-year="2001" data-sf="329" data-mf="252" data-adu="0" data-gross="581"></g>
-<g class="area-data-point" data-year="2002" data-sf="296" data-mf="307" data-adu="0" data-gross="603"></g>
-<g class="area-data-point" data-year="2003" data-sf="413" data-mf="245" data-adu="0" data-gross="658"></g>
-<g class="area-data-point" data-year="2004" data-sf="499" data-mf="181" data-adu="0" data-gross="680"></g>
-<g class="area-data-point" data-year="2005" data-sf="466" data-mf="125" data-adu="0" data-gross="591"></g>
-<g class="area-data-point" data-year="2006" data-sf="619" data-mf="206" data-adu="0" data-gross="825"></g>
-<g class="area-data-point" data-year="2007" data-sf="502" data-mf="105" data-adu="0" data-gross="607"></g>
-<g class="area-data-point" data-year="2008" data-sf="485" data-mf="71" data-adu="0" data-gross="556"></g>
-<g class="area-data-point" data-year="2009" data-sf="248" data-mf="47" data-adu="0" data-gross="295"></g>
-<g class="area-data-point" data-year="2010" data-sf="140" data-mf="94" data-adu="0" data-gross="234"></g>
+                <path d="M 55 170 L 55.0 129.1 L 88.7 128.0 L 122.3 131.7 L 156.0 110.5 L 189.7 116.4 L 223.3 119.8 L 257.0 100.3 L 290.7 81.6 L 324.3 75.2 L 358.0 90.5 L 391.7 80.1 L 425.3 68.8 L 459.0 46.6 L 492.7 52.6 L 526.3 59.2 L 560.0 79.5 L 560 170 Z" fill="#94a3b8" opacity="0.6" />
+                <path d="M 55 170 L 55.0 129.1 L 88.7 128.3 L 122.3 132.6 L 156.0 110.7 L 189.7 117.2 L 223.3 120.0 L 257.0 101.2 L 290.7 83.2 L 324.3 77.8 L 358.0 91.2 L 391.7 81.5 L 425.3 75.2 L 459.0 52.8 L 492.7 61.5 L 526.3 68.7 L 560.0 89.3 L 560 170 Z" fill="#2563eb" opacity="0.85" />
+                <path d="M 55 170 L 55.0 145.5 L 88.7 131.2 L 122.3 132.9 L 156.0 110.7 L 189.7 122.4 L 223.3 126.4 L 257.0 114.7 L 290.7 102.5 L 324.3 100.2 L 358.0 111.6 L 391.7 100.5 L 425.3 127.8 L 459.0 111.9 L 492.7 142.3 L 526.3 143.1 L 560.0 134.7 L 560 170 Z" fill="#004B87" opacity="0.95" />
+                <g class="area-data-point" data-year="2010" data-sf="140" data-mf="94" data-adu="0" data-gross="234"></g>
 <g class="area-data-point" data-year="2011" data-sf="222" data-mf="16" data-adu="2" data-gross="240"></g>
 <g class="area-data-point" data-year="2012" data-sf="212" data-mf="2" data-adu="5" data-gross="219"></g>
 <g class="area-data-point" data-year="2013" data-sf="339" data-mf="0" data-adu="1" data-gross="340"></g>
@@ -1044,7 +1041,6 @@
 <g class="area-data-point" data-year="2023" data-sf="158" data-mf="462" data-adu="51" data-gross="671"></g>
 <g class="area-data-point" data-year="2024" data-sf="154" data-mf="425" data-adu="54" data-gross="633"></g>
 <g class="area-data-point" data-year="2025" data-sf="202" data-mf="259" data-adu="56" data-gross="517"></g>
-<g class="area-data-point" data-year="2026" data-sf="145" data-mf="64" data-adu="31" data-gross="240"></g>
                 <line x1="55" y1="170" x2="560" y2="170" class="axis-line" />
                 <line x1="55" y1="30" x2="55" y2="170" class="axis-line" />
                 <!-- Y-axis labels placed left of axis (x=48, text-anchor=end) -->
@@ -1080,7 +1076,7 @@
         </div>
 
         <!-- Bottom Row: AMI Targets & Permitting Matrix -->
-        <div class="grid-2col-split" style="height: 375px;">
+        <div class="grid-2col-split" style="min-height: 350px;">
           <div class="visual-container">
             <div class="visual-title">Preliminary Allocated Units by Jurisdiction</div>
             <div class="visual-subtitle">[PRELIMINARY: Commerce default allocation (Exhibit 12). Local jurisdiction datasheets due Oct 20, 2026; not jurisdiction-verified]</div>
@@ -1115,6 +1111,7 @@
               </div>
               <div class="info-callout">
                 <div><strong>Notice:</strong> Preliminary: Commerce default allocation (Exhibit 12). Local jurisdiction datasheets due Oct 20, 2026; not jurisdiction-verified. Allocations shown: Anacortes 31, Burlington 217, Mount Vernon 23, Sedro-Woolley 56 = 327 total units.</div>
+                <div style="margin-top: 6px; font-weight: 600; color: #1e293b; font-size: 10px;">Total preliminary allocation shown: 327 units (4 jurisdictions); not jurisdiction-verified</div>
               </div>
             </div>
           </div>
@@ -1772,6 +1769,14 @@
         const markersData = [{"id": "JUR-01", "name": "Anacortes", "type": "Incorporated City/Town", "cat": "City", "color": "#004B87", "lat": 48.5126, "lon": -122.6127, "pop": 18350, "share": 13.63298662704309, "htgt": 2942}, {"id": "JUR-02", "name": "Burlington", "type": "Incorporated City/Town", "cat": "City", "color": "#004B87", "lat": 48.4757, "lon": -122.3254, "pop": 10910, "share": 8.105497771173848, "htgt": 2843}, {"id": "JUR-03", "name": "Concrete", "type": "Incorporated City/Town", "cat": "City", "color": "#004B87", "lat": 48.5393, "lon": -121.7471, "pop": 815, "share": 0.6054977711738485, "htgt": 107}, {"id": "JUR-04", "name": "Hamilton", "type": "Incorporated City/Town", "cat": "City", "color": "#004B87", "lat": 48.5246, "lon": -121.9868, "pop": 295, "share": 0.21916790490341753, "htgt": 0}, {"id": "JUR-05", "name": "La Conner", "type": "Incorporated City/Town", "cat": "City", "color": "#004B87", "lat": 48.3943, "lon": -122.4957, "pop": 1000, "share": 0.7429420505200593, "htgt": 124}, {"id": "JUR-06", "name": "Lyman", "type": "Incorporated City/Town", "cat": "City", "color": "#004B87", "lat": 48.5251, "lon": -122.0621, "pop": 440, "share": 0.32689450222882616, "htgt": 0}, {"id": "JUR-07", "name": "Mount Vernon", "type": "Incorporated City/Town", "cat": "City", "color": "#004B87", "lat": 48.4212, "lon": -122.334, "pop": 36050, "share": 26.783060921248143, "htgt": 5180}, {"id": "JUR-08", "name": "Sedro-Woolley", "type": "Incorporated City/Town", "cat": "City", "color": "#004B87", "lat": 48.5039, "lon": -122.2363, "pop": 13360, "share": 9.925705794947994, "htgt": 2646}, {"id": "JUR-09", "name": "Bay View Ridge UGA", "type": "Urban Growth Area (UGA)", "cat": "UGA", "color": "#2563eb", "lat": 48.4717, "lon": -122.4239, "pop": 1711, "share": 1.2711738484398216, "htgt": 0}, {"id": "JUR-10", "name": "Swinomish UGA", "type": "Urban Growth Area (UGA)", "cat": "UGA", "color": "#2563eb", "lat": 48.4069, "lon": -122.5186, "pop": 2567, "share": 1.9071322436849927, "htgt": 118}, {"id": "JUR-11", "name": "Unincorporated Rural (outside UGAs)", "type": "Unincorporated Rural Area", "cat": "Rural", "color": "#64748b", "lat": 48.48, "lon": -121.8, "pop": 49102, "share": 36.47994056463596, "htgt": 3490}];
         window.markersGroup = L.featureGroup();
 
+        const permLabels = {
+          'Mount Vernon': { anchor: [55, -12], text: 'Mount Vernon' },
+          'Anacortes': { anchor: [-12, 8], text: 'Anacortes' },
+          'Burlington': { anchor: [75, 8], text: 'Burlington' },
+          'Sedro-Woolley': { anchor: [-12, 8], text: 'Sedro-Woolley' },
+          'Unincorporated Rural (outside UGAs)': { anchor: [55, -14], text: 'Unincorporated Rural' }
+        };
+
         markersData.forEach(m => {
           let r = 7;
           if (m.pop >= 30000) r = 18;
@@ -1806,8 +1811,22 @@
             </div>
           `;
           circle.bindPopup(popupContent);
-          circle.bindTooltip(`<b>${m.name}</b><br>${m.pop.toLocaleString()}`, { direction: 'top', offset: [0, -r] });
+          circle.bindTooltip(`<b>${m.name}</b><br>2025 Pop: ${m.pop.toLocaleString()} (${m.share.toFixed(1)}%)`, { direction: 'top', offset: [0, -r] });
           window.markersGroup.addLayer(circle);
+
+          if (permLabels[m.name]) {
+            const cfg = permLabels[m.name];
+            const labelMarker = L.marker([m.lat, m.lon], {
+              interactive: false,
+              icon: L.divIcon({
+                className: 'leaflet-permanent-label',
+                html: `<span>${cfg.text}</span>`,
+                iconSize: [110, 16],
+                iconAnchor: cfg.anchor
+              })
+            });
+            window.markersGroup.addLayer(labelMarker);
+          }
         });
 
         window.markersGroup.addTo(leafletMap);

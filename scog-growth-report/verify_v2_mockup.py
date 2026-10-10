@@ -269,6 +269,22 @@ for pt in area_pts:
     check("Page 2 Stacked Area", f"{ayr} ADU Units", a_adu, str(exp_a_adu))
     check("Page 2 Stacked Area", f"{ayr} Gross Units", a_gross, str(exp_a_gross))
 
+# Area Chart Axis Start X Check
+p2_area_chart = p2.find_all("div", class_="visual-container")[0]
+p2_area_paths = p2_area_chart.find_all("path")
+area_min_xs = []
+area_starts_at_55 = True
+for p in p2_area_paths:
+    d = p["d"]
+    coords = re.findall(r"([-\d\.]+)\s+([-\d\.]+)", d)
+    xs = [float(c[0]) for c in coords]
+    area_min_xs.extend(xs)
+    if not (d.startswith("M 55 ") or d.startswith("M 55.0 ")):
+        area_starts_at_55 = False
+
+check("Page 2 Area Chart", "Area Chart Path Origin X is 55", area_starts_at_55, True)
+check("Page 2 Area Chart", "No Path Points Left of Axis X=55", min(area_min_xs) >= 55.0, True)
+
 # Page 2 AMI breakdown
 ami_container = p2.find_all("div", class_="visual-container")[2]
 ami_agg = df_ami[df_ami["Year"] == 2025].groupby("Jurisdiction_ID").agg({"Total_AMI_Units": "sum"}).reset_index().set_index("Jurisdiction_ID")
@@ -454,6 +470,15 @@ check("Page 4 Table", "Total County Share %", r14_tds[2], "100.0%")
 
 p4_map_title = p4.find_all("div", class_="visual-title")[0].text.strip()
 check("Page 4 Map", "Map Title Placeholder", p4_map_title, "Approximate Centroids (Leaflet placeholder)")
+
+# Check presence of permanent map labels
+p4_map_container = p4.find("div", id="map-container")
+p4_map_text = p4_map_container.text if p4_map_container else ""
+check("Page 4 Map Labels", "Mount Vernon Label Present", "Mount Vernon" in p4_map_text, True)
+check("Page 4 Map Labels", "Anacortes Label Present", "Anacortes" in p4_map_text, True)
+check("Page 4 Map Labels", "Burlington Label Present", "Burlington" in p4_map_text, True)
+check("Page 4 Map Labels", "Sedro-Woolley Label Present", "Sedro-Woolley" in p4_map_text, True)
+check("Page 4 Map Labels", "Unincorporated Rural Label Present", "Unincorporated Rural" in p4_map_text, True)
 
 # Page 4 Share Comparison Bars (Grouped horizontal bars)
 p4_comp_bars = p4.find_all("div", class_="grouped-bar-row")

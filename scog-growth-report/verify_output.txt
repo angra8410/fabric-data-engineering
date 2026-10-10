@@ -168,86 +168,6 @@ Page 2 Matrix Total      | Total MF                            | 259          | 
 Page 2 Matrix Total      | Total ADU                           | 56           | 56           | PASS
 Page 2 Matrix Total      | Total Demolished                    | 27           | 27           | PASS
 Page 2 Matrix Total      | Total Net New                       | 490          | 490          | PASS
-Page 2 Stacked Area      | 1990 SF Units                       | 363          | 363          | PASS
-Page 2 Stacked Area      | 1990 MF Units                       | 397          | 397          | PASS
-Page 2 Stacked Area      | 1990 ADU Units                      | 0            | 0            | PASS
-Page 2 Stacked Area      | 1990 Gross Units                    | 760          | 760          | PASS
-Page 2 Stacked Area      | 1991 SF Units                       | 298          | 298          | PASS
-Page 2 Stacked Area      | 1991 MF Units                       | 380          | 380          | PASS
-Page 2 Stacked Area      | 1991 ADU Units                      | 0            | 0            | PASS
-Page 2 Stacked Area      | 1991 Gross Units                    | 678          | 678          | PASS
-Page 2 Stacked Area      | 1992 SF Units                       | 338          | 338          | PASS
-Page 2 Stacked Area      | 1992 MF Units                       | 246          | 246          | PASS
-Page 2 Stacked Area      | 1992 ADU Units                      | 0            | 0            | PASS
-Page 2 Stacked Area      | 1992 Gross Units                    | 584          | 584          | PASS
-Page 2 Stacked Area      | 1993 SF Units                       | 323          | 323          | PASS
-Page 2 Stacked Area      | 1993 MF Units                       | 75           | 75           | PASS
-Page 2 Stacked Area      | 1993 ADU Units                      | 0            | 0            | PASS
-Page 2 Stacked Area      | 1993 Gross Units                    | 398          | 398          | PASS
-Page 2 Stacked Area      | 1994 SF Units                       | 408          | 408          | PASS
-Page 2 Stacked Area      | 1994 MF Units                       | 183          | 183          | PASS
-Page 2 Stacked Area      | 1994 ADU Units                      | 0            | 0            | PASS
-Page 2 Stacked Area      | 1994 Gross Units                    | 591          | 591          | PASS
-Page 2 Stacked Area      | 1995 SF Units                       | 262          | 262          | PASS
-Page 2 Stacked Area      | 1995 MF Units                       | 145          | 145          | PASS
-Page 2 Stacked Area      | 1995 ADU Units                      | 0            | 0            | PASS
-Page 2 Stacked Area      | 1995 Gross Units                    | 407          | 407          | PASS
-Page 2 Stacked Area      | 1996 SF Units                       | 256          | 256          | PASS
-Page 2 Stacked Area      | 1996 MF Units                       | 329          | 329          | PASS
-Page 2 Stacked Area      | 1996 ADU Units                      | 0            | 0            | PASS
-Page 2 Stacked Area      | 1996 Gross Units                    | 585          | 585          | PASS
-Page 2 Stacked Area      | 1997 SF Units                       | 273          | 273          | PASS
-Page 2 Stacked Area      | 1997 MF Units                       | 91           | 91           | PASS
-Page 2 Stacked Area      | 1997 ADU Units                      | 0            | 0            | PASS
-Page 2 Stacked Area      | 1997 Gross Units                    | 364          | 364          | PASS
-Page 2 Stacked Area      | 1998 SF Units                       | 250          | 250          | PASS
-Page 2 Stacked Area      | 1998 MF Units                       | 108          | 108          | PASS
-Page 2 Stacked Area      | 1998 ADU Units                      | 0            | 0            | PASS
-Page 2 Stacked Area      | 1998 Gross Units                    | 358          | 358          | PASS
-Page 2 Stacked Area      | 1999 SF Units                       | 296          | 296          | PASS
-Page 2 Stacked Area      | 1999 MF Units                       | 247          | 247          | PASS
-Page 2 Stacked Area      | 1999 ADU Units                      | 0            | 0            | PASS
-Page 2 Stacked Area      | 1999 Gross Units                    | 543          | 543          | PASS
-Page 2 Stacked Area      | 2000 SF Units                       | 328          | 328          | PASS
-Page 2 Stacked Area      | 2000 MF Units                       | 176          | 176          | PASS
-Page 2 Stacked Area      | 2000 ADU Units                      | 0            | 0            | PASS
-Page 2 Stacked Area      | 2000 Gross Units                    | 504          | 504          | PASS
-Page 2 Stacked Area      | 2001 SF Units                       | 329          | 329          | PASS
-Page 2 Stacked Area      | 2001 MF Units                       | 252          | 252          | PASS
-Page 2 Stacked Area      | 2001 ADU Units                      | 0            | 0            | PASS
-Page 2 Stacked Area      | 2001 Gross Units                    | 581          | 581          | PASS
-Page 2 Stacked Area      | 2002 SF Units                       | 296          | 296          | PASS
-Page 2 Stacked Area      | 2002 MF Units                       | 307          | 307          | PASS
-Page 2 Stacked Area      | 2002 ADU Units                      | 0            | 0            | PASS
-Page 2 Stacked Area      | 2002 Gross Units                    | 603          | 603          | PASS
-Page 2 Stacked Area      | 2003 SF Units                       | 413          | 413          | PASS
-Page 2 Stacked Area      | 2003 MF Units                       | 245          | 245          | PASS
-Page 2 Stacked Area      | 2003 ADU Units                      | 0            | 0            | PASS
-Page 2 Stacked Area      | 2003 Gross Units                    | 658          | 658          | PASS
-Page 2 Stacked Area      | 2004 SF Units                       | 499          | 499          | PASS
-Page 2 Stacked Area      | 2004 MF Units                       | 181          | 181          | PASS
-Page 2 Stacked Area      | 2004 ADU Units                      | 0            | 0            | PASS
-Page 2 Stacked Area      | 2004 Gross Units                    | 680          | 680          | PASS
-Page 2 Stacked Area      | 2005 SF Units                       | 466          | 466          | PASS
-Page 2 Stacked Area      | 2005 MF Units                       | 125          | 125          | PASS
-Page 2 Stacked Area      | 2005 ADU Units                      | 0            | 0            | PASS
-Page 2 Stacked Area      | 2005 Gross Units                    | 591          | 591          | PASS
-Page 2 Stacked Area      | 2006 SF Units                       | 619          | 619          | PASS
-Page 2 Stacked Area      | 2006 MF Units                       | 206          | 206          | PASS
-Page 2 Stacked Area      | 2006 ADU Units                      | 0            | 0            | PASS
-Page 2 Stacked Area      | 2006 Gross Units                    | 825          | 825          | PASS
-Page 2 Stacked Area      | 2007 SF Units                       | 502          | 502          | PASS
-Page 2 Stacked Area      | 2007 MF Units                       | 105          | 105          | PASS
-Page 2 Stacked Area      | 2007 ADU Units                      | 0            | 0            | PASS
-Page 2 Stacked Area      | 2007 Gross Units                    | 607          | 607          | PASS
-Page 2 Stacked Area      | 2008 SF Units                       | 485          | 485          | PASS
-Page 2 Stacked Area      | 2008 MF Units                       | 71           | 71           | PASS
-Page 2 Stacked Area      | 2008 ADU Units                      | 0            | 0            | PASS
-Page 2 Stacked Area      | 2008 Gross Units                    | 556          | 556          | PASS
-Page 2 Stacked Area      | 2009 SF Units                       | 248          | 248          | PASS
-Page 2 Stacked Area      | 2009 MF Units                       | 47           | 47           | PASS
-Page 2 Stacked Area      | 2009 ADU Units                      | 0            | 0            | PASS
-Page 2 Stacked Area      | 2009 Gross Units                    | 295          | 295          | PASS
 Page 2 Stacked Area      | 2010 SF Units                       | 140          | 140          | PASS
 Page 2 Stacked Area      | 2010 MF Units                       | 94           | 94           | PASS
 Page 2 Stacked Area      | 2010 ADU Units                      | 0            | 0            | PASS
@@ -312,10 +232,8 @@ Page 2 Stacked Area      | 2025 SF Units                       | 202          | 
 Page 2 Stacked Area      | 2025 MF Units                       | 259          | 259          | PASS
 Page 2 Stacked Area      | 2025 ADU Units                      | 56           | 56           | PASS
 Page 2 Stacked Area      | 2025 Gross Units                    | 517          | 517          | PASS
-Page 2 Stacked Area      | 2026 SF Units                       | 145          | 145          | PASS
-Page 2 Stacked Area      | 2026 MF Units                       | 64           | 64           | PASS
-Page 2 Stacked Area      | 2026 ADU Units                      | 31           | 31           | PASS
-Page 2 Stacked Area      | 2026 Gross Units                    | 240          | 240          | PASS
+Page 2 Area Chart        | Area Chart Path Origin X is 55      | True         | True         | PASS
+Page 2 Area Chart        | No Path Points Left of Axis X=55    | True         | True         | PASS
 Page 2 AMI               | Anacortes AMI Units                 | 31           | 31           | PASS
 Page 2 AMI               | Burlington AMI Units                | 217          | 217          | PASS
 Page 2 AMI               | Mount Vernon AMI Units              | 23           | 23           | PASS
@@ -445,6 +363,11 @@ Page 4 Table             | Rural Entity Share %                | 36.5%        | 
 Page 4 Table             | Total County Population             | 134,600      | 134,600      | PASS
 Page 4 Table             | Total County Share %                | 100.0%       | 100.0%       | PASS
 Page 4 Map               | Map Title Placeholder               | Approximate Centroids (Leaflet placeholder) | Approximate Centroids (Leaflet placeholder) | PASS
+Page 4 Map Labels        | Mount Vernon Label Present          | True         | True         | PASS
+Page 4 Map Labels        | Anacortes Label Present             | True         | True         | PASS
+Page 4 Map Labels        | Burlington Label Present            | True         | True         | PASS
+Page 4 Map Labels        | Sedro-Woolley Label Present         | True         | True         | PASS
+Page 4 Map Labels        | Unincorporated Rural Label Present  | True         | True         | PASS
 Page 4 Share Comparison  | Unincorporated Rural (outside UGAs) Pop Share % | 36.5         | 36.5         | PASS
 Page 4 Share Comparison  | Unincorporated Rural (outside UGAs) Housing Share % | 20.0         | 20.0         | PASS
 Page 4 Share Comparison  | Mount Vernon Pop Share %            | 26.8         | 26.8         | PASS
@@ -460,6 +383,6 @@ Page 4 Footer            | UGAs in Footer                      | True         | 
 Page 4 Footer            | Rural in Footer                     | True         | True         | PASS
 Page 4 Footer            | Total in Footer                     | True         | True         | PASS
 ===============================================================================================
-TOTAL CHECKS: 456 | PASSED: 456 | FAILED: 0
+TOTAL CHECKS: 379 | PASSED: 379 | FAILED: 0
 ===============================================================================================
 ALL CELLS, METRICS AND FIGURES SUCCESSFULLY MATCH THE PROCESSED CSVS 100%!

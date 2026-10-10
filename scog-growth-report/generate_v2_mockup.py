@@ -243,6 +243,7 @@ hp_annual = df_hp.groupby("Year").agg({
 }).reset_index()
 hp_annual["MF_Total"] = hp_annual["Duplex_Units"] + hp_annual["MultiFamily_3_4_Units"] + hp_annual["MultiFamily_5_Plus_Units"]
 hp_annual["Gross"] = hp_annual["Single_Family_Units"] + hp_annual["MF_Total"] + hp_annual["ADU_Units"]
+hp_annual = hp_annual[(hp_annual["Year"] >= 2010) & (hp_annual["Year"] <= 2025)].sort_values("Year")
 
 gross_pts = []
 mf_pts = []
@@ -1028,6 +1029,23 @@ html_content = f"""<!DOCTYPE html>
       border: 1.5px solid #ffffff;
       display: inline-block;
     }}
+
+    .leaflet-permanent-label {{
+      pointer-events: none;
+    }}
+    .leaflet-permanent-label span {{
+      font-family: var(--font-family);
+      font-size: 9.5px;
+      font-weight: 700;
+      color: #0f172a;
+      background: rgba(255, 255, 255, 0.92);
+      padding: 1px 5px;
+      border-radius: 3px;
+      border: 1px solid #cbd5e1;
+      white-space: nowrap;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+      display: inline-block;
+    }}
   </style>
 </head>
 <body>
@@ -1343,7 +1361,7 @@ html_content += f"""            </div>
         </div>
 
         <!-- Bottom Row: AMI Targets & Permitting Matrix -->
-        <div class="grid-2col-split" style="height: 375px;">
+        <div class="grid-2col-split" style="min-height: 350px;">
           <div class="visual-container">
             <div class="visual-title">Preliminary Allocated Units by Jurisdiction</div>
             <div class="visual-subtitle">[PRELIMINARY: Commerce default allocation (Exhibit 12). Local jurisdiction datasheets due Oct 20, 2026; not jurisdiction-verified]</div>
@@ -1363,6 +1381,7 @@ for _, r in ami_agg.iterrows():
 
 html_content += f"""              <div class="info-callout">
                 <div><strong>Notice:</strong> Preliminary: Commerce default allocation (Exhibit 12). Local jurisdiction datasheets due Oct 20, 2026; not jurisdiction-verified. Allocations shown: Anacortes 31, Burlington 217, Mount Vernon 23, Sedro-Woolley 56 = {int(ami_agg['Total_AMI_Units'].sum()):,} total units.</div>
+                <div style="margin-top: 6px; font-weight: 600; color: #1e293b; font-size: 10px;">Total preliminary allocation shown: {int(ami_agg['Total_AMI_Units'].sum()):,} units ({len(ami_agg)} jurisdictions); not jurisdiction-verified</div>
               </div>
             </div>
           </div>
@@ -1766,6 +1785,14 @@ html_content += f"""          </div>
         const markersData = {map_markers_json_str};
         window.markersGroup = L.featureGroup();
 
+        const permLabels = {{
+          'Mount Vernon': {{ anchor: [55, -12], text: 'Mount Vernon' }},
+          'Anacortes': {{ anchor: [-12, 8], text: 'Anacortes' }},
+          'Burlington': {{ anchor: [75, 8], text: 'Burlington' }},
+          'Sedro-Woolley': {{ anchor: [-12, 8], text: 'Sedro-Woolley' }},
+          'Unincorporated Rural (outside UGAs)': {{ anchor: [55, -14], text: 'Unincorporated Rural' }}
+        }};
+
         markersData.forEach(m => {{
           let r = 7;
           if (m.pop >= 30000) r = 18;
@@ -1800,8 +1827,22 @@ html_content += f"""          </div>
             </div>
           `;
           circle.bindPopup(popupContent);
-          circle.bindTooltip(`<b>${{m.name}}</b><br>${{m.pop.toLocaleString()}}`, {{ direction: 'top', offset: [0, -r] }});
+          circle.bindTooltip(`<b>${{m.name}}</b><br>2025 Pop: ${{m.pop.toLocaleString()}} (${{m.share.toFixed(1)}}%)`, {{ direction: 'top', offset: [0, -r] }});
           window.markersGroup.addLayer(circle);
+
+          if (permLabels[m.name]) {{
+            const cfg = permLabels[m.name];
+            const labelMarker = L.marker([m.lat, m.lon], {{
+              interactive: false,
+              icon: L.divIcon({{
+                className: 'leaflet-permanent-label',
+                html: `<span>${{cfg.text}}</span>`,
+                iconSize: [110, 16],
+                iconAnchor: cfg.anchor
+              }})
+            }});
+            window.markersGroup.addLayer(labelMarker);
+          }}
         }});
 
         window.markersGroup.addTo(leafletMap);

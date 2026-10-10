@@ -243,6 +243,80 @@ qcew_last = cai_series[-1]
 qcew_last_x = 70 + ((qcew_last["Year"] - 1999) / (2022 - 1999)) * 440
 qcew_last_y = 240 - ((qcew_last["Covered_Employment_QCEW"] - 40000) / 15000) * 200
 
+# Geo Centroids for Leaflet & SVG Map (Page 4)
+map_markers_data = []
+svg_marker_elements = []
+
+for jid in jur_order:
+    row_jur = df_jur[df_jur["Jurisdiction_ID"] == jid].iloc[0]
+    j_name = row_jur["Jurisdiction_Name"]
+    j_type = row_jur["Jurisdiction_Type"]
+    lat = float(row_jur["Latitude"])
+    lon = float(row_jur["Longitude"])
+    pop_val = int(pop_2025_df.loc[jid, "Population_Count"]) if jid in pop_2025_df.index else 0
+    pop_share = (pop_val / total_pop_2025) * 100
+    h_tgt_row = df_tgt[df_tgt["Jurisdiction_ID"] == jid]
+    h_tgt = int(h_tgt_row["Target_2045_Housing_Units"].values[0]) if not h_tgt_row.empty else 0
+    
+    if row_jur["Is_Incorporated"] == 1:
+        cat = "City"
+        color = "#004B87"
+    elif row_jur["Is_UGA"] == 1:
+        cat = "UGA"
+        color = "#2563eb"
+    else:
+        cat = "Rural"
+        color = "#0f766e"
+        
+    map_markers_data.append({
+        "id": jid,
+        "name": j_name,
+        "type": j_type,
+        "cat": cat,
+        "color": color,
+        "lat": lat,
+        "lon": lon,
+        "pop": pop_val,
+        "share": pop_share,
+        "htgt": h_tgt
+    })
+    
+    # SVG projection: lon [-122.68, -121.68] -> x [30, 550], lat [48.35, 48.60] -> y [30, 330]
+    px = 30 + ((lon - (-122.68)) / (-121.68 - (-122.68))) * 510
+    py = 30 + ((48.60 - lat) / (48.60 - 48.35)) * 290
+    
+    if pop_val >= 30000:
+        r_svg = 14
+    elif pop_val >= 15000:
+        r_svg = 11
+    elif pop_val >= 10000:
+        r_svg = 9
+    elif pop_val >= 2000:
+        r_svg = 7
+    elif cat == "Rural":
+        r_svg = 13
+    else:
+        r_svg = 5
+        
+    label_offset_y = -r_svg - 4
+    if jid == "JUR-02": # Burlington
+        label_offset_y = -r_svg - 4
+    elif jid == "JUR-07": # Mount Vernon
+        label_offset_y = r_svg + 11
+        
+    stroke_style = 'stroke="#ffffff" stroke-width="2"' if cat != "Rural" else 'stroke="#ffffff" stroke-width="2" stroke-dasharray="3,2"'
+    svg_marker_elements.append(f'''
+              <g class="svg-map-node">
+                <circle cx="{px:.1f}" cy="{py:.1f}" r="{r_svg}" fill="{color}" {stroke_style} opacity="0.9">
+                  <title>{j_name} ({j_type})&#10;2025 Pop: {pop_val:,} ({pop_share:.1f}%)&#10;2045 Housing Target: {h_tgt:,} units</title>
+                </circle>
+                <circle cx="{px:.1f}" cy="{py:.1f}" r="{r_svg+4}" fill="none" stroke="{color}" stroke-width="1" opacity="0.3" />
+                <text x="{px:.1f}" y="{py+label_offset_y:.1f}" text-anchor="middle" font-size="9" font-weight="700" fill="#0f172a" stroke="#ffffff" stroke-width="2.5" paint-order="stroke">{j_name}</text>
+              </g>''')
+
+svg_markers_markup = "\n".join(svg_marker_elements)
+map_markers_json_str = json.dumps(map_markers_data)
+
 # -------------------------------------------------------------
 # 2. GENERATE HTML MARKUP
 # -------------------------------------------------------------
@@ -256,6 +330,8 @@ html_content = f"""<!DOCTYPE html>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <style>
     :root {{
       --slate-900: #0f172a;
@@ -289,46 +365,51 @@ html_content = f"""<!DOCTYPE html>
       font-family: var(--font-family);
       background-color: #0b0f19;
       color: var(--text-main);
-      padding: 24px;
+      padding: 8px 16px;
       display: flex;
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
+      overflow-x: hidden;
     }}
 
     .mockup-controls {{
       width: 1300px;
+      max-width: 100%;
       background: var(--slate-800);
       color: #f8fafc;
-      padding: 16px 24px;
-      border-radius: 12px 12px 0 0;
+      padding: 6px 16px;
+      border-radius: 8px 8px 0 0;
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-bottom: 2px solid var(--slate-700);
+      flex-shrink: 0;
+      height: 44px;
     }}
 
-    .mockup-title h1 {{
-      font-size: 18px;
-      font-weight: 700;
-      color: #ffffff;
+    .mockup-title {{
       display: flex;
       align-items: center;
       gap: 10px;
     }}
 
-    .mockup-title p {{
-      font-size: 12px;
-      color: var(--slate-400);
-      margin-top: 4px;
+    .mockup-title h1 {{
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
     }}
 
     .badge-v2 {{
       background: #0284c7;
       color: #ffffff;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
-      padding: 3px 8px;
+      padding: 2px 6px;
       border-radius: 4px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -336,16 +417,16 @@ html_content = f"""<!DOCTYPE html>
 
     .tab-bar {{
       display: flex;
-      gap: 8px;
+      gap: 6px;
     }}
 
     .tab-btn {{
       background: var(--slate-700);
       color: #cbd5e1;
       border: 1px solid var(--slate-600);
-      padding: 8px 16px;
-      border-radius: 6px;
-      font-size: 13px;
+      padding: 5px 12px;
+      border-radius: 5px;
+      font-size: 11.5px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -360,7 +441,48 @@ html_content = f"""<!DOCTYPE html>
       background: var(--primary-accent);
       color: #ffffff;
       border-color: #38bdf8;
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+    }}
+
+    .view-controls {{
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }}
+
+    .view-btn {{
+      background: transparent;
+      color: #94a3b8;
+      border: 1px solid var(--slate-600);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }}
+
+    .view-btn:hover {{
+      color: #ffffff;
+      border-color: #94a3b8;
+    }}
+
+    .view-btn.active {{
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #38bdf8;
+    }}
+
+    .canvas-container {{
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      overflow: visible;
+      margin-bottom: 12px;
     }}
 
     .report-viewport {{
@@ -369,8 +491,73 @@ html_content = f"""<!DOCTYPE html>
       background: var(--bg-canvas);
       position: relative;
       overflow: hidden;
-      border-radius: 0 0 12px 12px;
+      border-radius: 0 0 8px 8px;
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      flex-shrink: 0;
+      transform-origin: top center;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }}
+
+    #map-container {{
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 350px;
+      border-radius: 6px;
+      overflow: hidden;
+      background: #f8fafc;
+      border: 1px solid var(--border-card);
+    }}
+
+    #skagit-leaflet-map {{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+    }}
+
+    #skagit-svg-fallback {{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }}
+
+    .map-legend-overlay {{
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(4px);
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 5px 8px;
+      font-size: 9.5px;
+      z-index: 1000;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }}
+
+    .map-legend-item {{
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--slate-800);
+      font-weight: 600;
+    }}
+
+    .map-legend-dot {{
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      border: 1.5px solid #ffffff;
+      display: inline-block;
     }}
 
     .report-page {{
@@ -721,7 +908,6 @@ html_content = f"""<!DOCTYPE html>
   <div class="mockup-controls">
     <div class="mockup-title">
       <h1>SCOG Growth Monitoring Report <span class="badge-v2">Alternative Design v2</span></h1>
-      <p>Question-based headers · Single accent color (#004B87) · Contextual comparison KPIs · Consistent 1300x900 grid</p>
     </div>
     <div class="tab-bar">
       <button class="tab-btn active" onclick="switchPage('p1')">Page 1: Regional Growth</button>
@@ -729,9 +915,20 @@ html_content = f"""<!DOCTYPE html>
       <button class="tab-btn" onclick="switchPage('p3')">Page 3: Population & Jobs</button>
       <button class="tab-btn" onclick="switchPage('p4')">Page 4: Spatial Allocation</button>
     </div>
+    <div class="view-controls">
+      <button id="btn-fit" class="view-btn active" onclick="setViewMode('fit')" title="Scale canvas to fit screen without scrolling">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+        Fit to Page
+      </button>
+      <button id="btn-actual" class="view-btn" onclick="setViewMode('actual')" title="100% Native 1300x900 canvas">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        100% Size
+      </button>
+    </div>
   </div>
 
-  <div class="report-viewport">
+  <div class="canvas-container">
+    <div class="report-viewport">
 
     <!-- ========================================================================= -->
     <!-- PAGE 1: QUESTION: Is Skagit County Growing in Line with Regional Targets? -->
@@ -1176,24 +1373,47 @@ html_content += f"""                <tr class="total-row">
         <div class="page-header-tag">Spatial & Typology Distribution</div>
       </div>
 
-      <div class="grid-2col-split" style="height: 440px; margin-bottom: 16px;">
-        <div class="visual-container">
+      <div class="grid-2col-split" style="height: 430px; margin-bottom: 12px;">
+        <div class="visual-container" style="height: 100%;">
           <div class="visual-title">Regional Jurisdictions & UGA Centroids (USGS/Census 2020)</div>
-          <div class="visual-subtitle">Native Azure Map Visual (Latitude/Longitude Centroid Anchors)</div>
-          <div class="visual-body" style="background:#e0f2fe; border-radius:6px; display:flex; align-items:center; justify-content:center;">
-            <div style="text-align:center; color:#0369a1;">
-              <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2" style="margin-bottom:8px;">
-                <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
-                <line x1="8" y1="2" x2="8" y2="18"></line>
-                <line x1="16" y1="6" x2="16" y2="22"></line>
+          <div class="visual-subtitle">Native Azure Map Visual (Latitude/Longitude Centroid Anchors with Proportional Sizing)</div>
+          <div class="visual-body" style="padding: 0; position: relative;">
+            <div id="map-container">
+              <!-- SVG Base Map (Always visible immediately) -->
+              <svg id="skagit-svg-fallback" viewBox="0 0 580 360">
+                <rect width="580" height="360" fill="#f8fafc" />
+                <!-- Puget Sound / Salish Sea Waters on West -->
+                <path d="M 0,0 L 140,0 C 130,50 145,100 135,160 C 120,200 150,260 130,360 L 0,360 Z" fill="#e0f2fe" opacity="0.8" />
+                <path d="M 0,0 L 140,0 C 130,50 145,100 135,160 C 120,200 150,260 130,360 L 0,360 Z" fill="none" stroke="#bae6fd" stroke-width="2" />
+                <!-- Fidalgo Island land outline (Anacortes) -->
+                <path d="M 25,75 Q 85,60 90,140 Q 80,210 30,200 Q 15,140 25,75 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+                <!-- Skagit River Channel -->
+                <path d="M 570,85 Q 520,100 450,110 T 350,118 T 260,145 Q 220,165 210,185 Q 200,240 185,270 Q 165,295 130,310" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" opacity="0.85" />
+                <text x="470" y="105" font-size="8" fill="#0284c7" font-style="italic">Skagit River</text>
+                <text x="25" y="45" font-size="9" fill="#0369a1" font-weight="600">Puget Sound / Padilla Bay</text>
+                <!-- Major Transport Corridors (I-5 & WA-20) -->
+                <line x1="210" y1="0" x2="210" y2="360" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4,3" />
+                <text x="214" y="20" font-size="8" fill="#64748b" font-weight="600">I-5 Corridor</text>
+                <path d="M 50,132 L 210,179 L 260,143 L 354,116 L 394,117 L 524,98 L 570,95" fill="none" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4,3" />
+                <text x="300" y="140" font-size="8" fill="#64748b" font-weight="600">WA-20 Highway</text>
+                <!-- Plotted Centroids with Proportional Sizes & Labels -->
+                {svg_markers_markup}
               </svg>
-              <div style="font-weight:700; font-size:13px;">Native Azure Map Visual</div>
-              <div style="font-size:11px; color:#075985;">Centroids: 8 Municipalities + 2 UGAs + Rural Centroid</div>
+
+              <!-- Leaflet Map Mount Point (Interactive Tiles) -->
+              <div id="skagit-leaflet-map"></div>
+
+              <!-- Map Legend Overlay -->
+              <div class="map-legend-overlay">
+                <div class="map-legend-item"><span class="map-legend-dot" style="background:#004B87;"></span> Incorporated Cities (8)</div>
+                <div class="map-legend-item"><span class="map-legend-dot" style="background:#2563eb;"></span> Urban Growth Areas (2)</div>
+                <div class="map-legend-item"><span class="map-legend-dot" style="background:#0f766e; border-style:dashed;"></span> Unincorporated Rural (1)</div>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="visual-container" style="height: 455px;">
+        <div class="visual-container" style="height: 100%;">
           <div class="visual-title">Growth & Allocation Metrics by Classification</div>
           <div class="visual-subtitle">Tripartite Breakdown: Incorporated Cities vs. UGAs vs. Unincorporated Rural</div>
           <div class="visual-body">
@@ -1260,13 +1480,149 @@ html_content += f"""        </div>
 
   </div>
 
+  </div><!-- end canvas-container -->
+
   <script>
+    let leafletMap = null;
+    let viewMode = 'fit';
+
     function switchPage(pageId) {{
       document.querySelectorAll('.report-page').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       document.getElementById(pageId).classList.add('active');
-      event.currentTarget.classList.add('active');
+      const targetBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick') && b.getAttribute('onclick').includes(pageId));
+      if (targetBtn) targetBtn.classList.add('active');
+
+      if (pageId === 'p4') {{
+        setTimeout(() => {{
+          initLeafletMap();
+          if (leafletMap) {{
+            leafletMap.invalidateSize();
+            if (window.markersGroup) {{
+              leafletMap.fitBounds(window.markersGroup.getBounds().pad(0.12));
+            }}
+          }}
+        }}, 80);
+      }}
     }}
+
+    function setViewMode(mode) {{
+      viewMode = mode;
+      document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.getElementById(mode === 'fit' ? 'btn-fit' : 'btn-actual');
+      if (activeBtn) activeBtn.classList.add('active');
+      updateCanvasScale();
+    }}
+
+    function updateCanvasScale() {{
+      const viewport = document.querySelector('.report-viewport');
+      const container = document.querySelector('.canvas-container');
+      if (!viewport || !container) return;
+
+      if (viewMode === 'fit') {{
+        const controls = document.querySelector('.mockup-controls');
+        const controlsHeight = controls ? controls.offsetHeight : 44;
+        const availWidth = window.innerWidth - 32;
+        const availHeight = window.innerHeight - controlsHeight - 20;
+
+        const scaleX = availWidth / 1300;
+        const scaleY = availHeight / 900;
+        const scale = Math.min(scaleX, scaleY, 1.0);
+
+        viewport.style.transform = `scale(${{scale}})`;
+        viewport.style.transformOrigin = 'top center';
+        container.style.height = `${{Math.ceil(900 * scale)}}px`;
+        container.style.overflow = 'hidden';
+      }} else {{
+        viewport.style.transform = 'none';
+        container.style.height = 'auto';
+        container.style.overflow = 'visible';
+      }}
+    }}
+
+    function initLeafletMap() {{
+      const mapEl = document.getElementById('skagit-leaflet-map');
+      if (!mapEl || leafletMap) return;
+      if (typeof L === 'undefined') {{
+        console.log("Leaflet library not loaded, using SVG fallback.");
+        return;
+      }}
+
+      try {{
+        leafletMap = L.map('skagit-leaflet-map', {{
+          zoomControl: true,
+          scrollWheelZoom: false,
+          attributionControl: true
+        }}).setView([48.48, -122.18], 10);
+
+        const tiles = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{{z}}/{{y}}/{{x}}', {{
+          attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
+          maxZoom: 16
+        }});
+
+        tiles.on('load', function() {{
+          mapEl.style.opacity = '1';
+        }});
+
+        tiles.addTo(leafletMap);
+
+        const markersData = {map_markers_json_str};
+        window.markersGroup = L.featureGroup();
+
+        markersData.forEach(m => {{
+          let r = 7;
+          if (m.pop >= 30000) r = 18;
+          else if (m.pop >= 15000) r = 14;
+          else if (m.pop >= 10000) r = 12;
+          else if (m.pop >= 2000) r = 9;
+          else if (m.cat === 'Rural') r = 16;
+
+          const circle = L.circleMarker([m.lat, m.lon], {{
+            radius: r,
+            fillColor: m.color,
+            color: '#ffffff',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.85
+          }});
+
+          const popupContent = `
+            <div style="font-family:'Segoe UI',sans-serif; min-width:180px; padding:2px;">
+              <div style="font-weight:700; font-size:13px; color:#0f172a; border-bottom:1px solid #e2e8f0; padding-bottom:4px; margin-bottom:4px;">
+                ${{m.name}}
+              </div>
+              <div style="font-size:10.5px; color:#64748b; margin-bottom:6px;">${{m.type}}</div>
+              <div style="display:flex; justify-content:space-between; font-size:11.5px; margin-bottom:2px;">
+                <span style="color:#64748b;">2025 Population:</span>
+                <strong style="color:#0f172a;">${{m.pop.toLocaleString()}} (${{m.share.toFixed(1)}}%)</strong>
+              </div>
+              <div style="display:flex; justify-content:space-between; font-size:11.5px;">
+                <span style="color:#64748b;">2045 Housing Target:</span>
+                <strong style="color:#004B87;">${{m.htgt.toLocaleString()}} units</strong>
+              </div>
+            </div>
+          `;
+          circle.bindPopup(popupContent);
+          circle.bindTooltip(`<b>${{m.name}}</b><br>${{m.pop.toLocaleString()}}`, {{ direction: 'top', offset: [0, -r] }});
+          window.markersGroup.addLayer(circle);
+        }});
+
+        window.markersGroup.addTo(leafletMap);
+        leafletMap.fitBounds(window.markersGroup.getBounds().pad(0.12));
+      }} catch (err) {{
+        console.warn("Leaflet error, using SVG fallback:", err);
+      }}
+    }}
+
+    window.addEventListener('resize', () => {{
+      updateCanvasScale();
+      if (leafletMap) leafletMap.invalidateSize();
+    }});
+
+    window.addEventListener('load', () => {{
+      updateCanvasScale();
+      initLeafletMap();
+    }});
   </script>
 </body>
 </html>

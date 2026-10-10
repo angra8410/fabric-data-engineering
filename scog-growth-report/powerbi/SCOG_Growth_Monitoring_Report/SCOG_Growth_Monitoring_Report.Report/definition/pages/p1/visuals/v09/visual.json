@@ -1,0 +1,143 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "v09",
+  "position": {
+    "x": 20,
+    "y": 450,
+    "z": 20,
+    "width": 1240,
+    "height": 215,
+    "tabOrder": 20
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Jurisdiction"
+                    }
+                  },
+                  "Property": "Jurisdiction_Name"
+                }
+              },
+              "queryRef": "Dim_Jurisdiction.Jurisdiction_Name",
+              "nativeQueryRef": "Jurisdiction_Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Jurisdiction"
+                    }
+                  },
+                  "Property": "Jurisdiction_Type"
+                }
+              },
+              "queryRef": "Dim_Jurisdiction.Jurisdiction_Type",
+              "nativeQueryRef": "Jurisdiction_Type"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Total Population"
+                }
+              },
+              "queryRef": "_Measures.Total Population",
+              "nativeQueryRef": "Total Population"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "2045 Population Target"
+                }
+              },
+              "queryRef": "_Measures.2045 Population Target",
+              "nativeQueryRef": "2045 Population Target"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Cumulative Net Housing Units (2020-Present)"
+                }
+              },
+              "queryRef": "_Measures.Cumulative Net Housing Units (2020-Present)",
+              "nativeQueryRef": "Cumulative Net Housing Units (2020-Present)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "2045 Housing Target Units"
+                }
+              },
+              "queryRef": "_Measures.2045 Housing Target Units",
+              "nativeQueryRef": "2045 Housing Target Units"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Housing Target Progress %"
+                }
+              },
+              "queryRef": "_Measures.Housing Target Progress %",
+              "nativeQueryRef": "Housing Target Progress %"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Jurisdictional Summary Table (2025 Baseline Calibration vs. Adopted GMA 2045 Targets)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

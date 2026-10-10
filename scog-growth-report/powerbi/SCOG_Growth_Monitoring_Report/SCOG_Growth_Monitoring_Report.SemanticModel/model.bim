@@ -150,7 +150,18 @@
             "name": "Total Population",
             "description": "Total official population estimate from OFM April 1.",
             "displayFolder": "02. Population Growth & Targets",
-            "expression": "SUM(Fact_Population[Population_Count])",
+            "expression": [
+              "VAR LatestYr = [Selected Reporting Year]",
+              "RETURN",
+              "IF(",
+              "    ISFILTERED(Dim_CalendarYear[Year]),",
+              "    SUM(Fact_Population[Population_Count]),",
+              "    CALCULATE(",
+              "        SUM(Fact_Population[Population_Count]),",
+              "        Dim_CalendarYear[Year] = LatestYr",
+              "    )",
+              ")"
+            ],
             "formatString": "#,##0",
             "lineageTag": "253e9ab4-373c-4b83-9807-6e30c4b71e26"
           },
@@ -166,7 +177,18 @@
             "name": "YoY Population Change",
             "description": "Net annual population change relative to prior year.",
             "displayFolder": "02. Population Growth & Targets",
-            "expression": "SUM(Fact_Population[YoY_Population_Change])",
+            "expression": [
+              "VAR LatestYr = [Selected Reporting Year]",
+              "RETURN",
+              "IF(",
+              "    ISFILTERED(Dim_CalendarYear[Year]),",
+              "    SUM(Fact_Population[YoY_Population_Change]),",
+              "    CALCULATE(",
+              "        SUM(Fact_Population[YoY_Population_Change]),",
+              "        Dim_CalendarYear[Year] = LatestYr",
+              "    )",
+              ")"
+            ],
             "formatString": "+#,##0;-#,##0;0",
             "lineageTag": "afa735bb-a22a-45ac-9d48-31a19414142d"
           },
@@ -228,7 +250,18 @@
             "name": "Total Housing Permits",
             "description": "Total residential units permitted in reporting period.",
             "displayFolder": "03. Housing Production & AMI",
-            "expression": "SUM(Fact_HousingPermits[Total_Permitted_Units])",
+            "expression": [
+              "VAR LatestYr = [Selected Reporting Year]",
+              "RETURN",
+              "IF(",
+              "    ISFILTERED(Dim_CalendarYear[Year]),",
+              "    SUM(Fact_HousingPermits[Total_Permitted_Units]),",
+              "    CALCULATE(",
+              "        SUM(Fact_HousingPermits[Total_Permitted_Units]),",
+              "        Dim_CalendarYear[Year] = LatestYr",
+              "    )",
+              ")"
+            ],
             "formatString": "#,##0",
             "lineageTag": "314191e8-b1ee-4615-8361-9139c2558a6c"
           },
@@ -236,7 +269,18 @@
             "name": "Single-Family Permits",
             "description": "Detached single-family residential permitted units.",
             "displayFolder": "03. Housing Production & AMI",
-            "expression": "SUM(Fact_HousingPermits[Single_Family_Units])",
+            "expression": [
+              "VAR LatestYr = [Selected Reporting Year]",
+              "RETURN",
+              "IF(",
+              "    ISFILTERED(Dim_CalendarYear[Year]),",
+              "    SUM(Fact_HousingPermits[Single_Family_Units]),",
+              "    CALCULATE(",
+              "        SUM(Fact_HousingPermits[Single_Family_Units]),",
+              "        Dim_CalendarYear[Year] = LatestYr",
+              "    )",
+              ")"
+            ],
             "formatString": "#,##0",
             "lineageTag": "469ce267-3801-4888-a03d-0b46234dd2c3"
           },
@@ -244,7 +288,19 @@
             "name": "Multi-Family Permits",
             "description": "Total multi-family permitted units (Duplex + 3-4 units + 5+ units).",
             "displayFolder": "03. Housing Production & AMI",
-            "expression": "SUM(Fact_HousingPermits[Duplex_Units]) + SUM(Fact_HousingPermits[MultiFamily_3_4_Units]) + SUM(Fact_HousingPermits[MultiFamily_5_Plus_Units])",
+            "expression": [
+              "VAR LatestYr = [Selected Reporting Year]",
+              "VAR MultiUnits = SUM(Fact_HousingPermits[Duplex_Units]) + SUM(Fact_HousingPermits[MultiFamily_3_4_Units]) + SUM(Fact_HousingPermits[MultiFamily_5_Plus_Units])",
+              "RETURN",
+              "IF(",
+              "    ISFILTERED(Dim_CalendarYear[Year]),",
+              "    MultiUnits,",
+              "    CALCULATE(",
+              "        MultiUnits,",
+              "        Dim_CalendarYear[Year] = LatestYr",
+              "    )",
+              ")"
+            ],
             "formatString": "#,##0",
             "lineageTag": "f8d15e47-15b4-4d19-83b8-461c981d276a"
           },
@@ -252,7 +308,18 @@
             "name": "ADU Permits",
             "description": "Permitted Accessory Dwelling Units.",
             "displayFolder": "03. Housing Production & AMI",
-            "expression": "SUM(Fact_HousingPermits[ADU_Units])",
+            "expression": [
+              "VAR LatestYr = [Selected Reporting Year]",
+              "RETURN",
+              "IF(",
+              "    ISFILTERED(Dim_CalendarYear[Year]),",
+              "    SUM(Fact_HousingPermits[ADU_Units]),",
+              "    CALCULATE(",
+              "        SUM(Fact_HousingPermits[ADU_Units]),",
+              "        Dim_CalendarYear[Year] = LatestYr",
+              "    )",
+              ")"
+            ],
             "formatString": "#,##0",
             "lineageTag": "dee63ad2-d68c-4de1-9cf5-0c276d5ff546"
           },
@@ -260,7 +327,18 @@
             "name": "Demolished Units",
             "description": "Residential units demolished during reporting period.",
             "displayFolder": "03. Housing Production & AMI",
-            "expression": "SUM(Fact_HousingPermits[Demolished_Units])",
+            "expression": [
+              "VAR LatestYr = [Selected Reporting Year]",
+              "RETURN",
+              "IF(",
+              "    ISFILTERED(Dim_CalendarYear[Year]),",
+              "    SUM(Fact_HousingPermits[Demolished_Units]),",
+              "    CALCULATE(",
+              "        SUM(Fact_HousingPermits[Demolished_Units]),",
+              "        Dim_CalendarYear[Year] = LatestYr",
+              "    )",
+              ")"
+            ],
             "formatString": "#,##0",
             "lineageTag": "4b682041-6d0e-46a0-b40b-7face2189311"
           },
@@ -268,7 +346,18 @@
             "name": "Net New Housing Units",
             "description": "Net new residential units (Total Permitted minus Demolitions).",
             "displayFolder": "03. Housing Production & AMI",
-            "expression": "SUM(Fact_HousingPermits[Net_New_Units])",
+            "expression": [
+              "VAR LatestYr = [Selected Reporting Year]",
+              "RETURN",
+              "IF(",
+              "    ISFILTERED(Dim_CalendarYear[Year]),",
+              "    SUM(Fact_HousingPermits[Net_New_Units]),",
+              "    CALCULATE(",
+              "        SUM(Fact_HousingPermits[Net_New_Units]),",
+              "        Dim_CalendarYear[Year] = LatestYr",
+              "    )",
+              ")"
+            ],
             "formatString": "#,##0",
             "lineageTag": "033ffa9d-f184-4e39-95db-f82666c820c0"
           },
@@ -276,7 +365,18 @@
             "name": "Total Permit Valuation",
             "description": "Permit construction valuation in US Dollars.",
             "displayFolder": "03. Housing Production & AMI",
-            "expression": "SUM(Fact_HousingPermits[Total_Valuation_USD])",
+            "expression": [
+              "VAR LatestYr = [Selected Reporting Year]",
+              "RETURN",
+              "IF(",
+              "    ISFILTERED(Dim_CalendarYear[Year]),",
+              "    SUM(Fact_HousingPermits[Total_Valuation_USD]),",
+              "    CALCULATE(",
+              "        SUM(Fact_HousingPermits[Total_Valuation_USD]),",
+              "        Dim_CalendarYear[Year] = LatestYr",
+              "    )",
+              ")"
+            ],
             "formatString": "$#,##0",
             "lineageTag": "e6befaa9-f363-494b-87fb-27e7a6bfe2d1"
           },
@@ -292,7 +392,14 @@
             "name": "Cumulative Net Housing Units (2020-Present)",
             "description": "Cumulative net new housing units added since GMA planning baseline 2020.",
             "displayFolder": "03. Housing Production & AMI",
-            "expression": "CALCULATE([Net New Housing Units], FILTER(ALL(Dim_CalendarYear), Dim_CalendarYear[Year] >= 2020 && Dim_CalendarYear[Year] <= MAX(Dim_CalendarYear[Year])))",
+            "expression": [
+              "VAR MaxYr = IF(ISFILTERED(Dim_CalendarYear[Year]), [Selected Reporting Year], 2026)",
+              "RETURN",
+              "CALCULATE(",
+              "    SUM(Fact_HousingPermits[Net_New_Units]),",
+              "    FILTER(ALL(Dim_CalendarYear), Dim_CalendarYear[Year] >= 2020 && Dim_CalendarYear[Year] <= MaxYr)",
+              ")"
+            ],
             "formatString": "#,##0",
             "lineageTag": "cf92c6ab-0628-49da-b5d8-d5459c6e0c90"
           },

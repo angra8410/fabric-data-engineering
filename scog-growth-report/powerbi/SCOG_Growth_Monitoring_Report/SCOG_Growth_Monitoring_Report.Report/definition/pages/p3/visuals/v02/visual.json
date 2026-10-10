@@ -1,0 +1,92 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "v02",
+  "position": {
+    "x": 20,
+    "y": 85,
+    "z": 20,
+    "height": 275,
+    "width": 615,
+    "tabOrder": 20
+  },
+  "visual": {
+    "visualType": "clusteredBarChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Jurisdiction"
+                    }
+                  },
+                  "Property": "Jurisdiction_Name"
+                }
+              },
+              "queryRef": "Dim_Jurisdiction.Jurisdiction_Name",
+              "nativeQueryRef": "Jurisdiction_Name",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Total Population"
+                }
+              },
+              "queryRef": "_Measures.Total Population",
+              "nativeQueryRef": "Total Population"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "2045 Population Target"
+                }
+              },
+              "queryRef": "_Measures.2045 Population Target",
+              "nativeQueryRef": "2045 Population Target"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Population Progress toward 2045 GMA Target by Jurisdiction'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

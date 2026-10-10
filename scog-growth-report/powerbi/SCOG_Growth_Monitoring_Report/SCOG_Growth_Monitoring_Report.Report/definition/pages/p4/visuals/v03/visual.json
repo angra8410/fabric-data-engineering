@@ -1,0 +1,221 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "v03",
+  "position": {
+    "x": 670,
+    "y": 85,
+    "z": 20,
+    "height": 325,
+    "width": 590,
+    "tabOrder": 20
+  },
+  "visual": {
+    "visualType": "matrix",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Jurisdiction"
+                    }
+                  },
+                  "Property": "Jurisdiction_Type"
+                }
+              },
+              "queryRef": "Dim_Jurisdiction.Jurisdiction_Type",
+              "nativeQueryRef": "Jurisdiction_Type"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Jurisdiction"
+                    }
+                  },
+                  "Property": "Jurisdiction_Name"
+                }
+              },
+              "queryRef": "Dim_Jurisdiction.Jurisdiction_Name",
+              "nativeQueryRef": "Jurisdiction_Name"
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Total Population"
+                }
+              },
+              "queryRef": "_Measures.Total Population",
+              "nativeQueryRef": "Total Population"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Jurisdiction Share of Regional Population %"
+                }
+              },
+              "queryRef": "_Measures.Jurisdiction Share of Regional Population %",
+              "nativeQueryRef": "Jurisdiction Share of Regional Population %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Cumulative Net Housing Units (2020-Present)"
+                }
+              },
+              "queryRef": "_Measures.Cumulative Net Housing Units (2020-Present)",
+              "nativeQueryRef": "Cumulative Net Housing Units (2020-Present)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Housing Target Progress %"
+                }
+              },
+              "queryRef": "_Measures.Housing Target Progress %",
+              "nativeQueryRef": "Housing Target Progress %"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Growth & Allocation Metrics by Jurisdiction Classification'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "690dcd0f85057c89043b",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Dim_Jurisdiction"
+              }
+            },
+            "Property": "Jurisdiction_Type"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "aeb9ea5562b978036ce0",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Dim_Jurisdiction"
+              }
+            },
+            "Property": "Jurisdiction_Name"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "dd7c5f96f7feca673afa",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Total Population"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "35be53d96f0f8fe3ff38",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Jurisdiction Share of Regional Population %"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "90f2aa5caacbd0bf9e20",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Cumulative Net Housing Units (2020-Present)"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "3a318cda579c486424fb",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Housing Target Progress %"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

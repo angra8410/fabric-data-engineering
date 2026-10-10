@@ -1,0 +1,46 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "v01",
+  "position": {
+    "x": 20,
+    "y": 15,
+    "z": 10,
+    "width": 1240,
+    "height": 60,
+    "tabOrder": 10
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "HOUSING PRODUCTION, TYPOLOGY & AFFORDABILITY (AMI) DEEP-DIVE",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI Semibold",
+                      "fontSize": "15pt",
+                      "color": "#004B87"
+                    }
+                  },
+                  {
+                    "value": "\nResidential Construction Trends, Housing Stock Diversity & Affordable Housing Allocations (HB 1220 / GMA Targets) — PRELIMINARY: Local Jurisdiction Housing Needs Assessments due Oct 20, 2025",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "9pt",
+                      "color": "#475569"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

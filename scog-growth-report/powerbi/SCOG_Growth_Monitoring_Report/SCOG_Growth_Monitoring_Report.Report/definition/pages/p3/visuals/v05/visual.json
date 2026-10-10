@@ -1,0 +1,87 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "v05",
+  "position": {
+    "x": 730,
+    "y": 370,
+    "z": 20,
+    "width": 530,
+    "height": 295,
+    "tabOrder": 20
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Jurisdiction"
+                    }
+                  },
+                  "Property": "Jurisdiction_Name"
+                }
+              },
+              "queryRef": "Dim_Jurisdiction.Jurisdiction_Name",
+              "nativeQueryRef": "Jurisdiction_Name"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "2022 Employment Baseline"
+                }
+              },
+              "queryRef": "_Measures.2022 Employment Baseline",
+              "nativeQueryRef": "2022 Employment Baseline"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "2045 Employment Target"
+                }
+              },
+              "queryRef": "_Measures.2045 Employment Target",
+              "nativeQueryRef": "2045 Employment Target"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Adopted GMA 2045 Employment Targets by Jurisdiction (Planning Allocations Only - No Annual Actuals)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

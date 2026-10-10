@@ -1,0 +1,249 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "v10",
+  "position": {
+    "x": 650,
+    "y": 420,
+    "z": 20,
+    "height": 245,
+    "width": 610,
+    "tabOrder": 20
+  },
+  "visual": {
+    "visualType": "matrix",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Jurisdiction"
+                    }
+                  },
+                  "Property": "Jurisdiction_Name"
+                }
+              },
+              "queryRef": "Dim_Jurisdiction.Jurisdiction_Name",
+              "nativeQueryRef": "Jurisdiction_Name"
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Single-Family Permits"
+                }
+              },
+              "queryRef": "_Measures.Single-Family Permits",
+              "nativeQueryRef": "Single-Family Permits"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Multi-Family Permits"
+                }
+              },
+              "queryRef": "_Measures.Multi-Family Permits",
+              "nativeQueryRef": "Multi-Family Permits"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "ADU Permits"
+                }
+              },
+              "queryRef": "_Measures.ADU Permits",
+              "nativeQueryRef": "ADU Permits"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Demolished Units"
+                }
+              },
+              "queryRef": "_Measures.Demolished Units",
+              "nativeQueryRef": "Demolished Units"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Net New Housing Units"
+                }
+              },
+              "queryRef": "_Measures.Net New Housing Units",
+              "nativeQueryRef": "Net New Housing Units"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Total Permit Valuation"
+                }
+              },
+              "queryRef": "_Measures.Total Permit Valuation",
+              "nativeQueryRef": "Total Permit Valuation"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Jurisdictional Housing Permitting Reconciliation Matrix'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "bc61a043271e8f729f5a",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Dim_Jurisdiction"
+              }
+            },
+            "Property": "Jurisdiction_Name"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "3127d93f218f4e898ca9",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Single-Family Permits"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "4a30693a4ae1b4b5bb0f",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Multi-Family Permits"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "1be808659c60fd5f7205",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "ADU Permits"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "31fcaca9889a97996a3e",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Demolished Units"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "da9956caf34d747309b2",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Net New Housing Units"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "819bc4180205af3db6a2",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Total Permit Valuation"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

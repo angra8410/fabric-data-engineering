@@ -112,8 +112,9 @@ check("Page 1 KPI", "Employment 2045 Target", re.search(r"Target:\s*([\d,]+)", c
 pop_traj = df_pop[df_pop["Year"].between(2020, 2025)].groupby("Year")["Population_Count"].sum().to_dict()
 p1_chart1 = p1.find("div", class_="visual-subtitle")
 check("Page 1 Chart", "Pop Trajectory 2020-2025 Growth", re.search(r"\+([\d,]+)\s*/", p1_chart1.text).group(1), f"{pop_2025 - pop_traj[2020]:,}")
+p1_chart1_svg = p1.find_all("svg", class_="chart-svg")[0]
 for y in [2020, 2021, 2022, 2023, 2024, 2025]:
-    m = re.search(rf"{y}\s*\(([\d,]+)\)", p1.text)
+    m = re.search(rf"{y}[\s\S]*?\(([\d,]+)\)", p1_chart1_svg.text)
     check("Page 1 Chart", f"Pop Trajectory Year {y}", m.group(1), f"{pop_traj[y]:,}")
 
 # 3. Page 1 Permitted Typology Chart (2025 Cluster)
@@ -129,7 +130,7 @@ p1_rows = p1_table.find("tbody").find_all("tr")
 
 tgt_indexed = df_tgt.set_index("Jurisdiction_ID")
 pop_2025_idx = df_pop[df_pop["Year"] == 2025].set_index("Jurisdiction_ID")
-cum_h_idx = df_hp[(df_hp["Year"] >= 2020) & (df_hp["Year"] <= 2025)].groupby("Jurisdiction_ID")["Net_New_Units"].sum()
+hp_cum_idx = df_hp[(df_hp["Year"] >= 2020) & (df_hp["Year"] <= 2025)].groupby("Jurisdiction_ID")["Net_New_Units"].sum()
 
 jur_order = [
     "JUR-01", "JUR-02", "JUR-03", "JUR-04", "JUR-05", 
@@ -140,125 +141,105 @@ for idx, jid in enumerate(jur_order):
     tr = p1_rows[idx]
     tds = tr.find_all("td")
     name = tds[0].text.strip()
-    jtype = tds[1].text.strip()
-    p25 = tds[2].text.strip()
-    ptgt = tds[3].text.strip()
-    hcum = tds[4].text.strip()
-    htgt = tds[5].text.strip()
-    hpct = tds[6].text.strip()
-    
-    exp_name = tgt_indexed.loc[jid, "Jurisdiction_Name"]
-    exp_p25 = int(pop_2025_idx.loc[jid, "Population_Count"])
-    exp_ptgt = int(tgt_indexed.loc[jid, "Target_2045_Population"])
-    exp_hcum = int(cum_h_idx.get(jid, 0))
-    exp_htgt = int(tgt_indexed.loc[jid, "Target_2045_Housing_Units"])
-    exp_hpct = f"{(exp_hcum / exp_htgt * 100):.1f}%" if exp_htgt > 0 else "—"
-    
-    check("Page 1 Table", f"{exp_name} 2025 Population", p25, f"{exp_p25:,}")
-    check("Page 1 Table", f"{exp_name} 2045 Pop Target", ptgt, f"{exp_ptgt:,}")
-    check("Page 1 Table", f"{exp_name} Net Housing Cum", hcum, f"{exp_hcum:,}")
-    check("Page 1 Table", f"{exp_name} 2045 Housing Target", htgt, f"{exp_htgt:,}")
-    check("Page 1 Table", f"{exp_name} Housing Target %", hpct, exp_hpct)
+    j_type = tds[1].text.strip()
+    pop_cell = tds[2].text.strip()
+    pop_tgt_cell = tds[3].text.strip()
+    net_h_cell = tds[4].text.strip()
+    tgt_h_cell = tds[5].text.strip()
+    pct_cell = tds[6].text.strip()
 
-# Total Row
-p1_total_tds = p1_rows[11].find_all("td")
-check("Page 1 Table Total", "Countywide 2025 Population", p1_total_tds[2].text, f"{pop_2025:,}")
-check("Page 1 Table Total", "Countywide 2045 Pop Target", p1_total_tds[3].text, f"{pop_tgt:,}")
-check("Page 1 Table Total", "Countywide Net Housing Cum", p1_total_tds[4].text, f"{hp_cum:,}")
-check("Page 1 Table Total", "Countywide 2045 Housing Target", p1_total_tds[5].text, f"{hp_tgt:,}")
-check("Page 1 Table Total", "Countywide Housing Target %", p1_total_tds[6].text, f"{hp_pct:.1f}%")
+    exp_name = tgt_indexed.loc[jid, "Jurisdiction_Name"]
+    exp_pop = int(pop_2025_idx.loc[jid, "Population_Count"])
+    exp_pop_tgt = int(tgt_indexed.loc[jid, "Target_2045_Population"])
+    exp_h_cum = int(hp_cum_idx.get(jid, 0))
+    exp_h_tgt = int(tgt_indexed.loc[jid, "Target_2045_Housing_Units"])
+    exp_pct = f"{(exp_h_cum / exp_h_tgt * 100):.1f}%" if exp_h_tgt > 0 else "—"
+
+    check("Page 1 Table", f"{exp_name} 2025 Pop", pop_cell, f"{exp_pop:,}")
+    check("Page 1 Table", f"{exp_name} 2045 Pop Target", pop_tgt_cell, f"{exp_pop_tgt:,}")
+    check("Page 1 Table", f"{exp_name} Net Housing", net_h_cell, f"{exp_h_cum:,}")
+    check("Page 1 Table", f"{exp_name} 2045 Housing Target", tgt_h_cell, f"{exp_h_tgt:,}")
+    check("Page 1 Table", f"{exp_name} Target %", pct_cell, exp_pct)
+
+# Page 1 Table Total Row
+total_tds = p1_rows[11].find_all("td")
+check("Page 1 Total", "Total Pop 2025", total_tds[2].text, f"{pop_2025:,}")
+check("Page 1 Total", "Total Pop Target 2045", total_tds[3].text, f"{pop_tgt:,}")
+check("Page 1 Total", "Total Net Housing Cum", total_tds[4].text, f"{hp_cum:,}")
+check("Page 1 Total", "Total Housing Target", total_tds[5].text, f"{hp_tgt:,}")
+check("Page 1 Total", "Total Progress %", total_tds[6].text, f"{hp_pct:.1f}%")
 
 # -------------------------------------------------------------------------
 # PAGE 2 CHECKS
 # -------------------------------------------------------------------------
 p2 = soup.find("div", id="p2")
-
-# 1. Page 2 KPIs
 p2_cards = p2.find_all("div", class_="card")
+
+# KPI Cards
 check("Page 2 KPI", "2025 Net New Units", p2_cards[0].find("div", class_="card-value").text, f"{net_2025:,}")
-check("Page 2 KPI", "2025 SF Permits", p2_cards[1].find("div", class_="card-value").text, f"{sf_2025:,}")
-check("Page 2 KPI", "2025 SF Share %", re.search(r"([\d\.]+)%", p2_cards[1].find("div", class_="card-comparison").text).group(1), f"{(sf_2025/gross_2025*100):.1f}")
-check("Page 2 KPI", "2025 MF Permits", p2_cards[2].find("div", class_="card-value").text, f"{mf_2025:,}")
-check("Page 2 KPI", "2025 MF Share %", re.search(r"([\d\.]+)%", p2_cards[2].find("div", class_="card-comparison").text).group(1), f"{(mf_2025/gross_2025*100):.1f}")
-check("Page 2 KPI", "2025 ADU Permits", p2_cards[3].find("div", class_="card-value").text, f"{adu_2025:,}")
-check("Page 2 KPI", "2025 ADU Share %", re.search(r"([\d\.]+)%", p2_cards[3].find("div", class_="card-comparison").text).group(1), f"{(adu_2025/gross_2025*100):.1f}")
+check("Page 2 KPI", "2025 Single-Family Units", p2_cards[1].find("div", class_="card-value").text, f"{sf_2025:,}")
+check("Page 2 KPI", "2025 Multi-Family Units", p2_cards[2].find("div", class_="card-value").text, f"{mf_2025:,}")
+check("Page 2 KPI", "2025 ADU Units", p2_cards[3].find("div", class_="card-value").text, f"{adu_2025:,}")
 
-# 2. Page 2 Top Row Chart: SF vs MF production
-p2_bar_rows = p2.find_all("div", class_="bar-row")
-# First group of bar rows are the top 5 SF vs MF production
-p2_hp_rows = p2_bar_rows[:5]
-for row in p2_hp_rows:
-    lbl = row.find("span", class_="bar-label").text.strip()
-    val_txt = row.find("span", class_="bar-val").text.strip()
-    m_sf_mf = re.search(r"(\d+)\s*SF\s*/\s*(\d+)\s*MF", val_txt)
-    exp_r = tgt_indexed[tgt_indexed["Jurisdiction_Name"] == lbl]
-    jid = exp_r.index[0]
-    exp_sf = int(hp_2025.set_index("Jurisdiction_ID").loc[jid, "Single_Family_Units"])
-    exp_mf = int((hp_2025.set_index("Jurisdiction_ID").loc[jid, "Duplex_Units"] + 
-                  hp_2025.set_index("Jurisdiction_ID").loc[jid, "MultiFamily_3_4_Units"] + 
-                  hp_2025.set_index("Jurisdiction_ID").loc[jid, "MultiFamily_5_Plus_Units"]))
-    check("Page 2 SF/MF Chart", f"{lbl} SF Value", m_sf_mf.group(1), str(exp_sf))
-    check("Page 2 SF/MF Chart", f"{lbl} MF Value", m_sf_mf.group(2), str(exp_mf))
+# Card Shares
+c1_sh = p2_cards[1].find("div", class_="card-comparison").text
+c2_sh = p2_cards[2].find("div", class_="card-comparison").text
+c3_sh = p2_cards[3].find("div", class_="card-comparison").text
+check("Page 2 KPI", "SF Share %", re.search(r"([\d\.]+)%", c1_sh).group(1), f"{(sf_2025/gross_2025*100):.1f}")
+check("Page 2 KPI", "MF Share %", re.search(r"([\d\.]+)%", c2_sh).group(1), f"{(mf_2025/gross_2025*100):.1f}")
+check("Page 2 KPI", "ADU Share %", re.search(r"([\d\.]+)%", c3_sh).group(1), f"{(adu_2025/gross_2025*100):.1f}")
 
-# 3. Page 2 Permitting Matrix Table
+# Page 2 Permitting Matrix
 p2_table = p2.find("table", class_="table-visual")
 p2_rows = p2_table.find("tbody").find_all("tr")
 
-hp_2025_idx = hp_2025.set_index("Jurisdiction_ID")
-hp_2025_idx["MF_Units"] = hp_2025_idx["Duplex_Units"] + hp_2025_idx["MultiFamily_3_4_Units"] + hp_2025_idx["MultiFamily_5_Plus_Units"]
-
+hp_2025_idx = df_hp[df_hp["Year"] == 2025].set_index("Jurisdiction_ID")
 for idx, jid in enumerate(jur_order):
     tr = p2_rows[idx]
     tds = tr.find_all("td")
     name = tds[0].text.strip()
-    sf = tds[1].text.strip()
-    mf = tds[2].text.strip()
-    adu = tds[3].text.strip()
-    dem = tds[4].text.strip()
-    net = tds[5].text.strip()
-    
+    sf_cell = tds[1].text.strip()
+    mf_cell = tds[2].text.strip()
+    adu_cell = tds[3].text.strip()
+    dem_cell = tds[4].text.strip()
+    net_cell = tds[5].text.strip()
+
     exp_name = tgt_indexed.loc[jid, "Jurisdiction_Name"]
     if jid in hp_2025_idx.index:
-        r = hp_2025_idx.loc[jid]
-        exp_sf = int(r["Single_Family_Units"])
-        exp_mf = int(r["MF_Units"])
-        exp_adu = int(r["ADU_Units"])
-        exp_dem = int(r["Demolished_Units"])
-        exp_net = int(r["Net_New_Units"])
+        r_hp = hp_2025_idx.loc[jid]
+        exp_sf = int(r_hp["Single_Family_Units"])
+        exp_mf = int(r_hp["Duplex_Units"] + r_hp["MultiFamily_3_4_Units"] + r_hp["MultiFamily_5_Plus_Units"])
+        exp_adu = int(r_hp["ADU_Units"])
+        exp_dem = int(r_hp["Demolished_Units"])
+        exp_net = int(r_hp["Net_New_Units"])
     else:
         exp_sf = exp_mf = exp_adu = exp_dem = exp_net = 0
-        
-    check("Page 2 Matrix", f"{exp_name} SF", sf, str(exp_sf))
-    check("Page 2 Matrix", f"{exp_name} MF", mf, str(exp_mf))
-    check("Page 2 Matrix", f"{exp_name} ADU", adu, str(exp_adu))
-    check("Page 2 Matrix", f"{exp_name} Demolished", dem, str(exp_dem))
-    check("Page 2 Matrix", f"{exp_name} Net New", net, str(exp_net))
+
+    check("Page 2 Matrix", f"{exp_name} SF", sf_cell, str(exp_sf))
+    check("Page 2 Matrix", f"{exp_name} MF", mf_cell, str(exp_mf))
+    check("Page 2 Matrix", f"{exp_name} ADU", adu_cell, str(exp_adu))
+    check("Page 2 Matrix", f"{exp_name} Demolished", dem_cell, str(exp_dem))
+    check("Page 2 Matrix", f"{exp_name} Net New", net_cell, str(exp_net))
 
 # Total Row
 p2_total_tds = p2_rows[11].find_all("td")
-check("Page 2 Matrix Total", "Total County SF", p2_total_tds[1].text, f"{sf_2025:,}")
-check("Page 2 Matrix Total", "Total County MF", p2_total_tds[2].text, f"{mf_2025:,}")
-check("Page 2 Matrix Total", "Total County ADU", p2_total_tds[3].text, f"{adu_2025:,}")
-check("Page 2 Matrix Total", "Total County Demolished", p2_total_tds[4].text, f"{dem_2025:,}")
-check("Page 2 Matrix Total", "Total County Net New", p2_total_tds[5].text, f"{net_2025:,}")
+check("Page 2 Matrix Total", "Total SF", p2_total_tds[1].text, f"{sf_2025:,}")
+check("Page 2 Matrix Total", "Total MF", p2_total_tds[2].text, f"{mf_2025:,}")
+check("Page 2 Matrix Total", "Total ADU", p2_total_tds[3].text, f"{adu_2025:,}")
+check("Page 2 Matrix Total", "Total Demolished", p2_total_tds[4].text, f"{dem_2025:,}")
+check("Page 2 Matrix Total", "Total Net New", p2_total_tds[5].text, f"{net_2025:,}")
 
-# 4. Page 2 AMI Distribution
-df_ami["Low"] = df_ami["AMI_0_to_30_Pct_Units"] + df_ami["AMI_31_to_50_Pct_Units"] + df_ami["AMI_51_to_80_Pct_Units"]
-df_ami["ModHigh"] = df_ami["AMI_81_to_100_Pct_Units"] + df_ami["AMI_101_to_120_Pct_Units"] + df_ami["AMI_Greater_120_Pct_Units"]
-ami_agg = df_ami.groupby(["Jurisdiction_ID", "Jurisdiction_Name"])[["Low", "ModHigh", "Total_AMI_Units"]].sum().reset_index()
+# Page 2 AMI breakdown
+ami_container = p2.find_all("div", class_="visual-container")[2]
+ami_agg = df_ami[df_ami["Year"] == 2025].groupby("Jurisdiction_ID").agg({"Total_AMI_Units": "sum"}).reset_index().set_index("Jurisdiction_ID")
+for jid in ami_agg.index:
+    j_name = tgt_indexed.loc[jid, "Jurisdiction_Name"]
+    exp_ami = int(ami_agg.loc[jid, "Total_AMI_Units"])
+    m_ami = re.search(rf"{j_name}[\s\S]*?([\d,]+)\s*units", ami_container.text)
+    check("Page 2 AMI", f"{j_name} AMI Units", m_ami.group(1), f"{exp_ami:,}")
 
-p2_ami_rows = p2_bar_rows[5:]
-for row in p2_ami_rows:
-    lbl = row.find("span", class_="bar-label").text.strip()
-    val_txt = row.find("span", class_="bar-val").text.strip()
-    m_val = re.search(r"([\d,]+)\s*units", val_txt)
-    exp_r = ami_agg[ami_agg["Jurisdiction_Name"] == lbl]
-    if not exp_r.empty:
-        exp_units = int(exp_r["Total_AMI_Units"].iloc[0])
-        check("Page 2 AMI", f"{lbl} Total AMI Units", m_val.group(1), f"{exp_units:,}")
-
-tot_ami = int(ami_agg["Total_AMI_Units"].sum())
-m_ami_tot = re.search(r"reporting\s*\(([\d,]+)\s*total units", p2.text)
+tot_ami = int(df_ami[df_ami["Year"] == 2025]["Total_AMI_Units"].sum())
+m_ami_tot = re.search(r"=\s*([\d,]+)\s*total units", ami_container.text)
 check("Page 2 AMI", "Total Preliminary AMI Units", m_ami_tot.group(1), f"{tot_ami:,}")
 
 # -------------------------------------------------------------------------
@@ -266,9 +247,10 @@ check("Page 2 AMI", "Total Preliminary AMI Units", m_ami_tot.group(1), f"{tot_am
 # -------------------------------------------------------------------------
 p3 = soup.find("div", id="p3")
 
-# 1. Page 3 Population Progress Top Chart
-p3_bar_rows = p3.find_all("div", class_="bar-row")
-p3_prog_rows = p3_bar_rows[:5]
+# 1. Page 3 Population Progress Top Chart (All 11 Jurisdictions)
+p3_containers = p3.find_all("div", class_="visual-container")
+p3_prog_rows = p3_containers[0].find_all("div", class_="bar-row")
+
 for row in p3_prog_rows:
     lbl = row.find("span", class_="bar-label").text.strip()
     val_txt = row.find("span", class_="bar-val").text.strip()
@@ -284,7 +266,7 @@ for row in p3_prog_rows:
 yoy_sub = re.search(r"Countywide Change:\s*\+([\d,]+)", p3.text)
 check("Page 3 Chart", "YoY Countywide Pop Change", yoy_sub.group(1), f"{pop_2025 - pop_traj[2024]:,}")
 
-p3_yoy_bars = p3_bar_rows[5:11]
+p3_yoy_bars = p3_containers[1].find_all("div", class_="bar-row")
 pop_2025_full = df_pop[df_pop["Year"] == 2025].set_index("Jurisdiction_ID")
 for row in p3_yoy_bars:
     lbl = row.find("span", class_="bar-label").text.strip()
@@ -292,7 +274,8 @@ for row in p3_yoy_bars:
     exp_r = tgt_indexed[tgt_indexed["Jurisdiction_Name"] == lbl]
     jid = exp_r.index[0]
     exp_yoy = int(pop_2025_full.loc[jid, "YoY_Population_Change"])
-    check("Page 3 YoY", f"{lbl} YoY Pop Change", val_txt, f"+{exp_yoy:,}")
+    exp_yoy_str = f"+{exp_yoy:,}" if exp_yoy > 0 else f"{exp_yoy:,}"
+    check("Page 3 YoY", f"{lbl} YoY Pop Change", val_txt, exp_yoy_str)
 
 # 3. Page 3 Employment Table
 p3_table = p3.find("table", class_="table-visual")
@@ -381,12 +364,12 @@ r14_tds = [td.text.strip() for td in p4_tbody_rows[14].find_all("td")]
 check("Page 4 Table", "Total County Population", r14_tds[1], f"{pop_2025:,}")
 check("Page 4 Table", "Total County Share %", r14_tds[2], "100.0%")
 
-# Page 4 Share Comparison Bars
-p4_comp_bars = p4.find_all("div", class_="bar-row")
+# Page 4 Share Comparison Bars (Grouped horizontal bars)
+p4_comp_bars = p4.find_all("div", class_="grouped-bar-row")
 for bar in p4_comp_bars:
     name = bar.find("span", class_="bar-label").text.strip()
-    val = bar.find("span", class_="bar-val").text.strip()
-    m_comp = re.search(r"([\d\.]+)%\s*/\s*([\d\.]+)%", val)
+    val_span = bar.find_all("span", class_="bar-val")[-1].text.strip()
+    m_comp = re.search(r"([\d\.]+)%\s*/\s*([\d\.]+)%", val_span)
     exp_r = tgt_indexed[tgt_indexed["Jurisdiction_Name"] == name]
     if not exp_r.empty:
         jid = exp_r.index[0]
@@ -404,30 +387,20 @@ check("Page 4 Footer", "UGAs in Footer", str(uga_pop) in p4_footer.replace(",", 
 check("Page 4 Footer", "Rural in Footer", str(rural_pop) in p4_footer.replace(",", ""), True)
 check("Page 4 Footer", "Total in Footer", str(pop_2025) in p4_footer.replace(",", ""), True)
 
-# -------------------------------------------------------------------------
-# PRINT SUMMARY REPORT
-# -------------------------------------------------------------------------
-print("=" * 80)
-print("SCOG REPORT DESIGN V2 MOCK-UP: AUTOMATED VERIFICATION AUDIT")
-print("=" * 80)
-print(f"{'Category':<24} | {'Metric / Cell':<35} | {'Rendered':<12} | {'Expected':<12} | {'Status'}")
-print("-" * 95)
-
-pass_count = 0
-fail_count = 0
-
-for r in results:
-    if r["status"] == "PASS":
-        pass_count += 1
+if __name__ == "__main__":
+    print("=" * 95)
+    print("SCOG REPORT DESIGN V2 MOCK-UP: COMPREHENSIVE AUTOMATED VERIFICATION AUDIT")
+    print("=" * 95)
+    print(f"{'Category':<24} | {'Metric / Cell':<35} | {'Rendered':<12} | {'Expected':<12} | {'Status'}")
+    print("-" * 95)
+    for r in results:
+        print(f"{r['category']:<24} | {r['metric']:<35} | {r['rendered']:<12} | {r['expected']:<12} | {r['status']}")
+    print("=" * 95)
+    pass_count = sum(1 for r in results if r["status"] == "PASS")
+    fail_count = sum(1 for r in results if r["status"] == "FAIL")
+    print(f"TOTAL CHECKS: {len(results)} | PASSED: {pass_count} | FAILED: {fail_count}")
+    print("=" * 95)
+    if fail_count > 0:
+        exit(1)
     else:
-        fail_count += 1
-    print(f"{r['category']:<24} | {r['metric']:<35} | {r['rendered']:<12} | {r['expected']:<12} | {r['status']}")
-
-print("=" * 95)
-print(f"TOTAL CHECKS: {len(results)} | PASSED: {pass_count} | FAILED: {fail_count}")
-print("=" * 95)
-
-if fail_count > 0:
-    exit(1)
-else:
-    print("ALL CELLS, METRICS AND FIGURES SUCCESSFULLY MATCH THE PROCESSED CSVS 100%!")
+        print("ALL CELLS, METRICS AND FIGURES SUCCESSFULLY MATCH THE PROCESSED CSVS 100%!")

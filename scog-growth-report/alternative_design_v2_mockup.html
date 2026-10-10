@@ -19,7 +19,7 @@
       --slate-400: #94a3b8;
       --slate-200: #e2e8f0;
       --slate-100: #f1f5f9;
-      --primary-accent: #004B87;     /* Single accent: accent blue (#004B87) */
+      --primary-accent: #004B87;     /* Single accent: Navy/Azure (#004B87) */
       --accent-tint: #e6f0f8;
       --accent-bar: #2563eb;
       --bg-canvas: #f1f5f9;
@@ -28,7 +28,6 @@
       --border-divider: #cbd5e1;
       --text-main: #0f172a;
       --text-muted: #64748b;
-      --success-green: #059669;      /* Minimal green reserved strictly for progress/good */
       --font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
     }
 
@@ -175,11 +174,378 @@
       transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
+    .report-page {
+      display: none;
+      width: 1300px;
+      height: 900px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 16px 24px 12px 24px;
+      box-sizing: border-box;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .report-page.active {
+      display: flex;
+    }
+
+    .page-header {
+      height: 46px;
+      margin-bottom: 10px;
+      border-bottom: 2px solid var(--border-divider);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding-bottom: 6px;
+      flex-shrink: 0;
+    }
+
+    .page-header-text h2 {
+      font-size: 18.5px;
+      font-weight: 700;
+      color: var(--primary-accent);
+      line-height: 1.2;
+    }
+
+    .page-header-text p {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .page-header-tag {
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--slate-700);
+      background: var(--accent-tint);
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid #bfdbfe;
+    }
+
+    .kpi-row {
+      display: grid;
+      grid-template-columns: 220px repeat(4, 1fr);
+      gap: 16px;
+      height: 96px;
+      margin-bottom: 14px;
+      flex-shrink: 0;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 8px;
+      padding: 10px 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .card-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--slate-900);
+      line-height: 1.1;
+      margin: 1px 0;
+    }
+
+    .card-comparison {
+      font-size: 10px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-top: 1px dashed var(--slate-100);
+      padding-top: 4px;
+      line-height: 1.25;
+    }
+
+    .card-comparison strong {
+      color: var(--slate-800);
+    }
+
+    .slicer-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 8px;
+      padding: 8px 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .slicer-card label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .slicer-dropdown {
+      width: 100%;
+      height: 28px;
+      padding: 2px 6px;
+      border: 1px solid var(--border-divider);
+      border-radius: 4px;
+      background: #ffffff;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--slate-900);
+      cursor: pointer;
+    }
+
+    .slicer-hint {
+      font-size: 9px;
+      color: var(--text-muted);
+      line-height: 1;
+    }
+
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+
+    .grid-2col-split {
+      display: grid;
+      grid-template-columns: 1fr 1.05fr;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+
+    .visual-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 8px;
+      padding: 12px 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+
+    .visual-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--primary-accent);
+      margin-bottom: 2px;
+    }
+
+    .visual-subtitle {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .visual-body {
+      flex: 1;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      overflow: visible;
+    }
+
+    .table-visual {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10.5px;
+      text-align: left;
+    }
+
+    .table-visual th {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: #f8fafc;
+      color: var(--slate-800);
+      font-weight: 700;
+      padding: 4px 8px;
+      border-bottom: 2px solid var(--border-divider);
+      white-space: nowrap;
+    }
+
+    .table-visual th.num, .table-visual td.num {
+      text-align: right;
+    }
+
+    .table-visual td {
+      padding: 3.5px 8px;
+      border-bottom: 1px solid var(--slate-100);
+      color: var(--slate-900);
+      line-height: 1.25;
+      white-space: nowrap;
+    }
+
+    .table-visual tr:nth-child(even) td {
+      background: #fcfdfe;
+    }
+
+    .table-visual tr.total-row td {
+      font-weight: 700;
+      background: #f1f5f9;
+      border-top: 2px solid var(--slate-400);
+      border-bottom: 2px solid var(--slate-400);
+      color: var(--slate-900);
+    }
+
+    .chart-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .axis-line {
+      stroke: var(--border-divider);
+      stroke-width: 1;
+    }
+
+    .axis-label {
+      font-size: 9.5px;
+      fill: var(--text-muted);
+      font-family: var(--font-family);
+    }
+
+    .chart-val-text {
+      font-size: 8.5px;
+      font-weight: 700;
+      fill: var(--slate-800);
+      text-anchor: middle;
+      font-family: var(--font-family);
+    }
+
+    .page-footer {
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border-divider);
+      padding-top: 4px;
+      font-size: 9.5px;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .legend-box {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 6px;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .legend-color {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      display: inline-block;
+    }
+
+    .bar-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 4px;
+      font-size: 10px;
+    }
+
+    .bar-label {
+      width: 165px;
+      color: var(--slate-800);
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex-shrink: 0;
+    }
+
+    .bar-track {
+      flex: 1;
+      height: 12px;
+      background: var(--slate-100);
+      border-radius: 3px;
+      overflow: hidden;
+      display: flex;
+      margin: 0 8px;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: var(--primary-accent);
+    }
+
+    .bar-fill.accent2 {
+      background: #2563eb;
+    }
+
+    .bar-val {
+      width: 85px;
+      text-align: right;
+      font-weight: 600;
+      color: var(--slate-900);
+      flex-shrink: 0;
+      font-size: 9.5px;
+    }
+
+    .grouped-bar-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 6px;
+      padding-bottom: 4px;
+      border-bottom: 1px dashed var(--slate-100);
+    }
+
+    .grouped-bar-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .grouped-bar-item {
+      display: flex;
+      align-items: center;
+    }
+
+    .info-callout {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 10px;
+      color: var(--slate-700);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 6px;
+      line-height: 1.3;
+    }
+
     #map-container {
       position: relative;
       width: 100%;
       height: 100%;
-      min-height: 350px;
+      min-height: 380px;
       border-radius: 6px;
       overflow: hidden;
       background: #f8fafc;
@@ -236,347 +602,6 @@
       border: 1.5px solid #ffffff;
       display: inline-block;
     }
-
-    .report-page {
-      display: none;
-      width: 1300px;
-      height: 900px;
-      position: absolute;
-      top: 0;
-      left: 0;
-      padding: 16px 24px 12px 24px;
-      box-sizing: border-box;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .report-page.active {
-      display: flex;
-    }
-
-    .page-header {
-      height: 48px;
-      margin-bottom: 10px;
-      border-bottom: 2px solid var(--border-divider);
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      padding-bottom: 6px;
-      flex-shrink: 0;
-    }
-
-    .page-header-text h2 {
-      font-size: 19px;
-      font-weight: 700;
-      color: var(--primary-accent);
-      line-height: 1.2;
-    }
-
-    .page-header-text p {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    .page-header-tag {
-      font-size: 10.5px;
-      font-weight: 600;
-      color: var(--slate-700);
-      background: var(--accent-tint);
-      padding: 3px 8px;
-      border-radius: 4px;
-      border: 1px solid #bfdbfe;
-    }
-
-    .kpi-row {
-      display: grid;
-      grid-template-columns: 220px repeat(4, 1fr);
-      gap: 16px;
-      height: 82px;
-      margin-bottom: 10px;
-      flex-shrink: 0;
-    }
-
-    .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-card);
-      border-radius: 8px;
-      padding: 10px 14px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .card-title {
-      font-size: 10.5px;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-    }
-
-    .card-value {
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--slate-900);
-      line-height: 1.1;
-      margin: 1px 0;
-    }
-
-    .card-comparison {
-      font-size: 10.5px;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      border-top: 1px dashed var(--slate-100);
-      padding-top: 3px;
-    }
-
-    .card-comparison strong {
-      color: var(--slate-800);
-    }
-
-    .slicer-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-card);
-      border-radius: 8px;
-      padding: 8px 12px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      gap: 3px;
-    }
-
-    .slicer-card label {
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .slicer-dropdown {
-      width: 100%;
-      height: 28px;
-      padding: 2px 6px;
-      border: 1px solid var(--border-divider);
-      border-radius: 4px;
-      background: #ffffff;
-      font-size: 11.5px;
-      font-weight: 600;
-      color: var(--slate-900);
-      cursor: pointer;
-    }
-
-    .slicer-hint {
-      font-size: 9px;
-      color: var(--text-muted);
-      line-height: 1;
-      margin-top: 1px;
-    }
-
-    .grid-2col {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      height: 250px;
-      margin-bottom: 10px;
-      flex-shrink: 0;
-    }
-
-    .grid-2col-split {
-      display: grid;
-      grid-template-columns: 1fr 1.05fr;
-      gap: 16px;
-      height: 310px;
-      margin-bottom: 10px;
-      flex-shrink: 0;
-    }
-
-    .visual-container {
-      background: var(--bg-card);
-      border: 1px solid var(--border-card);
-      border-radius: 8px;
-      padding: 12px 16px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    .visual-title {
-      font-size: 12.5px;
-      font-weight: 700;
-      color: var(--primary-accent);
-      margin-bottom: 2px;
-    }
-
-    .visual-subtitle {
-      font-size: 10px;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-    }
-
-    .visual-body {
-      flex: 1;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      overflow: visible;
-    }
-
-    .table-visual {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 10.5px;
-      text-align: left;
-    }
-
-    .table-visual th {
-      position: sticky;
-      top: 0;
-      z-index: 2;
-      background: #f8fafc;
-      color: var(--slate-800);
-      font-weight: 700;
-      padding: 4px 8px;
-      border-bottom: 2px solid var(--border-divider);
-      white-space: nowrap;
-    }
-
-    .table-visual th.num, .table-visual td.num {
-      text-align: right;
-    }
-
-    .table-visual td {
-      padding: 3px 8px;
-      border-bottom: 1px solid var(--slate-100);
-      color: var(--slate-900);
-      line-height: 1.25;
-      white-space: nowrap;
-    }
-
-    .table-visual tr:nth-child(even) td {
-      background: #fcfdfe;
-    }
-
-    .table-visual tr.total-row td {
-      font-weight: 700;
-      background: #e2e8f0;
-      border-top: 2px solid var(--slate-700);
-      border-bottom: 2px solid var(--slate-700);
-      color: var(--slate-900);
-    }
-
-    svg.chart-svg {
-      width: 100%;
-      height: 100%;
-      overflow: visible;
-    }
-
-    .axis-line {
-      stroke: var(--border-divider);
-      stroke-width: 1;
-    }
-
-    .grid-line {
-      stroke: var(--slate-100);
-      stroke-width: 1;
-    }
-
-    .axis-label {
-      font-size: 10px;
-      fill: var(--slate-500);
-      font-family: var(--font-family);
-    }
-
-    .page-footer {
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-top: 1px solid var(--border-divider);
-      padding-top: 4px;
-      font-size: 10px;
-      color: var(--text-muted);
-      flex-shrink: 0;
-    }
-
-    .legend-box {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      font-size: 10px;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-    }
-
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .legend-color {
-      width: 10px;
-      height: 10px;
-      border-radius: 2px;
-    }
-
-    .bar-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 5px;
-      font-size: 11px;
-    }
-    .bar-label {
-      width: 230px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      color: var(--slate-900);
-    }
-    .bar-track {
-      flex: 1;
-      height: 14px;
-      background: var(--slate-100);
-      border-radius: 3px;
-      overflow: hidden;
-      display: flex;
-    }
-    .bar-fill {
-      height: 100%;
-      background: var(--primary-accent);
-    }
-    .bar-fill.accent2 {
-      background: #2563eb;
-    }
-    .bar-fill.accent3 {
-      background: var(--slate-400);
-    }
-    .bar-val {
-      width: 75px;
-      text-align: right;
-      font-weight: 600;
-      color: var(--slate-900);
-    }
-
-    .info-callout {
-      background: #f0fdf4;
-      border: 1px solid #bbf7d0;
-      border-radius: 6px;
-      padding: 8px 12px;
-      font-size: 11px;
-      color: #166534;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 8px;
-    }
   </style>
 </head>
 <body>
@@ -607,685 +632,759 @@
   <div class="canvas-container">
     <div class="report-viewport">
 
-    <!-- ========================================================================= -->
-    <!-- PAGE 1: QUESTION: Is Skagit County Growing in Line with Regional Targets? -->
-    <!-- ========================================================================= -->
-    <div id="p1" class="report-page active">
-      <div class="page-header">
-        <div class="page-header-text">
-          <h2>Is Skagit County Growing in Line with Regional Population and Housing Targets?</h2>
-          <p>Regional Overview & 2025 Calibration Monitoring vs Adopted GMA 2045 Targets (Ordinance O20250002)</p>
-        </div>
-        <div class="page-header-tag">Baseline Calibration Year: 2025</div>
-      </div>
-
-      <div class="kpi-row">
-        <div class="slicer-card">
-          <label>Reporting Year</label>
-          <select class="slicer-dropdown">
-            <option>2025 Determination</option>
-            <option>2024</option>
-            <option>2023</option>
-            <option>2022</option>
-          </select>
-          <span style="font-size: 9px; color: var(--text-muted); margin-top: 4px;">Controls single-year rollups</span>
-        </div>
-
-        <div class="card">
-          <div class="card-title">Total Population (2025)</div>
-          <div class="card-value">134,600</div>
-          <div class="card-comparison">
-            <span>Adopted 2045 Target: <strong>160,830</strong> · Baseline 2022: 131,249 (+3,351)</span>
+      <!-- ========================================================================= -->
+      <!-- PAGE 1: QUESTION: Is Skagit County Growing in Line with Regional Targets? -->
+      <!-- ========================================================================= -->
+      <div id="p1" class="report-page active">
+        <div class="page-header">
+          <div class="page-header-text">
+            <h2>Is Skagit County Growing in Line with Regional Population and Housing Targets?</h2>
+            <p>Regional Overview & 2025 Calibration Monitoring vs Adopted GMA 2045 Targets (Ordinance O20250002)</p>
           </div>
+          <div class="page-header-tag">Baseline Calibration Year: 2025</div>
         </div>
 
-        <div class="card">
-          <div class="card-title">Net Housing Built (2020–Pres.)</div>
-          <div class="card-value">3,465</div>
-          <div class="card-comparison">
-            <span>19.9% of 2045 Target (3,465 net units of 17,450 target)</span>
+        <div class="kpi-row">
+          <div class="slicer-card">
+            <label>Reporting Year</label>
+            <select class="slicer-dropdown">
+              <option selected>2025 Determination</option>
+              <option>2024 Determination</option>
+              <option>2023 Determination</option>
+              <option>2022 Baseline Year</option>
+            </select>
+            <span class="slicer-hint">Controls single-year rollups</span>
           </div>
-        </div>
 
-        <div class="card">
-          <div class="card-title">2025 Net Permitted Units</div>
-          <div class="card-value">490</div>
-          <div class="card-comparison">
-            <span>Gross: <strong>517</strong> (202 SF, 259 MF, 56 ADU) − Demolished: <strong>27</strong></span>
+          <div class="card">
+            <div class="card-title">Total Population (2025)</div>
+            <div class="card-value">134,600</div>
+            <div class="card-comparison">
+              <span>Adopted 2045 Target: <strong>160,830</strong> · Baseline 2022: 131,249 (+3,351)</span>
+            </div>
           </div>
-        </div>
 
-        <div class="card">
-          <div class="card-title">Covered Employment (2022 Baseline)</div>
-          <div class="card-value">59,571</div>
-          <div class="card-comparison">
-            <span>2022 ESD QCEW Baseline · Adopted 2045 Target: <strong>80,100</strong></span>
+          <div class="card">
+            <div class="card-title">Net Housing Built (2020–Pres.)</div>
+            <div class="card-value">3,465</div>
+            <div class="card-comparison">
+              <span><strong>19.9%</strong> of 2045 Target (3,465 net units of 17,450 target)</span>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <div class="grid-2col">
-        <!-- Visual 07: Line Chart -->
-        <div class="visual-container">
-          <div class="visual-title">Regional Population Trajectory (2020–2025)</div>
-          <div class="visual-subtitle">WA OFM Official April 1 Determination (Cumulative Growth: +5,077 / +3.9%)</div>
-          <div class="visual-body">
-            <svg class="chart-svg" viewBox="0 0 580 220">
-              <line x1="50" y1="180" x2="560" y2="180" class="axis-line" />
-              <line x1="50" y1="30" x2="50" y2="180" class="axis-line" />
-              <line x1="50" y1="140" x2="560" y2="140" class="grid-line" />
-              <line x1="50" y1="90" x2="560" y2="90" class="grid-line" />
-              <line x1="50" y1="40" x2="560" y2="40" class="grid-line" />
-              <text x="42" y="184" class="axis-label" text-anchor="end">128k</text>
-              <text x="42" y="144" class="axis-label" text-anchor="end">130k</text>
-              <text x="42" y="94" class="axis-label" text-anchor="end">132k</text>
-              <text x="42" y="44" class="axis-label" text-anchor="end">135k</text>
-              <text x="80" y="200" class="axis-label" text-anchor="middle">2020 (129,523)</text>
-              <text x="175" y="200" class="axis-label" text-anchor="middle">2021 (130,000)</text>
-              <text x="270" y="200" class="axis-label" text-anchor="middle">2022 (131,250)</text>
-              <text x="365" y="200" class="axis-label" text-anchor="middle">2023 (132,000)</text>
-              <text x="460" y="200" class="axis-label" text-anchor="middle">2024 (133,300)</text>
-              <text x="540" y="200" class="axis-label" text-anchor="middle">2025 (134,600)</text>
-              <polyline fill="none" stroke="#004B87" stroke-width="3" points="80.0,149.5 172.0,140.0 264.0,115.0 356.0,100.0 448.0,74.0 540.0,48.0" />
-              <circle cx="80.0" cy="149.5" r="4" fill="#004B87" /><circle cx="172.0" cy="140.0" r="4" fill="#004B87" /><circle cx="264.0" cy="115.0" r="4" fill="#004B87" /><circle cx="356.0" cy="100.0" r="4" fill="#004B87" /><circle cx="448.0" cy="74.0" r="4" fill="#004B87" /><circle cx="540.0" cy="48.0" r="5" fill="#2563eb" stroke="#ffffff" stroke-width="2" /><text x="540.0" y="34.0" class="axis-label" font-weight="700" fill="#0f172a" text-anchor="middle">134,600</text>
-            </svg>
+          <div class="card">
+            <div class="card-title">2025 Net Permitted Units</div>
+            <div class="card-value">490</div>
+            <div class="card-comparison">
+              <span>Gross: <strong>517</strong> (202 SF, 259 MF, 56 ADU) − Demolished: <strong>27</strong></span>
+            </div>
           </div>
-        </div>
 
-        <!-- Visual 08: Clustered Column -->
-        <div class="visual-container">
-          <div class="visual-title">Annual Permitted Housing Units by Typology (2010–2025)</div>
-          <div class="visual-subtitle">Single-Family (202) vs Multi-Family (259) vs ADU (56) in 2025</div>
-          <div class="legend-box">
-            <div class="legend-item"><span class="legend-color" style="background:#004B87;"></span> Single-Family</div>
-            <div class="legend-item"><span class="legend-color" style="background:#2563eb;"></span> Multi-Family</div>
-            <div class="legend-item"><span class="legend-color" style="background:#94a3b8;"></span> ADU Permits</div>
-          </div>
-          <div class="visual-body">
-            <svg class="chart-svg" viewBox="0 0 580 200">
-              <line x1="40" y1="170" x2="560" y2="170" class="axis-line" />
-              <text x="90" y="185" class="axis-label" text-anchor="middle">2010</text>
-              <text x="210" y="185" class="axis-label" text-anchor="middle">2015</text>
-              <text x="350" y="185" class="axis-label" text-anchor="middle">2020</text>
-              <text x="490" y="185" class="axis-label" text-anchor="middle">2025</text>
-              <!-- Dynamically generated cluster bars (SF, MF, ADU) -->
-              
-              <rect x="66" y="126.4" width="16" height="43.6" fill="#004B87" opacity="0.5" rx="2" />
-              <text x="74" y="122.4" class="axis-label" text-anchor="middle" font-weight="400">140</text>
-              <rect x="86" y="140.8" width="16" height="29.2" fill="#2563eb" opacity="0.5" rx="2" />
-              <text x="94" y="136.8" class="axis-label" text-anchor="middle" font-weight="400">94</text>
-              <rect x="106" y="170.0" width="16" height="1.0" fill="#94a3b8" opacity="0.5" rx="2" />
-              <text x="114" y="166.0" class="axis-label" text-anchor="middle" font-weight="400">0</text>
-              <rect x="186" y="92.5" width="16" height="77.5" fill="#004B87" opacity="0.5" rx="2" />
-              <text x="194" y="88.5" class="axis-label" text-anchor="middle" font-weight="400">249</text>
-              <rect x="206" y="158.5" width="16" height="11.5" fill="#2563eb" opacity="0.5" rx="2" />
-              <text x="214" y="154.5" class="axis-label" text-anchor="middle" font-weight="400">37</text>
-              <rect x="226" y="169.7" width="16" height="1.0" fill="#94a3b8" opacity="0.5" rx="2" />
-              <text x="234" y="165.7" class="axis-label" text-anchor="middle" font-weight="400">1</text>
-              <rect x="326" y="46.5" width="16" height="123.5" fill="#004B87" opacity="0.5" rx="2" />
-              <text x="334" y="42.5" class="axis-label" text-anchor="middle" font-weight="400">397</text>
-              <rect x="346" y="136.1" width="16" height="33.9" fill="#2563eb" opacity="0.5" rx="2" />
-              <text x="354" y="132.1" class="axis-label" text-anchor="middle" font-weight="400">109</text>
-              <rect x="366" y="167.5" width="16" height="2.5" fill="#94a3b8" opacity="0.5" rx="2" />
-              <text x="374" y="163.5" class="axis-label" text-anchor="middle" font-weight="400">8</text>
-              <rect x="466" y="107.2" width="16" height="62.8" fill="#004B87" opacity="1.0" rx="2" />
-              <text x="474" y="103.2" class="axis-label" text-anchor="middle" font-weight="700">202</text>
-              <rect x="486" y="89.4" width="16" height="80.6" fill="#2563eb" opacity="1.0" rx="2" />
-              <text x="494" y="85.4" class="axis-label" text-anchor="middle" font-weight="700">259</text>
-              <rect x="506" y="152.6" width="16" height="17.4" fill="#94a3b8" opacity="1.0" rx="2" />
-              <text x="514" y="148.6" class="axis-label" text-anchor="middle" font-weight="700">56</text>
-            </svg>
-          </div>
-        </div>
-      </div>
-
-      <!-- Bottom Visual: Comprehensive Benchmarking Table -->
-      <div class="visual-container" style="height: 380px;">
-        <div class="visual-title">Jurisdictional Reconciliation Table (2025 Baseline vs. Adopted 2045 Targets)</div>
-        <div class="visual-subtitle">Official WA OFM 2025 Determinations, Housing Production Progress & GMA Countywide Planning Allocations</div>
-        <div class="visual-body">
-          <table class="table-visual">
-            <thead>
-              <tr>
-                <th>Jurisdiction</th>
-                <th>Type</th>
-                <th class="num">2025 Population</th>
-                <th class="num">2045 Pop Target</th>
-                <th class="num">Net Housing (2020–Pres.)</th>
-                <th class="num">2045 Housing Target</th>
-                <th class="num">Housing Target %</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Anacortes</td>
-                <td>Incorporated City/Town</td>
-                <td class="num">18,350</td>
-                <td class="num">22,971</td>
-                <td class="num">486</td>
-                <td class="num">2,942</td>
-                <td class="num">16.5%</td>
-              </tr>
-              <tr>
-                <td>Burlington</td>
-                <td>Incorporated City/Town</td>
-                <td class="num">10,910</td>
-                <td class="num">16,930</td>
-                <td class="num">1,187</td>
-                <td class="num">2,843</td>
-                <td class="num">41.8%</td>
-              </tr>
-              <tr>
-                <td>Concrete</td>
-                <td>Incorporated City/Town</td>
-                <td class="num">815</td>
-                <td class="num">1,130</td>
-                <td class="num">30</td>
-                <td class="num">107</td>
-                <td class="num">28.0%</td>
-              </tr>
-              <tr>
-                <td>Hamilton</td>
-                <td>Incorporated City/Town</td>
-                <td class="num">295</td>
-                <td class="num">302</td>
-                <td class="num">-1</td>
-                <td class="num">0</td>
-                <td class="num">—</td>
-              </tr>
-              <tr>
-                <td>La Conner</td>
-                <td>Incorporated City/Town</td>
-                <td class="num">1,000</td>
-                <td class="num">1,191</td>
-                <td class="num">39</td>
-                <td class="num">124</td>
-                <td class="num">31.5%</td>
-              </tr>
-              <tr>
-                <td>Lyman</td>
-                <td>Incorporated City/Town</td>
-                <td class="num">440</td>
-                <td class="num">425</td>
-                <td class="num">7</td>
-                <td class="num">0</td>
-                <td class="num">—</td>
-              </tr>
-              <tr>
-                <td>Mount Vernon</td>
-                <td>Incorporated City/Town</td>
-                <td class="num">36,050</td>
-                <td class="num">46,460</td>
-                <td class="num">465</td>
-                <td class="num">5,180</td>
-                <td class="num">9.0%</td>
-              </tr>
-              <tr>
-                <td>Sedro-Woolley</td>
-                <td>Incorporated City/Town</td>
-                <td class="num">13,360</td>
-                <td class="num">18,582</td>
-                <td class="num">517</td>
-                <td class="num">2,646</td>
-                <td class="num">19.5%</td>
-              </tr>
-              <tr>
-                <td>Bay View Ridge UGA</td>
-                <td>Urban Growth Area (UGA)</td>
-                <td class="num">1,711</td>
-                <td class="num">1,694</td>
-                <td class="num">12</td>
-                <td class="num">0</td>
-                <td class="num">—</td>
-              </tr>
-              <tr>
-                <td>Swinomish UGA</td>
-                <td>Urban Growth Area (UGA)</td>
-                <td class="num">2,567</td>
-                <td class="num">2,764</td>
-                <td class="num">0</td>
-                <td class="num">118</td>
-                <td class="num">0.0%</td>
-              </tr>
-              <tr>
-                <td>Unincorporated Rural (outside UGAs)</td>
-                <td>Unincorporated Rural Area</td>
-                <td class="num">49,102</td>
-                <td class="num">48,381</td>
-                <td class="num">723</td>
-                <td class="num">3,490</td>
-                <td class="num">20.7%</td>
-              </tr>
-              <tr class="total-row">
-                <td>Total Skagit County</td>
-                <td>Countywide</td>
-                <td class="num">134,600</td>
-                <td class="num">160,830</td>
-                <td class="num">3,465</td>
-                <td class="num">17,450</td>
-                <td class="num">19.9%</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="page-footer">
-        <span>Data Sources: WA OFM April 1 Population (2020-2025 Determination) | ESD QCEW Covered Employment | SCOG Ordinance O20250002</span>
-        <span>Reconciliation Check: 81,220 (Cities) + 4,278 (UGAs) + 49,102 (Rural) = 134,600 Total Population</span>
-      </div>
-    </div>
-
-    <!-- ========================================================================= -->
-    <!-- PAGE 2: QUESTION: What Types of Housing Are Being Built and For Whom?     -->
-    <!-- ========================================================================= -->
-    <div id="p2" class="report-page">
-      <div class="page-header">
-        <div class="page-header-text">
-          <h2>Where and What Types of Housing Are Being Built Across Skagit County?</h2>
-          <p>Housing Production, Typology Breakdown & Preliminary HB 1220 Affordability (AMI) Targets</p>
-        </div>
-        <div class="page-header-tag">HB 1220 Compliance Review</div>
-      </div>
-
-      <div class="kpi-row">
-        <div class="slicer-card">
-          <label>Jurisdiction Filter</label>
-          <select class="slicer-dropdown">
-            <option>(All Jurisdictions)</option>
-            <option>Anacortes</option>
-            <option>Burlington</option>
-            <option>Mount Vernon</option>
-            <option>Sedro-Woolley</option>
-          </select>
-          <span style="font-size: 9px; color: var(--text-muted); margin-top: 4px;">Filters permitting records</span>
-        </div>
-
-        <div class="card">
-          <div class="card-title">2025 Net New Units</div>
-          <div class="card-value">490</div>
-          <div class="card-comparison"><span>Gross: <strong>517</strong> | Demolished: <strong>27</strong></span></div>
-        </div>
-
-        <div class="card">
-          <div class="card-title">Single-Family Permits (2025)</div>
-          <div class="card-value">202</div>
-          <div class="card-comparison"><span>Share of Gross: <strong>39.1%</strong></span></div>
-        </div>
-
-        <div class="card">
-          <div class="card-title">Multi-Family Permits (2025)</div>
-          <div class="card-value">259</div>
-          <div class="card-comparison"><span>Share of Gross: <strong>50.1%</strong></span></div>
-        </div>
-
-        <div class="card">
-          <div class="card-title">ADU Permits (2025)</div>
-          <div class="card-value">56</div>
-          <div class="card-comparison"><span>Share of Gross: <strong>10.8%</strong></span></div>
-        </div>
-      </div>
-
-      <!-- Top Row Charts -->
-      <div class="grid-2col" style="height: 275px; margin-bottom: 16px;">
-        <div class="visual-container">
-          <div class="visual-title">Historical Permitted Housing Units by Typology (2010–2025)</div>
-          <div class="visual-subtitle">Shift in Regional Construction Diversity (SF vs MF vs ADU)</div>
-          <div class="visual-body">
-            <svg class="chart-svg" viewBox="0 0 580 180">
-              <path d="M 40 150 L 40.0 112.6 L 74.7 111.6 L 109.3 115.0 L 144.0 95.6 L 178.7 101.0 L 213.3 104.1 L 248.0 86.3 L 282.7 69.2 L 317.3 63.3 L 352.0 77.4 L 386.7 67.8 L 421.3 57.5 L 456.0 37.2 L 490.7 42.6 L 525.3 48.7 L 560.0 67.3 L 560 150 Z" fill="#94a3b8" opacity="0.6" />
-              <path d="M 40 150 L 40.0 112.6 L 74.7 111.9 L 109.3 115.8 L 144.0 95.8 L 178.7 101.7 L 213.3 104.2 L 248.0 87.1 L 282.7 70.6 L 317.3 65.7 L 352.0 78.0 L 386.7 69.0 L 421.3 63.3 L 456.0 42.8 L 490.7 50.8 L 525.3 57.4 L 560.0 76.2 L 560 150 Z" fill="#2563eb" opacity="0.7" />
-              <path d="M 40 150 L 40.0 127.6 L 74.7 114.5 L 109.3 116.1 L 144.0 95.8 L 178.7 106.5 L 213.3 110.2 L 248.0 99.4 L 282.7 88.2 L 317.3 86.2 L 352.0 96.6 L 386.7 86.5 L 421.3 111.4 L 456.0 96.9 L 490.7 124.7 L 525.3 125.4 L 560.0 117.7 L 560 150 Z" fill="#004B87" opacity="0.85" />
-              <text x="560" y="32" class="axis-label" text-anchor="end" font-weight="700">2025 Total: 517 Gross (490 Net)</text>
-            </svg>
-          </div>
-        </div>
-
-        <div class="visual-container">
-          <div class="visual-title">Single-Family vs. Multi-Family Production by Jurisdiction (2025)</div>
-          <div class="visual-subtitle">2025 Single-Family (202) vs Multi-Family (259) Permits</div>
-          <div class="visual-body" style="padding-top: 5px;">
-            <div class="bar-row"><span class="bar-label">Burlington</span><div class="bar-track"><div class="bar-fill" style="width:1.9%;"></div><div class="bar-fill accent2" style="width:98.1%;"></div></div><span class="bar-val">4 SF / 211 MF</span></div>
-            <div class="bar-row"><span class="bar-label">Unincorporated Rural (outside UGAs)</span><div class="bar-track"><div class="bar-fill" style="width:50.7%;"></div><div class="bar-fill accent2" style="width:1.9%;"></div></div><span class="bar-val">109 SF / 4 MF</span></div>
-            <div class="bar-row"><span class="bar-label">Sedro-Woolley</span><div class="bar-track"><div class="bar-fill" style="width:16.3%;"></div><div class="bar-fill accent2" style="width:8.4%;"></div></div><span class="bar-val">35 SF / 18 MF</span></div>
-            <div class="bar-row"><span class="bar-label">Concrete</span><div class="bar-track"><div class="bar-fill" style="width:0.5%;"></div><div class="bar-fill accent2" style="width:9.8%;"></div></div><span class="bar-val">1 SF / 21 MF</span></div>
-            <div class="bar-row"><span class="bar-label">Anacortes</span><div class="bar-track"><div class="bar-fill" style="width:8.8%;"></div><div class="bar-fill accent2" style="width:0.9%;"></div></div><span class="bar-val">19 SF / 2 MF</span></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Bottom Row: AMI Targets & Permitting Matrix -->
-      <div class="grid-2col-split" style="height: 390px;">
-        <div class="visual-container">
-          <div class="visual-title">Allocated Housing Units by Area Median Income (AMI) Income Band</div>
-          <div class="visual-subtitle">[PRELIMINARY: Local Jurisdiction Housing Needs Assessments due Oct 20, 2026]</div>
-          <div class="legend-box">
-            <div class="legend-item"><span class="legend-color" style="background:#004B87;"></span> &lt;80% AMI (Low Income)</div>
-            <div class="legend-item"><span class="legend-color" style="background:#2563eb;"></span> &gt;80% AMI (Moderate/High)</div>
-          </div>
-          <div class="visual-body" style="padding-top: 5px;">
-            <div class="bar-row"><span class="bar-label">Anacortes</span><div class="bar-track"><div class="bar-fill" style="width:0.0%;"></div><div class="bar-fill accent2" style="width:100.0%;"></div></div><span class="bar-val">31 units</span></div>
-            <div class="bar-row"><span class="bar-label">Burlington</span><div class="bar-track"><div class="bar-fill" style="width:0.0%;"></div><div class="bar-fill accent2" style="width:100.0%;"></div></div><span class="bar-val">217 units</span></div>
-            <div class="bar-row"><span class="bar-label">Mount Vernon</span><div class="bar-track"><div class="bar-fill" style="width:0.0%;"></div><div class="bar-fill accent2" style="width:100.0%;"></div></div><span class="bar-val">23 units</span></div>
-            <div class="bar-row"><span class="bar-label">Sedro-Woolley</span><div class="bar-track"><div class="bar-fill" style="width:0.0%;"></div><div class="bar-fill accent2" style="width:100.0%;"></div></div><span class="bar-val">56 units</span></div>
-            <div class="info-callout">
-              <strong>Notice:</strong> [PRELIMINARY: Local Jurisdiction Housing Needs Assessments due Oct 20, 2026]. Data reflects current preliminary Commerce reporting (327 total units across reporting jurisdictions).
+          <div class="card">
+            <div class="card-title">Total Employment (2022 Adopted Baseline)</div>
+            <div class="card-value">59,571</div>
+            <div class="card-comparison">
+              <span>Adopted 2045 Target: <strong>80,100</strong> (Total Employment)</span>
             </div>
           </div>
         </div>
 
-        <div class="visual-container">
-          <div class="visual-title">Housing Permitting Reconciliation Matrix (2025)</div>
-          <div class="visual-subtitle">Single-Family, Multi-Family, ADU, Demolitions & Net Production</div>
-          <div class="visual-body" style="overflow-y: auto;">
-            <table class="table-visual" style="font-size: 10.5px;">
+        <!-- Middle Row: 2 Charts -->
+        <div class="grid-2col" style="height: 295px; margin-bottom: 14px;">
+          <!-- Visual 07: Line Chart -->
+          <div class="visual-container">
+            <div class="visual-title">Regional Population Trajectory (2020–2025)</div>
+            <div class="visual-subtitle">WA OFM Official April 1 Determination (Cumulative Growth: +5,077 / +3.9%). (Axis truncated: starts at 128,000 for trend visibility; 2020: 129,523 → 2025: 134,600)</div>
+            <div class="visual-body">
+              <svg class="chart-svg" viewBox="0 0 580 230">
+                <line x1="50" y1="175" x2="560" y2="175" class="axis-line" />
+                <line x1="50" y1="35" x2="50" y2="175" class="axis-line" />
+                <text x="42" y="178" class="axis-label" text-anchor="end">128k</text>
+                <text x="42" y="135" class="axis-label" text-anchor="end">130k</text>
+                <text x="42" y="95" class="axis-label" text-anchor="end">132k</text>
+                <text x="42" y="55" class="axis-label" text-anchor="end">135k</text>
+                <text x="80" y="195" class="axis-label" text-anchor="middle" font-weight="600">2020</text>
+                <text x="80" y="210" class="axis-label" text-anchor="middle">(129,523)</text>
+                <text x="175" y="195" class="axis-label" text-anchor="middle" font-weight="600">2021</text>
+                <text x="175" y="210" class="axis-label" text-anchor="middle">(130,000)</text>
+                <text x="270" y="195" class="axis-label" text-anchor="middle" font-weight="600">2022</text>
+                <text x="270" y="210" class="axis-label" text-anchor="middle">(131,250)</text>
+                <text x="365" y="195" class="axis-label" text-anchor="middle" font-weight="600">2023</text>
+                <text x="365" y="210" class="axis-label" text-anchor="middle">(132,000)</text>
+                <text x="460" y="195" class="axis-label" text-anchor="middle" font-weight="600">2024</text>
+                <text x="460" y="210" class="axis-label" text-anchor="middle">(133,300)</text>
+                <text x="540" y="195" class="axis-label" text-anchor="middle" font-weight="600">2025</text>
+                <text x="540" y="210" class="axis-label" text-anchor="middle">(134,600)</text>
+                <polyline fill="none" stroke="#004B87" stroke-width="3" points="80,144.5 175,135.0 270,110.0 365,95.0 460,69.0 540,43.0" />
+                <circle cx="80" cy="144.5" r="4.5" fill="#004B87" stroke="#ffffff" stroke-width="2" /><circle cx="175" cy="135.0" r="4.5" fill="#004B87" stroke="#ffffff" stroke-width="2" /><circle cx="270" cy="110.0" r="4.5" fill="#004B87" stroke="#ffffff" stroke-width="2" /><circle cx="365" cy="95.0" r="4.5" fill="#004B87" stroke="#ffffff" stroke-width="2" /><circle cx="460" cy="69.0" r="4.5" fill="#004B87" stroke="#ffffff" stroke-width="2" /><circle cx="540" cy="43.0" r="4.5" fill="#004B87" stroke="#ffffff" stroke-width="2" />
+                <text x="540" y="45" font-size="10" font-weight="700" fill="#004B87" text-anchor="middle">134,600</text>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Visual 08: Clustered Column -->
+          <div class="visual-container">
+            <div class="visual-title">Annual Permitted Housing Units by Typology (2010–2025)</div>
+            <div class="visual-subtitle">Benchmark Years: 2010, 2015, 2020, and 2025 (Annual Single-Family, Multi-Family, and ADU Permits)</div>
+            <div class="legend-box">
+              <div class="legend-item"><span class="legend-color" style="background:#004B87;"></span> Single-Family</div>
+              <div class="legend-item"><span class="legend-color" style="background:#2563eb;"></span> Multi-Family</div>
+              <div class="legend-item"><span class="legend-color" style="background:#94a3b8;"></span> ADU Permits</div>
+            </div>
+            <div class="visual-body">
+              <svg class="chart-svg" viewBox="0 0 580 200">
+                <line x1="40" y1="170" x2="560" y2="170" class="axis-line" />
+                <text x="90" y="185" class="axis-label" text-anchor="middle" font-weight="600">2010</text>
+                <text x="210" y="185" class="axis-label" text-anchor="middle" font-weight="600">2015</text>
+                <text x="350" y="185" class="axis-label" text-anchor="middle" font-weight="600">2020</text>
+                <text x="490" y="185" class="axis-label" text-anchor="middle" font-weight="600">2025</text>
+                <rect x="64" y="126.4" width="16" height="43.6" fill="#004B87" rx="2" />
+<text x="72" y="121.4" class="chart-val-text">140</text>
+<rect x="82" y="140.8" width="16" height="29.2" fill="#2563eb" rx="2" />
+<text x="90" y="135.8" class="chart-val-text">94</text>
+<rect x="100" y="170.0" width="16" height="0.0" fill="#94a3b8" rx="2" />
+<rect x="184" y="92.5" width="16" height="77.5" fill="#004B87" rx="2" />
+<text x="192" y="87.5" class="chart-val-text">249</text>
+<rect x="202" y="158.5" width="16" height="11.5" fill="#2563eb" rx="2" />
+<text x="210" y="153.5" class="chart-val-text">37</text>
+<rect x="220" y="169.7" width="16" height="0.3" fill="#94a3b8" rx="2" />
+<text x="228" y="164.7" class="chart-val-text">1</text>
+<rect x="324" y="46.5" width="16" height="123.5" fill="#004B87" rx="2" />
+<text x="332" y="41.5" class="chart-val-text">397</text>
+<rect x="342" y="136.1" width="16" height="33.9" fill="#2563eb" rx="2" />
+<text x="350" y="131.1" class="chart-val-text">109</text>
+<rect x="360" y="167.5" width="16" height="2.5" fill="#94a3b8" rx="2" />
+<text x="368" y="162.5" class="chart-val-text">8</text>
+<rect x="464" y="107.2" width="16" height="62.8" fill="#004B87" rx="2" />
+<text x="472" y="102.2" class="chart-val-text">202</text>
+<rect x="482" y="89.4" width="16" height="80.6" fill="#2563eb" rx="2" />
+<text x="490" y="84.4" class="chart-val-text">259</text>
+<rect x="500" y="152.6" width="16" height="17.4" fill="#94a3b8" rx="2" />
+<text x="508" y="147.6" class="chart-val-text">56</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Visual: Comprehensive Benchmarking Table -->
+        <div class="visual-container" style="height: 375px;">
+          <div class="visual-title">Jurisdictional Reconciliation Table (2025 Baseline vs. Adopted 2045 Targets)</div>
+          <div class="visual-subtitle">Official WA OFM 2025 Determinations, Housing Production Progress & GMA Countywide Planning Allocations</div>
+          <div class="visual-body">
+            <table class="table-visual">
               <thead>
                 <tr>
                   <th>Jurisdiction</th>
-                  <th class="num">SF</th>
-                  <th class="num">MF</th>
-                  <th class="num">ADU</th>
-                  <th class="num">Demolished</th>
-                  <th class="num" style="color:#004B87;">Net New</th>
+                  <th>Type</th>
+                  <th class="num">2025 Population</th>
+                  <th class="num">2045 Pop Target</th>
+                  <th class="num">Net Housing (2020–Pres.)</th>
+                  <th class="num">2045 Housing Target</th>
+                  <th class="num">Housing Target %</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td>Anacortes</td>
-                  <td class="num">19</td>
-                  <td class="num">2</td>
-                  <td class="num">10</td>
-                  <td class="num">7</td>
-                  <td class="num" style="font-weight:600;">24</td>
+                  <td>Incorporated City/Town</td>
+                  <td class="num">18,350</td>
+                  <td class="num">22,971</td>
+                  <td class="num">486</td>
+                  <td class="num">2,942</td>
+                  <td class="num">16.5%</td>
                 </tr>
                 <tr>
                   <td>Burlington</td>
-                  <td class="num">4</td>
-                  <td class="num">211</td>
-                  <td class="num">2</td>
-                  <td class="num">9</td>
-                  <td class="num" style="font-weight:600;">208</td>
+                  <td>Incorporated City/Town</td>
+                  <td class="num">10,910</td>
+                  <td class="num">16,930</td>
+                  <td class="num">1,187</td>
+                  <td class="num">2,843</td>
+                  <td class="num">41.8%</td>
                 </tr>
                 <tr>
                   <td>Concrete</td>
-                  <td class="num">1</td>
-                  <td class="num">21</td>
-                  <td class="num">0</td>
-                  <td class="num">0</td>
-                  <td class="num" style="font-weight:600;">22</td>
+                  <td>Incorporated City/Town</td>
+                  <td class="num">815</td>
+                  <td class="num">1,130</td>
+                  <td class="num">30</td>
+                  <td class="num">107</td>
+                  <td class="num">28.0%</td>
                 </tr>
                 <tr>
                   <td>Hamilton</td>
+                  <td>Incorporated City/Town</td>
+                  <td class="num">295</td>
+                  <td class="num">302</td>
+                  <td class="num">-1</td>
                   <td class="num">0</td>
-                  <td class="num">0</td>
-                  <td class="num">0</td>
-                  <td class="num">0</td>
-                  <td class="num" style="font-weight:600;">0</td>
+                  <td class="num">—</td>
                 </tr>
                 <tr>
                   <td>La Conner</td>
-                  <td class="num">2</td>
-                  <td class="num">0</td>
-                  <td class="num">1</td>
-                  <td class="num">0</td>
-                  <td class="num" style="font-weight:600;">3</td>
+                  <td>Incorporated City/Town</td>
+                  <td class="num">1,000</td>
+                  <td class="num">1,191</td>
+                  <td class="num">39</td>
+                  <td class="num">124</td>
+                  <td class="num">31.5%</td>
                 </tr>
                 <tr>
                   <td>Lyman</td>
-                  <td class="num">3</td>
+                  <td>Incorporated City/Town</td>
+                  <td class="num">440</td>
+                  <td class="num">425</td>
+                  <td class="num">7</td>
                   <td class="num">0</td>
-                  <td class="num">0</td>
-                  <td class="num">0</td>
-                  <td class="num" style="font-weight:600;">3</td>
+                  <td class="num">—</td>
                 </tr>
                 <tr>
                   <td>Mount Vernon</td>
-                  <td class="num">17</td>
-                  <td class="num">3</td>
-                  <td class="num">3</td>
-                  <td class="num">6</td>
-                  <td class="num" style="font-weight:600;">17</td>
+                  <td>Incorporated City/Town</td>
+                  <td class="num">36,050</td>
+                  <td class="num">46,460</td>
+                  <td class="num">465</td>
+                  <td class="num">5,180</td>
+                  <td class="num">9.0%</td>
                 </tr>
                 <tr>
                   <td>Sedro-Woolley</td>
-                  <td class="num">35</td>
-                  <td class="num">18</td>
-                  <td class="num">3</td>
-                  <td class="num">2</td>
-                  <td class="num" style="font-weight:600;">54</td>
+                  <td>Incorporated City/Town</td>
+                  <td class="num">13,360</td>
+                  <td class="num">18,582</td>
+                  <td class="num">517</td>
+                  <td class="num">2,646</td>
+                  <td class="num">19.5%</td>
                 </tr>
                 <tr>
                   <td>Bay View Ridge UGA</td>
+                  <td>Urban Growth Area (UGA)</td>
+                  <td class="num">1,711</td>
+                  <td class="num">1,694</td>
                   <td class="num">12</td>
                   <td class="num">0</td>
-                  <td class="num">0</td>
-                  <td class="num">0</td>
-                  <td class="num" style="font-weight:600;">12</td>
+                  <td class="num">—</td>
                 </tr>
                 <tr>
                   <td>Swinomish UGA</td>
+                  <td>Urban Growth Area (UGA)</td>
+                  <td class="num">2,567</td>
+                  <td class="num">2,764</td>
                   <td class="num">0</td>
-                  <td class="num">0</td>
-                  <td class="num">0</td>
-                  <td class="num">0</td>
-                  <td class="num" style="font-weight:600;">0</td>
+                  <td class="num">118</td>
+                  <td class="num">0.0%</td>
                 </tr>
                 <tr>
                   <td>Unincorporated Rural (outside UGAs)</td>
-                  <td class="num">109</td>
-                  <td class="num">4</td>
-                  <td class="num">37</td>
-                  <td class="num">3</td>
-                  <td class="num" style="font-weight:600;">147</td>
+                  <td>Unincorporated Rural Area</td>
+                  <td class="num">49,102</td>
+                  <td class="num">48,381</td>
+                  <td class="num">723</td>
+                  <td class="num">3,490</td>
+                  <td class="num">20.7%</td>
                 </tr>
                 <tr class="total-row">
                   <td>Total Skagit County</td>
-                  <td class="num">202</td>
-                  <td class="num">259</td>
-                  <td class="num">56</td>
-                  <td class="num">27</td>
-                  <td class="num" style="font-weight:700; color:#004B87;">490</td>
+                  <td>Countywide</td>
+                  <td class="num">134,600</td>
+                  <td class="num">160,830</td>
+                  <td class="num">3,465</td>
+                  <td class="num">17,450</td>
+                  <td class="num">19.9%</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
-      </div>
 
-      <div class="page-footer">
-        <span>Reconciliation Check: SF 202 + MF 259 + ADU 56 − Demolitions 27 = Net New 490 Units</span>
-        <span>Local Building Department Annual Submissions | Preliminary Commerce HB 1220 Datasheets</span>
-      </div>
-    </div>
-
-    <!-- ========================================================================= -->
-    <!-- PAGE 3: QUESTION: How Are Populations and Jobs Expanding?                 -->
-    <!-- ========================================================================= -->
-    <div id="p3" class="report-page">
-      <div class="page-header">
-        <div class="page-header-text">
-          <h2>How Are Jurisdictional Populations and Covered Jobs Expanding Across the Region?</h2>
-          <p>Regional Demographic Shifts, Annual Net Population Growth & CAI/ESD QCEW Employment Baseline</p>
-        </div>
-        <div class="page-header-tag">Employment & Target Analysis</div>
-      </div>
-
-      <div class="grid-2col" style="height: 350px; margin-bottom: 16px;">
-        <div class="visual-container">
-          <div class="visual-title">Population Progress Toward 2045 GMA Target by Jurisdiction</div>
-          <div class="visual-subtitle">2025 Current Population vs Adopted 2045 Target Allocations</div>
-          <div class="legend-box">
-            <div class="legend-item"><span class="legend-color" style="background:#004B87;"></span> 2025 Current Population</div>
-            <div class="legend-item"><span class="legend-color" style="background:#94a3b8;"></span> 2045 Target Allocation</div>
-          </div>
-          <div class="visual-body">
-            <div class="bar-row"><span class="bar-label">Unincorporated Rural (outside UGAs)</span><div class="bar-track"><div class="bar-fill" style="width:101.5%;"></div></div><span class="bar-val">49,102 / 48,381</span></div>
-            <div class="bar-row"><span class="bar-label">Mount Vernon</span><div class="bar-track"><div class="bar-fill" style="width:74.5%;"></div></div><span class="bar-val">36,050 / 46,460</span></div>
-            <div class="bar-row"><span class="bar-label">Anacortes</span><div class="bar-track"><div class="bar-fill" style="width:37.9%;"></div></div><span class="bar-val">18,350 / 22,971</span></div>
-            <div class="bar-row"><span class="bar-label">Sedro-Woolley</span><div class="bar-track"><div class="bar-fill" style="width:27.6%;"></div></div><span class="bar-val">13,360 / 18,582</span></div>
-            <div class="bar-row"><span class="bar-label">Burlington</span><div class="bar-track"><div class="bar-fill" style="width:22.6%;"></div></div><span class="bar-val">10,910 / 16,930</span></div>
-          </div>
-        </div>
-
-        <div class="visual-container">
-          <div class="visual-title">Net Annual Population Change (OFM 2024–2025 Calibration)</div>
-          <div class="visual-subtitle">Single-Year Growth Dynamics by Jurisdiction (Total Countywide Change: +1,300)</div>
-          <div class="visual-body">
-            <div class="bar-row"><span class="bar-label">Burlington</span><div class="bar-track"><div class="bar-fill" style="width:100.0%; background:#2563eb;"></div></div><span class="bar-val">+500</span></div>
-            <div class="bar-row"><span class="bar-label">Sedro-Woolley</span><div class="bar-track"><div class="bar-fill" style="width:56.0%; background:#2563eb;"></div></div><span class="bar-val">+280</span></div>
-            <div class="bar-row"><span class="bar-label">Mount Vernon</span><div class="bar-track"><div class="bar-fill" style="width:50.0%; background:#2563eb;"></div></div><span class="bar-val">+250</span></div>
-            <div class="bar-row"><span class="bar-label">Unincorporated Rural (outside UGAs)</span><div class="bar-track"><div class="bar-fill" style="width:31.2%; background:#2563eb;"></div></div><span class="bar-val">+156</span></div>
-            <div class="bar-row"><span class="bar-label">Anacortes</span><div class="bar-track"><div class="bar-fill" style="width:16.0%; background:#2563eb;"></div></div><span class="bar-val">+80</span></div>
-            <div class="bar-row"><span class="bar-label">Bay View Ridge UGA</span><div class="bar-track"><div class="bar-fill" style="width:3.4%; background:#2563eb;"></div></div><span class="bar-val">+17</span></div>
-          </div>
+        <div class="page-footer">
+          <span>Data Sources: WA OFM April 1 Population (2020-2025 Determination) | ESD QCEW Covered Employment | SCOG Ordinance O20250002. Total employment baseline (59,571) reflects Appendix A multiplier (1.15458 x 51,597).</span>
+          <span>Reconciliation Check: 81,220 (Cities) + 4,278 (UGAs) + 49,102 (Rural) = 134,600 Total Population</span>
         </div>
       </div>
 
-      <!-- Bottom Row: Employment Benchmark & Targets Table -->
-      <div class="grid-2col-split" style="height: 420px;">
-        <div class="visual-container">
-          <div class="visual-title">Covered Employment (ESD QCEW Benchmark, 1999–2022)</div>
-          <div class="visual-subtitle">Historical Covered Wage & Salary Employment (Dim_CAI_Employment_Benchmark 1999–2022; Fact_Employment records through 2026)</div>
-          <div class="visual-body">
-            <svg class="chart-svg" viewBox="0 0 580 280">
-              <line x1="50" y1="240" x2="560" y2="240" class="axis-line" />
-              <line x1="50" y1="40" x2="50" y2="240" class="axis-line" />
-              <text x="42" y="244" class="axis-label" text-anchor="end">40k</text>
-              <text x="42" y="174" class="axis-label" text-anchor="end">50k</text>
-              <text x="42" y="104" class="axis-label" text-anchor="end">60k</text>
-              <text x="70" y="260" class="axis-label" text-anchor="middle">1999</text>
-              <text x="210" y="260" class="axis-label" text-anchor="middle">2007</text>
-              <text x="350" y="260" class="axis-label" text-anchor="middle">2015</text>
-              <text x="510" y="260" class="axis-label" text-anchor="middle">2022</text>
-              <polyline fill="none" stroke="#004B87" stroke-width="3" points="70.0,217.3 89.1,188.3 108.3,187.1 127.4,191.2 146.5,179.9 165.7,168.6 184.8,150.0 203.9,135.3 223.0,120.5 242.2,124.1 261.3,161.2 280.4,166.6 299.6,168.1 318.7,162.6 337.8,143.0 357.0,129.3 376.1,125.6 395.2,112.2 414.3,97.4 433.5,79.4 452.6,70.5 510.0,85.4" />
-              <circle cx="510.0" cy="85.4" r="5" fill="#2563eb" stroke="#ffffff" stroke-width="2" />
-              <text x="510.0" y="73.4" class="axis-label" font-weight="700" fill="#0f172a" text-anchor="middle">2022 QCEW: 51,597</text>
-            </svg>
+      <!-- ========================================================================= -->
+      <!-- PAGE 2: QUESTION: Where and What Types of Housing Are Being Built?        -->
+      <!-- ========================================================================= -->
+      <div id="p2" class="report-page">
+        <div class="page-header">
+          <div class="page-header-text">
+            <h2>Where and What Types of Housing Are Being Built Across Skagit County?</h2>
+            <p>Housing Production, Typology Breakdown & Preliminary HB 1220 Affordability (AMI) Targets</p>
+          </div>
+          <div class="page-header-tag">HB 1220 Compliance Review</div>
+        </div>
+
+        <div class="kpi-row">
+          <div class="slicer-card">
+            <label>Jurisdiction Filter</label>
+            <select class="slicer-dropdown">
+              <option selected>(All Jurisdictions)</option>
+              <option>Anacortes</option>
+              <option>Burlington</option>
+              <option>Mount Vernon</option>
+              <option>Sedro-Woolley</option>
+              <option>Unincorporated Rural</option>
+            </select>
+            <span class="slicer-hint">Filters permitting records</span>
+          </div>
+
+          <div class="card">
+            <div class="card-title">2025 Net New Units</div>
+            <div class="card-value">490</div>
+            <div class="card-comparison">
+              <span>Gross: <strong>517</strong> | Demolished: <strong>27</strong></span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Single-Family Permits (2025)</div>
+            <div class="card-value">202</div>
+            <div class="card-comparison">
+              <span>Share of Gross: <strong>39.1%</strong></span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Multi-Family Permits (2025)</div>
+            <div class="card-value">259</div>
+            <div class="card-comparison">
+              <span>Share of Gross: <strong>50.1%</strong></span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">ADU Permits (2025)</div>
+            <div class="card-value">56</div>
+            <div class="card-comparison">
+              <span>Share of Gross: <strong>10.8%</strong></span>
+            </div>
           </div>
         </div>
 
-        <div class="visual-container">
-          <div class="visual-title">Adopted GMA 2045 Employment Targets by Jurisdiction</div>
-          <div class="visual-subtitle">Planning Allocations Only (No Annual Actuals or Target Tracking)</div>
-          <div class="visual-body" style="overflow-y: auto;">
-            <table class="table-visual" style="font-size: 11px;">
-              <thead>
-                <tr>
-                  <th>Jurisdiction</th>
-                  <th class="num">2022 Baseline</th>
-                  <th class="num">2045 Target</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Anacortes</td>
-                  <td class="num">9,503</td>
-                  <td class="num">12,648</td>
-                </tr>
-                <tr>
-                  <td>Burlington</td>
-                  <td class="num">11,640</td>
-                  <td class="num">17,410</td>
-                </tr>
-                <tr>
-                  <td>Concrete</td>
-                  <td class="num">391</td>
-                  <td class="num">506</td>
-                </tr>
-                <tr>
-                  <td>Hamilton</td>
-                  <td class="num">466</td>
-                  <td class="num">489</td>
-                </tr>
-                <tr>
-                  <td>La Conner</td>
-                  <td class="num">1,020</td>
-                  <td class="num">1,905</td>
-                </tr>
-                <tr>
-                  <td>Lyman</td>
-                  <td class="num">56</td>
-                  <td class="num">76</td>
-                </tr>
-                <tr>
-                  <td>Mount Vernon</td>
-                  <td class="num">18,781</td>
-                  <td class="num">23,559</td>
-                </tr>
-                <tr>
-                  <td>Sedro-Woolley</td>
-                  <td class="num">4,640</td>
-                  <td class="num">7,040</td>
-                </tr>
-                <tr>
-                  <td>Bay View Ridge UGA</td>
-                  <td class="num">2,962</td>
-                  <td class="num">4,901</td>
-                </tr>
-                <tr>
-                  <td>Swinomish UGA</td>
-                  <td class="num">1,140</td>
-                  <td class="num">1,579</td>
-                </tr>
-                <tr>
-                  <td>Unincorporated Rural (outside UGAs)</td>
-                  <td class="num">8,972</td>
-                  <td class="num">9,987</td>
-                </tr>
-                <tr class="total-row">
-                  <td>Total Skagit County</td>
-                  <td class="num">59,571</td>
-                  <td class="num">80,100</td>
-                </tr>
-              </tbody>
-            </table>
+        <!-- Middle Row: 2 Charts -->
+        <div class="grid-2col" style="height: 295px; margin-bottom: 14px;">
+          <!-- Visual 08: Stacked Area Chart with Axes and Legend -->
+          <div class="visual-container">
+            <div class="visual-title">Historical Permitted Housing Units by Typology (2010–2025)</div>
+            <div class="visual-subtitle">Shift in Regional Construction Diversity (SF vs MF vs ADU)</div>
+            <div class="legend-box">
+              <div class="legend-item"><span class="legend-color" style="background:#004B87;"></span> Single-Family</div>
+              <div class="legend-item"><span class="legend-color" style="background:#2563eb;"></span> Multi-Family</div>
+              <div class="legend-item"><span class="legend-color" style="background:#94a3b8;"></span> ADU Permits</div>
+            </div>
+            <div class="visual-body">
+              <svg class="chart-svg" viewBox="0 0 580 200">
+                <line x1="40" y1="170" x2="560" y2="170" class="axis-line" />
+                <line x1="40" y1="30" x2="40" y2="170" class="axis-line" />
+                <!-- Y-axis labels -->
+                <text x="34" y="173" class="axis-label" text-anchor="end">0</text>
+                <text x="34" y="135" class="axis-label" text-anchor="end">200</text>
+                <text x="34" y="100" class="axis-label" text-anchor="end">400</text>
+                <text x="34" y="65" class="axis-label" text-anchor="end">600</text>
+                <text x="34" y="32" class="axis-label" text-anchor="end">800</text>
+                <!-- X-axis labels -->
+                <text x="40" y="185" class="axis-label" text-anchor="middle">2010</text>
+                <text x="144" y="185" class="axis-label" text-anchor="middle">2013</text>
+                <text x="248" y="185" class="axis-label" text-anchor="middle">2016</text>
+                <text x="352" y="185" class="axis-label" text-anchor="middle">2019</text>
+                <text x="456" y="185" class="axis-label" text-anchor="middle">2022</text>
+                <text x="560" y="185" class="axis-label" text-anchor="middle">2025</text>
+                <path d="M 40 170 L -653.3 37.0 L -618.7 51.3 L -584.0 67.8 L -549.3 100.3 L -514.7 66.6 L -480.0 98.8 L -445.3 67.6 L -410.7 106.3 L -376.0 107.3 L -341.3 75.0 L -306.7 81.8 L -272.0 68.3 L -237.3 64.5 L -202.7 54.8 L -168.0 51.0 L -133.3 66.6 L -98.7 25.6 L -64.0 63.8 L -29.3 72.7 L 5.3 118.4 L 40.0 129.1 L 74.7 128.0 L 109.3 131.7 L 144.0 110.5 L 178.7 116.4 L 213.3 119.8 L 248.0 100.3 L 282.7 81.6 L 317.3 75.2 L 352.0 90.5 L 386.7 80.1 L 421.3 68.8 L 456.0 46.6 L 490.7 52.6 L 525.3 59.2 L 560.0 79.5 L 594.7 128.0 L 560 170 Z" fill="#94a3b8" opacity="0.6" />
+                <path d="M 40 170 L -653.3 37.0 L -618.7 51.3 L -584.0 67.8 L -549.3 100.3 L -514.7 66.6 L -480.0 98.8 L -445.3 67.6 L -410.7 106.3 L -376.0 107.3 L -341.3 75.0 L -306.7 81.8 L -272.0 68.3 L -237.3 64.5 L -202.7 54.8 L -168.0 51.0 L -133.3 66.6 L -98.7 25.6 L -64.0 63.8 L -29.3 72.7 L 5.3 118.4 L 40.0 129.1 L 74.7 128.3 L 109.3 132.6 L 144.0 110.7 L 178.7 117.2 L 213.3 120.0 L 248.0 101.2 L 282.7 83.2 L 317.3 77.8 L 352.0 91.2 L 386.7 81.5 L 421.3 75.2 L 456.0 52.8 L 490.7 61.5 L 525.3 68.7 L 560.0 89.3 L 594.7 133.4 L 560 170 Z" fill="#2563eb" opacity="0.85" />
+                <path d="M 40 170 L -653.3 106.5 L -618.7 117.8 L -584.0 110.8 L -549.3 113.5 L -514.7 98.6 L -480.0 124.2 L -445.3 125.2 L -410.7 122.2 L -376.0 126.2 L -341.3 118.2 L -306.7 112.6 L -272.0 112.4 L -237.3 118.2 L -202.7 97.7 L -168.0 82.7 L -133.3 88.5 L -98.7 61.7 L -64.0 82.2 L -29.3 85.1 L 5.3 126.6 L 40.0 145.5 L 74.7 131.2 L 109.3 132.9 L 144.0 110.7 L 178.7 122.4 L 213.3 126.4 L 248.0 114.7 L 282.7 102.5 L 317.3 100.2 L 352.0 111.6 L 386.7 100.5 L 421.3 127.8 L 456.0 111.9 L 490.7 142.3 L 525.3 143.1 L 560.0 134.7 L 594.7 144.6 L 560 170 Z" fill="#004B87" opacity="0.95" />
+                <text x="540" y="65" font-size="9" font-weight="700" fill="#0f172a" text-anchor="middle">2025 Total: 517 Gross (490 Net)</text>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Visual 09: 100% Stacked Bar -->
+          <div class="visual-container">
+            <div class="visual-title">Single-Family vs. Multi-Family Production by Jurisdiction (2025)</div>
+            <div class="visual-subtitle">2025 Single-Family (202) vs Multi-Family (259) Permits</div>
+            <div class="visual-body" style="padding-top: 10px;">
+              <div class="bar-row"><span class="bar-label">Burlington</span><div class="bar-track"><div class="bar-fill" style="width:1.9%;"></div><div class="bar-fill accent2" style="width:98.1%;"></div></div><span class="bar-val">4 SF / 211 MF</span></div>
+              <div class="bar-row"><span class="bar-label">Unincorporated Rural (outside UGAs)</span><div class="bar-track"><div class="bar-fill" style="width:96.5%;"></div><div class="bar-fill accent2" style="width:3.5%;"></div></div><span class="bar-val">109 SF / 4 MF</span></div>
+              <div class="bar-row"><span class="bar-label">Sedro-Woolley</span><div class="bar-track"><div class="bar-fill" style="width:66.0%;"></div><div class="bar-fill accent2" style="width:34.0%;"></div></div><span class="bar-val">35 SF / 18 MF</span></div>
+              <div class="bar-row"><span class="bar-label">Concrete</span><div class="bar-track"><div class="bar-fill" style="width:4.5%;"></div><div class="bar-fill accent2" style="width:95.5%;"></div></div><span class="bar-val">1 SF / 21 MF</span></div>
+              <div class="bar-row"><span class="bar-label">Anacortes</span><div class="bar-track"><div class="bar-fill" style="width:90.5%;"></div><div class="bar-fill accent2" style="width:9.5%;"></div></div><span class="bar-val">19 SF / 2 MF</span></div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="page-footer">
-        <span>Employment Benchmarks: ESD QCEW 1999-2022 Covered Jobs (59,571 Baseline). Adopted 2045 GMA Planning Target: 80,100</span>
-        <span>Data Sources: ESD QCEW Covered Employment | SCOG Ordinance O20250002</span>
-      </div>
-    </div>
+        <!-- Bottom Row: AMI Targets & Permitting Matrix -->
+        <div class="grid-2col-split" style="height: 375px;">
+          <div class="visual-container">
+            <div class="visual-title">Allocated Housing Units by Area Median Income (AMI) Income Band</div>
+            <div class="visual-subtitle">[PRELIMINARY: Local Jurisdiction Housing Needs Assessments due Oct 20, 2026]</div>
+            <div class="legend-box">
+              <div class="legend-item"><span class="legend-color" style="background:#004B87;"></span> &lt;80% AMI (Low Income)</div>
+              <div class="legend-item"><span class="legend-color" style="background:#2563eb;"></span> &gt;80% AMI (Moderate/High)</div>
+            </div>
+            <div class="visual-body" style="padding-top: 5px;">
+              <div class="bar-row">
+                <span class="bar-label">Anacortes</span>
+                <div class="bar-track" style="max-width: 14.3%;">
+                  <div class="bar-fill" style="width:0.0%;"></div>
+                  <div class="bar-fill accent2" style="width:100.0%;"></div>
+                </div>
+                <span class="bar-val">31 units</span>
+              </div>
+              <div class="bar-row">
+                <span class="bar-label">Burlington</span>
+                <div class="bar-track" style="max-width: 100.0%;">
+                  <div class="bar-fill" style="width:0.0%;"></div>
+                  <div class="bar-fill accent2" style="width:100.0%;"></div>
+                </div>
+                <span class="bar-val">217 units</span>
+              </div>
+              <div class="bar-row">
+                <span class="bar-label">Mount Vernon</span>
+                <div class="bar-track" style="max-width: 10.6%;">
+                  <div class="bar-fill" style="width:0.0%;"></div>
+                  <div class="bar-fill accent2" style="width:100.0%;"></div>
+                </div>
+                <span class="bar-val">23 units</span>
+              </div>
+              <div class="bar-row">
+                <span class="bar-label">Sedro-Woolley</span>
+                <div class="bar-track" style="max-width: 25.8%;">
+                  <div class="bar-fill" style="width:0.0%;"></div>
+                  <div class="bar-fill accent2" style="width:100.0%;"></div>
+                </div>
+                <span class="bar-val">56 units</span>
+              </div>
+              <div class="info-callout">
+                <div><strong>Notice:</strong> Preliminary Commerce HB 1220 data reflects the 4 reporting jurisdictions with available local datasheets (Anacortes 31, Burlington 217, Mount Vernon 23, Sedro-Woolley 56 = 327 total units). Remaining jurisdictions are due Oct 20, 2026.</div>
+              </div>
+            </div>
+          </div>
 
-    <!-- ========================================================================= -->
-    <!-- PAGE 4: QUESTION: How Is Regional Growth Distributed Across the County?   -->
-    <!-- ========================================================================= -->
-    <div id="p4" class="report-page">
-      <div class="page-header">
-        <div class="page-header-text">
-          <h2>How Is Regional Growth Distributed Across Cities, Urban Growth Areas, and Rural Lands?</h2>
-          <p>Countywide Centroids, Municipal vs UGA vs Rural Classifications & Planning Allocation Shares</p>
+          <div class="visual-container">
+            <div class="visual-title">Housing Permitting Reconciliation Matrix (2025)</div>
+            <div class="visual-subtitle">Single-Family, Multi-Family, ADU, Demolitions & Net Production</div>
+            <div class="visual-body">
+              <table class="table-visual" style="font-size: 10.5px;">
+                <thead>
+                  <tr>
+                    <th>Jurisdiction</th>
+                    <th class="num">SF</th>
+                    <th class="num">MF</th>
+                    <th class="num">ADU</th>
+                    <th class="num">Demolished</th>
+                    <th class="num" style="color:#004B87;">Net New</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Anacortes</td>
+                    <td class="num">19</td>
+                    <td class="num">2</td>
+                    <td class="num">10</td>
+                    <td class="num">7</td>
+                    <td class="num" style="font-weight:600;">24</td>
+                  </tr>
+                  <tr>
+                    <td>Burlington</td>
+                    <td class="num">4</td>
+                    <td class="num">211</td>
+                    <td class="num">2</td>
+                    <td class="num">9</td>
+                    <td class="num" style="font-weight:600;">208</td>
+                  </tr>
+                  <tr>
+                    <td>Concrete</td>
+                    <td class="num">1</td>
+                    <td class="num">21</td>
+                    <td class="num">0</td>
+                    <td class="num">0</td>
+                    <td class="num" style="font-weight:600;">22</td>
+                  </tr>
+                  <tr>
+                    <td>Hamilton</td>
+                    <td class="num">0</td>
+                    <td class="num">0</td>
+                    <td class="num">0</td>
+                    <td class="num">0</td>
+                    <td class="num" style="font-weight:600;">0</td>
+                  </tr>
+                  <tr>
+                    <td>La Conner</td>
+                    <td class="num">2</td>
+                    <td class="num">0</td>
+                    <td class="num">1</td>
+                    <td class="num">0</td>
+                    <td class="num" style="font-weight:600;">3</td>
+                  </tr>
+                  <tr>
+                    <td>Lyman</td>
+                    <td class="num">3</td>
+                    <td class="num">0</td>
+                    <td class="num">0</td>
+                    <td class="num">0</td>
+                    <td class="num" style="font-weight:600;">3</td>
+                  </tr>
+                  <tr>
+                    <td>Mount Vernon</td>
+                    <td class="num">17</td>
+                    <td class="num">3</td>
+                    <td class="num">3</td>
+                    <td class="num">6</td>
+                    <td class="num" style="font-weight:600;">17</td>
+                  </tr>
+                  <tr>
+                    <td>Sedro-Woolley</td>
+                    <td class="num">35</td>
+                    <td class="num">18</td>
+                    <td class="num">3</td>
+                    <td class="num">2</td>
+                    <td class="num" style="font-weight:600;">54</td>
+                  </tr>
+                  <tr>
+                    <td>Bay View Ridge UGA</td>
+                    <td class="num">12</td>
+                    <td class="num">0</td>
+                    <td class="num">0</td>
+                    <td class="num">0</td>
+                    <td class="num" style="font-weight:600;">12</td>
+                  </tr>
+                  <tr>
+                    <td>Swinomish UGA</td>
+                    <td class="num">0</td>
+                    <td class="num">0</td>
+                    <td class="num">0</td>
+                    <td class="num">0</td>
+                    <td class="num" style="font-weight:600;">0</td>
+                  </tr>
+                  <tr>
+                    <td>Unincorporated Rural (outside UGAs)</td>
+                    <td class="num">109</td>
+                    <td class="num">4</td>
+                    <td class="num">37</td>
+                    <td class="num">3</td>
+                    <td class="num" style="font-weight:600;">147</td>
+                  </tr>
+                  <tr class="total-row">
+                    <td>Total Skagit County</td>
+                    <td class="num">202</td>
+                    <td class="num">259</td>
+                    <td class="num">56</td>
+                    <td class="num">27</td>
+                    <td class="num" style="font-weight:700; color:#004B87;">490</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
-        <div class="page-header-tag">Spatial & Typology Distribution</div>
+
+        <div class="page-footer">
+          <span>Reconciliation Check: SF 202 + MF 259 + ADU 56 − Demolitions 27 = Net New 490 Units</span>
+          <span>Local Building Department Annual Submissions | Preliminary Commerce HB 1220 Datasheets</span>
+        </div>
       </div>
 
-      <div class="grid-2col-split" style="height: 430px; margin-bottom: 12px;">
-        <div class="visual-container" style="height: 100%;">
-          <div class="visual-title">Regional Jurisdictions & UGA Centroids (USGS/Census 2020)</div>
-          <div class="visual-subtitle">Native Azure Map Visual (Latitude/Longitude Centroid Anchors with Proportional Sizing)</div>
-          <div class="visual-body" style="padding: 0; position: relative;">
-            <div id="map-container">
-              <!-- SVG Base Map (Always visible immediately) -->
-              <svg id="skagit-svg-fallback" viewBox="0 0 580 360">
-                <rect width="580" height="360" fill="#f8fafc" />
-                <!-- Puget Sound / Salish Sea Waters on West -->
-                <path d="M 0,0 L 140,0 C 130,50 145,100 135,160 C 120,200 150,260 130,360 L 0,360 Z" fill="#e0f2fe" opacity="0.8" />
-                <path d="M 0,0 L 140,0 C 130,50 145,100 135,160 C 120,200 150,260 130,360 L 0,360 Z" fill="none" stroke="#bae6fd" stroke-width="2" />
-                <!-- Fidalgo Island land outline (Anacortes) -->
-                <path d="M 25,75 Q 85,60 90,140 Q 80,210 30,200 Q 15,140 25,75 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
-                <!-- Skagit River Channel -->
-                <path d="M 570,85 Q 520,100 450,110 T 350,118 T 260,145 Q 220,165 210,185 Q 200,240 185,270 Q 165,295 130,310" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" opacity="0.85" />
-                <text x="470" y="105" font-size="8" fill="#0284c7" font-style="italic">Skagit River</text>
-                <text x="25" y="45" font-size="9" fill="#0369a1" font-weight="600">Puget Sound / Padilla Bay</text>
-                <!-- Major Transport Corridors (I-5 & WA-20) -->
-                <line x1="210" y1="0" x2="210" y2="360" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4,3" />
-                <text x="214" y="20" font-size="8" fill="#64748b" font-weight="600">I-5 Corridor</text>
-                <path d="M 50,132 L 210,179 L 260,143 L 354,116 L 394,117 L 524,98 L 570,95" fill="none" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4,3" />
-                <text x="300" y="140" font-size="8" fill="#64748b" font-weight="600">WA-20 Highway</text>
-                <!-- Plotted Centroids with Proportional Sizes & Labels -->
-                
+      <!-- ========================================================================= -->
+      <!-- PAGE 3: QUESTION: How Are Populations and Jobs Expanding?                 -->
+      <!-- ========================================================================= -->
+      <div id="p3" class="report-page">
+        <div class="page-header">
+          <div class="page-header-text">
+            <h2>How Are Jurisdictional Populations and Covered Jobs Expanding Across the Region?</h2>
+            <p>Regional Demographic Shifts, Annual Net Population Growth & CAI/ESD QCEW Employment Baseline</p>
+          </div>
+          <div class="page-header-tag">Employment & Target Analysis</div>
+        </div>
+
+        <!-- Top Row: All 11 Jurisdictions Population Progress + YoY Change -->
+        <div class="grid-2col" style="height: 395px; margin-bottom: 14px;">
+          <div class="visual-container">
+            <div class="visual-title">Jurisdictional Population Level (2025) vs. Adopted 2045 GMA Targets</div>
+            <div class="visual-subtitle">Current 2025 Population Count vs Adopted 2045 Target Allocation across all 11 Jurisdictions (Level ÷ Target %)</div>
+            <div class="visual-body">
+              <div class="bar-row"><span class="bar-label" title="Unincorporated Rural (outside UGAs)">Unincorporated Rural (outside UGAs)</span><div class="bar-track"><div class="bar-fill" style="width:101.5%;"></div></div><span class="bar-val">49,102 / 48,381 (101.5%)</span></div>
+              <div class="bar-row"><span class="bar-label" title="Mount Vernon">Mount Vernon</span><div class="bar-track"><div class="bar-fill" style="width:74.5%;"></div></div><span class="bar-val">36,050 / 46,460 (77.6%)</span></div>
+              <div class="bar-row"><span class="bar-label" title="Anacortes">Anacortes</span><div class="bar-track"><div class="bar-fill" style="width:37.9%;"></div></div><span class="bar-val">18,350 / 22,971 (79.9%)</span></div>
+              <div class="bar-row"><span class="bar-label" title="Sedro-Woolley">Sedro-Woolley</span><div class="bar-track"><div class="bar-fill" style="width:27.6%;"></div></div><span class="bar-val">13,360 / 18,582 (71.9%)</span></div>
+              <div class="bar-row"><span class="bar-label" title="Burlington">Burlington</span><div class="bar-track"><div class="bar-fill" style="width:22.6%;"></div></div><span class="bar-val">10,910 / 16,930 (64.4%)</span></div>
+              <div class="bar-row"><span class="bar-label" title="Swinomish UGA">Swinomish UGA</span><div class="bar-track"><div class="bar-fill" style="width:5.3%;"></div></div><span class="bar-val">2,567 / 2,764 (92.9%)</span></div>
+              <div class="bar-row"><span class="bar-label" title="Bay View Ridge UGA">Bay View Ridge UGA</span><div class="bar-track"><div class="bar-fill" style="width:3.5%;"></div></div><span class="bar-val">1,711 / 1,694 (101.0%)</span></div>
+              <div class="bar-row"><span class="bar-label" title="La Conner">La Conner</span><div class="bar-track"><div class="bar-fill" style="width:2.1%;"></div></div><span class="bar-val">1,000 / 1,191 (84.0%)</span></div>
+              <div class="bar-row"><span class="bar-label" title="Concrete">Concrete</span><div class="bar-track"><div class="bar-fill" style="width:1.7%;"></div></div><span class="bar-val">815 / 1,130 (72.1%)</span></div>
+              <div class="bar-row"><span class="bar-label" title="Lyman">Lyman</span><div class="bar-track"><div class="bar-fill" style="width:0.9%;"></div></div><span class="bar-val">440 / 425 (103.5%)</span></div>
+              <div class="bar-row"><span class="bar-label" title="Hamilton">Hamilton</span><div class="bar-track"><div class="bar-fill" style="width:0.6%;"></div></div><span class="bar-val">295 / 302 (97.7%)</span></div>
+              <div class="info-callout" style="margin-top: 4px; padding: 4px 8px; font-size: 9.5px;">
+                <div><strong>Notice on Rural Target:</strong> Unincorporated Rural (49,102) already exceeds its adopted 2045 planning target (48,381 by +721 persons, or 101.5% of target allocation).</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="visual-container">
+            <div class="visual-title">Net Annual Population Change (OFM 2024–2025 Calibration)</div>
+            <div class="visual-subtitle">Single-Year Growth Dynamics by Jurisdiction (Total Countywide Change: +1,300)</div>
+            <div class="visual-body">
+              <div class="bar-row"><span class="bar-label">Burlington</span><div class="bar-track"><div class="bar-fill" style="width:100.0%; background:#2563eb;"></div></div><span class="bar-val">+500</span></div>
+              <div class="bar-row"><span class="bar-label">Sedro-Woolley</span><div class="bar-track"><div class="bar-fill" style="width:56.0%; background:#2563eb;"></div></div><span class="bar-val">+280</span></div>
+              <div class="bar-row"><span class="bar-label">Mount Vernon</span><div class="bar-track"><div class="bar-fill" style="width:50.0%; background:#2563eb;"></div></div><span class="bar-val">+250</span></div>
+              <div class="bar-row"><span class="bar-label">Unincorporated Rural (outside UGAs)</span><div class="bar-track"><div class="bar-fill" style="width:31.2%; background:#2563eb;"></div></div><span class="bar-val">+156</span></div>
+              <div class="bar-row"><span class="bar-label">Anacortes</span><div class="bar-track"><div class="bar-fill" style="width:16.0%; background:#2563eb;"></div></div><span class="bar-val">+80</span></div>
+              <div class="bar-row"><span class="bar-label">Bay View Ridge UGA</span><div class="bar-track"><div class="bar-fill" style="width:3.4%; background:#2563eb;"></div></div><span class="bar-val">+17</span></div>
+              <div class="bar-row"><span class="bar-label">Lyman</span><div class="bar-track"><div class="bar-fill" style="width:2.0%; background:#2563eb;"></div></div><span class="bar-val">+10</span></div>
+              <div class="bar-row"><span class="bar-label">Concrete</span><div class="bar-track"><div class="bar-fill" style="width:1.0%; background:#2563eb;"></div></div><span class="bar-val">+5</span></div>
+              <div class="bar-row"><span class="bar-label">La Conner</span><div class="bar-track"><div class="bar-fill" style="width:1.0%; background:#2563eb;"></div></div><span class="bar-val">+5</span></div>
+              <div class="bar-row"><span class="bar-label">Hamilton</span><div class="bar-track"><div class="bar-fill" style="width:0.0%; background:#2563eb;"></div></div><span class="bar-val">0</span></div>
+              <div class="bar-row"><span class="bar-label">Swinomish UGA</span><div class="bar-track"><div class="bar-fill" style="width:-0.6%; background:#2563eb;"></div></div><span class="bar-val">-3</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Row: Employment Benchmark & Targets Table -->
+        <div class="grid-2col-split" style="height: 385px;">
+          <div class="visual-container">
+            <div class="visual-title">Covered Wage & Salary Employment (ESD QCEW Benchmark, 1999–2022)</div>
+            <div class="visual-subtitle">Historical Covered Wage & Salary Employment from Dim_CAI_Employment_Benchmark</div>
+            <div class="visual-body">
+              <svg class="chart-svg" viewBox="0 0 580 260">
+                <line x1="50" y1="230" x2="560" y2="230" class="axis-line" />
+                <line x1="50" y1="35" x2="50" y2="230" class="axis-line" />
+                <text x="42" y="234" class="axis-label" text-anchor="end">35k</text>
+                <text x="42" y="184" class="axis-label" text-anchor="end">40k</text>
+                <text x="42" y="136" class="axis-label" text-anchor="end">45k</text>
+                <text x="42" y="88" class="axis-label" text-anchor="end">50k</text>
+                <text x="42" y="40" class="axis-label" text-anchor="end">55k</text>
+                <text x="65" y="248" class="axis-label" text-anchor="middle">1999</text>
+                <text x="208" y="248" class="axis-label" text-anchor="middle">2006</text>
+                <text x="350" y="248" class="axis-label" text-anchor="middle">2014</text>
+                <text x="530" y="248" class="axis-label" text-anchor="middle">2022</text>
+                <polyline fill="none" stroke="#004B87" stroke-width="3" points="65.0,166.3 85.7,145.6 106.3,144.8 127.0,147.7 147.6,139.7 168.3,131.6 188.9,118.4 209.6,107.9 230.2,97.3 250.9,99.9 271.5,126.4 292.2,130.2 312.8,131.2 333.5,127.4 354.1,113.4 374.8,103.6 395.4,101.0 416.1,91.4 436.7,80.9 457.4,68.1 478.0,61.8 540.0,72.3" />
+                <circle cx="540.0" cy="72.3" r="5" fill="#2563eb" stroke="#ffffff" stroke-width="2" />
+                <text x="530.0" y="60.3" class="axis-label" font-weight="700" fill="#0f172a" text-anchor="end">2022 QCEW: 51,597 (Covered Jobs)</text>
+              </svg>
+            </div>
+          </div>
+
+          <div class="visual-container">
+            <div class="visual-title">Adopted GMA 2045 Employment Targets by Jurisdiction</div>
+            <div class="visual-subtitle">Planning Allocations Only (Total Employment Baseline & Target)</div>
+            <div class="visual-body">
+              <table class="table-visual" style="font-size: 10.5px;">
+                <thead>
+                  <tr>
+                    <th>Jurisdiction</th>
+                    <th class="num">2022 Baseline (Total)</th>
+                    <th class="num">2045 Target (Total)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Anacortes</td>
+                    <td class="num">9,503</td>
+                    <td class="num">12,648</td>
+                  </tr>
+                  <tr>
+                    <td>Burlington</td>
+                    <td class="num">11,640</td>
+                    <td class="num">17,410</td>
+                  </tr>
+                  <tr>
+                    <td>Concrete</td>
+                    <td class="num">391</td>
+                    <td class="num">506</td>
+                  </tr>
+                  <tr>
+                    <td>Hamilton</td>
+                    <td class="num">466</td>
+                    <td class="num">489</td>
+                  </tr>
+                  <tr>
+                    <td>La Conner</td>
+                    <td class="num">1,020</td>
+                    <td class="num">1,905</td>
+                  </tr>
+                  <tr>
+                    <td>Lyman</td>
+                    <td class="num">56</td>
+                    <td class="num">76</td>
+                  </tr>
+                  <tr>
+                    <td>Mount Vernon</td>
+                    <td class="num">18,781</td>
+                    <td class="num">23,559</td>
+                  </tr>
+                  <tr>
+                    <td>Sedro-Woolley</td>
+                    <td class="num">4,640</td>
+                    <td class="num">7,040</td>
+                  </tr>
+                  <tr>
+                    <td>Bay View Ridge UGA</td>
+                    <td class="num">2,962</td>
+                    <td class="num">4,901</td>
+                  </tr>
+                  <tr>
+                    <td>Swinomish UGA</td>
+                    <td class="num">1,140</td>
+                    <td class="num">1,579</td>
+                  </tr>
+                  <tr>
+                    <td>Unincorporated Rural (outside UGAs)</td>
+                    <td class="num">8,972</td>
+                    <td class="num">9,987</td>
+                  </tr>
+                  <tr class="total-row">
+                    <td>Total Skagit County</td>
+                    <td class="num">59,571</td>
+                    <td class="num">80,100</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="page-footer">
+          <span>Adopted GMA 2022 Total Employment Baseline: 59,571 jobs | Adopted 2045 Planning Target: 80,100 jobs (Appendix A). Total employment baseline (59,571) reflects adopted Appendix A allocations (derived via CAI multiplier 1.15458 applied to 2022 QCEW 51,597, pending final SCOG confirmation).</span>
+          <span>Data Sources: ESD QCEW Covered Employment | SCOG Ordinance O20250002</span>
+        </div>
+      </div>
+
+      <!-- ========================================================================= -->
+      <!-- PAGE 4: QUESTION: How Is Regional Growth Distributed Across the County?   -->
+      <!-- ========================================================================= -->
+      <div id="p4" class="report-page">
+        <div class="page-header">
+          <div class="page-header-text">
+            <h2>How Is Regional Growth Distributed Across Cities, Urban Growth Areas, and Rural Lands?</h2>
+            <p>Countywide Centroids, Municipal vs UGA vs Rural Classifications & Planning Allocation Shares</p>
+          </div>
+          <div class="page-header-tag">Spatial & Typology Distribution</div>
+        </div>
+
+        <div class="grid-2col-split" style="height: 480px; margin-bottom: 14px;">
+          <div class="visual-container" style="height: 100%;">
+            <div class="visual-title">Regional Jurisdictions & UGA Centroids (USGS/Census 2020)</div>
+            <div class="visual-subtitle">Map placeholder (Leaflet); Azure Map in the Power BI build</div>
+            <div class="visual-body" style="padding: 0; position: relative;">
+              <div id="map-container">
+                <!-- SVG Base Map (Always visible immediately) -->
+                <svg id="skagit-svg-fallback" viewBox="0 0 580 360">
+                  <rect width="580" height="360" fill="#f8fafc" />
+                  <!-- Puget Sound / Salish Sea Waters on West -->
+                  <path d="M 0,0 L 140,0 C 130,50 145,100 135,160 C 120,200 150,260 130,360 L 0,360 Z" fill="#e0f2fe" opacity="0.8" />
+                  <path d="M 0,0 L 140,0 C 130,50 145,100 135,160 C 120,200 150,260 130,360 L 0,360 Z" fill="none" stroke="#bae6fd" stroke-width="2" />
+                  <!-- Fidalgo Island land outline (Anacortes) -->
+                  <path d="M 25,75 Q 85,60 90,140 Q 80,210 30,200 Q 15,140 25,75 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+                  <!-- Skagit River Channel -->
+                  <path d="M 570,85 Q 520,100 450,110 T 350,118 T 260,145 Q 220,165 210,185 Q 200,240 185,270 Q 165,295 130,310" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" opacity="0.85" />
+                  <text x="470" y="105" font-size="8" fill="#0284c7" font-style="italic">Skagit River</text>
+                  <text x="25" y="45" font-size="9" fill="#0369a1" font-weight="600">Puget Sound / Padilla Bay</text>
+                  <!-- Major Transport Corridors (I-5 & WA-20) -->
+                  <line x1="210" y1="0" x2="210" y2="360" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4,3" />
+                  <text x="214" y="20" font-size="8" fill="#64748b" font-weight="600">I-5 Corridor</text>
+                  <path d="M 50,132 L 210,179 L 260,143 L 354,116 L 394,117 L 524,98 L 570,95" fill="none" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4,3" />
+                  <text x="300" y="140" font-size="8" fill="#64748b" font-weight="600">WA-20 Highway</text>
+                  <!-- Plotted Centroids with Proportional Sizes & Labels -->
+                  
               <g class="svg-map-node">
                 <circle cx="64.3" cy="131.4" r="11" fill="#004B87" stroke="#ffffff" stroke-width="2" opacity="0.9">
                   <title>Anacortes (Incorporated City/Town)&#10;2025 Pop: 18,350 (13.6%)&#10;2045 Housing Target: 2,942 units</title>
@@ -1367,91 +1466,155 @@
               </g>
 
               <g class="svg-map-node">
-                <circle cx="478.8" cy="169.2" r="14" fill="#0f766e" stroke="#ffffff" stroke-width="2" stroke-dasharray="3,2" opacity="0.9">
+                <circle cx="478.8" cy="169.2" r="14" fill="#64748b" stroke="#ffffff" stroke-width="2" stroke-dasharray="3,2" opacity="0.9">
                   <title>Unincorporated Rural (outside UGAs) (Unincorporated Rural Area)&#10;2025 Pop: 49,102 (36.5%)&#10;2045 Housing Target: 3,490 units</title>
                 </circle>
-                <circle cx="478.8" cy="169.2" r="18" fill="none" stroke="#0f766e" stroke-width="1" opacity="0.3" />
+                <circle cx="478.8" cy="169.2" r="18" fill="none" stroke="#64748b" stroke-width="1" opacity="0.3" />
                 <text x="478.8" y="151.2" text-anchor="middle" font-size="9" font-weight="700" fill="#0f172a" stroke="#ffffff" stroke-width="2.5" paint-order="stroke">Unincorporated Rural (outside UGAs)</text>
               </g>
-              </svg>
+                </svg>
 
-              <!-- Leaflet Map Mount Point (Interactive Tiles) -->
-              <div id="skagit-leaflet-map"></div>
+                <!-- Leaflet Map Mount Point (Interactive Tiles) -->
+                <div id="skagit-leaflet-map"></div>
 
-              <!-- Map Legend Overlay -->
-              <div class="map-legend-overlay">
-                <div class="map-legend-item"><span class="map-legend-dot" style="background:#004B87;"></span> Incorporated Cities (8)</div>
-                <div class="map-legend-item"><span class="map-legend-dot" style="background:#2563eb;"></span> Urban Growth Areas (2)</div>
-                <div class="map-legend-item"><span class="map-legend-dot" style="background:#0f766e; border-style:dashed;"></span> Unincorporated Rural (1)</div>
+                <!-- Map Legend Overlay (Single Accent Palette) -->
+                <div class="map-legend-overlay">
+                  <div class="map-legend-item"><span class="map-legend-dot" style="background:#004B87;"></span> Incorporated Cities (8)</div>
+                  <div class="map-legend-item"><span class="map-legend-dot" style="background:#2563eb;"></span> Urban Growth Areas (2)</div>
+                  <div class="map-legend-item"><span class="map-legend-dot" style="background:#64748b; border-style:dashed;"></span> Unincorporated Rural (1)</div>
+                </div>
               </div>
+            </div>
+          </div>
+
+          <div class="visual-container" style="height: 100%;">
+            <div class="visual-title">Growth & Allocation Metrics by Classification</div>
+            <div class="visual-subtitle">Tripartite Breakdown: Incorporated Cities vs. UGAs vs. Unincorporated Rural</div>
+            <div class="visual-body">
+              <table class="table-visual" style="font-size: 10.5px;">
+                <thead>
+                  <tr>
+                    <th style="width: 140px;">Jurisdiction Type</th>
+                    <th style="width: 230px;">Entity</th>
+                    <th class="num" style="width: 75px;">Population</th>
+                    <th class="num" style="width: 60px;">Share %</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="background:#f1f5f9; font-weight:700;"><td colspan="2">Incorporated Cities (8 Entities)</td><td class="num">81,220</td><td class="num">60.3%</td></tr>
+                  <tr><td>Incorporated City/Town</td><td>Anacortes</td><td class="num">18,350</td><td class="num">13.6%</td></tr>
+                  <tr><td>Incorporated City/Town</td><td>Burlington</td><td class="num">10,910</td><td class="num">8.1%</td></tr>
+                  <tr><td>Incorporated City/Town</td><td>Concrete</td><td class="num">815</td><td class="num">0.6%</td></tr>
+                  <tr><td>Incorporated City/Town</td><td>Hamilton</td><td class="num">295</td><td class="num">0.2%</td></tr>
+                  <tr><td>Incorporated City/Town</td><td>La Conner</td><td class="num">1,000</td><td class="num">0.7%</td></tr>
+                  <tr><td>Incorporated City/Town</td><td>Lyman</td><td class="num">440</td><td class="num">0.3%</td></tr>
+                  <tr><td>Incorporated City/Town</td><td>Mount Vernon</td><td class="num">36,050</td><td class="num">26.8%</td></tr>
+                  <tr><td>Incorporated City/Town</td><td>Sedro-Woolley</td><td class="num">13,360</td><td class="num">9.9%</td></tr>
+                  <tr style="background:#f1f5f9; font-weight:700;"><td colspan="2">Urban Growth Areas (UGAs)</td><td class="num">4,278</td><td class="num">3.2%</td></tr>
+                  <tr><td>Urban Growth Area (UGA)</td><td>Bay View Ridge UGA</td><td class="num">1,711</td><td class="num">1.3%</td></tr>
+                  <tr><td>Urban Growth Area (UGA)</td><td>Swinomish UGA</td><td class="num">2,567</td><td class="num">1.9%</td></tr>
+                  <tr style="background:#f1f5f9; font-weight:700;"><td colspan="2">Unincorporated Rural (outside UGAs)</td><td class="num">49,102</td><td class="num">36.5%</td></tr>
+                  <tr><td>Unincorporated Rural Area</td><td>Unincorporated Rural (outside UGAs)</td><td class="num">49,102</td><td class="num">36.5%</td></tr>
+                  <tr class="total-row">
+                    <td colspan="2">Total Skagit County</td>
+                    <td class="num">134,600</td>
+                    <td class="num">100.0%</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
 
-        <div class="visual-container" style="height: 100%;">
-          <div class="visual-title">Growth & Allocation Metrics by Classification</div>
-          <div class="visual-subtitle">Tripartite Breakdown: Incorporated Cities vs. UGAs vs. Unincorporated Rural</div>
+        <!-- Bottom Visual: Comparison Clustered Bar (Side-by-Side Grouped Bars) -->
+        <div class="visual-container" style="height: 300px;">
+          <div class="visual-title">Jurisdictional Shares of Regional Population vs. Housing Allocations</div>
+          <div class="visual-subtitle">Alignment of Current Population Footprint vs. Adopted 2045 Housing Target Shares (Side-by-Side Bars)</div>
+          <div class="legend-box">
+            <div class="legend-item"><span class="legend-color" style="background:#004B87;"></span> Share of Regional Population %</div>
+            <div class="legend-item"><span class="legend-color" style="background:#2563eb;"></span> Share of Regional Housing %</div>
+          </div>
           <div class="visual-body">
-            <table class="table-visual" style="font-size: 10.5px;">
-              <thead>
-                <tr>
-                  <th style="width: 140px;">Jurisdiction Type</th>
-                  <th style="width: 230px;">Entity</th>
-                  <th class="num" style="width: 75px;">Population</th>
-                  <th class="num" style="width: 60px;">Share %</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr style="background:#f1f5f9; font-weight:700;"><td colspan="2">Incorporated Cities (8 Entities)</td><td class="num">81,220</td><td class="num">60.3%</td></tr>
-                <tr><td>Incorporated City/Town</td><td>Anacortes</td><td class="num">18,350</td><td class="num">13.6%</td></tr>
-                <tr><td>Incorporated City/Town</td><td>Burlington</td><td class="num">10,910</td><td class="num">8.1%</td></tr>
-                <tr><td>Incorporated City/Town</td><td>Concrete</td><td class="num">815</td><td class="num">0.6%</td></tr>
-                <tr><td>Incorporated City/Town</td><td>Hamilton</td><td class="num">295</td><td class="num">0.2%</td></tr>
-                <tr><td>Incorporated City/Town</td><td>La Conner</td><td class="num">1,000</td><td class="num">0.7%</td></tr>
-                <tr><td>Incorporated City/Town</td><td>Lyman</td><td class="num">440</td><td class="num">0.3%</td></tr>
-                <tr><td>Incorporated City/Town</td><td>Mount Vernon</td><td class="num">36,050</td><td class="num">26.8%</td></tr>
-                <tr><td>Incorporated City/Town</td><td>Sedro-Woolley</td><td class="num">13,360</td><td class="num">9.9%</td></tr>
-                <tr style="background:#f1f5f9; font-weight:700;"><td colspan="2">Urban Growth Areas (UGAs)</td><td class="num">4,278</td><td class="num">3.2%</td></tr>
-                <tr><td>Urban Growth Area (UGA)</td><td>Bay View Ridge UGA</td><td class="num">1,711</td><td class="num">1.3%</td></tr>
-                <tr><td>Urban Growth Area (UGA)</td><td>Swinomish UGA</td><td class="num">2,567</td><td class="num">1.9%</td></tr>
-                <tr style="background:#f1f5f9; font-weight:700;"><td colspan="2">Unincorporated Rural (outside UGAs)</td><td class="num">49,102</td><td class="num">36.5%</td></tr>
-                <tr><td>Unincorporated Rural Area</td><td>Unincorporated Rural (outside UGAs)</td><td class="num">49,102</td><td class="num">36.5%</td></tr>
-                <tr class="total-row">
-                  <td colspan="2">Total Skagit County</td>
-                  <td class="num">134,600</td>
-                  <td class="num">100.0%</td>
-                </tr>
-              </tbody>
-            </table>
+            <div class="grouped-bar-row">
+              <span class="bar-label">Unincorporated Rural (outside UGAs)</span>
+              <div class="grouped-bar-col">
+                <div class="grouped-bar-item">
+                  <div class="bar-track"><div class="bar-fill" style="width:91.2%;"></div></div>
+                  <span class="bar-val">36.5% Pop</span>
+                </div>
+                <div class="grouped-bar-item">
+                  <div class="bar-track"><div class="bar-fill accent2" style="width:50.0%;"></div></div>
+                  <span class="bar-val">20.0% Hsg</span>
+                </div>
+              </div>
+              <span class="bar-val" style="width: 100px; font-weight: 700; color: #004B87;">36.5% / 20.0%</span>
+            </div>
+            <div class="grouped-bar-row">
+              <span class="bar-label">Mount Vernon</span>
+              <div class="grouped-bar-col">
+                <div class="grouped-bar-item">
+                  <div class="bar-track"><div class="bar-fill" style="width:67.0%;"></div></div>
+                  <span class="bar-val">26.8% Pop</span>
+                </div>
+                <div class="grouped-bar-item">
+                  <div class="bar-track"><div class="bar-fill accent2" style="width:74.2%;"></div></div>
+                  <span class="bar-val">29.7% Hsg</span>
+                </div>
+              </div>
+              <span class="bar-val" style="width: 100px; font-weight: 700; color: #004B87;">26.8% / 29.7%</span>
+            </div>
+            <div class="grouped-bar-row">
+              <span class="bar-label">Anacortes</span>
+              <div class="grouped-bar-col">
+                <div class="grouped-bar-item">
+                  <div class="bar-track"><div class="bar-fill" style="width:34.1%;"></div></div>
+                  <span class="bar-val">13.6% Pop</span>
+                </div>
+                <div class="grouped-bar-item">
+                  <div class="bar-track"><div class="bar-fill accent2" style="width:42.1%;"></div></div>
+                  <span class="bar-val">16.9% Hsg</span>
+                </div>
+              </div>
+              <span class="bar-val" style="width: 100px; font-weight: 700; color: #004B87;">13.6% / 16.9%</span>
+            </div>
+            <div class="grouped-bar-row">
+              <span class="bar-label">Sedro-Woolley</span>
+              <div class="grouped-bar-col">
+                <div class="grouped-bar-item">
+                  <div class="bar-track"><div class="bar-fill" style="width:24.8%;"></div></div>
+                  <span class="bar-val">9.9% Pop</span>
+                </div>
+                <div class="grouped-bar-item">
+                  <div class="bar-track"><div class="bar-fill accent2" style="width:37.9%;"></div></div>
+                  <span class="bar-val">15.2% Hsg</span>
+                </div>
+              </div>
+              <span class="bar-val" style="width: 100px; font-weight: 700; color: #004B87;">9.9% / 15.2%</span>
+            </div>
+            <div class="grouped-bar-row">
+              <span class="bar-label">Burlington</span>
+              <div class="grouped-bar-col">
+                <div class="grouped-bar-item">
+                  <div class="bar-track"><div class="bar-fill" style="width:20.3%;"></div></div>
+                  <span class="bar-val">8.1% Pop</span>
+                </div>
+                <div class="grouped-bar-item">
+                  <div class="bar-track"><div class="bar-fill accent2" style="width:40.7%;"></div></div>
+                  <span class="bar-val">16.3% Hsg</span>
+                </div>
+              </div>
+              <span class="bar-val" style="width: 100px; font-weight: 700; color: #004B87;">8.1% / 16.3%</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Bottom Visual: Comparison Clustered Bar -->
-      <div class="visual-container" style="height: 330px;">
-        <div class="visual-title">Jurisdictional Shares of Regional Population vs. Housing Allocations</div>
-        <div class="visual-subtitle">Alignment of Current Population Footprint vs. Adopted 2045 Housing Target Shares</div>
-        <div class="legend-box">
-          <div class="legend-item"><span class="legend-color" style="background:#004B87;"></span> Share of Regional Population %</div>
-          <div class="legend-item"><span class="legend-color" style="background:#2563eb;"></span> Share of Regional Housing %</div>
-        </div>
-        <div class="visual-body">
-          <div class="bar-row"><span class="bar-label">Unincorporated Rural (outside UGAs)</span><div class="bar-track"><div class="bar-fill" style="width:36.5%;"></div><div class="bar-fill accent2" style="width:20.0%;"></div></div><span class="bar-val">36.5% / 20.0%</span></div>
-          <div class="bar-row"><span class="bar-label">Mount Vernon</span><div class="bar-track"><div class="bar-fill" style="width:26.8%;"></div><div class="bar-fill accent2" style="width:29.7%;"></div></div><span class="bar-val">26.8% / 29.7%</span></div>
-          <div class="bar-row"><span class="bar-label">Anacortes</span><div class="bar-track"><div class="bar-fill" style="width:13.6%;"></div><div class="bar-fill accent2" style="width:16.9%;"></div></div><span class="bar-val">13.6% / 16.9%</span></div>
-          <div class="bar-row"><span class="bar-label">Sedro-Woolley</span><div class="bar-track"><div class="bar-fill" style="width:9.9%;"></div><div class="bar-fill accent2" style="width:15.2%;"></div></div><span class="bar-val">9.9% / 15.2%</span></div>
-          <div class="bar-row"><span class="bar-label">Burlington</span><div class="bar-track"><div class="bar-fill" style="width:8.1%;"></div><div class="bar-fill accent2" style="width:16.3%;"></div></div><span class="bar-val">8.1% / 16.3%</span></div>
+        <div class="page-footer">
+          <span>Tripartite Reconciliation: Cities (81,220 / 60.3%) + UGAs (4,278 / 3.2%) + Rural (49,102 / 36.5%) = 134,600 Total (100.0%)</span>
+          <span>Centroid Coordinates: Approximate centroids derived from Dim_Jurisdiction.csv coordinates</span>
         </div>
       </div>
 
-      <div class="page-footer">
-        <span>Tripartite Reconciliation: Cities (81,220 / 60.3%) + UGAs (4,278 / 3.2%) + Rural (49,102 / 36.5%) = 134,600 Total (100.0%)</span>
-        <span>Centroid Coordinates: Official USGS GNIS / US Census Bureau 2020 Municipal Centers & UGA Centroids</span>
-      </div>
     </div>
-
-  </div>
-
   </div><!-- end canvas-container -->
 
   <script>
@@ -1538,7 +1701,7 @@
 
         tiles.addTo(leafletMap);
 
-        const markersData = [{"id": "JUR-01", "name": "Anacortes", "type": "Incorporated City/Town", "cat": "City", "color": "#004B87", "lat": 48.5126, "lon": -122.6127, "pop": 18350, "share": 13.63298662704309, "htgt": 2942}, {"id": "JUR-02", "name": "Burlington", "type": "Incorporated City/Town", "cat": "City", "color": "#004B87", "lat": 48.4757, "lon": -122.3254, "pop": 10910, "share": 8.105497771173848, "htgt": 2843}, {"id": "JUR-03", "name": "Concrete", "type": "Incorporated City/Town", "cat": "City", "color": "#004B87", "lat": 48.5393, "lon": -121.7471, "pop": 815, "share": 0.6054977711738485, "htgt": 107}, {"id": "JUR-04", "name": "Hamilton", "type": "Incorporated City/Town", "cat": "City", "color": "#004B87", "lat": 48.5246, "lon": -121.9868, "pop": 295, "share": 0.21916790490341753, "htgt": 0}, {"id": "JUR-05", "name": "La Conner", "type": "Incorporated City/Town", "cat": "City", "color": "#004B87", "lat": 48.3943, "lon": -122.4957, "pop": 1000, "share": 0.7429420505200593, "htgt": 124}, {"id": "JUR-06", "name": "Lyman", "type": "Incorporated City/Town", "cat": "City", "color": "#004B87", "lat": 48.5251, "lon": -122.0621, "pop": 440, "share": 0.32689450222882616, "htgt": 0}, {"id": "JUR-07", "name": "Mount Vernon", "type": "Incorporated City/Town", "cat": "City", "color": "#004B87", "lat": 48.4212, "lon": -122.334, "pop": 36050, "share": 26.783060921248143, "htgt": 5180}, {"id": "JUR-08", "name": "Sedro-Woolley", "type": "Incorporated City/Town", "cat": "City", "color": "#004B87", "lat": 48.5039, "lon": -122.2363, "pop": 13360, "share": 9.925705794947994, "htgt": 2646}, {"id": "JUR-09", "name": "Bay View Ridge UGA", "type": "Urban Growth Area (UGA)", "cat": "UGA", "color": "#2563eb", "lat": 48.4717, "lon": -122.4239, "pop": 1711, "share": 1.2711738484398216, "htgt": 0}, {"id": "JUR-10", "name": "Swinomish UGA", "type": "Urban Growth Area (UGA)", "cat": "UGA", "color": "#2563eb", "lat": 48.4069, "lon": -122.5186, "pop": 2567, "share": 1.9071322436849927, "htgt": 118}, {"id": "JUR-11", "name": "Unincorporated Rural (outside UGAs)", "type": "Unincorporated Rural Area", "cat": "Rural", "color": "#0f766e", "lat": 48.48, "lon": -121.8, "pop": 49102, "share": 36.47994056463596, "htgt": 3490}];
+        const markersData = [{"id": "JUR-01", "name": "Anacortes", "type": "Incorporated City/Town", "cat": "City", "color": "#004B87", "lat": 48.5126, "lon": -122.6127, "pop": 18350, "share": 13.63298662704309, "htgt": 2942}, {"id": "JUR-02", "name": "Burlington", "type": "Incorporated City/Town", "cat": "City", "color": "#004B87", "lat": 48.4757, "lon": -122.3254, "pop": 10910, "share": 8.105497771173848, "htgt": 2843}, {"id": "JUR-03", "name": "Concrete", "type": "Incorporated City/Town", "cat": "City", "color": "#004B87", "lat": 48.5393, "lon": -121.7471, "pop": 815, "share": 0.6054977711738485, "htgt": 107}, {"id": "JUR-04", "name": "Hamilton", "type": "Incorporated City/Town", "cat": "City", "color": "#004B87", "lat": 48.5246, "lon": -121.9868, "pop": 295, "share": 0.21916790490341753, "htgt": 0}, {"id": "JUR-05", "name": "La Conner", "type": "Incorporated City/Town", "cat": "City", "color": "#004B87", "lat": 48.3943, "lon": -122.4957, "pop": 1000, "share": 0.7429420505200593, "htgt": 124}, {"id": "JUR-06", "name": "Lyman", "type": "Incorporated City/Town", "cat": "City", "color": "#004B87", "lat": 48.5251, "lon": -122.0621, "pop": 440, "share": 0.32689450222882616, "htgt": 0}, {"id": "JUR-07", "name": "Mount Vernon", "type": "Incorporated City/Town", "cat": "City", "color": "#004B87", "lat": 48.4212, "lon": -122.334, "pop": 36050, "share": 26.783060921248143, "htgt": 5180}, {"id": "JUR-08", "name": "Sedro-Woolley", "type": "Incorporated City/Town", "cat": "City", "color": "#004B87", "lat": 48.5039, "lon": -122.2363, "pop": 13360, "share": 9.925705794947994, "htgt": 2646}, {"id": "JUR-09", "name": "Bay View Ridge UGA", "type": "Urban Growth Area (UGA)", "cat": "UGA", "color": "#2563eb", "lat": 48.4717, "lon": -122.4239, "pop": 1711, "share": 1.2711738484398216, "htgt": 0}, {"id": "JUR-10", "name": "Swinomish UGA", "type": "Urban Growth Area (UGA)", "cat": "UGA", "color": "#2563eb", "lat": 48.4069, "lon": -122.5186, "pop": 2567, "share": 1.9071322436849927, "htgt": 118}, {"id": "JUR-11", "name": "Unincorporated Rural (outside UGAs)", "type": "Unincorporated Rural Area", "cat": "Rural", "color": "#64748b", "lat": 48.48, "lon": -121.8, "pop": 49102, "share": 36.47994056463596, "htgt": 3490}];
         window.markersGroup = L.featureGroup();
 
         markersData.forEach(m => {

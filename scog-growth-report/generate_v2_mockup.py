@@ -222,12 +222,14 @@ for yr, cx in zip(benchmark_years, bar_x_centers):
     adu_h = (adu / 450) * 140
     
     # Bars width = 16
+    cluster_bars.append(f'<g class="benchmark-year-group" data-year="{yr}" data-sf="{sf}" data-mf="{mf}" data-adu="{adu}">')
     cluster_bars.append(f'<rect x="{cx-26}" y="{170-sf_h:.1f}" width="16" height="{sf_h:.1f}" fill="#004B87" rx="2" />')
     cluster_bars.append(f'<text x="{cx-18}" y="{165-sf_h:.1f}" class="chart-val-text">{sf}</text>' if sf > 0 else "")
     cluster_bars.append(f'<rect x="{cx-8}" y="{170-mf_h:.1f}" width="16" height="{mf_h:.1f}" fill="#2563eb" rx="2" />')
     cluster_bars.append(f'<text x="{cx}" y="{165-mf_h:.1f}" class="chart-val-text">{mf}</text>' if mf > 0 else "")
     cluster_bars.append(f'<rect x="{cx+10}" y="{170-adu_h:.1f}" width="16" height="{adu_h:.1f}" fill="#94a3b8" rx="2" />')
     cluster_bars.append(f'<text x="{cx+18}" y="{165-adu_h:.1f}" class="chart-val-text">{adu}</text>' if adu > 0 else "")
+    cluster_bars.append('</g>')
 
 cluster_bars_svg = "\n".join([b for b in cluster_bars if b])
 
@@ -245,35 +247,57 @@ hp_annual["Gross"] = hp_annual["Single_Family_Units"] + hp_annual["MF_Total"] + 
 gross_pts = []
 mf_pts = []
 sf_pts = []
+area_pts_svg = []
 for _, r in hp_annual.iterrows():
-    yr = r["Year"]
+    yr = int(r["Year"])
+    sf_val = int(r["Single_Family_Units"])
+    mf_val = int(r["MF_Total"])
+    adu_val = int(r["ADU_Units"])
+    gross_val = int(r["Gross"])
     x = 40 + ((yr - 2010) / (2025 - 2010)) * 520
     # y scale: 0 to 800 units -> height 140px (y: 170 down to 30)
-    g_h = (r["Gross"] / 800) * 140
-    mf_h = ((r["Single_Family_Units"] + r["MF_Total"]) / 800) * 140
-    sf_h = (r["Single_Family_Units"] / 800) * 140
+    g_h = (gross_val / 800) * 140
+    mf_h = ((sf_val + mf_val) / 800) * 140
+    sf_h = (sf_val / 800) * 140
     gross_pts.append(f"{x:.1f} {170-g_h:.1f}")
     mf_pts.append(f"{x:.1f} {170-mf_h:.1f}")
     sf_pts.append(f"{x:.1f} {170-sf_h:.1f}")
+    area_pts_svg.append(f'<g class="area-data-point" data-year="{yr}" data-sf="{sf_val}" data-mf="{mf_val}" data-adu="{adu_val}" data-gross="{gross_val}"></g>')
 
 area_gross = f"M 40 170 L " + " L ".join(gross_pts) + " L 560 170 Z"
 area_mf = f"M 40 170 L " + " L ".join(mf_pts) + " L 560 170 Z"
 area_sf = f"M 40 170 L " + " L ".join(sf_pts) + " L 560 170 Z"
+area_data_elements = "\n".join(area_pts_svg)
 
 # SVG Historical QCEW Series (Page 3)
-# Y-range 35,000 to 55,000 over 190px (y: 230 down to 40)
+# Extended to 2025 using Fact_Employment (County Total Annual Average = 54,148)
+emp_2025_row = df_emp[(df_emp["Year"] == 2025) & (df_emp["Is_County_Total"] == 1)].iloc[0]
+emp_2025_qcew = int(emp_2025_row["Annual_Average_Employment"]) # 54,148
+
 cai_series = df_cai[df_cai["Year"].between(1999, 2022)].sort_values("Year").to_dict("records")
+qcew_full_series = [{"Year": int(r["Year"]), "Covered_Employment_QCEW": int(r["Covered_Employment_QCEW"])} for r in cai_series]
+qcew_full_series.append({"Year": 2025, "Covered_Employment_QCEW": emp_2025_qcew})
+
+# Y-range 35,000 to 55,000 over 190px (y: 230 down to 40)
+# X-range 1999 to 2025 over 480px (x: 60 to 540)
 qcew_pts = []
-for r in cai_series:
+qcew_dots = []
+for r in qcew_full_series:
     yr = r["Year"]
     val = r["Covered_Employment_QCEW"]
-    x = 65 + ((yr - 1999) / (2022 - 1999)) * 475
+    x = 60 + ((yr - 1999) / (2025 - 1999)) * 480
     y = 230 - ((val - 35000) / 20000) * 190
     qcew_pts.append(f"{x:.1f},{y:.1f}")
+    qcew_dots.append(f'<circle class="qcew-node" cx="{x:.1f}" cy="{y:.1f}" r="3" fill="#004B87" data-year="{yr}" data-qcew="{val}"><title>{yr}: {val:,} Covered Jobs</title></circle>')
+
 qcew_polyline = " ".join(qcew_pts)
-qcew_last = cai_series[-1]
-qcew_last_x = 65 + ((qcew_last["Year"] - 1999) / (2022 - 1999)) * 475
+qcew_last = qcew_full_series[-1]
+qcew_last_x = 60 + ((qcew_last["Year"] - 1999) / (2025 - 1999)) * 480
 qcew_last_y = 230 - ((qcew_last["Covered_Employment_QCEW"] - 35000) / 20000) * 190
+
+qcew_2022 = next(r for r in qcew_full_series if r["Year"] == 2022)
+qcew_2022_x = 60 + ((2022 - 1999) / (2025 - 1999)) * 480
+qcew_2022_y = 230 - ((qcew_2022["Covered_Employment_QCEW"] - 35000) / 20000) * 190
 
 # Geo Centroids for Leaflet & SVG Map (Page 4)
 map_markers_data = []
@@ -871,6 +895,14 @@ html_content = f"""<!DOCTYPE html>
       border-bottom: 1px dashed var(--slate-100);
     }}
 
+    .grouped-bar-row .bar-label {{
+      width: 280px;
+    }}
+
+    #p3 .visual-container:first-child .bar-label {{
+      width: 215px;
+    }}
+
     .grouped-bar-col {{
       flex: 1;
       display: flex;
@@ -1037,10 +1069,10 @@ html_content = f"""<!DOCTYPE html>
           </div>
 
           <div class="card">
-            <div class="card-title">Total Employment (2022 Adopted Baseline)</div>
-            <div class="card-value">{emp_baseline_2022:,}</div>
+            <div class="card-title">Covered jobs, 2025 (QCEW)</div>
+            <div class="card-value">{emp_2025_qcew:,}</div>
             <div class="card-comparison">
-              <span>Adopted 2045 Target: <strong>{emp_target_2045:,}</strong> (Total Employment)</span>
+              <span>2022 Total Baseline: <strong>{emp_baseline_2022:,}</strong> · 2045 Target: <strong>{emp_target_2045:,}</strong> (Total Employment)</span>
             </div>
           </div>
         </div>
@@ -1073,14 +1105,14 @@ html_content = f"""<!DOCTYPE html>
                 <text x="540" y="210" class="axis-label" text-anchor="middle">({pop_traj[2025]:,})</text>
                 <polyline fill="none" stroke="#004B87" stroke-width="3" points="{pop_polyline}" />
                 {"".join(pop_dots)}
-                <text x="540" y="45" font-size="10" font-weight="700" fill="#004B87" text-anchor="middle">134,600</text>
+                <text x="540" y="28" font-size="10" font-weight="700" fill="#004B87" text-anchor="middle">134,600</text>
               </svg>
             </div>
           </div>
 
           <!-- Visual 08: Clustered Column -->
           <div class="visual-container">
-            <div class="visual-title">Annual Permitted Housing Units by Typology (2010–2025)</div>
+            <div class="visual-title">Annual Permitted Housing Units by Typology (Benchmark Years)</div>
             <div class="visual-subtitle">Benchmark Years: 2010, 2015, 2020, and 2025 (Annual Single-Family, Multi-Family, and ADU Permits)</div>
             <div class="legend-box">
               <div class="legend-item"><span class="legend-color" style="background:#004B87;"></span> Single-Family</div>
@@ -1241,7 +1273,8 @@ html_content += f"""                <tr class="total-row">
                 <path d="{area_gross}" fill="#94a3b8" opacity="0.6" />
                 <path d="{area_mf}" fill="#2563eb" opacity="0.85" />
                 <path d="{area_sf}" fill="#004B87" opacity="0.95" />
-                <text x="540" y="65" font-size="9" font-weight="700" fill="#0f172a" text-anchor="middle">2025 Total: {total_gross_2025:,} Gross ({total_net_2025:,} Net)</text>
+                {area_data_elements}
+                <text x="555" y="55" font-size="9" font-weight="700" fill="#0f172a" text-anchor="end">2025 Total: {total_gross_2025:,} Gross ({total_net_2025:,} Net)</text>
               </svg>
             </div>
           </div>
@@ -1268,31 +1301,24 @@ html_content += f"""            </div>
         <!-- Bottom Row: AMI Targets & Permitting Matrix -->
         <div class="grid-2col-split" style="height: 375px;">
           <div class="visual-container">
-            <div class="visual-title">Allocated Housing Units by Area Median Income (AMI) Income Band</div>
-            <div class="visual-subtitle">[PRELIMINARY: Local Jurisdiction Housing Needs Assessments due Oct 20, 2026]</div>
-            <div class="legend-box">
-              <div class="legend-item"><span class="legend-color" style="background:#004B87;"></span> &lt;80% AMI (Low Income)</div>
-              <div class="legend-item"><span class="legend-color" style="background:#2563eb;"></span> &gt;80% AMI (Moderate/High)</div>
-            </div>
+            <div class="visual-title">Preliminary Allocated Units by Jurisdiction</div>
+            <div class="visual-subtitle">[PRELIMINARY: Commerce default allocation (Exhibit 12). Local jurisdiction datasheets due Oct 20, 2026; not jurisdiction-verified]</div>
             <div class="visual-body" style="padding-top: 5px;">
 """
 
 for _, r in ami_agg.iterrows():
     tot = int(r["Total_AMI_Units"])
-    low = int(r["Low"])
-    mod = int(r["ModHigh"])
     prop_width = (tot / max_ami_units) * 100
     html_content += f"""              <div class="bar-row">
                 <span class="bar-label">{r['Jurisdiction_Name']}</span>
-                <div class="bar-track" style="max-width: {prop_width:.1f}%;">
-                  <div class="bar-fill" style="width:{(low/tot*100 if tot>0 else 0):.1f}%;"></div>
-                  <div class="bar-fill accent2" style="width:{(mod/tot*100 if tot>0 else 0):.1f}%;"></div>
+                <div class="bar-track" style="max-width: {prop_width:.1f}%;" data-jurisdiction="{r['Jurisdiction_Name']}" data-width="{prop_width:.1f}" data-units="{tot}">
+                  <div class="bar-fill accent2" style="width: 100%;"></div>
                 </div>
                 <span class="bar-val">{tot:,} units</span>
               </div>\n"""
 
 html_content += f"""              <div class="info-callout">
-                <div><strong>Notice:</strong> Preliminary Commerce HB 1220 data reflects the 4 reporting jurisdictions with available local datasheets (Anacortes 31, Burlington 217, Mount Vernon 23, Sedro-Woolley 56 = {int(ami_agg['Total_AMI_Units'].sum()):,} total units). Remaining jurisdictions are due Oct 20, 2026.</div>
+                <div><strong>Notice:</strong> Preliminary: Commerce default allocation (Exhibit 12). Local jurisdiction datasheets due Oct 20, 2026; not jurisdiction-verified. Allocations shown: Anacortes 31, Burlington 217, Mount Vernon 23, Sedro-Woolley 56 = {int(ami_agg['Total_AMI_Units'].sum()):,} total units.</div>
               </div>
             </div>
           </div>
@@ -1341,7 +1367,7 @@ html_content += f"""                  <tr class="total-row">
 
         <div class="page-footer">
           <span>Reconciliation Check: SF {total_sf_2025:,} + MF {total_mf_2025:,} + ADU {total_adu_2025:,} − Demolitions {total_dem_2025:,} = Net New {total_net_2025:,} Units</span>
-          <span>Local Building Department Annual Submissions | Preliminary Commerce HB 1220 Datasheets</span>
+          <span>Local Building Department Annual Submissions | Preliminary Commerce default allocation (Exhibit 12)</span>
         </div>
       </div>
 
@@ -1361,7 +1387,7 @@ html_content += f"""                  <tr class="total-row">
         <div class="grid-2col" style="height: 395px; margin-bottom: 14px;">
           <div class="visual-container">
             <div class="visual-title">Jurisdictional Population Level (2025) vs. Adopted 2045 GMA Targets</div>
-            <div class="visual-subtitle">Current 2025 Population Count vs Adopted 2045 Target Allocation across all 11 Jurisdictions (Level ÷ Target %)</div>
+            <div class="visual-subtitle">Current 2025 Population Count vs Adopted 2045 Target Allocation across all 11 Jurisdictions (Level ÷ Target %; Not Cumulative Growth)</div>
             <div class="visual-body">
 """
 
@@ -1375,7 +1401,7 @@ for r in all_p3_pop:
     html_content += f"""              <div class="bar-row"><span class="bar-label" title="{r['name']}">{r['name']}</span><div class="bar-track"><div class="bar-fill" style="width:{fill_w:.1f}%;"></div></div><span class="bar-val">{r['pop25']:,} / {r['pop_tgt']:,} ({pct_of_tgt:.1f}%)</span></div>\n"""
 
 html_content += f"""              <div class="info-callout" style="margin-top: 4px; padding: 4px 8px; font-size: 9.5px;">
-                <div><strong>Notice on Rural Target:</strong> Unincorporated Rural (49,102) already exceeds its adopted 2045 planning target (48,381 by +721 persons, or 101.5% of target allocation).</div>
+                <div><strong>Notice on Rural Target:</strong> Bars reflect 2025 population level relative to the 2045 target level (Level ÷ Target %), not progress of cumulative growth since baseline. Unincorporated Rural (49,102) already exceeds its adopted 2045 planning target (48,381 by +721 persons, or 101.5% of target allocation).</div>
               </div>
             </div>
           </div>
@@ -1402,8 +1428,8 @@ html_content += f"""            </div>
         <!-- Bottom Row: Employment Benchmark & Targets Table -->
         <div class="grid-2col-split" style="height: 385px;">
           <div class="visual-container">
-            <div class="visual-title">Covered Wage & Salary Employment (ESD QCEW Benchmark, 1999–2022)</div>
-            <div class="visual-subtitle">Historical Covered Wage & Salary Employment from Dim_CAI_Employment_Benchmark</div>
+            <div class="visual-title">Covered Wage & Salary Employment (ESD QCEW Benchmark, 1999–2025)</div>
+            <div class="visual-subtitle">Historical Covered Wage & Salary Employment (Dim_CAI_Employment_Benchmark & Fact_Employment). Axis starts at 35,000 for visibility.</div>
             <div class="visual-body">
               <svg class="chart-svg" viewBox="0 0 580 260">
                 <line x1="50" y1="230" x2="560" y2="230" class="axis-line" />
@@ -1413,13 +1439,16 @@ html_content += f"""            </div>
                 <text x="42" y="136" class="axis-label" text-anchor="end">45k</text>
                 <text x="42" y="88" class="axis-label" text-anchor="end">50k</text>
                 <text x="42" y="40" class="axis-label" text-anchor="end">55k</text>
-                <text x="65" y="248" class="axis-label" text-anchor="middle">1999</text>
-                <text x="208" y="248" class="axis-label" text-anchor="middle">2006</text>
-                <text x="350" y="248" class="axis-label" text-anchor="middle">2014</text>
-                <text x="530" y="248" class="axis-label" text-anchor="middle">2022</text>
+                <text x="60" y="248" class="axis-label" text-anchor="middle">1999</text>
+                <text x="189" y="248" class="axis-label" text-anchor="middle">2006</text>
+                <text x="337" y="248" class="axis-label" text-anchor="middle">2014</text>
+                <text x="485" y="248" class="axis-label" text-anchor="middle">2022</text>
+                <text x="540" y="248" class="axis-label" text-anchor="middle" font-weight="700">2025</text>
                 <polyline fill="none" stroke="#004B87" stroke-width="3" points="{qcew_polyline}" />
-                <circle cx="{qcew_last_x:.1f}" cy="{qcew_last_y:.1f}" r="5" fill="#2563eb" stroke="#ffffff" stroke-width="2" />
-                <text x="{qcew_last_x-10:.1f}" y="{qcew_last_y-12:.1f}" class="axis-label" font-weight="700" fill="#0f172a" text-anchor="end">2022 QCEW: {qcew_last['Covered_Employment_QCEW']:,} (Covered Jobs)</text>
+                {"".join(qcew_dots)}
+                <circle cx="{qcew_last_x:.1f}" cy="{qcew_last_y:.1f}" r="5.5" fill="#2563eb" stroke="#ffffff" stroke-width="2" />
+                <text x="{qcew_last_x-10:.1f}" y="{qcew_last_y-12:.1f}" class="axis-label" font-weight="700" fill="#0f172a" text-anchor="end">2025 QCEW: {qcew_last['Covered_Employment_QCEW']:,} (Covered Jobs)</text>
+                <text x="{qcew_2022_x-8:.1f}" y="{qcew_2022_y+16:.1f}" font-size="8.5" fill="#475569" text-anchor="end">2022: 51,597</text>
               </svg>
             </div>
           </div>
@@ -1477,7 +1506,7 @@ html_content += f"""                  <tr class="total-row">
 
         <div class="grid-2col-split" style="height: 480px; margin-bottom: 14px;">
           <div class="visual-container" style="height: 100%;">
-            <div class="visual-title">Regional Jurisdictions & UGA Centroids (USGS/Census 2020)</div>
+            <div class="visual-title">Approximate Centroids (Leaflet placeholder)</div>
             <div class="visual-subtitle">Map placeholder (Leaflet); Azure Map in the Power BI build</div>
             <div class="visual-body" style="padding: 0; position: relative;">
               <div id="map-container">
@@ -1581,7 +1610,6 @@ for r in top_p4_comp:
                   <span class="bar-val">{r['h_share']:.1f}% Hsg</span>
                 </div>
               </div>
-              <span class="bar-val" style="width: 100px; font-weight: 700; color: #004B87;">{r['pop_share']:.1f}% / {r['h_share']:.1f}%</span>
             </div>\n"""
 
 html_content += f"""          </div>

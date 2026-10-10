@@ -78,6 +78,7 @@ gross_2025 = sf_2025 + mf_2025 + adu_2025
 
 emp_base = int(df_tgt["Baseline_2022_Employment"].sum())
 emp_tgt = int(df_tgt["Target_2045_Employment"].sum())
+emp_2025_qcew = int(df_emp[(df_emp["Year"] == 2025) & (df_emp["Is_County_Total"] == 1)]["Annual_Average_Employment"].iloc[0])
 
 p1_cards = p1.find_all("div", class_="card")
 # Card 1: Population
@@ -102,11 +103,12 @@ check("Page 1 KPI", "2025 Net Permitted Units", c3_val, f"{net_2025:,}")
 check("Page 1 KPI", "2025 Gross Units", re.search(r"Gross:\s*([\d,]+)", c3_comp).group(1), f"{gross_2025:,}")
 check("Page 1 KPI", "2025 Demolished Units", re.search(r"Demolished:\s*([\d,]+)", c3_comp).group(1), f"{dem_2025:,}")
 
-# Card 4: Employment
+# Card 4: Employment (Covered Jobs 2025 QCEW)
 c4_val = p1_cards[3].find("div", class_="card-value").text
 c4_comp = p1_cards[3].find("div", class_="card-comparison").text
-check("Page 1 KPI", "Employment 2022 Baseline", c4_val, f"{emp_base:,}")
-check("Page 1 KPI", "Employment 2045 Target", re.search(r"Target:\s*([\d,]+)", c4_comp).group(1), f"{emp_tgt:,}")
+check("Page 1 KPI", "Covered Jobs 2025 (QCEW)", c4_val, f"{emp_2025_qcew:,}")
+check("Page 1 KPI", "Employment 2022 Total Baseline", re.search(r"2022 Total Baseline:\s*([\d,]+)", c4_comp).group(1), f"{emp_base:,}")
+check("Page 1 KPI", "Employment 2045 Total Target", re.search(r"Target:\s*([\d,]+)", c4_comp).group(1), f"{emp_tgt:,}")
 
 # 2. Page 1 Population Trajectory Chart
 pop_traj = df_pop[df_pop["Year"].between(2020, 2025)].groupby("Year")["Population_Count"].sum().to_dict()
@@ -117,12 +119,21 @@ for y in [2020, 2021, 2022, 2023, 2024, 2025]:
     m = re.search(rf"{y}[\s\S]*?\(([\d,]+)\)", p1_chart1_svg.text)
     check("Page 1 Chart", f"Pop Trajectory Year {y}", m.group(1), f"{pop_traj[y]:,}")
 
-# 3. Page 1 Permitted Typology Chart (2025 Cluster)
+# 3. Page 1 Benchmark Typology Bars (every benchmark year: 2010, 2015, 2020, 2025)
 p1_perm_svg = p1.find_all("svg", class_="chart-svg")[1]
-texts = [t.text.strip() for t in p1_perm_svg.find_all("text")]
-check("Page 1 Permitting SVG", "2025 SF Permits", str(sf_2025) in texts, True)
-check("Page 1 Permitting SVG", "2025 MF Permits", str(mf_2025) in texts, True)
-check("Page 1 Permitting SVG", "2025 ADU Permits", str(adu_2025) in texts, True)
+b_groups = p1_perm_svg.find_all("g", class_="benchmark-year-group")
+for grp in b_groups:
+    byr = int(grp["data-year"])
+    b_sf = grp["data-sf"]
+    b_mf = grp["data-mf"]
+    b_adu = grp["data-adu"]
+    df_by = df_hp[df_hp["Year"] == byr]
+    exp_b_sf = int(df_by["Single_Family_Units"].sum())
+    exp_b_mf = int((df_by["Duplex_Units"] + df_by["MultiFamily_3_4_Units"] + df_by["MultiFamily_5_Plus_Units"]).sum())
+    exp_b_adu = int(df_by["ADU_Units"].sum())
+    check("Page 1 Benchmark Bars", f"{byr} SF Permits", b_sf, str(exp_b_sf))
+    check("Page 1 Benchmark Bars", f"{byr} MF Permits", b_mf, str(exp_b_mf))
+    check("Page 1 Benchmark Bars", f"{byr} ADU Permits", b_adu, str(exp_b_adu))
 
 # 4. Page 1 Reconciliation Table
 p1_table = p1.find("table", class_="table-visual")
@@ -229,6 +240,26 @@ check("Page 2 Matrix Total", "Total ADU", p2_total_tds[3].text, f"{adu_2025:,}")
 check("Page 2 Matrix Total", "Total Demolished", p2_total_tds[4].text, f"{dem_2025:,}")
 check("Page 2 Matrix Total", "Total Net New", p2_total_tds[5].text, f"{net_2025:,}")
 
+# Page 2 Stacked-Area Series (every year 2010-2025: SF, MF, ADU, Gross)
+area_pts = p2.find_all("g", class_="area-data-point")
+for pt in area_pts:
+    ayr = int(pt["data-year"])
+    a_sf = pt["data-sf"]
+    a_mf = pt["data-mf"]
+    a_adu = pt["data-adu"]
+    a_gross = pt["data-gross"]
+    
+    df_ay = df_hp[df_hp["Year"] == ayr]
+    exp_a_sf = int(df_ay["Single_Family_Units"].sum())
+    exp_a_mf = int((df_ay["Duplex_Units"] + df_ay["MultiFamily_3_4_Units"] + df_ay["MultiFamily_5_Plus_Units"]).sum())
+    exp_a_adu = int(df_ay["ADU_Units"].sum())
+    exp_a_gross = exp_a_sf + exp_a_mf + exp_a_adu
+    
+    check("Page 2 Stacked Area", f"{ayr} SF Units", a_sf, str(exp_a_sf))
+    check("Page 2 Stacked Area", f"{ayr} MF Units", a_mf, str(exp_a_mf))
+    check("Page 2 Stacked Area", f"{ayr} ADU Units", a_adu, str(exp_a_adu))
+    check("Page 2 Stacked Area", f"{ayr} Gross Units", a_gross, str(exp_a_gross))
+
 # Page 2 AMI breakdown
 ami_container = p2.find_all("div", class_="visual-container")[2]
 ami_agg = df_ami[df_ami["Year"] == 2025].groupby("Jurisdiction_ID").agg({"Total_AMI_Units": "sum"}).reset_index().set_index("Jurisdiction_ID")
@@ -241,6 +272,20 @@ for jid in ami_agg.index:
 tot_ami = int(df_ami[df_ami["Year"] == 2025]["Total_AMI_Units"].sum())
 m_ami_tot = re.search(r"=\s*([\d,]+)\s*total units", ami_container.text)
 check("Page 2 AMI", "Total Preliminary AMI Units", m_ami_tot.group(1), f"{tot_ami:,}")
+
+# Page 2 AMI Bar Widths & Proportional Scaling Check
+max_ami_val = ami_agg["Total_AMI_Units"].max()
+ami_tracks = ami_container.find_all("div", class_="bar-track")
+for track in ami_tracks:
+    j_name = track["data-jurisdiction"]
+    w_rend = track["data-width"]
+    u_rend = int(track["data-units"])
+    exp_w = f"{(u_rend / max_ami_val * 100):.1f}"
+    check("Page 2 AMI Bar Width", f"{j_name} Bar Width %", w_rend, exp_w)
+
+# Page 2 AMI Wording Compliance Check
+check("Page 2 AMI Wording", "No reporting jurisdictions wording", "reporting jurisdictions with available local datasheets" in ami_container.text, False)
+check("Page 2 AMI Wording", "Preliminary Commerce Notice", "Commerce default allocation (Exhibit 12)" in ami_container.text, True)
 
 # -------------------------------------------------------------------------
 # PAGE 3 CHECKS
@@ -300,10 +345,20 @@ p3_total_tds = p3_rows[11].find_all("td")
 check("Page 3 Employment Total", "Countywide 2022 Baseline", p3_total_tds[1].text, f"{emp_base:,}")
 check("Page 3 Employment Total", "Countywide 2045 Target", p3_total_tds[2].text, f"{emp_tgt:,}")
 
-# 4. Page 3 Historical QCEW Benchmark
-qcew_2022 = int(df_cai[df_cai["Year"] == 2022]["Covered_Employment_QCEW"].iloc[0])
-m_qcew = re.search(r"2022 QCEW:\s*([\d,]+)", p3.text)
-check("Page 3 QCEW", "2022 QCEW Value", m_qcew.group(1), f"{qcew_2022:,}")
+# 4. Page 3 Historical QCEW Benchmark Series (every point 1999-2025)
+qcew_nodes = p3.find_all("circle", class_="qcew-node")
+cai_dict = df_cai.set_index("Year")["Covered_Employment_QCEW"].to_dict()
+for node in qcew_nodes:
+    nyr = int(node["data-year"])
+    nqcew = int(node["data-qcew"])
+    if nyr == 2025:
+        exp_q = emp_2025_qcew
+    else:
+        exp_q = int(cai_dict[nyr])
+    check("Page 3 QCEW Series", f"{nyr} Covered Employment", str(nqcew), str(exp_q))
+
+m_qcew_endpoint = re.search(r"2025 QCEW:\s*([\d,]+)", p3.text)
+check("Page 3 QCEW", "2025 QCEW Endpoint Label", m_qcew_endpoint.group(1), f"{emp_2025_qcew:,}")
 
 # -------------------------------------------------------------------------
 # PAGE 4 CHECKS
@@ -364,12 +419,16 @@ r14_tds = [td.text.strip() for td in p4_tbody_rows[14].find_all("td")]
 check("Page 4 Table", "Total County Population", r14_tds[1], f"{pop_2025:,}")
 check("Page 4 Table", "Total County Share %", r14_tds[2], "100.0%")
 
+p4_map_title = p4.find_all("div", class_="visual-title")[0].text.strip()
+check("Page 4 Map", "Map Title Placeholder", p4_map_title, "Approximate Centroids (Leaflet placeholder)")
+
 # Page 4 Share Comparison Bars (Grouped horizontal bars)
 p4_comp_bars = p4.find_all("div", class_="grouped-bar-row")
 for bar in p4_comp_bars:
     name = bar.find("span", class_="bar-label").text.strip()
-    val_span = bar.find_all("span", class_="bar-val")[-1].text.strip()
-    m_comp = re.search(r"([\d\.]+)%\s*/\s*([\d\.]+)%", val_span)
+    val_spans = bar.find_all("span", class_="bar-val")
+    m_pop = re.search(r"([\d\.]+)%\s*Pop", val_spans[0].text)
+    m_hsg = re.search(r"([\d\.]+)%\s*Hsg", val_spans[1].text)
     exp_r = tgt_indexed[tgt_indexed["Jurisdiction_Name"] == name]
     if not exp_r.empty:
         jid = exp_r.index[0]
@@ -377,8 +436,8 @@ for bar in p4_comp_bars:
         exp_ht = int(tgt_indexed.loc[jid, "Target_2045_Housing_Units"])
         exp_pop_sh = (exp_p / pop_2025) * 100
         exp_h_sh = (exp_ht / hp_tgt) * 100
-        check("Page 4 Share Comparison", f"{name} Pop Share %", m_comp.group(1), f"{exp_pop_sh:.1f}")
-        check("Page 4 Share Comparison", f"{name} Housing Share %", m_comp.group(2), f"{exp_h_sh:.1f}")
+        check("Page 4 Share Comparison", f"{name} Pop Share %", m_pop.group(1), f"{exp_pop_sh:.1f}")
+        check("Page 4 Share Comparison", f"{name} Housing Share %", m_hsg.group(1), f"{exp_h_sh:.1f}")
 
 # Page 4 Footer Tripartite Check
 p4_footer = p4.find("div", class_="page-footer").text

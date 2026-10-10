@@ -515,6 +515,14 @@
       border-bottom: 1px dashed var(--slate-100);
     }
 
+    .grouped-bar-row .bar-label {
+      width: 280px;
+    }
+
+    #p3 .visual-container:first-child .bar-label {
+      width: 215px;
+    }
+
     .grouped-bar-col {
       flex: 1;
       display: flex;
@@ -681,10 +689,10 @@
           </div>
 
           <div class="card">
-            <div class="card-title">Total Employment (2022 Adopted Baseline)</div>
-            <div class="card-value">59,571</div>
+            <div class="card-title">Covered jobs, 2025 (QCEW)</div>
+            <div class="card-value">54,148</div>
             <div class="card-comparison">
-              <span>Adopted 2045 Target: <strong>80,100</strong> (Total Employment)</span>
+              <span>2022 Total Baseline: <strong>59,571</strong> · 2045 Target: <strong>80,100</strong> (Total Employment)</span>
             </div>
           </div>
         </div>
@@ -717,14 +725,14 @@
                 <text x="540" y="210" class="axis-label" text-anchor="middle">(134,600)</text>
                 <polyline fill="none" stroke="#004B87" stroke-width="3" points="80,144.5 175,135.0 270,110.0 365,95.0 460,69.0 540,43.0" />
                 <circle cx="80" cy="144.5" r="4.5" fill="#004B87" stroke="#ffffff" stroke-width="2" /><circle cx="175" cy="135.0" r="4.5" fill="#004B87" stroke="#ffffff" stroke-width="2" /><circle cx="270" cy="110.0" r="4.5" fill="#004B87" stroke="#ffffff" stroke-width="2" /><circle cx="365" cy="95.0" r="4.5" fill="#004B87" stroke="#ffffff" stroke-width="2" /><circle cx="460" cy="69.0" r="4.5" fill="#004B87" stroke="#ffffff" stroke-width="2" /><circle cx="540" cy="43.0" r="4.5" fill="#004B87" stroke="#ffffff" stroke-width="2" />
-                <text x="540" y="45" font-size="10" font-weight="700" fill="#004B87" text-anchor="middle">134,600</text>
+                <text x="540" y="28" font-size="10" font-weight="700" fill="#004B87" text-anchor="middle">134,600</text>
               </svg>
             </div>
           </div>
 
           <!-- Visual 08: Clustered Column -->
           <div class="visual-container">
-            <div class="visual-title">Annual Permitted Housing Units by Typology (2010–2025)</div>
+            <div class="visual-title">Annual Permitted Housing Units by Typology (Benchmark Years)</div>
             <div class="visual-subtitle">Benchmark Years: 2010, 2015, 2020, and 2025 (Annual Single-Family, Multi-Family, and ADU Permits)</div>
             <div class="legend-box">
               <div class="legend-item"><span class="legend-color" style="background:#004B87;"></span> Single-Family</div>
@@ -738,29 +746,37 @@
                 <text x="210" y="185" class="axis-label" text-anchor="middle" font-weight="600">2015</text>
                 <text x="350" y="185" class="axis-label" text-anchor="middle" font-weight="600">2020</text>
                 <text x="490" y="185" class="axis-label" text-anchor="middle" font-weight="600">2025</text>
-                <rect x="64" y="126.4" width="16" height="43.6" fill="#004B87" rx="2" />
+                <g class="benchmark-year-group" data-year="2010" data-sf="140" data-mf="94" data-adu="0">
+<rect x="64" y="126.4" width="16" height="43.6" fill="#004B87" rx="2" />
 <text x="72" y="121.4" class="chart-val-text">140</text>
 <rect x="82" y="140.8" width="16" height="29.2" fill="#2563eb" rx="2" />
 <text x="90" y="135.8" class="chart-val-text">94</text>
 <rect x="100" y="170.0" width="16" height="0.0" fill="#94a3b8" rx="2" />
+</g>
+<g class="benchmark-year-group" data-year="2015" data-sf="249" data-mf="37" data-adu="1">
 <rect x="184" y="92.5" width="16" height="77.5" fill="#004B87" rx="2" />
 <text x="192" y="87.5" class="chart-val-text">249</text>
 <rect x="202" y="158.5" width="16" height="11.5" fill="#2563eb" rx="2" />
 <text x="210" y="153.5" class="chart-val-text">37</text>
 <rect x="220" y="169.7" width="16" height="0.3" fill="#94a3b8" rx="2" />
 <text x="228" y="164.7" class="chart-val-text">1</text>
+</g>
+<g class="benchmark-year-group" data-year="2020" data-sf="397" data-mf="109" data-adu="8">
 <rect x="324" y="46.5" width="16" height="123.5" fill="#004B87" rx="2" />
 <text x="332" y="41.5" class="chart-val-text">397</text>
 <rect x="342" y="136.1" width="16" height="33.9" fill="#2563eb" rx="2" />
 <text x="350" y="131.1" class="chart-val-text">109</text>
 <rect x="360" y="167.5" width="16" height="2.5" fill="#94a3b8" rx="2" />
 <text x="368" y="162.5" class="chart-val-text">8</text>
+</g>
+<g class="benchmark-year-group" data-year="2025" data-sf="202" data-mf="259" data-adu="56">
 <rect x="464" y="107.2" width="16" height="62.8" fill="#004B87" rx="2" />
 <text x="472" y="102.2" class="chart-val-text">202</text>
 <rect x="482" y="89.4" width="16" height="80.6" fill="#2563eb" rx="2" />
 <text x="490" y="84.4" class="chart-val-text">259</text>
 <rect x="500" y="152.6" width="16" height="17.4" fill="#94a3b8" rx="2" />
 <text x="508" y="147.6" class="chart-val-text">56</text>
+</g>
               </svg>
             </div>
           </div>
@@ -993,7 +1009,44 @@
                 <path d="M 40 170 L -653.3 37.0 L -618.7 51.3 L -584.0 67.8 L -549.3 100.3 L -514.7 66.6 L -480.0 98.8 L -445.3 67.6 L -410.7 106.3 L -376.0 107.3 L -341.3 75.0 L -306.7 81.8 L -272.0 68.3 L -237.3 64.5 L -202.7 54.8 L -168.0 51.0 L -133.3 66.6 L -98.7 25.6 L -64.0 63.8 L -29.3 72.7 L 5.3 118.4 L 40.0 129.1 L 74.7 128.0 L 109.3 131.7 L 144.0 110.5 L 178.7 116.4 L 213.3 119.8 L 248.0 100.3 L 282.7 81.6 L 317.3 75.2 L 352.0 90.5 L 386.7 80.1 L 421.3 68.8 L 456.0 46.6 L 490.7 52.6 L 525.3 59.2 L 560.0 79.5 L 594.7 128.0 L 560 170 Z" fill="#94a3b8" opacity="0.6" />
                 <path d="M 40 170 L -653.3 37.0 L -618.7 51.3 L -584.0 67.8 L -549.3 100.3 L -514.7 66.6 L -480.0 98.8 L -445.3 67.6 L -410.7 106.3 L -376.0 107.3 L -341.3 75.0 L -306.7 81.8 L -272.0 68.3 L -237.3 64.5 L -202.7 54.8 L -168.0 51.0 L -133.3 66.6 L -98.7 25.6 L -64.0 63.8 L -29.3 72.7 L 5.3 118.4 L 40.0 129.1 L 74.7 128.3 L 109.3 132.6 L 144.0 110.7 L 178.7 117.2 L 213.3 120.0 L 248.0 101.2 L 282.7 83.2 L 317.3 77.8 L 352.0 91.2 L 386.7 81.5 L 421.3 75.2 L 456.0 52.8 L 490.7 61.5 L 525.3 68.7 L 560.0 89.3 L 594.7 133.4 L 560 170 Z" fill="#2563eb" opacity="0.85" />
                 <path d="M 40 170 L -653.3 106.5 L -618.7 117.8 L -584.0 110.8 L -549.3 113.5 L -514.7 98.6 L -480.0 124.2 L -445.3 125.2 L -410.7 122.2 L -376.0 126.2 L -341.3 118.2 L -306.7 112.6 L -272.0 112.4 L -237.3 118.2 L -202.7 97.7 L -168.0 82.7 L -133.3 88.5 L -98.7 61.7 L -64.0 82.2 L -29.3 85.1 L 5.3 126.6 L 40.0 145.5 L 74.7 131.2 L 109.3 132.9 L 144.0 110.7 L 178.7 122.4 L 213.3 126.4 L 248.0 114.7 L 282.7 102.5 L 317.3 100.2 L 352.0 111.6 L 386.7 100.5 L 421.3 127.8 L 456.0 111.9 L 490.7 142.3 L 525.3 143.1 L 560.0 134.7 L 594.7 144.6 L 560 170 Z" fill="#004B87" opacity="0.95" />
-                <text x="540" y="65" font-size="9" font-weight="700" fill="#0f172a" text-anchor="middle">2025 Total: 517 Gross (490 Net)</text>
+                <g class="area-data-point" data-year="1990" data-sf="363" data-mf="397" data-adu="0" data-gross="760"></g>
+<g class="area-data-point" data-year="1991" data-sf="298" data-mf="380" data-adu="0" data-gross="678"></g>
+<g class="area-data-point" data-year="1992" data-sf="338" data-mf="246" data-adu="0" data-gross="584"></g>
+<g class="area-data-point" data-year="1993" data-sf="323" data-mf="75" data-adu="0" data-gross="398"></g>
+<g class="area-data-point" data-year="1994" data-sf="408" data-mf="183" data-adu="0" data-gross="591"></g>
+<g class="area-data-point" data-year="1995" data-sf="262" data-mf="145" data-adu="0" data-gross="407"></g>
+<g class="area-data-point" data-year="1996" data-sf="256" data-mf="329" data-adu="0" data-gross="585"></g>
+<g class="area-data-point" data-year="1997" data-sf="273" data-mf="91" data-adu="0" data-gross="364"></g>
+<g class="area-data-point" data-year="1998" data-sf="250" data-mf="108" data-adu="0" data-gross="358"></g>
+<g class="area-data-point" data-year="1999" data-sf="296" data-mf="247" data-adu="0" data-gross="543"></g>
+<g class="area-data-point" data-year="2000" data-sf="328" data-mf="176" data-adu="0" data-gross="504"></g>
+<g class="area-data-point" data-year="2001" data-sf="329" data-mf="252" data-adu="0" data-gross="581"></g>
+<g class="area-data-point" data-year="2002" data-sf="296" data-mf="307" data-adu="0" data-gross="603"></g>
+<g class="area-data-point" data-year="2003" data-sf="413" data-mf="245" data-adu="0" data-gross="658"></g>
+<g class="area-data-point" data-year="2004" data-sf="499" data-mf="181" data-adu="0" data-gross="680"></g>
+<g class="area-data-point" data-year="2005" data-sf="466" data-mf="125" data-adu="0" data-gross="591"></g>
+<g class="area-data-point" data-year="2006" data-sf="619" data-mf="206" data-adu="0" data-gross="825"></g>
+<g class="area-data-point" data-year="2007" data-sf="502" data-mf="105" data-adu="0" data-gross="607"></g>
+<g class="area-data-point" data-year="2008" data-sf="485" data-mf="71" data-adu="0" data-gross="556"></g>
+<g class="area-data-point" data-year="2009" data-sf="248" data-mf="47" data-adu="0" data-gross="295"></g>
+<g class="area-data-point" data-year="2010" data-sf="140" data-mf="94" data-adu="0" data-gross="234"></g>
+<g class="area-data-point" data-year="2011" data-sf="222" data-mf="16" data-adu="2" data-gross="240"></g>
+<g class="area-data-point" data-year="2012" data-sf="212" data-mf="2" data-adu="5" data-gross="219"></g>
+<g class="area-data-point" data-year="2013" data-sf="339" data-mf="0" data-adu="1" data-gross="340"></g>
+<g class="area-data-point" data-year="2014" data-sf="272" data-mf="30" data-adu="4" data-gross="306"></g>
+<g class="area-data-point" data-year="2015" data-sf="249" data-mf="37" data-adu="1" data-gross="287"></g>
+<g class="area-data-point" data-year="2016" data-sf="316" data-mf="77" data-adu="5" data-gross="398"></g>
+<g class="area-data-point" data-year="2017" data-sf="386" data-mf="110" data-adu="9" data-gross="505"></g>
+<g class="area-data-point" data-year="2018" data-sf="399" data-mf="128" data-adu="15" data-gross="542"></g>
+<g class="area-data-point" data-year="2019" data-sf="334" data-mf="116" data-adu="4" data-gross="454"></g>
+<g class="area-data-point" data-year="2020" data-sf="397" data-mf="109" data-adu="8" data-gross="514"></g>
+<g class="area-data-point" data-year="2021" data-sf="241" data-mf="301" data-adu="36" data-gross="578"></g>
+<g class="area-data-point" data-year="2022" data-sf="332" data-mf="338" data-adu="35" data-gross="705"></g>
+<g class="area-data-point" data-year="2023" data-sf="158" data-mf="462" data-adu="51" data-gross="671"></g>
+<g class="area-data-point" data-year="2024" data-sf="154" data-mf="425" data-adu="54" data-gross="633"></g>
+<g class="area-data-point" data-year="2025" data-sf="202" data-mf="259" data-adu="56" data-gross="517"></g>
+<g class="area-data-point" data-year="2026" data-sf="145" data-mf="64" data-adu="31" data-gross="240"></g>
+                <text x="555" y="55" font-size="9" font-weight="700" fill="#0f172a" text-anchor="end">2025 Total: 517 Gross (490 Net)</text>
               </svg>
             </div>
           </div>
@@ -1015,47 +1068,39 @@
         <!-- Bottom Row: AMI Targets & Permitting Matrix -->
         <div class="grid-2col-split" style="height: 375px;">
           <div class="visual-container">
-            <div class="visual-title">Allocated Housing Units by Area Median Income (AMI) Income Band</div>
-            <div class="visual-subtitle">[PRELIMINARY: Local Jurisdiction Housing Needs Assessments due Oct 20, 2026]</div>
-            <div class="legend-box">
-              <div class="legend-item"><span class="legend-color" style="background:#004B87;"></span> &lt;80% AMI (Low Income)</div>
-              <div class="legend-item"><span class="legend-color" style="background:#2563eb;"></span> &gt;80% AMI (Moderate/High)</div>
-            </div>
+            <div class="visual-title">Preliminary Allocated Units by Jurisdiction</div>
+            <div class="visual-subtitle">[PRELIMINARY: Commerce default allocation (Exhibit 12). Local jurisdiction datasheets due Oct 20, 2026; not jurisdiction-verified]</div>
             <div class="visual-body" style="padding-top: 5px;">
               <div class="bar-row">
                 <span class="bar-label">Anacortes</span>
-                <div class="bar-track" style="max-width: 14.3%;">
-                  <div class="bar-fill" style="width:0.0%;"></div>
-                  <div class="bar-fill accent2" style="width:100.0%;"></div>
+                <div class="bar-track" style="max-width: 14.3%;" data-jurisdiction="Anacortes" data-width="14.3" data-units="31">
+                  <div class="bar-fill accent2" style="width: 100%;"></div>
                 </div>
                 <span class="bar-val">31 units</span>
               </div>
               <div class="bar-row">
                 <span class="bar-label">Burlington</span>
-                <div class="bar-track" style="max-width: 100.0%;">
-                  <div class="bar-fill" style="width:0.0%;"></div>
-                  <div class="bar-fill accent2" style="width:100.0%;"></div>
+                <div class="bar-track" style="max-width: 100.0%;" data-jurisdiction="Burlington" data-width="100.0" data-units="217">
+                  <div class="bar-fill accent2" style="width: 100%;"></div>
                 </div>
                 <span class="bar-val">217 units</span>
               </div>
               <div class="bar-row">
                 <span class="bar-label">Mount Vernon</span>
-                <div class="bar-track" style="max-width: 10.6%;">
-                  <div class="bar-fill" style="width:0.0%;"></div>
-                  <div class="bar-fill accent2" style="width:100.0%;"></div>
+                <div class="bar-track" style="max-width: 10.6%;" data-jurisdiction="Mount Vernon" data-width="10.6" data-units="23">
+                  <div class="bar-fill accent2" style="width: 100%;"></div>
                 </div>
                 <span class="bar-val">23 units</span>
               </div>
               <div class="bar-row">
                 <span class="bar-label">Sedro-Woolley</span>
-                <div class="bar-track" style="max-width: 25.8%;">
-                  <div class="bar-fill" style="width:0.0%;"></div>
-                  <div class="bar-fill accent2" style="width:100.0%;"></div>
+                <div class="bar-track" style="max-width: 25.8%;" data-jurisdiction="Sedro-Woolley" data-width="25.8" data-units="56">
+                  <div class="bar-fill accent2" style="width: 100%;"></div>
                 </div>
                 <span class="bar-val">56 units</span>
               </div>
               <div class="info-callout">
-                <div><strong>Notice:</strong> Preliminary Commerce HB 1220 data reflects the 4 reporting jurisdictions with available local datasheets (Anacortes 31, Burlington 217, Mount Vernon 23, Sedro-Woolley 56 = 327 total units). Remaining jurisdictions are due Oct 20, 2026.</div>
+                <div><strong>Notice:</strong> Preliminary: Commerce default allocation (Exhibit 12). Local jurisdiction datasheets due Oct 20, 2026; not jurisdiction-verified. Allocations shown: Anacortes 31, Burlington 217, Mount Vernon 23, Sedro-Woolley 56 = 327 total units.</div>
               </div>
             </div>
           </div>
@@ -1180,7 +1225,7 @@
 
         <div class="page-footer">
           <span>Reconciliation Check: SF 202 + MF 259 + ADU 56 − Demolitions 27 = Net New 490 Units</span>
-          <span>Local Building Department Annual Submissions | Preliminary Commerce HB 1220 Datasheets</span>
+          <span>Local Building Department Annual Submissions | Preliminary Commerce default allocation (Exhibit 12)</span>
         </div>
       </div>
 
@@ -1200,7 +1245,7 @@
         <div class="grid-2col" style="height: 395px; margin-bottom: 14px;">
           <div class="visual-container">
             <div class="visual-title">Jurisdictional Population Level (2025) vs. Adopted 2045 GMA Targets</div>
-            <div class="visual-subtitle">Current 2025 Population Count vs Adopted 2045 Target Allocation across all 11 Jurisdictions (Level ÷ Target %)</div>
+            <div class="visual-subtitle">Current 2025 Population Count vs Adopted 2045 Target Allocation across all 11 Jurisdictions (Level ÷ Target %; Not Cumulative Growth)</div>
             <div class="visual-body">
               <div class="bar-row"><span class="bar-label" title="Unincorporated Rural (outside UGAs)">Unincorporated Rural (outside UGAs)</span><div class="bar-track"><div class="bar-fill" style="width:101.5%;"></div></div><span class="bar-val">49,102 / 48,381 (101.5%)</span></div>
               <div class="bar-row"><span class="bar-label" title="Mount Vernon">Mount Vernon</span><div class="bar-track"><div class="bar-fill" style="width:74.5%;"></div></div><span class="bar-val">36,050 / 46,460 (77.6%)</span></div>
@@ -1214,7 +1259,7 @@
               <div class="bar-row"><span class="bar-label" title="Lyman">Lyman</span><div class="bar-track"><div class="bar-fill" style="width:0.9%;"></div></div><span class="bar-val">440 / 425 (103.5%)</span></div>
               <div class="bar-row"><span class="bar-label" title="Hamilton">Hamilton</span><div class="bar-track"><div class="bar-fill" style="width:0.6%;"></div></div><span class="bar-val">295 / 302 (97.7%)</span></div>
               <div class="info-callout" style="margin-top: 4px; padding: 4px 8px; font-size: 9.5px;">
-                <div><strong>Notice on Rural Target:</strong> Unincorporated Rural (49,102) already exceeds its adopted 2045 planning target (48,381 by +721 persons, or 101.5% of target allocation).</div>
+                <div><strong>Notice on Rural Target:</strong> Bars reflect 2025 population level relative to the 2045 target level (Level ÷ Target %), not progress of cumulative growth since baseline. Unincorporated Rural (49,102) already exceeds its adopted 2045 planning target (48,381 by +721 persons, or 101.5% of target allocation).</div>
               </div>
             </div>
           </div>
@@ -1241,8 +1286,8 @@
         <!-- Bottom Row: Employment Benchmark & Targets Table -->
         <div class="grid-2col-split" style="height: 385px;">
           <div class="visual-container">
-            <div class="visual-title">Covered Wage & Salary Employment (ESD QCEW Benchmark, 1999–2022)</div>
-            <div class="visual-subtitle">Historical Covered Wage & Salary Employment from Dim_CAI_Employment_Benchmark</div>
+            <div class="visual-title">Covered Wage & Salary Employment (ESD QCEW Benchmark, 1999–2025)</div>
+            <div class="visual-subtitle">Historical Covered Wage & Salary Employment (Dim_CAI_Employment_Benchmark & Fact_Employment). Axis starts at 35,000 for visibility.</div>
             <div class="visual-body">
               <svg class="chart-svg" viewBox="0 0 580 260">
                 <line x1="50" y1="230" x2="560" y2="230" class="axis-line" />
@@ -1252,13 +1297,16 @@
                 <text x="42" y="136" class="axis-label" text-anchor="end">45k</text>
                 <text x="42" y="88" class="axis-label" text-anchor="end">50k</text>
                 <text x="42" y="40" class="axis-label" text-anchor="end">55k</text>
-                <text x="65" y="248" class="axis-label" text-anchor="middle">1999</text>
-                <text x="208" y="248" class="axis-label" text-anchor="middle">2006</text>
-                <text x="350" y="248" class="axis-label" text-anchor="middle">2014</text>
-                <text x="530" y="248" class="axis-label" text-anchor="middle">2022</text>
-                <polyline fill="none" stroke="#004B87" stroke-width="3" points="65.0,166.3 85.7,145.6 106.3,144.8 127.0,147.7 147.6,139.7 168.3,131.6 188.9,118.4 209.6,107.9 230.2,97.3 250.9,99.9 271.5,126.4 292.2,130.2 312.8,131.2 333.5,127.4 354.1,113.4 374.8,103.6 395.4,101.0 416.1,91.4 436.7,80.9 457.4,68.1 478.0,61.8 540.0,72.3" />
-                <circle cx="540.0" cy="72.3" r="5" fill="#2563eb" stroke="#ffffff" stroke-width="2" />
-                <text x="530.0" y="60.3" class="axis-label" font-weight="700" fill="#0f172a" text-anchor="end">2022 QCEW: 51,597 (Covered Jobs)</text>
+                <text x="60" y="248" class="axis-label" text-anchor="middle">1999</text>
+                <text x="189" y="248" class="axis-label" text-anchor="middle">2006</text>
+                <text x="337" y="248" class="axis-label" text-anchor="middle">2014</text>
+                <text x="485" y="248" class="axis-label" text-anchor="middle">2022</text>
+                <text x="540" y="248" class="axis-label" text-anchor="middle" font-weight="700">2025</text>
+                <polyline fill="none" stroke="#004B87" stroke-width="3" points="60.0,166.3 78.5,145.6 96.9,144.8 115.4,147.7 133.8,139.7 152.3,131.6 170.8,118.4 189.2,107.9 207.7,97.3 226.2,99.9 244.6,126.4 263.1,130.2 281.5,131.2 300.0,127.4 318.5,113.4 336.9,103.6 355.4,101.0 373.8,91.4 392.3,80.9 410.8,68.1 429.2,61.8 484.6,72.3 540.0,48.1" />
+                <circle class="qcew-node" cx="60.0" cy="166.3" r="3" fill="#004B87" data-year="1999" data-qcew="41700"><title>1999: 41,700 Covered Jobs</title></circle><circle class="qcew-node" cx="78.5" cy="145.6" r="3" fill="#004B87" data-year="2000" data-qcew="43881"><title>2000: 43,881 Covered Jobs</title></circle><circle class="qcew-node" cx="96.9" cy="144.8" r="3" fill="#004B87" data-year="2001" data-qcew="43964"><title>2001: 43,964 Covered Jobs</title></circle><circle class="qcew-node" cx="115.4" cy="147.7" r="3" fill="#004B87" data-year="2002" data-qcew="43662"><title>2002: 43,662 Covered Jobs</title></circle><circle class="qcew-node" cx="133.8" cy="139.7" r="3" fill="#004B87" data-year="2003" data-qcew="44505"><title>2003: 44,505 Covered Jobs</title></circle><circle class="qcew-node" cx="152.3" cy="131.6" r="3" fill="#004B87" data-year="2004" data-qcew="45353"><title>2004: 45,353 Covered Jobs</title></circle><circle class="qcew-node" cx="170.8" cy="118.4" r="3" fill="#004B87" data-year="2005" data-qcew="46751"><title>2005: 46,751 Covered Jobs</title></circle><circle class="qcew-node" cx="189.2" cy="107.9" r="3" fill="#004B87" data-year="2006" data-qcew="47851"><title>2006: 47,851 Covered Jobs</title></circle><circle class="qcew-node" cx="207.7" cy="97.3" r="3" fill="#004B87" data-year="2007" data-qcew="48964"><title>2007: 48,964 Covered Jobs</title></circle><circle class="qcew-node" cx="226.2" cy="99.9" r="3" fill="#004B87" data-year="2008" data-qcew="48695"><title>2008: 48,695 Covered Jobs</title></circle><circle class="qcew-node" cx="244.6" cy="126.4" r="3" fill="#004B87" data-year="2009" data-qcew="45908"><title>2009: 45,908 Covered Jobs</title></circle><circle class="qcew-node" cx="263.1" cy="130.2" r="3" fill="#004B87" data-year="2010" data-qcew="45502"><title>2010: 45,502 Covered Jobs</title></circle><circle class="qcew-node" cx="281.5" cy="131.2" r="3" fill="#004B87" data-year="2011" data-qcew="45395"><title>2011: 45,395 Covered Jobs</title></circle><circle class="qcew-node" cx="300.0" cy="127.4" r="3" fill="#004B87" data-year="2012" data-qcew="45803"><title>2012: 45,803 Covered Jobs</title></circle><circle class="qcew-node" cx="318.5" cy="113.4" r="3" fill="#004B87" data-year="2013" data-qcew="47272"><title>2013: 47,272 Covered Jobs</title></circle><circle class="qcew-node" cx="336.9" cy="103.6" r="3" fill="#004B87" data-year="2014" data-qcew="48300"><title>2014: 48,300 Covered Jobs</title></circle><circle class="qcew-node" cx="355.4" cy="101.0" r="3" fill="#004B87" data-year="2015" data-qcew="48582"><title>2015: 48,582 Covered Jobs</title></circle><circle class="qcew-node" cx="373.8" cy="91.4" r="3" fill="#004B87" data-year="2016" data-qcew="49585"><title>2016: 49,585 Covered Jobs</title></circle><circle class="qcew-node" cx="392.3" cy="80.9" r="3" fill="#004B87" data-year="2017" data-qcew="50695"><title>2017: 50,695 Covered Jobs</title></circle><circle class="qcew-node" cx="410.8" cy="68.1" r="3" fill="#004B87" data-year="2018" data-qcew="52042"><title>2018: 52,042 Covered Jobs</title></circle><circle class="qcew-node" cx="429.2" cy="61.8" r="3" fill="#004B87" data-year="2019" data-qcew="52709"><title>2019: 52,709 Covered Jobs</title></circle><circle class="qcew-node" cx="484.6" cy="72.3" r="3" fill="#004B87" data-year="2022" data-qcew="51597"><title>2022: 51,597 Covered Jobs</title></circle><circle class="qcew-node" cx="540.0" cy="48.1" r="3" fill="#004B87" data-year="2025" data-qcew="54148"><title>2025: 54,148 Covered Jobs</title></circle>
+                <circle cx="540.0" cy="48.1" r="5.5" fill="#2563eb" stroke="#ffffff" stroke-width="2" />
+                <text x="530.0" y="36.1" class="axis-label" font-weight="700" fill="#0f172a" text-anchor="end">2025 QCEW: 54,148 (Covered Jobs)</text>
+                <text x="476.6" y="88.3" font-size="8.5" fill="#475569" text-anchor="end">2022: 51,597</text>
               </svg>
             </div>
           </div>
@@ -1362,7 +1410,7 @@
 
         <div class="grid-2col-split" style="height: 480px; margin-bottom: 14px;">
           <div class="visual-container" style="height: 100%;">
-            <div class="visual-title">Regional Jurisdictions & UGA Centroids (USGS/Census 2020)</div>
+            <div class="visual-title">Approximate Centroids (Leaflet placeholder)</div>
             <div class="visual-subtitle">Map placeholder (Leaflet); Azure Map in the Power BI build</div>
             <div class="visual-body" style="padding: 0; position: relative;">
               <div id="map-container">
@@ -1547,7 +1595,6 @@
                   <span class="bar-val">20.0% Hsg</span>
                 </div>
               </div>
-              <span class="bar-val" style="width: 100px; font-weight: 700; color: #004B87;">36.5% / 20.0%</span>
             </div>
             <div class="grouped-bar-row">
               <span class="bar-label">Mount Vernon</span>
@@ -1561,7 +1608,6 @@
                   <span class="bar-val">29.7% Hsg</span>
                 </div>
               </div>
-              <span class="bar-val" style="width: 100px; font-weight: 700; color: #004B87;">26.8% / 29.7%</span>
             </div>
             <div class="grouped-bar-row">
               <span class="bar-label">Anacortes</span>
@@ -1575,7 +1621,6 @@
                   <span class="bar-val">16.9% Hsg</span>
                 </div>
               </div>
-              <span class="bar-val" style="width: 100px; font-weight: 700; color: #004B87;">13.6% / 16.9%</span>
             </div>
             <div class="grouped-bar-row">
               <span class="bar-label">Sedro-Woolley</span>
@@ -1589,7 +1634,6 @@
                   <span class="bar-val">15.2% Hsg</span>
                 </div>
               </div>
-              <span class="bar-val" style="width: 100px; font-weight: 700; color: #004B87;">9.9% / 15.2%</span>
             </div>
             <div class="grouped-bar-row">
               <span class="bar-label">Burlington</span>
@@ -1603,7 +1647,6 @@
                   <span class="bar-val">16.3% Hsg</span>
                 </div>
               </div>
-              <span class="bar-val" style="width: 100px; font-weight: 700; color: #004B87;">8.1% / 16.3%</span>
             </div>
           </div>
         </div>

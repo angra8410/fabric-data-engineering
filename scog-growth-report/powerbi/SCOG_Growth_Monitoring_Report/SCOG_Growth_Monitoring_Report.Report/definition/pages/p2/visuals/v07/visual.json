@@ -99,13 +99,26 @@
             }
           }
         }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
       ]
     }
   },
   "filterConfig": {
     "filters": [
       {
-        "name": "F_f85d9c5faaad4059",
+        "name": "F_4de0ba699fd54627",
         "field": {
           "Column": {
             "Expression": {

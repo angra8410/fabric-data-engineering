@@ -127,13 +127,26 @@
             }
           }
         }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
       ]
     }
   },
   "filterConfig": {
     "filters": [
       {
-        "name": "F_c2ffcdf6ddc34f6d",
+        "name": "F_084d5832658741e7",
         "field": {
           "Column": {
             "Expression": {

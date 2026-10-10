@@ -70,7 +70,20 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Official ESD Covered Employment Benchmark Series (1999-2022) [Total Multiplier Pending SCOG Confirmation]'"
+                  "Value": "'Covered employment (ESD QCEW), 1999\u20132022. Total-employment multiplier pending SCOG confirmation.'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }

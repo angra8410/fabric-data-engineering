@@ -2,10 +2,10 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "v10",
   "position": {
-    "x": 650,
+    "x": 560,
     "y": 515,
     "z": 20,
-    "width": 630,
+    "width": 720,
     "height": 330,
     "tabOrder": 20
   },
@@ -136,6 +136,19 @@
               "expr": {
                 "Literal": {
                   "Value": "'Jurisdictional Housing Permitting Reconciliation Matrix'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }

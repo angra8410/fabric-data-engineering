@@ -59,15 +59,23 @@ def make_agg_proj(entity, prop, func=0, func_name="Sum"):
         "nativeQueryRef": f"{func_name} of {prop}"
     }
 
-def make_title_vco(text):
-    return {
+def make_title_vco(text, subtitle=None):
+    vco = {
         "title": [{
             "properties": {
                 "show": {"expr": {"Literal": {"Value": "true"}}},
                 "text": {"expr": {"Literal": {"Value": f"'{text}'"}}}
             }
+        }],
+        "subTitle": [{
+            "properties": {
+                "show": {"expr": {"Literal": {"Value": "true" if subtitle else "false"}}}
+            }
         }]
     }
+    if subtitle:
+        vco["subTitle"][0]["properties"]["text"] = {"expr": {"Literal": {"Value": f"'{subtitle}'"}}}
+    return vco
 
 def make_year_range_filter(min_year, max_year):
     f_id = f"F_{uuid.uuid4().hex[:16]}"
@@ -450,7 +458,7 @@ pages_data = [
                 filters=[make_year_range_filter(2010, 2025)]
             ),
             make_table(
-                "v09", 20, 515, 1260, 330, 20,
+                "v09", 20, 515, 1260, 338, 20,
                 [
                     make_col_proj("Dim_Jurisdiction", "Jurisdiction_Name"),
                     make_col_proj("Dim_Jurisdiction", "Jurisdiction_Type"),
@@ -475,7 +483,7 @@ pages_data = [
             make_textbox(
                 "v01", 20, 15, 1260, 60, 10,
                 "HOUSING PRODUCTION, TYPOLOGY & AFFORDABILITY (AMI) DEEP-DIVE",
-                "Residential Construction Trends, Housing Stock Diversity & Affordable Housing Allocations (HB 1220 / GMA Targets) — PRELIMINARY: Local Jurisdiction Housing Needs Assessments due Oct 20, 2025"
+                "Residential Construction Trends, Housing Stock Diversity & Affordable Housing Allocations (HB 1220 / GMA Targets) — PRELIMINARY: Local Jurisdiction Housing Needs Assessments due Oct 20, 2026"
             ),
             make_slicer("v02", 20, 85, 260, 80, 20, "Dim_Jurisdiction", "Jurisdiction_Name", "Jurisdiction Filter"),
             make_card("v03", 295, 85, 230, 80, 20, "_Measures", "Net New Housing Units"),
@@ -503,7 +511,7 @@ pages_data = [
                 "Single-Family vs. Multi-Family Permits by Jurisdiction"
             ),
             make_cartesian(
-                "v09", "clusteredBarChart", 20, 515, 610, 330, 20,
+                "v09", "clusteredBarChart", 20, 515, 520, 330, 20,
                 make_col_proj("Dim_Jurisdiction", "Jurisdiction_Name"),
                 [
                     make_measure_proj("_Measures", "Low Income AMI Units (<80% AMI)"),
@@ -512,7 +520,7 @@ pages_data = [
                 "Allocated Housing Units by Area Median Income (AMI) Income Band [HB 1220 Target Allocations]"
             ),
             make_matrix(
-                "v10", 650, 515, 630, 330, 20,
+                "v10", 560, 515, 720, 330, 20,
                 [make_col_proj("Dim_Jurisdiction", "Jurisdiction_Name")],
                 [
                     make_measure_proj("_Measures", "Single-Family Permits"),
@@ -526,7 +534,7 @@ pages_data = [
             ),
             make_footer(
                 "v11", 20, 855, 1260, 35, 10,
-                "Data Sources: Local Building Department Annual Submissions | OFM Housing Estimates. Note: AMI income band allocations are preliminary statewide default shares pending local jurisdiction housing needs assessments due October 20, 2025."
+                "Data Sources: Local Building Department Annual Submissions | OFM Housing Estimates. Note: AMI income band allocations are preliminary statewide default shares pending local jurisdiction housing needs assessments due October 20, 2026."
             )
         ]
     },
@@ -558,7 +566,7 @@ pages_data = [
                 "v04", "lineChart", 20, 450, 660, 395, 20,
                 make_col_proj("Dim_CAI_Employment_Benchmark", "Year"),
                 [make_agg_proj("Dim_CAI_Employment_Benchmark", "Covered_Employment_QCEW")],
-                "Official ESD Covered Employment Benchmark Series (1999-2022) [Total Multiplier Pending SCOG Confirmation]",
+                "Covered employment (ESD QCEW), 1999–2022. Total-employment multiplier pending SCOG confirmation.",
                 show_markers=True
             ),
             make_table(
@@ -619,7 +627,7 @@ pages_data = [
             ),
             make_footer(
                 "v05", 20, 855, 1260, 35, 10,
-                "Centroid Coordinates: Official USGS GNIS / US Census Bureau 2020 Municipal Centers & UGA Centroids. 'Unincorporated Skagit County' represents rural balance outside designated UGAs per Ordinance O20250002. Official countywide population is 134,600 (OFM April 1, 2025 determination)."
+                "Centroid Coordinates: Official USGS GNIS / US Census Bureau 2020 Municipal Centers & UGA Centroids. 'Unincorporated Skagit County' (53,380) includes the Bay View Ridge and Swinomish UGAs; the county's Rural allocation excludes them. Basis pending SCOG confirmation. Official countywide population is 134,600 (OFM April 1, 2025 determination)."
             )
         ]
     }

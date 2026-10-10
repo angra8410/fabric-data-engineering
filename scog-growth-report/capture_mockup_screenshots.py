@@ -23,9 +23,14 @@ if not chrome_path or not Path(chrome_path).exists():
 if not chrome_path:
     raise FileNotFoundError("Chrome executable not found on system.")
 
-# Relative output directory
-output_dir = BASE_DIR / "screenshots"
+# Relative output directory for send package
+output_dir = BASE_DIR / "dist"
 output_dir.mkdir(parents=True, exist_ok=True)
+
+# Package self-contained HTML
+dist_html = output_dir / "index.html"
+shutil.copyfile(html_file, dist_html)
+print(f"Packaged HTML -> {dist_html}")
 
 for p_num in range(1, 5):
     pid = f"p{p_num}"

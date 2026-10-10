@@ -4,3 +4,8 @@
 # Power BI local desktop machine settings
 .pbi/
 *.localSettings.json
+
+# Local exports, distributions, and screenshots
+dist/
+screenshots/
+

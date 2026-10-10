@@ -254,7 +254,7 @@ for _, r in hp_annual.iterrows():
     mf_val = int(r["MF_Total"])
     adu_val = int(r["ADU_Units"])
     gross_val = int(r["Gross"])
-    x = 40 + ((yr - 2010) / (2025 - 2010)) * 520
+    x = 55 + ((yr - 2010) / (2025 - 2010)) * 505
     # y scale: 0 to 800 units -> height 140px (y: 170 down to 30)
     g_h = (gross_val / 800) * 140
     mf_h = ((sf_val + mf_val) / 800) * 140
@@ -264,9 +264,9 @@ for _, r in hp_annual.iterrows():
     sf_pts.append(f"{x:.1f} {170-sf_h:.1f}")
     area_pts_svg.append(f'<g class="area-data-point" data-year="{yr}" data-sf="{sf_val}" data-mf="{mf_val}" data-adu="{adu_val}" data-gross="{gross_val}"></g>')
 
-area_gross = f"M 40 170 L " + " L ".join(gross_pts) + " L 560 170 Z"
-area_mf = f"M 40 170 L " + " L ".join(mf_pts) + " L 560 170 Z"
-area_sf = f"M 40 170 L " + " L ".join(sf_pts) + " L 560 170 Z"
+area_gross = f"M 55 170 L " + " L ".join(gross_pts) + " L 560 170 Z"
+area_mf = f"M 55 170 L " + " L ".join(mf_pts) + " L 560 170 Z"
+area_sf = f"M 55 170 L " + " L ".join(sf_pts) + " L 560 170 Z"
 area_data_elements = "\n".join(area_pts_svg)
 
 # SVG Historical QCEW Series (Page 3)
@@ -1299,25 +1299,25 @@ html_content += f"""                <tr class="total-row">
             </div>
             <div class="visual-body">
               <svg class="chart-svg" viewBox="0 0 580 200">
-                <line x1="40" y1="170" x2="560" y2="170" class="axis-line" />
-                <line x1="40" y1="30" x2="40" y2="170" class="axis-line" />
-                <!-- Y-axis labels -->
-                <text x="34" y="173" class="axis-label" text-anchor="end">0</text>
-                <text x="34" y="135" class="axis-label" text-anchor="end">200</text>
-                <text x="34" y="100" class="axis-label" text-anchor="end">400</text>
-                <text x="34" y="65" class="axis-label" text-anchor="end">600</text>
-                <text x="34" y="32" class="axis-label" text-anchor="end">800</text>
-                <!-- X-axis labels -->
-                <text x="40" y="185" class="axis-label" text-anchor="middle">2010</text>
-                <text x="144" y="185" class="axis-label" text-anchor="middle">2013</text>
-                <text x="248" y="185" class="axis-label" text-anchor="middle">2016</text>
-                <text x="352" y="185" class="axis-label" text-anchor="middle">2019</text>
-                <text x="456" y="185" class="axis-label" text-anchor="middle">2022</text>
-                <text x="560" y="185" class="axis-label" text-anchor="middle">2025</text>
                 <path d="{area_gross}" fill="#94a3b8" opacity="0.6" />
                 <path d="{area_mf}" fill="#2563eb" opacity="0.85" />
                 <path d="{area_sf}" fill="#004B87" opacity="0.95" />
                 {area_data_elements}
+                <line x1="55" y1="170" x2="560" y2="170" class="axis-line" />
+                <line x1="55" y1="30" x2="55" y2="170" class="axis-line" />
+                <!-- Y-axis labels placed left of axis (x=48, text-anchor=end) -->
+                <text x="48" y="173" class="axis-label" text-anchor="end">0</text>
+                <text x="48" y="135" class="axis-label" text-anchor="end">200</text>
+                <text x="48" y="100" class="axis-label" text-anchor="end">400</text>
+                <text x="48" y="65" class="axis-label" text-anchor="end">600</text>
+                <text x="48" y="32" class="axis-label" text-anchor="end">800</text>
+                <!-- X-axis labels -->
+                <text x="55" y="185" class="axis-label" text-anchor="middle">2010</text>
+                <text x="156" y="185" class="axis-label" text-anchor="middle">2013</text>
+                <text x="257" y="185" class="axis-label" text-anchor="middle">2016</text>
+                <text x="358" y="185" class="axis-label" text-anchor="middle">2019</text>
+                <text x="459" y="185" class="axis-label" text-anchor="middle">2022</text>
+                <text x="560" y="185" class="axis-label" text-anchor="middle">2025</text>
                 <text x="560" y="20" font-size="9" font-weight="700" fill="#0f172a" text-anchor="end">2025 Total: {total_gross_2025:,} Gross ({total_net_2025:,} Net)</text>
               </svg>
             </div>
@@ -1578,6 +1578,9 @@ html_content += f"""                  <tr class="total-row">
                 <!-- Leaflet Map Mount Point (Interactive Tiles) -->
                 <div id="skagit-leaflet-map"></div>
 
+                <!-- Offline Note: displayed when offline or if tiles fail to load -->
+                <div id="map-offline-note" style="position: absolute; top: 8px; left: 8px; background: rgba(255, 255, 255, 0.94); border: 1px solid #cbd5e1; border-radius: 4px; padding: 3px 8px; font-size: 9px; color: #475569; z-index: 500; font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">Map tiles require internet</div>
+
                 <!-- Map Legend Overlay (Single Accent Palette) -->
                 <div class="map-legend-overlay">
                   <div class="map-legend-item"><span class="map-legend-dot" style="background:#004B87;"></span> Incorporated Cities (8)</div>
@@ -1748,6 +1751,14 @@ html_content += f"""          </div>
 
         tiles.on('load', function() {{
           mapEl.style.opacity = '1';
+          const offNote = document.getElementById('map-offline-note');
+          if (offNote) offNote.style.display = 'none';
+        }});
+
+        tiles.on('tileerror', function() {{
+          mapEl.style.opacity = '0';
+          const offNote = document.getElementById('map-offline-note');
+          if (offNote) offNote.style.display = 'block';
         }});
 
         tiles.addTo(leafletMap);

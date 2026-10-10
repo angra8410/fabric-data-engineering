@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
   "name": "v04",
   "position": {
     "x": 620,
     "y": 520,
     "z": 20,
-    "width": 660,
     "height": 325,
+    "width": 660,
     "tabOrder": 20
   },
   "visual": {
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "Dim_Jurisdiction.Jurisdiction_Name",
-              "nativeQueryRef": "Jurisdiction_Name"
+              "nativeQueryRef": "Jurisdiction_Name",
+              "active": true
             }
           ]
         },

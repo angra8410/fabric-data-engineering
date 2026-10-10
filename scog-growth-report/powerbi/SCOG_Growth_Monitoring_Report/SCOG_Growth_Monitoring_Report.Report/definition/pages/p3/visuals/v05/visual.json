@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
   "name": "v05",
   "position": {
     "x": 700,
     "y": 450,
     "z": 20,
-    "width": 580,
     "height": 395,
+    "width": 580,
     "tabOrder": 20
   },
   "visual": {
@@ -61,6 +61,65 @@
         }
       }
     },
+    "objects": {
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "170D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Dim_Jurisdiction.Jurisdiction_Name"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "130D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_Measures.2022 Employment Baseline"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "130D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_Measures.2045 Employment Target"
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
     "visualContainerObjects": {
       "title": [
         {
@@ -86,65 +145,6 @@
         {
           "properties": {
             "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
-                }
-              }
-            }
-          }
-        }
-      ]
-    },
-    "objects": {
-      "columnWidth": [
-        {
-          "properties": {
-            "value": {
-              "expr": {
-                "Literal": {
-                  "Value": "220D"
-                }
-              }
-            }
-          },
-          "selector": {
-            "metadata": "Dim_Jurisdiction.Jurisdiction_Name"
-          }
-        },
-        {
-          "properties": {
-            "value": {
-              "expr": {
-                "Literal": {
-                  "Value": "165D"
-                }
-              }
-            }
-          },
-          "selector": {
-            "metadata": "_Measures.2022 Employment Baseline"
-          }
-        },
-        {
-          "properties": {
-            "value": {
-              "expr": {
-                "Literal": {
-                  "Value": "165D"
-                }
-              }
-            }
-          },
-          "selector": {
-            "metadata": "_Measures.2045 Employment Target"
-          }
-        }
-      ],
-      "columnHeaders": [
-        {
-          "properties": {
-            "autoSizeColumnWidth": {
               "expr": {
                 "Literal": {
                   "Value": "false"

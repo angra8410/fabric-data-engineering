@@ -10,7 +10,7 @@
     "tabOrder": 20
   },
   "visual": {
-    "visualType": "matrix",
+    "visualType": "pivotTable",
     "query": {
       "queryState": {
         "Rows": {
@@ -73,7 +73,7 @@
                 }
               },
               "queryRef": "_Measures.Jurisdiction Share of Regional Population %",
-              "nativeQueryRef": "Jurisdiction Share of Regional Population %"
+              "nativeQueryRef": "Share of Regional Population %"
             }
           ]
         }
@@ -104,6 +104,79 @@
         {
           "properties": {
             "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "objects": {
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "150D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Dim_Jurisdiction.Jurisdiction_Type"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "150D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Dim_Jurisdiction.Jurisdiction_Name"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "90D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_Measures.Total Population"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "90D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_Measures.Jurisdiction Share of Regional Population %"
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {
+            "autoSizeColumnWidth": {
               "expr": {
                 "Literal": {
                   "Value": "false"

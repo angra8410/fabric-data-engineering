@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
   "name": "v02",
   "position": {
     "x": 20,
     "y": 85,
     "z": 20,
-    "width": 580,
     "height": 760,
+    "width": 580,
     "tabOrder": 20
   },
   "visual": {
@@ -27,30 +27,26 @@
                 }
               },
               "queryRef": "Dim_Jurisdiction.Jurisdiction_Name",
-              "nativeQueryRef": "Jurisdiction_Name"
+              "nativeQueryRef": "Jurisdiction_Name",
+              "active": true
             }
           ]
         },
-        "Y": {
+        "Size": {
           "projections": [
             {
               "field": {
-                "Aggregation": {
+                "Measure": {
                   "Expression": {
-                    "Column": {
-                      "Expression": {
-                        "SourceRef": {
-                          "Entity": "Dim_Jurisdiction"
-                        }
-                      },
-                      "Property": "Latitude"
+                    "SourceRef": {
+                      "Entity": "_Measures"
                     }
                   },
-                  "Function": 1
+                  "Property": "Total Population"
                 }
               },
-              "queryRef": "Avg(Dim_Jurisdiction.Latitude)",
-              "nativeQueryRef": "Avg of Latitude"
+              "queryRef": "_Measures.Total Population",
+              "nativeQueryRef": "Total Population"
             }
           ]
         },
@@ -77,25 +73,59 @@
             }
           ]
         },
-        "Size": {
+        "Y": {
           "projections": [
             {
               "field": {
-                "Measure": {
+                "Aggregation": {
                   "Expression": {
-                    "SourceRef": {
-                      "Entity": "_Measures"
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dim_Jurisdiction"
+                        }
+                      },
+                      "Property": "Latitude"
                     }
                   },
-                  "Property": "Total Population"
+                  "Function": 1
                 }
               },
-              "queryRef": "_Measures.Total Population",
-              "nativeQueryRef": "Total Population"
+              "queryRef": "Avg(Dim_Jurisdiction.Latitude)",
+              "nativeQueryRef": "Avg of Latitude"
             }
           ]
         }
       }
+    },
+    "objects": {
+      "mapControls": [
+        {
+          "properties": {
+            "zoom": {
+              "expr": {
+                "Literal": {
+                  "Value": "8.62D"
+                }
+              }
+            },
+            "centerLatitude": {
+              "expr": {
+                "Literal": {
+                  "Value": "48.46685178552937D"
+                }
+              }
+            },
+            "centerLongitude": {
+              "expr": {
+                "Literal": {
+                  "Value": "-122.17989999999998D"
+                }
+              }
+            }
+          }
+        }
+      ]
     },
     "visualContainerObjects": {
       "title": [
@@ -125,35 +155,6 @@
               "expr": {
                 "Literal": {
                   "Value": "false"
-                }
-              }
-            }
-          }
-        }
-      ]
-    },
-    "objects": {
-      "mapControls": [
-        {
-          "properties": {
-            "zoom": {
-              "expr": {
-                "Literal": {
-                  "Value": "8.62D"
-                }
-              }
-            },
-            "centerLatitude": {
-              "expr": {
-                "Literal": {
-                  "Value": "48.46685178552937D"
-                }
-              }
-            },
-            "centerLongitude": {
-              "expr": {
-                "Literal": {
-                  "Value": "-122.17989999999998D"
                 }
               }
             }

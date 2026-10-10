@@ -18,7 +18,7 @@ SCHEMA_REPORT = "https://developer.microsoft.com/json-schemas/fabric/item/report
 SCHEMA_VERSION = "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/versionMetadata/1.0.0/schema.json"
 SCHEMA_DEF_PROPS = "https://developer.microsoft.com/json-schemas/fabric/item/report/definitionProperties/2.0.0/schema.json"
 
-def make_measure_proj(entity, prop):
+def make_measure_proj(entity, prop, display_name=None):
     return {
         "field": {
             "Measure": {
@@ -27,7 +27,7 @@ def make_measure_proj(entity, prop):
             }
         },
         "queryRef": f"{entity}.{prop}",
-        "nativeQueryRef": prop
+        "nativeQueryRef": display_name if display_name else prop
     }
 
 def make_col_proj(entity, prop):
@@ -316,13 +316,13 @@ def make_table(name, x, y, w, h, z, projs, title, col_widths=None, auto_size_col
         vis["visual"]["objects"] = objs
     return vis
 
-def make_matrix(name, x, y, w, h, z, row_projs, val_projs, title, filters=None):
+def make_matrix(name, x, y, w, h, z, row_projs, val_projs, title, filters=None, col_widths=None, auto_size_col=None):
     vis = {
         "$schema": SCHEMA_VC,
         "name": name,
         "position": {"x": x, "y": y, "z": z, "width": w, "height": h, "tabOrder": z},
         "visual": {
-            "visualType": "matrix",
+            "visualType": "pivotTable",
             "query": {
                 "queryState": {
                     "Rows": {"projections": row_projs},
@@ -334,6 +334,13 @@ def make_matrix(name, x, y, w, h, z, row_projs, val_projs, title, filters=None):
     }
     if filters:
         vis["filterConfig"] = {"filters": filters}
+    if col_widths or auto_size_col is not None:
+        objs = {}
+        if col_widths:
+            objs["columnWidth"] = col_widths
+        if auto_size_col is not None:
+            objs["columnHeaders"] = [{"properties": {"autoSizeColumnWidth": {"expr": {"Literal": {"Value": str(auto_size_col).lower()}}}}}]
+        vis["visual"]["objects"] = objs
     return vis
 
 def make_azure_map(name, x, y, w, h, z, cat_proj, lat_proj, lon_proj, size_proj, title, map_controls=None):
@@ -550,14 +557,45 @@ pages_data = [
                 "v10", 560, 515, 720, 330, 20,
                 [make_col_proj("Dim_Jurisdiction", "Jurisdiction_Name")],
                 [
-                    make_measure_proj("_Measures", "Single-Family Permits"),
-                    make_measure_proj("_Measures", "Multi-Family Permits"),
-                    make_measure_proj("_Measures", "ADU Permits"),
-                    make_measure_proj("_Measures", "Demolished Units"),
-                    make_measure_proj("_Measures", "Net New Housing Units"),
-                    make_measure_proj("_Measures", "Total Permit Valuation")
+                    make_measure_proj("_Measures", "Single-Family Permits", "Single-Family"),
+                    make_measure_proj("_Measures", "Multi-Family Permits", "Multi-Family"),
+                    make_measure_proj("_Measures", "ADU Permits", "ADU"),
+                    make_measure_proj("_Measures", "Demolished Units", "Demolished"),
+                    make_measure_proj("_Measures", "Net New Housing Units", "Net New Housing"),
+                    make_measure_proj("_Measures", "Total Permit Valuation", "Valuation")
                 ],
-                "Jurisdictional Housing Permitting Reconciliation Matrix"
+                "Jurisdictional Housing Permitting Reconciliation Matrix",
+                col_widths=[
+                    {
+                        "properties": {"value": {"expr": {"Literal": {"Value": "150D"}}}},
+                        "selector": {"metadata": "Dim_Jurisdiction.Jurisdiction_Name"}
+                    },
+                    {
+                        "properties": {"value": {"expr": {"Literal": {"Value": "80D"}}}},
+                        "selector": {"metadata": "_Measures.Single-Family Permits"}
+                    },
+                    {
+                        "properties": {"value": {"expr": {"Literal": {"Value": "80D"}}}},
+                        "selector": {"metadata": "_Measures.Multi-Family Permits"}
+                    },
+                    {
+                        "properties": {"value": {"expr": {"Literal": {"Value": "60D"}}}},
+                        "selector": {"metadata": "_Measures.ADU Permits"}
+                    },
+                    {
+                        "properties": {"value": {"expr": {"Literal": {"Value": "75D"}}}},
+                        "selector": {"metadata": "_Measures.Demolished Units"}
+                    },
+                    {
+                        "properties": {"value": {"expr": {"Literal": {"Value": "95D"}}}},
+                        "selector": {"metadata": "_Measures.Net New Housing Units"}
+                    },
+                    {
+                        "properties": {"value": {"expr": {"Literal": {"Value": "90D"}}}},
+                        "selector": {"metadata": "_Measures.Total Permit Valuation"}
+                    }
+                ],
+                auto_size_col=False
             ),
             make_footer(
                 "v11", 20, 855, 1260, 35, 10,
@@ -606,15 +644,15 @@ pages_data = [
                 "Adopted GMA 2045 Employment Targets by Jurisdiction (Planning Allocations Only - No Annual Actuals)",
                 col_widths=[
                     {
-                        "properties": {"value": {"expr": {"Literal": {"Value": "220D"}}}},
+                        "properties": {"value": {"expr": {"Literal": {"Value": "170D"}}}},
                         "selector": {"metadata": "Dim_Jurisdiction.Jurisdiction_Name"}
                     },
                     {
-                        "properties": {"value": {"expr": {"Literal": {"Value": "165D"}}}},
+                        "properties": {"value": {"expr": {"Literal": {"Value": "130D"}}}},
                         "selector": {"metadata": "_Measures.2022 Employment Baseline"}
                     },
                     {
-                        "properties": {"value": {"expr": {"Literal": {"Value": "165D"}}}},
+                        "properties": {"value": {"expr": {"Literal": {"Value": "130D"}}}},
                         "selector": {"metadata": "_Measures.2045 Employment Target"}
                     }
                 ],
@@ -658,9 +696,28 @@ pages_data = [
                 ],
                 [
                     make_measure_proj("_Measures", "Total Population"),
-                    make_measure_proj("_Measures", "Jurisdiction Share of Regional Population %")
+                    make_measure_proj("_Measures", "Jurisdiction Share of Regional Population %", "Share of Regional Population %")
                 ],
-                "Growth & Allocation Metrics by Jurisdiction Classification (Official Local Government Entities)"
+                "Growth & Allocation Metrics by Jurisdiction Classification (Official Local Government Entities)",
+                col_widths=[
+                    {
+                        "properties": {"value": {"expr": {"Literal": {"Value": "150D"}}}},
+                        "selector": {"metadata": "Dim_Jurisdiction.Jurisdiction_Type"}
+                    },
+                    {
+                        "properties": {"value": {"expr": {"Literal": {"Value": "150D"}}}},
+                        "selector": {"metadata": "Dim_Jurisdiction.Jurisdiction_Name"}
+                    },
+                    {
+                        "properties": {"value": {"expr": {"Literal": {"Value": "90D"}}}},
+                        "selector": {"metadata": "_Measures.Total Population"}
+                    },
+                    {
+                        "properties": {"value": {"expr": {"Literal": {"Value": "90D"}}}},
+                        "selector": {"metadata": "_Measures.Jurisdiction Share of Regional Population %"}
+                    }
+                ],
+                auto_size_col=False
             ),
             make_cartesian(
                 "v04", "clusteredBarChart", 620, 520, 660, 325, 20,

@@ -380,42 +380,46 @@ html_content = f"""<!DOCTYPE html>
       position: absolute;
       top: 0;
       left: 0;
-      padding: 20px 24px;
+      padding: 16px 24px 12px 24px;
+      box-sizing: border-box;
+      flex-direction: column;
+      justify-content: space-between;
     }}
 
     .report-page.active {{
-      display: block;
+      display: flex;
     }}
 
     .page-header {{
-      height: 60px;
-      margin-bottom: 15px;
+      height: 48px;
+      margin-bottom: 10px;
       border-bottom: 2px solid var(--border-divider);
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
-      padding-bottom: 8px;
+      padding-bottom: 6px;
+      flex-shrink: 0;
     }}
 
     .page-header-text h2 {{
-      font-size: 20px;
+      font-size: 19px;
       font-weight: 700;
       color: var(--primary-accent);
       line-height: 1.2;
     }}
 
     .page-header-text p {{
-      font-size: 12px;
+      font-size: 11px;
       color: var(--text-muted);
-      margin-top: 3px;
+      margin-top: 2px;
     }}
 
     .page-header-tag {{
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 600;
       color: var(--slate-700);
       background: var(--accent-tint);
-      padding: 4px 10px;
+      padding: 3px 8px;
       border-radius: 4px;
       border: 1px solid #bfdbfe;
     }}
@@ -424,15 +428,16 @@ html_content = f"""<!DOCTYPE html>
       display: grid;
       grid-template-columns: 220px repeat(4, 1fr);
       gap: 16px;
-      height: 90px;
-      margin-bottom: 16px;
+      height: 82px;
+      margin-bottom: 10px;
+      flex-shrink: 0;
     }}
 
     .card {{
       background: var(--bg-card);
       border: 1px solid var(--border-card);
       border-radius: 8px;
-      padding: 12px 14px;
+      padding: 10px 14px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.05);
       display: flex;
       flex-direction: column;
@@ -440,7 +445,7 @@ html_content = f"""<!DOCTYPE html>
     }}
 
     .card-title {{
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 600;
       color: var(--text-muted);
       text-transform: uppercase;
@@ -448,21 +453,21 @@ html_content = f"""<!DOCTYPE html>
     }}
 
     .card-value {{
-      font-size: 26px;
+      font-size: 24px;
       font-weight: 700;
       color: var(--slate-900);
       line-height: 1.1;
-      margin: 2px 0;
+      margin: 1px 0;
     }}
 
     .card-comparison {{
-      font-size: 11px;
+      font-size: 10.5px;
       color: var(--text-muted);
       display: flex;
       align-items: center;
       gap: 6px;
       border-top: 1px dashed var(--slate-100);
-      padding-top: 4px;
+      padding-top: 3px;
     }}
 
     .card-comparison strong {{
@@ -473,37 +478,48 @@ html_content = f"""<!DOCTYPE html>
       background: var(--bg-card);
       border: 1px solid var(--border-card);
       border-radius: 8px;
-      padding: 10px 12px;
+      padding: 8px 12px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: flex-start;
+      gap: 3px;
     }}
 
     .slicer-card label {{
-      font-size: 11px;
-      font-weight: 600;
+      font-size: 10px;
+      font-weight: 700;
       color: var(--text-muted);
       text-transform: uppercase;
+      letter-spacing: 0.5px;
     }}
 
     .slicer-dropdown {{
       width: 100%;
-      padding: 5px 8px;
+      height: 28px;
+      padding: 2px 6px;
       border: 1px solid var(--border-divider);
-      border-radius: 6px;
+      border-radius: 4px;
       background: #ffffff;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 600;
       color: var(--slate-900);
       cursor: pointer;
+    }}
+
+    .slicer-hint {{
+      font-size: 9px;
+      color: var(--text-muted);
+      line-height: 1;
+      margin-top: 1px;
     }}
 
     .grid-2col {{
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 16px;
-      height: 265px;
-      margin-bottom: 16px;
+      height: 250px;
+      margin-bottom: 10px;
+      flex-shrink: 0;
     }}
 
     .grid-2col-split {{
@@ -511,7 +527,8 @@ html_content = f"""<!DOCTYPE html>
       grid-template-columns: 1fr 1.05fr;
       gap: 16px;
       height: 310px;
-      margin-bottom: 16px;
+      margin-bottom: 10px;
+      flex-shrink: 0;
     }}
 
     .visual-container {{
@@ -526,7 +543,7 @@ html_content = f"""<!DOCTYPE html>
     }}
 
     .visual-title {{
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 700;
       color: var(--primary-accent);
       margin-bottom: 2px;
@@ -535,7 +552,7 @@ html_content = f"""<!DOCTYPE html>
     .visual-subtitle {{
       font-size: 10px;
       color: var(--text-muted);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }}
 
     .visual-body {{
@@ -544,13 +561,13 @@ html_content = f"""<!DOCTYPE html>
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
-      overflow: hidden;
+      overflow: visible;
     }}
 
     .table-visual {{
       width: 100%;
       border-collapse: collapse;
-      font-size: 11px;
+      font-size: 10.5px;
       text-align: left;
     }}
 
@@ -561,7 +578,7 @@ html_content = f"""<!DOCTYPE html>
       background: #f8fafc;
       color: var(--slate-800);
       font-weight: 700;
-      padding: 5px 8px;
+      padding: 4px 8px;
       border-bottom: 2px solid var(--border-divider);
       white-space: nowrap;
     }}
@@ -571,7 +588,7 @@ html_content = f"""<!DOCTYPE html>
     }}
 
     .table-visual td {{
-      padding: 3.5px 8px;
+      padding: 3px 8px;
       border-bottom: 1px solid var(--slate-100);
       color: var(--slate-900);
       line-height: 1.25;
@@ -613,18 +630,15 @@ html_content = f"""<!DOCTYPE html>
     }}
 
     .page-footer {{
-      height: 35px;
-      position: absolute;
-      bottom: 12px;
-      left: 24px;
-      right: 24px;
+      height: 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-top: 1px solid var(--border-card);
-      padding-top: 6px;
+      border-top: 1px solid var(--border-divider);
+      padding-top: 4px;
       font-size: 10px;
       color: var(--text-muted);
+      flex-shrink: 0;
     }}
 
     .legend-box {{

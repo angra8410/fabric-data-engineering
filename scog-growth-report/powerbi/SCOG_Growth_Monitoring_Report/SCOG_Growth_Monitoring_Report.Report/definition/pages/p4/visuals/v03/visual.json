@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
   "name": "v03",
   "position": {
     "x": 620,
     "y": 85,
     "z": 20,
-    "width": 660,
     "height": 420,
+    "width": 660,
     "tabOrder": 20
   },
   "visual": {
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "Dim_Jurisdiction.Jurisdiction_Type",
-              "nativeQueryRef": "Jurisdiction_Type"
+              "nativeQueryRef": "Jurisdiction_Type",
+              "active": true
             },
             {
               "field": {
@@ -41,7 +42,8 @@
                 }
               },
               "queryRef": "Dim_Jurisdiction.Jurisdiction_Name",
-              "nativeQueryRef": "Jurisdiction_Name"
+              "nativeQueryRef": "Jurisdiction_Name",
+              "active": false
             }
           ]
         },
@@ -78,41 +80,6 @@
           ]
         }
       }
-    },
-    "visualContainerObjects": {
-      "title": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            },
-            "text": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Growth & Allocation Metrics by Jurisdiction Classification (Official Local Government Entities)'"
-                }
-              }
-            }
-          }
-        }
-      ],
-      "subTitle": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
-                }
-              }
-            }
-          }
-        }
-      ]
     },
     "objects": {
       "columnWidth": [
@@ -179,6 +146,41 @@
             "autoSizeColumnWidth": {
               "expr": {
                 "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Growth & Allocation Metrics by Jurisdiction Classification (Official Local Government Entities)'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
                   "Value": "false"
                 }
               }
@@ -187,5 +189,65 @@
         }
       ]
     }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "f62140e9ea686ec11107",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Dim_Jurisdiction"
+              }
+            },
+            "Property": "Jurisdiction_Type"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "9b747054c7d4c49fa1d1",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Dim_Jurisdiction"
+              }
+            },
+            "Property": "Jurisdiction_Name"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "c7a1d8936b6e173d8392",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Total Population"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "4db34f3d52b0143a3d10",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Jurisdiction Share of Regional Population %"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
   }
 }

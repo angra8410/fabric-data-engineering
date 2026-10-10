@@ -19,7 +19,7 @@ SCHEMA_VERSION = "https://developer.microsoft.com/json-schemas/fabric/item/repor
 SCHEMA_DEF_PROPS = "https://developer.microsoft.com/json-schemas/fabric/item/report/definitionProperties/2.0.0/schema.json"
 
 def make_measure_proj(entity, prop, display_name=None):
-    return {
+    proj = {
         "field": {
             "Measure": {
                 "Expression": {"SourceRef": {"Entity": entity}},
@@ -29,6 +29,9 @@ def make_measure_proj(entity, prop, display_name=None):
         "queryRef": f"{entity}.{prop}",
         "nativeQueryRef": display_name if display_name else prop
     }
+    if display_name:
+        proj["displayName"] = display_name
+    return proj
 
 def make_col_proj(entity, prop):
     return {
@@ -316,7 +319,7 @@ def make_table(name, x, y, w, h, z, projs, title, col_widths=None, auto_size_col
         vis["visual"]["objects"] = objs
     return vis
 
-def make_matrix(name, x, y, w, h, z, row_projs, val_projs, title, filters=None, col_widths=None, auto_size_col=None):
+def make_matrix(name, x, y, w, h, z, row_projs, val_projs, title, filters=None, col_widths=None, auto_size_col=None, row_padding=None, font_size=None):
     vis = {
         "$schema": SCHEMA_VC,
         "name": name,
@@ -334,12 +337,22 @@ def make_matrix(name, x, y, w, h, z, row_projs, val_projs, title, filters=None, 
     }
     if filters:
         vis["filterConfig"] = {"filters": filters}
-    if col_widths or auto_size_col is not None:
-        objs = {}
-        if col_widths:
-            objs["columnWidth"] = col_widths
-        if auto_size_col is not None:
-            objs["columnHeaders"] = [{"properties": {"autoSizeColumnWidth": {"expr": {"Literal": {"Value": str(auto_size_col).lower()}}}}}]
+    objs = {}
+    if col_widths:
+        objs["columnWidth"] = col_widths
+    col_hdr_props = {}
+    if auto_size_col is not None:
+        col_hdr_props["autoSizeColumnWidth"] = {"expr": {"Literal": {"Value": str(auto_size_col).lower()}}}
+    if font_size is not None:
+        col_hdr_props["fontSize"] = {"expr": {"Literal": {"Value": f"{font_size}D"}}}
+    if col_hdr_props:
+        objs["columnHeaders"] = [{"properties": col_hdr_props}]
+    if row_padding is not None:
+        objs["grid"] = [{"properties": {"rowPadding": {"expr": {"Literal": {"Value": f"{row_padding}D"}}}}}]
+    if font_size is not None:
+        objs["values"] = [{"properties": {"fontSize": {"expr": {"Literal": {"Value": f"{font_size}D"}}}}}]
+        objs["rowHeaders"] = [{"properties": {"fontSize": {"expr": {"Literal": {"Value": f"{font_size}D"}}}}}]
+    if objs:
         vis["visual"]["objects"] = objs
     return vis
 
@@ -525,7 +538,7 @@ pages_data = [
             make_card("v05", 785, 85, 230, 80, 20, "_Measures", "Multi-Family Permits"),
             make_card("v06", 1030, 85, 250, 80, 20, "_Measures", "ADU Permits"),
             make_cartesian(
-                "v07", "stackedAreaChart", 20, 180, 780, 320, 20,
+                "v07", "stackedAreaChart", 20, 180, 780, 275, 20,
                 make_col_proj("Dim_CalendarYear", "Year"),
                 [
                     make_measure_proj("_Measures", "Single-Family Permits"),
@@ -536,7 +549,7 @@ pages_data = [
                 filters=[make_year_range_filter(2010, 2025)]
             ),
             make_cartesian(
-                "v08", "clusteredBarChart", 820, 180, 460, 320, 20,
+                "v08", "clusteredBarChart", 820, 180, 460, 275, 20,
                 make_col_proj("Dim_Jurisdiction", "Jurisdiction_Name"),
                 [
                     make_measure_proj("_Measures", "Single-Family Permits"),
@@ -545,7 +558,7 @@ pages_data = [
                 "Single-Family vs. Multi-Family Permits by Jurisdiction"
             ),
             make_cartesian(
-                "v09", "clusteredBarChart", 20, 515, 520, 330, 20,
+                "v09", "clusteredBarChart", 20, 475, 520, 370, 20,
                 make_col_proj("Dim_Jurisdiction", "Jurisdiction_Name"),
                 [
                     make_measure_proj("_Measures", "Low Income AMI Units (<80% AMI)"),
@@ -554,7 +567,7 @@ pages_data = [
                 "Allocated Housing Units by Area Median Income (AMI) Income Band [HB 1220 Target Allocations]"
             ),
             make_matrix(
-                "v10", 560, 505, 720, 348, 20,
+                "v10", 560, 475, 720, 372, 20,
                 [make_col_proj("Dim_Jurisdiction", "Jurisdiction_Name")],
                 [
                     make_measure_proj("_Measures", "Single-Family Permits", "SF"),
@@ -590,7 +603,9 @@ pages_data = [
                         "selector": {"metadata": "_Measures.Net New Housing Units"}
                     }
                 ],
-                auto_size_col=False
+                auto_size_col=False,
+                row_padding=2,
+                font_size=9
             ),
             make_footer(
                 "v11", 20, 855, 1260, 35, 10,

@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
   "name": "v09",
   "position": {
     "x": 20,
     "y": 500,
     "z": 20,
-    "width": 1260,
     "height": 355,
+    "width": 1260,
     "tabOrder": 20
   },
   "visual": {
@@ -117,6 +117,29 @@
         }
       }
     },
+    "objects": {
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "191.7560884466329D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_Measures.Cumulative Net Housing Units (2020-Present)"
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {}
+        }
+      ]
+    },
     "visualContainerObjects": {
       "title": [
         {
@@ -151,29 +174,108 @@
           }
         }
       ]
-    },
-    "objects": {
-      "columnWidth": [
-        {
-          "properties": {
-            "value": {
-              "expr": {
-                "Literal": {
-                  "Value": "191.7560884466329D"
-                }
-              }
-            }
-          },
-          "selector": {
-            "metadata": "_Measures.Cumulative Net Housing Units (2020-Present)"
-          }
-        }
-      ],
-      "columnHeaders": [
-        {
-          "properties": {}
-        }
-      ]
     }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "1812e88887c01d3722f5",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Dim_Jurisdiction"
+              }
+            },
+            "Property": "Jurisdiction_Name"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "83bd06453e644e2e08b8",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Dim_Jurisdiction"
+              }
+            },
+            "Property": "Jurisdiction_Type"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "6db6533d9640d832dd28",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Total Population"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "f5aecaaf7ec39a3fefbf",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "2045 Population Target"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "04902d115d01bc19b1a5",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Cumulative Net Housing Units (2020-Present)"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "4a8815eed47612b73b6e",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "2045 Housing Target Units"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "fc36a9990ad355118eab",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Housing Target Progress %"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
   }
 }

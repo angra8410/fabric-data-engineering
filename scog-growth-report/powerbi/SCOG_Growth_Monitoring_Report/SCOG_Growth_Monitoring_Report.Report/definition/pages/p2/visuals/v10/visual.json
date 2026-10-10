@@ -3,9 +3,9 @@
   "name": "v10",
   "position": {
     "x": 560,
-    "y": 505,
+    "y": 475,
     "z": 20,
-    "height": 348,
+    "height": 372,
     "width": 720,
     "tabOrder": 20
   },
@@ -46,7 +46,8 @@
                 }
               },
               "queryRef": "_Measures.Single-Family Permits",
-              "nativeQueryRef": "SF"
+              "nativeQueryRef": "SF",
+              "displayName": "SF"
             },
             {
               "field": {
@@ -60,7 +61,8 @@
                 }
               },
               "queryRef": "_Measures.Multi-Family Permits",
-              "nativeQueryRef": "MF"
+              "nativeQueryRef": "MF",
+              "displayName": "MF"
             },
             {
               "field": {
@@ -74,7 +76,8 @@
                 }
               },
               "queryRef": "_Measures.ADU Permits",
-              "nativeQueryRef": "ADU"
+              "nativeQueryRef": "ADU",
+              "displayName": "ADU"
             },
             {
               "field": {
@@ -88,7 +91,8 @@
                 }
               },
               "queryRef": "_Measures.Demolished Units",
-              "nativeQueryRef": "Demolished"
+              "nativeQueryRef": "Demolished",
+              "displayName": "Demolished"
             },
             {
               "field": {
@@ -102,13 +106,53 @@
                 }
               },
               "queryRef": "_Measures.Net New Housing Units",
-              "nativeQueryRef": "Net New"
+              "nativeQueryRef": "Net New",
+              "displayName": "Net New"
             }
           ]
         }
       }
     },
     "objects": {
+      "grid": [
+        {
+          "properties": {
+            "rowPadding": {
+              "expr": {
+                "Literal": {
+                  "Value": "2D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "rowHeaders": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9D"
+                }
+              }
+            }
+          }
+        }
+      ],
       "columnWidth": [
         {
           "properties": {
@@ -201,7 +245,14 @@
             "autoSizeColumnWidth": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "true"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9D"
                 }
               }
             }

@@ -136,7 +136,7 @@ CALCULATE(
 // Format: #,##0
 
 [Housing Target Progress %] = 
-DIVIDE([Cumulative Net Housing Units (2020-Present)], [2045 Housing Target Units], 0)
+IF(ISBLANK([2045 Housing Target Units]) || [2045 Housing Target Units] = 0, BLANK(), DIVIDE([Cumulative Net Housing Units (2020-Present)], [2045 Housing Target Units]))
 // Format: 0.0%
 
 [Low Income AMI Units (<80% AMI)] = 

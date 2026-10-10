@@ -290,8 +290,8 @@ def make_cartesian(name, vtype, x, y, w, h, z, cat_proj, y_projs, title, filters
         }
     return vis
 
-def make_table(name, x, y, w, h, z, projs, title):
-    return {
+def make_table(name, x, y, w, h, z, projs, title, col_widths=None):
+    vis = {
         "$schema": SCHEMA_VC,
         "name": name,
         "position": {"x": x, "y": y, "z": z, "width": w, "height": h, "tabOrder": z},
@@ -305,6 +305,12 @@ def make_table(name, x, y, w, h, z, projs, title):
             "visualContainerObjects": make_title_vco(title)
         }
     }
+    if col_widths:
+        vis["visual"]["objects"] = {
+            "columnWidth": col_widths,
+            "columnHeaders": [{"properties": {}}]
+        }
+    return vis
 
 def make_matrix(name, x, y, w, h, z, row_projs, val_projs, title, filters=None):
     vis = {
@@ -440,14 +446,14 @@ pages_data = [
             make_card("v05", 745, 85, 250, 80, 20, "_Measures", "Covered Employment QCEW"),
             make_card("v06", 1010, 85, 270, 80, 20, "_Measures", "Housing Target Progress %"),
             make_cartesian(
-                "v07", "lineChart", 20, 180, 620, 320, 20,
+                "v07", "lineChart", 20, 175, 620, 315, 20,
                 make_col_proj("Dim_CalendarYear", "Year"),
                 [make_measure_proj("_Measures", "Total Population")],
                 "Regional Population Trajectory (2020-2025)",
                 filters=[make_year_range_filter(2020, 2025)]
             ),
             make_cartesian(
-                "v08", "clusteredColumnChart", 660, 180, 620, 320, 20,
+                "v08", "clusteredColumnChart", 660, 175, 620, 315, 20,
                 make_col_proj("Dim_CalendarYear", "Year"),
                 [
                     make_measure_proj("_Measures", "Single-Family Permits"),
@@ -458,7 +464,7 @@ pages_data = [
                 filters=[make_year_range_filter(2010, 2025)]
             ),
             make_table(
-                "v09", 20, 515, 1260, 338, 20,
+                "v09", 20, 500, 1260, 355, 20,
                 [
                     make_col_proj("Dim_Jurisdiction", "Jurisdiction_Name"),
                     make_col_proj("Dim_Jurisdiction", "Jurisdiction_Type"),
@@ -468,10 +474,24 @@ pages_data = [
                     make_measure_proj("_Measures", "2045 Housing Target Units"),
                     make_measure_proj("_Measures", "Housing Target Progress %")
                 ],
-                "Jurisdictional Summary Table (2025 Baseline Calibration vs. Adopted GMA 2045 Targets)"
+                "Jurisdictional Summary Table (2025 Baseline Calibration vs. Adopted GMA 2045 Targets)",
+                col_widths=[{
+                    "properties": {
+                        "value": {
+                            "expr": {
+                                "Literal": {
+                                    "Value": "228.7177920437633D"
+                                }
+                            }
+                        }
+                    },
+                    "selector": {
+                        "metadata": "_Measures.Cumulative Net Housing Units (2020-Present)"
+                    }
+                }]
             ),
             make_footer(
-                "v10", 20, 855, 1260, 35, 10,
+                "v10", 20, 860, 1260, 35, 10,
                 "Data Sources: WA OFM April 1 Population (2020-2025 official determination: 134,600 county total) | ESD QCEW Covered Employment | Ordinance O20250002"
             )
         ]

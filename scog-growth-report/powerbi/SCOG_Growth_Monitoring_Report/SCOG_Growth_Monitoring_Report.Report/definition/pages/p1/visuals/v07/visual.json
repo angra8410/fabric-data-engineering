@@ -3,10 +3,10 @@
   "name": "v07",
   "position": {
     "x": 20,
-    "y": 180,
+    "y": 175,
     "z": 20,
     "width": 620,
-    "height": 320,
+    "height": 315,
     "tabOrder": 20
   },
   "visual": {
@@ -90,7 +90,7 @@
   "filterConfig": {
     "filters": [
       {
-        "name": "F_7ffdfae7222e4d8a",
+        "name": "F_44de304f46924e62",
         "field": {
           "Column": {
             "Expression": {

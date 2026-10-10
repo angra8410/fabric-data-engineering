@@ -3,10 +3,10 @@
   "name": "v09",
   "position": {
     "x": 20,
-    "y": 515,
+    "y": 500,
     "z": 20,
     "width": 1260,
-    "height": 338,
+    "height": 355,
     "tabOrder": 20
   },
   "visual": {
@@ -149,6 +149,29 @@
               }
             }
           }
+        }
+      ]
+    },
+    "objects": {
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "228.7177920437633D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_Measures.Cumulative Net Housing Units (2020-Present)"
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {}
         }
       ]
     }

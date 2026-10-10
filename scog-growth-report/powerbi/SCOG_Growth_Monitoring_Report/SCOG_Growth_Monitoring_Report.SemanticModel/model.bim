@@ -421,7 +421,7 @@
             "name": "Housing Target Progress %",
             "description": "Percentage progress of cumulative housing production against 2045 GMA target.",
             "displayFolder": "03. Housing Production & AMI",
-            "expression": "DIVIDE([Cumulative Net Housing Units (2020-Present)], [2045 Housing Target Units], 0)",
+            "expression": "IF(ISBLANK([2045 Housing Target Units]) || [2045 Housing Target Units] = 0, BLANK(), DIVIDE([Cumulative Net Housing Units (2020-Present)], [2045 Housing Target Units]))",
             "formatString": "0.0%",
             "lineageTag": "cd99baed-f9d8-4232-882b-912a0484013e"
           },

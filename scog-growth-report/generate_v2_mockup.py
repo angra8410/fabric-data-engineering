@@ -958,14 +958,12 @@ html_content = f"""<!DOCTYPE html>
       background: #f8fafc;
       border: 1px solid #cbd5e1;
       border-radius: 6px;
-      padding: 6px 10px;
+      padding: 8px 10px;
       font-size: 10px;
       color: var(--slate-700);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 6px;
-      line-height: 1.3;
+      display: block;
+      margin-top: 8px;
+      line-height: 1.45;
     }}
 
     #map-container {{
@@ -1381,7 +1379,6 @@ for _, r in ami_agg.iterrows():
 
 html_content += f"""              <div class="info-callout">
                 <div><strong>Notice:</strong> Preliminary: Commerce default allocation (Exhibit 12). Local jurisdiction datasheets due Oct 20, 2026; not jurisdiction-verified. Allocations shown: Anacortes 31, Burlington 217, Mount Vernon 23, Sedro-Woolley 56 = {int(ami_agg['Total_AMI_Units'].sum()):,} total units.</div>
-                <div style="margin-top: 6px; font-weight: 600; color: #1e293b; font-size: 10px;">Total preliminary allocation shown: {int(ami_agg['Total_AMI_Units'].sum()):,} units ({len(ami_agg)} jurisdictions); not jurisdiction-verified</div>
               </div>
             </div>
           </div>

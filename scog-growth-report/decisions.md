@@ -57,7 +57,9 @@
   1. **Conformed Dimensions:** `Dim_Jurisdiction` (11 entities with WGS84 coordinates), `Dim_CalendarYear` (56 years, 1990–2045), `Dim_GMA_2045_Target` (Baseline 2022 and 2045 targets).
   2. **Fact Tables:** `Fact_Population` (97 observations), `Fact_HousingPermits` (314 observations), `Fact_Employment` (131 observations), `Fact_Housing_AMI` (20 observations).
   3. **Integrity Assertions:** 0 orphaned foreign keys; strict 1-to-many relationship cardinality. Output generated to both clean CSVs and unified `SCOG_Star_Schema_Data_Model.xlsx`.
-- **Consequences:** Decouples reporting presentation from raw file structures and enables one-click annual data refresh.
+  4. **Unincorporated Population & UGA Derivation:** Official Washington State OFM annual postcensal releases report an aggregate "Unincorporated" figure that includes the Bay View Ridge and Swinomish Urban Growth Areas (UGAs). To align with Skagit County GMA planning allocations (which treat the rural balance outside UGAs separately), the report defines "Unincorporated Rural (outside UGAs)" as a derived value: OFM Unincorporated minus the two SAEP UGA population estimates per year, pending formal SCOG confirmation.
+  5. **County Total Additivity Assertion:** The ETL pipeline executes an automated assertion verifying that for every year from 2020 through 2026, the sum of incorporated cities + UGAs + derived rural population exactly equals the official OFM countywide total.
+- **Consequences:** Decouples reporting presentation from raw file structures, ensures demographic additivity across municipal and regional boundaries, and enables one-click annual data refresh.
 
 ---
 

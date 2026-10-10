@@ -30,3 +30,8 @@ python etl_star_schema.py
 7. `Fact_Employment.csv`
 8. `Fact_Housing_AMI.csv`
 9. `SCOG_Star_Schema_Data_Model.xlsx` (Multi-tab master workbook formatted for Power BI Desktop ingestion)
+
+## Population Accounting & UGA Methodology
+- **OFM Unincorporated Accounting:** Washington State OFM's official unincorporated population estimate includes the Bay View Ridge and Swinomish Urban Growth Areas (UGAs).
+- **Derived Rural Population:** The report presents "Unincorporated Rural (outside UGAs)" as a derived value (OFM unincorporated minus the two SAEP UGA population estimates, per year), pending formal SCOG confirmation.
+- **ETL Additivity Assertions:** The ETL pipeline systematically asserts that for every year 2020–2026, incorporated cities + UGAs + derived rural population exactly equals the OFM official county total.

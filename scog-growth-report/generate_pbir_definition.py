@@ -554,45 +554,40 @@ pages_data = [
                 "Allocated Housing Units by Area Median Income (AMI) Income Band [HB 1220 Target Allocations]"
             ),
             make_matrix(
-                "v10", 560, 515, 720, 330, 20,
+                "v10", 560, 505, 720, 348, 20,
                 [make_col_proj("Dim_Jurisdiction", "Jurisdiction_Name")],
                 [
-                    make_measure_proj("_Measures", "Single-Family Permits", "Single-Family"),
-                    make_measure_proj("_Measures", "Multi-Family Permits", "Multi-Family"),
+                    make_measure_proj("_Measures", "Single-Family Permits", "SF"),
+                    make_measure_proj("_Measures", "Multi-Family Permits", "MF"),
                     make_measure_proj("_Measures", "ADU Permits", "ADU"),
                     make_measure_proj("_Measures", "Demolished Units", "Demolished"),
-                    make_measure_proj("_Measures", "Net New Housing Units", "Net New Housing"),
-                    make_measure_proj("_Measures", "Total Permit Valuation", "Valuation")
+                    make_measure_proj("_Measures", "Net New Housing Units", "Net New")
                 ],
                 "Jurisdictional Housing Permitting Reconciliation Matrix",
                 col_widths=[
                     {
-                        "properties": {"value": {"expr": {"Literal": {"Value": "150D"}}}},
+                        "properties": {"value": {"expr": {"Literal": {"Value": "160D"}}}},
                         "selector": {"metadata": "Dim_Jurisdiction.Jurisdiction_Name"}
                     },
                     {
-                        "properties": {"value": {"expr": {"Literal": {"Value": "80D"}}}},
+                        "properties": {"value": {"expr": {"Literal": {"Value": "95D"}}}},
                         "selector": {"metadata": "_Measures.Single-Family Permits"}
                     },
                     {
-                        "properties": {"value": {"expr": {"Literal": {"Value": "80D"}}}},
+                        "properties": {"value": {"expr": {"Literal": {"Value": "95D"}}}},
                         "selector": {"metadata": "_Measures.Multi-Family Permits"}
                     },
                     {
-                        "properties": {"value": {"expr": {"Literal": {"Value": "60D"}}}},
+                        "properties": {"value": {"expr": {"Literal": {"Value": "85D"}}}},
                         "selector": {"metadata": "_Measures.ADU Permits"}
                     },
                     {
-                        "properties": {"value": {"expr": {"Literal": {"Value": "75D"}}}},
+                        "properties": {"value": {"expr": {"Literal": {"Value": "105D"}}}},
                         "selector": {"metadata": "_Measures.Demolished Units"}
                     },
                     {
-                        "properties": {"value": {"expr": {"Literal": {"Value": "95D"}}}},
+                        "properties": {"value": {"expr": {"Literal": {"Value": "105D"}}}},
                         "selector": {"metadata": "_Measures.Net New Housing Units"}
-                    },
-                    {
-                        "properties": {"value": {"expr": {"Literal": {"Value": "90D"}}}},
-                        "selector": {"metadata": "_Measures.Total Permit Valuation"}
                     }
                 ],
                 auto_size_col=False

@@ -369,10 +369,27 @@ for jid in jur_order:
         r_svg = 5
         
     label_offset_y = -r_svg - 4
+    anchor = "middle"
+    offset_x = 0
     if jid == "JUR-02": # Burlington
+        offset_x = 8
+        label_offset_y = -r_svg - 2
+        anchor = "start"
+    elif jid == "JUR-09": # Bay View Ridge UGA
+        offset_x = -8
+        label_offset_y = -r_svg - 2
+        anchor = "end"
+    elif jid == "JUR-05": # La Conner
+        offset_x = 6
+        label_offset_y = r_svg + 11
+        anchor = "start"
+    elif jid == "JUR-10": # Swinomish UGA
+        offset_x = -6
         label_offset_y = -r_svg - 4
+        anchor = "end"
     elif jid == "JUR-07": # Mount Vernon
         label_offset_y = r_svg + 11
+        anchor = "middle"
         
     stroke_style = 'stroke="#ffffff" stroke-width="2"' if cat != "Rural" else 'stroke="#ffffff" stroke-width="2" stroke-dasharray="3,2"'
     svg_marker_elements.append(f'''
@@ -381,7 +398,7 @@ for jid in jur_order:
                   <title>{j_name} ({j_type})&#10;2025 Pop: {pop_val:,} ({pop_share:.1f}%)&#10;2045 Housing Target: {h_tgt:,} units</title>
                 </circle>
                 <circle cx="{px:.1f}" cy="{py:.1f}" r="{r_svg+4}" fill="none" stroke="{color}" stroke-width="1" opacity="0.3" />
-                <text x="{px:.1f}" y="{py+label_offset_y:.1f}" text-anchor="middle" font-size="9" font-weight="700" fill="#0f172a" stroke="#ffffff" stroke-width="2.5" paint-order="stroke">{j_name}</text>
+                <text x="{px+offset_x:.1f}" y="{py+label_offset_y:.1f}" text-anchor="{anchor}" font-size="9" font-weight="700" fill="#0f172a" stroke="#ffffff" stroke-width="2.5" paint-order="stroke">{j_name}</text>
               </g>''')
 
 svg_markers_markup = "\n".join(svg_marker_elements)
@@ -863,13 +880,14 @@ html_content = f"""<!DOCTYPE html>
     }}
 
     .bar-label {{
-      width: 165px;
+      width: 220px;
       color: var(--slate-800);
       font-weight: 600;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       flex-shrink: 0;
+      font-size: 10px;
     }}
 
     .bar-track {{
@@ -906,14 +924,21 @@ html_content = f"""<!DOCTYPE html>
       margin-bottom: 6px;
       padding-bottom: 4px;
       border-bottom: 1px dashed var(--slate-100);
+      font-size: 10px;
     }}
 
     .grouped-bar-row .bar-label {{
-      width: 280px;
+      width: 220px;
+      font-size: 10px;
+      font-weight: 600;
     }}
 
     #p3 .visual-container:first-child .bar-label {{
-      width: 215px;
+      width: 220px;
+    }}
+
+    #p3 .visual-container:first-child .bar-val {{
+      width: 135px;
     }}
 
     .grouped-bar-col {{
@@ -1084,8 +1109,9 @@ html_content = f"""<!DOCTYPE html>
           <div class="card">
             <div class="card-title">Covered jobs, QCEW</div>
             <div class="card-value">{emp_2025_qcew:,}</div>
-            <div class="card-comparison" style="font-size: 8.8px; line-height: 1.25;">
-              <span>2022 Covered: <strong>{emp_2022_qcew:,}</strong> · Total Employment: 2022 Base <strong>{emp_baseline_2022:,}</strong>, 2025 Est. <strong>{emp_2025_est_total:,}</strong> (estimated) · 2045 Target: <strong>{emp_target_2045:,}</strong> (Total Employment)</span>
+            <div class="card-comparison" style="font-size: 9.5px; line-height: 1.35; flex-direction: column; align-items: flex-start; gap: 2px;">
+              <div>2022 covered: <strong>{emp_2022_qcew:,}</strong></div>
+              <div>Total employment: 2022 baseline <strong>{emp_baseline_2022:,}</strong>; 2025 est. <strong>{emp_2025_est_total:,}</strong> (estimated); 2045 target <strong>{emp_target_2045:,}</strong></div>
             </div>
           </div>
         </div>
@@ -1190,9 +1216,14 @@ html_content += f"""                <tr class="total-row">
           </div>
         </div>
 
-        <div class="page-footer">
-          <span>Data Sources: WA OFM April 1 Population (2020-2025 Determination) | ESD QCEW Covered Employment | SCOG Ordinance O20250002. Total employment baseline (59,571) reflects Appendix A multiplier (1.15458 x 51,597).</span>
-          <span>Reconciliation Check: 81,220 (Cities) + 4,278 (UGAs) + 49,102 (Rural) = 134,600 Total Population</span>
+        <div class="page-footer" style="height: auto; min-height: 26px; flex-direction: column; align-items: flex-start; gap: 2px; padding-top: 4px;">
+          <div style="width: 100%; display: flex; justify-content: space-between;">
+            <span>Data Sources: WA OFM April 1 Population | ESD QCEW Covered Employment | SCOG Ordinance O20250002</span>
+            <span>Reconciliation Check: 81,220 (Cities) + 4,278 (UGAs) + 49,102 (Rural) = 134,600 Total Pop</span>
+          </div>
+          <div style="color: var(--slate-500); font-size: 9px;">
+            Note: 2022 Total employment baseline (59,571) reflects adopted Appendix A multiplier (1.15458 x 51,597).
+          </div>
         </div>
       </div>
 
@@ -1287,7 +1318,7 @@ html_content += f"""                <tr class="total-row">
                 <path d="{area_mf}" fill="#2563eb" opacity="0.85" />
                 <path d="{area_sf}" fill="#004B87" opacity="0.95" />
                 {area_data_elements}
-                <text x="555" y="55" font-size="9" font-weight="700" fill="#0f172a" text-anchor="end">2025 Total: {total_gross_2025:,} Gross ({total_net_2025:,} Net)</text>
+                <text x="560" y="20" font-size="9" font-weight="700" fill="#0f172a" text-anchor="end">2025 Total: {total_gross_2025:,} Gross ({total_net_2025:,} Net)</text>
               </svg>
             </div>
           </div>
@@ -1324,10 +1355,10 @@ for _, r in ami_agg.iterrows():
     prop_width = (tot / max_ami_units) * 100
     html_content += f"""              <div class="bar-row">
                 <span class="bar-label">{r['Jurisdiction_Name']}</span>
-                <div class="bar-track" style="max-width: {prop_width:.1f}%;" data-jurisdiction="{r['Jurisdiction_Name']}" data-width="{prop_width:.1f}" data-units="{tot}">
-                  <div class="bar-fill accent2" style="width: 100%;"></div>
+                <div class="bar-track" data-jurisdiction="{r['Jurisdiction_Name']}" data-width="{prop_width:.1f}" data-units="{tot}">
+                  <div class="bar-fill accent2" style="width: {prop_width:.1f}%;"></div>
                 </div>
-                <span class="bar-val">{tot:,} units</span>
+                <span class="bar-val" style="width: 65px; text-align: right; flex-shrink: 0;">{tot:,} units</span>
               </div>\n"""
 
 html_content += f"""              <div class="info-callout">

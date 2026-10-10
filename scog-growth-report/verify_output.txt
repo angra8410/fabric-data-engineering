@@ -16,7 +16,7 @@ Page 1 KPI               | 2025 Demolished Units               | 27           | 
 Page 1 KPI               | Employment Card Title               | Covered jobs, QCEW | Covered jobs, QCEW | PASS
 Page 1 KPI               | Covered Jobs 2025 (QCEW)            | 54,148       | 54,148       | PASS
 Page 1 KPI               | Covered Jobs 2022 (QCEW)            | 51,597       | 51,597       | PASS
-Page 1 KPI               | Employment 2022 Total Baseline      | 59,571,      | 59,571       | PASS
+Page 1 KPI               | Employment 2022 Total Baseline      | 59,571       | 59,571       | PASS
 Page 1 KPI               | Employment 2025 Estimated Total     | 62,518       | 62,518       | PASS
 Page 1 KPI               | Employment 2025 Estimated Label     | True         | True         | PASS
 Page 1 KPI               | Employment 2045 Total Target        | 80,100       | 80,100       | PASS

@@ -290,7 +290,7 @@ def make_cartesian(name, vtype, x, y, w, h, z, cat_proj, y_projs, title, filters
         }
     return vis
 
-def make_table(name, x, y, w, h, z, projs, title, col_widths=None):
+def make_table(name, x, y, w, h, z, projs, title, col_widths=None, auto_size_col=None):
     vis = {
         "$schema": SCHEMA_VC,
         "name": name,
@@ -305,11 +305,15 @@ def make_table(name, x, y, w, h, z, projs, title, col_widths=None):
             "visualContainerObjects": make_title_vco(title)
         }
     }
-    if col_widths:
-        vis["visual"]["objects"] = {
-            "columnWidth": col_widths,
-            "columnHeaders": [{"properties": {}}]
-        }
+    if col_widths or auto_size_col is not None:
+        objs = {}
+        if col_widths:
+            objs["columnWidth"] = col_widths
+        if auto_size_col is not None:
+            objs["columnHeaders"] = [{"properties": {"autoSizeColumnWidth": {"expr": {"Literal": {"Value": str(auto_size_col).lower()}}}}}]
+        else:
+            objs["columnHeaders"] = [{"properties": {}}]
+        vis["visual"]["objects"] = objs
     return vis
 
 def make_matrix(name, x, y, w, h, z, row_projs, val_projs, title, filters=None):
@@ -332,8 +336,8 @@ def make_matrix(name, x, y, w, h, z, row_projs, val_projs, title, filters=None):
         vis["filterConfig"] = {"filters": filters}
     return vis
 
-def make_azure_map(name, x, y, w, h, z, cat_proj, lat_proj, lon_proj, size_proj, title):
-    return {
+def make_azure_map(name, x, y, w, h, z, cat_proj, lat_proj, lon_proj, size_proj, title, map_controls=None):
+    vis = {
         "$schema": SCHEMA_VC,
         "name": name,
         "position": {"x": x, "y": y, "z": z, "width": w, "height": h, "tabOrder": z},
@@ -350,6 +354,9 @@ def make_azure_map(name, x, y, w, h, z, cat_proj, lat_proj, lon_proj, size_proj,
             "visualContainerObjects": make_title_vco(title)
         }
     }
+    if map_controls:
+        vis["visual"]["objects"] = {"mapControls": map_controls}
+    return vis
 
 print("Setting up report directory...")
 REPORT_DIR.mkdir(parents=True, exist_ok=True)
@@ -480,7 +487,7 @@ pages_data = [
                         "value": {
                             "expr": {
                                 "Literal": {
-                                    "Value": "228.7177920437633D"
+                                    "Value": "191.7560884466329D"
                                 }
                             }
                         }
@@ -596,7 +603,22 @@ pages_data = [
                     make_measure_proj("_Measures", "2022 Employment Baseline"),
                     make_measure_proj("_Measures", "2045 Employment Target")
                 ],
-                "Adopted GMA 2045 Employment Targets by Jurisdiction (Planning Allocations Only - No Annual Actuals)"
+                "Adopted GMA 2045 Employment Targets by Jurisdiction (Planning Allocations Only - No Annual Actuals)",
+                col_widths=[
+                    {
+                        "properties": {"value": {"expr": {"Literal": {"Value": "220D"}}}},
+                        "selector": {"metadata": "Dim_Jurisdiction.Jurisdiction_Name"}
+                    },
+                    {
+                        "properties": {"value": {"expr": {"Literal": {"Value": "165D"}}}},
+                        "selector": {"metadata": "_Measures.2022 Employment Baseline"}
+                    },
+                    {
+                        "properties": {"value": {"expr": {"Literal": {"Value": "165D"}}}},
+                        "selector": {"metadata": "_Measures.2045 Employment Target"}
+                    }
+                ],
+                auto_size_col=False
             ),
             make_footer(
                 "v06", 20, 855, 1260, 35, 10,
@@ -619,7 +641,14 @@ pages_data = [
                 make_agg_proj("Dim_Jurisdiction", "Latitude", func=1, func_name="Avg"),
                 make_agg_proj("Dim_Jurisdiction", "Longitude", func=1, func_name="Avg"),
                 make_measure_proj("_Measures", "Total Population"),
-                "Regional Jurisdictions & UGAs (Official USGS/Census 2020 Centroids)"
+                "Regional Jurisdictions & UGAs (Official USGS/Census 2020 Centroids)",
+                map_controls=[{
+                    "properties": {
+                        "zoom": {"expr": {"Literal": {"Value": "8.62D"}}},
+                        "centerLatitude": {"expr": {"Literal": {"Value": "48.46685178552937D"}}},
+                        "centerLongitude": {"expr": {"Literal": {"Value": "-122.17989999999998D"}}}
+                    }
+                }]
             ),
             make_matrix(
                 "v03", 620, 85, 660, 420, 20,
@@ -629,12 +658,9 @@ pages_data = [
                 ],
                 [
                     make_measure_proj("_Measures", "Total Population"),
-                    make_measure_proj("_Measures", "Jurisdiction Share of Regional Population %"),
-                    make_measure_proj("_Measures", "Cumulative Net Housing Units (2020-Present)"),
-                    make_measure_proj("_Measures", "Housing Target Progress %")
+                    make_measure_proj("_Measures", "Jurisdiction Share of Regional Population %")
                 ],
-                "Growth & Allocation Metrics by Jurisdiction Classification (Official Local Government Entities)",
-                filters=[make_exclude_filter("Dim_Jurisdiction", "Jurisdiction_Type", "Urban Growth Area (UGA)")]
+                "Growth & Allocation Metrics by Jurisdiction Classification (Official Local Government Entities)"
             ),
             make_cartesian(
                 "v04", "clusteredBarChart", 620, 520, 660, 325, 20,
@@ -657,7 +683,7 @@ pages_data = [
 pages_meta = {
     "$schema": SCHEMA_PAGES_META,
     "pageOrder": [p["id"] for p in pages_data],
-    "activePageName": pages_data[0]["id"]
+    "activePageName": "p4"
 }
 with open(PAGES_DIR / "pages.json", "w", encoding="utf-8") as f:
     json.dump(pages_meta, f, indent=2)

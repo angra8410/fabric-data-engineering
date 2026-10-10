@@ -95,6 +95,65 @@
           }
         }
       ]
+    },
+    "objects": {
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "220D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Dim_Jurisdiction.Jurisdiction_Name"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "165D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_Measures.2022 Employment Baseline"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "165D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_Measures.2045 Employment Target"
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
     }
   }
 }

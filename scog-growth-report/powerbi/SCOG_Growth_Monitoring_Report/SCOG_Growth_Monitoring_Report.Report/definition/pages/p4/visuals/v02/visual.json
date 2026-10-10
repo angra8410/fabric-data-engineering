@@ -131,6 +131,35 @@
           }
         }
       ]
+    },
+    "objects": {
+      "mapControls": [
+        {
+          "properties": {
+            "zoom": {
+              "expr": {
+                "Literal": {
+                  "Value": "8.62D"
+                }
+              }
+            },
+            "centerLatitude": {
+              "expr": {
+                "Literal": {
+                  "Value": "48.46685178552937D"
+                }
+              }
+            },
+            "centerLongitude": {
+              "expr": {
+                "Literal": {
+                  "Value": "-122.17989999999998D"
+                }
+              }
+            }
+          }
+        }
+      ]
     }
   }
 }

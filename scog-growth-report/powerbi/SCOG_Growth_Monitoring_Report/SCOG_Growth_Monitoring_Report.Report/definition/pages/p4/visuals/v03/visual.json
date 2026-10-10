@@ -74,34 +74,6 @@
               },
               "queryRef": "_Measures.Jurisdiction Share of Regional Population %",
               "nativeQueryRef": "Jurisdiction Share of Regional Population %"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "_Measures"
-                    }
-                  },
-                  "Property": "Cumulative Net Housing Units (2020-Present)"
-                }
-              },
-              "queryRef": "_Measures.Cumulative Net Housing Units (2020-Present)",
-              "nativeQueryRef": "Cumulative Net Housing Units (2020-Present)"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "_Measures"
-                    }
-                  },
-                  "Property": "Housing Target Progress %"
-                }
-              },
-              "queryRef": "_Measures.Housing Target Progress %",
-              "nativeQueryRef": "Housing Target Progress %"
             }
           ]
         }
@@ -142,67 +114,5 @@
         }
       ]
     }
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "F_7a0d640023a84c03",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Dim_Jurisdiction"
-              }
-            },
-            "Property": "Jurisdiction_Type"
-          }
-        },
-        "type": "Categorical",
-        "filter": {
-          "Version": 2,
-          "From": [
-            {
-              "Name": "d",
-              "Entity": "Dim_Jurisdiction",
-              "Type": 0
-            }
-          ],
-          "Where": [
-            {
-              "Condition": {
-                "Not": {
-                  "Expression": {
-                    "In": {
-                      "Expressions": [
-                        {
-                          "Column": {
-                            "Expression": {
-                              "SourceRef": {
-                                "Source": "d"
-                              }
-                            },
-                            "Property": "Jurisdiction_Type"
-                          }
-                        }
-                      ],
-                      "Values": [
-                        [
-                          {
-                            "Literal": {
-                              "Value": "'Urban Growth Area (UGA)'"
-                            }
-                          }
-                        ]
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          ]
-        },
-        "howCreated": "User"
-      }
-    ]
   }
 }

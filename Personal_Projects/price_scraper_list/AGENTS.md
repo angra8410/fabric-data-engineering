@@ -37,6 +37,7 @@ Do not close a feature with failing or skipped gates; record it as `blocked` wit
 - **Schema changes need a migration** in `PriceDatabase.init_db()` (see `_migrate_legacy_schema`, `_migrate_add_product_key`) plus a test that opens an old-schema DB. Never drop user tables.
 - **DuckDB 2.0:** fully consume every `execute()` result (`fetchall()`) before running another statement on the same connection; `relation.fetchone()` no longer exists.
 - **Selectors:** extraction depends on Rappi `data-qa` attributes (`product-item-cpgs-<store>_<product>`, `product-name`, `product-price`, `product-real-price`, `product-pum`, `product-discount`, `store-item-cpgs-<store>`). If they change, a run exits `2`/`1` and dumps the page to `logs/debug/` — inspect that before guessing.
+- **Client confidentiality:** client store id/location/inventory/sales/reports live only in `config/settings.local.yaml` and `data/client/` (both git-ignored). Never copy client figures, costs or customer data into committed files (README, decisions, progress, tests, commit messages). Never read the customer columns of the client's sales sheet (tower/apartment/notes). Don't publish client reports anywhere without the user's explicit OK.
 - **Be polite to Rappi:** keep `delay_between_queries_ms` ≥ 1500 and one browser context per zone; no parallel scraping.
 - No secrets are needed; if any appear (proxies, API keys), use environment variables.
 
@@ -48,7 +49,9 @@ Do not close a feature with failing or skipped gates; record it as `blocked` wit
 | `src/config.py` | Pydantic config, project-root path resolution, Rappi cookie encoder |
 | `src/scraper.py` | Playwright run, in-page extraction (`EXTRACT_JS`), relevance filter, run health (`RunResult`) |
 | `src/parser.py` | COP prices, discounts, unit price, brand/pet/medical detection, `match_key`, `is_relevant` |
-| `src/database.py` | Schema, migrations, upsert, analytical views, exports |
+| `src/database.py` | Schema, migrations, upsert, analytical views, exports, `search_store_ranks` |
+| `src/client_report.py` | Client inventory ↔ Rappi matching, price suggestions, Spanish Excel report |
+| `config/settings.local.yaml` | PRIVATE overlay: client store + its zone/queries (git-ignored) |
 | `main.py` | CLI: `run`, `stats`, `export`, `query` (exit 0/1/2) |
 | `analysis.py` | Printed report over the views |
 | `run_weekly.ps1` | Scheduled entry point (logs to `logs/`) |

@@ -78,6 +78,44 @@ def cmd_query(args) -> int:
     return 0
 
 
+def cmd_client_report(args) -> int:
+    from src import client_report as cr
+    from src.scraper import RappiScraper
+
+    config, db = open_db(args)
+    client = config.client
+    if client is None:
+        print("No client configured (config/settings.local.yaml) - skipping client report.")
+        return 0
+    today = config.local_now().date()
+    items = cr.products_to_price(cr.load_inventory(cr.inventory_file(client), client.sales_window_days, today))
+    print(f"Client {client.name}: {len(items)} products in stock or sold in the last {client.sales_window_days} days")
+
+    queries = [i.search_query for i in items]
+    if args.search == "all":
+        pending = list(dict.fromkeys(q for q in queries if q))
+    elif args.search == "none":
+        pending = []
+    else:
+        pending = cr.queries_needing_search(db, client.zone_id, queries, client.product_search_max_age_days, today)
+    pending = pending[: args.max_searches or client.max_product_searches]
+    if pending:
+        print(f"Searching Rappi for {len(pending)} products from zone '{client.zone_id}'...")
+        res = asyncio.run(RappiScraper(config, db).search_queries(config.zone(client.zone_id), pending,
+                                                                    headless=not args.headed))
+        print(f"  {res.saved} offers saved; {len(res.empty)} searches without relevant results, {len(res.failed)} failed")
+
+    suggestions = cr.build_suggestions(config, db, items, today)
+    vis = cr.visibility(db, client)
+    out = cr.write_report(config, suggestions, vis, resolve_path(args.out) if args.out else
+                          cr.default_report_path(client, today), today)
+    matched = sum(1 for s in suggestions if s.competitor)
+    print(f"Report written: {out}")
+    print(f"  {len(suggestions)} products, {matched} matched to a competitor, "
+          f"{sum(1 for s in suggestions if s.rappi_price)} currently published")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Rappi Pet Food Price Scraper & Analytics (DuckDB)")
     parser.add_argument("--config", default=str(DEFAULT_CONFIG_PATH), help="Path to settings.yaml")
@@ -107,6 +145,16 @@ def build_parser() -> argparse.ArgumentParser:
     ]:
         group.add_argument(flag, dest="preset", action="store_const", const=key, help=help_text)
     q_p.set_defaults(func=cmd_query, preset=None)
+
+    c_p = sub.add_parser("client-report",
+                         help="Pricing + visibility Excel for the client store (config/settings.local.yaml)")
+    c_p.add_argument("--search", choices=["auto", "all", "none"], default="auto",
+                     help="Per-product Rappi searches: auto = only those older than "
+                          "client.product_search_max_age_days (default), all, or none")
+    c_p.add_argument("--max-searches", type=int, help="Cap the number of product searches in this run")
+    c_p.add_argument("--out", help="Output .xlsx (default: client.report_dir/<name>_Rappi_<date>.xlsx)")
+    c_p.add_argument("--headed", action="store_true", help="Show the browser window")
+    c_p.set_defaults(func=cmd_client_report)
     return parser
 
 

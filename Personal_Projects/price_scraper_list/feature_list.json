@@ -117,14 +117,30 @@
         "F2",
         "F4"
       ],
-      "status": "in-progress",
+      "status": "done",
       "acceptance": [
         "Visibility measured from the store's own coordinates for the queries her customers use",
         "Price index vs competitors on shared products with matching pack size",
         "Findings + recommendations delivered to the user; client answers to open questions recorded",
-        "Decision on turning the probes into a recurring client report (F9)"
+        "Decision on turning the probes into a recurring client report -> F9"
       ],
-      "evidence": "2026-11-05: probes from 6.18963,-75.60427 (18 searches, store catalog) -> data/client/diagnosis_velykapet_2026-11-05.md (private)."
+      "evidence": "2026-11-05: probes from the store coordinates (search visibility, catalog, competitor offers), contract and partner-portal review; diagnosis + recommendations delivered to the user. Private details only in data/client/."
+    },
+    {
+      "id": "F9",
+      "name": "Client pricing sheet + weekly visibility tracker",
+      "description": "Private overlay config (config/settings.local.yaml) with client store/zone/queries; search_store_ranks + v_store_visibility; weekly crawl of the client catalog; client-report command: inventory <-> Rappi matching (ADR-010), commission-aware price suggestions, Spanish Excel (Resumen, Precios Rappi, Visibilidad, Visibilidad semanal, Supuestos); wired into run_weekly.ps1.",
+      "dependencies": [
+        "F8"
+      ],
+      "status": "done",
+      "acceptance": [
+        "Weekly run records store positions and the client catalog",
+        "client-report produces the Excel; matches reviewed for false positives",
+        "Already-cheapest products are never told to price above the competitor",
+        "No client data in committed files"
+      ],
+      "evidence": "2026-11-05: pytest 74 passed (matching true/false pairs, pricing rules incl. already-cheapest, inventory loader, report sheets, overlay merge, header parsing); live: main.py run --zone <client zone> exit 0 (24 searches, catalog 21 products from 15 pages); main.py client-report exit 0 (123 product searches, 145 products, 58 matched, 13 published); manual review of matches; leak scan of committed files clean."
     }
   ]
 }

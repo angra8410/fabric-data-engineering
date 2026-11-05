@@ -17,7 +17,7 @@ COLUMNS = [
     "unit_price_value", "unit_measure", "package_weight", "in_stock",
 ]
 
-VIEWS = ["v_weekly_trends", "v_top_medical_discounts", "v_zone_price_comparison",
+VIEWS = ["v_store_visibility", "v_weekly_trends", "v_top_medical_discounts", "v_zone_price_comparison",
          "v_best_price_by_zone", "v_latest_snapshots"]
 
 CREATE_TABLE_SQL = """
@@ -48,6 +48,27 @@ CREATE TABLE IF NOT EXISTS product_snapshots (
     in_stock         BOOLEAN NOT NULL DEFAULT TRUE
 );
 """
+
+# Position of every store section in every search result page (Rappi shows ~5).
+CREATE_RANKS_SQL = """
+CREATE TABLE IF NOT EXISTS search_store_ranks (
+    snapshot_date DATE NOT NULL,
+    week_id       VARCHAR NOT NULL,
+    extracted_at  TIMESTAMP NOT NULL,
+    zone_id       VARCHAR NOT NULL,
+    zone          VARCHAR NOT NULL,
+    search_query  VARCHAR NOT NULL,
+    rank          INTEGER NOT NULL,     -- 1 = first store section on the page
+    store_id      VARCHAR NOT NULL,
+    store_name    VARCHAR NOT NULL,
+    eta_text      VARCHAR,              -- e.g. "10 - 45 min"
+    fee_text      VARCHAR,              -- e.g. "$ 2.000" / "Envío gratis"
+    PRIMARY KEY (snapshot_date, zone_id, search_query, store_id)
+);
+"""
+
+RANK_COLUMNS = ["snapshot_date", "week_id", "extracted_at", "zone_id", "zone", "search_query",
+                "rank", "store_id", "store_name", "eta_text", "fee_text"]
 
 CREATE_VIEWS_SQL = r"""
 -- 1. Latest snapshot per zone (a zone scraped on a different day is still visible).
@@ -134,6 +155,24 @@ SELECT
     ROUND((price_current - prev_price) / prev_price * 100, 2) AS pct_change
 FROM ranked
 WHERE prev_price IS NOT NULL;
+
+-- 6. Search visibility per store and run: in how many searches it appeared and where
+CREATE OR REPLACE VIEW v_store_visibility AS
+WITH totals AS (
+    SELECT snapshot_date, zone_id, COUNT(DISTINCT search_query) AS searches
+    FROM search_store_ranks GROUP BY ALL
+)
+SELECT
+    r.snapshot_date, r.zone_id, ANY_VALUE(r.zone) AS zone, r.store_id,
+    ANY_VALUE(r.store_name)                        AS store_name,
+    COUNT(DISTINCT r.search_query)                 AS searches_appeared,
+    ANY_VALUE(t.searches)                          AS searches_total,
+    ROUND(100.0 * COUNT(DISTINCT r.search_query) / ANY_VALUE(t.searches), 1) AS visibility_pct,
+    ROUND(AVG(r.rank), 2)                          AS avg_rank,
+    MIN(r.rank)                                    AS best_rank
+FROM search_store_ranks r
+JOIN totals t USING (snapshot_date, zone_id)
+GROUP BY r.snapshot_date, r.zone_id, r.store_id;
 """
 
 
@@ -154,6 +193,7 @@ class PriceDatabase:
         with self.get_connection() as con:
             self._migrate_legacy_schema(con)
             con.execute(CREATE_TABLE_SQL)
+            con.execute(CREATE_RANKS_SQL)
             self._migrate_add_product_key(con)
             con.execute(CREATE_VIEWS_SQL)
 
@@ -224,6 +264,18 @@ class PriceDatabase:
             con.executemany(
                 f"INSERT OR REPLACE INTO product_snapshots ({', '.join(COLUMNS)}) VALUES ({placeholders})",
                 list(rows.values()),
+            )
+        return len(rows)
+
+    def insert_store_ranks(self, rows: List[Dict[str, Any]]) -> int:
+        """Upsert store positions for one (date, zone, query)."""
+        if not rows:
+            return 0
+        placeholders = ", ".join("?" for _ in RANK_COLUMNS)
+        with self.get_connection() as con:
+            con.executemany(
+                f"INSERT OR REPLACE INTO search_store_ranks ({', '.join(RANK_COLUMNS)}) VALUES ({placeholders})",
+                [tuple(r.get(c) for c in RANK_COLUMNS) for r in rows],
             )
         return len(rows)
 

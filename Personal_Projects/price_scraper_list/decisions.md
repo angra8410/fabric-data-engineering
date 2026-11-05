@@ -31,5 +31,16 @@
 **Decision:** Run Wednesdays 10:00 (`register_task.ps1`). Reasons: specialty pet stores are open (closed stores vanish from search results, which would look like missing products); outside the 12:00–14:00 delivery peak; Mondays are frequently *festivos* (Ley Emiliani) with reduced hours; mid-week avoids weekend campaigns and the 15th/30th payday promos.
 **Consequences:** `StartWhenAvailable` runs a missed slot later the same day/next boot — such snapshots may include fewer stores (late evening). Interactive logon only: no run while signed out (no stored password).
 
+## ADR-009 — Client analysis: private overlay, store ranks, catalog crawl (2026-11-05)
+**Context:** The real goal became diagnosing a client's Rappi store. Her location, store id, inventory (costs) and sales are private.
+**Decision:** Client specifics live only in git-ignored `config/settings.local.yaml` (merged over `settings.yaml`; `extra_zones` appended, other keys replace) and `data/client/`. Committed code stays generic. Zones may carry their own `search_queries`. Every search now stores the ordered store sections in `search_store_ranks` (+ ETA/fee text) → `v_store_visibility`. The client store's own catalog is crawled each run (home → aisles → sub-aisles, `data-qa="product-item-<id>"`) and stored with `search_query = '[catalogo tienda]'`. The sales sheet's customer columns are never read.
+**Consequences:** Weekly run time grows with the client zone (~24 searches + catalog). Client report is skipped silently when no client is configured.
+
+## ADR-010 — Inventory ↔ Rappi matching and price suggestion (2026-11-05)
+**Context:** First matching pass paired dog with cat food, urinary with renal, other brands of corn litter — a wrong match yields a harmful price.
+**Decision:** Precision over recall. Match requires: score ≥ 0.7 (≥ 0.85 if pack size cannot be verified); first brand word present both ways; all distinctive words when ≤3 (all but one otherwise); no conflict in dog/cat, life stage, breed size, medical line (incl. Pro Plan codes UR/EN/OM/HA/NF, skin), wet/dry, flavour; and the same presence of condition / non-adult stage / breed size on both sides; pack size within 12% (from Rappi unit price). Inventory abbreviations (VET NAT, VETE DIETS, FRANGO…) are expanded only for matching, not for stored product keys.
+Price rule (commission = contract Anexo 1 rate × 1.19 IVA by product family; arena/aseo/juguetes/accesorios = 14%): keep-store-margin price = store price / (1 − commission); suggest 1% under the cheapest matching competitor when that still leaves ≥ 10% margin after commission; otherwise keep the store-margin price and say "no competir". Out-of-stock items are flagged "no publicar" (cancellations are charged to her).
+**Consequences:** Many products stay unmatched; the sheet shows the matched competitor name + score for human review. Contract clause 6(viii) (price parity) is surfaced in "Supuestos".
+
 ## ADR-007 — Data not versioned (2026-11-05)
 **Decision:** `data/` contents (DuckDB, Parquet, CSV, backups) and `logs/` are git-ignored; the DB grows weekly and is binary. Backups are manual copies in `data/`.

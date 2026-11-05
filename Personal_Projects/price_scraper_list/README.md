@@ -42,15 +42,18 @@ Snapshot dates and ISO week ids use Colombian local time (UTC-5). Older database
 ```
 Personal_Projects/price_scraper_list/
 ├── config/
-│   └── settings.yaml          # Configurable zones (Poblado, Sabaneta) and search terms
+│   ├── settings.yaml          # Configurable zones (Poblado, Sabaneta) and search terms
+│   └── settings.local.yaml    # PRIVATE, git-ignored: client store, extra zones (optional)
 ├── src/
-│   ├── config.py              # Pydantic models & cookie encoder
+│   ├── config.py              # Pydantic models, cookie encoder, private overlay merge
 │   ├── database.py            # DuckDB manager, upsert logic & analytical views
-│   ├── parser.py              # COP price regex, medical diet detector, unit price
-│   └── scraper.py             # Playwright browser automation
+│   ├── parser.py              # COP price regex, medical diet detector, unit price, name keys
+│   ├── scraper.py             # Playwright: searches, store ranks, store catalog crawl
+│   └── client_report.py       # Client pricing + visibility Excel (Spanish)
 ├── tests/
 │   ├── test_parser.py         # Price / discount / pet-type parsing
-│   └── test_database.py       # Upserts, views, legacy migration, cookie encoding
+│   ├── test_database.py       # Upserts, views, legacy migration, cookie encoding
+│   └── test_client_report.py  # Product matching, pricing rules, inventory, Excel output
 ├── analysis.py                # Ready-to-run DuckDB SQL analysis report
 ├── main.py                    # CLI tool for runs, queries, exports, and stats
 ├── init.ps1                   # Setup + verification (venv, deps, Chromium, tests)
@@ -136,6 +139,30 @@ This displays:
 .venv\Scripts\python.exe main.py export
 ```
 Creates `data/rappi_prices.parquet` and `data/rappi_prices.csv` for use in Excel, Power BI, or Pandas.
+
+### 6. Client store report (optional, private)
+
+For analysing one Rappi store on behalf of its owner. Everything client-specific lives in the git-ignored `config/settings.local.yaml` and `data/client/`:
+
+```yaml
+# config/settings.local.yaml  (merged over settings.yaml; extra_zones is appended)
+extra_zones:
+  - {id: "store_zone", name: "...", city: "...", lat: 0.0, lng: 0.0, address: "...",
+     search_queries: ["...", "..."]}          # searches her customers make
+client:
+  name: "..."
+  store_id: "900000000"                        # from the Rappi store URL
+  store_slug: "900000000-store-slug"
+  zone_id: "store_zone"
+  inventory_path: "data/client/<inventory>.xlsx"  # sheets 'Inventario DEFINITIVO' (+ 'VENTAS')
+```
+
+```powershell
+.venv\Scripts\python.exe main.py client-report                 # searches products not checked in 30 days
+.venv\Scripts\python.exe main.py client-report --search none   # rebuild the Excel from stored data only
+```
+
+With a client configured, the weekly run also records the store's search positions, crawls its full catalog and refreshes the Excel (`data/client/reports/<name>_Rappi_<date>.xlsx`, in Spanish): **Resumen**, **Precios Rappi** (cost, Rappi commission from the contract, current Rappi price, cheapest matching competitor, suggested price, action), **Visibilidad** and **Visibilidad semanal**, **Supuestos**. Product matching is deliberately strict (brand both ways, dog/cat, life stage, breed size, medical line, flavour, pack size) — a missed match is better than a wrong price. Rules: `decisions.md` ADR-009/010.
 
 ---
 

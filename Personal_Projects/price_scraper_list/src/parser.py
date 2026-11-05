@@ -195,21 +195,57 @@ class ProductParser:
         Package size is NOT part of the key (views add pack_size from the
         unit price, which is more reliable than the size written in names).
         """
+        return " ".join(sorted(set(cls.key_tokens(name))))
+
+    # Shorthand used in store inventories (not applied to stored product keys).
+    INVENTORY_ABBREVIATIONS = [
+        (r"^\(\w+\)\s*", ""),                       # "(VE) INABA ..." -> "INABA ..."
+        (r"\bvet nat\b", "vet life natural"),
+        (r"\bvete diets\b", "veterinary diets"),
+        (r"\bvet diets\b", "veterinary diets"),
+        (r"\bcalabza\b", "calabaza"),
+        (r"\bfrango\b", "pollo"),                   # Portuguese labels
+        (r"\bsuino\b", "cerdo"),
+        (r"\bfel\b", "felino"),
+    ]
+
+    @classmethod
+    def key_tokens(cls, name: str, inventory: bool = False) -> list[str]:
+        """Normalized tokens in their original order (first one is usually the brand)."""
         text = unicodedata.normalize("NFKD", (name or "").lower())
         text = "".join(c for c in text if not unicodedata.combining(c))
+        if inventory:
+            for pattern, repl in cls.INVENTORY_ABBREVIATIONS:
+                text = re.sub(pattern, repl, text)
         text = text.replace("hill's", "hills").replace("hill´s", "hills").replace("hill`s", "hills")
         text = cls.KEY_WEIGHT_PATTERN.sub(" ", text)
         text = re.sub(r"(?<=\d)[.,](?=\d{3}\b)", "", text)  # 2.000.000 UI -> 2000000
         text = text.replace("proplan", "pro plan").replace("vetlife", "vet life")
         text = re.sub(r"\b([a-z])/([a-z])\b", r"\1_\2", text)  # keep i/d, k/d ... as one token
         text = re.sub(r"[^a-z0-9_+ ]", " ", text)
-        tokens = set()
+        tokens: list[str] = []
         for tok in text.split():
             tok = cls.KEY_SYNONYMS.get(tok, tok).replace("_", "/")
-            if tok in cls.KEY_STOPWORDS:
-                continue
-            tokens.add(tok)
-        return " ".join(sorted(tokens))
+            if tok not in cls.KEY_STOPWORDS and tok not in tokens:
+                tokens.append(tok)
+        return tokens
+
+    SIZE_PATTERN = re.compile(
+        r"(\d+(?:[.,]\d+)?)\s*(kg|kgs|kl|k|kilos?|g|gr|grs|gramos?|lb|lbs|libras?|ml|l|lt|litros?)\b",
+        re.IGNORECASE,
+    )
+    SIZE_FACTORS = {"kg": 1000, "kgs": 1000, "kl": 1000, "k": 1000, "kilo": 1000, "kilos": 1000,
+                    "g": 1, "gr": 1, "grs": 1, "gramo": 1, "gramos": 1,
+                    "lb": 453.6, "lbs": 453.6, "libra": 453.6, "libras": 453.6,
+                    "ml": 1, "l": 1000, "lt": 1000, "litro": 1000, "litros": 1000}
+
+    @classmethod
+    def size_in_base_units(cls, name: str) -> Optional[float]:
+        """'ARENA MAIZ CAT 10 KG' -> 10000.0 (grams, or ml for liquids); None if absent."""
+        m = cls.SIZE_PATTERN.search(name or "")
+        if not m:
+            return None
+        return float(m.group(1).replace(",", ".")) * cls.SIZE_FACTORS[m.group(2).lower()]
 
     @classmethod
     def is_relevant(cls, query: str, product_name: str) -> bool:

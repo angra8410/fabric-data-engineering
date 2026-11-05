@@ -50,6 +50,13 @@ try {
     $code = Invoke-Python @("main.py", "--config", $ConfigPath, "export")
     if ($code -ne 0) { throw "Export failed (exit $code)" }
 
+    # Client pricing/visibility Excel (no-op when config/settings.local.yaml has no client)
+    $code = Invoke-Python @("main.py", "--config", $ConfigPath, "client-report")
+    if ($code -ne 0) {
+        Write-Log "WARNING: client report failed (exit $code)" Yellow
+        if ($exitCode -eq 0) { $exitCode = 2 }
+    }
+
     Invoke-Python @("main.py", "--config", $ConfigPath, "stats") | Out-Null
     if ($exitCode -eq 0) { Write-Log "Weekly run finished successfully!" Green }
     else { Write-Log "Weekly run finished with warnings (exit $exitCode)." Yellow }

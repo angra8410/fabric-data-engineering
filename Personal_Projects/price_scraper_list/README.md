@@ -54,6 +54,7 @@ Personal_Projects/price_scraper_list/
 ├── analysis.py                # Ready-to-run DuckDB SQL analysis report
 ├── main.py                    # CLI tool for runs, queries, exports, and stats
 ├── init.ps1                   # Setup + verification (venv, deps, Chromium, tests)
+├── register_task.ps1          # Registers the weekly Windows scheduled task
 ├── run_weekly.ps1             # Weekly scheduled run (scrape -> export -> stats), logs to logs/
 ├── requirements.txt           # Locked runtime dependencies
 ├── requirements-dev.txt       # + pytest
@@ -146,11 +147,16 @@ You can run `run_weekly.ps1` manually or schedule it in Windows Task Scheduler:
 powershell -ExecutionPolicy Bypass -File .\run_weekly.ps1
 ```
 
-In Windows Task Scheduler:
-- **Action**: Start a program
-- **Program/script**: `powershell.exe`
-- **Arguments**: `-ExecutionPolicy Bypass -File "C:\Users\antoi\downloads\all_files\projects\proyectos-data-engineering\Personal_Projects\price_scraper_list\run_weekly.ps1"`
-- **Trigger**: Weekly on Monday mornings.
+Register the scheduled task (current user, no admin needed):
+
+```powershell
+.\register_task.ps1                          # Wednesday 10:00 (default)
+.\register_task.ps1 -Day Thursday -At 09:30  # other slot
+Start-ScheduledTask -TaskName "Rappi Price Scraper (weekly)"   # test run now
+.\register_task.ps1 -Remove                  # unregister
+```
+
+**Why Wednesday 10:00** (see `decisions.md` ADR-008): all pet stores are open with full catalogs (closed stores drop out of results), it's outside Rappi's lunch peak, Mondays are often Colombian public holidays (*festivos*) with reduced hours, and mid-week avoids weekend / *quincena* promo spikes, so weeks compare like with like. The task also runs on battery and starts as soon as possible if the PC was off at 10:00.
 
 The script switches to its own folder (Task Scheduler starts in `System32`), writes a transcript to `logs/run_<timestamp>.log` (last 26 kept) and reports its outcome in Task Scheduler's *Last Run Result*:
 

@@ -26,5 +26,10 @@
 ## ADR-006 — Local time and paths (2026-11-05)
 **Decision:** Snapshot date / ISO week use fixed UTC-5 (`utc_offset_hours`; Colombia has no DST, avoids a `tzdata` dependency on Windows). All relative paths resolve against the project root so Task Scheduler (cwd `System32`) works.
 
+## ADR-008 — Weekly schedule: Wednesday 10:00 local (2026-11-05)
+**Context:** Only consistency week to week matters for trends, but store availability and promos skew snapshots.
+**Decision:** Run Wednesdays 10:00 (`register_task.ps1`). Reasons: specialty pet stores are open (closed stores vanish from search results, which would look like missing products); outside the 12:00–14:00 delivery peak; Mondays are frequently *festivos* (Ley Emiliani) with reduced hours; mid-week avoids weekend campaigns and the 15th/30th payday promos.
+**Consequences:** `StartWhenAvailable` runs a missed slot later the same day/next boot — such snapshots may include fewer stores (late evening). Interactive logon only: no run while signed out (no stored password).
+
 ## ADR-007 — Data not versioned (2026-11-05)
 **Decision:** `data/` contents (DuckDB, Parquet, CSV, backups) and `logs/` are git-ignored; the DB grows weekly and is binary. Backups are manual copies in `data/`.

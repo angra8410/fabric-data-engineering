@@ -24,7 +24,9 @@
       "id": "F2",
       "name": "Store-aware data model and views",
       "description": "Capture store_id/store_name/product_id from data-qa attributes; key snapshots by day+zone+store+product; pack_size from unit price; per-zone latest view; generic N-zone comparison; best-price-by-store view; trends per offer. ADR-001, ADR-002.",
-      "dependencies": ["F1"],
+      "dependencies": [
+        "F1"
+      ],
       "status": "done",
       "acceptance": [
         "No duplicate offers per day/zone/store/product",
@@ -37,7 +39,9 @@
       "id": "F3",
       "name": "Scheduled-run hardening",
       "description": "Project-root path resolution, Colombia local dates + ISO weeks, UTF-8 output, run_weekly.ps1 with cwd fix, transcript logs, exit codes; init.ps1 with fail-fast + tests; requirements as UTF-8 + requirements-dev.txt; pytest suite. ADR-006.",
-      "dependencies": ["F1"],
+      "dependencies": [
+        "F1"
+      ],
       "status": "done",
       "acceptance": [
         "run_weekly.ps1 works when launched from System32",
@@ -49,7 +53,9 @@
       "id": "F4",
       "name": "Cross-store product matching",
       "description": "Persisted product_key (normalized, order-insensitive name) with v2->v3 migration/backfill; views group by product_key + pack_size. ADR-003.",
-      "dependencies": ["F2"],
+      "dependencies": [
+        "F2"
+      ],
       "status": "done",
       "acceptance": [
         "Differently worded names of the same product share a key",
@@ -62,7 +68,9 @@
       "id": "F5",
       "name": "Markup-drift detection and relevance filter",
       "description": "RunResult tracks empty/failed queries and text-fallback cards; exit 2 when degraded; debug HTML+PNG dumps to logs/debug; drop results unrelated to the query. ADR-004, ADR-005.",
-      "dependencies": ["F2"],
+      "dependencies": [
+        "F2"
+      ],
       "status": "done",
       "acceptance": [
         "Degraded runs exit 2 and still export",
@@ -74,20 +82,25 @@
     {
       "id": "F6",
       "name": "Register weekly Windows Task Scheduler job",
-      "description": "Create the scheduled task (weekly, Monday morning) running run_weekly.ps1 and confirm Last Run Result = 0 after the first scheduled execution.",
-      "dependencies": ["F3"],
-      "status": "not-started",
+      "description": "Create the scheduled task (weekly, Wednesday 10:00 via register_task.ps1, ADR-008) running run_weekly.ps1 and confirm Last Run Result = 0 after the first scheduled execution.",
+      "dependencies": [
+        "F3"
+      ],
+      "status": "done",
       "acceptance": [
         "Task exists (Get-ScheduledTask) with the documented action",
-        "First scheduled run produces logs/run_*.log and Last Run Result 0"
+        "First run via Task Scheduler produces a complete logs/run_*.log and Last Run Result 0"
       ],
-      "evidence": ""
+      "evidence": "2026-11-05: user ran register_task.ps1 -> task 'Rappi Price Scraper (weekly)' registered, NextRunTime 2026-11-11 10:00. Start-ScheduledTask -> LastRunTime 12:44:24, LastTaskResult 0; 1,496 offers saved/updated (DB 1,422 rows, 382 medical), exports refreshed 12:47. Found PS 5.1 Start-Transcript dropping python output in hidden window; run_weekly.ps1 now writes every line to the log (UTF-8). Re-verified hidden from System32 with a 1-query temp config: exit 0, complete log."
     },
     {
       "id": "F7",
       "name": "Validate week-over-week trends with real data",
       "description": "After a second weekly run (>= 2026-11-09), check v_weekly_trends returns rows, store/product ids are stable across weeks, and pct_change values are plausible.",
-      "dependencies": ["F2", "F6"],
+      "dependencies": [
+        "F2",
+        "F6"
+      ],
       "status": "blocked",
       "acceptance": [
         "v_weekly_trends non-empty after the second run",

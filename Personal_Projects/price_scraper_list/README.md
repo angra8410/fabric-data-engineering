@@ -1,0 +1,163 @@
+# Rappi Pet Food Price Tracker & Analytics (Medellín)
+
+A weekly automated price scraping and analytics pipeline for pet food (specialized and veterinary diets) across **Medellín (El Poblado & Sabaneta)** on **Rappi Colombia**, backed by **DuckDB**.
+
+---
+
+## 🏗️ Architecture
+
+```mermaid
+flowchart TD
+    A["Settings (config/settings.yaml)\n- Zones: El Poblado & Sabaneta\n- Queries: Hill's, Royal Canin, Pro Plan, Tierragro"] --> B["Playwright Engine (src/scraper.py)\n- Injects base64 'currentLocation' cookie\n- Renders dynamic SPA & scrolls"]
+    B --> C["Parser & Normalizer (src/parser.py)\n- Colombian Peso cleaner\n- Brand detection & Medical diet classification\n- Unit price per gram/kg"]
+    C --> D[("DuckDB Storage (data/rappi_prices.duckdb)\n- Table: product_snapshots (zone x store x product x day)
+- Views: v_latest_snapshots, v_best_price_by_zone, v_zone_price_comparison, v_top_medical_discounts, v_weekly_trends")]
+    D --> E["Exports & Reporting\n- data/rappi_prices.parquet\n- data/rappi_prices.csv\n- analysis.py"]
+```
+
+### Key Technical Highlight: Hyper-local Geo Injection
+Rappi requires a delivery location before displaying prices and availability. Rather than manually solving address prompts on each run, the scraper generates and injects Rappi's URL-encoded, Base64 `currentLocation` cookie for exact latitude/longitude coordinates (Medellín Poblado vs Sabaneta) into the browser context.
+
+### Data model
+Rappi search results are grouped **by store** (Turbo, Puppis, Tierragro, Laika...), and the same product is usually sold by several stores at different prices. Every snapshot row is therefore keyed by **day + zone + store + product** (Rappi's own `storeId`/`productId`, read from the `data-qa="product-item-cpgs-<store>_<product>"` attribute). Re-running on the same day overwrites that day's prices.
+
+**Matching the same product across stores.** Stores word names differently ("Hill's Comida Perro Adulto Small Bites" vs "Alimento Hills Small Bites para Perros Adultos"), so each row stores a `product_key`: accents, filler words (alimento, comida, para...), weights and word order are removed and synonyms unified (perros/canine → perro, felino → gato...). Names also often omit the package size, so the views derive `pack_size` from Rappi's unit price (`price / price-per-gram`). Offers are compared only when **product_key and pack_size** both match.
+
+**Relevance filter.** Rappi fuzzy-matches every query (even nonsense returns products, and medical queries return medicines, vaccines and toys). A result is stored only if its name shares at least one normalized word with the query (`ProductParser.is_relevant`).
+
+| View | What it answers |
+| :--- | :--- |
+| `v_latest_snapshots` | Most recent run per zone (+ derived `pack_size`) |
+| `v_best_price_by_zone` | Cheapest vs most expensive store for each product inside a zone |
+| `v_zone_price_comparison` | Best price of the same product in each zone (cheapest/priciest zone) |
+| `v_top_medical_discounts` | Active promos on veterinary / prescription diets |
+| `v_weekly_trends` | Week-over-week price change of the exact same offer (zone + store + product) |
+
+Snapshot dates and ISO week ids use Colombian local time (UTC-5). Older databases are migrated automatically on open: v1 (no store columns) is kept aside in `product_snapshots_legacy_v1`; v2 gets `product_key` added and backfilled.
+
+---
+
+## 📁 Project Structure
+
+```
+Personal_Projects/price_scraper_list/
+├── config/
+│   └── settings.yaml          # Configurable zones (Poblado, Sabaneta) and search terms
+├── src/
+│   ├── config.py              # Pydantic models & cookie encoder
+│   ├── database.py            # DuckDB manager, upsert logic & analytical views
+│   ├── parser.py              # COP price regex, medical diet detector, unit price
+│   └── scraper.py             # Playwright browser automation
+├── tests/
+│   ├── test_parser.py         # Price / discount / pet-type parsing
+│   └── test_database.py       # Upserts, views, legacy migration, cookie encoding
+├── analysis.py                # Ready-to-run DuckDB SQL analysis report
+├── main.py                    # CLI tool for runs, queries, exports, and stats
+├── init.ps1                   # Setup + verification (venv, deps, Chromium, tests)
+├── run_weekly.ps1             # Weekly scheduled run (scrape -> export -> stats), logs to logs/
+├── requirements.txt           # Locked runtime dependencies
+├── requirements-dev.txt       # + pytest
+├── AGENTS.md                  # Agent harness: startup, gates, project rules
+├── feature_list.json          # Feature status + verification evidence
+├── progress.md                # Session log, blockers, next step
+├── decisions.md               # Architecture decisions (ADR-001...)
+└── README.md
+```
+
+---
+
+## 🚀 Quickstart & Usage
+
+### 0. Setup & verification
+
+```powershell
+.\init.ps1          # creates .venv, installs deps + Chromium, runs unit tests and stats
+.\init.ps1 -Smoke   # additionally scrapes one query in one zone against live Rappi
+```
+
+### 1. Run Scraper Manually
+
+```powershell
+# Run full weekly extraction (all zones and queries configured in settings.yaml)
+.venv\Scripts\python.exe main.py run
+
+# Run only for a specific zone
+.venv\Scripts\python.exe main.py run --zone poblado
+.venv\Scripts\python.exe main.py run --zone sabaneta
+
+# Run a quick test for a single query
+.venv\Scripts\python.exe main.py run --query "hills perro"
+```
+
+### 2. View Database Stats
+
+```powershell
+.venv\Scripts\python.exe main.py stats
+```
+
+### 3. Run Price Analysis
+
+To run the pre-built DuckDB analysis report:
+
+```powershell
+.venv\Scripts\python.exe analysis.py
+```
+
+This displays:
+1. **Snapshot Overview**: Average, minimum, and maximum prices by zone and pet type (dog vs cat).
+2. **Medical Diet Breakdown**: Tracked veterinary diets grouped by brand (Hill's, Royal Canin, Pro Plan, etc.).
+3. **Top Active Discounts**: Active sales and savings in COP for prescription pet diets.
+4. **Store Gaps**: Same product and size, cheapest vs most expensive store inside a zone.
+5. **Zone Comparison**: Best price in El Poblado vs Sabaneta for identical items (same pack size).
+
+### 4. Query DuckDB Directly via CLI
+
+```powershell
+# See top medical food discounts
+.venv\Scripts\python.exe main.py query --discounts
+
+# Compare prices between El Poblado and Sabaneta (same product + pack size)
+.venv\Scripts\python.exe main.py query --compare-zones
+
+# Cheapest vs most expensive store for the same product inside each zone
+.venv\Scripts\python.exe main.py query --best-prices
+
+# See week-over-week price changes
+.venv\Scripts\python.exe main.py query --trends
+
+# Run custom SQL directly
+.venv\Scripts\python.exe main.py query --sql "SELECT brand, AVG(price_current) FROM product_snapshots GROUP BY brand;"
+```
+
+### 5. Export to Parquet & CSV
+
+```powershell
+.venv\Scripts\python.exe main.py export
+```
+Creates `data/rappi_prices.parquet` and `data/rappi_prices.csv` for use in Excel, Power BI, or Pandas.
+
+---
+
+## ⏰ Weekly Automation
+
+You can run `run_weekly.ps1` manually or schedule it in Windows Task Scheduler:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\run_weekly.ps1
+```
+
+In Windows Task Scheduler:
+- **Action**: Start a program
+- **Program/script**: `powershell.exe`
+- **Arguments**: `-ExecutionPolicy Bypass -File "C:\Users\antoi\downloads\all_files\projects\proyectos-data-engineering\Personal_Projects\price_scraper_list\run_weekly.ps1"`
+- **Trigger**: Weekly on Monday mornings.
+
+The script switches to its own folder (Task Scheduler starts in `System32`), writes a transcript to `logs/run_<timestamp>.log` (last 26 kept) and reports its outcome in Task Scheduler's *Last Run Result*:
+
+| Exit code | Meaning |
+| :--- | :--- |
+| `0` | OK |
+| `1` | Failed: nothing saved, or export failed |
+| `2` | Degraded: data saved and exported, but ≥50% of queries came back empty, or ≥50% of cards needed the text fallback parser (Rappi probably changed its `data-qa` markup). Look for `DEGRADED RUN` in the log. |
+
+Whenever a query returns no product cards (or none can be parsed), the page HTML and a screenshot are saved to `logs/debug/` to make markup changes easy to diagnose. A full run (2 zones x 10 queries) takes about 5 minutes and stores ~1,400 relevant offers.

@@ -1,0 +1,100 @@
+{
+  "$comment": "Source of truth for scope and progress. One feature in-progress at a time. 'done' requires evidence: command, outcome, date.",
+  "project": "price_scraper_list",
+  "verification": {
+    "full": ".\\init.ps1",
+    "smoke": ".\\init.ps1 -Smoke",
+    "pipeline": ".\\run_weekly.ps1",
+    "report": ".venv\\Scripts\\python.exe analysis.py"
+  },
+  "features": [
+    {
+      "id": "F1",
+      "name": "Baseline scraper pipeline",
+      "description": "Playwright scraper with Rappi location-cookie injection per zone, COP parser, DuckDB storage, CLI (run/stats/export/query), analysis report.",
+      "dependencies": [],
+      "status": "done",
+      "acceptance": [
+        "Location cookie changes the stores returned per zone",
+        "main.py run stores snapshots; stats/export/query work"
+      ],
+      "evidence": "2026-11-05: probe showed different store sets for El Poblado, Sabaneta and Bogotá with the cookie; initial run stored 171 rows (query 'hills perro')."
+    },
+    {
+      "id": "F2",
+      "name": "Store-aware data model and views",
+      "description": "Capture store_id/store_name/product_id from data-qa attributes; key snapshots by day+zone+store+product; pack_size from unit price; per-zone latest view; generic N-zone comparison; best-price-by-store view; trends per offer. ADR-001, ADR-002.",
+      "dependencies": ["F1"],
+      "status": "done",
+      "acceptance": [
+        "No duplicate offers per day/zone/store/product",
+        "Zone comparison compares same product and pack size only",
+        "v1 database migrated without losing rows"
+      ],
+      "evidence": "2026-11-05: .\\run_weekly.ps1 from C:\\Windows\\System32 -> exit 0, 1,621 offers from 25 stores, 0 unparsed cards; legacy 171 rows kept in product_snapshots_legacy_v1; analysis.py sections 1-5 render; zone diffs 5-22% after pack_size."
+    },
+    {
+      "id": "F3",
+      "name": "Scheduled-run hardening",
+      "description": "Project-root path resolution, Colombia local dates + ISO weeks, UTF-8 output, run_weekly.ps1 with cwd fix, transcript logs, exit codes; init.ps1 with fail-fast + tests; requirements as UTF-8 + requirements-dev.txt; pytest suite. ADR-006.",
+      "dependencies": ["F1"],
+      "status": "done",
+      "acceptance": [
+        "run_weekly.ps1 works when launched from System32",
+        "init.ps1 stops on first failing step"
+      ],
+      "evidence": "2026-11-05: run_weekly.ps1 from System32 exit 0; init.ps1 from System32 exit 0 (tests pass)."
+    },
+    {
+      "id": "F4",
+      "name": "Cross-store product matching",
+      "description": "Persisted product_key (normalized, order-insensitive name) with v2->v3 migration/backfill; views group by product_key + pack_size. ADR-003.",
+      "dependencies": ["F2"],
+      "status": "done",
+      "acceptance": [
+        "Differently worded names of the same product share a key",
+        "Distinct variants (i/d vs k/d, mini vs medium, strengths) do not",
+        "Existing DB backfilled on open"
+      ],
+      "evidence": "2026-11-05: pytest 47 passed (match_key merge/split cases, v2 backfill test); real DB backfilled 604 names -> 553 keys; cross-store matches 399 -> 404."
+    },
+    {
+      "id": "F5",
+      "name": "Markup-drift detection and relevance filter",
+      "description": "RunResult tracks empty/failed queries and text-fallback cards; exit 2 when degraded; debug HTML+PNG dumps to logs/debug; drop results unrelated to the query. ADR-004, ADR-005.",
+      "dependencies": ["F2"],
+      "status": "done",
+      "acceptance": [
+        "Degraded runs exit 2 and still export",
+        "Empty/unparseable pages are dumped to logs/debug",
+        "Fuzzy-matched unrelated products are not stored"
+      ],
+      "evidence": "2026-11-05: pytest exit-code + fallback-flag tests pass; offline dump test wrote logs/debug/*.html/.png; .\\init.ps1 -Smoke exit 0 (84/84 cards structured, 0 fallback); filter removed 203/1,621 existing rows, all 380 medical rows kept."
+    },
+    {
+      "id": "F6",
+      "name": "Register weekly Windows Task Scheduler job",
+      "description": "Create the scheduled task (weekly, Monday morning) running run_weekly.ps1 and confirm Last Run Result = 0 after the first scheduled execution.",
+      "dependencies": ["F3"],
+      "status": "not-started",
+      "acceptance": [
+        "Task exists (Get-ScheduledTask) with the documented action",
+        "First scheduled run produces logs/run_*.log and Last Run Result 0"
+      ],
+      "evidence": ""
+    },
+    {
+      "id": "F7",
+      "name": "Validate week-over-week trends with real data",
+      "description": "After a second weekly run (>= 2026-11-09), check v_weekly_trends returns rows, store/product ids are stable across weeks, and pct_change values are plausible.",
+      "dependencies": ["F2", "F6"],
+      "status": "blocked",
+      "acceptance": [
+        "v_weekly_trends non-empty after the second run",
+        "Spot-check 5 offers against Rappi"
+      ],
+      "evidence": "",
+      "blocked_by": "Needs a second weekly snapshot (calendar time)."
+    }
+  ]
+}

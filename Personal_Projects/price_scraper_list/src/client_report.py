@@ -282,21 +282,21 @@ def suggest_price(item: InventoryItem, client: ClientConfig, competitor: Optiona
                   rappi_price: Optional[float] = None) -> PriceSuggestion:
     c = client.commission_rate(item.category)
     s = PriceSuggestion(item=item, commission=c, rappi_price=rappi_price, competitor=competitor)
-    keep_store_margin = round_up(item.store_price / (1 - c))          # nets the same as a shop sale
+    keep_store_margin = round_up(item.store_price / (1 - c))          # nets the same as a direct (WhatsApp) sale
     floor = round_up(item.cost / (1 - c - client.min_margin_pct / 100))  # lowest price we recommend
     break_even = item.cost / (1 - c)
 
     if competitor is None:
         s.suggested = keep_store_margin
-        s.action = "Sin competencia visible: usar precio que conserva el margen de tienda"
+        s.action = "Sin competencia visible: usar precio que conserva el margen de venta directa"
     else:
         target = round_down(competitor.price * (1 - client.undercut_pct / 100))
         if target >= keep_store_margin:
             s.suggested = target
-            s.action = "Puede ser la más barata ganando igual o más que en tienda"
+            s.action = "Puede ser la más barata ganando igual o más que en venta directa"
         elif target >= floor:
             s.suggested = target
-            s.action = "Bajar para ser la más barata (margen menor que en tienda)"
+            s.action = "Bajar para ser la más barata (margen menor que en venta directa)"
         elif competitor.price < break_even:
             s.suggested = keep_store_margin
             s.action = "No competir en precio: el competidor vende por debajo de tu costo + comisión de Rappi"
@@ -480,7 +480,7 @@ def write_report(config: AppConfig, suggestions: List[PriceSuggestion], vis: Dic
 
     # --- Precios Rappi
     headers = ["Producto (inventario)", "Categoría", "Stock", f"Vendidas {client.sales_window_days} días",
-               "Costo", "Precio tienda", "Comisión Rappi (con IVA)", "Precio Rappi actual", "Margen actual",
+               "Costo", "Precio venta directa (WhatsApp)", "Comisión Rappi (con IVA)", "Precio Rappi actual", "Margen actual",
                "Competidor más barato", "Precio competidor", "Producto del competidor", "Coincidencia",
                "Tiendas con el producto", "Precio sugerido", "Utilidad por unidad", "Margen sugerido",
                "Diferencia vs competidor", "Acción", "Notas"]
@@ -519,13 +519,14 @@ def write_report(config: AppConfig, suggestions: List[PriceSuggestion], vis: Dic
         ["Comisión Rappi medicina", f"{client.commission_pct.get('medicina')}% + IVA"],
         ["Comisión Rappi accesorios (incluye arena, aseo, juguetes)", f"{client.commission_pct.get('accesorios')}% + IVA"],
         ["IVA", f"{client.iva_pct}%"],
-        ["Precio que conserva el margen de tienda", "Precio tienda / (1 - comisión con IVA), redondeado a 100"],
+        ["Precio venta directa", "Columna 'Precio Venta' del inventario (lo que cobra por WhatsApp / venta directa)"],
+        ["Precio que conserva el margen de venta directa", "Precio venta directa / (1 - comisión con IVA), redondeado a 100"],
         ["Margen mínimo aceptado después de comisión", f"{client.min_margin_pct}%"],
         ["Para ser la más barata", f"{client.undercut_pct}% por debajo del competidor más barato, redondeado a 100"],
         ["Competencia considerada", f"Tiendas que Rappi muestra desde la dirección de la tienda, últimos {client.product_search_max_age_days} días"],
         ["Coincidencia", f"0 a 1; se exige {MIN_MATCH_SCORE} o más, la misma marca y el mismo tamaño cuando se puede verificar"],
-        ["Importante", "El contrato (cláusula 6 viii) pide ofrecer en Rappi los mismos precios de la tienda física. "
-                       "Confirmar con el ejecutivo de Rappi antes de usar precios distintos."],
+        ["Importante", "El contrato (cláusula 6 viii) pide ofrecer en Rappi los mismos precios que en sus demás canales "
+                       "(incluye WhatsApp). Confirmar con el ejecutivo de Rappi antes de usar precios distintos."],
         ["Importante", "Revisar las coincidencias marcadas 'Tamaño no verificado' antes de cambiar precios."],
     ]
     for r in notes:

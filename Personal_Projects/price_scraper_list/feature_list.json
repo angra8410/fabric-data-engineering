@@ -108,6 +108,23 @@
       ],
       "evidence": "",
       "blocked_by": "Needs a second weekly snapshot (calendar time)."
+    },
+    {
+      "id": "F8",
+      "name": "Client store competitive diagnosis (VelykaPet, Itagüí)",
+      "description": "Explain low Rappi sales of the client store 900483846 vs competitors: search visibility from her address, catalog breadth and availability, price index vs competitors on shared products, listing price vs in-store price, margins. Client sales data and findings live only in data/client/ (git-ignored).",
+      "dependencies": [
+        "F2",
+        "F4"
+      ],
+      "status": "in-progress",
+      "acceptance": [
+        "Visibility measured from the store's own coordinates for the queries her customers use",
+        "Price index vs competitors on shared products with matching pack size",
+        "Findings + recommendations delivered to the user; client answers to open questions recorded",
+        "Decision on turning the probes into a recurring client report (F9)"
+      ],
+      "evidence": "2026-11-05: probes from 6.18963,-75.60427 (18 searches, store catalog) -> data/client/diagnosis_velykapet_2026-11-05.md (private)."
     }
   ]
 }

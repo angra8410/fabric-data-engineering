@@ -1,7 +1,7 @@
 # Session Progress Log: price_scraper_list
 
 **Last Updated:** 2026-11-05
-**Active Feature:** None (F1–F6 done). Next: F7 after the 2026-11-11 scheduled run.
+**Active Feature:** F8 — client store diagnosis (VelykaPet). F7 after the 2026-11-11 scheduled run.
 **Harness Status:** Healthy — `.\init.ps1` passes (47 tests).
 
 ---
@@ -18,6 +18,12 @@
 - Known limits: store-brand foods whose name lacks a species word are filtered out (ADR-004); pack sizes within ~5% can merge (ADR-002); no run while the user is signed out (ADR-008).
 
 ## Session log
+
+### 2026-11-05 (c) — F8 client diagnosis started (Claude Code)
+- Real goal clarified: the user's client runs a Rappi store (VelykaPet, Itagüí) with low sales; this project is to diagnose why.
+- **Confidentiality:** client sales/costs and all findings live only in `data/client/` (git-ignored). Never copy figures into committed files.
+- Probes (throwaway scripts, no writes to the main DB) from the store's own coordinates: search visibility for 18 queries, full store catalog, competitor offers. Diagnosis: `data/client/diagnosis_velykapet_2026-11-05.md`.
+- Waiting on client answers (commission, price uplift, delisted best sellers, partner-portal data).
 
 ### 2026-11-05 (b) — Scheduling (Claude Code)
 - Chose Wednesday 10:00 (ADR-008); wrote `register_task.ps1` (agent auto mode blocks creating scheduled tasks, so the user ran it).

@@ -1,6 +1,7 @@
 import argparse
 import asyncio
 import sys
+from datetime import timedelta
 
 from src.config import DEFAULT_CONFIG_PATH, PROJECT_ROOT, load_config, resolve_path
 from src.database import PriceDatabase
@@ -92,9 +93,16 @@ def cmd_client_report(args) -> int:
     items = cr.products_to_price(inventory)
     print(f"Client {client.name}: {len(items)} products in stock or sold in the last {client.sales_window_days} days")
 
+    if args.catalog:   # refresh her own Rappi listings and prices first
+        saved = asyncio.run(RappiScraper(config, db).crawl_client_catalog(config.zone(client.zone_id), client,
+                                                                          headless=not args.headed))
+        print(f"  her Rappi catalog: {saved} listings saved")
+
     queries = [i.search_query for i in items]
     if args.search == "all":
         pending = list(dict.fromkeys(q for q in queries if q))
+    elif args.search == "stock":   # every in-stock product, however recent its last search (ADR-014)
+        pending = list(dict.fromkeys(i.search_query for i in items if i.stock > 0 and i.search_query))
     elif args.search == "none":
         pending = []
     else:
@@ -108,19 +116,22 @@ def cmd_client_report(args) -> int:
 
     suggestions = cr.build_suggestions(config, db, items, today)
     vis = cr.visibility(db, client)
-    adjustments = cr.rappi_adjustments(client, inventory, cr.load_client_catalog(db, client))
+    offers = cr.load_offers(db, client.zone_id, today - timedelta(days=client.product_search_max_age_days),
+                            client.store_id)
+    checks = cr.listing_checks(client, inventory, cr.load_client_catalog(db, client), offers)
     from src import probe
     probe_rows = probe.load(client.zone_id)
     out = cr.write_report(config, suggestions, vis, resolve_path(args.out) if args.out else
-                          cr.default_report_path(client, today), today, adjustments, probe_rows)
+                          cr.default_report_path(client, today), today, checks, probe_rows)
     matched = sum(1 for s in suggestions if s.competitor)
     print(f"Report written: {out}")
     print(f"  {len(suggestions)} products, {matched} matched to a competitor, "
           f"{sum(1 for s in suggestions if s.rappi_price)} currently published")
     counts = {}
-    for a in adjustments:
+    for a in checks:
         counts[a.action] = counts.get(a.action, 0) + 1
-    print(f"  Ajustar en Rappi: {len(adjustments)} listings -> " + ", ".join(f"{k} {v}" for k, v in sorted(counts.items())))
+    print(f"  Cambiar precio en Rappi: {len(checks)} listings -> "
+          + ", ".join(f"{k} {v}" for k, v in sorted(counts.items())))
     return 0
 
 
@@ -180,9 +191,11 @@ def build_parser() -> argparse.ArgumentParser:
 
     c_p = sub.add_parser("client-report",
                          help="Pricing + visibility Excel for the client store (config/settings.local.yaml)")
-    c_p.add_argument("--search", choices=["auto", "all", "none"], default="auto",
+    c_p.add_argument("--search", choices=["auto", "stock", "all", "none"], default="auto",
                      help="Per-product Rappi searches: auto = only those older than "
-                          "client.product_search_max_age_days (default), all, or none")
+                          "client.product_search_max_age_days (default), stock = every in-stock product, all, or none")
+    c_p.add_argument("--catalog", action="store_true",
+                     help="Refresh the client's own Rappi listings and prices before the report")
     c_p.add_argument("--max-searches", type=int, help="Cap the number of product searches in this run")
     c_p.add_argument("--out", help="Output .xlsx (default: client.report_dir/<name>_Rappi_<date>.xlsx)")
     c_p.add_argument("--headed", action="store_true", help="Show the browser window")

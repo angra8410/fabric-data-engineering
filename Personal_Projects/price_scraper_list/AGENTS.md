@@ -38,7 +38,7 @@ Do not close a feature with failing or skipped gates; record it as `blocked` wit
 - **DuckDB 2.0:** fully consume every `execute()` result (`fetchall()`) before running another statement on the same connection; `relation.fetchone()` no longer exists.
 - **Selectors:** extraction depends on Rappi `data-qa` attributes (`product-item-cpgs-<store>_<product>`, `product-name`, `product-price`, `product-real-price`, `product-pum`, `product-discount`, `store-item-cpgs-<store>`). If they change, a run exits `2`/`1` and dumps the page to `logs/debug/` — inspect that before guessing.
 - **Client confidentiality:** client store id/location/inventory/sales/reports live only in `config/settings.local.yaml` and `data/client/` (both git-ignored). Never copy client figures, costs or customer data into committed files (README, decisions, progress, tests, commit messages). Never read the customer columns of the client's sales sheet (tower/apartment/notes). Don't publish client reports anywhere without the user's explicit OK.
-- **Be polite to Rappi:** keep `delay_between_queries_ms` ≥ 1500 and one browser context per zone; no parallel scraping.
+- **Be polite to Rappi:** keep `delay_between_queries_ms` ≥ 1500 and one browser context per zone; no parallel scraping. Every scheduled runner must take `data/.scrape.lock` via `scrape_lock.ps1`.
 - No secrets are needed; if any appear (proxies, API keys), use environment variables.
 
 ## 4. Map
@@ -52,7 +52,9 @@ Do not close a feature with failing or skipped gates; record it as `blocked` wit
 | `src/database.py` | Schema, migrations, upsert, analytical views, exports, `search_store_ranks` |
 | `src/client_report.py` | Client inventory ↔ Rappi matching, price suggestions, Spanish Excel report |
 | `src/probe.py` | Hourly client visibility probe: rows, separate DB `data/visibility_probe.duckdb`, hourly summaries (ADR-013) |
-| `run_probe.ps1` / `register_probe_task.ps1` | Hourly probe runner (skips while the weekly task runs) / time-limited scheduled task |
+| `run_probe.ps1` / `register_probe_task.ps1` | Hourly probe runner / time-limited scheduled task |
+| `run_prices.ps1` / `register_prices_task.ps1` | Twice-weekly client price check (Mon + Thu 07:30, ADR-014) / its scheduled task |
+| `scrape_lock.ps1` | Shared `data/.scrape.lock`: one scraping job on Rappi at a time (weekly, price check, probe) |
 | `config/settings.local.yaml` | PRIVATE overlay: client store + its zone/queries, listing links, probe queries/hours (git-ignored) |
 | `main.py` | CLI: `run`, `stats`, `export`, `query` (exit 0/1/2) |
 | `analysis.py` | Printed report over the views |

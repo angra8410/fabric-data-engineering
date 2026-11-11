@@ -209,6 +209,7 @@ class Offer:
     unit_measure: Optional[str]
     snapshot_date: date
     product_id: Optional[str] = None
+    price_regular: Optional[float] = None   # before a Rappi discount, when there is one
 
     @property
     def size(self) -> Optional[float]:
@@ -337,7 +338,7 @@ def suggest_price(item: InventoryItem, client: ClientConfig, competitor: Optiona
         s.suggested = keep_store_margin
         s.action = "Sin competencia visible: usar precio que conserva el margen de venta directa"
     else:
-        target = round_down(competitor.price * (1 - client.undercut_pct / 100))
+        target = competitor.price - client.undercut_cop
         if target >= keep_store_margin:
             s.suggested = target
             s.action = "Puede ser la más barata ganando igual o más que en venta directa"
@@ -385,7 +386,7 @@ def load_client_catalog(db: PriceDatabase, client: ClientConfig) -> List[Offer]:
     with db.get_connection() as con:
         rows = con.execute(
             """SELECT store_id, store_name, product_name, price_current, unit_price_value, unit_measure, snapshot_date,
-                      product_id
+                      product_id, price_regular
                FROM product_snapshots
                WHERE store_id = ? AND zone_id = ?
                  AND snapshot_date = (SELECT MAX(snapshot_date) FROM product_snapshots
@@ -467,18 +468,19 @@ def build_suggestions(config: AppConfig, db: PriceDatabase, items: List[Inventor
     return out
 
 
-# --------------------------------------------------------------------------- her own Rappi prices
-PRICE_TOLERANCE = 100   # COP; Rappi shows prices rounded, so smaller gaps are not a change
+# --------------------------------------------------------------------------- her own Rappi listings
+PRICE_TOLERANCE = 100   # COP; gaps this small are not worth a price change
 
 
 @dataclass
-class RappiAdjustment:
-    """One of her Rappi listings checked against her rule: Rappi = WhatsApp price + markup."""
+class ListingCheck:
+    """One of her Rappi listings vs the cheapest matching competitor (ADR-014)."""
     item: Optional[InventoryItem]
     listing: Optional[Offer]
     units: int = 1
     commission: float = 0.0
-    target: Optional[float] = None
+    competitor: Optional[Offer] = None
+    suggested: Optional[float] = None
     action: str = ""
     notes: List[str] = field(default_factory=list)
     barcode: Optional[str] = None
@@ -489,64 +491,101 @@ class RappiAdjustment:
 
     @property
     def needs_change(self) -> bool:
-        return self.action in ("Subir precio", "Bajar precio")
-
-    @property
-    def whatsapp(self) -> Optional[float]:
-        return self.item.store_price * self.units if self.item else None
+        return self.action in ("Bajar precio", "Subir precio", "Desactivar")
 
     @property
     def cost(self) -> Optional[float]:
         return self.item.cost * self.units if self.item else None
 
-    def profit(self) -> Optional[float]:
-        return None if not (self.target and self.item) else self.target * (1 - self.commission) - self.cost
+    @property
+    def whatsapp(self) -> Optional[float]:
+        return self.item.store_price * self.units if self.item else None
+
+    def profit(self, price: Optional[float]) -> Optional[float]:
+        if not (price and self.item and self.item.cost):
+            return None
+        return price * (1 - self.commission) - self.cost
+
+    def margin(self, price: Optional[float]) -> Optional[float]:
+        p = self.profit(price)
+        return None if p is None else p / price
 
 
-def rappi_adjustments(client: ClientConfig, inventory: List[InventoryItem],
-                      catalog: List[Offer]) -> List[RappiAdjustment]:
-    """Her linked listings (client.rappi_listings) vs her markup rule, plus listings not linked yet."""
+def listing_checks(client: ClientConfig, inventory: List[InventoryItem], catalog: List[Offer],
+                   offers: List[Offer]) -> List[ListingCheck]:
+    """
+    Her linked listings (client.rappi_listings): price = cheapest matching competitor
+    minus client.undercut_cop when that still leaves client.min_margin_pct after the
+    commission; profit at her current Rappi price; plus listings not linked yet.
+    """
     by_id = {str(o.product_id): o for o in catalog if o.product_id}
     inv = {i.barcode: i for i in inventory}
-    markup = 1 + client.rappi_markup_pct / 100
-    out: List[RappiAdjustment] = []
+    min_margin = client.min_margin_pct / 100
+    out: List[ListingCheck] = []
     for barcode, pid in client.rappi_listings.items():
         item, listing = inv.get(barcode), by_id.get(str(pid))
-        a = RappiAdjustment(item=item, listing=listing, units=client.units_per_listing.get(barcode, 1),
-                            barcode=barcode)
+        units = client.units_per_listing.get(barcode, 1)
+        a = ListingCheck(item=item, listing=listing, units=units, barcode=barcode)
         if item is None:
             a.action = "Revisar vínculo"
             a.notes.append(f"El código de barras vinculado ({barcode}) ya no está en el inventario")
             out.append(a)
             continue
         a.commission = client.commission_rate(item.category)
-        if a.whatsapp:
-            a.target = round(a.whatsapp * markup)
         if listing is None:
             a.action = "No aparece en Rappi"
-            a.notes.append("Agotado o desactivado esta semana")
-        elif not a.target:
-            a.action = "Revisar inventario"
-            a.notes.append("Sin precio de venta en el inventario")
-        elif abs(listing.price - a.target) <= PRICE_TOLERANCE:
-            a.action = "OK"
-        else:
-            a.action = "Subir precio" if listing.price < a.target else "Bajar precio"
-        if listing is not None and item.stock <= 0:
+            a.notes.append("Agotado o desactivado")
+            out.append(a)
+            continue
+        priced = replace(item, cost=item.cost * units, store_price=item.store_price * units) if units > 1 else item
+        comp = next((m[2] for m in best_matches(priced, offers)
+                     if competitor_price_plausible(priced, client, m[2].price)), None)
+        a.competitor = comp
+        price = listing.price
+        if item.stock <= 0:
+            a.action = "Desactivar"
             a.notes.append("Sin stock: desactivar en Rappi hasta reponer (las cancelaciones se le cobran)")
-        if a.target and item.cost and a.profit() < 0:
-            a.notes.append("Pierde plata a este precio: revisar costo o precio de venta")
-        if a.units > 1:
-            a.notes.append(f"Paquete de {a.units}: precio WhatsApp por unidad × {a.units}")
+        elif comp is None:
+            a.action = "Sin competidor"
+            a.notes.append("Ningún competidor cercano vende el mismo producto y tamaño: mantener su precio")
+        elif not item.cost:
+            a.action = "Revisar inventario"
+            a.notes.append("Sin costo en el inventario: no se puede calcular la utilidad")
+        else:
+            target = comp.price - client.undercut_cop
+            floor = a.cost / (1 - a.commission - min_margin)
+            if price < comp.price:
+                if target - price >= PRICE_TOLERANCE:
+                    a.action, a.suggested = "Subir precio", target
+                    a.notes.append("Ya es la más barata: puede subir y seguir siéndolo")
+                else:
+                    a.action = "Mantener"
+                    a.notes.append("Ya es la más barata")
+            elif target >= floor:
+                a.action, a.suggested = "Bajar precio", target
+            else:
+                a.action = "No competir"
+                a.notes.append(f"Igualar al competidor deja menos de {client.min_margin_pct:g}% de margen: "
+                               f"mantener su precio")
+        p = a.profit(price)
+        if p is not None and p < 0:
+            a.notes.append("Pierde plata con el precio actual")
+        elif p is not None and a.margin(price) < min_margin:
+            a.notes.append(f"Margen bajo con el precio actual ({a.margin(price):.1%})")
+        if listing.price_regular and listing.price_regular > price:
+            a.notes.append(f"Tiene descuento en Rappi (precio normal ${listing.price_regular:,.0f}); "
+                           f"los precios de esta hoja son precio final".replace(",", "."))
+        if units > 1:
+            a.notes.append(f"Paquete de {units}: costo × {units}")
         out.append(a)
     linked = {str(p) for p in client.rappi_listings.values()}
     for o in catalog:
         if str(o.product_id) not in linked:
-            out.append(RappiAdjustment(item=None, listing=o, action="Vincular",
-                                       notes=["Publicación sin producto del inventario vinculado: no se puede revisar"]))
-    order = {"Subir precio": 0, "Bajar precio": 0, "Revisar inventario": 1, "Revisar vínculo": 1, "Vincular": 2,
-             "No aparece en Rappi": 3, "OK": 4}
-    return sorted(out, key=lambda a: (order.get(a.action, 5), a.label))
+            out.append(ListingCheck(item=None, listing=o, action="Vincular",
+                                    notes=["Publicación sin producto del inventario vinculado: no se puede revisar"]))
+    order = {"Bajar precio": 0, "Subir precio": 0, "Desactivar": 1, "No competir": 2, "Revisar inventario": 3,
+             "Revisar vínculo": 3, "Vincular": 4, "No aparece en Rappi": 5, "Mantener": 6, "Sin competidor": 7}
+    return sorted(out, key=lambda a: (order.get(a.action, 8), a.label))
 
 
 HEADER_FILL = PatternFill("solid", fgColor="1F4E78")
@@ -580,10 +619,10 @@ def _sheet(wb, title: str, headers: List[str], rows: List[list], widths: List[in
 
 
 def write_report(config: AppConfig, suggestions: List[PriceSuggestion], vis: Dict[str, list],
-                 out_path: Path, today: date, adjustments: Optional[List[RappiAdjustment]] = None,
+                 out_path: Path, today: date, checks: Optional[List[ListingCheck]] = None,
                  probe_rows: Optional[List[dict]] = None) -> Path:
     client = config.client
-    adjustments = adjustments or []
+    checks = checks or []
     wb = openpyxl.Workbook()
     wb.remove(wb.active)
 
@@ -607,8 +646,8 @@ def write_report(config: AppConfig, suggestions: List[PriceSuggestion], vis: Dic
         ["Búsquedas medidas (última semana)", hist[1] if hist else "-"],
         ["Búsquedas donde aparece la tienda", hist[2] if hist else "-"],
         ["Costo de envío mediano de la competencia", vis.get("competitor_fee_median") or "-"],
-        [f"Precios a corregir en Rappi (pestaña 'Ajustar en Rappi', regla +{client.rappi_markup_pct:g}%)",
-         sum(1 for a in adjustments if a.needs_change)],
+        ["Publicaciones a cambiar en Rappi (pestaña 'Cambiar precio en Rappi')",
+         sum(1 for a in checks if a.needs_change)],
         [],
         ["Acción sugerida", "Productos"],
         *[[k, v] for k, v in sorted(actions.items(), key=lambda kv: -kv[1])],
@@ -622,29 +661,35 @@ def write_report(config: AppConfig, suggestions: List[PriceSuggestion], vis: Dic
         for c in ws[row]:
             c.font = Font(bold=True)
 
-    # --- Ajustar en Rappi: her listings vs her own rule (WhatsApp + markup)
-    adj_rows = []
-    for a in adjustments:
-        live = a.listing.price if a.listing else None
-        p = a.profit()
-        adj_rows.append([
+    # --- Cambiar precio en Rappi: her listings vs the cheapest competitor (ADR-014)
+    rows = []
+    for a in checks:
+        price = a.listing.price if a.listing else None
+        comp = a.competitor
+        new = a.suggested or price
+        rows.append([
             a.action, a.item.name if a.item else None, a.listing.product_name if a.listing else None,
-            a.item.stock if a.item else None, a.units if a.item else None, a.cost, a.whatsapp, a.target, live,
-            (live - a.target) if (live and a.target) else None, p, (p / a.target) if (p is not None and a.target) else None,
+            a.item.stock if a.item else None, a.cost, a.commission or None,
+            price, a.profit(price), a.margin(price),
+            comp.store_name if comp else None, comp.price if comp else None, comp.product_name if comp else None,
+            a.suggested, a.profit(new) if a.suggested else None, a.margin(new) if a.suggested else None,
+            a.whatsapp, (a.whatsapp - a.cost) if (a.whatsapp and a.cost) else None,
             "; ".join(a.notes),
         ])
-    ws = _sheet(wb, "Ajustar en Rappi",
-                ["Acción", "Producto (inventario)", "Publicación en Rappi", "Stock", "Unidades por publicación",
-                 "Costo", "Precio WhatsApp", f"Precio Rappi según su regla (+{client.rappi_markup_pct:g}%)",
-                 "Precio Rappi actual", "Diferencia (actual - regla)", "Utilidad en Rappi con la regla",
-                 "Margen en Rappi con la regla", "Notas"],
-                adj_rows, [16, 46, 46, 8, 11, 11, 11, 14, 12, 12, 13, 11, 60],
-                {6: COP, 7: COP, 8: COP, 9: COP, 10: '+#,##0;-#,##0', 11: COP, 12: PCT})
-    adj_fills = {"Subir": "FFEB9C", "Bajar": "FFEB9C", "OK": "C6EFCE", "Revisar": "F8CBAD", "Vincular": "E4DFEC",
-                 "No aparece": "DDEBF7"}
+    ws = _sheet(wb, "Cambiar precio en Rappi",
+                ["Acción", "Producto (inventario)", "Publicación en Rappi", "Stock", "Costo", "Comisión Rappi (con IVA)",
+                 "Precio Rappi actual", "Utilidad actual (después de comisión)", "Margen actual",
+                 "Competidor más barato", "Precio competidor", "Producto del competidor",
+                 f"Precio sugerido (competidor - ${client.undercut_cop:,.0f})".replace(",", "."),
+                 "Utilidad con el sugerido", "Margen con el sugerido",
+                 "Precio WhatsApp", "Utilidad en WhatsApp", "Notas"],
+                rows, [14, 44, 44, 7, 11, 10, 12, 14, 9, 22, 12, 44, 14, 13, 10, 12, 12, 60],
+                {5: COP, 6: PCT, 7: COP, 8: COP, 9: PCT, 11: COP, 13: COP, 14: COP, 15: PCT, 16: COP, 17: COP})
+    fills = {"Bajar": "FFEB9C", "Subir": "C6EFCE", "Desactivar": "F8CBAD", "No competir": "F8CBAD",
+             "Revisar": "F8CBAD", "Vincular": "E4DFEC", "No aparece": "DDEBF7", "Mantener": "C6EFCE"}
     for r in range(2, ws.max_row + 1):
         action = ws.cell(r, 1).value or ""
-        for prefix, color in adj_fills.items():
+        for prefix, color in fills.items():
             if action.startswith(prefix):
                 ws.cell(r, 1).fill = PatternFill("solid", fgColor=color)
                 break
@@ -695,12 +740,13 @@ def write_report(config: AppConfig, suggestions: List[PriceSuggestion], vis: Dic
             open_ = probe.declared_open(client, run.probed_at)
             detail.append([run.probed_at.date().isoformat(), probe.DAY_NAMES[run.probed_at.weekday()],
                            f"{run.probed_at:%H:%M}", {True: "Abierta", False: "Cerrada", None: "-"}[open_],
+                           run.rappi_status or "-",
                            {True: "Abre", False: "No abre", None: "-"}[run.store_page_ok],
                            run.searches, run.appeared, run.best_rank, run.where])
         _sheet(wb, "Visibilidad hora a hora",
-               ["Fecha", "Día", "Hora", "Según su horario", "Página de la tienda", "Búsquedas medidas",
-                "Aparece en", "Mejor posición", "Dónde aparece"],
-               detail, [12, 11, 8, 16, 18, 16, 11, 13, 80])
+               ["Fecha", "Día", "Hora", "Según su horario", "Según Rappi (tiempo de entrega)", "Página de la tienda",
+                "Búsquedas medidas", "Aparece en", "Mejor posición", "Dónde aparece"],
+               detail, [12, 11, 8, 16, 28, 18, 16, 11, 13, 80])
 
     # --- Supuestos
     ws = wb.create_sheet("Supuestos")
@@ -713,15 +759,17 @@ def write_report(config: AppConfig, suggestions: List[PriceSuggestion], vis: Dic
         ["Precio venta directa", "Columna 'Precio Venta' del inventario (lo que cobra por WhatsApp / venta directa)"],
         ["Precio que conserva el margen de venta directa", "Precio venta directa / (1 - comisión con IVA), redondeado a 100"],
         ["Margen mínimo aceptado después de comisión", f"{client.min_margin_pct}%"],
-        ["Para ser la más barata", f"{client.undercut_pct}% por debajo del competidor más barato, redondeado a 100"],
+        ["Para ser la más barata", f"${client.undercut_cop:,.0f} por debajo del competidor más barato, si queda al menos "
+                                   f"{client.min_margin_pct:g}% de margen después de la comisión".replace(",", ".")],
         ["Competencia considerada", f"Tiendas que Rappi muestra desde la dirección de la tienda, últimos {client.product_search_max_age_days} días"],
         ["Coincidencia", f"0 a 1; se exige {MIN_MATCH_SCORE} o más, la misma marca y el mismo tamaño cuando se puede verificar"],
         ["Precio del competidor creíble",
          f"Entre {client.competitor_price_ratio_min:g} y {client.competitor_price_ratio_max:g} veces el precio de venta directa; "
          "fuera de ese rango se muestra para revisar pero no se usa para sugerir precio"],
-        ["Ajustar en Rappi", f"Regla de la tienda: precio Rappi = precio WhatsApp + {client.rappi_markup_pct:g}% "
-                             f"(cubre la comisión). Se compara con el precio que Rappi muestra hoy; diferencias de hasta "
-                             f"${PRICE_TOLERANCE} se consideran iguales"],
+        ["Cambiar precio en Rappi", "Cada publicación de la tienda contra el competidor más barato con el mismo producto "
+                                    "y tamaño. Bajar: queda la más barata con margen suficiente. Subir: ya es la más "
+                                    "barata y puede subir sin dejar de serlo. No competir: igualar deja poco margen. "
+                                    "Utilidad = precio × (1 - comisión) - costo"],
         ["Visibilidad por hora", "Medición cada hora desde la dirección de la tienda: si la página de la tienda abre y en "
                                  "qué posición la muestra Rappi en algunas búsquedas (Rappi muestra unas 5 tiendas por "
                                  "búsqueda). 'Según su horario' usa el horario declarado por la tienda"],

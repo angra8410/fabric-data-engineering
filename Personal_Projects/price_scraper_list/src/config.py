@@ -80,7 +80,7 @@ class ClientConfig(BaseModel):
         "ACCESORIOS": "accesorios", "ACCESORIOS NO PET": "accesorios", "JUGUETES": "accesorios",
         "COMEDERO": "accesorios", "ASEO": "accesorios", "ARENA": "accesorios"})
     min_margin_pct: float = 10.0         # lowest margin (after commission) we suggest pricing at
-    undercut_pct: float = 1.0            # how far below the cheapest competitor to suggest
+    undercut_cop: float = 100.0          # suggest this many COP below the cheapest competitor
     # A competitor priced outside [min, max] x her direct price is most likely another
     # product or pack size: it is shown for review but never priced against.
     competitor_price_ratio_min: float = 0.4
@@ -88,8 +88,6 @@ class ClientConfig(BaseModel):
     # Barcode -> units in one Rappi listing, for items whose inventory cost/price is per
     # unit but sold as a pack on Rappi (e.g. a 4-tube pack she sells tube by tube).
     units_per_listing: Dict[str, int] = Field(default_factory=dict)
-    # Her own rule for Rappi prices: direct (WhatsApp) price + this markup, to cover the fee.
-    rappi_markup_pct: float = 20.0
     # Barcode -> Rappi product id of HER listing (names on Rappi are rewritten, so her own
     # listings are linked explicitly instead of matched by name).
     rappi_listings: Dict[str, str] = Field(default_factory=dict)

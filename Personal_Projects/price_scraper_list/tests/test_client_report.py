@@ -85,7 +85,7 @@ def test_commission_by_category():
 
 def test_cheaper_competitor_within_margin_suggests_undercut():
     s = cr.suggest_price(item("X", cost=10000, price=15000), CLIENT, offer("X", 16000))
-    assert s.suggested == 15800 and s.action.startswith("Bajar")
+    assert s.suggested == 15900 and s.action.startswith("Bajar")      # 100 COP under the competitor
     assert s.margin(s.suggested) > CLIENT.min_margin_pct / 100
 
 
@@ -97,19 +97,19 @@ def test_competitor_below_cost_is_not_chased():
 
 def test_room_above_store_margin_and_already_cheapest():
     s = cr.suggest_price(item("X", cost=15000, price=26000, category="SUPLEMENTOS"), CLIENT, offer("X", 35000))
-    assert s.action.startswith("Puede ser") and s.suggested == 34600
+    assert s.action.startswith("Puede ser") and s.suggested == 34900
     s = cr.suggest_price(item("X", cost=15000, price=26000, category="SUPLEMENTOS"), CLIENT, offer("X", 35000),
                          rappi_price=31000)
-    assert s.action.startswith("Ya es la más barata: puede subir") and s.suggested == 34600
+    assert s.action.startswith("Ya es la más barata: puede subir") and s.suggested == 34900
     s = cr.suggest_price(item("X", cost=15000, price=26000, category="SUPLEMENTOS"), CLIENT, offer("X", 35000),
-                         rappi_price=34700)
-    assert s.action == "Ya es la más barata: mantener precio" and s.suggested == 34700
+                         rappi_price=34950)
+    assert s.action == "Ya es la más barata: mantener precio" and s.suggested == 34950
 
 
 def test_already_cheapest_with_thin_margin_is_never_told_to_go_above_competitor():
     # synthetic: thin margin at the current Rappi price, competitor slightly above her
     s = cr.suggest_price(item("X", cost=130000, price=170000), CLIENT, offer("X", 165000), rappi_price=158000)
-    assert s.suggested == 163300 and s.suggested < 165000
+    assert s.suggested == 164900 and s.suggested < 165000
     assert s.margin(s.suggested) > s.margin(158000)
     assert any("Margen bajo" in n for n in s.notes)
 
@@ -144,7 +144,7 @@ def test_units_per_listing_prices_the_pack(tmp_path):
     it = item("MARCA GATO SNACK TUBOS 4 PIEZAS 56 GR", cost=2000, price=3000, category="SNACKS")
     (s,) = cr.build_suggestions(config, db, [it], TODAY)
     assert s.units == 4 and s.item.cost == 8000 and s.item.store_price == 12000
-    assert not s.competitor_suspect and s.suggested == 11800 and s.action.startswith("Bajar")
+    assert not s.competitor_suspect and s.suggested == 11900 and s.action.startswith("Bajar")
     assert any("Paquete de 4" in n for n in s.notes)
 
 
@@ -203,14 +203,14 @@ def test_inventory_selection_and_report(tmp_path):
     assert vis["per_query"][0][1] is None and vis["competitor_fee_median"] == 6000
 
     client = CLIENT.model_copy(update={"rappi_listings": {"222": "6"}})
-    adj = cr.rappi_adjustments(client, items, cr.load_client_catalog(db, client))
-    assert [(a.action, a.target) for a in adj] == [("Bajar precio", 21600)]   # 18000 x 1.2 vs 22800 live
-    out = cr.write_report(config, sugg, vis, tmp_path / "r.xlsx", TODAY, adj)
+    checks = cr.listing_checks(client, items, cr.load_client_catalog(db, client), [])
+    assert [(c.action, c.listing.price) for c in checks] == [("Sin competidor", 22800)]
+    out = cr.write_report(config, sugg, vis, tmp_path / "r.xlsx", TODAY, checks)
     wb = openpyxl.load_workbook(out)
-    assert wb.sheetnames == ["Resumen", "Ajustar en Rappi", "Precios Rappi", "Visibilidad", "Visibilidad semanal",
-                             "Supuestos"]
+    assert wb.sheetnames == ["Resumen", "Cambiar precio en Rappi", "Precios Rappi", "Visibilidad",
+                             "Visibilidad semanal", "Supuestos"]
     assert wb["Precios Rappi"]["A2"].value == "BIOCANIS X 14 G"
-    assert wb["Ajustar en Rappi"]["B2"].value == "ARENA MAIZ CAT 4 KG"
+    assert wb["Cambiar precio en Rappi"]["B2"].value == "ARENA MAIZ CAT 4 KG"
     assert wb["Visibilidad"]["B2"].value == "No aparece"
 
 
@@ -221,32 +221,41 @@ def test_inventory_path_pattern_picks_newest_backup(tmp_path):
     assert cr.inventory_file(client).name == "Tienda_Backup_2026-11-10.xlsx"
 
 
-# ------------------------------------------------------------------ ajustar en Rappi
-def test_rappi_adjustments_follow_her_markup_rule():
-    client = CLIENT.model_copy(update={
-        "rappi_markup_pct": 20.0, "units_per_listing": {"p": 4},
-        "rappi_listings": {"ok": "1", "up": "2", "down": "3", "gone": "4", "nostock": "5", "p": "6", "old": "7"}})
-    inv = [cr.InventoryItem("ok", "A", "CONCENTRADOS", 8000, 10000, 1),
-           cr.InventoryItem("up", "B", "CONCENTRADOS", 8000, 10000, 1),
-           cr.InventoryItem("down", "C", "ARENA", 8000, 10000, 1),
-           cr.InventoryItem("gone", "D", "CONCENTRADOS", 8000, 10000, 1),
-           cr.InventoryItem("nostock", "E", "CONCENTRADOS", 8000, 10000, 0),
-           cr.InventoryItem("p", "F", "SNACKS", 2000, 3000, 8)]
-    live = lambda pid, price: cr.Offer("1", "Tienda", f"Listing {pid}", price, None, None, TODAY, pid)
-    catalog = [live("1", 12050), live("2", 11000), live("3", 13000), live("5", 12000), live("6", 14400),
-               live("9", 5000)]
-    adj = {(a.barcode or a.listing.product_id): a for a in cr.rappi_adjustments(client, inv, catalog)}
-    assert adj["ok"].action == "OK" and adj["ok"].target == 12000          # within the 100 COP tolerance
-    assert adj["up"].action == "Subir precio"
-    assert adj["down"].action == "Bajar precio"
-    assert adj["gone"].action == "No aparece en Rappi"
-    assert adj["nostock"].action == "OK" and any("Sin stock" in n for n in adj["nostock"].notes)
-    assert adj["p"].target == 14400 and adj["p"].action == "OK" and adj["p"].cost == 8000
-    assert adj["old"].action == "Revisar vínculo"
-    assert adj["9"].action == "Vincular" and adj["9"].item is None
-    assert round(adj["up"].profit()) == round(12000 * (1 - CLIENT.commission_rate("CONCENTRADOS")) - 8000)
-    ordered = cr.rappi_adjustments(client, inv, catalog)
-    assert ordered[0].needs_change and ordered[-1].action == "OK"
+# ------------------------------------------------------------------ cambiar precio en Rappi
+def test_listing_checks_price_100_under_cheapest_competitor():
+    # synthetic: each product has its own brand so it only matches its own competitor offer
+    client = CLIENT.model_copy(update={"rappi_listings": {
+        "cut": "1", "up": "2", "keep": "3", "thin": "4", "solo": "5", "nostock": "6", "gone": "7", "old": "8"}})
+    inv = [cr.InventoryItem("cut", "ALFA GATO 1 KG", "CONCENTRADOS", 7000, 10000, 2),
+           cr.InventoryItem("up", "BETA GATO 1 KG", "CONCENTRADOS", 7000, 10000, 2),
+           cr.InventoryItem("keep", "GAMA GATO 1 KG", "CONCENTRADOS", 7000, 10000, 2),
+           cr.InventoryItem("thin", "DELTA GATO 1 KG", "CONCENTRADOS", 7500, 10000, 2),
+           cr.InventoryItem("solo", "EPSILON GATO 1 KG", "CONCENTRADOS", 7500, 9000, 2),
+           cr.InventoryItem("nostock", "ZETA GATO 1 KG", "CONCENTRADOS", 7000, 10000, 0),
+           cr.InventoryItem("gone", "ETA GATO 1 KG", "CONCENTRADOS", 7000, 10000, 2)]
+    mine = lambda pid, price, regular=None: cr.Offer("1", "Tienda", f"Listing {pid}", price, None, None, TODAY,
+                                                     pid, regular)
+    catalog = [mine("1", 12000, 13000), mine("2", 9000), mine("3", 10950), mine("4", 12000), mine("5", 8000),
+               mine("6", 12000), mine("9", 5000)]
+    offers = [offer("Alfa Gato 1 Kg", 11000), offer("Alfa Gato 1 Kg", 11500, store="Otra"),
+              offer("Beta Gato 1 Kg", 11000), offer("Gama Gato 1 Kg", 11000), offer("Delta Gato 1 Kg", 8000),
+              offer("Zeta Gato 1 Kg", 11000)]
+    checks = cr.listing_checks(client, inv, catalog, offers)
+    c = {(x.barcode or x.listing.product_id): x for x in checks}
+    assert c["cut"].action == "Bajar precio" and c["cut"].suggested == 10900      # cheapest (11000) - 100
+    assert any("descuento" in n for n in c["cut"].notes)
+    assert c["up"].action == "Subir precio" and c["up"].suggested == 10900        # already cheapest, room to rise
+    assert c["keep"].action == "Mantener" and c["keep"].suggested is None         # 10950 vs 10900: not worth it
+    assert c["thin"].action == "No competir" and c["thin"].suggested is None      # 7900 leaves < 10% margin
+    assert c["solo"].action == "Sin competidor" and any("Pierde plata" in n for n in c["solo"].notes)
+    assert c["nostock"].action == "Desactivar"
+    assert c["gone"].action == "No aparece en Rappi"
+    assert c["old"].action == "Revisar vínculo"
+    assert c["9"].action == "Vincular"
+    commission = CLIENT.commission_rate("CONCENTRADOS")
+    assert round(c["cut"].profit(10900)) == round(10900 * (1 - commission) - 7000)
+    assert c["cut"].margin(10900) >= CLIENT.min_margin_pct / 100
+    assert checks[0].needs_change and checks[-1].action == "Sin competidor"
 
 
 # ------------------------------------------------------------------ config / scraper helpers

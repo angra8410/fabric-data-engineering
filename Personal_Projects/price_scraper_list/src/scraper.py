@@ -296,7 +296,11 @@ class RappiScraper:
     ) -> List[dict]:
         """Crawls a store's home, aisles and sub-aisles and returns every listed product."""
         root = f"/tiendas/{slug}"
-        queue, seen, raw_by_id = [root], set(), {}
+        # The store home can redirect to Rappi's directory (seen 2026-11-11 while the store
+        # was open), so also start from an in-store search for the store's own name: it
+        # always lists products and links to the aisles. Each view caps at ~27 products.
+        in_store_search = f"{root}/s?term={urllib.parse.quote(store_name.lower())}"
+        queue, seen, raw_by_id = [root, in_store_search], set(), {}
         while queue and len(seen) < max_pages:
             path = queue.pop(0)
             if path in seen:
@@ -353,6 +357,22 @@ class RappiScraper:
             finally:
                 await browser.close()
         return result
+
+    async def crawl_client_catalog(self, zone: ZoneConfig, client, headless: bool = True) -> int:
+        """Re-reads the client's own Rappi listings and prices (twice-weekly price check)."""
+        base = self.zone_base(zone, self.run_stamp())
+        async with async_playwright() as p:
+            browser = await p.chromium.launch(headless=headless)
+            try:
+                context, page = await self.new_zone_page(browser, zone)
+                try:
+                    records = await self.scrape_store_catalog(page, zone, client.store_id, client.store_slug,
+                                                              client.name, base)
+                finally:
+                    await context.close()
+            finally:
+                await browser.close()
+        return self.db.insert_snapshots(records)
 
     async def probe_visibility(self, zone: ZoneConfig, store_id: str, store_slug: str, queries: List[str],
                                headless: bool = True) -> List[dict]:

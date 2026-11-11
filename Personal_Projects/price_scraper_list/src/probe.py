@@ -115,6 +115,16 @@ class HourRun:
     appeared: int
     best_rank: Optional[int]
     where: str
+    rappi_status: Optional[str] = None   # her delivery-time text: "29 min o prog." = open, "Hoy, 4 PM" = opens at 4
+
+
+def rappi_status(eta: Optional[str]) -> Optional[str]:
+    """Rappi's own open/closed signal from the delivery-time text next to her store."""
+    if not eta:
+        return None
+    if "min" in eta.lower():
+        return f"Abierta ({eta})"
+    return f"Cerrada, abre {eta}"
 
 
 def runs(rows: List[Dict[str, Any]]) -> List[HourRun]:
@@ -132,7 +142,8 @@ def runs(rows: List[Dict[str, Any]]) -> List[HourRun]:
             store_page_products=page["store_page_products"] if page else None,
             searches=len(searches), appeared=len(hits),
             best_rank=min((r["her_rank"] for r in hits), default=None),
-            where=", ".join(f"{r['check_name']} (#{r['her_rank']})" for r in hits)))
+            where=", ".join(f"{r['check_name']} (#{r['her_rank']})" for r in hits),
+            rappi_status=rappi_status(next((r["her_eta"] for r in hits if r.get("her_eta")), None))))
     return out
 
 
@@ -158,5 +169,6 @@ def summary_line(rows: List[Dict[str, Any]]) -> str:
     run = runs(rows)[-1]
     page = {True: f"store page opens ({run.store_page_products} products)", False: "store page does NOT open",
             None: "store page not checked"}[run.store_page_ok]
-    return f"{run.probed_at:%Y-%m-%d %H:%M}: {page}; listed in {run.appeared}/{run.searches} searches" + (
-        f" ({run.where})" if run.where else "")
+    return (f"{run.probed_at:%Y-%m-%d %H:%M}: {page}; listed in {run.appeared}/{run.searches} searches"
+            + (f" ({run.where})" if run.where else "")
+            + (f"; Rappi status: {run.rappi_status}" if run.rappi_status else ""))

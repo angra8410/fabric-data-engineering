@@ -1,0 +1,32 @@
+country: "co"
+base_url: "https://www.rappi.com.co"
+database_path: "data/rappi_prices.duckdb"
+
+zones:
+  - id: "poblado"
+    name: "El Poblado"
+    city: "Medellín"
+    lat: 6.2088
+    lng: -75.5678
+    address: "El Poblado, Medellín, Antioquia"
+  - id: "sabaneta"
+    name: "Sabaneta"
+    city: "Sabaneta"
+    lat: 6.1514
+    lng: -75.6158
+    address: "Sabaneta, Antioquia"
+
+search_queries:
+  # Medical and premium dog food
+  - "hills perro"
+  - "royal canin perro"
+  - "pro plan veterinary perro"
+  - "vet life perro medicado"
+  # Medical and premium cat food
+  - "hills gato"
+  - "royal canin gato"
+  - "pro plan veterinary gato"
+  - "vet life gato medicado"
+  # Target stores / brands
+  - "tierragro perro"
+  - "tierragro gato"

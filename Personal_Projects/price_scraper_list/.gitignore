@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Data and run artifacts are not versioned (see decisions.md ADR-007)
+data/
+logs/
+
+# Private client configuration (store, location, inventory path)
+config/settings.local.yaml

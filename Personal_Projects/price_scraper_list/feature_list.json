@@ -1,0 +1,194 @@
+{
+  "$comment": "Source of truth for scope and progress. One feature in-progress at a time. 'done' requires evidence: command, outcome, date.",
+  "project": "price_scraper_list",
+  "verification": {
+    "full": ".\\init.ps1",
+    "smoke": ".\\init.ps1 -Smoke",
+    "pipeline": ".\\run_weekly.ps1",
+    "report": ".venv\\Scripts\\python.exe analysis.py"
+  },
+  "features": [
+    {
+      "id": "F1",
+      "name": "Baseline scraper pipeline",
+      "description": "Playwright scraper with Rappi location-cookie injection per zone, COP parser, DuckDB storage, CLI (run/stats/export/query), analysis report.",
+      "dependencies": [],
+      "status": "done",
+      "acceptance": [
+        "Location cookie changes the stores returned per zone",
+        "main.py run stores snapshots; stats/export/query work"
+      ],
+      "evidence": "2026-11-05: probe showed different store sets for El Poblado, Sabaneta and Bogotá with the cookie; initial run stored 171 rows (query 'hills perro')."
+    },
+    {
+      "id": "F2",
+      "name": "Store-aware data model and views",
+      "description": "Capture store_id/store_name/product_id from data-qa attributes; key snapshots by day+zone+store+product; pack_size from unit price; per-zone latest view; generic N-zone comparison; best-price-by-store view; trends per offer. ADR-001, ADR-002.",
+      "dependencies": [
+        "F1"
+      ],
+      "status": "done",
+      "acceptance": [
+        "No duplicate offers per day/zone/store/product",
+        "Zone comparison compares same product and pack size only",
+        "v1 database migrated without losing rows"
+      ],
+      "evidence": "2026-11-05: .\\run_weekly.ps1 from C:\\Windows\\System32 -> exit 0, 1,621 offers from 25 stores, 0 unparsed cards; legacy 171 rows kept in product_snapshots_legacy_v1; analysis.py sections 1-5 render; zone diffs 5-22% after pack_size."
+    },
+    {
+      "id": "F3",
+      "name": "Scheduled-run hardening",
+      "description": "Project-root path resolution, Colombia local dates + ISO weeks, UTF-8 output, run_weekly.ps1 with cwd fix, transcript logs, exit codes; init.ps1 with fail-fast + tests; requirements as UTF-8 + requirements-dev.txt; pytest suite. ADR-006.",
+      "dependencies": [
+        "F1"
+      ],
+      "status": "done",
+      "acceptance": [
+        "run_weekly.ps1 works when launched from System32",
+        "init.ps1 stops on first failing step"
+      ],
+      "evidence": "2026-11-05: run_weekly.ps1 from System32 exit 0; init.ps1 from System32 exit 0 (tests pass)."
+    },
+    {
+      "id": "F4",
+      "name": "Cross-store product matching",
+      "description": "Persisted product_key (normalized, order-insensitive name) with v2->v3 migration/backfill; views group by product_key + pack_size. ADR-003.",
+      "dependencies": [
+        "F2"
+      ],
+      "status": "done",
+      "acceptance": [
+        "Differently worded names of the same product share a key",
+        "Distinct variants (i/d vs k/d, mini vs medium, strengths) do not",
+        "Existing DB backfilled on open"
+      ],
+      "evidence": "2026-11-05: pytest 47 passed (match_key merge/split cases, v2 backfill test); real DB backfilled 604 names -> 553 keys; cross-store matches 399 -> 404."
+    },
+    {
+      "id": "F5",
+      "name": "Markup-drift detection and relevance filter",
+      "description": "RunResult tracks empty/failed queries and text-fallback cards; exit 2 when degraded; debug HTML+PNG dumps to logs/debug; drop results unrelated to the query. ADR-004, ADR-005.",
+      "dependencies": [
+        "F2"
+      ],
+      "status": "done",
+      "acceptance": [
+        "Degraded runs exit 2 and still export",
+        "Empty/unparseable pages are dumped to logs/debug",
+        "Fuzzy-matched unrelated products are not stored"
+      ],
+      "evidence": "2026-11-05: pytest exit-code + fallback-flag tests pass; offline dump test wrote logs/debug/*.html/.png; .\\init.ps1 -Smoke exit 0 (84/84 cards structured, 0 fallback); filter removed 203/1,621 existing rows, all 380 medical rows kept."
+    },
+    {
+      "id": "F6",
+      "name": "Register weekly Windows Task Scheduler job",
+      "description": "Create the scheduled task (weekly, Wednesday 10:00 via register_task.ps1, ADR-008) running run_weekly.ps1 and confirm Last Run Result = 0 after the first scheduled execution.",
+      "dependencies": [
+        "F3"
+      ],
+      "status": "done",
+      "acceptance": [
+        "Task exists (Get-ScheduledTask) with the documented action",
+        "First run via Task Scheduler produces a complete logs/run_*.log and Last Run Result 0"
+      ],
+      "evidence": "2026-11-05: user ran register_task.ps1 -> task 'Rappi Price Scraper (weekly)' registered, NextRunTime 2026-11-11 10:00. Start-ScheduledTask -> LastRunTime 12:44:24, LastTaskResult 0; 1,496 offers saved/updated (DB 1,422 rows, 382 medical), exports refreshed 12:47. Found PS 5.1 Start-Transcript dropping python output in hidden window; run_weekly.ps1 now writes every line to the log (UTF-8). Re-verified hidden from System32 with a 1-query temp config: exit 0, complete log."
+    },
+    {
+      "id": "F7",
+      "name": "Validate week-over-week trends with real data",
+      "description": "After a second weekly run (>= 2026-11-09), check v_weekly_trends returns rows, store/product ids are stable across weeks, and pct_change values are plausible.",
+      "dependencies": [
+        "F2",
+        "F6"
+      ],
+      "status": "not-started",
+      "acceptance": [
+        "v_weekly_trends non-empty after the second run",
+        "Spot-check 5 offers against Rappi"
+      ],
+      "evidence": "",
+      "note": "Unblocked 2026-11-11: scheduled run added a third run date."
+    },
+    {
+      "id": "F8",
+      "name": "Client store competitive diagnosis (VelykaPet, Itagüí)",
+      "description": "Explain low Rappi sales of the client store 900483846 vs competitors: search visibility from her address, catalog breadth and availability, price index vs competitors on shared products, listing price vs in-store price, margins. Client sales data and findings live only in data/client/ (git-ignored).",
+      "dependencies": [
+        "F2",
+        "F4"
+      ],
+      "status": "done",
+      "acceptance": [
+        "Visibility measured from the store's own coordinates for the queries her customers use",
+        "Price index vs competitors on shared products with matching pack size",
+        "Findings + recommendations delivered to the user; client answers to open questions recorded",
+        "Decision on turning the probes into a recurring client report -> F9"
+      ],
+      "evidence": "2026-11-05: probes from the store coordinates (search visibility, catalog, competitor offers), contract and partner-portal review; diagnosis + recommendations delivered to the user. Private details only in data/client/."
+    },
+    {
+      "id": "F9",
+      "name": "Client pricing sheet + weekly visibility tracker",
+      "description": "Private overlay config (config/settings.local.yaml) with client store/zone/queries; search_store_ranks + v_store_visibility; weekly crawl of the client catalog; client-report command: inventory <-> Rappi matching (ADR-010), commission-aware price suggestions, Spanish Excel (Resumen, Precios Rappi, Visibilidad, Visibilidad semanal, Supuestos); wired into run_weekly.ps1.",
+      "dependencies": [
+        "F8"
+      ],
+      "status": "done",
+      "acceptance": [
+        "Weekly run records store positions and the client catalog",
+        "client-report produces the Excel; matches reviewed for false positives",
+        "Already-cheapest products are never told to price above the competitor",
+        "No client data in committed files"
+      ],
+      "evidence": "2026-11-05: pytest 74 passed (matching true/false pairs, pricing rules incl. already-cheapest, inventory loader, report sheets, overlay merge, header parsing); live: main.py run --zone <client zone> exit 0 (24 searches, catalog 21 products from 15 pages); main.py client-report exit 0 (123 product searches, 145 products, 58 matched, 13 published); manual review of matches; leak scan of committed files clean."
+    },
+    {
+      "id": "F10",
+      "name": "Client report: price sanity check, units per listing, stricter flavours",
+      "description": "Fixes from review of the 2026-11-11 report: competitors priced outside 0.4-2.5x her direct price are flagged 'Revisar coincidencia' and not priced against; client.units_per_listing scales per-unit cost/price to the Rappi pack; flavour sets must be equal (more flavours, English mapped); sub-lines (pops/bites/rolls) must agree. ADR-011.",
+      "dependencies": [
+        "F9"
+      ],
+      "status": "done",
+      "acceptance": [
+        "Per-unit items configured as packs are compared pack-to-pack",
+        "Implausibly priced matches are shown but never drive the suggestion",
+        "Different flavours and sub-lines of the same brand do not match",
+        "No client data in committed files"
+      ],
+      "evidence": "2026-11-11: .\\init.ps1 exit 0, pytest 85 passed (new: flavour/sub-line false pairs, Churu true pairs, ratio check, pack hint, units_per_listing). main.py client-report --search none --out <v2> exit 0: only the configured pack items and the brand-less accessory changed; 56 matched (was 58, both removed matches were wrong)."
+    },
+    {
+      "id": "F11",
+      "name": "Client report: 'Ajustar en Rappi' tab (her +20% rule)",
+      "description": "Weekly tab comparing each of her linked Rappi listings (barcode -> product id, private overlay) with WhatsApp price x (1 + rappi_markup_pct): Subir/Bajar/OK, unlinked listings, linked listings missing, stock-0 notes; inventory_path glob picks the newest backup. ADR-012.",
+      "dependencies": [
+        "F9",
+        "F10"
+      ],
+      "status": "done",
+      "acceptance": [
+        "Every listing in her live catalog appears in the tab (linked or 'Vincular')",
+        "Target follows her rule, including pack listings",
+        "Runs inside the weekly client-report with no manual step besides dropping a new backup in data/client/",
+        "No client data in committed files"
+      ],
+      "evidence": "2026-11-11: .\\init.ps1 exit 0, pytest 87 passed (new: markup rule actions, tolerance, pack target, unlinked/missing links, sheet order, newest-backup glob). main.py client-report --search none --out <v3> exit 0: 27 listings -> 13 OK, 9 Subir, 2 Bajar, 3 Vincular."
+    },
+    {
+      "id": "F12",
+      "name": "Hourly client visibility probe",
+      "description": "main.py probe + run_probe.ps1 + register_probe_task.ps1 (hourly 09:15-20:15, daily, time-limited): her store page opens? + her rank in ~9 searches; separate DB; report tabs 'Visibilidad por hora' / 'Visibilidad hora a hora'. ADR-013.",
+      "dependencies": [
+        "F9"
+      ],
+      "status": "in-progress",
+      "acceptance": [
+        "Probe writes only data/visibility_probe.duckdb and never runs in parallel with the weekly task",
+        "Task registered by the user and running hourly; logs in logs/probe_<date>.log",
+        "After the period: hourly summary delivered (when her store page opens, when she is listed) and task removed"
+      ],
+      "evidence": "2026-11-11: .\\init.ps1 exit 0, pytest 91 passed (new tests/test_probe.py: row building, declared hours/holidays, save/load idempotent, hourly summary, report sheets). Live: run_probe.ps1 exit 0 at 15:39 (store page redirected to directory; listed 1/9, #1 in control search). Scripts parse OK. Pending: user runs register_probe_task.ps1 (agent cannot create scheduled tasks)."
+    }
+  ]
+}

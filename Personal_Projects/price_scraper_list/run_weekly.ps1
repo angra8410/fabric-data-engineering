@@ -5,6 +5,7 @@ param (
 
 # Task Scheduler starts in C:\Windows\System32: always work from the project folder.
 Set-Location $PSScriptRoot
+. "$PSScriptRoot\scrape_lock.ps1"
 $env:PYTHONIOENCODING = "utf-8"
 try { [Console]::OutputEncoding = [System.Text.Encoding]::UTF8 } catch { }
 $VenvPython = Join-Path $PSScriptRoot ".venv\Scripts\python.exe"
@@ -40,6 +41,12 @@ try {
     Write-Log "User: $env:USERNAME | Config: $ConfigPath" Cyan
     Write-Log "==========================================" Cyan
 
+    # One browser at a time on Rappi: wait for the hourly probe / price check, but never skip the weekly run.
+    if (-not (Enter-ScrapeLock -Minutes 20)) {
+        Write-Log "WARNING: another scraping job still running after 20 minutes - continuing anyway." Yellow
+        Set-Content -Path $ScrapeLock -Value $PID
+    }
+
     $code = Invoke-Python @("main.py", "--config", $ConfigPath, "run")
     if ($code -eq 2) {
         Write-Log "WARNING: scrape degraded - exporting what was saved, run will report exit 2." Yellow
@@ -66,6 +73,7 @@ catch {
     $exitCode = 1
 }
 finally {
+    Exit-ScrapeLock
     Write-Log "Finished at $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') with exit code $exitCode"
     # keep the last 26 logs (~6 months)
     Get-ChildItem $LogDir -Filter "run_*.log" | Sort-Object Name -Descending | Select-Object -Skip 26 | Remove-Item -Force

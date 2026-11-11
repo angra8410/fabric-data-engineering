@@ -167,6 +167,7 @@
         "F10"
       ],
       "status": "done",
+      "note": "Markup rule superseded by F13 / ADR-014 (her prices are set per product, not by a fixed rule).",
       "acceptance": [
         "Every listing in her live catalog appears in the tab (linked or 'Vincular')",
         "Target follows her rule, including pack listings",
@@ -189,6 +190,24 @@
         "After the period: hourly summary delivered (when her store page opens, when she is listed) and task removed"
       ],
       "evidence": "2026-11-11: .\\init.ps1 exit 0, pytest 91 passed (new tests/test_probe.py: row building, declared hours/holidays, save/load idempotent, hourly summary, report sheets). Live: run_probe.ps1 exit 0 at 15:39 (store page redirected to directory; listed 1/9, #1 in control search). Scripts parse OK. Pending: user runs register_probe_task.ps1 (agent cannot create scheduled tasks)."
+    },
+    {
+      "id": "F13",
+      "name": "Twice-weekly competitor price check (100 COP under the cheapest)",
+      "description": "'Cambiar precio en Rappi' tab replaces the +20% rule: per linked listing, profit after commission, cheapest matching competitor, suggestion = competitor - 100 COP if >= 10% margin remains (Bajar/Subir/Mantener/No competir/Sin competidor/Desactivar). client-report --search stock --catalog; run_prices.ps1 + register_prices_task.ps1 (Mon + Thu 07:30); shared scrape lock for all jobs. ADR-014.",
+      "dependencies": [
+        "F10",
+        "F11",
+        "F12"
+      ],
+      "status": "in-progress",
+      "acceptance": [
+        "Suggested price = cheapest matching competitor - 100 COP only when >= 10% margin remains after commission",
+        "Every in-stock product is searched again on each price check; her own listings are refreshed",
+        "Only one scraping job runs on Rappi at a time",
+        "Task registered by the user and the first scheduled run produces the Excel"
+      ],
+      "evidence": "2026-11-11: .\\init.ps1 exit 0, pytest 92 passed (new listing-check rules test; pricing tests moved to the 100 COP rule). Lock: probe skipped with a live foreign lock, stale lock ignored. Live run_prices.ps1 exit 0 in 13.5 min: 35 listings, 82 searches, 4,742 offers, 0 failed; tab: Bajar 2, Subir 1, Desactivar 1, No competir 12, Sin competidor 17, Vincular 2. Pending: user runs register_prices_task.ps1."
     }
   ]
 }

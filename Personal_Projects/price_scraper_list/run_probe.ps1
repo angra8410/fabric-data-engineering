@@ -5,6 +5,7 @@ param (
 )
 
 Set-Location $PSScriptRoot
+. "$PSScriptRoot\scrape_lock.ps1"
 $env:PYTHONIOENCODING = "utf-8"
 $VenvPython = Join-Path $PSScriptRoot ".venv\Scripts\python.exe"
 $LogDir = Join-Path $PSScriptRoot "logs"
@@ -20,10 +21,9 @@ function Write-Log([string]$Message) {
 $exitCode = 0
 try {
     Write-Log "---- probe $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
-    # Never scrape in parallel with the weekly run (one browser at a time on Rappi).
-    $weekly = Get-ScheduledTask -TaskName "Rappi Price Scraper (weekly)" -ErrorAction SilentlyContinue
-    if ($weekly -and $weekly.State -eq "Running") {
-        Write-Log "Skipped: the weekly run is in progress."
+    # Never scrape in parallel with another job (one browser at a time on Rappi).
+    if (-not (Enter-ScrapeLock -Minutes 0)) {
+        Write-Log "Skipped: another scraping job (weekly run or price check) is in progress."
     }
     else {
         $ErrorActionPreference = "Continue"
@@ -36,6 +36,7 @@ catch {
     $exitCode = 1
 }
 finally {
+    Exit-ScrapeLock
     Write-Log "exit $exitCode"
     Get-ChildItem $LogDir -Filter "probe_*.log" | Sort-Object Name -Descending | Select-Object -Skip 30 | Remove-Item -Force
 }

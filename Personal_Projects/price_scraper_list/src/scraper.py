@@ -358,6 +358,22 @@ class RappiScraper:
                 await browser.close()
         return result
 
+    async def crawl_client_catalog(self, zone: ZoneConfig, client, headless: bool = True) -> int:
+        """Re-reads the client's own Rappi listings and prices (twice-weekly price check)."""
+        base = self.zone_base(zone, self.run_stamp())
+        async with async_playwright() as p:
+            browser = await p.chromium.launch(headless=headless)
+            try:
+                context, page = await self.new_zone_page(browser, zone)
+                try:
+                    records = await self.scrape_store_catalog(page, zone, client.store_id, client.store_slug,
+                                                              client.name, base)
+                finally:
+                    await context.close()
+            finally:
+                await browser.close()
+        return self.db.insert_snapshots(records)
+
     async def probe_visibility(self, zone: ZoneConfig, store_id: str, store_slug: str, queries: List[str],
                                headless: bool = True) -> List[dict]:
         """

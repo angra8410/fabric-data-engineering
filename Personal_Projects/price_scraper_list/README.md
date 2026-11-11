@@ -156,7 +156,8 @@ client:
   zone_id: "store_zone"
   inventory_path: "data/client/<Store>_Backup_*.xlsx"  # sheets 'Inventario DEFINITIVO' (+ 'VENTAS');
                                                # a '*' pattern uses the newest file by name
-  rappi_markup_pct: 20                         # her rule: Rappi price = WhatsApp price + 20%
+  undercut_cop: 100                            # suggest 100 COP below the cheapest competitor...
+  min_margin_pct: 10                           # ...if at least 10% margin remains after commission
   rappi_listings:                              # her own listings: barcode -> Rappi product id
     "<barcode>": "<product id>"
   units_per_listing:                           # optional: sold by the unit, listed as a pack on Rappi
@@ -182,10 +183,14 @@ client:
 
 ```powershell
 .venv\Scripts\python.exe main.py client-report                 # searches products not checked in 30 days
+.venv\Scripts\python.exe main.py client-report --search stock --catalog   # her listings + every in-stock product
 .venv\Scripts\python.exe main.py client-report --search none   # rebuild the Excel from stored data only
+.\register_prices_task.ps1           # price check Monday + Thursday 07:30 (run_prices.ps1, ADR-014); -Remove
 ```
 
-With a client configured, the weekly run also records the store's search positions, crawls its full catalog and refreshes the Excel (`data/client/reports/<name>_Rappi_<date>.xlsx`, in Spanish): **Resumen**, **Ajustar en Rappi** (each linked listing's live Rappi price vs her rule WhatsApp + `rappi_markup_pct`: Subir / Bajar / OK, plus listings not linked yet and linked ones missing this week), **Precios Rappi** (cost, Rappi commission from the contract, current Rappi price, cheapest matching competitor, suggested price, action), **Visibilidad** and **Visibilidad semanal**, **Visibilidad por hora** / **Visibilidad hora a hora** (only once the hourly probe has data), **Supuestos**. Product matching is deliberately strict (brand both ways, dog/cat, life stage, breed size, medical line, flavour, product sub-line, pack size) — a missed match is better than a wrong price. A competitor whose price is far from hers is flagged "Revisar coincidencia" instead of being priced against. Rules: `decisions.md` ADR-009/010/011.
+The weekly run, the price check and the hourly probe share `data/.scrape.lock` (`scrape_lock.ps1`), so only one browser works on Rappi at a time.
+
+With a client configured, the weekly run also records the store's search positions, crawls its full catalog and refreshes the Excel (`data/client/reports/<name>_Rappi_<date>.xlsx`, in Spanish): **Resumen**, **Cambiar precio en Rappi** (each linked listing: profit after commission at her current Rappi price, cheapest matching competitor, suggested price = competitor − 100 COP when ≥ 10% margin remains: Bajar / Subir / Mantener / No competir / Sin competidor / Desactivar, plus listings not linked yet), **Precios Rappi** (cost, Rappi commission from the contract, current Rappi price, cheapest matching competitor, suggested price, action), **Visibilidad** and **Visibilidad semanal**, **Visibilidad por hora** / **Visibilidad hora a hora** (only once the hourly probe has data), **Supuestos**. Product matching is deliberately strict (brand both ways, dog/cat, life stage, breed size, medical line, flavour, product sub-line, pack size) — a missed match is better than a wrong price. A competitor whose price is far from hers is flagged "Revisar coincidencia" instead of being priced against. Rules: `decisions.md` ADR-009/010/011/014.
 
 ---
 

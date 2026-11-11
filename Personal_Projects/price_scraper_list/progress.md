@@ -1,8 +1,8 @@
 # Session Progress Log: price_scraper_list
 
 **Last Updated:** 2026-11-11
-**Active Feature:** F12 hourly visibility probe (collecting data once the task is registered). Also open: F7.
-**Harness Status:** Healthy — `.\init.ps1` passes (91 tests).
+**Active Feature:** F12 hourly probe (collecting until 2026-11-25) and F13 price check (waiting for task registration). Also open: F7.
+**Harness Status:** Healthy — `.\init.ps1` passes (92 tests).
 
 ---
 
@@ -28,6 +28,7 @@
 - F11: "Ajustar en Rappi" tab (her WhatsApp +20% rule, ADR-012). 24 of her 27 listings linked by hand in the overlay; 3 left as "Vincular" (ambiguous: Br For Dogs cordero adult/puppy, Disugual conejo two barcodes, Dogzymes without barcode). Inventory switched to the 2026-11-10 backup via `VelyKaPet_Backup_*.xlsx` (newest wins). Report v3 rebuilt offline.
 - F12 (in progress): hourly visibility probe (ADR-013). Live finding 2026-11-11: Rappi lists exactly 5 stores per search (no "more"); her store home redirected to the store directory at 15:35-15:40 (loaded fine at ~10:08) while she ranked #1 for "agility adulto gato". Declared hours: Mon-Fri 10-20, weekends/holidays 10-18. Task registered by the user; first scheduled run 16:15 OK (result 0). The client was away until 16:00 (store closed: Rappi showed "Hoy, 4 PM"); from 16:15 Rappi shows "29 min o prog." (open) but the store home page still redirects — open question, separate from opening hours. Hour-by-hour sheet now shows Rappi's status.
 - Catalog crawl fix: also starts from the in-store search link; live crawl found 35 listings (was 27). DB backed up to `data/rappi_prices.backup-20261111.duckdb` before saving today's full catalog. 8 more listings linked (32 of 35; Disugual conejo and Dogzymes still "Vincular"). "Ajustar en Rappi": 15 OK, 16 Subir, 2 Bajar — most "Subir" rows are her price sheet (×1.2 = live Rappi) vs a higher inventory "Precio Venta": ask which WhatsApp price is current.
+- User: the workbook "Precio Venta" is the WhatsApp price, and she prices Rappi per product (the 1.2 is only a rough fee allowance) -> F13 (ADR-014) replaces the +20% tab with "Cambiar precio en Rappi": competitor - 100 COP when >= 10% margin remains. Twice-weekly `run_prices.ps1` (Mon + Thu 07:30) refreshes her listings and searches every in-stock product; shared `data/.scrape.lock` for all three jobs. Live run 17:27-17:40 exit 0 (Bajar 2, Subir 1, Desactivar 1, No competir 12, Sin competidor 17, Vincular 2). Note: that run wrote the default-named report and replaced the 10:00 report of 2026-11-11. Waiting for the user to run `.\register_prices_task.ps1`.
 - Caveat for the client: several inventory "Precio Venta" values look like Rappi prices (e.g. cost + 20%), so some "Subir" rows may be data errors; she should confirm WhatsApp prices.
 
 ### 2026-11-05 (d) — F9 client pricing sheet + visibility tracker (Claude Code)

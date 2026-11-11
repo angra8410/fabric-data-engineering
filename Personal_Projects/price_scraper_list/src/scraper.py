@@ -296,7 +296,11 @@ class RappiScraper:
     ) -> List[dict]:
         """Crawls a store's home, aisles and sub-aisles and returns every listed product."""
         root = f"/tiendas/{slug}"
-        queue, seen, raw_by_id = [root], set(), {}
+        # The store home can redirect to Rappi's directory (seen 2026-11-11 while the store
+        # was open), so also start from an in-store search for the store's own name: it
+        # always lists products and links to the aisles. Each view caps at ~27 products.
+        in_store_search = f"{root}/s?term={urllib.parse.quote(store_name.lower())}"
+        queue, seen, raw_by_id = [root, in_store_search], set(), {}
         while queue and len(seen) < max_pages:
             path = queue.pop(0)
             if path in seen:

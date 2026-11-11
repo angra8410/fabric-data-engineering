@@ -88,7 +88,8 @@ def cmd_client_report(args) -> int:
         print("No client configured (config/settings.local.yaml) - skipping client report.")
         return 0
     today = config.local_now().date()
-    items = cr.products_to_price(cr.load_inventory(cr.inventory_file(client), client.sales_window_days, today))
+    inventory = cr.load_inventory(cr.inventory_file(client), client.sales_window_days, today)
+    items = cr.products_to_price(inventory)
     print(f"Client {client.name}: {len(items)} products in stock or sold in the last {client.sales_window_days} days")
 
     queries = [i.search_query for i in items]
@@ -107,13 +108,44 @@ def cmd_client_report(args) -> int:
 
     suggestions = cr.build_suggestions(config, db, items, today)
     vis = cr.visibility(db, client)
+    adjustments = cr.rappi_adjustments(client, inventory, cr.load_client_catalog(db, client))
+    from src import probe
+    probe_rows = probe.load(client.zone_id)
     out = cr.write_report(config, suggestions, vis, resolve_path(args.out) if args.out else
-                          cr.default_report_path(client, today), today)
+                          cr.default_report_path(client, today), today, adjustments, probe_rows)
     matched = sum(1 for s in suggestions if s.competitor)
     print(f"Report written: {out}")
     print(f"  {len(suggestions)} products, {matched} matched to a competitor, "
           f"{sum(1 for s in suggestions if s.rappi_price)} currently published")
+    counts = {}
+    for a in adjustments:
+        counts[a.action] = counts.get(a.action, 0) + 1
+    print(f"  Ajustar en Rappi: {len(adjustments)} listings -> " + ", ".join(f"{k} {v}" for k, v in sorted(counts.items())))
     return 0
+
+
+def cmd_probe(args) -> int:
+    """Hourly visibility probe of the client store (separate DB, see src/probe.py)."""
+    from src import probe
+    from src.scraper import RappiScraper
+
+    config = load_config(args.config)
+    client = config.client
+    if client is None or not client.probe_queries:
+        print("No client probe_queries configured (config/settings.local.yaml) - nothing to probe.")
+        return 0
+    zone = config.zone(client.zone_id)
+    print(f"Visibility probe {config.local_now():%Y-%m-%d %H:%M} | {client.name} | zone {zone.name} | "
+          f"{len(client.probe_queries)} searches")
+    rows = asyncio.run(RappiScraper(config, db=_NoDb()).probe_visibility(
+        zone, client.store_id, client.store_slug, client.probe_queries, headless=not args.headed))
+    probe.save(rows)
+    print("  " + probe.summary_line(rows))
+    return 0 if any(r["ok"] for r in rows) else 1
+
+
+class _NoDb:
+    """The probe never touches the price database."""
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -155,6 +187,10 @@ def build_parser() -> argparse.ArgumentParser:
     c_p.add_argument("--out", help="Output .xlsx (default: client.report_dir/<name>_Rappi_<date>.xlsx)")
     c_p.add_argument("--headed", action="store_true", help="Show the browser window")
     c_p.set_defaults(func=cmd_client_report)
+
+    p_p = sub.add_parser("probe", help="Hourly visibility check of the client store (data/visibility_probe.duckdb)")
+    p_p.add_argument("--headed", action="store_true", help="Show the browser window")
+    p_p.set_defaults(func=cmd_probe)
     return parser
 
 

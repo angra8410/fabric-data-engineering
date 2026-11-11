@@ -1,8 +1,8 @@
 # Session Progress Log: price_scraper_list
 
-**Last Updated:** 2026-11-05
-**Active Feature:** None (F8, F9 done). Next: F7 after the 2026-11-11 scheduled run.
-**Harness Status:** Healthy — `.\init.ps1` passes (74 tests).
+**Last Updated:** 2026-11-11
+**Active Feature:** F12 hourly visibility probe (collecting data once the task is registered). Also open: F7.
+**Harness Status:** Healthy — `.\init.ps1` passes (91 tests).
 
 ---
 
@@ -19,6 +19,15 @@
 - Known limits: store-brand foods whose name lacks a species word are filtered out (ADR-004); pack sizes within ~5% can merge (ADR-002); no run while the user is signed out (ADR-008).
 
 ## Session log
+
+### 2026-11-11 — Scheduled run check + F10 client report fixes (Claude Code)
+- Second scheduled run OK: Task Scheduler LastRunTime 2026-11-11 10:00, LastTaskResult 0, 2,968 snapshots (3 zones), client report written. DB now 3 run dates.
+- Review of the client report found wrong suggestions: per-unit items compared with competitors' packs, a brand-less accessory matched a branded one, mismatched flavours / sub-lines. Fixed in F10 (ADR-011); 12 per-unit pack barcodes configured in the private overlay.
+- Verification: `.\init.ps1` exit 0 (85 tests); report rebuilt offline to `data/client/reports/*_2026-11-11_v2.xlsx` (the original 10:00 report is kept).
+- Not done: F7 (trends validation) — now unblocked.
+- F11: "Ajustar en Rappi" tab (her WhatsApp +20% rule, ADR-012). 24 of her 27 listings linked by hand in the overlay; 3 left as "Vincular" (ambiguous: Br For Dogs cordero adult/puppy, Disugual conejo two barcodes, Dogzymes without barcode). Inventory switched to the 2026-11-10 backup via `VelyKaPet_Backup_*.xlsx` (newest wins). Report v3 rebuilt offline.
+- F12 (in progress): hourly visibility probe (ADR-013). Live finding 2026-11-11: Rappi lists exactly 5 stores per search (no "more"); her store home redirected to the store directory at 15:35-15:40 (loaded fine at ~10:08) while she ranked #1 for "agility adulto gato". Declared hours: Mon-Fri 10-20, weekends/holidays 10-18. Waiting for the user to run `.\register_probe_task.ps1`.
+- Caveat for the client: several inventory "Precio Venta" values look like Rappi prices (e.g. cost + 20%), so some "Subir" rows may be data errors; she should confirm WhatsApp prices.
 
 ### 2026-11-05 (d) — F9 client pricing sheet + visibility tracker (Claude Code)
 - Added private overlay config, per-zone queries, `search_store_ranks` + `v_store_visibility`, client catalog crawl, `client-report` command and Spanish Excel (ADR-009/010); wired into `run_weekly.ps1`; added openpyxl.
@@ -46,4 +55,4 @@
 - Harness created: AGENTS.md, feature_list.json, progress.md, decisions.md.
 
 ## Next step
-Deliver the client Excel to the user (private; do not publish). After Wednesday 2026-11-11 10:00: check `Get-ScheduledTaskInfo -TaskName "Rappi Price Scraper (weekly)"` (LastTaskResult 0) and the newest `logs\run_*.log`, then do F7: `main.py query --trends` must return rows; spot-check 5 offers against Rappi.
+F12: confirm the hourly task runs (`Get-ScheduledTaskInfo -TaskName "Rappi Visibility Probe (hourly)"`, `logs\probe_*.log`); after the period, read 'Visibilidad por hora' in the client report, deliver findings, run `.\register_probe_task.ps1 -Remove`. F7: `main.py query --trends` must return rows (runs 2026-11-05/06/11 exist); spot-check 5 offers against Rappi. Client: inventory per-tube costs for the 4-pack items may be stale vs the current pack cost — ask the user to update the workbook.

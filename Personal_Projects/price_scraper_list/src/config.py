@@ -1,7 +1,7 @@
 import base64
 import json
 import urllib.parse
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Dict, List, Optional
 
@@ -81,6 +81,23 @@ class ClientConfig(BaseModel):
         "COMEDERO": "accesorios", "ASEO": "accesorios", "ARENA": "accesorios"})
     min_margin_pct: float = 10.0         # lowest margin (after commission) we suggest pricing at
     undercut_pct: float = 1.0            # how far below the cheapest competitor to suggest
+    # A competitor priced outside [min, max] x her direct price is most likely another
+    # product or pack size: it is shown for review but never priced against.
+    competitor_price_ratio_min: float = 0.4
+    competitor_price_ratio_max: float = 2.5
+    # Barcode -> units in one Rappi listing, for items whose inventory cost/price is per
+    # unit but sold as a pack on Rappi (e.g. a 4-tube pack she sells tube by tube).
+    units_per_listing: Dict[str, int] = Field(default_factory=dict)
+    # Her own rule for Rappi prices: direct (WhatsApp) price + this markup, to cover the fee.
+    rappi_markup_pct: float = 20.0
+    # Barcode -> Rappi product id of HER listing (names on Rappi are rewritten, so her own
+    # listings are linked explicitly instead of matched by name).
+    rappi_listings: Dict[str, str] = Field(default_factory=dict)
+    # Hourly visibility probe (ADR-013): searches to check, declared opening hours
+    # ("weekday"/"weekend" -> "10-20"; holidays use the weekend hours).
+    probe_queries: List[str] = Field(default_factory=list)
+    opening_hours: Dict[str, str] = Field(default_factory=dict)
+    holidays: List[date] = Field(default_factory=list)
     sales_window_days: int = 90          # "recently sold" window for picking products
     product_search_max_age_days: int = 30
     max_product_searches: int = 200

@@ -30,6 +30,11 @@ CLIENT = ClientConfig(name="Tienda Test", store_id="1", store_slug="1-tienda", z
     ("AGILITY GOLD PERRO ADULTO OBESO X 1.5 KG", "Agility Gold Alimento Seco para Perro Adultos Obesos"),
     ("PRO PLAN VETE DIETS UR URINARY PERRO 2 KG", "Comida para perro Purina Pro Plan Veterinary Diets UR Urinary"),
     ("NEXGARD SPECTRA  DE 7.5 A 15 KG (M)", "Nexgard Spectra M Antipulgas Para Perro 7.5-15 Kg"),
+    ("INABA GATO CHURU ATUN CON HOJUELAS DE BONITO 4 PIEZAS 56 GR",
+     "Inaba Cat Snack Churu 4 Piezas - Tuna With Bonito Flakes - Hojuelas Atun - 56 Gr"),
+    ("INABA GATO CHURU ATUN 4 PIEZAS 56 GR", "Inaba Churu Snack Para Gato Atún 4 Piezas 56 Gr - Tuna"),
+    ("INABA GATO CHURU ATUN CON VIEIRA (TUNA RECIPE WITH SCALLOP) 4 PIEZAS 56 GR",
+     "Inaba Churu Gato Tuna With Scallop Atún Y Vieira 4 Piezas 56 Gr"),
 ])
 def test_same_product_matches(mine, theirs):
     assert cr.match_score(item(mine), theirs) >= cr.MIN_MATCH_SCORE
@@ -46,6 +51,15 @@ def test_same_product_matches(mine, theirs):
     ("PRO PLAN VETE DIETS UR URINARY PERRO 2 KG", "Pro Plan Veterinary Diets EN Gastroenteric Perro 2 kg"),
     ("AGILITY GOLD GRANDES ADULTOS 8 KG", "Agility Gold Grandes Adultos Piel X8kl"),
     ("CHUNKY GATOS SALMON Y CORDERO 1.5 KG", "Chunky Alimento para Perro Adulto Sabor a Cordero"),
+    # flavours must agree when both names give them; sub-lines are other products
+    ("INABA GATO CHURU ATUN CON SALMON (TUNA RECIPE WITH SALMON) 4 PIEZAS 56 GR",
+     "Inaba Cat Snack Churu 4 Piezas - Tuna With Bonito Flakes - Hojuelas Atun - 56 Gr"),
+    ("INABA GATO CHURU ATUN CON POLLO (TUNA RECIPE WITH CHICKEN) 4 PIEZAS 56 GR",
+     "Inaba Cat Snack Churu 4 Piezas - Tuna With Bonito Flakes - Hojuelas Atun - 56 Gr"),
+    ("INABA GATO CHURU ATUN 4 PIEZAS 56 GR", "inaba cat snack churu pops 4 piezas - tuna - atun 60 gr"),
+    ("INABA GATO CHURU ATUN CON CAMARON (TUNA RECIPE WITH SHRIMP) 4 PIEZAS 56 GR",
+     "Inaba Churu Gato Atún 4 Piezas 56 Gr"),
+    ("INABA GATO CHURU ATUN 4 PIEZAS 56 GR", "Inaba Churu Cat Tuna Recipe With Scallop 4 Pzs 56 g"),
 ])
 def test_different_products_do_not_match(mine, theirs):
     assert cr.match_score(item(mine), theirs) < cr.MIN_MATCH_SCORE
@@ -98,6 +112,40 @@ def test_already_cheapest_with_thin_margin_is_never_told_to_go_above_competitor(
     assert s.suggested == 163300 and s.suggested < 165000
     assert s.margin(s.suggested) > s.margin(158000)
     assert any("Margen bajo" in n for n in s.notes)
+
+
+def test_implausible_competitor_price_is_shown_but_not_priced_against():
+    # synthetic: generic accessory matched to a branded one at 10x her price
+    s = cr.suggest_price(item("PANOLETA PEQUENA", cost=1000, price=2000, category="ACCESORIOS"), CLIENT,
+                         offer("Pañoleta Marca Pequeña", 20000))
+    assert s.competitor_suspect and s.competitor.price == 20000
+    assert s.action.startswith("Revisar") and s.suggested == cr.round_up(2000 / (1 - s.commission))
+    # far below her price is suspicious too
+    s = cr.suggest_price(item("X", cost=10000, price=50000), CLIENT, offer("X", 15000))
+    assert s.competitor_suspect
+
+
+def test_per_unit_price_against_pack_hints_the_pack():
+    s = cr.suggest_price(item("MARCA SNACK 4 PIEZAS 56 GR", cost=2000, price=3000), CLIENT, offer("Marca Snack", 12000))
+    assert s.competitor_suspect
+    assert any("paquete de 4" in n and "3.000 por unidad" in n for n in s.notes)
+    assert cr.pack_count("MARCA 4 PIEZAS 56 GR") == 4 and cr.pack_count("MARCA X 100 G") is None
+
+
+def test_units_per_listing_prices_the_pack(tmp_path):
+    db = PriceDatabase(tmp_path / "t.duckdb")
+    base = {"snapshot_date": TODAY, "week_id": "2026-W45", "extracted_at": TODAY, "zone_id": "z", "zone": "Z",
+            "brand": "Other", "pet_type": "Cat", "is_medical": False, "in_stock": True}
+    db.insert_snapshots([{**base, "store_id": "99", "store_name": "Comp", "product_id": "7", "search_query": "q",
+                          "product_name": "Marca Gato Snack Tubos 4 Piezas 56 Gr", "price_current": 12000.0}])
+    client = CLIENT.model_copy(update={"units_per_listing": {"1": 4}})
+    config = AppConfig(zones=[ZoneConfig(id="z", name="Z", city="C", lat=0, lng=0, address="A")],
+                       search_queries=["q"], client=client)
+    it = item("MARCA GATO SNACK TUBOS 4 PIEZAS 56 GR", cost=2000, price=3000, category="SNACKS")
+    (s,) = cr.build_suggestions(config, db, [it], TODAY)
+    assert s.units == 4 and s.item.cost == 8000 and s.item.store_price == 12000
+    assert not s.competitor_suspect and s.suggested == 11800 and s.action.startswith("Bajar")
+    assert any("Paquete de 4" in n for n in s.notes)
 
 
 def test_no_competitor_and_out_of_stock_notes():
@@ -154,11 +202,51 @@ def test_inventory_selection_and_report(tmp_path):
     vis = cr.visibility(db, CLIENT)
     assert vis["per_query"][0][1] is None and vis["competitor_fee_median"] == 6000
 
-    out = cr.write_report(config, sugg, vis, tmp_path / "r.xlsx", TODAY)
+    client = CLIENT.model_copy(update={"rappi_listings": {"222": "6"}})
+    adj = cr.rappi_adjustments(client, items, cr.load_client_catalog(db, client))
+    assert [(a.action, a.target) for a in adj] == [("Bajar precio", 21600)]   # 18000 x 1.2 vs 22800 live
+    out = cr.write_report(config, sugg, vis, tmp_path / "r.xlsx", TODAY, adj)
     wb = openpyxl.load_workbook(out)
-    assert wb.sheetnames == ["Resumen", "Precios Rappi", "Visibilidad", "Visibilidad semanal", "Supuestos"]
+    assert wb.sheetnames == ["Resumen", "Ajustar en Rappi", "Precios Rappi", "Visibilidad", "Visibilidad semanal",
+                             "Supuestos"]
     assert wb["Precios Rappi"]["A2"].value == "BIOCANIS X 14 G"
+    assert wb["Ajustar en Rappi"]["B2"].value == "ARENA MAIZ CAT 4 KG"
     assert wb["Visibilidad"]["B2"].value == "No aparece"
+
+
+def test_inventory_path_pattern_picks_newest_backup(tmp_path):
+    for d in ("2026-11-05", "2026-11-10", "2026-10-30"):
+        (tmp_path / f"Tienda_Backup_{d}.xlsx").write_bytes(b"")
+    client = CLIENT.model_copy(update={"inventory_path": str(tmp_path / "Tienda_Backup_*.xlsx")})
+    assert cr.inventory_file(client).name == "Tienda_Backup_2026-11-10.xlsx"
+
+
+# ------------------------------------------------------------------ ajustar en Rappi
+def test_rappi_adjustments_follow_her_markup_rule():
+    client = CLIENT.model_copy(update={
+        "rappi_markup_pct": 20.0, "units_per_listing": {"p": 4},
+        "rappi_listings": {"ok": "1", "up": "2", "down": "3", "gone": "4", "nostock": "5", "p": "6", "old": "7"}})
+    inv = [cr.InventoryItem("ok", "A", "CONCENTRADOS", 8000, 10000, 1),
+           cr.InventoryItem("up", "B", "CONCENTRADOS", 8000, 10000, 1),
+           cr.InventoryItem("down", "C", "ARENA", 8000, 10000, 1),
+           cr.InventoryItem("gone", "D", "CONCENTRADOS", 8000, 10000, 1),
+           cr.InventoryItem("nostock", "E", "CONCENTRADOS", 8000, 10000, 0),
+           cr.InventoryItem("p", "F", "SNACKS", 2000, 3000, 8)]
+    live = lambda pid, price: cr.Offer("1", "Tienda", f"Listing {pid}", price, None, None, TODAY, pid)
+    catalog = [live("1", 12050), live("2", 11000), live("3", 13000), live("5", 12000), live("6", 14400),
+               live("9", 5000)]
+    adj = {(a.barcode or a.listing.product_id): a for a in cr.rappi_adjustments(client, inv, catalog)}
+    assert adj["ok"].action == "OK" and adj["ok"].target == 12000          # within the 100 COP tolerance
+    assert adj["up"].action == "Subir precio"
+    assert adj["down"].action == "Bajar precio"
+    assert adj["gone"].action == "No aparece en Rappi"
+    assert adj["nostock"].action == "OK" and any("Sin stock" in n for n in adj["nostock"].notes)
+    assert adj["p"].target == 14400 and adj["p"].action == "OK" and adj["p"].cost == 8000
+    assert adj["old"].action == "Revisar vínculo"
+    assert adj["9"].action == "Vincular" and adj["9"].item is None
+    assert round(adj["up"].profit()) == round(12000 * (1 - CLIENT.commission_rate("CONCENTRADOS")) - 8000)
+    ordered = cr.rappi_adjustments(client, inv, catalog)
+    assert ordered[0].needs_change and ordered[-1].action == "OK"
 
 
 # ------------------------------------------------------------------ config / scraper helpers

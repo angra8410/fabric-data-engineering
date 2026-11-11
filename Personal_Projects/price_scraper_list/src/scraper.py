@@ -354,6 +354,50 @@ class RappiScraper:
                 await browser.close()
         return result
 
+    async def probe_visibility(self, zone: ZoneConfig, store_id: str, store_slug: str, queries: List[str],
+                               headless: bool = True) -> List[dict]:
+        """
+        Hourly visibility check (ADR-013): does her store page open, and where does
+        Rappi list her store for each search. Returns probe rows; writes nothing.
+        """
+        from src import probe
+        base = probe.stamp(self.config.local_now().replace(tzinfo=None), zone.id)
+        rows = []
+        async with async_playwright() as p:
+            browser = await p.chromium.launch(headless=headless)
+            try:
+                context, page = await self.new_zone_page(browser, zone)
+                try:
+                    await self._goto(page, f"{self.config.base_url}/tiendas/{store_slug}")
+                    try:
+                        await page.wait_for_selector(STORE_PAGE_SELECTOR, timeout=self.settings.results_timeout_ms)
+                    except Exception:
+                        pass
+                    products = await page.locator(STORE_PAGE_SELECTOR).count()
+                    rows.append(probe.store_page_row(base, products, page.url))
+                    print(f"  store page: {products} products" + ("" if products else f" (now at {page.url})"))
+                    for query in queries:
+                        await page.wait_for_timeout(self.settings.delay_between_queries_ms)
+                        url = f"{self.config.base_url}/search?query={urllib.parse.quote_plus(query)}"
+                        try:
+                            cards = await self._load_results(page, url)
+                            if not cards:
+                                await page.wait_for_timeout(3000)
+                                cards = await self._load_results(page, url)
+                            stores = await page.evaluate(STORES_JS) if cards else []
+                        except Exception as e:
+                            print(f"  '{query}': ERROR {e.__class__.__name__}")
+                            stores = []
+                        row = probe.search_row(base, query, stores, store_id, parse_store_header)
+                        rows.append(row)
+                        print(f"  '{query}': {row['n_stores']} stores, "
+                              + (f"her store #{row['her_rank']}" if row["her_rank"] else "her store not listed"))
+                finally:
+                    await context.close()
+            finally:
+                await browser.close()
+        return rows
+
     async def run(
         self,
         zone_filter: Optional[str] = None,

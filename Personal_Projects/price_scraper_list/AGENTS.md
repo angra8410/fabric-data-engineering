@@ -51,7 +51,9 @@ Do not close a feature with failing or skipped gates; record it as `blocked` wit
 | `src/parser.py` | COP prices, discounts, unit price, brand/pet/medical detection, `match_key`, `is_relevant` |
 | `src/database.py` | Schema, migrations, upsert, analytical views, exports, `search_store_ranks` |
 | `src/client_report.py` | Client inventory ↔ Rappi matching, price suggestions, Spanish Excel report |
-| `config/settings.local.yaml` | PRIVATE overlay: client store + its zone/queries (git-ignored) |
+| `src/probe.py` | Hourly client visibility probe: rows, separate DB `data/visibility_probe.duckdb`, hourly summaries (ADR-013) |
+| `run_probe.ps1` / `register_probe_task.ps1` | Hourly probe runner (skips while the weekly task runs) / time-limited scheduled task |
+| `config/settings.local.yaml` | PRIVATE overlay: client store + its zone/queries, listing links, probe queries/hours (git-ignored) |
 | `main.py` | CLI: `run`, `stats`, `export`, `query` (exit 0/1/2) |
 | `analysis.py` | Printed report over the views |
 | `run_weekly.ps1` | Scheduled entry point (logs to `logs/`) |

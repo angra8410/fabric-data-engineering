@@ -101,13 +101,13 @@
         "F2",
         "F6"
       ],
-      "status": "blocked",
+      "status": "not-started",
       "acceptance": [
         "v_weekly_trends non-empty after the second run",
         "Spot-check 5 offers against Rappi"
       ],
       "evidence": "",
-      "blocked_by": "Needs a second weekly snapshot (calendar time)."
+      "note": "Unblocked 2026-11-11: scheduled run added a third run date."
     },
     {
       "id": "F8",
@@ -141,6 +141,54 @@
         "No client data in committed files"
       ],
       "evidence": "2026-11-05: pytest 74 passed (matching true/false pairs, pricing rules incl. already-cheapest, inventory loader, report sheets, overlay merge, header parsing); live: main.py run --zone <client zone> exit 0 (24 searches, catalog 21 products from 15 pages); main.py client-report exit 0 (123 product searches, 145 products, 58 matched, 13 published); manual review of matches; leak scan of committed files clean."
+    },
+    {
+      "id": "F10",
+      "name": "Client report: price sanity check, units per listing, stricter flavours",
+      "description": "Fixes from review of the 2026-11-11 report: competitors priced outside 0.4-2.5x her direct price are flagged 'Revisar coincidencia' and not priced against; client.units_per_listing scales per-unit cost/price to the Rappi pack; flavour sets must be equal (more flavours, English mapped); sub-lines (pops/bites/rolls) must agree. ADR-011.",
+      "dependencies": [
+        "F9"
+      ],
+      "status": "done",
+      "acceptance": [
+        "Per-unit items configured as packs are compared pack-to-pack",
+        "Implausibly priced matches are shown but never drive the suggestion",
+        "Different flavours and sub-lines of the same brand do not match",
+        "No client data in committed files"
+      ],
+      "evidence": "2026-11-11: .\\init.ps1 exit 0, pytest 85 passed (new: flavour/sub-line false pairs, Churu true pairs, ratio check, pack hint, units_per_listing). main.py client-report --search none --out <v2> exit 0: only the configured pack items and the brand-less accessory changed; 56 matched (was 58, both removed matches were wrong)."
+    },
+    {
+      "id": "F11",
+      "name": "Client report: 'Ajustar en Rappi' tab (her +20% rule)",
+      "description": "Weekly tab comparing each of her linked Rappi listings (barcode -> product id, private overlay) with WhatsApp price x (1 + rappi_markup_pct): Subir/Bajar/OK, unlinked listings, linked listings missing, stock-0 notes; inventory_path glob picks the newest backup. ADR-012.",
+      "dependencies": [
+        "F9",
+        "F10"
+      ],
+      "status": "done",
+      "acceptance": [
+        "Every listing in her live catalog appears in the tab (linked or 'Vincular')",
+        "Target follows her rule, including pack listings",
+        "Runs inside the weekly client-report with no manual step besides dropping a new backup in data/client/",
+        "No client data in committed files"
+      ],
+      "evidence": "2026-11-11: .\\init.ps1 exit 0, pytest 87 passed (new: markup rule actions, tolerance, pack target, unlinked/missing links, sheet order, newest-backup glob). main.py client-report --search none --out <v3> exit 0: 27 listings -> 13 OK, 9 Subir, 2 Bajar, 3 Vincular."
+    },
+    {
+      "id": "F12",
+      "name": "Hourly client visibility probe",
+      "description": "main.py probe + run_probe.ps1 + register_probe_task.ps1 (hourly 09:15-20:15, daily, time-limited): her store page opens? + her rank in ~9 searches; separate DB; report tabs 'Visibilidad por hora' / 'Visibilidad hora a hora'. ADR-013.",
+      "dependencies": [
+        "F9"
+      ],
+      "status": "in-progress",
+      "acceptance": [
+        "Probe writes only data/visibility_probe.duckdb and never runs in parallel with the weekly task",
+        "Task registered by the user and running hourly; logs in logs/probe_<date>.log",
+        "After the period: hourly summary delivered (when her store page opens, when she is listed) and task removed"
+      ],
+      "evidence": "2026-11-11: .\\init.ps1 exit 0, pytest 91 passed (new tests/test_probe.py: row building, declared hours/holidays, save/load idempotent, hourly summary, report sheets). Live: run_probe.ps1 exit 0 at 15:39 (store page redirected to directory; listed 1/9, #1 in control search). Scripts parse OK. Pending: user runs register_probe_task.ps1 (agent cannot create scheduled tasks)."
     }
   ]
 }

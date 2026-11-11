@@ -695,12 +695,13 @@ def write_report(config: AppConfig, suggestions: List[PriceSuggestion], vis: Dic
             open_ = probe.declared_open(client, run.probed_at)
             detail.append([run.probed_at.date().isoformat(), probe.DAY_NAMES[run.probed_at.weekday()],
                            f"{run.probed_at:%H:%M}", {True: "Abierta", False: "Cerrada", None: "-"}[open_],
+                           run.rappi_status or "-",
                            {True: "Abre", False: "No abre", None: "-"}[run.store_page_ok],
                            run.searches, run.appeared, run.best_rank, run.where])
         _sheet(wb, "Visibilidad hora a hora",
-               ["Fecha", "Día", "Hora", "Según su horario", "Página de la tienda", "Búsquedas medidas",
-                "Aparece en", "Mejor posición", "Dónde aparece"],
-               detail, [12, 11, 8, 16, 18, 16, 11, 13, 80])
+               ["Fecha", "Día", "Hora", "Según su horario", "Según Rappi (tiempo de entrega)", "Página de la tienda",
+                "Búsquedas medidas", "Aparece en", "Mejor posición", "Dónde aparece"],
+               detail, [12, 11, 8, 16, 28, 18, 16, 11, 13, 80])
 
     # --- Supuestos
     ws = wb.create_sheet("Supuestos")

@@ -69,4 +69,11 @@ def test_report_adds_hourly_sheets_only_with_probe_data(tmp_path):
                                                 probe_rows=rows))
     assert wb.sheetnames[-3:] == ["Visibilidad por hora", "Visibilidad hora a hora", "Supuestos"]
     detail = wb["Visibilidad hora a hora"]
-    assert [c.value for c in detail[2]][:7] == ["2026-11-12", "jueves", "15:15", "Abierta", "No abre", 2, 1]
+    assert [c.value for c in detail[2]][:8] == ["2026-11-12", "jueves", "15:15", "Abierta",
+                                                "Abierta (38 min o prog.)", "No abre", 2, 1]
+
+
+def test_rappi_status_from_delivery_time_text():
+    assert probe.rappi_status("29 min o prog.") == "Abierta (29 min o prog.)"
+    assert probe.rappi_status("Hoy, 4 PM") == "Cerrada, abre Hoy, 4 PM"
+    assert probe.rappi_status(None) is None

@@ -70,6 +70,7 @@ class ClientConfig(BaseModel):
     zone_id: str                         # zone (usually the store address) to measure from
     inventory_path: Optional[str] = None # owner's inventory workbook (costs, store prices, stock)
     report_dir: str = "data/client/reports"
+    powerbi_dir: str = "data/client/powerbi/data"   # Parquet tables for the local Power BI dashboard (ADR-015)
     # Rappi platform fee by product family, % before IVA (contract Anexo 1).
     commission_pct: Dict[str, float] = Field(default_factory=lambda: {
         "alimento": 12.0, "medicina": 12.0, "accesorios": 14.0})
@@ -103,6 +104,10 @@ class ClientConfig(BaseModel):
     @property
     def report_path(self) -> Path:
         return resolve_path(self.report_dir)
+
+    @property
+    def powerbi_path(self) -> Path:
+        return resolve_path(self.powerbi_dir)
 
     def commission_rate(self, category: Optional[str]) -> float:
         family = self.category_family.get((category or "").strip().upper(), "alimento")

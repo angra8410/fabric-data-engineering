@@ -115,7 +115,7 @@ def cmd_client_report(args) -> int:
         print(f"  {res.saved} offers saved; {len(res.empty)} searches without relevant results, {len(res.failed)} failed")
 
     suggestions = cr.build_suggestions(config, db, items, today)
-    vis = cr.visibility(db, client)
+    vis = cr.visibility(db, client, config.queries_for(config.zone(client.zone_id)))
     offers = cr.load_offers(db, client.zone_id, today - timedelta(days=client.product_search_max_age_days),
                             client.store_id)
     checks = cr.listing_checks(client, inventory, cr.load_client_catalog(db, client), offers)
@@ -123,8 +123,13 @@ def cmd_client_report(args) -> int:
     probe_rows = probe.load(client.zone_id)
     out = cr.write_report(config, suggestions, vis, resolve_path(args.out) if args.out else
                           cr.default_report_path(client, today), today, checks, probe_rows)
+    from src import powerbi_export
+    tables = powerbi_export.write_tables(config, suggestions, vis, today, checks, probe_rows,
+                                         store_rows=probe.load_stores(client.zone_id))
     matched = sum(1 for s in suggestions if s.competitor)
     print(f"Report written: {out}")
+    print(f"  Power BI tables: {client.powerbi_path} ("
+          + ", ".join(f"{k} {v}" for k, v in tables.items()) + ")")
     print(f"  {len(suggestions)} products, {matched} matched to a competitor, "
           f"{sum(1 for s in suggestions if s.rappi_price)} currently published")
     counts = {}

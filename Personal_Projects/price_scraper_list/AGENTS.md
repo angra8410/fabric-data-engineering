@@ -51,7 +51,9 @@ Do not close a feature with failing or skipped gates; record it as `blocked` wit
 | `src/parser.py` | COP prices, discounts, unit price, brand/pet/medical detection, `match_key`, `is_relevant` |
 | `src/database.py` | Schema, migrations, upsert, analytical views, exports, `search_store_ranks` |
 | `src/client_report.py` | Client inventory ↔ Rappi matching, price suggestions, Spanish Excel report |
-| `src/probe.py` | Hourly client visibility probe: rows, separate DB `data/visibility_probe.duckdb`, hourly summaries (ADR-013) |
+| `src/probe.py` | Hourly client visibility probe: rows, separate DB `data/visibility_probe.duckdb` (+ every listed store's open status, ADR-016), hourly summaries (ADR-013) |
+| `src/powerbi_export.py` | Parquet tables for the client's local Power BI dashboard, written by `client-report` to `data/client/powerbi/data` (ADR-015) |
+| `powerbi/build_pbip.mjs` | Generates the PBIP (TMDL model + 3 pages) into git-ignored `data/client/powerbi/`; `--pages-only` keeps the model. Validate with `powerbi-report-author validate` |
 | `run_probe.ps1` / `register_probe_task.ps1` | Hourly probe runner / time-limited scheduled task |
 | `run_prices.ps1` / `register_prices_task.ps1` | Twice-weekly client price check (Mon + Thu 07:30, ADR-014) / its scheduled task |
 | `scrape_lock.ps1` | Shared `data/.scrape.lock`: one scraping job on Rappi at a time (weekly, price check, probe) |

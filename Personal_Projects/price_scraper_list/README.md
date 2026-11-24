@@ -194,6 +194,21 @@ With a client configured, the weekly run also records the store's search positio
 
 ---
 
+## 📊 Client Power BI dashboard (local)
+
+Every `main.py client-report` run also writes Parquet tables to `data/client/powerbi/data/`
+(git-ignored). Build the Power BI project once (Node 20+, `powerbi-report-author` CLI):
+
+```powershell
+powerbi-report-author scaffold data\client\powerbi --name <Tienda>_Rappi --model-path ../<Tienda>_Rappi.SemanticModel   # first time only
+node powerbi\build_pbip.mjs              # model + pages (use --pages-only to keep the model)
+powerbi-report-author validate data\client\powerbi\<Tienda>_Rappi.Report
+```
+
+Open `data\client\powerbi\<Tienda>_Rappi.pbip` in Power BI Desktop and click **Refresh** after each run.
+Pages: actions to take on Rappi, prices vs competition, and when/where customers find the store.
+Nothing is published; the dashboard and its data stay on this PC.
+
 ## ⏰ Weekly Automation
 
 You can run `run_weekly.ps1` manually or schedule it in Windows Task Scheduler:

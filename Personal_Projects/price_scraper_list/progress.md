@@ -1,8 +1,8 @@
 # Session Progress Log: price_scraper_list
 
-**Last Updated:** 2026-11-11
-**Active Feature:** F12 hourly probe (collecting until 2026-11-25) and F13 price check (waiting for task registration). Also open: F7.
-**Harness Status:** Healthy — `.\init.ps1` passes (92 tests).
+**Last Updated:** 2026-11-23
+**Active Feature:** F15 best hours (probe collecting until 2026-12-09, incl. weekends). F13, F14 done. Also open: F7.
+**Harness Status:** Healthy — `.\init.ps1` passes (96 tests).
 
 ---
 
@@ -19,6 +19,15 @@
 - Known limits: store-brand foods whose name lacks a species word are filtered out (ADR-004); pack sizes within ~5% can merge (ADR-002); no run while the user is signed out (ADR-008).
 
 ## Session log
+
+### 2026-11-23 — Run check + opening hours (Claude Code)
+- Price check: missed 07:30 (PC off), ran 17:20-17:47 via StartWhenAvailable, exit 0 (82/82 searches, 4,300 offers, report written). Probe 17:15/18:15/19:15 exit 0; Task Scheduler shows 0x800710E0 at 19:20:27 (refused start, harmless).
+- Client says she closes at 18:00 (not 20:00 on weekdays): private overlay `opening_hours.weekday` -> "10-18". Rappi's "Cerrada" from 18:15 is therefore expected. Probe task still runs to 20:15 until it expires 2026-11-25 (the after-hours runs act as a control).
+- F14 (ADR-015): local Power BI dashboard. `src/powerbi_export.py` writes Parquet tables on every client-report run (`data/client/powerbi/data`); `powerbi/build_pbip.mjs` generates the PBIP (spec in `data/client/powerbi/_brief/report-spec.md`, git-ignored). Validated (0 errors) and reviewed from Desktop screenshots; one fix round (subtitles, table widths, exact pesos, linear line, totals).
+- ADR-016: weekly visibility split into general searches vs product-name searches (the old single line mixed the two lists); dates/types with < 5 searches dropped. Probe now stores every listed store's open/closed status (`visibility_probe_stores` -> `competencia_hora`); live smoke into a throwaway DB OK. Probe re-registered (user request): 07:15-20:15 daily until 2026-12-09, `-Wake`.
+- Findings for the user (figures kept in `data/client/`): hours do not change her visibility; general searches never list her; store page redirects earlier in the month; past sales lean to weekends but no Sunday has been probed; her sales sheet ends 2026-11-02, so last week's zero sales cannot be checked from it.
+- Verification: `.\init.ps1` exit 0 (96 tests); offline client-report exit 0; `powerbi-report-author validate` 0 errors.
+- Not verified: the < 5-search filter in Desktop (needs Refresh). Desktop currently has the report open: do not save it there (it would write the old pages back).
 
 ### 2026-11-11 — Scheduled run check + F10 client report fixes (Claude Code)
 - Second scheduled run OK: Task Scheduler LastRunTime 2026-11-11 10:00, LastTaskResult 0, 2,968 snapshots (3 zones), client report written. DB now 3 run dates.
@@ -57,4 +66,4 @@
 - Harness created: AGENTS.md, feature_list.json, progress.md, decisions.md.
 
 ## Next step
-F12: confirm the hourly task runs (`Get-ScheduledTaskInfo -TaskName "Rappi Visibility Probe (hourly)"`, `logs\probe_*.log`); after the period, read 'Visibilidad por hora' in the client report, deliver findings, run `.\register_probe_task.ps1 -Remove`. F7: `main.py query --trends` must return rows (runs 2026-11-05/06/11 exist); spot-check 5 offers against Rappi. Client: inventory per-tube costs for the 4-pack items may be stale vs the current pack cost — ask the user to update the workbook.
+F15: after the first weekend of probe data (2026-11-28/29), check `competencia_hora` (stores open per hour, weekday vs weekend) and add a "Mejor horario" view to the dashboard (model + page via `powerbi/build_pbip.mjs`); ask the client for order times from the Rappi partner portal and an updated sales sheet (ends 2026-11-02). Keep the PC on and signed in on weekends until 2026-12-09. F7 still open (`main.py query --trends`, 5 spot checks).

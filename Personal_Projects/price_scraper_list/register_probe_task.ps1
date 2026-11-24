@@ -3,12 +3,16 @@
 # then the task stops firing on its own. Runs as the current user, only while logged on.
 # Usage:  .\register_probe_task.ps1              (14 days from today)
 #         .\register_probe_task.ps1 -Days 7
+#         .\register_probe_task.ps1 -Days 17 -From 07:15 -Runs 14 -Wake
+#                                                (07:15 ... 20:15, wakes a sleeping PC; ADR-016)
 #         .\register_probe_task.ps1 -Remove      (unregister)
+# A run is skipped while the PC is off or the user is signed out; -Wake only helps when it sleeps.
 param(
     [int]$Days = 14,
     [string]$From = "09:15",
     [int]$Runs = 12,
-    [switch]$Remove
+    [switch]$Remove,
+    [switch]$Wake
 )
 
 $ErrorActionPreference = "Stop"
@@ -34,7 +38,7 @@ $trigger.EndBoundary = (Get-Date).Date.AddDays($Days).ToString("s")
 $settings = New-ScheduledTaskSettingsSet `
     -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries `
     -ExecutionTimeLimit (New-TimeSpan -Minutes 20) `
-    -MultipleInstances IgnoreNew
+    -MultipleInstances IgnoreNew -WakeToRun:$Wake
 $principal = New-ScheduledTaskPrincipal -UserId "$env:USERDOMAIN\$env:USERNAME" -LogonType Interactive -RunLevel Limited
 
 Register-ScheduledTask -TaskName $TaskName -Force `

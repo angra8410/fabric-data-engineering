@@ -179,7 +179,7 @@
     {
       "id": "F12",
       "name": "Hourly client visibility probe",
-      "description": "main.py probe + run_probe.ps1 + register_probe_task.ps1 (hourly 09:15-20:15, daily, time-limited): her store page opens? + her rank in ~9 searches; separate DB; report tabs 'Visibilidad por hora' / 'Visibilidad hora a hora'. ADR-013.",
+      "description": "main.py probe + run_probe.ps1 + register_probe_task.ps1 (hourly 09:15-20:15, daily, time-limited): her store page opens? + her rank in ~9 searches; separate DB; report tabs 'Visibilidad por hora' / 'Visibilidad hora a hora'. ADR-013. Extended by ADR-016: 07:15-20:15 until 2026-12-09, -Wake, every listed store's open status.",
       "dependencies": [
         "F9"
       ],
@@ -189,7 +189,7 @@
         "Task registered by the user and running hourly; logs in logs/probe_<date>.log",
         "After the period: hourly summary delivered (when her store page opens, when she is listed) and task removed"
       ],
-      "evidence": "2026-11-11: .\\init.ps1 exit 0, pytest 91 passed (new tests/test_probe.py: row building, declared hours/holidays, save/load idempotent, hourly summary, report sheets). Live: run_probe.ps1 exit 0 at 15:39 (store page redirected to directory; listed 1/9, #1 in control search). Scripts parse OK. Pending: user runs register_probe_task.ps1 (agent cannot create scheduled tasks)."
+      "evidence": "2026-11-11: .\\init.ps1 exit 0, pytest 91 passed (new tests/test_probe.py: row building, declared hours/holidays, save/load idempotent, hourly summary, report sheets). Live: run_probe.ps1 exit 0 at 15:39 (store page redirected to directory; listed 1/9, #1 in control search). Scripts parse OK. Pending: user runs register_probe_task.ps1 (agent cannot create scheduled tasks). | 2026-11-23: probe ran daily 11-11..11-19 and on 11-20/11-23 evenings (gaps = PC off: no Sunday measured). Re-registered by the agent on user request: .\register_probe_task.ps1 -Days 17 -From 07:15 -Runs 14 -Wake -> trigger 07:15 every 1h for 13h05, EndBoundary 2026-12-10, WakeToRun True."
     },
     {
       "id": "F13",
@@ -200,14 +200,46 @@
         "F11",
         "F12"
       ],
-      "status": "in-progress",
+      "status": "done",
       "acceptance": [
         "Suggested price = cheapest matching competitor - 100 COP only when >= 10% margin remains after commission",
         "Every in-stock product is searched again on each price check; her own listings are refreshed",
         "Only one scraping job runs on Rappi at a time",
         "Task registered by the user and the first scheduled run produces the Excel"
       ],
-      "evidence": "2026-11-11: .\\init.ps1 exit 0, pytest 92 passed (new listing-check rules test; pricing tests moved to the 100 COP rule). Lock: probe skipped with a live foreign lock, stale lock ignored. Live run_prices.ps1 exit 0 in 13.5 min: 35 listings, 82 searches, 4,742 offers, 0 failed; tab: Bajar 2, Subir 1, Desactivar 1, No competir 12, Sin competidor 17, Vincular 2. Pending: user runs register_prices_task.ps1."
+      "evidence": "2026-11-11: .\\init.ps1 exit 0, pytest 92 passed (new listing-check rules test; pricing tests moved to the 100 COP rule). Lock: probe skipped with a live foreign lock, stale lock ignored. Live run_prices.ps1 exit 0 in 13.5 min: 35 listings, 82 searches, 4,742 offers, 0 failed; tab: Bajar 2, Subir 1, Desactivar 1, No competir 12, Sin competidor 17, Vincular 2. Pending: user runs register_prices_task.ps1. | 2026-11-23: task registered; scheduled runs 2026-11-19 (log prices_20261119_074013) and 2026-11-23 (missed 07:30 with PC off, ran 17:20 via StartWhenAvailable, 82/82 searches, report written) both exit 0."
+    },
+    {
+      "id": "F14",
+      "name": "Local Power BI dashboard for the client",
+      "description": "client-report writes Parquet tables (src/powerbi_export.py) to data/client/powerbi/data; powerbi/build_pbip.mjs generates the PBIP (TMDL Import model + 3 pages: Qué cambiar hoy en Rappi, Precios vs competencia, Visibilidad). Weekly visibility split into general vs product searches. ADR-015, ADR-016.",
+      "dependencies": [
+        "F13",
+        "F12"
+      ],
+      "status": "done",
+      "acceptance": [
+        "Parquet tables written on every client-report run, atomically, under the git-ignored client folder",
+        "PBIP validates (powerbi-report-author validate: 0 errors) and opens in Desktop with data",
+        "Each page reviewed from Desktop screenshots; no client figures in committed files"
+      ],
+      "evidence": "2026-11-23: .\\init.ps1 exit 0, pytest 96 passed (tests/test_powerbi_export.py: tables, search-type split, competitor status). Offline client-report --search none exit 0 (Parquet written). powerbi-report-author validate: 0 errors (5 slicer-height heuristics, labels render fine). Desktop screenshots of all 3 pages reviewed after one fix round (subtitles, table widths, exact pesos, linear line, totals) and the search-type split. Not re-screenshotted: dropping <5-search points (data-only, needs Refresh in Desktop)."
+    },
+    {
+      "id": "F15",
+      "name": "Best hours to work: competitor open status per hour",
+      "description": "Probe stores every listed store's open/closed text per search (visibility_probe_stores) -> competencia_hora Parquet; after a period incl. weekends, add a dashboard view of her visibility vs competitors open by weekday x hour and recommend hours. ADR-016.",
+      "dependencies": [
+        "F12",
+        "F14"
+      ],
+      "status": "in-progress",
+      "acceptance": [
+        "Probe records each listed store with is_open (tested, live smoke OK)",
+        "Data collected through 2026-12-09 including at least one Saturday and Sunday",
+        "Dashboard view + written hour recommendation delivered to the user; ask the client for order times from the Rappi partner portal"
+      ],
+      "evidence": "2026-11-23: pytest 96 passed (probe store rows, idempotent save, missing table). Live smoke into a throwaway DB (2 searches, ~20:45): 5 stores listed per search, open/closed parsed for all. Collection starts 2026-11-24 07:15."
     }
   ]
 }

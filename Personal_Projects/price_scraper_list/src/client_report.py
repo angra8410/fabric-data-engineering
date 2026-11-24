@@ -406,7 +406,18 @@ def queries_needing_search(db: PriceDatabase, zone_id: str, queries: List[str], 
     return [q for q in dict.fromkeys(queries) if q and q not in done]
 
 
-def visibility(db: PriceDatabase, client: ClientConfig) -> Dict[str, list]:
+GENERAL_SEARCHES = "Búsquedas generales"
+PRODUCT_SEARCHES = "Sus productos"
+
+
+def visibility(db: PriceDatabase, client: ClientConfig,
+               general_queries: Optional[List[str]] = None, min_searches: int = 5) -> Dict[str, list]:
+    """
+    general_queries: the zone's own search list (what customers type, run weekly). Searches
+    outside it are product-name searches from the price check, where she shows up far more
+    easily; history_by_type keeps the two apart so a run date is compared like with like, and
+    drops a date/type with fewer than min_searches searches (one stray search is not a sample).
+    """
     with db.get_connection() as con:
         latest = con.execute("SELECT MAX(snapshot_date) FROM search_store_ranks WHERE zone_id = ?",
                              [client.zone_id]).fetchall()[0][0]
@@ -427,11 +438,21 @@ def visibility(db: PriceDatabase, client: ClientConfig) -> Dict[str, list]:
                  ON r.snapshot_date = t.snapshot_date AND r.zone_id = ? AND r.store_id = ?
                GROUP BY t.snapshot_date, t.n ORDER BY t.snapshot_date""",
             [client.zone_id, client.zone_id, client.store_id]).fetchall()
+        by_type = con.execute(
+            """WITH r AS (
+                 SELECT snapshot_date, search_query,
+                        CASE WHEN list_contains(?::VARCHAR[], search_query) THEN ? ELSE ? END AS kind,
+                        MAX(CASE WHEN store_id = ? THEN rank END) AS her_rank
+                 FROM search_store_ranks WHERE zone_id = ? GROUP BY 1, 2, 3)
+               SELECT snapshot_date, kind, COUNT(*), COUNT(her_rank), ROUND(AVG(her_rank), 1)
+               FROM r GROUP BY 1, 2 HAVING COUNT(*) >= ? ORDER BY 1, 2""",
+            [list(general_queries or []), GENERAL_SEARCHES, PRODUCT_SEARCHES, client.store_id,
+             client.zone_id, min_searches]).fetchall()
         fees = con.execute(
             """SELECT fee_text FROM search_store_ranks WHERE zone_id = ? AND snapshot_date = ? AND store_id <> ?""",
             [client.zone_id, latest, client.store_id]).fetchall()
     fee_values = [ProductParser.parse_price_text(f[0]) for f in fees if f[0] and f[0].startswith("$")]
-    return {"latest": latest, "per_query": per_query, "history": history,
+    return {"latest": latest, "per_query": per_query, "history": history, "history_by_type": by_type,
             "competitor_fee_median": sorted(fee_values)[len(fee_values) // 2] if fee_values else None}
 
 

@@ -77,3 +77,18 @@ def test_rappi_status_from_delivery_time_text():
     assert probe.rappi_status("29 min o prog.") == "Abierta (29 min o prog.)"
     assert probe.rappi_status("Hoy, 4 PM") == "Cerrada, abre Hoy, 4 PM"
     assert probe.rappi_status(None) is None
+
+
+def test_probe_records_every_listed_store_open_or_closed(tmp_path):
+    closed = [{"rank": 2, "store_id": "8", "name": "Store 8", "slug": "s",
+               "header": ["Store 8", "Mañana 10:00 am", "•", "$ 4.000"]}]
+    base = probe.stamp(datetime(2026, 11, 29, 19, 15), "z")
+    row = probe.search_row(base, "comida gato", stores("1") + closed, "1", parse_store_header)
+    assert [(s["store_id"], s["is_open"], s["eta_text"]) for s in row["_stores"]] ==         [("1", True, "38 min o prog."), ("8", False, "Mañana 10:00 am")]
+    db = tmp_path / "p.duckdb"
+    probe.save([row, probe.store_page_row(base, 29, "u")], db)
+    probe.save([row], db)                                   # same run again: no duplicates
+    saved = probe.load_stores("z", db)
+    assert [(s["rank"], s["store_name"], s["is_open"]) for s in saved] == [(1, "Store 1", True), (2, "Store 8", False)]
+    assert probe.load("z", db)[0]["check_name"] in ("comida gato", probe.STORE_PAGE_CHECK)
+    assert probe.load_stores("z", tmp_path / "missing.duckdb") == []

@@ -38,6 +38,32 @@ CREATE TABLE IF NOT EXISTS visibility_probe (
 COLUMNS = ["probed_at", "probe_date", "probe_hour", "zone_id", "check_name", "ok", "n_stores", "her_rank",
            "her_eta", "her_fee", "store_page_products", "top_stores"]
 
+# Every store Rappi lists in a probed search, with its own open/closed signal, so the hours
+# when fewer competitors are open can be found (separate table: no migration of the one above).
+CREATE_STORES_SQL = """
+CREATE TABLE IF NOT EXISTS visibility_probe_stores (
+    probed_at   TIMESTAMP NOT NULL,
+    zone_id     VARCHAR NOT NULL,
+    check_name  VARCHAR NOT NULL,
+    rank        INTEGER NOT NULL,
+    store_id    VARCHAR,
+    store_name  VARCHAR,
+    eta_text    VARCHAR,
+    fee_text    VARCHAR,
+    is_open     BOOLEAN,              -- NULL = no delivery-time text to tell
+    PRIMARY KEY (probed_at, zone_id, check_name, rank)
+);
+"""
+STORE_COLUMNS = ["probed_at", "zone_id", "check_name", "rank", "store_id", "store_name", "eta_text", "fee_text",
+                 "is_open"]
+
+
+def is_open(eta: Optional[str]) -> Optional[bool]:
+    """Rappi shows '25 min' style times for open stores and an opening time ('Mañana 10:00 am') otherwise."""
+    if not eta:
+        return None
+    return "min" in eta.lower()
+
 
 def probe_db_path() -> Path:
     return resolve_path(PROBE_DB)
@@ -48,10 +74,17 @@ def save(rows: List[Dict[str, Any]], path: Optional[Path] = None) -> int:
     path.parent.mkdir(parents=True, exist_ok=True)
     with duckdb.connect(str(path)) as con:
         con.execute(CREATE_PROBE_SQL)
+        con.execute(CREATE_STORES_SQL)
         if rows:
             con.executemany(
                 f"INSERT OR REPLACE INTO visibility_probe ({', '.join(COLUMNS)}) VALUES ({', '.join('?' * len(COLUMNS))})",
                 [tuple(r.get(c) for c in COLUMNS) for r in rows])
+        listed = [s for r in rows for s in r.get("_stores", [])]
+        if listed:
+            con.executemany(
+                f"INSERT OR REPLACE INTO visibility_probe_stores ({', '.join(STORE_COLUMNS)}) "
+                f"VALUES ({', '.join('?' * len(STORE_COLUMNS))})",
+                [tuple(s.get(c) for c in STORE_COLUMNS) for s in listed])
     return len(rows)
 
 
@@ -81,9 +114,34 @@ def search_row(base: Dict[str, Any], query: str, stores: List[Dict[str, Any]], s
     """One search result page -> probe row (stores as returned by scraper.STORES_JS)."""
     her = next((s for s in stores if str(s["store_id"]) == str(store_id)), None)
     info = header_parser(her["header"]) if her else {}
+    listed = []
+    for s in stores:
+        h = header_parser(s["header"])
+        listed.append({"probed_at": base["probed_at"], "zone_id": base["zone_id"], "check_name": query,
+                       "rank": s["rank"], "store_id": str(s["store_id"]), "store_name": s["name"],
+                       "eta_text": h.get("eta_text"), "fee_text": h.get("fee_text"),
+                       "is_open": is_open(h.get("eta_text"))})
     return {**base, "check_name": query, "ok": bool(stores), "n_stores": len(stores),
             "her_rank": her["rank"] if her else None, "her_eta": info.get("eta_text"), "her_fee": info.get("fee_text"),
-            "top_stores": "  |  ".join(f"{s['rank']}. {s['name']}" for s in stores)}
+            "top_stores": "  |  ".join(f"{s['rank']}. {s['name']}" for s in stores), "_stores": listed}
+
+
+def load_stores(zone_id: str, path: Optional[Path] = None) -> List[Dict[str, Any]]:
+    """Stores listed per probed search ([] before the first run that recorded them)."""
+    path = path or probe_db_path()
+    if not path.exists():
+        return []
+    try:
+        with duckdb.connect(str(path), read_only=True) as con:
+            if not con.execute("SELECT 1 FROM information_schema.tables WHERE table_name = 'visibility_probe_stores'"
+                               ).fetchall():
+                return []
+            cur = con.execute(f"SELECT {', '.join(STORE_COLUMNS)} FROM visibility_probe_stores WHERE zone_id = ? "
+                              "ORDER BY probed_at, check_name, rank", [zone_id])
+            return [dict(zip(STORE_COLUMNS, r)) for r in cur.fetchall()]
+    except duckdb.Error as e:
+        print(f"  visibility probe store data not available: {e.__class__.__name__}")
+        return []
 
 
 def store_page_row(base: Dict[str, Any], products: int, final_url: str) -> Dict[str, Any]:
